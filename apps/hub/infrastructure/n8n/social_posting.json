@@ -1,0 +1,108 @@
+{
+  "name": "BizLegal — Social Auto-Posting",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "social-trigger",
+        "authentication": "none"
+      },
+      "id": "webhook-publish",
+      "name": "Webhook: Article Published",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [200, 300],
+      "webhookId": "social-trigger"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [{ "value1": "={{ $json.body.risk_level }}", "operation": "largerEqual", "value2": 60 }]
+        }
+      },
+      "id": "check-risk",
+      "name": "Risk >= 60?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "command": "python3 /opt/bizlegal/tools/publisher_buffer.py --slug {{ $json.body.slug }}"
+      },
+      "id": "post-social",
+      "name": "Run: publisher_buffer.py",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [600, 200]
+    },
+    {
+      "parameters": {
+        "url": "https://api.substack.com/api/v1/drafts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Authorization", "value": "=Bearer {{ $env.SUBSTACK_TOKEN }}" }]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "body": {
+          "draft_title": "={{ $json.body.title }}",
+          "draft_subtitle": "={{ $json.body.meta_description }}",
+          "draft_body": "={{ $json.body.body_markdown }}",
+          "draft_section_id": null
+        }
+      },
+      "id": "post-substack",
+      "name": "Post: Substack Draft",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [600, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "chat_id", "value": "={{ $env.TELEGRAM_CHAT_ID }}" },
+            { "name": "text", "value": "=📢 Published: {{ $json.body.title }}\nRisk: {{ $json.body.risk_level }}/100\nSocial: scheduled on all platforms" }
+          ]
+        }
+      },
+      "id": "notify-publish",
+      "name": "Notify: Published",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [800, 250]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { status: \"scheduled\", slug: $json.body.slug } }}"
+      },
+      "id": "respond-ok",
+      "name": "Respond: 200 OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1000, 250]
+    }
+  ],
+  "connections": {
+    "Webhook: Article Published": { "main": [[{ "node": "Risk >= 60?", "type": "main", "index": 0 }]] },
+    "Risk >= 60?": {
+      "main": [
+        [{ "node": "Run: publisher_buffer.py", "type": "main", "index": 0 }, { "node": "Post: Substack Draft", "type": "main", "index": 0 }],
+        [{ "node": "Respond: 200 OK", "type": "main", "index": 0 }]
+      ]
+    },
+    "Run: publisher_buffer.py": { "main": [[{ "node": "Notify: Published", "type": "main", "index": 0 }]] },
+    "Post: Substack Draft": { "main": [[{ "node": "Notify: Published", "type": "main", "index": 0 }]] },
+    "Notify: Published": { "main": [[{ "node": "Respond: 200 OK", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "bizlegal" }, { "name": "social" }],
+  "_meta": {
+    "description": "Social auto-posting — triggered on article publish, routes to Buffer + Substack if risk >= 60",
+    "endpoint": "POST /webhook/social-trigger"
+  }
+}

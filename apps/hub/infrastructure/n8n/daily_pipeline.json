@@ -1,0 +1,194 @@
+{
+  "name": "BizLegal — Daily Regulatory Scout Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "cronExpression", "expression": "0 6 * * 1-5" }] }
+      },
+      "id": "cron-trigger",
+      "name": "Trigger: 06:00 UTC Weekdays",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=&dateb=&owner=include&count=20&search_text=&output=atom",
+        "options": { "response": { "response": { "responseFormat": "text" } } }
+      },
+      "id": "fetch-sec",
+      "name": "Fetch: SEC EDGAR RSS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [400, 200]
+    },
+    {
+      "parameters": {
+        "url": "https://eur-lex.europa.eu/legal-content/EN/RDF/?feed=NEWS",
+        "options": {}
+      },
+      "id": "fetch-mica",
+      "name": "Fetch: EUR-Lex MiCA RSS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://www.fca.org.uk/news/rss.xml",
+        "options": {}
+      },
+      "id": "fetch-fca",
+      "name": "Fetch: FCA RSS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [400, 400]
+    },
+    {
+      "parameters": {
+        "url": "https://www.mas.gov.sg/api/news?format=json&limit=20",
+        "options": {}
+      },
+      "id": "fetch-mas",
+      "name": "Fetch: MAS News API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [400, 500]
+    },
+    {
+      "parameters": {
+        "command": "python3 /opt/bizlegal/tools/scout_ollama.py --input /opt/bizlegal/gaps/raw-$(date +%Y-%m-%d).json --output /opt/bizlegal/gaps/scored-$(date +%Y-%m-%d).json"
+      },
+      "id": "run-scout",
+      "name": "Run: scout_ollama.py",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [700, 300]
+    },
+    {
+      "parameters": {
+        "command": "python3 /opt/bizlegal/tools/judge_dedup.py --input /opt/bizlegal/gaps/scored-$(date +%Y-%m-%d).json --output /opt/bizlegal/gaps/judged-$(date +%Y-%m-%d).json"
+      },
+      "id": "run-judge",
+      "name": "Run: judge_dedup.py",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [{ "value1": "={{ $json.stats.passed }}", "operation": "larger", "value2": 0 }]
+        }
+      },
+      "id": "check-has-items",
+      "name": "Has new items?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1100, 300]
+    },
+    {
+      "parameters": {
+        "command": "python3 /opt/bizlegal/tools/writer_draft.py --input /opt/bizlegal/gaps/judged-$(date +%Y-%m-%d).json --min-risk 60"
+      },
+      "id": "run-writer",
+      "name": "Run: writer_draft.py (risk >= 60)",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [1300, 200]
+    },
+    {
+      "parameters": {
+        "command": "python3 /opt/bizlegal/tools/writer_haiku_qa.py --input /opt/bizlegal/gaps/drafts-$(date +%Y-%m-%d).json"
+      },
+      "id": "run-qa",
+      "name": "Run: writer_haiku_qa.py",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [1500, 200]
+    },
+    {
+      "parameters": {
+        "command": "python3 /opt/bizlegal/tools/builder_github.py --input /opt/bizlegal/gaps/qa-$(date +%Y-%m-%d).json"
+      },
+      "id": "run-builder",
+      "name": "Run: builder_github.py",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [1700, 200]
+    },
+    {
+      "parameters": {
+        "command": "python3 /opt/bizlegal/tools/publisher_buffer.py --input /opt/bizlegal/gaps/qa-$(date +%Y-%m-%d).json"
+      },
+      "id": "run-social",
+      "name": "Run: publisher_buffer.py",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [1900, 200]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "chat_id", "value": "={{ $env.TELEGRAM_CHAT_ID }}" },
+            { "name": "text", "value": "✅ BizLegal daily pipeline complete. Check logs: /opt/bizlegal/logs/" }
+          ]
+        }
+      },
+      "id": "notify-success",
+      "name": "Notify: Telegram Success",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [2100, 200]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "chat_id", "value": "={{ $env.TELEGRAM_CHAT_ID }}" },
+            { "name": "text", "value": "⚠️ BizLegal scout: no new items today. Check gaps/ folder." }
+          ]
+        }
+      },
+      "id": "notify-empty",
+      "name": "Notify: No Items Today",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1300, 400]
+    }
+  ],
+  "connections": {
+    "Trigger: 06:00 UTC Weekdays": {
+      "main": [[{ "node": "Fetch: SEC EDGAR RSS", "type": "main", "index": 0 }, { "node": "Fetch: EUR-Lex MiCA RSS", "type": "main", "index": 0 }, { "node": "Fetch: FCA RSS", "type": "main", "index": 0 }, { "node": "Fetch: MAS News API", "type": "main", "index": 0 }]]
+    },
+    "Fetch: SEC EDGAR RSS": { "main": [[{ "node": "Run: scout_ollama.py", "type": "main", "index": 0 }]] },
+    "Run: scout_ollama.py": { "main": [[{ "node": "Run: judge_dedup.py", "type": "main", "index": 0 }]] },
+    "Run: judge_dedup.py": { "main": [[{ "node": "Has new items?", "type": "main", "index": 0 }]] },
+    "Has new items?": {
+      "main": [
+        [{ "node": "Run: writer_draft.py (risk >= 60)", "type": "main", "index": 0 }],
+        [{ "node": "Notify: No Items Today", "type": "main", "index": 0 }]
+      ]
+    },
+    "Run: writer_draft.py (risk >= 60)": { "main": [[{ "node": "Run: writer_haiku_qa.py", "type": "main", "index": 0 }]] },
+    "Run: writer_haiku_qa.py": { "main": [[{ "node": "Run: builder_github.py", "type": "main", "index": 0 }]] },
+    "Run: builder_github.py": { "main": [[{ "node": "Run: publisher_buffer.py", "type": "main", "index": 0 }]] },
+    "Run: publisher_buffer.py": { "main": [[{ "node": "Notify: Telegram Success", "type": "main", "index": 0 }]] }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "tags": [{ "name": "bizlegal" }, { "name": "automation" }],
+  "_meta": {
+    "description": "BizLegal AI Daily Scout Pipeline — Scrape → Score → Judge → Write → QA → Publish → Social",
+    "version": "1.0.0"
+  }
+}

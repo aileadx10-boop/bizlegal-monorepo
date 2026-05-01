@@ -1,0 +1,109 @@
+{
+  "name": "BizLegal — Weekly Newsletter + Monthly Digest",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "cronExpression", "expression": "0 8 * * 5" }] }
+      },
+      "id": "cron-friday",
+      "name": "Trigger: Friday 08:00 UTC",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "cronExpression", "expression": "0 7 1-7 * 1" }] }
+      },
+      "id": "cron-monthly",
+      "name": "Trigger: First Monday 07:00 UTC",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [200, 450]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, title, summary, category, risk_level, slug, published_at FROM intelligence_items WHERE published_at >= NOW() - INTERVAL '7 days' AND status = 'live' ORDER BY risk_level DESC LIMIT 5",
+        "options": {}
+      },
+      "id": "fetch-weekly-items",
+      "name": "Query: Top 5 This Week",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [450, 300],
+      "credentials": { "postgres": { "id": "supabase-db1", "name": "Supabase DB1" } }
+    },
+    {
+      "parameters": {
+        "command": "python3 /opt/bizlegal/tools/publisher_resend.py --template newsletter --date $(date +%Y-%m-%d)"
+      },
+      "id": "send-newsletter",
+      "name": "Run: publisher_resend.py (newsletter)",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [700, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, title, summary, category, risk_level, slug, published_at FROM intelligence_items WHERE published_at >= NOW() - INTERVAL '30 days' AND status = 'live' ORDER BY risk_level DESC LIMIT 100",
+        "options": {}
+      },
+      "id": "fetch-monthly-items",
+      "name": "Query: Top 100 This Month",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [450, 450],
+      "credentials": { "postgres": { "id": "supabase-db1", "name": "Supabase DB1" } }
+    },
+    {
+      "parameters": {
+        "command": "weasyprint /opt/bizlegal/templates/ebook.html /opt/bizlegal/pdfs/digest-$(date +%Y-%m).pdf --base-url https://bizlegal-ai.com"
+      },
+      "id": "generate-pdf",
+      "name": "Run: WeasyPrint PDF",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [700, 450]
+    },
+    {
+      "parameters": {
+        "command": "python3 /opt/bizlegal/tools/publisher_resend.py --template digest_pdf --pdf-url https://storage.bizlegal-ai.com/pdfs/digest-$(date +%Y-%m).pdf"
+      },
+      "id": "send-digest",
+      "name": "Run: publisher_resend.py (digest)",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [950, 450]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "chat_id", "value": "={{ $env.TELEGRAM_CHAT_ID }}" },
+            { "name": "text", "value": "📧 BizLegal newsletter sent successfully. Check Resend dashboard." }
+          ]
+        }
+      },
+      "id": "notify",
+      "name": "Notify: Telegram",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [950, 300]
+    }
+  ],
+  "connections": {
+    "Trigger: Friday 08:00 UTC": { "main": [[{ "node": "Query: Top 5 This Week", "type": "main", "index": 0 }]] },
+    "Query: Top 5 This Week": { "main": [[{ "node": "Run: publisher_resend.py (newsletter)", "type": "main", "index": 0 }]] },
+    "Run: publisher_resend.py (newsletter)": { "main": [[{ "node": "Notify: Telegram", "type": "main", "index": 0 }]] },
+    "Trigger: First Monday 07:00 UTC": { "main": [[{ "node": "Query: Top 100 This Month", "type": "main", "index": 0 }]] },
+    "Query: Top 100 This Month": { "main": [[{ "node": "Run: WeasyPrint PDF", "type": "main", "index": 0 }]] },
+    "Run: WeasyPrint PDF": { "main": [[{ "node": "Run: publisher_resend.py (digest)", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "bizlegal" }, { "name": "newsletter" }],
+  "_meta": { "description": "Weekly newsletter (Fridays) + Monthly digest PDF (first Monday)" }
+}

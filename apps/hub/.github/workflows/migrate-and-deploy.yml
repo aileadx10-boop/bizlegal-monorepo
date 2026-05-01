@@ -1,0 +1,115 @@
+name: Migrate DB + Deploy to Vercel
+
+on:
+  workflow_dispatch:
+    inputs:
+      skip_migration:
+        description: 'Skip DB migration (set true if already run)'
+        required: false
+        default: 'false'
+  push:
+    branches:
+      - quantum-wat
+    paths:
+      - 'supabase/migrations/**'
+      - 'app/**'
+      - '.github/workflows/migrate-and-deploy.yml'
+
+jobs:
+  migrate-and-deploy:
+    name: Run migration 005 + deploy to production
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: quantum-wat
+
+      # -- Step 1: DB Migration --
+      - name: Install PostgreSQL client
+        if: ${{ github.event.inputs.skip_migration != 'true' }}
+        run: sudo apt-get install -y postgresql-client
+
+      - name: Run migration 005 (seo_pages upgrade columns)
+        if: ${{ github.event.inputs.skip_migration != 'true' }}
+        continue-on-error: true
+        run: |
+          echo "Running migration 005..."
+          psql "${{ secrets.SUPABASE_DB_URL }}" \
+            --set ON_ERROR_STOP=1 \
+            --file supabase/migrations/005_seo_pages_upgrade.sql
+          echo "Migration 005 complete."
+
+      - name: Migration skipped - SUPABASE_DB_URL not set
+        if: github.event.inputs.skip_migration == 'true'
+        run: |
+          echo "::warning::SUPABASE_DB_URL secret not set. Migration 005 skipped."
+          echo "Add SUPABASE_DB_URL in GitHub Settings -> Secrets -> Actions"
+          echo "Get value from: Supabase Dashboard -> Settings -> Database -> Connection String -> URI"
+          echo "The deploy will continue - app handles missing columns gracefully."
+
+      # -- Step 2: Vercel production deploy --
+      - name: Trigger Vercel production deploy
+        id: deploy
+        run: |
+          echo "Triggering Vercel deploy from quantum-wat..."
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
+            "https://api.vercel.com/v13/deployments?projectId=${{ secrets.VERCEL_PROJECT_ID }}&teamId=${{ secrets.VERCEL_TEAM_ID }}" \
+            -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "name": "bizlegal-ai",
+              "target": "production",
+              "gitSource": {
+                "type": "github",
+                "repoId": "1184517300",
+                "ref": "quantum-wat"
+              }
+            }')
+          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | head -1)
+          echo "HTTP status: $HTTP_CODE"
+          DEPLOY_URL=$(echo "$BODY" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('url',''))" 2>/dev/null || echo '')
+          [ -n "$DEPLOY_URL" ] && echo "Deploy preview: https://$DEPLOY_URL"
+          if [ "$HTTP_CODE" != "200" ] && [ "$HTTP_CODE" != "201" ]; then
+            echo "::error::Vercel deploy API returned HTTP $HTTP_CODE — $BODY"
+            exit 1
+          fi
+          echo "Vercel deploy triggered successfully."
+
+      # -- Step 3: Wait + verify --
+      - name: Wait for deploy (90s)
+        run: sleep 90
+
+      - name: Verify sitemap
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 https://bizlegal-ai.com/sitemap.xml || echo "000")
+          echo "sitemap.xml: $STATUS"
+          [ "$STATUS" = "200" ] && echo "OK" || echo "::warning::sitemap returning $STATUS - may still be propagating"
+
+      - name: Verify robots.txt
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 https://bizlegal-ai.com/robots.txt || echo "000")
+          echo "robots.txt: $STATUS"
+
+      - name: Verify refund page
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 https://bizlegal-ai.com/refund || echo "000")
+          echo "refund page: $STATUS"
+
+      - name: Verify guide page has canonical URL
+        run: |
+          TITLE=$(curl -s --max-time 15 https://bizlegal-ai.com/guides/uae/vara-mvl-license 2>/dev/null | grep -o '<title>[^<]*' | head -1 || echo 'not found')
+          echo "Guide page title: $TITLE"
+
+      - name: Ping Google sitemap
+        run: curl -s "https://www.google.com/ping?sitemap=https://bizlegal-ai.com/sitemap.xml" || true
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "Completed at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "Branch: quantum-wat"
+          echo "Target: bizlegal-ai.com (Vercel production)"

@@ -1,0 +1,66 @@
+{
+  "framework": "nextjs",
+  "functions": {
+    "app/api/risk-assessment/route.ts": { "maxDuration": 30 },
+    "app/api/risk-engine/deep-analysis/route.ts": { "maxDuration": 60 },
+    "app/api/jurisdictions/compare/route.ts": { "maxDuration": 60 },
+    "app/api/og/route.tsx": { "maxDuration": 10 },
+    "app/api/tracr/analyze/route.ts": { "maxDuration": 30 },
+    "app/api/tracr/generate-report/route.ts": { "maxDuration": 60 },
+    "app/api/tracr/verify-eth/route.ts": { "maxDuration": 60 },
+    "app/api/tracr/webhook/route.ts": { "maxDuration": 60 },
+    "app/api/tracr/create-order/route.ts": { "maxDuration": 15 },
+    "app/api/tracr/paypal-order/route.ts": { "maxDuration": 15 },
+    "app/api/tracr/paypal-capture/route.ts": { "maxDuration": 60 },
+    "app/api/payments/nowpayments/start/route.ts": { "maxDuration": 30 },
+    "app/api/payments/nowpayments/webhook/route.ts": { "maxDuration": 30 },
+    "app/api/payments/paypal/start/route.ts": { "maxDuration": 30 },
+    "app/api/payments/paypal/webhook/route.ts": { "maxDuration": 30 },
+    "app/api/cron/billing/charge-due/route.ts": { "maxDuration": 60 },
+    "app/api/cron/boi/check/route.ts": { "maxDuration": 60 },
+    "app/api/cron/ops-alerts/route.ts": { "maxDuration": 30 },
+    "app/api/cron/smoke/route.ts": { "maxDuration": 60 },
+    "app/api/cron/ai-act-monitor/route.ts": { "maxDuration": 60 },
+    "app/api/ai-act/classify/route.ts": { "maxDuration": 60 },
+    "app/api/cron/policy-refresh/route.ts": { "maxDuration": 60 },
+    "app/api/policy-refresh/audit/route.ts": { "maxDuration": 60 },
+    "app/api/ops/health/route.ts": { "maxDuration": 30 },
+    "app/api/boi/subscribe/route.ts": { "maxDuration": 30 }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/billing/charge-due",
+      "schedule": "0 7 * * *"
+    },
+    {
+      "path": "/api/cron/boi/check",
+      "schedule": "0 14 * * *"
+    },
+    {
+      "path": "/api/cron/ops-alerts",
+      "schedule": "*/15 * * * *"
+    },
+    {
+      "path": "/api/cron/smoke",
+      "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/ai-act-monitor",
+      "schedule": "0 11 * * *"
+    },
+    {
+      "path": "/api/cron/policy-refresh",
+      "schedule": "0 12 * * *"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    }
+  ]
+}

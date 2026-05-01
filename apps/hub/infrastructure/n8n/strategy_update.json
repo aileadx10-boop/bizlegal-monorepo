@@ -1,0 +1,120 @@
+{
+  "name": "BizLegal — Weekly Strategy Brain",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "cronExpression", "expression": "0 20 * * 0" }] }
+      },
+      "id": "cron-sunday",
+      "name": "Trigger: Sunday 20:00 UTC",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT COUNT(*) as items_scouted, AVG(risk_level) as avg_risk FROM intelligence_items WHERE created_at >= NOW() - INTERVAL '7 days'",
+        "options": {}
+      },
+      "id": "q-scout",
+      "name": "Query: Scout Volume",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [400, 200],
+      "credentials": { "postgres": { "id": "supabase-db1", "name": "Supabase DB1" } }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT COUNT(*) as orders, SUM(amount) as revenue FROM tracr_orders WHERE created_at >= NOW() - INTERVAL '7 days' AND status = 'completed'",
+        "options": {}
+      },
+      "id": "q-orders",
+      "name": "Query: Weekly Orders",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [400, 300],
+      "credentials": { "postgres": { "id": "supabase-db1", "name": "Supabase DB1" } }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT COUNT(*) as leads_captured FROM leads WHERE created_at >= NOW() - INTERVAL '7 days'",
+        "options": {}
+      },
+      "id": "q-leads",
+      "name": "Query: Weekly Leads",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [400, 400],
+      "credentials": { "postgres": { "id": "supabase-db1", "name": "Supabase DB1" } }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT COUNT(*) as conversations, SUM(CASE WHEN lead_captured THEN 1 ELSE 0 END) as lead_captures FROM bizbot_conversations WHERE created_at >= NOW() - INTERVAL '7 days'",
+        "options": {}
+      },
+      "id": "q-bizbot",
+      "name": "Query: BizBot Stats",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [400, 500],
+      "credentials": { "postgres": { "id": "supabase-db1", "name": "Supabase DB1" } }
+    },
+    {
+      "parameters": {
+        "jsCode": "const scout = items[0].json;\nconst orders = items[1].json;\nconst leads = items[2].json;\nconst bizbot = items[3].json;\n\nconst week = new Date().toISOString().split('T')[0];\n\nreturn [{\n  json: {\n    week,\n    summary: `WEEK OF ${week}\\n` +\n      `Scout: ${scout.items_scouted} items, avg risk ${Math.round(scout.avg_risk)}\\n` +\n      `Orders: ${orders.orders} completed, $${orders.revenue || 0} revenue\\n` +\n      `Leads: ${leads.leads_captured} new\\n` +\n      `BizBot: ${bizbot.conversations} conversations, ${bizbot.lead_captures} lead captures`\n  }\n}];"
+      },
+      "id": "build-report",
+      "name": "Build: Weekly Data Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 350]
+    },
+    {
+      "parameters": {
+        "command": "=echo \"{{ $json.summary }}\" > /opt/bizlegal/logs/strategy-{{ $json.week }}.md"
+      },
+      "id": "save-report",
+      "name": "Save: Strategy Log",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [850, 350]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "chat_id", "value": "={{ $env.TELEGRAM_CHAT_ID }}" },
+            { "name": "text", "value": "=📊 BizLegal Weekly Strategy Report\n\n{{ $json.summary }}\n\nFull log: /opt/bizlegal/logs/strategy-{{ $json.week }}.md" }
+          ]
+        }
+      },
+      "id": "notify-strategy",
+      "name": "Notify: Strategy Telegram",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1050, 350]
+    }
+  ],
+  "connections": {
+    "Trigger: Sunday 20:00 UTC": {
+      "main": [[
+        { "node": "Query: Scout Volume", "type": "main", "index": 0 },
+        { "node": "Query: Weekly Orders", "type": "main", "index": 0 },
+        { "node": "Query: Weekly Leads", "type": "main", "index": 0 },
+        { "node": "Query: BizBot Stats", "type": "main", "index": 0 }
+      ]]
+    },
+    "Query: Scout Volume": { "main": [[{ "node": "Build: Weekly Data Summary", "type": "main", "index": 0 }]] },
+    "Build: Weekly Data Summary": { "main": [[{ "node": "Save: Strategy Log", "type": "main", "index": 0 }]] },
+    "Save: Strategy Log": { "main": [[{ "node": "Notify: Strategy Telegram", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "bizlegal" }, { "name": "strategy" }],
+  "_meta": { "description": "Weekly strategy brain — data gathering + Telegram report every Sunday 20:00 UTC" }
+}

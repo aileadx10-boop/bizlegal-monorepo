@@ -25,6 +25,17 @@ pnpm-debug.log*
 !.env.example
 !.env.template
 
+# Secret-leaking dumps from prior debug sessions (defensive — pre-commit
+# hook + GitHub secret scanner are the actual enforcers)
+vercel-env-*.txt
+*-canonical.env*
+*-canonical.txt
+ops-token-verified.txt
+gh-log*.txt
+error.txt
+*.session.log
+*.secret*
+
 # OS / IDE
 .DS_Store
 Thumbs.db

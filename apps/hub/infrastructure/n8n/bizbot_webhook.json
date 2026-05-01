@@ -1,0 +1,151 @@
+{
+  "name": "BizLegal — BizBot Webhook Handler",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "bizbot",
+        "authentication": "none",
+        "options": {}
+      },
+      "id": "webhook-in",
+      "name": "Webhook: POST /webhook/bizbot",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [200, 300],
+      "webhookId": "bizbot-main"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:11434/api/generate",
+        "sendBody": true,
+        "contentType": "json",
+        "body": {
+          "model": "llama3.2:3b",
+          "prompt": "=Classify this user message into ONE intent: INTELLIGENCE|COMPLIANCE|CONTRACTS|FORENSICS|RISK|LEGAL_QUESTION|PRICING|LEAD_CAPTURE|ESCALATE\n\nMessage: {{ $json.body.message }}\n\nReturn ONLY JSON: {\"intent\": \"...\", \"product\": \"tracr|brai|lexaudit|docai|forge|leadforge|hub\", \"confidence\": 0.0-1.0}",
+          "stream": false,
+          "options": { "temperature": 0.0, "num_predict": 64 }
+        }
+      },
+      "id": "classify-intent",
+      "name": "Classify: Intent Router (llama3.2:3b)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "rules": [
+            { "operation": "contains", "value1": "={{ $json.intent }}", "value2": "INTELLIGENCE" },
+            { "operation": "contains", "value1": "={{ $json.intent }}", "value2": "FORENSICS" },
+            { "operation": "contains", "value1": "={{ $json.intent }}", "value2": "RISK" },
+            { "operation": "contains", "value1": "={{ $json.intent }}", "value2": "COMPLIANCE" },
+            { "operation": "contains", "value1": "={{ $json.intent }}", "value2": "ESCALATE" }
+          ]
+        }
+      },
+      "id": "route-intent",
+      "name": "Route: By Intent",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 2,
+      "position": [600, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, title, summary, risk_level, category, slug FROM intelligence_items WHERE to_tsvector('english', title || ' ' || summary) @@ plainto_tsquery('english', '{{ $json.body.message }}') ORDER BY risk_level DESC LIMIT 3",
+        "options": {}
+      },
+      "id": "query-intelligence",
+      "name": "Query: Supabase Intelligence Items",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [800, 180],
+      "credentials": { "postgres": { "id": "supabase-db1", "name": "Supabase DB1" } }
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:11434/api/generate",
+        "sendBody": true,
+        "contentType": "json",
+        "body": {
+          "model": "gemma2:9b",
+          "prompt": "=You are BizBot, the AI assistant for BizLegal AI. Answer this question concisely (max 120 words). Always hedge: this is intelligence, not legal advice. End with a relevant product CTA.\n\nUser: {{ $json.body.message }}\nContext: {{ JSON.stringify($json.intelligence_items) }}\n\nSystem: {{ $json.bizbot_system }}",
+          "stream": false,
+          "options": { "temperature": 0.3, "num_predict": 256 }
+        }
+      },
+      "id": "generate-response",
+      "name": "Generate: Response (gemma2:9b)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1000, 300]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "public",
+        "table": "bizbot_conversations",
+        "columns": "session_id, messages, intent_path, lead_captured",
+        "additionalFields": {}
+      },
+      "id": "log-conversation",
+      "name": "Log: Supabase Conversation",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [1200, 300],
+      "credentials": { "postgres": { "id": "supabase-db1", "name": "Supabase DB1" } }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { response: $json.response, intent: $node[\"classify-intent\"].json.intent, session_id: $json.body.session_id } }}"
+      },
+      "id": "respond",
+      "name": "Respond: JSON to Widget",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1400, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "chat_id", "value": "={{ $env.TELEGRAM_CHAT_ID }}" },
+            { "name": "text", "value": "=🚨 BizBot ESCALATION\nSession: {{ $json.body.session_id }}\nMessage: {{ $json.body.message }}" }
+          ]
+        }
+      },
+      "id": "escalate-notify",
+      "name": "Escalate: Telegram Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [800, 500]
+    }
+  ],
+  "connections": {
+    "Webhook: POST /webhook/bizbot": { "main": [[{ "node": "Classify: Intent Router (llama3.2:3b)", "type": "main", "index": 0 }]] },
+    "Classify: Intent Router (llama3.2:3b)": { "main": [[{ "node": "Route: By Intent", "type": "main", "index": 0 }]] },
+    "Route: By Intent": {
+      "main": [
+        [{ "node": "Query: Supabase Intelligence Items", "type": "main", "index": 0 }],
+        [{ "node": "Generate: Response (gemma2:9b)", "type": "main", "index": 0 }],
+        [{ "node": "Generate: Response (gemma2:9b)", "type": "main", "index": 0 }],
+        [{ "node": "Generate: Response (gemma2:9b)", "type": "main", "index": 0 }],
+        [{ "node": "Escalate: Telegram Alert", "type": "main", "index": 0 }]
+      ]
+    },
+    "Query: Supabase Intelligence Items": { "main": [[{ "node": "Generate: Response (gemma2:9b)", "type": "main", "index": 0 }]] },
+    "Generate: Response (gemma2:9b)": { "main": [[{ "node": "Log: Supabase Conversation", "type": "main", "index": 0 }]] },
+    "Log: Supabase Conversation": { "main": [[{ "node": "Respond: JSON to Widget", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "bizlegal" }, { "name": "bizbot" }],
+  "_meta": {
+    "description": "BizBot webhook handler — intent routing, response generation, conversation logging",
+    "endpoint": "POST /webhook/bizbot"
+  }
+}

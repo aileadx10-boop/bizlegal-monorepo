@@ -145,16 +145,19 @@ Live status: `https://bizlegal-ai.com/ops/health?t=$OPS_DASHBOARD_TOKEN` (after 
 
 Every planning + ops doc lives in `decisions/`:
 
-- `concurrent-bouncing-kitten.md` — current Phase Z plan (canonical)
-- `MOSES_OPS_HANDOFF.md` — the Moses-task checklist (Phase A from Phase V; subset of Z0)
-- `PARAMETERS_RUNBOOK.md` — disaster recovery for every env across 10 surfaces
-- `PAYMENT_URLS_VAULT.md` — *DEPRECATED post-Z3*; archive only
-- `MONOREPO_AGENT_PROMPT.md` — original phased prompts; Z1 supersedes
-- `OUTREACH_KIT.md` — Reddit / LinkedIn / X / HN templates per spear product
-- `AGENTS_BRAINSTORM_V2.md` — V3-V7 candidates (parked)
-- `MRR_30K_PATH.md` — 30/60/90/120 day milestones
-- `DASHBOARD_AGENT_PROMPT.md` — *added in Z5*
-- `OPENCLAW_ROLE.md` — *added in Z6*
+- `decisions/MOSES_OPS_HANDOFF.md` — Moses-task checklist (Phase A subset of Z0)
+- `decisions/PARAMETERS_RUNBOOK.md` — disaster recovery for every env across 10 surfaces
+- `decisions/PAYMENT_URLS_VAULT.md` — DEPRECATED post-Z3; archive only
+- `decisions/MONOREPO_AGENT_PROMPT.md` — original phased prompts; Z1 of this Phase Z plan supersedes
+- `decisions/OUTREACH_KIT.md` — Reddit / LinkedIn / X / HN templates per spear product
+- `decisions/AGENTS_BRAINSTORM_V2.md` — V3-V7 candidates (parked indefinitely)
+- `decisions/MRR_30K_PATH.md` — 30/60/90/120 day milestones
+- `decisions/MASTER_FUNNEL.md` — lead → product → payment → email lineage
+- `decisions/AGENTS_BRAINSTORM.md` — original V1 brainstorm (10 agents shipped from this list)
+- `decisions/SEO_FIXES.md` — long-tail keyword audit
+- `decisions/DASHBOARD_AGENT_PROMPT.md` — added in Z5
+- `decisions/OPENCLAW_ROLE.md` — added in Z6
+- *current plan is at `~/.claude/plans/concurrent-bouncing-kitten.md` (lives outside the repo since plans are per-session ephemera)*
 
 When you write a new decision, add it here.
 
