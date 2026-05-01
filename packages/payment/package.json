@@ -1,0 +1,29 @@
+{
+  "name": "@bizlegal/payment",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Code-only payment gateway clients (NOWPayments + PayPal + LemonSqueezy + Paddle stubs). Replaces NEXT_PUBLIC_*_URL env constants with on-the-fly checkout-URL generation.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./products": {
+      "types": "./dist/products.d.ts",
+      "import": "./dist/products.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "echo ok",
+    "test": "echo 'no tests yet'"
+  },
+  "devDependencies": {
+    "@types/node": "^20.16.0",
+    "typescript": "^5.7.2"
+  }
+}

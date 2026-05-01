@@ -1,0 +1,28 @@
+name = "bizlegal-telegram-hub"
+main = "src/index.ts"
+compatibility_date = "2026-05-01"
+compatibility_flags = ["nodejs_compat"]
+
+# DEPLOYS to https://bizlegal-telegram-hub.bizlegal-ai.workers.dev
+# (After verification, optional custom route on telegram.bizlegal-ai.com)
+
+[observability]
+enabled = true
+head_sampling_rate = 1.0
+
+# Telegram bot uses webhook mode (not long-poll) so the Worker stays free.
+# The webhook URL is set ONCE per token via:
+#
+#   curl "https://api.telegram.org/bot$BIZLEGALHUBBOT/setWebhook" \
+#     -d "url=https://bizlegal-telegram-hub.bizlegal-ai.workers.dev/webhook" \
+#     -d "secret_token=$TELEGRAM_WEBHOOK_SECRET"
+#
+# Telegram includes the secret_token in the X-Telegram-Bot-Api-Secret-Token
+# header on every callback so we verify before processing.
+
+# Required secrets (set via `wrangler secret put <NAME>`):
+# - BIZLEGALHUBBOT             (the @BizlegalHubBot token from BotFather)
+# - TELEGRAM_WEBHOOK_SECRET    (random hex; verifies inbound is from Telegram)
+# - WEBHOOK_SHARED_SECRET      (= BIZLEGAL_INBOUND_SECRET hex; used to sign
+#                              outbound ops_event POSTs to hub /api/ops/log)
+# - HUB_BASE_URL               (default https://bizlegal-ai.com — override for staging)

@@ -1,0 +1,20 @@
+{
+  "name": "@bizlegal/telegram-hub",
+  "version": "0.1.0",
+  "private": true,
+  "description": "@BizlegalHubBot — Telegram FAQ + intake bot. Cloudflare Worker. Routes inbound messages to /agents/<x> CTAs and fires lead.inbound ops events.",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "build": "echo 'wrangler deploy is the build'",
+    "lint": "echo ok",
+    "test": "echo 'no tests yet'"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241127.0",
+    "typescript": "^5.7.2",
+    "wrangler": "^3.91.0"
+  }
+}
