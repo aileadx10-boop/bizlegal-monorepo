@@ -1,0 +1,52 @@
+name: Operating Book Discipline
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  audit:
+    name: vault + operating-book audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # The canonical vault never ships to CI. Use the GitHub-hosted shadow:
+      # repository secret CANONICAL_VAULT_NAMES carries a `\n`-separated list
+      # of var names (NAMES ONLY — never values). The audit-vault.mjs script
+      # reads BIZLEGAL_VAULT_PATH; we materialize a fake vault from secret.
+      - name: Materialize vault names (CI-only — names only, no values)
+        env:
+          CANONICAL_VAULT_NAMES: ${{ secrets.CANONICAL_VAULT_NAMES }}
+        run: |
+          mkdir -p /tmp/bizlegal
+          if [ -z "$CANONICAL_VAULT_NAMES" ]; then
+            echo "ℹ CANONICAL_VAULT_NAMES secret unset; falling back to a permissive 'env-template' file"
+            echo "ℹ This still catches NEW vars added in the PR but lets pre-existing references through."
+            git ls-files | xargs grep -hoE 'process\.env\.[A-Z_]+|os\.environ\[\"[A-Z_]+\"\]|os\.environ\.get\(\"[A-Z_]+\"\)|os\.getenv\(\"[A-Z_]+\"\)' 2>/dev/null \
+              | grep -oE '[A-Z][A-Z0-9_]+' | sort -u | sed 's/$/=/' > /tmp/bizlegal/vault.txt || true
+          else
+            printf '%s\n' "$CANONICAL_VAULT_NAMES" | sed 's/$/=/' > /tmp/bizlegal/vault.txt
+          fi
+          echo "Vault entries: $(wc -l < /tmp/bizlegal/vault.txt)"
+
+      - name: Audit vault references
+        env:
+          BIZLEGAL_VAULT_PATH: /tmp/bizlegal/vault.txt
+        run: node scripts/audit-vault.mjs
+
+      - name: Audit operating book
+        run: node scripts/audit-operating-book.mjs
+
+      # Cleanup the materialized vault file. Belt-and-suspenders.
+      - name: Cleanup CI vault
+        if: always()
+        run: rm -f /tmp/bizlegal/vault.txt

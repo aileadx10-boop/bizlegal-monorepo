@@ -1,0 +1,25 @@
+# Z2.5 — Operating Book Discipline enforcement (Phase Z 2026-05-01).
+# Every commit that touches code MUST keep the canonical env vault + operating book in sync.
+# Bypass with `git commit --no-verify` only in dire emergencies; fix the check immediately after.
+
+pre-commit:
+  parallel: true
+  commands:
+    audit-vault:
+      glob: "*.{ts,tsx,js,mjs,py}"
+      run: node scripts/audit-vault.mjs --staged
+      stage_fixed: false
+      fail_text: |
+        ❌ A staged file references an env var that is NOT in the canonical vault.
+        Open the canonical vault and append a line `MY_VAR=` before committing.
+        Vault path: C:/Users/Moshe Dor/Downloads/env-hub-bizlegal-ai.txt
+        See CLAUDE.md Section 4 + Section 5 for why this rule exists.
+
+    audit-operating-book:
+      run: node scripts/audit-operating-book.mjs --staged
+      stage_fixed: false
+      fail_text: |
+        ❌ A new dir was created under apps/ services/ agents/ or packages/ but is missing CLAUDE.md.
+        Add <new>/CLAUDE.md (10-20 lines describing purpose + envs + deploy target).
+        Then add a one-liner pointing at it in the root CLAUDE.md.
+        See CLAUDE.md Section 5 for the discipline rule.

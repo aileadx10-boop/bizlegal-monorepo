@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build artifacts
+.next/
+.turbo/
+dist/
+build/
+out/
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env files (CANONICAL VAULT IS C:/Users/Moshe Dor/Downloads/env-hub-bizlegal-ai.txt)
+.env
+.env.*
+!.env.example
+!.env.template
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Python (curator + OCI services)
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Curator drafts (regenerable)
+drafts/
+
+# Wrangler
+.wrangler/
+.dev.vars

@@ -1,0 +1,30 @@
+{
+  "name": "bizlegal-monorepo",
+  "private": true,
+  "version": "0.0.1",
+  "description": "BizLegal AI consolidated workspace — apps + services + packages + agents under one git repo, one env vault, one deploy story.",
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  },
+  "packageManager": "pnpm@9.12.3",
+  "workspaces": [
+    "apps/*",
+    "services/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
+    "audit:vault": "node scripts/audit-vault.mjs",
+    "audit:operating-book": "node scripts/audit-operating-book.mjs",
+    "prepare": "lefthook install || true"
+  },
+  "devDependencies": {
+    "lefthook": "^1.7.22",
+    "turbo": "^2.2.3",
+    "typescript": "^5.7.2"
+  }
+}
