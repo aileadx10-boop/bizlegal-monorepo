@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bizlegal-ai.com/schemas/lead-profile.json",
+  "title": "LeadProfile",
+  "description": "BizLegal-AI lead intake schema. Populated in stages: Worker metadata + Haiku extraction + Haiku critique + Haiku scoring + Haiku summary.",
+  "type": "object",
+  "required": ["lead_id", "received_at", "source", "contact", "pain", "pipeline_meta"],
+  "additionalProperties": false,
+  "properties": {
+    "lead_id": {
+      "type": "string",
+      "description": "UUIDv4 assigned by Worker on receipt",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "received_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp of form receipt"
+    },
+    "source": {
+      "type": "object",
+      "description": "Where the lead came from",
+      "required": ["form_url"],
+      "properties": {
+        "form_url": { "type": "string", "format": "uri" },
+        "utm_source": { "type": ["string", "null"] },
+        "utm_medium": { "type": ["string", "null"] },
+        "utm_campaign": { "type": ["string", "null"] },
+        "referrer": { "type": ["string", "null"] },
+        "user_agent": { "type": ["string", "null"] },
+        "ip_country": { "type": ["string", "null"], "description": "Populated from Cloudflare CF-IPCountry header" }
+      }
+    },
+    "language": {
+      "type": "string",
+      "description": "ISO 639-1 code detected by Haiku",
+      "default": "en"
+    },
+    "contact": {
+      "type": "object",
+      "required": ["full_name", "email"],
+      "properties": {
+        "full_name": { "type": "string", "minLength": 1 },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": ["string", "null"] },
+        "role": { "type": ["string", "null"], "description": "e.g., CEO, Head of Compliance, GC" }
+      }
+    },
+    "company": {
+      "type": "object",
+      "properties": {
+        "name": { "type": ["string", "null"] },
+        "website": { "type": ["string", "null"] },
+        "industry": { "type": ["string", "null"] },
+        "size_band": {
+          "type": ["string", "null"],
+          "enum": ["1-10", "11-50", "51-200", "201-1000", "1000+", null]
+        },
+        "hq_country": { "type": ["string", "null"], "description": "ISO 3166-1 alpha-2" },
+        "hq_region": { "type": ["string", "null"], "description": "State/province/canton" }
+      }
+    },
+    "pain": {
+      "type": "object",
+      "required": ["raw_text"],
+      "properties": {
+        "raw_text": { "type": "string", "description": "Verbatim description submitted by the lead" },
+        "extracted_challenge": { "type": ["string", "null"], "description": "Haiku's one-sentence rephrase" },
+        "jurisdictions_mentioned": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "regulations_mentioned": { "type": "array", "items": { "type": "string" }, "default": [], "description": "e.g., GDPR, CCPA, BOI, HIPAA, SOX" },
+        "urgency_signals": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "budget_signals": { "type": "array", "items": { "type": "string" }, "default": [] }
+      }
+    },
+    "qualification": {
+      "type": ["object", "null"],
+      "description": "Populated by Haiku scoring call",
+      "properties": {
+        "vertical": {
+          "type": "string",
+          "enum": ["compliance", "regulatory_risk", "jurisdiction_arbitrage", "business_intelligence", "other"]
+        },
+        "scores": {
+          "type": "object",
+          "required": ["fit", "urgency", "budget", "vertical_match", "decision_authority", "pain_clarity"],
+          "properties": {
+            "fit": { "type": "number", "minimum": 0, "maximum": 10 },
+            "urgency": { "type": "number", "minimum": 0, "maximum": 10 },
+            "budget": { "type": "number", "minimum": 0, "maximum": 10 },
+            "vertical_match": { "type": "number", "minimum": 0, "maximum": 10 },
+            "decision_authority": { "type": "number", "minimum": 0, "maximum": 10 },
+            "pain_clarity": { "type": "number", "minimum": 0, "maximum": 10 }
+          }
+        },
+        "overall_score": { "type": "number", "minimum": 0, "maximum": 10 },
+        "recommended_action": {
+          "type": "string",
+          "enum": ["respond_immediately", "qualify_further", "disqualify"]
+        },
+        "rationale": { "type": "string" }
+      }
+    },
+    "confidence": {
+      "type": ["object", "null"],
+      "description": "Populated by Haiku critique call",
+      "properties": {
+        "per_field": {
+          "type": "object",
+          "description": "Map of dotted field path to 0-1 confidence",
+          "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 }
+        },
+        "min_confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "critical_fields_missing": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "concerns": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "escalate_to_cloud": { "type": "boolean", "default": false }
+      }
+    },
+    "summary_bullets": {
+      "type": ["array", "null"],
+      "description": "5-bullet human summary populated by Haiku summary call",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": { "type": "string" }
+    },
+    "pipeline_meta": {
+      "type": "object",
+      "required": ["extraction_model", "status"],
+      "properties": {
+        "extraction_model": { "type": "string", "description": "e.g., claude-haiku-4-5" },
+        "critique_model": { "type": "string" },
+        "scoring_model": { "type": "string" },
+        "summary_model": { "type": "string" },
+        "escalated_to_cloud": { "type": "boolean", "default": false },
+        "retries": { "type": "integer", "minimum": 0, "default": 0 },
+        "status": {
+          "type": "string",
+          "enum": ["received", "extracted", "scored", "stored", "notified", "failed", "dlq"]
+        },
+        "error_class": { "type": ["string", "null"] },
+        "error_detail": { "type": ["string", "null"] },
+        "processed_at": { "type": ["string", "null"], "format": "date-time" },
+        "duration_ms": { "type": ["integer", "null"] }
+      }
+    }
+  }
+}

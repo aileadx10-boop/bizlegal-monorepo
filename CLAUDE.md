@@ -24,11 +24,11 @@ bizlegal-monorepo/
 │   ├── forge/        forge.bizlegal-ai.com (BOI Kit $149, Passport $297, scan $97)
 │   └── blog/         blog.bizlegal-ai.com (curator-fed MDX content; CF Pages)
 ├── services/         non-Vercel runtimes
-│   ├── hetzner/      curator pipeline: scout/brain/publisher/bot (Python, systemd)
-│   ├── oci/          deal-router (FastAPI, Docker, Caddy + Cloudflare Tunnel)
-│   ├── worker/       Cloudflare Worker — bizlegal-lead-intake (TS, wrangler)
+│   ├── hetzner/      curator pipeline: scout/brain/publisher/bot (Python, systemd) [Z1.C-pending]
+│   ├── oci/          deal-router (FastAPI, Docker, Caddy + Cloudflare Tunnel) [Z1.C-pending]
+│   ├── worker/       Cloudflare Worker — bizlegal-lead-intake (TS, wrangler) [Z1.C-pending]
 │   ├── telegram-hub/ CF Worker — @BizlegalHubBot customer FAQ (Z4.2)
-│   └── fastify-*/    additional Fastify services (Z1.E — path TBD)
+│   └── funnel-mvp/   Fastify legal-risk intelligence funnel (Z1.E — imported from SKOOL-NATE)
 ├── packages/         shared TS + Python siblings
 │   ├── ops-log/      @bizlegal/ops-log — HMAC-signed event POST to hub /api/ops/log
 │   ├── firecrawl/    @bizlegal/firecrawl — scrape + Sonnet semantic-diff
@@ -38,7 +38,9 @@ bizlegal-monorepo/
 │   ├── policy-refresh/ @bizlegal/policy-refresh — 7-framework registry (V2)
 │   └── payment/      @bizlegal/payment — NOWPayments + PayPal + LemonSqueezy + Paddle clients (Z3)
 ├── agents/           AGENTS.md + agent prompt seeds + WAT specs
+│   └── ea/           Executive Assistant brain — prompts, schemas, templates, context (Z1.F)
 ├── decisions/        all planning + ops docs (single canonical location)
+│   └── strategy/     SKOOL-NATE strategy chapters (01-11) + THE-MACHINE + master plans (Z1.G)
 ├── infrastructure/   Caddyfile, docker-compose, systemd units, Hetzner/OCI provisioning
 ├── supabase/         consolidated migrations (chronological YYYYMMDD_<app>_<feature>.sql)
 └── scripts/          audit-vault.mjs + audit-operating-book.mjs (Z2.5)

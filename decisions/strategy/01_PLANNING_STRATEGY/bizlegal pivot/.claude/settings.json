@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(nslookup __TRACKED_VAR__.bizlegal-ai.com)",
+      "Bash(dig +short bizlegal-ai.com CNAME)",
+      "Bash(timeout 3 curl -v https://tracr.bizlegal-ai.com)",
+      "Bash(grep -r -l -E \"SG\\\\.[A-Za-z0-9_-]{22,}|sk-ant-api[0-9]{2}|ghp_[A-Za-z0-9]{36,}|fc-[a-f0-9]{32,}|VRClh_|AIzaSy[A-Za-z0-9_-]{30,}|nowpayments.+[a-zA-Z0-9]{30,}\")"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\Moshe Dor\\bizlegal-monorepo\\agents\\ea"
+    ]
+  }
+}
