@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="v0-dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forge | Compliance Intelligence Platform</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <style>
+        :root {
+            /* V0 Dark Brand Tokens */
+            --accent: #c8ff00;
+            --bg: #0d0d0d;
+            --card: #141414;
+            --text: #ffffff;
+            --text-dim: #888888;
+            --border: rgba(255, 255, 255, 0.08);
+            --glass: rgba(13, 13, 13, 0.7);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3 { font-weight: 900; letter-spacing: -0.05em; line-height: 0.9; }
+        p { font-weight: 400; color: var(--text-dim); }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 4%; }
+
+        /* 1. FIXED NAV */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            padding: 20px 5%; display: flex; justify-content: space-between;
+            align-items: center; background: var(--glass);
+            backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
+        }
+        .logo { font-weight: 900; font-size: 1.5rem; letter-spacing: -2px; }
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-links a { color: var(--text-dim); text-decoration: none; font-size: 0.85rem; font-weight: 500; }
+        .nav-cta { padding: 10px 20px; background: var(--accent); color: #000; border-radius: 8px; font-weight: 700; text-decoration: none; font-size: 0.8rem; }
+
+        /* 2. HERO */
+        .hero {
+            height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            position: relative; padding-top: 80px;
+        }
+        .hero-tag { font-size: 0.7rem; font-weight: 800; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; margin-bottom: 24px; }
+        .hero h1 { font-size: clamp(3.5rem, 12vw, 8.5rem); margin-bottom: 32px; }
+        .hero-sub { max-width: 540px; font-size: 1.25rem; margin-bottom: 48px; }
+        .hero-ctas { display: flex; gap: 16px; }
+        .btn-prime { padding: 18px 36px; background: var(--accent); color: #000; border-radius: 12px; font-weight: 800; text-decoration: none; }
+        .btn-sec { padding: 18px 36px; border: 1px solid var(--border); border-radius: 12px; font-weight: 800; text-decoration: none; color: #fff; }
+        .social-proof { margin-top: 60px; font-size: 0.8rem; font-weight: 600; color: var(--text-dim); }
+
+        /* 3. TICKER */
+        .ticker {
+            border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+            padding: 30px 0; overflow: hidden; white-space: nowrap; display: flex;
+        }
+        .ticker-track { display: flex; gap: 80px; animation: scroll 40s linear infinite; }
+        .ticker-track:hover { animation-play-state: paused; }
+        .ticker-item { font-weight: 900; font-size: 1.5rem; color: var(--text-dim); opacity: 0.4; }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* 4. PROCESS (01/02/03) */
+        .process { padding: 120px 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+        .step { position: relative; padding-top: 60px; }
+        .step-num { position: absolute; top: 0; left: 0; font-size: 8rem; font-weight: 900; opacity: 0.05; line-height: 1; }
+        .step h3 { font-size: 1.8rem; margin-bottom: 16px; }
+
+        /* 5. SERVICES BENTO */
+        .bento { padding: 100px 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+        .bento-card { background: var(--card); border: 1px solid var(--border); border-radius: 32px; padding: 60px; overflow: hidden; position: relative; }
+        .bento-card.wide { grid-column: span 2; }
+        .mock-ui { margin-top: 40px; background: #000; border: 1px solid var(--border); border-radius: 12px; height: 200px; width: 100%; }
+
+        /* 8. PLANS (Pricing) */
+        .plans { padding: 120px 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .plan-card { background: var(--card); border: 1px solid var(--border); border-radius: 32px; padding: 50px; text-align: left; }
+        .plan-card.popular { border: 2px solid var(--accent); position: relative; }
+        .plan-card h4 { color: var(--accent); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 2px; margin-bottom: 20px; }
+        .price { font-size: 4rem; font-weight: 900; margin-bottom: 10px; }
+        .price span { font-size: 1rem; color: var(--text-dim); }
+
+        /* 10. FAQ */
+        .faq { padding: 100px 0; max-width: 800px; margin: 0 auto; }
+        .faq-item { border-bottom: 1px solid var(--border); padding: 30px 0; cursor: pointer; }
+        .faq-head { display: flex; justify-content: space-between; align-items: center; }
+        .faq-icon { transition: transform 0.4s; }
+        .faq-item.open .faq-icon { transform: rotate(45deg); color: var(--accent); }
+        .faq-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; margin-top: 0; color: var(--text-dim); }
+        .faq-item.open .faq-content { max-height: 200px; margin-top: 20px; }
+
+        /* 11. FINAL CTA */
+        .final-cta {
+            padding: 100px 0; text-align: center;
+            background: radial-gradient(circle at center, rgba(200, 255, 0, 0.05) 0%, transparent 70%);
+            border-radius: 40px; margin-bottom: 100px;
+        }
+
+        /* 12. FOOTER */
+        footer { padding: 80px 0; border-top: 1px solid var(--border); display: grid; grid-template-columns: 1.5fr repeat(4, 1fr); gap: 40px; }
+        footer a { color: var(--text-dim); text-decoration: none; font-size: 0.85rem; display: block; margin-bottom: 12px; }
+
+        @media (max-width: 1024px) {
+            .process, .bento, .plans, footer { grid-template-columns: 1fr; }
+            .bento-card.wide { grid-column: span 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">FORGE<span>.</span></div>
+        <div class="nav-links">
+            <a href="#services">Services</a>
+            <a href="#about">About</a>
+            <a href="#plans">Pricing</a>
+            <a href="#contact" class="nav-cta">Start Free</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section class="hero">
+            <div class="hero-tag gsap-reveal">Verified Institutional Infrastructure</div>
+            <h1 class="gsap-reveal">COMPLIANCE<br>BY DESIGN.</h1>
+            <p class="hero-sub gsap-reveal">Deploy automated risk layers for BOI, Travel Rule, and DeFi. Managed by Moses Dor and the Forge legal desk.</p>
+            <div class="hero-ctas gsap-reveal">
+                <a href="#" class="btn-prime">Submit BOI Report</a>
+                <a href="#" class="btn-sec">Intel Feed</a>
+            </div>
+            <div class="social-proof gsap-reveal">
+                177+ REPORTS DELIVERED ACROSS 4 JURISDICTIONS
+            </div>
+        </section>
+
+        <section class="ticker">
+            <div class="ticker-track">
+                <span class="ticker-item">US FINCEN</span>
+                <span class="ticker-item">EU MICA</span>
+                <span class="ticker-item">UAE VARA</span>
+                <span class="ticker-item">SINGAPORE MAS</span>
+                <span class="ticker-item">BOI COMPLIANCE</span>
+                <span class="ticker-item">US FINCEN</span>
+                <span class="ticker-item">EU MICA</span>
+                <span class="ticker-item">UAE VARA</span>
+                <span class="ticker-item">SINGAPORE MAS</span>
+            </div>
+        </section>
+
+        <section class="process">
+            <div class="step gsap-reveal">
+                <div class="step-num">01</div>
+                <h3>Connect Stack</h3>
+                <p>Integrate your DeFi protocol or business entity to the Forge Intel Feed.</p>
+            </div>
+            <div class="step gsap-reveal">
+                <div class="step-num">02</div>
+                <h3>Automate Drift</h3>
+                <p>Our agents map your architecture to 500+ global regulatory sources instantly.</p>
+            </div>
+            <div class="step gsap-reveal">
+                <div class="step-num">03</div>
+                <h3>Verified Safety</h3>
+                <p>Generate audit-ready reports signed off by Moses Dor, LLB LLM.</p>
+            </div>
+        </section>
+
+        <section class="bento" id="services">
+            <div class="bento-card wide gsap-reveal">
+                <h3>BOI Reporting Engine</h3>
+                <p>Avoid the $500/day penalty. Automated Beneficial Ownership Information filings for US entities with 24h delivery.</p>
+                <div class="mock-ui"></div>
+            </div>
+            <div class="bento-card gsap-reveal">
+                <h3>Reg Passport</h3>
+                <p>Institutional identity and licensing orchestration for global VASPs.</p>
+            </div>
+            <div class="bento-card gsap-reveal">
+                <h3>Web Scanner</h3>
+                <p>Real-time threat detection for smart contracts and compliance drift.</p>
+            </div>
+        </section>
+
+        <section style="padding: 120px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 80px;">
+            <div class="gsap-reveal">
+                <h2 style="font-size: 3rem; margin-bottom: 30px;">Legal Logic.<br><span style="color: var(--accent);">Code Implementation.</span></h2>
+                <p style="font-size: 1.2rem; margin-bottom: 40px;">Led by Moses Dor, LLB LLM, Forge bridges the gap between DIFC regulations and decentralized architecture.</p>
+                <div style="display: flex; gap: 40px;">
+                    <div><div style="font-size: 2.5rem; font-weight: 900;">177+</div><p>Reports</p></div>
+                    <div><div style="font-size: 2.5rem; font-weight: 900;">4</div><p>Jurisdictions</p></div>
+                </div>
+            </div>
+            <div class="plan-card gsap-reveal" style="background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);">
+                <i data-lucide="award" color="#c8ff00" size="48"></i>
+                <h3 style="margin-top: 30px;">Moses Dor, LLB LLM</h3>
+                <p style="margin: 15px 0;">Israel Bar Association · DIFC Registered Practitioner · Real Estate & Urban Renewal Specialist.</p>
+                <div style="padding: 10px; border: 1px solid var(--accent); border-radius: 8px; display: inline-block; font-size: 0.7rem; font-weight: 800;">LICENSED COUNSEL</div>
+            </div>
+        </section>
+
+        <section class="plans" id="plans">
+            <div class="plan-card gsap-reveal">
+                <h4>Starter</h4>
+                <div class="price">$149<span>/report</span></div>
+                <p>BOI Compliance filing.</p>
+                <a href="#" class="btn-sec" style="display: block; text-align: center; margin-top: 30px;">Get BOI</a>
+            </div>
+            <div class="plan-card popular gsap-reveal">
+                <h4>Scale</h4>
+                <div class="price">$1,500<span>/mo</span></div>
+                <p>Reg Passport & Monitoring.</p>
+                <a href="#" class="btn-prime" style="display: block; text-align: center; margin-top: 30px;">Go Scale</a>
+            </div>
+            <div class="plan-card gsap-reveal">
+                <h4>Enterprise</h4>
+                <div class="price">POA</div>
+                <p>Custom Institutional Stack.</p>
+                <a href="#" class="btn-sec" style="display: block; text-align: center; margin-top: 30px;">Contact Legal</a>
+            </div>
+        </section>
+
+        <section class="faq">
+            <div class="faq-item gsap-reveal" onclick="toggleFaq(this)">
+                <div class="faq-head"><h3>What is the penalty for BOI non-compliance?</h3><i data-lucide="plus" class="faq-icon"></i></div>
+                <div class="faq-content">Failure to file Beneficial Ownership Information can result in civil penalties of up to $500 for each day the violation continues.</div>
+            </div>
+            <div class="faq-item gsap-reveal" onclick="toggleFaq(this)">
+                <div class="faq-head"><h3>How fast is the priority delivery?</h3><i data-lucide="plus" class="faq-icon"></i></div>
+                <div class="faq-content">Standard delivery is 24 hours. Priority delivery is guaranteed within 12 hours for urgent filings.</div>
+            </div>
+        </section>
+
+        <section class="final-cta gsap-reveal">
+            <h2 style="font-size: 4rem; margin-bottom: 24px;">READY TO FORGE?</h2>
+            <p style="margin-bottom: 40px; font-size: 1.2rem;">Join 177+ entities securing their regulatory future.</p>
+            <a href="#" class="btn-prime">Submit Your BOI Today</a>
+        </section>
+
+        <footer>
+            <div><div class="logo">FORGE.</div><p style="font-size: 0.75rem; margin-top: 20px;">&copy; 2026 BizLegal AI GitHub Org. All Rights Reserved.</p></div>
+            <div><h4>Product</h4><a href="#">BOI Report</a><a href="#">Web Scanner</a><a href="#">Intel Feed</a></div>
+            <div><h4>Legal</h4><a href="#">Moses Dor Profile</a><a href="#">DIFC Status</a><a href="#">Israel Bar</a></div>
+            <div><h4>Support</h4><a href="#">Documentation</a><a href="#">API Status</a><a href="#">24h Delivery</a></div>
+        </footer>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        gsap.registerPlugin(ScrollTrigger);
+
+        // GSAP SKILLS Implementation
+        const tl = gsap.timeline({ defaults: { ease: "expo.out", duration: 1.5 } });
+
+        tl.from(".logo", { y: -20, opacity: 0 })
+          .from(".nav-links a", { y: -20, opacity: 0, stagger: 0.1 }, "-=1.2")
+          .from(".hero h1", { y: 100, opacity: 0, skewY: 10 }, "-=1")
+          .from(".hero-sub", { y: 20, opacity: 0 }, "-=1.2")
+          .from(".hero-ctas .btn-prime, .btn-sec", { scale: 0.8, opacity: 0, stagger: 0.1 }, "-=1.1");
+
+        // Scroll Reveals
+        gsap.utils.toArray('.gsap-reveal').forEach((el) => {
+            gsap.from(el, {
+                scrollTrigger: { trigger: el, start: "top 90%" },
+                y: 50, opacity: 0, duration: 1.2, ease: "power3.out"
+            });
+        });
+
+        function toggleFaq(el) {
+            el.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>

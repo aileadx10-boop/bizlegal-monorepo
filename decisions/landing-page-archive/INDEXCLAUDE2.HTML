@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forge — Compliance Intelligence for Digital Assets</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- GSAP + ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- Lenis smooth scroll -->
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<!-- Chart.js for sparklines -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<!-- Vanilla Tilt for 3D cards -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   FORGE × CRYPTOCLAY — MASTER TEMPLATE
+   ───────────────────────────────────────────────────────────────
+   THEME TOKENS — swap ONE block to change the entire theme
+   Current: DARK (V0) — override with any theme below
+
+   V0 DARK:   bg=#08080f  card=#111120  accent=#7132f5  accent2=#a855f7  lime=#c8ff00  text=#f0f0f0
+   V1 WHITE:  bg=#ffffff  card=#f7f8fa  accent=#1a1aff  accent2=#4040ff  lime=#1a1aff  text=#0f1117
+   V2 PURPLE: bg=#f8f7ff  card=#ffffff  accent=#5b21b6  accent2=#7c3aed  lime=#5b21b6  text=#0e0b1a
+   V3 GREEN:  bg=#faf9f6  card=#ffffff  accent=#1a5c38  accent2=#24763e  lime=#1a5c38  text=#1a1a14
+   V4 FINTECH:bg=#f0f4ff  card=#ffffff  accent=#0f52ba  accent2=#1d6fd8  lime=#0f52ba  text=#0a1628
+   V5 ORANGE: bg=#fffaf5  card=#ffffff  accent=#ea580c  accent2=#f97316  lime=#ea580c  text=#1a0a00
+═══════════════════════════════════════════════════════════════ */
+
+/* ── ACTIVE THEME TOKENS (injected per variant) ── */
+:root {
+  --bg: #08080f;
+  --bg2: #0d0d1a;
+  --bg3: #111120;
+  --card: #111120;
+  --card2: #161625;
+  --border: rgba(255,255,255,.07);
+  --border2: rgba(255,255,255,.13);
+  --border-acc: rgba(113,50,245,.4);
+  --text: #f0f0f0;
+  --text2: #c8c8e0;
+  --muted: #7878a0;
+  --dim: #3a3a5a;
+  --accent: #7132f5;
+  --accent2: #a855f7;
+  --accent-rgb: 113,50,245;
+  --glow: rgba(113,50,245,.28);
+  --glow2: rgba(113,50,245,.12);
+  --lime: #c8ff00;
+  --neon: #00ffa3;
+  --rose: #ff3366;
+  --amber: #fbbf24;
+  --green: #00ffa3;
+  --mode: dark;           /* dark | light */
+  --nav-bg: rgba(8,8,15,.75);
+  --hero-grid-color: rgba(113,50,245,.06);
+  --section-alt: #0d0d1a;
+  --shadow: 0 32px 80px rgba(0,0,0,.5);
+  --shadow2: 0 8px 32px rgba(0,0,0,.3);
+}
+
+/* ─── RESET ────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  line-height:1.6;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ─── SCROLLBAR ─────────────────────────────────────────── */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:2px}
+
+/* ─── NOISE GRAIN ───────────────────────────────────────── */
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px;
+}
+
+/* ─── NAV ───────────────────────────────────────────────── */
+nav{
+  position:fixed;top:14px;left:50%;transform:translateX(-50%);
+  z-index:500;width:calc(100% - 48px);max-width:1200px;
+  padding:0 24px;height:58px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--nav-bg);backdrop-filter:blur(24px);
+  border:1px solid var(--border2);border-radius:50px;
+  transition:all .4s;
+}
+nav.solid{background:var(--bg2);border-color:var(--border-acc)}
+.nav-logo{
+  display:flex;align-items:center;gap:10px;
+  font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;
+  color:var(--text);text-decoration:none;
+}
+.nmark{
+  width:32px;height:32px;border-radius:9px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;font-weight:900;color:#fff;letter-spacing:-.02em;
+  box-shadow:0 0 18px var(--glow);flex-shrink:0;
+}
+.nav-links{display:flex;list-style:none;gap:2px}
+.nav-links a{
+  color:var(--muted);text-decoration:none;font-size:.82rem;font-weight:500;
+  padding:6px 14px;border-radius:50px;transition:all .2s;
+  font-family:'DM Sans',sans-serif;
+}
+.nav-links a:hover{color:var(--text);background:rgba(255,255,255,.06)}
+.nav-cta{
+  padding:9px 22px;background:var(--accent);color:#fff;
+  border:none;border-radius:50px;font-size:.82rem;font-weight:700;
+  cursor:pointer;text-decoration:none;transition:all .25s;
+  font-family:'Syne',sans-serif;letter-spacing:.01em;
+  box-shadow:0 0 20px var(--glow);
+}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 0 32px var(--glow);filter:brightness(1.1)}
+
+/* ─── HERO ──────────────────────────────────────────────── */
+.hero{
+  min-height:100vh;padding:110px 80px 80px;
+  display:grid;grid-template-columns:1fr 1fr;
+  align-items:center;gap:60px;
+  position:relative;overflow:hidden;
+  max-width:1400px;margin:0 auto;
+}
+
+/* Animated mesh blobs */
+.blob{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;animation:blobFloat 8s ease-in-out infinite}
+.blob1{width:640px;height:640px;background:radial-gradient(circle,rgba(var(--accent-rgb),.22),transparent 70%);top:-140px;right:-100px;animation-duration:9s}
+.blob2{width:420px;height:420px;background:radial-gradient(circle,rgba(var(--accent-rgb),.14),transparent 70%);bottom:-60px;left:-120px;animation-duration:11s;animation-delay:-3s}
+.blob3{width:280px;height:280px;background:radial-gradient(circle,rgba(var(--accent-rgb),.08),transparent 70%);top:45%;right:22%;animation-duration:7s;animation-delay:-1.5s}
+@keyframes blobFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(20px,-30px) scale(1.04)}66%{transform:translate(-15px,20px) scale(.97)}}
+
+/* Hero grid */
+.hero-grid{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--hero-grid-color) 1px,transparent 1px),
+    linear-gradient(90deg,var(--hero-grid-color) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse 75% 75% at 50% 50%,black 30%,transparent 100%);
+}
+
+.hero-l{position:relative;z-index:2}
+
+/* Hero eyebrow badge */
+.h-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 16px 6px 8px;
+  background:rgba(var(--accent-rgb),.1);
+  border:1px solid rgba(var(--accent-rgb),.25);border-radius:50px;
+  font-size:.74rem;font-weight:700;color:var(--accent2);
+  margin-bottom:28px;font-family:'DM Mono',monospace;letter-spacing:.04em;
+}
+.badge-pill{
+  width:24px;height:24px;background:var(--accent);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.6rem;color:#fff;font-weight:900;letter-spacing:0;
+  animation:pulseDot 2.5s ease infinite;
+}
+@keyframes pulseDot{0%,100%{box-shadow:0 0 0 0 rgba(var(--accent-rgb),.5)}50%{box-shadow:0 0 0 7px rgba(var(--accent-rgb),0)}}
+
+.hero h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(2.8rem,5.5vw,5.4rem);
+  font-weight:800;letter-spacing:-.045em;line-height:1.01;
+  margin-bottom:22px;
+}
+.hero h1 .accent-w{
+  color:var(--accent2);
+  text-shadow:0 0 60px rgba(var(--accent-rgb),.4);
+}
+.hero-sub{
+  color:var(--muted);max-width:460px;
+  margin-bottom:40px;line-height:1.76;font-size:.97rem;
+}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:52px}
+.btn-pri{
+  padding:14px 30px;background:var(--accent);color:#fff;
+  border:none;border-radius:50px;font-size:.92rem;font-weight:700;
+  cursor:pointer;text-decoration:none;transition:all .25s;
+  font-family:'Syne',sans-serif;position:relative;overflow:hidden;
+  box-shadow:0 0 32px var(--glow),inset 0 1px 0 rgba(255,255,255,.18);
+}
+.btn-pri::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
+  transform:translateX(-100%);transition:.55s;
+}
+.btn-pri:hover::before{transform:translateX(100%)}
+.btn-pri:hover{transform:translateY(-2px);box-shadow:0 0 50px var(--glow)}
+.btn-sec{
+  padding:14px 30px;background:transparent;color:var(--text);
+  border:1px solid var(--border2);border-radius:50px;
+  font-size:.92rem;font-weight:600;cursor:pointer;text-decoration:none;
+  transition:all .25s;font-family:'DM Sans',sans-serif;
+}
+.btn-sec:hover{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.05);transform:translateY(-2px)}
+
+/* Social proof row */
+.proof-row{display:flex;align-items:center;gap:16px}
+.av-stack{display:flex}
+.av{
+  width:36px;height:36px;border-radius:50%;border:2.5px solid var(--bg);
+  margin-left:-10px;font-size:.68rem;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-family:'Syne',sans-serif;
+}
+.av:first-child{margin-left:0}
+.proof-txt{font-size:.82rem;color:var(--muted);line-height:1.5}
+.proof-txt b{color:var(--text);font-weight:700}
+.proof-stars{display:block;color:var(--lime);font-size:.72rem;margin-top:2px;letter-spacing:1px}
+
+/* ─── HERO RIGHT — 3D Dashboard Card ────────────────────── */
+.hero-r{position:relative;z-index:2;display:flex;justify-content:center;align-items:center}
+.dash-wrap{
+  width:100%;max-width:480px;
+  /* VanillaTilt target */
+  transform-style:preserve-3d;
+}
+.dash-card{
+  background:var(--card);
+  border:1px solid var(--border2);border-radius:24px;
+  padding:26px;
+  box-shadow:var(--shadow);
+  position:relative;overflow:hidden;
+}
+.dash-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1.5px;
+  background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent);
+}
+.dash-card::after{
+  content:'';position:absolute;
+  top:-40%;right:-20%;width:200px;height:200px;
+  background:radial-gradient(circle,rgba(var(--accent-rgb),.1),transparent 70%);
+  pointer-events:none;
+}
+/* Inside the 3D card */
+.dc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.dc-title{font-family:'DM Mono',monospace;font-size:.74rem;font-weight:600;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.dc-live{
+  display:flex;align-items:center;gap:6px;
+  padding:4px 12px;background:rgba(0,255,163,.1);
+  border:1px solid rgba(0,255,163,.2);border-radius:50px;
+  font-size:.68rem;font-weight:700;color:var(--neon);font-family:'DM Mono',monospace;
+}
+.dc-live::before{content:'';width:5px;height:5px;background:var(--neon);border-radius:50%;animation:blink 1.5s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.dc-score-row{margin-bottom:14px}
+.dc-score{font-family:'Syne',sans-serif;font-size:2.6rem;font-weight:800;letter-spacing:-.05em;line-height:1;color:var(--text)}
+.dc-score-sub{font-size:.8rem;color:var(--muted);margin-top:2px;font-family:'DM Mono',monospace}
+.dc-score-sub span{color:var(--rose);font-weight:700}
+.chart-area{height:80px;margin-bottom:18px}
+.dc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.dcs{padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px}
+.dcs-l{font-size:.65rem;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.dcs-v{font-size:.95rem;font-weight:700;font-family:'Syne',sans-serif;color:var(--text)}
+/* Alert rows */
+.dc-alerts{display:flex;flex-direction:column;gap:8px}
+.dc-alert{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 13px;border-radius:10px;
+  background:var(--bg3);border:1px solid var(--border);
+}
+.dc-alert.crit{border-color:rgba(255,51,102,.2);background:rgba(255,51,102,.05)}
+.dc-alert.warn{border-color:rgba(251,191,36,.15);background:rgba(251,191,36,.04)}
+.dc-alert.pass{border-color:rgba(0,255,163,.12);background:rgba(0,255,163,.04)}
+.al-badge{padding:2px 7px;border-radius:50px;font-size:.6rem;font-weight:800;font-family:'DM Mono',monospace;flex-shrink:0}
+.al-badge.crit{background:rgba(255,51,102,.15);color:var(--rose)}
+.al-badge.warn{background:rgba(251,191,36,.12);color:var(--amber)}
+.al-badge.pass{background:rgba(0,255,163,.1);color:var(--neon)}
+.al-txt{font-size:.78rem;color:var(--muted);flex:1;font-family:'DM Sans',sans-serif}
+.al-jur{font-size:.65rem;color:var(--dim);font-family:'DM Mono',monospace}
+
+/* Floating mini cards around dashboard (CryptoClay 3D effect) */
+.float-card{
+  position:absolute;background:var(--card2);
+  border:1px solid var(--border2);border-radius:14px;
+  padding:12px 16px;font-family:'DM Mono',monospace;
+  backdrop-filter:blur(8px);pointer-events:none;
+  box-shadow:var(--shadow2);
+}
+.float-card.fc1{top:-20px;right:-30px;font-size:.72rem}
+.float-card.fc2{bottom:-10px;left:-24px;font-size:.72rem}
+.fc-label{font-size:.6rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px}
+.fc-val{font-weight:700;color:var(--text)}
+.fc-chg{font-size:.7rem;font-weight:700}
+.fc-chg.up{color:var(--neon)}.fc-chg.dn{color:var(--rose)}
+
+/* ─── TICKER ─────────────────────────────────────────────── */
+.ticker{
+  overflow:hidden;border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:15px 0;background:var(--bg2);position:relative;
+}
+.ticker::before,.ticker::after{
+  content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none;
+}
+.ticker::before{left:0;background:linear-gradient(90deg,var(--bg2),transparent)}
+.ticker::after{right:0;background:linear-gradient(-90deg,var(--bg2),transparent)}
+.tick-track{
+  display:flex;gap:60px;width:max-content;
+  animation:tickScroll 30s linear infinite;align-items:center;
+}
+@keyframes tickScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tick-item{
+  display:flex;align-items:center;gap:9px;
+  font-size:.78rem;font-weight:600;color:var(--muted);
+  letter-spacing:.08em;text-transform:uppercase;flex-shrink:0;
+  white-space:nowrap;font-family:'DM Mono',monospace;
+}
+.tick-item::before{content:'✦';font-size:.5rem;color:var(--accent)}
+
+/* ─── SECTION WRAPPER ───────────────────────────────────── */
+.s-wrap{max-width:1400px;margin:0 auto;padding:96px 80px}
+.s-center{text-align:center;margin-bottom:64px}
+.s-pill{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:5px 16px;background:rgba(var(--accent-rgb),.1);
+  border:1px solid rgba(var(--accent-rgb),.22);border-radius:50px;
+  font-size:.72rem;font-weight:700;color:var(--accent2);
+  letter-spacing:.1em;text-transform:uppercase;margin-bottom:18px;
+  font-family:'DM Mono',monospace;
+}
+.s-pill::before{content:'✦';font-size:.5rem;color:var(--accent)}
+.s-h{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(2.2rem,4.5vw,3.6rem);
+  font-weight:800;letter-spacing:-.045em;line-height:1.04;
+  margin-bottom:16px;
+}
+.s-h .hl{color:var(--lime);text-shadow:0 0 40px rgba(var(--accent-rgb),.3)}
+.s-sub{color:var(--muted);max-width:520px;margin:0 auto;font-size:.96rem;line-height:1.78}
+
+/* ─── MARKETS / PRICE TABLE ─────────────────────────────── */
+.markets-bg{background:var(--section-alt)}
+.market-tabs{
+  display:flex;gap:4px;margin-bottom:24px;
+  background:var(--bg3);padding:4px;border-radius:12px;width:fit-content;
+}
+.m-tab{
+  padding:8px 18px;border-radius:9px;font-size:.82rem;font-weight:600;
+  color:var(--muted);cursor:pointer;border:none;background:transparent;
+  transition:all .2s;font-family:'DM Sans',sans-serif;
+}
+.m-tab.on{background:var(--accent);color:#fff;box-shadow:0 2px 14px var(--glow)}
+.m-tab:hover:not(.on){color:var(--text);background:rgba(255,255,255,.05)}
+.price-tbl{width:100%;border-collapse:collapse}
+.price-tbl th{
+  font-size:.7rem;font-weight:600;color:var(--dim);
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:0 14px 12px;text-align:left;
+  font-family:'DM Mono',monospace;border-bottom:1px solid var(--border);
+}
+.price-tbl th:nth-child(3),.price-tbl th:nth-child(4),.price-tbl th:nth-child(5){text-align:right}
+.price-tbl td{
+  padding:13px 14px;border-bottom:1px solid var(--border);
+  font-size:.87rem;vertical-align:middle;
+}
+.price-tbl tr{transition:background .15s}
+.price-tbl tr:hover td{background:rgba(255,255,255,.02)}
+.price-tbl tr:last-child td{border-bottom:none}
+.coin-row{display:flex;align-items:center;gap:11px}
+.coin-ico{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;font-family:monospace}
+.coin-name{font-weight:700;font-family:'Syne',sans-serif;font-size:.87rem}
+.coin-sym{font-size:.7rem;color:var(--muted);font-family:'DM Mono',monospace}
+.p-val{font-family:'DM Mono',monospace;font-weight:600;text-align:right}
+.p-chg{
+  font-family:'DM Mono',monospace;font-weight:700;font-size:.8rem;
+  text-align:right;padding:3px 8px;border-radius:6px;display:inline-block;
+}
+.p-chg.up{color:var(--neon);background:rgba(0,255,163,.08)}
+.p-chg.dn{color:var(--rose);background:rgba(255,51,102,.08)}
+.spark-cell{text-align:right;padding-right:14px}
+.tbl-note{text-align:center;padding:14px;color:var(--muted);font-size:.8rem;font-family:'DM Mono',monospace}
+
+/* ─── PROCESS ───────────────────────────────────────────── */
+.proc-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+  max-width:1100px;margin:0 auto;position:relative;
+}
+.proc-grid::before{
+  content:'';position:absolute;top:48px;
+  left:calc(12.5% + 8px);right:calc(12.5% + 8px);height:1px;
+  background:linear-gradient(90deg,transparent,var(--border-acc),var(--border-acc),transparent);z-index:0;
+}
+.proc-card{
+  padding:30px 26px;background:var(--card);border:1px solid var(--border);
+  border-radius:20px;transition:all .35s;position:relative;z-index:1;overflow:hidden;
+}
+.proc-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(var(--accent-rgb),.07),transparent);
+  opacity:0;transition:opacity .4s;
+}
+.proc-card:hover{border-color:var(--border-acc);transform:translateY(-4px);box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.proc-card:hover::before{opacity:1}
+.proc-num{
+  width:44px;height:44px;border-radius:50%;
+  background:var(--bg3);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'DM Mono',monospace;font-size:.78rem;font-weight:700;color:var(--accent2);
+  margin-bottom:18px;
+}
+.proc-big{
+  position:absolute;bottom:12px;right:16px;
+  font-family:'Syne',sans-serif;font-size:4.5rem;font-weight:800;
+  color:rgba(255,255,255,.025);line-height:1;letter-spacing:-.06em;
+  pointer-events:none;
+}
+.proc-card h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;letter-spacing:-.02em;margin-bottom:9px}
+.proc-card p{color:var(--muted);font-size:.85rem;line-height:1.7}
+
+/* ─── SERVICES BENTO ────────────────────────────────────── */
+.feat-tabs{
+  display:flex;gap:4px;margin-bottom:32px;justify-content:center;
+  background:var(--bg3);padding:4px;border-radius:12px;
+  width:fit-content;margin-left:auto;margin-right:auto;
+}
+.f-tab{padding:8px 20px;border-radius:9px;font-size:.82rem;font-weight:600;color:var(--muted);cursor:pointer;border:none;background:transparent;transition:all .2s;font-family:'DM Sans',sans-serif}
+.f-tab.on{background:var(--accent);color:#fff;box-shadow:0 2px 14px var(--glow)}
+.fp{display:none}.fp.on{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:1100px;margin:0 auto}
+.bc{
+  padding:36px;background:var(--card);border:1px solid var(--border);
+  border-radius:20px;transition:all .35s;overflow:hidden;position:relative;
+}
+.bc:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:var(--shadow)}
+.bc.w2{grid-column:1/3}
+.bc h3{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;letter-spacing:-.03em;margin-bottom:10px}
+.bc>p{color:var(--muted);font-size:.87rem;line-height:1.72;margin-bottom:20px}
+.stags{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
+.stag{padding:4px 11px;border:1px solid var(--border2);border-radius:50px;font-size:.69rem;font-weight:600;color:var(--muted);font-family:'DM Mono',monospace}
+/* Mock chat */
+.mock-chat{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;font-size:.82rem}
+.msg{padding:10px 14px;border-radius:12px;max-width:84%;line-height:1.5;font-family:'DM Sans',sans-serif}
+.msg-in{background:rgba(255,255,255,.06);color:var(--muted);align-self:flex-start;border-bottom-left-radius:4px}
+.msg-out{background:var(--accent);color:#fff;font-weight:600;align-self:flex-end;border-bottom-right-radius:4px;box-shadow:0 4px 14px var(--glow)}
+.typing{display:flex;align-items:center;gap:4px;padding:10px 14px;align-self:flex-start}
+.typing span{width:6px;height:6px;background:var(--muted);border-radius:50%;animation:typ 1.2s ease infinite}
+.typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
+@keyframes typ{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+/* Mock scan */
+.mock-scan{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:16px;margin-top:16px}
+.scan-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:.82rem}
+.scan-row:last-child{border-bottom:none}
+.scan-l{color:var(--muted)}
+.s-pass{color:#00ffa3;font-weight:700;font-size:.65rem;padding:2px 8px;background:rgba(0,255,163,.1);border-radius:50px;font-family:'DM Mono',monospace}
+.s-fail{color:#ff3366;font-weight:700;font-size:.65rem;padding:2px 8px;background:rgba(255,51,102,.1);border-radius:50px;font-family:'DM Mono',monospace}
+.s-warn{color:#fbbf24;font-weight:700;font-size:.65rem;padding:2px 8px;background:rgba(251,191,36,.1);border-radius:50px;font-family:'DM Mono',monospace}
+.rb{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:8px;font-size:.78rem;font-weight:700;margin-bottom:14px;background:rgba(255,51,102,.08);color:#ff3366;border:1px solid rgba(255,51,102,.2);font-family:'DM Mono',monospace}
+/* Intel cards */
+.intel-c{padding:12px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:12px;margin-bottom:9px;transition:border-color .2s}
+.intel-c:hover{border-color:var(--border-acc)}.intel-c:last-child{margin-bottom:0}
+.intel-top{display:flex;gap:8px;align-items:center;margin-bottom:5px}
+.i-crit{padding:2px 7px;background:rgba(255,51,102,.1);border:1px solid rgba(255,51,102,.2);border-radius:50px;font-size:.6rem;font-weight:800;color:#ff3366;font-family:'DM Mono',monospace}
+.i-high{padding:2px 7px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.18);border-radius:50px;font-size:.6rem;font-weight:800;color:#fbbf24;font-family:'DM Mono',monospace}
+.i-jur{font-size:.64rem;color:var(--dim);font-family:'DM Mono',monospace}
+.i-title{font-size:.82rem;font-weight:600}
+/* BOI card extras */
+.av-row{display:flex;align-items:center;gap:12px;margin-top:18px}
+.av-stack2{display:flex}
+.av2{width:32px;height:32px;border-radius:50%;border:2px solid var(--card);margin-left:-8px;font-size:.65rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Syne',sans-serif}
+.av2:first-child{margin-left:0}
+.av-count{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800}.av-lbl{font-size:.74rem;color:var(--muted)}
+
+/* ─── BENEFITS ───────────────────────────────────────────── */
+.ben-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:2px;
+  background:var(--border);max-width:1100px;margin:0 auto;
+  border:1px solid var(--border);border-radius:20px;overflow:hidden;
+}
+.ben-card{padding:36px;background:var(--bg);transition:background .3s;display:flex;flex-direction:column;gap:15px}
+.ben-card:hover{background:var(--card)}
+.ben-ico{
+  width:48px;height:48px;background:rgba(var(--accent-rgb),.12);
+  border:1px solid rgba(var(--accent-rgb),.2);border-radius:14px;
+  display:flex;align-items:center;justify-content:center;font-size:1.3rem;
+  transition:all .3s;
+}
+.ben-card:hover .ben-ico{background:rgba(var(--accent-rgb),.22);border-color:rgba(var(--accent-rgb),.4);box-shadow:0 0 20px rgba(var(--accent-rgb),.15)}
+.ben-card h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;letter-spacing:-.02em}
+.ben-card p{color:var(--muted);font-size:.86rem;line-height:1.7}
+
+/* ─── WHY CHOOSE US — TABBED SHOWCASE ───────────────────── */
+.why-tabs{display:flex;gap:4px;margin-bottom:28px;background:var(--bg3);padding:4px;border-radius:12px;width:fit-content}
+.w-tab{padding:9px 18px;border-radius:9px;font-size:.82rem;font-weight:600;color:var(--muted);cursor:pointer;border:none;background:transparent;transition:all .2s;font-family:'DM Sans',sans-serif}
+.w-tab.on{background:var(--accent);color:#fff;box-shadow:0 2px 14px var(--glow)}
+.why-panel{display:none}.why-panel.on{display:block}
+.why-inner{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;max-width:1100px;margin:0 auto}
+.why-copy h3{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:12px}
+.why-copy p{color:var(--muted);line-height:1.75;font-size:.93rem}
+.why-img{
+  border-radius:16px;background:var(--card);border:1px solid var(--border2);
+  overflow:hidden;display:flex;align-items:center;justify-content:center;
+  min-height:260px;position:relative;
+}
+.why-mock{padding:24px;width:100%}
+
+/* ─── STATS ──────────────────────────────────────────────── */
+.stats-bg{background:var(--section-alt)}
+.stats-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:2px;
+  background:var(--border);max-width:1100px;margin:0 auto;
+  border:1px solid var(--border);border-radius:20px;overflow:hidden;
+}
+.stat-box{padding:44px 32px;background:var(--section-alt);transition:background .3s;position:relative;overflow:hidden}
+.stat-box:hover{background:var(--card)}
+.stat-box::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  opacity:0;transition:opacity .4s;
+}
+.stat-box:hover::after{opacity:1}
+.stat-n{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;letter-spacing:-.05em;color:var(--text);margin-bottom:6px;line-height:1}
+.stat-n em{font-style:normal;color:var(--lime)}
+.stat-l{font-size:.82rem;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.05em}
+
+/* ─── HOW IT WORKS ──────────────────────────────────────── */
+.hiw-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;max-width:1100px;margin:0 auto;align-items:center}
+.hiw-steps{display:flex;flex-direction:column;gap:20px}
+.hiw-step{display:flex;gap:18px;align-items:flex-start;padding:20px;border-radius:16px;transition:all .3s;border:1px solid transparent}
+.hiw-step:hover{background:var(--card);border-color:var(--border)}
+.hiw-num{
+  width:40px;height:40px;border-radius:50%;background:rgba(var(--accent-rgb),.12);
+  border:1px solid rgba(var(--accent-rgb),.25);display:flex;align-items:center;
+  justify-content:center;font-family:'DM Mono',monospace;font-size:.8rem;font-weight:700;
+  color:var(--accent2);flex-shrink:0;
+}
+.hiw-copy h4{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:6px;letter-spacing:-.02em}
+.hiw-copy p{color:var(--muted);font-size:.86rem;line-height:1.7}
+/* iPhone-style 3D mockup */
+.phone-wrap{display:flex;justify-content:center;align-items:center;position:relative;height:500px}
+.iphone{
+  width:220px;height:440px;background:var(--card);
+  border:2px solid rgba(255,255,255,.15);border-radius:44px;
+  box-shadow:0 40px 100px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06);
+  position:relative;overflow:hidden;
+  transform:perspective(800px) rotateY(-10deg) rotateX(3deg);
+}
+.iphone::before{
+  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.06) 0%,transparent 60%);
+  z-index:10;border-radius:44px;pointer-events:none;
+}
+.iphone-notch{
+  position:absolute;top:14px;left:50%;transform:translateX(-50%);
+  width:100px;height:24px;background:var(--bg);border-radius:50px;z-index:11;
+}
+.iphone-screen{padding:56px 14px 14px;height:100%;display:flex;flex-direction:column;gap:10px}
+.iphone-hdr{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:800;color:var(--text);letter-spacing:-.02em;margin-bottom:2px}
+.iphone-sub{font-size:.6rem;color:var(--muted);font-family:'DM Mono',monospace}
+.iphone-score{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--text);letter-spacing:-.05em}
+.iphone-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:.6rem}
+.iphone-row:last-child{border-bottom:none}
+.iphone-rl{color:var(--muted)}.iphone-rv{font-weight:700;font-family:'DM Mono',monospace}
+.iphone-btn{
+  margin-top:auto;padding:9px;background:var(--accent);color:#fff;
+  border-radius:10px;text-align:center;font-size:.65rem;font-weight:700;
+  font-family:'Syne',sans-serif;
+}
+/* Floating phone elements */
+.phone-float{
+  position:absolute;background:var(--card2);border:1px solid var(--border2);
+  border-radius:12px;padding:10px 14px;font-family:'DM Mono',monospace;
+  box-shadow:var(--shadow2);
+}
+.pf1{top:40px;right:-10px;font-size:.7rem}
+.pf2{bottom:60px;left:-10px;font-size:.7rem}
+.pf-l{font-size:.58rem;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px}
+.pf-v{font-weight:700;color:var(--text)}
+
+/* ─── ABOUT ──────────────────────────────────────────────── */
+.abt-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.abt-copy h2{font-family:'Syne',sans-serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:800;letter-spacing:-.045em;margin-bottom:20px;line-height:1.06}
+.abt-copy p{color:var(--muted);line-height:1.78;margin-bottom:18px;font-size:.92rem}
+.lnk{color:var(--accent2);font-weight:600;font-size:.88rem;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:gap .2s}
+.lnk:hover{gap:10px}
+.a-stats{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:26px}
+.a-stat{padding:18px;background:var(--card);border:1px solid var(--border);border-radius:12px;transition:border-color .25s}
+.a-stat:hover{border-color:var(--border-acc)}
+.a-sn{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;letter-spacing:-.04em}
+.a-sl{font-size:.74rem;color:var(--muted);margin-top:3px;font-family:'DM Mono',monospace}
+/* Credential visual card */
+.cred-vis{
+  background:var(--card);border:1px solid var(--border2);border-radius:24px;
+  padding:36px;min-height:360px;display:flex;flex-direction:column;
+  justify-content:space-between;gap:16px;position:relative;overflow:hidden;
+}
+.cred-vis::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(var(--accent-rgb),.12),transparent 70%);pointer-events:none}
+.cv-n{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+.cv-r{font-size:.82rem;color:var(--muted);line-height:1.6;margin-top:4px}
+.cred-list{display:flex;flex-direction:column;gap:9px}
+.cred-item{display:flex;align-items:center;gap:11px;padding:11px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;transition:border-color .2s}
+.cred-item:hover{border-color:var(--border-acc)}
+.ci-dot{width:7px;height:7px;background:var(--lime);border-radius:50%;flex-shrink:0;box-shadow:0 0 8px rgba(var(--accent-rgb),.4)}
+.ci-t{font-size:.8rem;font-weight:500}
+
+/* ─── PLANS ──────────────────────────────────────────────── */
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:1000px;margin:0 auto}
+.plan{
+  background:var(--card);border:1px solid var(--border);border-radius:24px;
+  padding:36px;transition:all .35s;position:relative;overflow:hidden;
+}
+.plan.hot{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 24px 60px rgba(var(--accent-rgb),.1)}
+.plan:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.plan-badge{
+  position:absolute;top:18px;right:18px;
+  padding:4px 12px;background:var(--accent);color:#fff;
+  border-radius:50px;font-size:.66rem;font-weight:800;
+  letter-spacing:.05em;font-family:'DM Mono',monospace;
+}
+.plan-tier{font-size:.76rem;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;font-family:'DM Mono',monospace}
+.plan-price{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;letter-spacing:-.05em;line-height:1;margin-bottom:4px}
+.plan-price span{font-size:.88rem;font-weight:500;color:var(--muted);font-family:'DM Sans',sans-serif}
+.plan-desc{font-size:.82rem;color:var(--muted);margin-bottom:22px;line-height:1.65}
+.plan-div{height:1px;background:var(--border);margin-bottom:20px}
+.plan-feats{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.plan-feats li{display:flex;align-items:center;gap:9px;font-size:.85rem;color:var(--muted)}
+.p-ck{width:18px;height:18px;border-radius:50%;background:rgba(var(--accent-rgb),.15);border:1px solid rgba(var(--accent-rgb),.25);display:flex;align-items:center;justify-content:center;font-size:.62rem;color:var(--accent2);flex-shrink:0}
+.plan-cta{display:block;padding:13px;background:var(--accent);color:#fff;border:none;border-radius:12px;font-size:.9rem;font-weight:700;cursor:pointer;text-decoration:none;text-align:center;transition:all .2s;font-family:'Syne',sans-serif;box-shadow:0 0 20px var(--glow)}
+.plan-cta:hover{transform:translateY(-2px);box-shadow:0 0 36px var(--glow)}
+.plan-cta-g{display:block;padding:13px;background:transparent;color:var(--text);border:1px solid var(--border2);border-radius:12px;font-size:.9rem;font-weight:600;cursor:pointer;text-decoration:none;text-align:center;transition:all .2s;font-family:'DM Sans',sans-serif}
+.plan-cta-g:hover{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.04)}
+
+/* ─── TESTIMONIALS ───────────────────────────────────────── */
+.t-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:1100px;margin:0 auto}
+.t-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;transition:all .35s}
+.t-card:hover{border-color:var(--border2);transform:translateY(-3px);background:var(--card2);box-shadow:var(--shadow2)}
+.t-stars{color:var(--lime);font-size:.82rem;margin-bottom:13px;letter-spacing:1px}
+.t-text{font-size:.88rem;line-height:1.72;margin-bottom:20px;font-style:italic;opacity:.92}
+.t-text::before{content:'\201C'}.t-text::after{content:'\201D'}
+.t-auth{display:flex;align-items:center;gap:10px}
+.t-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.74rem;font-weight:800;flex-shrink:0;font-family:'Syne',sans-serif}
+.t-name{font-size:.84rem;font-weight:700;font-family:'Syne',sans-serif}
+.t-role{font-size:.73rem;color:var(--muted);font-family:'DM Mono',monospace}
+
+/* ─── FAQ ────────────────────────────────────────────────── */
+.faq-wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.faq-item{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:border-color .2s}
+.faq-item.open{border-color:var(--border-acc)}
+.faq-q{
+  width:100%;display:flex;justify-content:space-between;align-items:center;
+  padding:19px 22px;background:transparent;border:none;color:var(--text);
+  font-size:.92rem;font-weight:600;cursor:pointer;
+  font-family:'Syne',sans-serif;letter-spacing:-.01em;text-align:left;gap:14px;transition:color .2s;
+}
+.faq-q:hover{color:var(--accent2)}
+.faq-icon{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:.78rem;color:var(--muted);flex-shrink:0;transition:transform .35s,background .2s}
+.faq-item.open .faq-icon{transform:rotate(45deg);background:rgba(var(--accent-rgb),.15);color:var(--accent2)}
+.faq-body{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.4,0,.2,1),padding .4s;padding:0 22px}
+.faq-item.open .faq-body{padding:0 22px 18px}
+.faq-body p{color:var(--muted);font-size:.88rem;line-height:1.74}
+
+/* ─── FINAL CTA ──────────────────────────────────────────── */
+.cta-bg{background:var(--section-alt)}
+.cta-box{
+  max-width:900px;margin:0 auto;
+  background:var(--card);border:1px solid var(--border2);border-radius:28px;
+  padding:80px 60px;text-align:center;position:relative;overflow:hidden;
+}
+.cta-box::before{content:'';position:absolute;width:800px;height:500px;background:radial-gradient(ellipse,rgba(var(--accent-rgb),.07) 0%,transparent 65%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.cta-box::after{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent)}
+.cta-box h2{font-family:'Syne',sans-serif;font-size:clamp(2.4rem,5.5vw,4.2rem);font-weight:800;letter-spacing:-.048em;margin-bottom:16px;line-height:1.03;position:relative}
+.cta-box p{color:var(--muted);font-size:1rem;margin-bottom:36px;line-height:1.7;max-width:500px;margin-left:auto;margin-right:auto;position:relative}
+.cta-note{font-size:.74rem;color:var(--dim);margin-top:16px;font-family:'DM Mono',monospace;position:relative}
+
+/* ─── FOOTER ─────────────────────────────────────────────── */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:60px 80px 28px}
+.ft-inner{max-width:1400px;margin:0 auto}
+.ft-top{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;margin-bottom:44px}
+.ft-brand-n{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.ft-brand-p{color:var(--muted);font-size:.82rem;max-width:230px;line-height:1.65}
+.ft-cols{display:flex;gap:56px;flex-wrap:wrap}
+.ft-col h4{font-size:.7rem;font-weight:700;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px;font-family:'DM Mono',monospace}
+.ft-col a{display:block;color:var(--muted);text-decoration:none;font-size:.82rem;margin-bottom:8px;transition:color .2s}
+.ft-col a:hover{color:var(--accent2)}
+.ft-bot{border-top:1px solid var(--border);padding-top:22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;color:var(--dim);font-size:.73rem;font-family:'DM Mono',monospace}
+
+/* ─── REVEALS ────────────────────────────────────────────── */
+.rev{opacity:0;transform:translateY(28px)}
+.rev-l{opacity:0;transform:translateX(-28px)}
+.rev-r{opacity:0;transform:translateX(28px)}
+.rev-s{opacity:0;transform:scale(.95)}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+@media(max-width:1100px){
+  .hero{grid-template-columns:1fr;padding:120px 40px 60px}
+  .hero-r{display:none}
+  .stats-grid,.proc-grid{grid-template-columns:repeat(2,1fr)}
+  .t-grid{grid-template-columns:repeat(2,1fr)}
+  .plans-grid{grid-template-columns:1fr}
+  .fp.on{grid-template-columns:1fr}.bc.w2{grid-column:auto}
+  .abt-inner,.hiw-grid,.why-inner{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  nav{top:10px;width:calc(100% - 24px);padding:0 16px}
+  .nav-links{display:none}
+  .s-wrap{padding:72px 24px}
+  footer{padding:48px 24px 24px}
+  .ben-grid{grid-template-columns:1fr}
+  .proc-grid{grid-template-columns:1fr}.proc-grid::before{display:none}
+  .cta-box{padding:48px 24px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#hero" class="nav-logo">
+    <div class="nmark">F</div>Forge
+  </a>
+  <ul class="nav-links">
+    <li><a href="#markets">Markets</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#plans">Plans</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a href="https://calendly.com/ai-leadx10" class="nav-cta">Book a call</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-l">
+    <div class="h-badge">
+      <div class="badge-pill">AI</div>
+      Attorney-reviewed · Live enforcement tracking
+    </div>
+    <h1>Compliance<br>Intelligence for<br><span class="accent-w">Digital Assets</span></h1>
+    <p class="hero-sub">Detect regulatory exposure before enforcement does. BOI, MiCA, CIPA, and 12 active frameworks — attorney-reviewed analysis in 60 seconds.</p>
+    <div class="hero-btns">
+      <a href="#services" class="btn-pri">Run Free Scan →</a>
+      <a href="#plans" class="btn-sec">See Pricing</a>
+    </div>
+    <div class="proof-row">
+      <div class="av-stack">
+        <div class="av" style="background:#7132f5;color:#fff">M</div>
+        <div class="av" style="background:#00ffa3;color:#000">S</div>
+        <div class="av" style="background:#a855f7;color:#fff">J</div>
+        <div class="av" style="background:#4f46e5;color:#fff">A</div>
+        <div class="av" style="background:#c8ff00;color:#000">R</div>
+      </div>
+      <div class="proof-txt">
+        <b>200+ legal teams</b> across 4 jurisdictions
+        <span class="proof-stars">★★★★★ Attorney-grade intelligence</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-r">
+    <div class="dash-wrap" data-tilt data-tilt-max="8" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.06">
+      <!-- Floating mini cards -->
+      <div class="float-card fc1">
+        <div class="fc-label">BOI Penalty</div>
+        <div class="fc-val" style="color:var(--rose)">$500/day</div>
+        <div class="fc-chg dn">▲ Active enforcement</div>
+      </div>
+      <div class="float-card fc2">
+        <div class="fc-label">MiCA Deadline</div>
+        <div class="fc-val">Jul 1, 2026</div>
+        <div class="fc-chg up">→ 75 days left</div>
+      </div>
+      <div class="dash-card">
+        <div class="dc-head">
+          <div class="dc-title">Compliance Score</div>
+          <div class="dc-live">Scanner Live</div>
+        </div>
+        <div class="dc-score-row">
+          <div class="dc-score">72<span style="font-size:1.4rem;color:var(--muted)">/100</span></div>
+          <div class="dc-score-sub">Risk score · <span>3 new violations in 24h</span></div>
+        </div>
+        <div class="chart-area"><canvas id="heroChart"></canvas></div>
+        <div class="dc-stats">
+          <div class="dcs"><div class="dcs-l">Exposure</div><div class="dcs-v" style="color:var(--rose)">$500/d</div></div>
+          <div class="dcs"><div class="dcs-l">Checks</div><div class="dcs-v">15</div></div>
+          <div class="dcs"><div class="dcs-l">Status</div><div class="dcs-v" style="color:var(--neon)">Live</div></div>
+        </div>
+        <div class="dc-alerts">
+          <div class="dc-alert crit"><span class="al-badge crit">CRIT</span><span class="al-txt">CIPA §631 — session replay active</span><span class="al-jur">US/CA</span></div>
+          <div class="dc-alert warn"><span class="al-badge warn">WARN</span><span class="al-txt">BOI filing overdue — $500/day accruing</span><span class="al-jur">FinCEN</span></div>
+          <div class="dc-alert pass"><span class="al-badge pass">PASS</span><span class="al-txt">HTTPS + Privacy Policy valid</span><span class="al-jur">GDPR</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="tick-track" id="ticker">
+    <span class="tick-item">SEC Enforcement</span><span class="tick-item">MiCA Jul 2026</span><span class="tick-item">VARA Dubai</span><span class="tick-item">FinCEN Travel Rule</span><span class="tick-item">GDPR Art.7</span><span class="tick-item">CIPA §631</span><span class="tick-item">BOI $500/Day</span><span class="tick-item">MAS Singapore</span><span class="tick-item">FATF Eval</span><span class="tick-item">FCA Crypto</span><span class="tick-item">DORA EU</span><span class="tick-item">ADGM Rules</span>
+    <span class="tick-item">SEC Enforcement</span><span class="tick-item">MiCA Jul 2026</span><span class="tick-item">VARA Dubai</span><span class="tick-item">FinCEN Travel Rule</span><span class="tick-item">GDPR Art.7</span><span class="tick-item">CIPA §631</span><span class="tick-item">BOI $500/Day</span><span class="tick-item">MAS Singapore</span><span class="tick-item">FATF Eval</span><span class="tick-item">FCA Crypto</span><span class="tick-item">DORA EU</span><span class="tick-item">ADGM Rules</span>
+  </div>
+</div>
+
+<!-- MARKETS — ENFORCEMENT TABLE (CryptoClay price table adapted) -->
+<div class="markets-bg" id="markets">
+<div class="s-wrap">
+  <div class="s-center rev">
+    <div class="s-pill">Intelligence Feed</div>
+    <h2 class="s-h">Active Enforcement <span class="hl">Monitors</span></h2>
+    <p class="s-sub">Real-time tracking of 4 jurisdictions. Every entry is a $500K+ fine exposure event with active enforcement in the last 90 days.</p>
+  </div>
+  <div class="market-tabs">
+    <button class="m-tab on" onclick="switchMarket(this,'all')">All Alerts</button>
+    <button class="m-tab" onclick="switchMarket(this,'us')">🇺🇸 US / SEC</button>
+    <button class="m-tab" onclick="switchMarket(this,'eu')">🇪🇺 EU / MiCA</button>
+    <button class="m-tab" onclick="switchMarket(this,'uae')">🇦🇪 VARA / UAE</button>
+  </div>
+  <table class="price-tbl">
+    <thead>
+      <tr>
+        <th>Framework</th>
+        <th>Violation Type</th>
+        <th style="text-align:right">Fine Exposure</th>
+        <th style="text-align:right">Status</th>
+        <th style="text-align:right">Trend</th>
+      </tr>
+    </thead>
+    <tbody id="marketTbody"></tbody>
+  </table>
+  <div class="tbl-note">Updated every 24h · 177+ intelligence pages · Attorney cross-referenced</div>
+</div>
+</div>
+
+<!-- PROCESS (01-04) -->
+<div class="s-wrap" id="process">
+  <div class="s-center rev">
+    <div class="s-pill">Process</div>
+    <h2 class="s-h">From Zero to <span class="hl">Protected</span></h2>
+    <p class="s-sub">Three steps, one attorney, 24 hours maximum. Your compliance is documented, defensible, and done.</p>
+  </div>
+  <div class="proc-grid">
+    <div class="proc-card rev">
+      <div class="proc-num">01</div>
+      <div class="proc-big">01</div>
+      <h3>Scan & Detect</h3>
+      <p>Enter your URL or company details. 15 frameworks checked in under 60 seconds — CIPA, GDPR, BOI, MiCA, VARA, and more.</p>
+    </div>
+    <div class="proc-card rev">
+      <div class="proc-num">02</div>
+      <div class="proc-big">02</div>
+      <h3>Attorney Review</h3>
+      <p>Every finding cross-referenced with current regulatory guidance. Risk scores and fine exposure validated by licensed attorneys.</p>
+    </div>
+    <div class="proc-card rev">
+      <div class="proc-num">03</div>
+      <div class="proc-big">03</div>
+      <h3>Receive Report</h3>
+      <p>Court-ready format, clear action items, severity rankings. Delivered to your inbox within 24 hours of order.</p>
+    </div>
+    <div class="proc-card rev">
+      <div class="proc-num">04</div>
+      <div class="proc-big">04</div>
+      <h3>Stay Protected</h3>
+      <p>Daily intelligence alerts you to new gaps before regulators act. Annual monitoring keeps your filings current.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES with TABS -->
+<div class="markets-bg" id="services">
+<div class="s-wrap">
+  <div class="s-center rev">
+    <div class="s-pill">Services</div>
+    <h2 class="s-h">Four Precision <span class="hl">Instruments</span></h2>
+    <p class="s-sub">Each product targets one specific, expensive compliance gap with a clear, court-ready deliverable.</p>
+  </div>
+  <div class="feat-tabs">
+    <button class="f-tab on" onclick="switchFeat(this,'f1')">BIZBOT</button>
+    <button class="f-tab" onclick="switchFeat(this,'f2')">Web Scanner</button>
+    <button class="f-tab" onclick="switchFeat(this,'f3')">BOI Report</button>
+    <button class="f-tab" onclick="switchFeat(this,'f4')">Intel Feed</button>
+  </div>
+  <!-- BIZBOT -->
+  <div class="fp on" id="f1">
+    <div class="bc w2 rev">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start">
+        <div>
+          <h3>BIZBOT — Compliance Assistant</h3>
+          <p>Instant answers on BOI, MiCA, VARA, SEC, and MAS. Available 24/7, attorney-context trained, jurisdiction-aware. No hallucinations — every answer backed by current regulatory text.</p>
+          <div class="stags"><span class="stag">BOI/CTA</span><span class="stag">MiCA</span><span class="stag">VARA</span><span class="stag">SEC</span><span class="stag">MAS</span><span class="stag">Free Preview</span></div>
+        </div>
+        <div class="mock-chat">
+          <div class="msg msg-in">Do I need to file BOI for my US LLC?</div>
+          <div class="msg msg-out">Yes — most US LLCs must file with FinCEN. $500/day for late filers. I can help you prepare in 30 minutes.</div>
+          <div class="msg msg-in">What about MiCA for EU operations?</div>
+          <div class="msg msg-out">CASP authorisation required by July 1, 2026. Unlicensed operation risks €5M+ fines. Want me to check your jurisdiction?</div>
+          <div class="typing"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- SCANNER -->
+  <div class="fp" id="f2">
+    <div class="bc rev">
+      <div class="rb">⚠ CIPA §631 Violation Detected</div>
+      <h3>Web Compliance Scanner</h3>
+      <p>Scan any website against 10 frameworks in 60 seconds. Free, no signup required. Compliance score + top violations instantly.</p>
+      <div class="mock-scan">
+        <div class="scan-row"><span class="scan-l">HTTPS / TLS</span><span class="s-pass">PASS</span></div>
+        <div class="scan-row"><span class="scan-l">Cookie Consent (GDPR)</span><span class="s-fail">FAIL</span></div>
+        <div class="scan-row"><span class="scan-l">Session Replay (CIPA §631)</span><span class="s-fail">FAIL — Hotjar</span></div>
+        <div class="scan-row"><span class="scan-l">Privacy Policy</span><span class="s-pass">PASS</span></div>
+        <div class="scan-row"><span class="scan-l">ADA Accessibility</span><span class="s-warn">WARN</span></div>
+      </div>
+      <div class="stags"><span class="stag">Free</span><span class="stag">60 sec</span><span class="stag">10 checks</span></div>
+    </div>
+    <div class="bc rev">
+      <h3>Frameworks Checked</h3>
+      <p>Every scan runs 10 compliance checks across the most actively enforced regulatory frameworks in 2026.</p>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">
+        <div class="intel-c"><div class="intel-top"><span class="i-crit">CIPA §631</span><span class="i-jur">California / USA</span></div><div class="i-title">Session replay, ad trackers, unauthorized wiretapping</div></div>
+        <div class="intel-c"><div class="intel-top"><span class="i-high">GDPR Art.7</span><span class="i-jur">European Union</span></div><div class="i-title">Cookie consent, data retention, processor agreements</div></div>
+        <div class="intel-c"><div class="intel-top"><span class="i-crit">BOI / CTA</span><span class="i-jur">US / FinCEN</span></div><div class="i-title">Beneficial ownership filing status and deadlines</div></div>
+        <div class="intel-c"><div class="intel-top"><span class="i-high">ADA Title III</span><span class="i-jur">USA Federal</span></div><div class="i-title">Digital accessibility — WCAG 2.1 AA requirements</div></div>
+      </div>
+    </div>
+  </div>
+  <!-- BOI -->
+  <div class="fp" id="f3">
+    <div class="bc rev">
+      <h3>BOI Compliance Report</h3>
+      <p>Attorney-reviewed FinCEN filing. Stops $500/day penalties the moment it's submitted. Court-ready format, 24-hour delivery.</p>
+      <div class="av-row">
+        <div class="av-stack2">
+          <div class="av2" style="background:#7132f5;color:#fff">M</div>
+          <div class="av2" style="background:#00ffa3;color:#000">S</div>
+          <div class="av2" style="background:#a855f7;color:#fff">J</div>
+          <div class="av2" style="background:#4f46e5;color:#fff">A</div>
+        </div>
+        <div><div class="av-count">177+</div><div class="av-lbl">Reports delivered</div></div>
+      </div>
+      <div class="stags" style="margin-top:20px"><span class="stag">$149 flat</span><span class="stag">24h delivery</span><span class="stag">PayPal + Crypto</span></div>
+    </div>
+    <div class="bc rev">
+      <h3>What's Included</h3>
+      <p>Everything required for full CTA/BOI compliance, reviewed and signed off by a licensed attorney.</p>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">
+        <div class="intel-c"><div class="intel-top"><span class="i-high">STEP 1</span></div><div class="i-title">Ownership structure — all beneficial owners identified</div></div>
+        <div class="intel-c"><div class="intel-top"><span class="i-high">STEP 2</span></div><div class="i-title">FinCEN Form 1 generated and pre-filled with your data</div></div>
+        <div class="intel-c"><div class="intel-top"><span class="i-high">STEP 3</span></div><div class="i-title">Attorney review + penalty exposure calculation</div></div>
+        <div class="intel-c"><div class="intel-top"><span class="i-high">STEP 4</span></div><div class="i-title">PDF delivered — ready to file or send to counsel</div></div>
+      </div>
+    </div>
+  </div>
+  <!-- INTEL -->
+  <div class="fp" id="f4">
+    <div class="bc w2 rev">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start">
+        <div>
+          <h3>Daily Intelligence Feed</h3>
+          <p>New compliance gaps identified every day by our AI Scout. SEC, VARA, MiCA, MAS, FinCEN — jurisdiction-specific, actionable in 24 hours. Free to read. 177 pages live.</p>
+          <div class="stags"><span class="stag">Free</span><span class="stag">Daily</span><span class="stag">4 Jurisdictions</span><span class="stag">Attorney Verified</span></div>
+        </div>
+        <div>
+          <div class="intel-c"><div class="intel-top"><span class="i-crit">CRITICAL</span><span class="i-jur">US · FinCEN</span></div><div class="i-title">DeFi Travel Rule Enforcement — May 15, 2026</div></div>
+          <div class="intel-c"><div class="intel-top"><span class="i-high">HIGH</span><span class="i-jur">EU · MiCA</span></div><div class="i-title">CASP Authorisation Deadline — July 1, 2026</div></div>
+          <div class="intel-c"><div class="intel-top"><span class="i-crit">CRITICAL</span><span class="i-jur">UAE · VARA</span></div><div class="i-title">VASP CAR Filing Closes Q2 2026</div></div>
+          <div class="intel-c"><div class="intel-top"><span class="i-high">HIGH</span><span class="i-jur">SG · MAS</span></div><div class="i-title">PSA Amendment — New MPI License Requirements</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- WHY CHOOSE US (CryptoClay tabbed showcase) -->
+<div class="s-wrap">
+  <div class="s-center rev">
+    <div class="s-pill">Why Choose Us</div>
+    <h2 class="s-h">Most Trusted <span class="hl">Compliance Intelligence</span></h2>
+    <p class="s-sub">Attorney-reviewed, evidence-grade, delivered fast. The standard that meets actual legal proceedings.</p>
+  </div>
+  <div class="why-tabs">
+    <button class="w-tab on" onclick="switchWhy(this,'w1')">Seamless Analysis</button>
+    <button class="w-tab" onclick="switchWhy(this,'w2')">Direct Delivery</button>
+    <button class="w-tab" onclick="switchWhy(this,'w3')">Secure by Design</button>
+  </div>
+  <div class="why-panel on" id="w1">
+    <div class="why-inner">
+      <div class="why-copy">
+        <h3>Attorney-powered analysis across 4 jurisdictions simultaneously</h3>
+        <p>Our engine scans your entire digital footprint — website, corporate structure, product offerings — against 15 active regulatory frameworks. Every result is cross-referenced by a licensed attorney before delivery. No hallucinations, no guesswork.</p>
+        <div class="stags" style="margin-top:20px"><span class="stag">15 frameworks</span><span class="stag">4 jurisdictions</span><span class="stag">60 seconds</span><span class="stag">Attorney-reviewed</span></div>
+      </div>
+      <div class="why-img">
+        <div class="why-mock">
+          <div class="mock-scan">
+            <div class="scan-row"><span class="scan-l">CIPA §631 · California</span><span class="s-fail">3 violations</span></div>
+            <div class="scan-row"><span class="scan-l">BOI · FinCEN</span><span class="s-fail">Filing overdue</span></div>
+            <div class="scan-row"><span class="scan-l">GDPR · EU</span><span class="s-warn">2 warnings</span></div>
+            <div class="scan-row"><span class="scan-l">MiCA · ESMA</span><span class="s-warn">Deadline: Jul 2026</span></div>
+            <div class="scan-row"><span class="scan-l">MAS · Singapore</span><span class="s-pass">Compliant</span></div>
+            <div class="scan-row"><span class="scan-l">ADA · Federal</span><span class="s-warn">1 warning</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="why-panel" id="w2">
+    <div class="why-inner">
+      <div class="why-copy">
+        <h3>Court-ready reports delivered in 24 hours, not 24 days</h3>
+        <p>Every paid report arrives within 24 hours as a court-ready PDF. Clear action items, severity rankings, fine exposure estimates. Priority delivery in 12 hours for litigation matters.</p>
+        <div class="stags" style="margin-top:20px"><span class="stag">24h standard</span><span class="stag">12h priority</span><span class="stag">Court-ready PDF</span></div>
+      </div>
+      <div class="why-img">
+        <div class="why-mock">
+          <div style="padding:8px">
+            <div style="font-family:'Syne',sans-serif;font-size:.9rem;font-weight:800;margin-bottom:12px">Report Delivery Status</div>
+            <div class="intel-c"><div class="intel-top"><span class="s-pass">DELIVERED</span><span class="i-jur">BOI Report #177</span></div><div class="i-title">FinCEN Form 1 — Moses Corp LLC · 22h 14m</div></div>
+            <div class="intel-c"><div class="intel-top"><span class="s-pass">DELIVERED</span><span class="i-jur">Web Scan #344</span></div><div class="i-title">CIPA + GDPR Analysis — fintech.io · 58 sec</div></div>
+            <div class="intel-c"><div class="intel-top"><span style="color:var(--amber);font-family:'DM Mono',monospace;font-size:.62rem;font-weight:700;background:rgba(251,191,36,.1);padding:2px 7px;border-radius:50px;">IN REVIEW</span><span class="i-jur">Reg Passport #38</span></div><div class="i-title">12-Market Licensing Roadmap · ~6h remaining</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="why-panel" id="w3">
+    <div class="why-inner">
+      <div class="why-copy">
+        <h3>Attorney credentials protect every report from day one</h3>
+        <p>Every report is signed by a licensed attorney. Israel Bar Association, DIFC Registered, 20+ years experience. Our products are designed to meet the standard of actual court proceedings.</p>
+        <div class="stags" style="margin-top:20px"><span class="stag">Israel Bar</span><span class="stag">DIFC Registered</span><span class="stag">20+ years</span><span class="stag">Court-ready</span></div>
+      </div>
+      <div class="why-img">
+        <div class="why-mock">
+          <div style="padding:8px">
+            <div class="cred-list">
+              <div class="cred-item"><div class="ci-dot"></div><div class="ci-t">Moses Dor, LLB LLM — Lead Attorney</div></div>
+              <div class="cred-item"><div class="ci-dot"></div><div class="ci-t">Israel Bar Association — Licensed</div></div>
+              <div class="cred-item"><div class="ci-dot"></div><div class="ci-t">DIFC Courts — Registered Practitioner</div></div>
+              <div class="cred-item"><div class="ci-dot"></div><div class="ci-t">International Commercial Arbitrator</div></div>
+              <div class="cred-item"><div class="ci-dot"></div><div class="ci-t">20+ Years International Practice</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BENEFITS 3×2 GRID -->
+<div class="markets-bg">
+<div class="s-wrap">
+  <div class="s-center rev">
+    <div class="s-pill">Benefits</div>
+    <h2 class="s-h">What You Gain with <span class="hl">Forge</span></h2>
+    <p class="s-sub">Know your exposure before regulators do. Act before enforcement. Stay compliant, always.</p>
+  </div>
+  <div class="ben-grid">
+    <div class="ben-card rev"><div class="ben-ico">⚡</div><h3>60-Second Results</h3><p>Instant compliance preview for any website or company. No signup, no friction, no waiting.</p></div>
+    <div class="ben-card rev"><div class="ben-ico">💰</div><h3>Stop $500/Day Penalties</h3><p>BOI/CTA penalties accrue daily and automatically. Our report stops them the moment you file.</p></div>
+    <div class="ben-card rev"><div class="ben-ico">⚖️</div><h3>Attorney-Reviewed</h3><p>Every report validated by licensed attorneys. Not AI guesses — defensible, court-ready intelligence.</p></div>
+    <div class="ben-card rev"><div class="ben-ico">🌍</div><h3>4 Jurisdictions</h3><p>US, EU, UAE, Singapore — all active enforcement zones covered on one platform.</p></div>
+    <div class="ben-card rev"><div class="ben-ico">📡</div><h3>Daily Gap Intelligence</h3><p>New regulatory gaps identified every morning. Act on enforcement trends before your competitors.</p></div>
+    <div class="ben-card rev"><div class="ben-ico">🔒</div><h3>24-Hour Delivery SLA</h3><p>Every paid report in 24 hours. Priority delivery for litigation. Attorney available for questions.</p></div>
+  </div>
+</div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bg">
+<div class="s-wrap">
+  <div class="s-center rev">
+    <div class="s-pill">By the Numbers</div>
+    <h2 class="s-h">Intelligence That <span class="hl">Delivers</span></h2>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-box rev"><div class="stat-n" data-target="177">0<em>+</em></div><div class="stat-l">Intelligence pages live</div></div>
+    <div class="stat-box rev"><div class="stat-n" data-target="4">0</div><div class="stat-l">Active jurisdictions</div></div>
+    <div class="stat-box rev"><div class="stat-n" data-target="24">0<em>h</em></div><div class="stat-l">Max delivery time</div></div>
+    <div class="stat-box rev"><div class="stat-n" data-target="20">0<em>yr</em></div><div class="stat-l">Attorney experience</div></div>
+  </div>
+</div>
+</div>
+
+<!-- HOW IT WORKS + PHONE MOCKUP -->
+<div class="s-wrap">
+  <div class="s-center rev">
+    <div class="s-pill">How It Works</div>
+    <h2 class="s-h">Protected in <span class="hl">10 Minutes</span></h2>
+    <p class="s-sub">From zero to court-ready compliance documentation — faster than any law firm.</p>
+  </div>
+  <div class="hiw-grid">
+    <div class="hiw-steps">
+      <div class="hiw-step rev">
+        <div class="hiw-num">01</div>
+        <div class="hiw-copy"><h4>Enter your URL or company</h4><p>Paste your website or company details. Our engine runs 15 framework checks in under 60 seconds.</p></div>
+      </div>
+      <div class="hiw-step rev">
+        <div class="hiw-num">02</div>
+        <div class="hiw-copy"><h4>Receive instant risk score</h4><p>See your compliance score 0–100, top violations, and estimated fine exposure — instantly, for free.</p></div>
+      </div>
+      <div class="hiw-step rev">
+        <div class="hiw-num">03</div>
+        <div class="hiw-copy"><h4>Order attorney-reviewed report</h4><p>Choose your product — BOI $149, Web Scan free, Reg Passport $1,500. Pay via PayPal or crypto.</p></div>
+      </div>
+      <div class="hiw-step rev">
+        <div class="hiw-num">04</div>
+        <div class="hiw-copy"><h4>Receive court-ready PDF in 24h</h4><p>Your report arrives within 24 hours. Clear action items, severity rankings, attorney signature.</p></div>
+      </div>
+    </div>
+    <!-- 3D Phone Mockup (CryptoClay style) -->
+    <div class="phone-wrap">
+      <div class="phone-float pf1">
+        <div class="pf-l">Risk Score</div>
+        <div class="pf-v" style="color:var(--rose)">72/100</div>
+      </div>
+      <div class="phone-float pf2">
+        <div class="pf-l">Status</div>
+        <div class="pf-v" style="color:var(--neon)">Report Ready</div>
+      </div>
+      <div class="iphone">
+        <div class="iphone-notch"></div>
+        <div class="iphone-screen">
+          <div>
+            <div class="iphone-hdr">Forge Compliance</div>
+            <div class="iphone-sub">Attorney-reviewed intelligence</div>
+          </div>
+          <div>
+            <div style="font-size:.6rem;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:4px">COMPLIANCE SCORE</div>
+            <div class="iphone-score">72</div>
+          </div>
+          <div>
+            <div class="iphone-row"><span class="iphone-rl">CIPA §631</span><span class="iphone-rv" style="color:var(--rose)">FAIL</span></div>
+            <div class="iphone-row"><span class="iphone-rl">BOI / CTA</span><span class="iphone-rv" style="color:var(--rose)">OVERDUE</span></div>
+            <div class="iphone-row"><span class="iphone-rl">GDPR</span><span class="iphone-rv" style="color:var(--amber)">WARN</span></div>
+            <div class="iphone-row"><span class="iphone-rl">HTTPS</span><span class="iphone-rv" style="color:var(--neon)">PASS</span></div>
+            <div class="iphone-row"><span class="iphone-rl">MiCA</span><span class="iphone-rv" style="color:var(--amber)">Jul 2026</span></div>
+          </div>
+          <div class="iphone-btn">Get Full Report — $149</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="markets-bg">
+<div class="s-wrap">
+  <div class="abt-inner">
+    <div class="abt-copy rev-l">
+      <div class="s-pill" style="margin-bottom:18px">About</div>
+      <h2>Built by an Attorney.<br>Powered by <span style="color:var(--lime)">Intelligence.</span></h2>
+      <p>Forge is part of BizLegal AI — built by Moses Dor, international attorney, licensed arbitrator, and DIFC registered legal professional with 20+ years of international commercial practice across fintech, crypto, and regulated industries.</p>
+      <p>We built Forge because compliance intelligence was either inaccessible (big law fees) or unreliable (AI hallucinations). Our approach: attorney-reviewed, evidence-grade, delivered fast.</p>
+      <a href="https://bizlegal-ai.com" class="lnk">Learn more →</a>
+      <div class="a-stats">
+        <div class="a-stat"><div class="a-sn" data-target="177">0</div><div class="a-sl">Intelligence pages live</div></div>
+        <div class="a-stat"><div class="a-sn" data-target="54">0</div><div class="a-sl">Jurisdictions covered</div></div>
+        <div class="a-stat"><div class="a-sn" data-target="20">0</div><div class="a-sl">Years legal experience</div></div>
+        <div class="a-stat"><div class="a-sn" data-target="24">0</div><div class="a-sl">Hour max delivery</div></div>
+      </div>
+    </div>
+    <div class="cred-vis rev-r" data-tilt data-tilt-max="5" data-tilt-speed="600">
+      <div><div class="cv-n">Moses Dor, LLB LLM</div><div class="cv-r">International Attorney · Licensed Arbitrator<br>DIFC Registered Legal Professional</div></div>
+      <div class="cred-list">
+        <div class="cred-item"><div class="ci-dot"></div><div class="ci-t">Israel Bar Association — Licensed</div></div>
+        <div class="cred-item"><div class="ci-dot"></div><div class="ci-t">DIFC Courts — Registered Practitioner</div></div>
+        <div class="cred-item"><div class="ci-dot"></div><div class="ci-t">International Commercial Arbitrator</div></div>
+        <div class="cred-item"><div class="ci-dot"></div><div class="ci-t">20+ Years International Practice</div></div>
+        <div class="cred-item"><div class="ci-dot"></div><div class="ci-t">Fintech · Crypto · Digital Assets</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PLANS -->
+<div class="s-wrap" id="plans">
+  <div class="s-center rev">
+    <div class="s-pill">Plans</div>
+    <h2 class="s-h">Flexible Pricing,<br><span class="hl">Maximum Protection</span></h2>
+    <p class="s-sub">Flat fees. No subscriptions. Attorney-reviewed. 24-hour delivery guaranteed.</p>
+  </div>
+  <div class="plans-grid">
+    <div class="plan rev">
+      <div class="plan-tier">Starter</div>
+      <div class="plan-price">Free<span>/scan</span></div>
+      <div class="plan-desc">Instant compliance preview. Find your exposure in 60 seconds. No credit card needed.</div>
+      <div class="plan-div"></div>
+      <ul class="plan-feats">
+        <li><div class="p-ck">✓</div>10 compliance checks</li>
+        <li><div class="p-ck">✓</div>Risk score 0–100</li>
+        <li><div class="p-ck">✓</div>3 violations preview</li>
+        <li><div class="p-ck">✓</div>Daily intelligence feed</li>
+      </ul>
+      <a href="https://forge.bizlegal-ai.com/audit" class="plan-cta-g">Run Free Scan</a>
+    </div>
+    <div class="plan hot rev">
+      <div class="plan-badge">Most Popular</div>
+      <div class="plan-tier">BOI Report</div>
+      <div class="plan-price">$149<span>/report</span></div>
+      <div class="plan-desc">Attorney-reviewed FinCEN filing. Stops $500/day penalties. PayPal and crypto accepted.</div>
+      <div class="plan-div"></div>
+      <ul class="plan-feats">
+        <li><div class="p-ck">✓</div>FinCEN Form 1 generation</li>
+        <li><div class="p-ck">✓</div>Penalty exposure calculator</li>
+        <li><div class="p-ck">✓</div>24-hour delivery guarantee</li>
+        <li><div class="p-ck">✓</div>Attorney review included</li>
+        <li><div class="p-ck">✓</div>PayPal + Crypto accepted</li>
+      </ul>
+      <a href="https://forge.bizlegal-ai.com/boi" class="plan-cta">Get Started →</a>
+    </div>
+    <div class="plan rev">
+      <div class="plan-tier">Reg Passport</div>
+      <div class="plan-price">$1,500<span>/roadmap</span></div>
+      <div class="plan-desc">12-market licensing roadmap for international expansion. No surprises, no exposure.</div>
+      <div class="plan-div"></div>
+      <ul class="plan-feats">
+        <li><div class="p-ck">✓</div>12 jurisdictions mapped</li>
+        <li><div class="p-ck">✓</div>License requirements per market</li>
+        <li><div class="p-ck">✓</div>Attorney consultation</li>
+        <li><div class="p-ck">✓</div>30-day action plan</li>
+      </ul>
+      <a href="https://forge.bizlegal-ai.com/passport" class="plan-cta-g">Get Passport →</a>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<div class="markets-bg">
+<div class="s-wrap">
+  <div class="s-center rev">
+    <div class="s-pill">Testimonials</div>
+    <h2 class="s-h">What Our Clients Say</h2>
+    <p class="s-sub">Legal professionals and compliance teams across 4 jurisdictions.</p>
+  </div>
+  <div class="t-grid">
+    <div class="t-card rev"><div class="t-stars">★★★★★</div><div class="t-text">The TRACR report gave us court-admissible risk documentation within 24 hours. Exactly what our judge needed to understand on-chain evidence.</div><div class="t-auth"><div class="t-av" style="background:#7132f5;color:#fff">SP</div><div><div class="t-name">Senior Litigation Partner</div><div class="t-role">NYC Law Firm</div></div></div></div>
+    <div class="t-card rev"><div class="t-stars">★★★★★</div><div class="t-text">BOI report stopped a $500/day penalty situation within 24 hours. The attorney review gave us full confidence to submit immediately.</div><div class="t-auth"><div class="t-av" style="background:#0d9488;color:#fff">CD</div><div><div class="t-name">Compliance Director</div><div class="t-role">Crypto Exchange, DIFC</div></div></div></div>
+    <div class="t-card rev"><div class="t-stars">★★★★★</div><div class="t-text">Needed blockchain evidence for an emergency injunction. Forge produced exactly the evidence-grade documentation a judge would accept.</div><div class="t-auth"><div class="t-av" style="background:#ea580c;color:#fff">MK</div><div><div class="t-name">Managing Partner</div><div class="t-role">International Law Firm</div></div></div></div>
+    <div class="t-card rev"><div class="t-stars">★★★★★</div><div class="t-text">OFAC matching and wallet clustering flagged a case that three other forensic tools missed entirely. Outstanding precision.</div><div class="t-auth"><div class="t-av" style="background:#2563eb;color:#fff">AR</div><div><div class="t-name">Asset Recovery Attorney</div><div class="t-role">California State Bar</div></div></div></div>
+  </div>
+</div>
+</div>
+
+<!-- FAQ -->
+<div class="s-wrap" id="faq">
+  <div class="s-center rev">
+    <div class="s-pill">FAQ</div>
+    <h2 class="s-h">Your Questions, <span class="hl">Answered</span></h2>
+    <p class="s-sub">Everything you need to know before your first report.</p>
+  </div>
+  <div class="faq-wrap">
+    <div class="faq-item"><button class="faq-q" onclick="tf(this)">What is the BOI report and who needs it?<div class="faq-icon">+</div></button><div class="faq-body"><p>The Beneficial Ownership Information report is required by the Corporate Transparency Act. Most US LLCs, corporations, and similar entities must file with FinCEN. Non-compliance results in $500/day penalties — automatic, with no court order required. Our report guides you through the entire filing with attorney oversight.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="tf(this)">Is this legal advice?<div class="faq-icon">+</div></button><div class="faq-body"><p>No. Forge provides regulatory intelligence and compliance documentation tools, not legal advice. Our reports are evidence-grade assessments designed to inform your compliance actions. For legal advice specific to your situation, consult a licensed attorney. Our founder (Moses Dor, Israel Bar) is available for consultation engagements separately.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="tf(this)">How long does a report take?<div class="faq-icon">+</div></button><div class="faq-body"><p>Standard reports are delivered within 24 hours. Free compliance scans are instant (60 seconds). Priority and litigation packages within 12 hours. Complex multi-wallet forensic analyses may take 48 hours — timeline confirmed at order.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="tf(this)">What payment methods do you accept?<div class="faq-icon">+</div></button><div class="faq-body"><p>PayPal (credit/debit worldwide) and cryptocurrency via NOWPayments (BTC, ETH, USDT, and 100+ others). B2B invoicing via Payoneer for law firms and enterprise clients. Contact us for volume pricing.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="tf(this)">What jurisdictions do you cover?<div class="faq-icon">+</div></button><div class="faq-body"><p>US (SEC, FinCEN, CFTC, OCC), EU (MiCA, ESMA, EBA, GDPR, DORA), UAE/Dubai (VARA, DFSA, ADGM), and Singapore (MAS, PSA, MPI). Global multi-jurisdiction reports available on request.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="tf(this)">Who built Forge?<div class="faq-icon">+</div></button><div class="faq-body"><p>Forge is part of BizLegal AI, built by Moses Dor — international attorney (Israel Bar), licensed arbitrator, DIFC registered legal professional, with 20+ years specialising in fintech, crypto, and digital asset regulation. Our team combines legal expertise with AI intelligence to deliver products that meet the standards of actual legal proceedings.</p></div></div>
+  </div>
+</div>
+
+<!-- FINAL CTA -->
+<div class="cta-bg">
+<div class="s-wrap">
+  <div class="cta-box rev-s">
+    <h2>Ready to Protect<br>Your Business?</h2>
+    <p>Schedule a free 15-minute consultation with our compliance team. No commitment, no pitch — just answers to your specific regulatory questions.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="https://calendly.com/ai-leadx10" class="btn-pri">Book a 15-min Call →</a>
+      <a href="https://forge.bizlegal-ai.com/audit" class="btn-sec">Run Free Scan First</a>
+    </div>
+    <div class="cta-note">100% free · No credit card required · Attorney responds within 24h</div>
+  </div>
+</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-inner">
+    <div class="ft-top">
+      <div>
+        <div class="ft-brand-n"><div class="nmark">F</div>Forge</div>
+        <p class="ft-brand-p">Attorney-reviewed compliance intelligence for crypto, fintech, and digital asset companies worldwide.</p>
+        <p style="font-size:.74rem;color:var(--dim);font-family:'DM Mono',monospace;margin-top:10px">Part of BizLegal AI</p>
+      </div>
+      <div class="ft-cols">
+        <div class="ft-col"><h4>Products</h4><a href="#">Web Scanner</a><a href="#">BOI Report</a><a href="#">Reg Passport</a><a href="#">Intel Feed</a></div>
+        <div class="ft-col"><h4>Jurisdictions</h4><a href="#">United States</a><a href="#">European Union</a><a href="#">UAE / Dubai</a><a href="#">Singapore</a></div>
+        <div class="ft-col"><h4>BizLegal AI</h4><a href="https://bizlegal-ai.com">Hub</a><a href="#">TRACR</a><a href="#">BRAI</a><a href="#">LexAudit</a></div>
+        <div class="ft-col"><h4>Legal</h4><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Refund</a><a href="#">Disclaimer</a></div>
+      </div>
+    </div>
+    <div class="ft-bot">
+      <span>© 2026 Forge Compliance Engine · BizLegal AI · All rights reserved.</span>
+      <span>Not legal advice. Regulatory intelligence only.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════
+     JAVASCRIPT — All plugins + interactions
+═══════════════════════════════════════════════════════ -->
+<script>
+// ── LENIS SMOOTH SCROLL ─────────────────────────────────
+const lenis = new Lenis({ duration:1.2, easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)), smooth:true });
+function raf(t){lenis.raf(t);requestAnimationFrame(raf)}
+requestAnimationFrame(raf);
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(t=>lenis.raf(t*1000));
+gsap.ticker.lagSmoothing(0);
+
+// ── GSAP SCROLL REVEALS ─────────────────────────────────
+gsap.registerPlugin(ScrollTrigger);
+gsap.utils.toArray('.rev').forEach((el,i)=>{
+  gsap.to(el,{opacity:1,y:0,duration:.88,ease:'power2.out',
+    scrollTrigger:{trigger:el,start:'top 89%'},delay:i%5*.055});
+});
+gsap.utils.toArray('.rev-l').forEach(el=>{
+  gsap.to(el,{opacity:1,x:0,duration:1,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 86%'}});
+});
+gsap.utils.toArray('.rev-r').forEach(el=>{
+  gsap.to(el,{opacity:1,x:0,duration:1,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 86%'},delay:.14});
+});
+gsap.utils.toArray('.rev-s').forEach(el=>{
+  gsap.to(el,{opacity:1,scale:1,duration:1.1,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 86%'}});
+});
+
+// ── HERO ENTRANCE ───────────────────────────────────────
+const htl = gsap.timeline({defaults:{ease:'power3.out'}});
+htl.from('.h-badge',{opacity:0,y:-18,duration:.7,delay:.3})
+   .from('.hero h1',{opacity:0,y:44,duration:.95},'-=.25')
+   .from('.hero-sub',{opacity:0,y:22,duration:.7},'-=.55')
+   .from('.hero-btns',{opacity:0,y:16,duration:.6},'-=.4')
+   .from('.proof-row',{opacity:0,y:12,duration:.5},'-=.3')
+   .from('.dash-wrap',{opacity:0,x:40,duration:1,ease:'power2.out'},'-=.7')
+   .from('.float-card',{opacity:0,scale:.8,duration:.6,stagger:.15},'-=.5');
+
+// ── CHART.JS HERO SPARKLINE ─────────────────────────────
+const cCtx = document.getElementById('heroChart').getContext('2d');
+const sparkPts = [58,62,59,65,69,67,72,74,71,68,72,76,80,78,75,73,77,80,78,74,72,74,70,72,71,74,72,75,70,72];
+new Chart(cCtx,{
+  type:'line',
+  data:{
+    labels:sparkPts.map((_,i)=>i),
+    datasets:[{
+      data:sparkPts,
+      borderColor:'rgba(var(--accent-rgb,113,50,245),.8)',
+      backgroundColor:(ctx)=>{
+        const g=ctx.chart.ctx.createLinearGradient(0,0,0,80);
+        g.addColorStop(0,'rgba(113,50,245,.18)');
+        g.addColorStop(1,'rgba(113,50,245,0)');
+        return g;
+      },
+      borderWidth:1.5,fill:true,tension:.45,pointRadius:0,
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{enabled:false}},
+    scales:{x:{display:false},y:{display:false}},
+    animation:{duration:1800,easing:'easeInOutQuart'}
+  }
+});
+
+// ── COUNTERS ────────────────────────────────────────────
+gsap.utils.toArray('[data-target]').forEach(el=>{
+  const t=+el.dataset.target;
+  const orig=el.innerHTML;
+  const suffix=orig.replace(/[0-9]/g,'');
+  ScrollTrigger.create({trigger:el,start:'top 87%',onEnter:()=>{
+    gsap.to({v:0},{v:t,duration:2,ease:'power1.out',
+      onUpdate:function(){el.innerHTML=Math.floor(this.targets()[0].v)+suffix}});
+  }});
+});
+
+// ── NAV SCROLL ──────────────────────────────────────────
+ScrollTrigger.create({start:'top -80px',onUpdate:s=>{
+  document.getElementById('nav').classList.toggle('solid',s.progress>0);
+}});
+
+// ── TICKER PAUSE ────────────────────────────────────────
+const tk=document.querySelector('.tick-track');
+tk.addEventListener('mouseenter',()=>tk.style.animationPlayState='paused');
+tk.addEventListener('mouseleave',()=>tk.style.animationPlayState='running');
+
+// ── BLOB ANIMATION ──────────────────────────────────────
+gsap.to('.blob1',{y:-35,x:25,duration:9,repeat:-1,yoyo:true,ease:'sine.inOut'});
+gsap.to('.blob2',{y:25,x:-20,duration:11,repeat:-1,yoyo:true,ease:'sine.inOut',delay:1});
+gsap.to('.blob3',{y:-20,x:12,duration:7,repeat:-1,yoyo:true,ease:'sine.inOut',delay:2});
+
+// ── VANILLA TILT ────────────────────────────────────────
+VanillaTilt.init(document.querySelectorAll('[data-tilt]'),{max:8,speed:400,glare:true,'max-glare':.07,perspective:900});
+
+// ── PROC CARD STAGGER ───────────────────────────────────
+gsap.utils.toArray('.proc-card').forEach((el,i)=>{
+  gsap.to(el,{opacity:1,y:0,duration:.8,ease:'power2.out',
+    scrollTrigger:{trigger:el,start:'top 91%'},delay:i*.1});
+});
+
+// ── MARKET TABLE ────────────────────────────────────────
+const mdata={
+  all:[
+    {fw:'CIPA §631',jur:'🇺🇸 California',type:'Session Replay / Wiretapping',exp:'$5,000/user',status:'ACTIVE',trend:'up'},
+    {fw:'BOI / CTA',jur:'🇺🇸 FinCEN',type:'Beneficial Ownership Filing',exp:'$500/day',status:'ACTIVE',trend:'up'},
+    {fw:'MiCA Art.60',jur:'🇪🇺 EU',type:'CASP Unlicensed Operation',exp:'€5,000,000',status:'ACTIVE',trend:'up'},
+    {fw:'VARA VASP',jur:'🇦🇪 Dubai',type:'Virtual Asset License Required',exp:'AED 50,000',status:'ACTIVE',trend:'stable'},
+    {fw:'GDPR Art.7',jur:'🇪🇺 EU',type:'Consent Management Violation',exp:'4% Revenue',status:'ACTIVE',trend:'up'},
+    {fw:'MAS PSA',jur:'🇸🇬 Singapore',type:'Payment Services License',exp:'SGD 250,000',status:'ACTIVE',trend:'stable'},
+  ],
+  us:[
+    {fw:'CIPA §631',jur:'🇺🇸 California',type:'Session Replay / Wiretapping',exp:'$5,000/user',status:'ACTIVE',trend:'up'},
+    {fw:'BOI / CTA',jur:'🇺🇸 FinCEN',type:'Beneficial Ownership Filing',exp:'$500/day',status:'ACTIVE',trend:'up'},
+    {fw:'SEC Reg D',jur:'🇺🇸 SEC',type:'Unregistered Securities',exp:'$50,000+',status:'ACTIVE',trend:'stable'},
+  ],
+  eu:[
+    {fw:'MiCA Art.60',jur:'🇪🇺 EU',type:'CASP Unlicensed Operation',exp:'€5,000,000',status:'ACTIVE',trend:'up'},
+    {fw:'GDPR Art.7',jur:'🇪🇺 EU',type:'Consent Management',exp:'4% Revenue',status:'ACTIVE',trend:'up'},
+    {fw:'DORA Art.11',jur:'🇪🇺 EU',type:'ICT Risk Management',exp:'€2,000,000',status:'ACTIVE',trend:'stable'},
+  ],
+  uae:[
+    {fw:'VARA VASP',jur:'🇦🇪 Dubai',type:'Virtual Asset License',exp:'AED 50,000',status:'ACTIVE',trend:'stable'},
+    {fw:'DFSA Rules',jur:'🇦🇪 DIFC',type:'Crypto Asset Activity',exp:'USD 100,000',status:'ACTIVE',trend:'stable'},
+  ]
+};
+function renderMarket(key){
+  document.getElementById('marketTbody').innerHTML = mdata[key].map(r=>`
+    <tr>
+      <td><div class="coin-row"><div class="coin-ico">⚖️</div><div><div class="coin-name">${r.fw}</div><div class="coin-sym">${r.jur}</div></div></div></td>
+      <td style="color:var(--muted);font-size:.85rem">${r.type}</td>
+      <td><div class="p-val" style="color:var(--rose)">${r.exp}</div></td>
+      <td style="text-align:right"><span class="p-chg ${r.trend==='up'?'up':'dn'}">${r.status}</span></td>
+      <td style="text-align:right;font-family:'DM Mono',monospace;font-size:.76rem;color:${r.trend==='up'?'var(--rose)':'var(--amber)'}">${r.trend==='up'?'▲ Rising':'→ Stable'}</td>
+    </tr>`).join('');
+}
+function switchMarket(btn,key){
+  document.querySelectorAll('.m-tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');renderMarket(key);
+}
+renderMarket('all');
+
+// ── FEATURE TABS ────────────────────────────────────────
+function switchFeat(btn,id){
+  document.querySelectorAll('.f-tab').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.fp').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  const p=document.getElementById(id);p.classList.add('on');
+  gsap.from(p.querySelectorAll('.bc'),{opacity:0,y:24,duration:.6,ease:'power2.out',stagger:.08});
+}
+
+// ── WHY TABS ────────────────────────────────────────────
+function switchWhy(btn,id){
+  document.querySelectorAll('.w-tab').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.why-panel').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');document.getElementById(id).classList.add('on');
+}
+
+// ── FAQ ─────────────────────────────────────────────────
+function tf(btn){
+  const item=btn.closest('.faq-item'),open=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>{i.classList.remove('open');i.querySelector('.faq-body').style.maxHeight='0'});
+  if(!open){item.classList.add('open');const b=item.querySelector('.faq-body');b.style.maxHeight=b.scrollHeight+'px';}
+}
+
+// ── HITSTEP HOVER ───────────────────────────────────────
+document.querySelectorAll('.hiw-step').forEach(s=>{
+  s.addEventListener('mouseenter',()=>gsap.to(s,{x:6,duration:.2}));
+  s.addEventListener('mouseleave',()=>gsap.to(s,{x:0,duration:.2}));
+});
+</script>
+</body>
+</html>
