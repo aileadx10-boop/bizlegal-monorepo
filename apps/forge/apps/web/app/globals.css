@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0f1117;
+  --foreground: #e2e8f0;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+@layer components {
+  .input-field {
+    @apply w-full bg-forge-card border border-forge-border rounded-lg px-4 py-3 text-forge-text
+           placeholder-forge-muted focus:outline-none focus:ring-2 focus:ring-forge-accent
+           focus:border-transparent transition-all;
+  }
+
+  .btn-primary {
+    @apply bg-forge-accent hover:bg-forge-accent-hover text-white font-semibold
+           px-6 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .card {
+    @apply bg-forge-card border border-forge-border rounded-xl p-6;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-forge-text mb-1.5;
+  }
+}

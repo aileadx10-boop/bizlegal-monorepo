@@ -1,0 +1,44 @@
+{
+  "id": "cipa",
+  "name": "CIPA §631 Scanner",
+  "statute": "California Invasion of Privacy Act §631",
+  "detection_type": "web_scan",
+  "target_buyer": "Privacy Counsel, General Counsel, CTO",
+  "price_usd": 999,
+  "monitoring_price_usd": 199,
+  "damage_per_violation_usd": 5000,
+  "icp": {
+    "company_size": "50-5000 employees",
+    "industries": ["SaaS", "eCommerce", "Healthcare", "Finance", "Media"],
+    "geo": "US companies with CA user traffic",
+    "trigger": "Uses third-party analytics or advertising trackers"
+  },
+  "detection_signals": [
+    "Trackers firing before consent capture",
+    "No consent banner present",
+    "Consent banner present but trackers fire anyway",
+    "Third-party session replay tools (Hotjar, FullStory, MS Clarity)",
+    "Ad pixels (Meta, Google, TikTok, LinkedIn) firing pre-consent"
+  ],
+  "high_risk_domains": [
+    "googletagmanager.com",
+    "doubleclick.net",
+    "hotjar.com",
+    "fullstory.com",
+    "facebook.com/tr",
+    "snap.licdn.com",
+    "analytics.tiktok.com",
+    "clarity.ms"
+  ],
+  "fix_deliverables": [
+    "Consent-gated GTM script",
+    "Privacy policy addendum (CIPA §631 disclosure)",
+    "Implementation guide"
+  ],
+  "apify_actor": "",
+  "enforcement_cases": [
+    "Javier v. Assurance IQ (2022) — $2.5M settlement",
+    "Saleh v. Nike (2022) — session replay claims",
+    "Heiting v. Taco Bell (2023) — CIPA tracking"
+  ]
+}

@@ -1,0 +1,228 @@
+// Forge /pricing — Phase D8 + B4 (3-tier matrix, no Contact Sales)
+
+import Link from 'next/link'
+import { PricingTierCard, type PricingTierData } from '../components/ui-v2/PricingTierCard'
+
+export const dynamic = 'force-dynamic'
+
+function url(name: string): string | undefined {
+  const v = (process.env as Record<string, string | undefined>)[name]
+  return v && v.length > 4 ? v : undefined
+}
+
+const BOI_TIER: PricingTierData = {
+  name: 'BOI Report Kit',
+  badge: 'Most popular',
+  description:
+    'CTA Beneficial Ownership Information report — generated from your LLC details, filing-ready FinCEN BOIR PDF in 5 minutes. Avoid $500/day non-filing exposure.',
+  prices: {
+    oneTime: { amount: 149, currency: 'USD', label: 'one-time' },
+    yearly: { amount: 149, currency: 'USD', saveLabel: '+ refresh', label: '/year (annual refresh)' },
+  },
+  features: [
+    'FinCEN-ready BOIR PDF',
+    'Beneficial owner walkthrough',
+    'Ownership structure analyzer',
+    'Annual refresh reminder',
+    'Practitioner-reviewed template',
+    '14-day money back',
+  ],
+  checkoutUrls: {
+    oneTime: {
+      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_FORGE_BOI_ONETIME_URL'),
+      card: url('NEXT_PUBLIC_PAYPAL_FORGE_BOI_ONETIME_URL'),
+    },
+    yearly: {
+      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_FORGE_BOI_YEARLY_URL'),
+      card: url('NEXT_PUBLIC_PAYPAL_FORGE_BOI_YEARLY_URL'),
+    },
+  },
+  highlighted: true,
+}
+
+const PASSPORT_TIER: PricingTierData = {
+  name: 'Regulatory Passport',
+  description:
+    'Multi-framework operating brief for cross-border founders. 8 frameworks, scored against your business model. Quarterly refresh keeps you ahead of regulator changes.',
+  prices: {
+    oneTime: { amount: 1500, currency: 'USD', label: 'one-time brief' },
+    monthly: { amount: 99, currency: 'USD' },
+    yearly: { amount: 990, currency: 'USD', saveLabel: 'save 2 mo' },
+  },
+  features: [
+    '8 regulatory frameworks',
+    'GDPR / CIPA / FCA / VARA / MAS',
+    'Per-jurisdiction risk score',
+    'Quarterly refresh',
+    'Custom watch list',
+    'Practitioner-reviewed',
+  ],
+  checkoutUrls: {
+    oneTime: {
+      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_FORGE_PASSPORT_ONETIME_URL'),
+      card: url('NEXT_PUBLIC_PAYPAL_FORGE_PASSPORT_ONETIME_URL'),
+    },
+    monthly: {
+      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_FORGE_PASSPORT_MONTHLY_URL'),
+      card: url('NEXT_PUBLIC_PAYPAL_FORGE_PASSPORT_MONTHLY_URL'),
+    },
+    yearly: {
+      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_FORGE_PASSPORT_YEARLY_URL'),
+      card: url('NEXT_PUBLIC_PAYPAL_FORGE_PASSPORT_YEARLY_URL'),
+    },
+  },
+}
+
+const AUDIT_TIER: PricingTierData = {
+  name: 'Web Compliance Scanner',
+  description:
+    'Automated audit of your public surface — cookie banners, privacy policy, CIPA, accessibility. Scan once or subscribe for monthly re-scans + drift alerts.',
+  prices: {
+    oneTime: { amount: 99, currency: 'USD', label: 'per scan' },
+    monthly: { amount: 49, currency: 'USD' },
+    yearly: { amount: 490, currency: 'USD', saveLabel: 'save 2 mo' },
+  },
+  features: [
+    'Cookie / GDPR audit',
+    'Privacy policy gap scan',
+    'CIPA disclosure check',
+    'Accessibility (WCAG AA)',
+    'Prioritised remediation list',
+    'PDF export',
+  ],
+  checkoutUrls: {
+    oneTime: {
+      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_FORGE_AUDIT_ONETIME_URL'),
+      card: url('NEXT_PUBLIC_PAYPAL_FORGE_AUDIT_ONETIME_URL'),
+    },
+    monthly: {
+      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_FORGE_AUDIT_MONTHLY_URL'),
+      card: url('NEXT_PUBLIC_PAYPAL_FORGE_AUDIT_MONTHLY_URL'),
+    },
+    yearly: {
+      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_FORGE_AUDIT_YEARLY_URL'),
+      card: url('NEXT_PUBLIC_PAYPAL_FORGE_AUDIT_YEARLY_URL'),
+    },
+  },
+}
+
+export default function ForgePricingPage() {
+  return (
+    <>
+      <section
+        className="bl-hero-bg"
+        style={{
+          paddingTop: 'clamp(4rem, 2rem + 4vw, 6rem)',
+          paddingBottom: 'clamp(2rem, 1.5rem + 2vw, 3rem)',
+        }}
+      >
+        <div
+          className="bl-container"
+          style={{ textAlign: 'center', maxWidth: 720, margin: '0 auto' }}
+        >
+          <span className="bl-tag" style={{ marginBottom: '1rem' }}>
+            Transparent pricing
+          </span>
+          <h1
+            style={{
+              fontFamily: 'var(--bl-font-display)',
+              fontSize: 'var(--bl-text-h1)',
+              fontWeight: 800,
+              letterSpacing: '-0.025em',
+              lineHeight: 1.05,
+              color: 'var(--bl-text)',
+              margin: '1.5rem 0 1rem',
+            }}
+          >
+            Pay for the filing,{' '}
+            <span className="bl-grad-text">not the meeting.</span>
+          </h1>
+          <p
+            style={{
+              fontSize: 'clamp(1.05rem, 0.95rem + 0.4vw, 1.2rem)',
+              color: 'var(--bl-text-muted)',
+              lineHeight: 1.6,
+              margin: 0,
+            }}
+          >
+            BOI Kit one-time. Passport on subscription. Audit per scan
+            or monthly. Crypto via NOWPayments, card via PayPal. 14-day
+            money-back, no questions.
+          </p>
+        </div>
+      </section>
+
+      <section className="bl-section" style={{ paddingTop: 'clamp(2rem, 1rem + 2vw, 4rem)' }}>
+        <div className="bl-container">
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: 'clamp(1rem, 0.75rem + 1vw, 1.5rem)',
+              alignItems: 'stretch',
+            }}
+          >
+            <PricingTierCard {...BOI_TIER} defaultInterval="one-time" />
+            <PricingTierCard {...PASSPORT_TIER} defaultInterval="monthly" />
+            <PricingTierCard {...AUDIT_TIER} defaultInterval="one-time" />
+          </div>
+          <p
+            style={{
+              fontSize: 'var(--bl-text-small)',
+              color: 'var(--bl-text-subtle)',
+              textAlign: 'center',
+              marginTop: 'clamp(1.5rem, 1rem + 1vw, 2.5rem)',
+              maxWidth: 720,
+              marginInline: 'auto',
+            }}
+          >
+            Prices in USD. Crypto checkout (NOWPayments) accepts BTC, ETH,
+            USDT, USDC + 100 more. Card checkout (PayPal) supports cards in
+            200+ countries. 14-day money-back, no questions.
+          </p>
+        </div>
+      </section>
+
+      <section
+        className="bl-section"
+        style={{
+          background: 'var(--bl-accent-soft)',
+          borderTop: '1px solid var(--bl-divider)',
+        }}
+      >
+        <div className="bl-container-narrow" style={{ textAlign: 'center' }}>
+          <h2
+            style={{
+              fontFamily: 'var(--bl-font-display)',
+              fontSize: 'var(--bl-text-h2)',
+              fontWeight: 800,
+              letterSpacing: '-0.025em',
+              color: 'var(--bl-text)',
+              margin: 0,
+              marginBottom: '1rem',
+            }}
+          >
+            Need all three?{' '}
+            <span className="bl-grad-text">Bundle.</span>
+          </h2>
+          <p
+            style={{
+              fontSize: 'var(--bl-text-body)',
+              color: 'var(--bl-text-muted)',
+              lineHeight: 1.6,
+              margin: 0,
+              marginBottom: '1.5rem',
+            }}
+          >
+            BOI + Passport + Audit on a single annual plan — saves ~$300
+            vs the per-product prices.
+          </p>
+          <Link href="/boi" className="bl-btn-primary">
+            Start with BOI ($149)
+            <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+      </section>
+    </>
+  )
+}

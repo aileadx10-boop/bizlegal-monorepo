@@ -1,0 +1,34 @@
+{
+  "id": "surplus",
+  "name": "Surplus Funds Deal Flow",
+  "statute": "Uniform Unclaimed Property Act + State escheatment laws",
+  "detection_type": "case_intake",
+  "target_buyer": "Real estate attorneys, probate attorneys, financial advisors, investors",
+  "price_usd": 800,
+  "icp": {
+    "company_size": "N/A — individual case",
+    "industries": ["Real estate", "Probate", "Estate settlement", "Corporate dissolution", "Insurance payouts"],
+    "geo": "US — all 50 states, specific to FL, TX, CA, NY",
+    "trigger": "Unclaimed property, escheated funds, forgotten accounts, uncashed checks, dormant accounts"
+  },
+  "detection_signals": [
+    "Forgotten bank accounts with balance >$1,000",
+    "Uncashed payroll checks from former employer",
+    "Insurance policy payouts never claimed",
+    "Estate funds unclaimed by beneficiaries",
+    "Utility deposit refunds never received",
+    "CD or savings account abandoned >3 years"
+  ],
+  "fix_deliverables": [
+    "State escheatment search",
+    "Owner identification and verification",
+    "Claim filing documentation",
+    "Attorney referral for complex claims",
+    "Fee agreement (contingency or hourly)"
+  ],
+  "enforcement_cases": [
+    "State treasurers holding $100B+ in unclaimed property nationwide",
+    "New York EScheat Fund: $14B unclaimed",
+    "Florida Unclaimed Property: $2B+ returned annually"
+  ]
+}

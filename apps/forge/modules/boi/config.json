@@ -1,0 +1,40 @@
+{
+  "id": "boi",
+  "name": "CTA/BOI Report Filer",
+  "statute": "Corporate Transparency Act — Beneficial Ownership Information Reporting (31 CFR 1010.306)",
+  "detection_type": "intake_form",
+  "target_buyer": "LLC owners, corporate attorneys, real estate investors, small business owners",
+  "price_usd": 149,
+  "damage_per_violation_usd": 500,
+  "icp": {
+    "company_size": "Any size — CTA applies to all reporting companies",
+    "industries": ["LLC", "Corporation", "Limited Partnership", "Real estate holding", "Family-owned business"],
+    "geo": "US — all 50 states",
+    "trigger": "Formed any entity (DOMESTIC or FOREIGN) after Jan 1, 2024 — or existing entities who never filed"
+  },
+  "detection_signals": [
+    "Company formed 2024-2026 and never filed BOI",
+    "Ownership change after initial filing — update not filed",
+    "Company acquired or merged — new beneficial owners not reported",
+    "Filing was made but contains incorrect/missing information",
+    "Company doesn't know who qualifies as a 'beneficial owner'"
+  ],
+  "questions": [
+    "When was the company formed?",
+    "What state was it formed in?",
+    "How many individuals own 25%+ or exercise substantial control?",
+    "Has a BOI report been previously filed with FinCEN?",
+    "Has there been any ownership change since the last filing?"
+  ],
+  "fix_deliverables": [
+    "Beneficial Owner Identification Checklist",
+    "BOI Report (FinCEN Form 1 or Form 2 for corrections)",
+    "Annual update reminder system",
+    "Ownership change trigger checklist"
+  ],
+  "enforcement_cases": [
+    "FinCEN BOI civil penalties: $500/day accruing from Jan 1, 2024",
+    "US v. Crypto Index LLC (2025) — first criminal BOI prosecution",
+    "NSBA v. Yellen (2024) — temporary injunction, then reinstated"
+  ]
+}

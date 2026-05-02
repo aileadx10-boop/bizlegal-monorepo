@@ -1,0 +1,42 @@
+{
+  "id": "sms",
+  "name": "10DLC SMS Compliance",
+  "statute": "FCC 10DLC / TCPA — SMS Marketing Registration (47 CFR 64.1200)",
+  "detection_type": "web_scan",
+  "target_buyer": "E-commerce brands, SaaS companies, marketing agencies using SMS",
+  "price_usd": 149,
+  "damage_per_violation_usd": 1000,
+  "icp": {
+    "company_size": "Any size — all businesses sending SMS marketing",
+    "industries": ["E-commerce", "SaaS", "Retail", "Healthcare", "Restaurants", "Gyms", "Real estate", "Automotive"],
+    "geo": "US — all 50 states",
+    "trigger": "Uses Klaviyo, Attentive, Yext, or any SMS API to send marketing texts"
+  },
+  "detection_signals": [
+    "Campaign registered with The Campaign Registry (TCR)?",
+    "Carrier-approved use case matches actual campaign content",
+    "TCPA one-to-one consent language on opt-in page",
+    "Opt-out keyword (STOP) properly handled",
+    "Campaign volume matches registration",
+    "Registered phone number matches sending number"
+  ],
+  "high_risk_domains": [
+    "Klaviyo",
+    "Attentive",
+    "Yext",
+    "Twilio",
+    "Braze",
+    "Salesforce Marketing Cloud"
+  ],
+  "fix_deliverables": [
+    "TCR Campaign Registration Review",
+    "TCPA-Compliant Opt-In Page Template",
+    "A2P 10DLC Fee Calculator",
+    "STOP Keyword Processing Checklist"
+  ],
+  "enforcement_cases": [
+    "FCC enforcement: $10,000/day for unregistered SMS campaigns (2024)",
+    "TCPA class actions: $1,000-$2,000 per text message",
+    "AT&T/T-Mobile blocking unregistered 10DLC routes (2024 ongoing)"
+  ]
+}

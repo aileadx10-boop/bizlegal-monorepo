@@ -1,0 +1,35 @@
+{
+  "id": "iso27001",
+  "name": "ISO 27001 Certification Readiness",
+  "statute": "ISO/IEC 27001:2022 — Information Security Management System",
+  "detection_type": "intake_form",
+  "target_buyer": "Israeli tech companies pursuing US government contracts, enterprise customers, or M&A due diligence",
+  "price_usd": 999,
+  "icp": {
+    "company_size": "10-500 employees",
+    "industries": ["SaaS", "Fintech", "Cybersecurity", "Health Tech", "Defense Tech", "Cloud"],
+    "geo": "Israel / US / EU — companies with enterprise or government requirements",
+    "trigger": "Pursuing SOC 2, ISO 27001, FedRAMP, DFARS, or enterprise sales"
+  },
+  "detection_signals": [
+    "No formal ISMS (Information Security Management System)",
+    "No documented information security policies",
+    "No risk assessment in the past 12 months",
+    "No asset inventory or data classification",
+    "No access control policy (IAM, RBAC)",
+    "No incident response plan"
+  ],
+  "fix_deliverables": [
+    "ISO 27001 Gap Assessment Report",
+    "Information Security Policy Template",
+    "Risk Assessment Template (aligned to ISO 27001 Annex A)",
+    "Statement of Applicability (SoA) draft",
+    "Implementation Roadmap (12-18 month plan)",
+    "Internal Audit Checklist"
+  ],
+  "enforcement_cases": [
+    "NIST CSF required for DoD contractors (DFARS 252.204-7012)",
+    "ISO 27001 required by 60%+ of enterprise procurement teams (2024)",
+    "Israeli companies in US M&A — ISO 27001 a common LOI condition"
+  ]
+}

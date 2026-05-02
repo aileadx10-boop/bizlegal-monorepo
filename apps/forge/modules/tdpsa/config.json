@@ -1,0 +1,35 @@
+{
+  "id": "tdpsa",
+  "name": "Texas Data Privacy Act (TDPSA)",
+  "statute": "Texas HB 4 — Texas Data Privacy and Security Act (effective July 1, 2024)",
+  "detection_type": "web_scan",
+  "target_buyer": "Texas businesses with any online presence, e-commerce, SaaS, healthcare, financial services",
+  "price_usd": 299,
+  "damage_per_violation_usd": 7500,
+  "icp": {
+    "company_size": "Revenue >$10M OR processing data of 100K+ Texas consumers",
+    "industries": ["E-commerce", "SaaS", "Healthcare", "Financial services", "Retail", "Technology"],
+    "geo": "Texas — any business targeting Texas consumers or with Texas customers",
+    "trigger": "Has any online presence serving Texas customers, collects personal data"
+  },
+  "detection_signals": [
+    "Privacy policy does not include TDPSA-required disclosures",
+    "No opt-out mechanism for sale of personal data",
+    "No consumer rights request (access/deletion) process",
+    "Sensitive data (health, precise location, biometrics) collected without consent",
+    "Vendor contracts missing TDPSA-required Data Processing Addendum",
+    "No data breach notification procedure"
+  ],
+  "fix_deliverables": [
+    "TDPSA-Compliant Privacy Notice",
+    "Opt-Out Mechanism Implementation",
+    "Texas Consumer Rights Request Form",
+    "Vendor Data Processing Addendum Template",
+    "Data Breach Response Procedure"
+  ],
+  "enforcement_cases": [
+    "Texas AG Ken Paxton — aggressive data privacy enforcement history",
+    "TDPSA enforcement cases expected beginning 2026",
+    "First AG enforcement under HB 4 anticipated Q1-Q2 2026"
+  ]
+}
