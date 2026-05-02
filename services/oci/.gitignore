@@ -1,0 +1,18 @@
+# OCI Deal Router — local-only artefacts.
+# Production lives on Hetzner; venv + caches must never be committed.
+router/.venv/
+router/__pycache__/
+router/**/__pycache__/
+router/.pytest_cache/
+router/tests/__pycache__/
+
+# Real env (template is committed as .env.example)
+.env
+.env.local
+.env.*.local
+
+# Build / test artefacts
+*.pyc
+.coverage
+htmlcov/
+.pytest_cache/

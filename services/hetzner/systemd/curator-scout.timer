@@ -1,0 +1,11 @@
+[Unit]
+Description=BizLegal-AI Curator scout — Mon/Wed/Fri 06:00 UTC
+# Backup trigger if n8n is down. Scout is idempotent (dedupes on URL).
+
+[Timer]
+OnCalendar=Mon,Wed,Fri 06:00 UTC
+Persistent=true
+Unit=curator-scout.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,11 @@
+[Unit]
+Description=Nightly deal-router summary (Telegram + anonymizer call)
+After=deal-router.service
+Wants=deal-router.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/oci-deal-router
+EnvironmentFile=/opt/oci-deal-router/.env
+ExecStart=/usr/bin/docker exec deal-router python /app/payout_report.py
+TimeoutStartSec=120

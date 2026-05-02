@@ -1,0 +1,11 @@
+[Unit]
+Description=Weekly run of the payout reconciler (Fridays 10:00 UTC) — fires referral.paid events for any payouts that transitioned pending->paid since last run
+
+[Timer]
+OnCalendar=Fri *-*-* 10:00:00
+Persistent=true
+RandomizedDelaySec=600
+Unit=payout-reconciler.service
+
+[Install]
+WantedBy=timers.target

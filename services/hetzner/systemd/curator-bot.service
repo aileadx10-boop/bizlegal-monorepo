@@ -1,0 +1,19 @@
+[Unit]
+Description=BizLegal-AI Curator Telegram bot (BIZLEGALFORGEBOT)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/bizlegal/curator
+EnvironmentFile=/opt/bizlegal/curator/.env
+ExecStart=/opt/bizlegal/venv/bin/python /opt/bizlegal/curator/bot.py
+Restart=on-failure
+RestartSec=10
+# Don't burn the whole server budget on a runaway loop
+MemoryMax=512M
+CPUQuota=50%
+
+[Install]
+WantedBy=multi-user.target

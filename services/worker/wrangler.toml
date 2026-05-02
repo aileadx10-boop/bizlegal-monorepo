@@ -1,0 +1,57 @@
+name = "bizlegal-lead-intake"
+main = "src/index.ts"
+compatibility_date = "2026-04-21"
+compatibility_flags = ["nodejs_compat"]
+
+# DEPLOYED 2026-04-21 at:
+#   https://bizlegal-lead-intake.bizlegal-ai.workers.dev
+#
+# Day-3 TODO: add KV namespace for idempotency + DLQ, add custom domain
+# route (intake.bizlegal-ai.com), add scheduled Cron Trigger for daily smoke test.
+
+# Phase 3.2 — product-digest aggregator cache.
+# Created 2026-04-26 via wrangler kv namespace create DIGEST_KV
+[[kv_namespaces]]
+binding = "DIGEST_KV"
+id = "f56bcfd5fd4d46468da269070a7ad323"
+
+# [routes]
+# pattern = "intake.bizlegal-ai.com/*"
+# zone_name = "bizlegal-ai.com"
+
+[vars]
+# Non-secret config only. Secrets live in wrangler secret put.
+PIPELINE_VERSION = "0.1.0-day1"
+GITHUB_REPO_OWNER = "aileadx10-boop"
+GITHUB_REPO_NAME = "bizlegal-ea"
+GITHUB_DEFAULT_BRANCH = "main"
+HAIKU_MODEL_ID = "claude-haiku-4-5"
+SONNET_ESCALATION_MODEL_ID = "claude-sonnet-4-6"
+MIN_CONFIDENCE_THRESHOLD = "0.80"
+NOTIFY_SCORE_THRESHOLD = "7"
+
+[observability]
+enabled = true
+head_sampling_rate = 1.0
+
+# Cron triggers — handler in src/index.ts branches on event.cron.
+#   "0 6 * * *" — Phase 3.2 daily product-digest aggregation
+#                  (fetch /api/digest from each subdomain, write
+#                   KV `hub:digest:latest`, commit audit JSON to
+#                   bizlegal-ea/digests/{date}.json). Runs even if
+#                   DIGEST_KV is unbound — graceful no-op on the KV
+#                   write so partial config never breaks the audit
+#                   trail.
+#   "0 9 * * *" — daily synthetic snapshot smoke test against the
+#                  Anthropic + GitHub + Telegram + Resend chain.
+[triggers]
+crons = ["0 6 * * *", "0 9 * * *"]
+
+# Required secrets (set via: wrangler secret put <NAME>):
+# - ANTHROPIC_API_KEY
+# - GITHUB_TOKEN              (fine-grained PAT, contents:write on bizlegal-ea)
+# - TELEGRAM_BOT_TOKEN        (Day-2+, user will provide)
+# - TELEGRAM_CHAT_ID          (Day-2+, user will provide)
+# - WEBHOOK_SHARED_SECRET     (client-side form posts include X-Bizlegal-Secret header)
+# Optional secrets:
+# - GEMINI_API_KEY            (enables Nano Banana hero images on /report/snapshot)

@@ -1,0 +1,23 @@
+{
+  "name": "bizlegal-lead-intake",
+  "version": "0.1.0",
+  "description": "BizLegal-AI lead intake Cloudflare Worker: form -> Haiku chain -> GitHub-backed EA -> Telegram",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "tail": "wrangler tail",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "pdf-lib": "^1.17.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260401.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0",
+    "wrangler": "^4.73.0"
+  }
+}

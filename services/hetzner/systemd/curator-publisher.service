@@ -1,0 +1,18 @@
+[Unit]
+Description=BizLegal-AI Curator publisher (FastAPI on 127.0.0.1:8082)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/bizlegal/curator
+EnvironmentFile=/opt/bizlegal/curator/.env
+ExecStart=/opt/bizlegal/venv/bin/uvicorn publisher:app --host 127.0.0.1 --port 8082
+Restart=on-failure
+RestartSec=10
+MemoryMax=512M
+CPUQuota=50%
+
+[Install]
+WantedBy=multi-user.target

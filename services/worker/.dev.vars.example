@@ -1,0 +1,14 @@
+# Local-only secrets for `wrangler dev`. Copy to .dev.vars (gitignored).
+# In production these are set via `wrangler secret put <NAME>`.
+
+ANTHROPIC_API_KEY=sk-ant-...
+GITHUB_TOKEN=ghp_...
+TELEGRAM_BOT_TOKEN=...
+TELEGRAM_CHAT_ID=...
+WEBHOOK_SHARED_SECRET=generate-with-openssl-rand-hex-32
+
+# Optional override for the /api/ops/log target. Defaults to the hub
+# at https://bizlegal-ai.com/api/ops/log when unset. The HMAC pair on
+# the hub side reads WEBHOOK_SHARED_SECRET as BIZLEGAL_INBOUND_SECRET
+# — they must hold the same hex string.
+# OPS_LOG_URL=https://bizlegal-ai.com/api/ops/log

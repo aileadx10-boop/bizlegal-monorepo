@@ -1,0 +1,11 @@
+[Unit]
+Description=Run deal-router payout report daily at 03:00 UTC
+
+[Timer]
+OnCalendar=*-*-* 03:00:00
+Persistent=true
+RandomizedDelaySec=600
+Unit=payout-report.service
+
+[Install]
+WantedBy=timers.target

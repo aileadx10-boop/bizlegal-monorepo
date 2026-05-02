@@ -1,0 +1,41 @@
+# Caddy config — auto-issues Let's Encrypt cert at first contact.
+# Recommended over nginx+certbot on OCI free-tier (saves ~30MB RAM).
+# Run as: caddy run --config /opt/oci-deal-router/Caddyfile
+
+{
+    email team@bizlegal-ai.com
+}
+
+router.bizlegal-ai.com {
+    encode zstd gzip
+
+    @admin {
+        path /partners /payouts /feedback
+    }
+    handle @admin {
+        reverse_proxy 127.0.0.1:8000
+    }
+
+    handle /lead {
+        reverse_proxy 127.0.0.1:8000
+        request_body {
+            max_size 64KB
+        }
+    }
+
+    handle /health {
+        reverse_proxy 127.0.0.1:8000
+    }
+
+    handle {
+        respond "BizLegal-AI Deal Router" 200
+    }
+
+    log {
+        output file /var/log/caddy/router.log {
+            roll_size 10MB
+            roll_keep 5
+        }
+        format json
+    }
+}
