@@ -313,6 +313,38 @@ To rotate: regenerate the hook URL from the source (Vercel/CF/NOW/PayPal), paste
 7. Re-establish Cloudflare Tunnel `curator-gpu` to laptop Ollama.
 8. Verify heartbeat events arrive on `/ops` within 10 min.
 
+### Caddy Cloudflare DNS challenge (Let's Encrypt)
+
+The OCI router uses Caddy with Cloudflare DNS challenge for `router.bizlegal-ai.com` TLS. Caddy needs Cloudflare API credentials in its environment:
+
+```bash
+# SSH into OCI VM, then:
+sudo nano /etc/caddy/Caddyfile
+# Ensure the global section has:
+# {
+#     acme_dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+# }
+
+# Add CLOUDFLARE env vars to caddy service.
+# DO NOT inline the token here — read it from the canonical vault
+# (CLOUDFLARE_AUTH_EMAIL + CLOUDFLARE_API_TOKEN entries) and paste
+# into the systemd override:
+sudo systemctl edit caddy
+# Add:
+# [Service]
+# Environment=CLOUDFLARE_AUTH_EMAIL=<from vault: CLOUDFLARE_AUTH_EMAIL>
+# Environment=CLOUDFLARE_API_TOKEN=<from vault: CLOUDFLARE_API_TOKEN>
+#
+# Vault path: C:/Users/Moshe Dor/Downloads/env-hub-bizlegal-ai.txt
+# If the token has been rotated, the vault is the source of truth.
+
+sudo systemctl daemon-reload
+sudo systemctl reload caddy
+# Verify:
+curl -s https://router.bizlegal-ai.com/health
+# Expect: 200 OK (not 401/502)
+```
+
 ### "OCI VM wiped"
 1. New OCI instance + Docker compose.
 2. `git clone https://github.com/aileadx10-boop/bizlegal-ea` → `cd projects/oci-deal-router`.

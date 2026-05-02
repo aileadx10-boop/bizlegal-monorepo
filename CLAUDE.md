@@ -159,6 +159,7 @@ Every planning + ops doc lives in `decisions/`:
 - `decisions/SEO_FIXES.md` — long-tail keyword audit
 - `decisions/DASHBOARD_AGENT_PROMPT.md` — added in Z5
 - `decisions/OPENCLAW_ROLE.md` — added in Z6
+- `decisions/POST_CUTOVER_PUNCH_LIST.md` — 5 RED items after Vercel cutover (Cloudflare DNS + Vercel Preview env, Moses-only fixes)
 - *current plan is at `~/.claude/plans/concurrent-bouncing-kitten.md` (lives outside the repo since plans are per-session ephemera)*
 
 When you write a new decision, add it here.
