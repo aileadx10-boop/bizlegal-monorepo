@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — BizLegal AI | 20+ Years Commercial Law Expertise</title>
+<meta name="description" content="Founded by a New York-licensed attorney with 20+ years of international commercial law experience. AAA & ICC Arbitrator. DIFC, ADGM, VARA registered.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0e1a;--bg1:#0f1428;--bg2:#1a1f3a;--bg3:#252a4a;
+  --border:rgba(99,102,241,0.15);--border2:rgba(99,102,241,0.25);
+  --ink:#ffffff;--ink2:#e0e4f0;--ink3:#a0a8c0;--muted:#6b7280;
+  --royal:#4f46e5;--royal2:#6366f1;--royal3:#818cf8;--royal4:#312e81;
+  --royal-light:rgba(99,102,241,0.1);--royal-glow:rgba(99,102,241,0.3);
+  --gold:#d4af37;--green:#10b981;
+  --font-s:'Inter',sans-serif;--font-m:'JetBrains Mono',monospace;--font-accent:'Playfair Display',serif;
+}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-s);line-height:1.6;overflow-x:hidden}
+.shine-bg{position:fixed;inset:0;z-index:-1;background:radial-gradient(ellipse at 20% 20%,rgba(99,102,241,0.08) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(99,102,241,0.06) 0%,transparent 50%),var(--bg)}
+
+/* Nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(10,14,26,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--royal),var(--royal2));border-radius:8px;display:grid;place-items:center;font-family:var(--font-accent);font-size:1.2rem}
+.logo-text{font-size:1.1rem;font-weight:600}
+.logo-text span{color:var(--royal3)}
+.nav-links{display:flex;gap:24px}
+.nav-links a{color:var(--ink3);text-decoration:none;font-size:0.9rem;font-weight:500;transition:color 0.2s}
+.nav-links a:hover{color:var(--ink)}
+
+/* Hero */
+.page-hero{padding:180px 48px 80px;text-align:center}
+.page-hero h1{font-size:clamp(2.5rem,4vw,3.5rem);font-weight:700;line-height:1.1;letter-spacing:-0.02em;margin-bottom:20px}
+.page-hero h1 .accent{font-family:var(--font-accent);font-style:italic;color:var(--royal3)}
+.page-hero p{font-size:1.15rem;color:var(--ink3);max-width:700px;margin:0 auto}
+
+/* Content */
+.content-section{padding:80px 48px}
+.wrap{max-width:1000px;margin:0 auto}
+.section-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-m);font-size:0.75rem;color:var(--royal3);text-transform:uppercase;letter-spacing:0.15em;padding:6px 14px;background:var(--royal-light);border:1px solid var(--border2);border-radius:100px;margin-bottom:20px}
+.section-title{font-size:clamp(1.8rem,3vw,2.5rem);font-weight:700;line-height:1.1;letter-spacing:-0.02em;margin-bottom:24px}
+.section-title .accent{font-family:var(--font-accent);font-style:italic;color:var(--royal3)}
+.content-text{font-size:1.05rem;color:var(--ink3);line-height:1.8}
+.content-text p{margin-bottom:24px}
+.content-text strong{color:var(--ink)}
+
+/* Stats */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin:48px 0}
+.stat-card{background:var(--bg1);border:1px solid var(--border);border-radius:16px;padding:32px;text-align:center}
+.stat-number{font-size:2.5rem;font-weight:700;color:var(--royal3);line-height:1;margin-bottom:8px}
+.stat-label{font-family:var(--font-m);font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em}
+
+/* Credentials */
+.credentials-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:48px}
+.credential-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px;display:flex;align-items:flex-start;gap:16px}
+.credential-icon{font-size:1.5rem;flex-shrink:0}
+.credential-content h4{font-size:1rem;font-weight:600;margin-bottom:6px}
+.credential-content p{font-size:0.9rem;color:var(--ink3);line-height:1.6}
+
+/* Timeline */
+.timeline{margin-top:48px;position:relative}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--border)}
+.timeline-item{display:flex;gap:24px;margin-bottom:32px;position:relative;padding-left:24px}
+.timeline-item::before{content:'';position:absolute;left:-6px;top:6px;width:14px;height:14px;background:var(--royal);border-radius:50%;box-shadow:0 0 12px var(--royal-glow)}
+.timeline-year{font-family:var(--font-m);font-size:0.85rem;font-weight:600;color:var(--royal3);min-width:80px}
+.timeline-content h4{font-size:1.05rem;font-weight:600;margin-bottom:6px}
+.timeline-content p{font-size:0.95rem;color:var(--ink3);line-height:1.6}
+
+/* Footer */
+footer{background:var(--bg1);border-top:1px solid var(--border);padding:48px;text-align:center}
+footer p{color:var(--muted);font-size:0.9rem}
+
+@media(max-width:768px){
+  nav{padding:14px 24px}
+  .nav-links{display:none}
+  .page-hero,.content-section{padding:80px 24px}
+  .stats-grid,.credentials-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="shine-bg"></div>
+
+<nav>
+  <a href="/" class="logo">
+    <div class="logo-icon">§</div>
+    <div class="logo-text">BizLegal <span>AI</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/#platform">Platform</a>
+    <a href="/#pricing">Pricing</a>
+    <a href="/legal/about.html" style="color:var(--ink)">About</a>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <h1>20+ Years of <span class="accent">Deal-Making</span> Expertise</h1>
+  <p>
+    Founded by a New York-licensed commercial attorney with two decades of 
+    international transaction experience across real estate, fintech, and crypto.
+  </p>
+</section>
+
+<section class="content-section">
+  <div class="wrap">
+    <div class="section-tag">Our Story</div>
+    <h2 class="section-title">Built on <span class="accent">Real Experience</span></h2>
+    <div class="content-text">
+      <p>
+        BizLegal AI was born from a simple observation: businesses were paying $5,000-$15,000 
+        for routine commercial legal documents that should cost a fraction of that amount. 
+        Meanwhile, solo entrepreneurs and small businesses were using free templates that 
+        exposed them to massive legal risks.
+      </p>
+      <p>
+        Our founder, a New York-licensed attorney with 20+ years of international commercial 
+        law practice, decided to bridge this gap. The solution: combine deep legal expertise 
+        with advanced AI to make institutional-quality legal intelligence accessible to everyone.
+      </p>
+      <p>
+        Every template, every analysis, every recommendation in our platform is built on the 
+        foundation of hundreds of millions of dollars in actual transaction experience. 
+        This isn't AI trained on internet text — this is AI powered by real deal-making expertise.
+      </p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">20+</div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">500+</div>
+        <div class="stat-label">Transactions</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">$500M+</div>
+        <div class="stat-label">Deal Value</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">4</div>
+        <div class="stat-label">Jurisdictions</div>
+      </div>
+    </div>
+
+    <div class="section-tag" style="margin-top:80px">Credentials</div>
+    <h2 class="section-title">Licensed & <span class="accent">Recognized</span> Expertise</h2>
+    <div class="credentials-grid">
+      <div class="credential-card">
+        <div class="credential-icon">⚖️</div>
+        <div class="credential-content">
+          <h4>New York Bar</h4>
+          <p>Licensed attorney in good standing with the New York State Bar Association, specializing in commercial law and international transactions.</p>
+        </div>
+      </div>
+      <div class="credential-card">
+        <div class="credential-icon">🏛️</div>
+        <div class="credential-content">
+          <h4>AAA Arbitrator</h4>
+          <p>Panel arbitrator with the American Arbitration Association, handling complex commercial disputes and international arbitration matters.</p>
+        </div>
+      </div>
+      <div class="credential-card">
+        <div class="credential-icon">🌍</div>
+        <div class="credential-content">
+          <h4>ICC Arbitrator</h4>
+          <p>Recognized arbitrator with the International Chamber of Commerce, experienced in cross-border commercial arbitration.</p>
+        </div>
+      </div>
+      <div class="credential-card">
+        <div class="credential-icon">🏢</div>
+        <div class="credential-content">
+          <h4>DIFC Registered</h4>
+          <p>Registered legal practitioner with the Dubai International Financial Centre, authorized to advise on DIFC law matters.</p>
+        </div>
+      </div>
+      <div class="credential-card">
+        <div class="credential-icon">💎</div>
+        <div class="credential-content">
+          <h4>ADGM Registered</h4>
+          <p>Registered legal practitioner with the Abu Dhabi Global Market, authorized to advise on ADGM law matters.</p>
+        </div>
+      </div>
+      <div class="credential-card">
+        <div class="credential-icon">🔐</div>
+        <div class="credential-content">
+          <h4>VARA Knowledge</h4>
+          <p>Extensive expertise in Dubai's Virtual Assets Regulatory Authority framework for crypto and digital asset businesses.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-tag" style="margin-top:80px">Experience</div>
+    <h2 class="section-title">Career <span class="accent">Timeline</span></h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-year">2003-2006</div>
+        <div class="timeline-content">
+          <h4>Big Law Foundation</h4>
+          <p>Started career at a major international law firm, focusing on commercial transactions, securities, and corporate governance.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2006-2012</div>
+        <div class="timeline-content">
+          <h4>In-House Counsel</h4>
+          <p>Served as senior legal counsel for a multinational corporation, managing commercial contracts, regulatory compliance, and international expansion.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2012-2018</div>
+        <div class="timeline-content">
+          <h4>Private Practice</h4>
+          <p>Established boutique commercial law practice specializing in real estate, fintech, and cross-border transactions across US, EU, and Middle East.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2018-Present</div>
+        <div class="timeline-content">
+          <h4>Legal Technology & AI</h4>
+          <p>Founded BizLegal AI to democratize access to institutional-quality legal intelligence through modern legal platforms.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 BizLegal AI. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

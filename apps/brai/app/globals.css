@@ -1,0 +1,45 @@
+:root {
+  --bg: #0d1626;
+  --bg-low: #111e30;
+  --bg-highest: #131f35;
+  --card: #131f35;
+  --outline: #4a6a88;
+  --outline-var: #1a2d4a;
+  --on-surface: #ddeeff;
+  --on-surface-var: #9fb6cc;
+  --muted: #4a6a88;
+  --text: #ddeeff;
+  --accent: #00e5a0;
+  --accent-mid: #00c083;
+  --gold: #f7b731;
+  --amber: #f7b731;
+  --red: #ff4d4d;
+  --font-display: "Syne", Georgia, ui-serif;
+  --font-body: "Syne", -apple-system, ui-sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+}
+
+.lp-h2 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--on-surface);
+  margin: 28px 0 10px;
+}

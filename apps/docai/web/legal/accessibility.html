@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accessibility — BizLegal AI</title>
+<meta name="description" content="BizLegal AI accessibility statement and accommodation requests.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#020408;--bg1:#040810;--surface:rgba(6,14,30,0.7);--border:rgba(0,200,255,0.08);--border2:rgba(0,200,255,0.18);--ink:#E8F4FF;--muted:#4A6080;--cyan:#00C8FF;--blue:#0066FF;--red:#FF4466;--green:#00E599;--font-d:'DM Sans',sans-serif;--font-m:'DM Mono',monospace;}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-d);line-height:1.7;font-size:16px;}
+  a{color:var(--cyan);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  nav{position:sticky;top:0;background:rgba(2,4,8,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;z-index:100;}
+  .logo{font-family:var(--font-m);font-size:.8rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);}
+  .nav-back{font-family:var(--font-m);font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+  .wrap{max-width:860px;margin:0 auto;padding:80px 60px;}
+  .page-tag{font-family:var(--font-m);font-size:.54rem;letter-spacing:.26em;text-transform:uppercase;color:var(--cyan);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+  .page-tag::before{content:'';width:20px;height:1px;background:var(--cyan);}
+  h1{font-size:2.8rem;font-weight:300;letter-spacing:-.03em;margin-bottom:12px;line-height:1.1;}
+  .page-meta{font-family:var(--font-m);font-size:.56rem;letter-spacing:.14em;color:var(--muted);margin-bottom:60px;}
+  h2{font-size:1.15rem;font-weight:500;color:var(--ink);margin:48px 0 14px;padding-top:32px;border-top:1px solid var(--border);}
+  h2:first-of-type{border-top:none;padding-top:0;}
+  h3{font-size:.95rem;font-weight:500;color:var(--cyan);margin:24px 0 8px;}
+  p{color:var(--muted);margin-bottom:14px;font-weight:300;}
+  ul,ol{color:var(--muted);padding-left:24px;margin-bottom:14px;}
+  li{margin-bottom:6px;font-weight:300;}
+  .highlight{background:rgba(0,200,255,0.04);border:1px solid var(--border2);border-left:3px solid var(--cyan);padding:18px 22px;margin:20px 0;}
+  .warning{background:rgba(255,68,102,0.05);border:1px solid rgba(255,68,102,0.2);border-left:3px solid var(--red);padding:18px 22px;margin:20px 0;}
+  .highlight p,.warning p{margin-bottom:0;color:var(--ink);}
+  .faq-item{border:1px solid var(--border);margin-bottom:2px;}
+  .faq-q{padding:18px 22px;cursor:pointer;font-weight:400;display:flex;justify-content:space-between;align-items:center;background:var(--bg1);transition:background .2s;}
+  .faq-q:hover{background:rgba(0,200,255,0.04);}
+  .faq-a{padding:0 22px;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s;color:var(--muted);font-weight:300;}
+  .faq-a.open{max-height:400px;padding:16px 22px;}
+  .faq-icon{font-family:var(--font-m);font-size:.7rem;color:var(--cyan);transition:transform .2s;}
+  .faq-item.open .faq-icon{transform:rotate(45deg);}
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border);margin:40px 0;}
+  .about-card{background:var(--bg1);padding:28px;position:relative;}
+  .about-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),transparent);}
+  .about-card h3{color:var(--cyan);margin-top:0;}
+  .cred-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border);font-size:.9rem;}
+  .cred-row:last-child{border-bottom:none;}
+  .cred-icon{font-size:1.2rem;flex-shrink:0;}
+  footer{border-top:1px solid var(--border);padding:32px 60px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;margin-top:80px;}
+  .foot-logo{font-family:var(--font-m);font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);}
+  .foot-links{display:flex;gap:20px;flex-wrap:wrap;}
+  .foot-link{font-family:var(--font-m);font-size:.48rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+  .foot-disc{font-family:var(--font-m);font-size:.46rem;color:rgba(74,96,128,0.4);max-width:400px;line-height:1.6;}
+  @media(max-width:700px){nav{padding:14px 20px;}.wrap{padding:48px 24px;}footer{padding:24px;flex-direction:column;}.about-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://docstack.bizlegal-ai.com/" class="logo">BizLegal AI</a>
+  <a href="https://docstack.bizlegal-ai.com/" class="nav-back">← Back to site</a>
+</nav>
+<div class="wrap">
+  <p class="page-tag">Accessibility</p>
+  <h1>Accessibility Statement</h1>
+  <p class="page-meta">Last reviewed: 2025</p>
+
+  <p>BizLegal AI (operated by BizLegal AI) is committed to ensuring digital accessibility for people with disabilities. We continually improve the user experience for everyone and apply relevant accessibility standards.</p>
+
+  <h2>Our Commitment</h2>
+  <ul>
+    <li>Semantic HTML structure for screen readers</li>
+    <li>Sufficient color contrast ratios (WCAG 2.1 AA target)</li>
+    <li>Keyboard navigation support for all interactive elements</li>
+    <li>Descriptive link text and form labels</li>
+    <li>Responsive design for mobile and assistive device use</li>
+  </ul>
+
+  <h2>Known Limitations</h2>
+  <p>The Three.js 3D background animation is decorative and not conveyed to assistive technologies. Some complex interactive elements (clause editor) may have limited screen reader support. We are working to improve these.</p>
+
+  <h2>Request Accommodation</h2>
+  <p>If you experience difficulty accessing any part of this platform, or need a document in an alternative format, please contact us:</p>
+  <div class="highlight">
+    <p>Email: <a href="/cdn-cgi/l/email-protection#b5c6c0c5c5dac7c1f5d7dccfd9d0d2d4d998d4dc9bd6dad8"><span class="__cf_email__" data-cfemail="91e2e4e1e1fee3e5d1f3f8ebfdf4f6f0fdbcf0f8bff2fefc">[email&#160;protected]</span></a><br>
+    We will respond within 2 business days and work with you to provide the information or service you need.</p>
+  </div>
+
+  <h2>Feedback</h2>
+  <p>We welcome your feedback on the accessibility of BizLegal AI. Please let us know if you encounter accessibility barriers so we can address them.</p>
+</div>
+
+<footer>
+  <div class="foot-logo">BizLegal AI</div>
+  <div class="foot-links">
+    <a href="https://docstack.bizlegal-ai.com/legal/about.html" class="foot-link">About</a>
+    <a href="https://docstack.bizlegal-ai.com/legal/faq.html" class="foot-link">FAQ</a>
+    <a href="https://docstack.bizlegal-ai.com/legal/terms.html" class="foot-link">Terms</a>
+    <a href="https://docstack.bizlegal-ai.com/legal/privacy.html" class="foot-link">Privacy</a>
+    <a href="https://docstack.bizlegal-ai.com/legal/refund.html" class="foot-link">Refunds</a>
+    <a href="https://docstack.bizlegal-ai.com/legal/disclaimer.html" class="foot-link">Disclaimer</a>
+    <a href="https://docstack.bizlegal-ai.com/legal/accessibility.html" class="foot-link">Accessibility<

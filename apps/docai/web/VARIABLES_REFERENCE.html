@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DOR-INNOVATION Variables - Quick Reference</title>
+<style>
+body{font-family:system-ui,sans-serif;max-width:1000px;margin:40px auto;padding:20px;background:#f5f5f5;color:#333}
+h1{color:#00C8FF;border-bottom:3px solid #00C8FF;padding-bottom:10px}
+h2{color:#020408;margin-top:30px;border-bottom:1px solid #ddd;padding-bottom:5px}
+.variable{display:inline-block;padding:8px 12px;margin:4px;background:#020408;color:#00C8FF;font-family:monospace;border-radius:4px}
+.value{display:inline-block;padding:8px 12px;margin:4px;background:#e8f4ff;color:#040810;font-family:monospace;border-radius:4px}
+.row{display:flex;align-items:center;gap:10px;margin:8px 0;flex-wrap:wrap}
+.section{background:white;padding:20px;margin:20px 0;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.color-swatch{width:40px;height:40px;border-radius:4px;border:1px solid #ddd;display:inline-block;vertical-align:middle;margin-right:10px}
+code{background:#f0f0f0;padding:2px 6px;border-radius:3px}
+.note{background:#fff3cd;border-left:4px solid #ffc107;padding:15px;margin:20px 0}
+</style>
+</head>
+<body>
+<h1>🎨 DOR-INNOVATION Design Variables</h1>
+<p><strong>Quick reference for the DocAI redesign using DOR-INNOVATION style.</strong></p>
+
+<div class="section">
+<h2>🌈 Primary Colors</h2>
+<div class="row">
+  <span class="color-swatch" style="background:#00C8FF"></span>
+  <span class="variable">--primary</span>
+  <span class="value">#00C8FF</span>
+  <span>(Cyan - Main accent)</span>
+</div>
+<div class="row">
+  <span class="color-swatch" style="background:#00E5FF"></span>
+  <span class="variable">--primary2</span>
+  <span class="value">#00E5FF</span>
+  <span>(Cyan Light)</span>
+</div>
+<div class="row">
+  <span class="color-swatch" style="background:#0066FF"></span>
+  <span class="variable">--primary3</span>
+  <span class="value">#0066FF</span>
+  <span>(Blue)</span>
+</div>
+</div>
+
+<div class="section">
+<h2>⚫ Backgrounds</h2>
+<div class="row">
+  <span class="color-swatch" style="background:#020408"></span>
+  <span class="variable">--bg</span>
+  <span class="value">#020408</span>
+  <span>(Main background - Cyan black)</span>
+</div>
+<div class="row">
+  <span class="color-swatch" style="background:#040810"></span>
+  <span class="variable">--bg1</span>
+  <span class="value">#040810</span>
+  <span>(Surface 1)</span>
+</div>
+<div class="row">
+  <span class="color-swatch" style="background:#060c18"></span>
+  <span class="variable">--bg2</span>
+  <span class="value">#060c18</span>
+  <span>(Surface 2)</span>
+</div>
+<div class="row">
+  <span class="color-swatch" style="background:#0a1420"></span>
+  <span class="variable">--bg3</span>
+  <span class="value">#0a1420</span>
+  <span>(Surface 3)</span>
+</div>
+</div>
+
+<div class="section">
+<h2>📝 Text Colors</h2>
+<div class="row">
+  <span class="color-swatch" style="background:#E8F4FF"></span>
+  <span class="variable">--ink</span>
+  <span class="value">#E8F4FF</span>
+  <span>(Primary text - Cyan white)</span>
+</div>
+<div class="row">
+  <span class="color-swatch" style="background:#CCE6FF"></span>
+  <span class="variable">--ink2</span>
+  <span class="value">#CCE6FF</span>
+  <span>(Secondary text)</span>
+</div>
+<div class="row">
+  <span class="color-swatch" style="background:#4A6080"></span>
+  <span class="variable">--muted</span>
+  <span class="value">#4A6080</span>
+  <span>(Muted text)</span>
+</div>
+<div class="row">
+  <span class="color-swatch" style="background:#5A7090"></span>
+  <span class="variable">--muted2</span>
+  <span class="value">#5A7090</span>
+  <span>(Muted text 2)</span>
+</div>
+</div>
+
+<div class="section">
+<h2>🎯 Accent Colors</h2>
+<div class="row">
+  <span class="color-swatch" style="background:#00E599"></span>
+  <span class="variable">--green</span>
+  <span class="value">#00E599</span>
+  <span>(Success)</span>
+</div>
+<div class="row">
+  <span class="color-swatch" style="background:#FF4466"></span>
+  <span class="variable">--red</span>
+  <span class="value">#FF4466</span>
+  <span>(Error/Alert)</span>
+</div>
+<div class="row">
+  <span class="color-swatch" style="background:#FFB744"></span>
+  <span class="variable">--amber</span>
+  <span class="value">#FFB744</span>
+  <span>(Warning)</span>
+</div>
+</div>
+
+<div class="section">
+<h2>🔤 Typography</h2>
+<div class="row">
+  <span class="variable">--font-sans</span>
+  <span class="value">'DM Sans'</span>
+  <span>(Main font)</span>
+</div>
+<div class="row">
+  <span class="variable">--font-mono</span>
+  <span class="value">'DM Mono'</span>
+  <span>(Monospace)</span>
+</div>
+<div class="row">
+  <span class="variable">--font-serif</span>
+  <span class="value">'Playfair Display'</span>
+  <span>(Serif accents)</span>
+</div>
+</div>
+
+<div class="section">
+<h2>✨ Glow Effects</h2>
+<div class="row">
+  <span class="variable">--glowSm</span>
+  <span class="value">rgba(0,200,255,0.12)</span>
+  <span>(Small glow)</span>
+</div>
+<div class="row">
+  <span class="variable">--glowMd</span>
+  <span class="value">rgba(0,200,255,0.25)</span>
+  <span>(Medium glow)</span>
+</div>
+<div class="row">
+  <span class="variable">--glowLg</span>
+  <span class="value">rgba(0,200,255,0.4)</span>
+  <span>(Large glow)</span>
+</div>
+</div>
+
+<div class="section">
+<h2>🔗 Borders</h2>
+<div class="row">
+  <span class="variable">--border</span>
+  <span class="value">rgba(0,200,255,0.08)</span>
+  <span>(Subtle border)</span>
+</div>
+<div class="row">
+  <span class="variable">--border2</span>
+  <span class="value">rgba(0,200,255,0.18)</span>
+  <span>(Medium border)</span>
+</div>
+<div class="row">
+  <span class="variable">--border3</span>
+  <span class="value">rgba(0,200,255,0.28)</span>
+  <span>(Strong border)</span>
+</div>
+</div>
+
+<div class="section">
+<h2>📱 Social Media Icons (7)</h2>
+<p>Update these with your actual profiles in <code>index-new.html</code> (line ~1874):</p>
+<ol>
+  <li><strong>Twitter/X:</strong> <code>https://twitter.com/YOUR_USERNAME</code></li>
+  <li><strong>LinkedIn:</strong> <code>https://linkedin.com/in/YOUR_PROFILE</code></li>
+  <li><strong>Facebook:</strong> <code>https://facebook.com/YOUR_PAGE</code></li>
+  <li><strong>Instagram:</strong> <code>https://instagram.com/YOUR_USERNAME</code></li>
+  <li><strong>GitHub:</strong> <code>https://github.com/YOUR_USERNAME</code></li>
+  <li><strong>YouTube:</strong> <code>https://youtube.com/@YOUR_CHANNEL</code></li>
+  <li><strong>Email:</strong> <code>mailto:YOUR@EMAIL.COM</code></li>
+</ol>
+</div>
+
+<div class="section">
+<h2>⚙️ Configuration Needed</h2>
+<div class="note">
+<strong>⚠️ Don't forget to update:</strong>
+<ol>
+  <li><strong>PayPal Client ID</strong> (Line 9): Replace <code>YOUR_CLIENT_ID</code></li>
+  <li><strong>Social Media Links</strong> (Line 1874): Replace all placeholder URLs</li>
+  <li><strong>API Keys</strong>: Ensure <code>/api/paypal</code>, <code>/api/dd</code>, <code>/api/email</code> are configured</li>
+</ol>
+</div>
+</div>
+
+<div class="section">
+<h2>📁 Key Files</h2>
+<ul>
+  <li><code>index-new.html</code> - Your redesigned site with DOR-INNOVATION variables</li>
+  <li><code>DOR-INNOVATION_INTEGRATION.md</code> - Detailed integration documentation</li>
+  <li><code>UPDATE_SUMMARY.md</code> - Complete changelog</li>
+  <li><code>SETUP_GUIDE.html</code> - Visual setup guide</li>
+</ul>
+</div>
+
+<p style="margin-top:40px;padding-top:20px;border-top:1px solid #ddd;color:#666;font-size:14px;text-align:center">
+<strong>Source:</strong> C:\Users\Moshe Dor\Downloads\DOR-INNOVATION\belegal-dockstack\bizlegal-site-\index.html
+</p>
+</body>
+</html>

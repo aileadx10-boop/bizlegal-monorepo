@@ -1,0 +1,18 @@
+{
+  "name": "lexaudit",
+  "buildCommand": "next build",
+  "devCommand": "next dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "outputDirectory": ".next",
+  "functions": {
+    "app/api/cron/monitor/diff/route.ts": { "maxDuration": 60 },
+    "app/api/monitor/check/route.ts": { "maxDuration": 30 }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/monitor/diff",
+      "schedule": "0 6 * * *"
+    }
+  ]
+}

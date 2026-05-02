@@ -1,0 +1,9 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "devCommand": "next dev",
+  "installCommand": "npm install",
+  "crons": [
+    { "path": "/api/sanctions/refresh", "schedule": "0 6 * * *" }
+  ]
+}
