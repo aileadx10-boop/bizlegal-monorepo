@@ -33,13 +33,17 @@ load_dotenv()
 
 # ── Config ─────────────────────────────────────────────────────────
 RSS_FEEDS = [
+    # 2026-05-04: Dropped FTC (HTTP 403, anti-bot block returns 0 entries),
+    # EU (HTTP 301 redirect feedparser doesn't follow correctly), and
+    # FinCEN (HTTP 404, URL is dead). When refreshing the feed list,
+    # check each with `curl -sk -o /dev/null -w "%{http_code}\n" <URL>`
+    # before adding back. Each broken feed costs ~30s of feedparser hang.
     ("SEC", "https://www.sec.gov/news/pressreleases.rss"),
-    ("FTC", "https://www.ftc.gov/feeds/press-releases.xml"),
     ("FCA", "https://www.fca.org.uk/news/rss.xml"),
-    ("EU",  "https://ec.europa.eu/info/news/rss_en"),
-    ("FinCEN", "https://www.fincen.gov/news-room/news-releases.xml"),
 ]
-MAX_ITEMS_PER_FEED = 10
+MAX_ITEMS_PER_FEED = 3   # cut from 10 — covers the daily-news lookback window
+                         # but keeps Ollama call count low. With 2 working feeds
+                         # × 3 items = 6 LLM calls × ~17s warm = ~100s filter pass.
 MIN_RELEVANCE_SCORE = 4   # 1-5 from filter pass
 TOP_N = 3                 # picks per scout run
 
@@ -147,6 +151,13 @@ def ollama_chat(model: str, system: str, user: str, *, json_mode: bool = True) -
         ],
         "stream": False,
         "options": {"temperature": 0.1},
+        # 2026-05-04: keep_alive="24h" prevents model unload between calls.
+        # Without this, Ollama unloads the model after the default 5min idle,
+        # which under scout's load (filter pass on 6 items + rank pass on 3
+        # using a DIFFERENT model) caused 30-50s reload thrashing per call,
+        # blowing past the 40-min systemd timeout. Works regardless of the
+        # OLLAMA_KEEP_ALIVE env var on the Ollama host.
+        "keep_alive": "24h",
     }
     if json_mode:
         payload["format"] = "json"
