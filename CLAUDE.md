@@ -160,6 +160,7 @@ Every planning + ops doc lives in `decisions/`:
 - `decisions/DASHBOARD_AGENT_PROMPT.md` — added in Z5
 - `decisions/OPENCLAW_ROLE.md` — added in Z6
 - `decisions/POST_CUTOVER_PUNCH_LIST.md` — 5 RED items after Vercel cutover (Cloudflare DNS + Vercel Preview env, Moses-only fixes)
+- `decisions/WEEKLY_ROUTINES_AND_SEO.md` — full UTC schedule of crons / timers / event-driven services (every cron mapped Sun-Sat by surface) + programmatic SEO audit (3 gap pages currently, 6 P0/P1 improvements scoped at ~11h total work)
 - *current plan is at `~/.claude/plans/concurrent-bouncing-kitten.md` (lives outside the repo since plans are per-session ephemera)*
 
 When you write a new decision, add it here.
