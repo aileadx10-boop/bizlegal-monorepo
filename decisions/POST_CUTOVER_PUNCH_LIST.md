@@ -274,3 +274,67 @@ Expected:
 - **Earlier "Hetzner unreachable" / "OCI router 401" diagnoses were false** — both servers SSH fine; ICMP just blocked. Always probe with the actual protocol you care about.
 
 **Pattern:** every blocker so far has been a **scope mismatch** (env var scope, user profile scope, credential type scope). Phase Z's "operating book" discipline is the right counter — write down which scope each value belongs in, mechanically enforce it.
+
+---
+
+## Update — 2026-05-03 23:45 UTC (session close)
+
+**Closed since last update:**
+- ✅ DNS rows 1, 2, 3 — all 9 surfaces resolve, all 8 endpoints HTTP 200 (verified by Z7 matrix run)
+- ✅ Cloudflare Access policy attached to application (was created as reusable, never linked — moved into the Application's Policies tab via Access → Applications → app → Policies → Add existing)
+- ✅ scout.py reads `CF_ACCESS_CLIENT_ID` + `_SECRET` directly (commit `21c6304`)
+- ✅ Hetzner curator dir has `firecrawl_enrich.py` + `ops_log.py` (were missing — pushed via scp)
+- ✅ Cloudflared Windows service permanent — config moved to `%ProgramData%\Cloudflare\.cloudflared\`, service binPath updated via WMI `Invoke-CimMethod -MethodName Change`. New connector ID `37031b1e-...` registered, 4 edge connections. **Survives reboot.**
+- ✅ Bonus: vault → Vercel sync for `OPS_DASHBOARD_TOKEN` (Vercel had a stray literal `\n` at the end, breaking URL token check). Re-added clean from vault, redeploy triggered (commit `231569a`).
+
+**Carrying forward to next session:**
+
+### A. Tunnel routes to a different Ollama than Moses's local
+
+Confirmed via direct test: `curl /api/chat -d '{"model":"llama3.2:3b",...}'` through the tunnel returns `{"error":"model 'llama3.2:3b' not found"}` HTTP 404. But Moses's local Ollama on `127.0.0.1:11434` has both `llama3.2:3b` and `qwen2.5:7b-instruct-q4_K_M` loaded (verified via `ollama list` and `Invoke-WebRequest`). Tunnel's `ingress:` config in `config.yml` says `service: http://localhost:11434` — should match. But `/api/tags` through the tunnel shows different models (`gemma4`, `deepseek-v4-flash:cloud`).
+
+**Hypothesis:** the cloudflared LocalSystem service binds the `localhost:11434` differently than the user account does. There may be a second Ollama process on a different port, or another instance bound to LocalSystem's loopback that the service-mode daemon hits instead. Or the local config.yml inside `%ProgramData%\Cloudflare\.cloudflared\` was copied incorrectly and routes elsewhere.
+
+**Diagnostic commands for next session:**
+```powershell
+# What's listening on 11434 right now?
+Get-NetTCPConnection -LocalPort 11434 | Select-Object LocalAddress,OwningProcess
+Get-Process -Id <PID-from-above>
+
+# Confirm Moses's local Ollama API state
+Invoke-WebRequest http://127.0.0.1:11434/api/tags -UseBasicParsing | ConvertFrom-Json | Select -ExpandProperty models | Select name
+
+# Test the tunnel against /api/chat with a model the tunnel DOES have (e.g. gemma4:e2b)
+# If that works, tunnel routing is fine — it's just a different Ollama
+# If even that fails, tunnel ingress config is misrouting
+```
+
+**Likely fix:** either (a) make local Ollama bind to `0.0.0.0:11434` so all instances share state, or (b) update Hetzner's `OLLAMA_FILTER_MODEL`/`OLLAMA_RANK_MODEL` to match what the tunnel-side Ollama actually has, or (c) `ollama pull llama3.2:3b qwen2.5:7b-instruct-q4_K_M` on whichever instance the tunnel routes to.
+
+### B. Vercel redeploy not yet complete
+
+After re-adding `OPS_DASHBOARD_TOKEN` to Production and pushing empty commit `231569a`, Vercel started a build. As of session close it returned HTTP 000 (still building). Allow 2-3 min for the redeploy then re-test `/api/ops/health?token=...` — should return JSON with `ok:true`.
+
+### C. scout.py crash loop blocked on (A)
+
+Service is `activating`, hangs ~10 min on an Ollama call that 404s, then systemd kills it. Once (A) is resolved, scout runs clean on next start. Currently the crash loop is mostly cosmetic (no real harm — just journal noise + occasional CPU blip), but worth fixing before claiming Z7 fully green.
+
+---
+
+## Z7 row-by-row (post-session)
+
+| Row | Check | State |
+|---|---|---|
+| 1 | DNS resolves (9 surfaces) | ✅ all 9 OK |
+| 2 | HTTP endpoints (8 surfaces) | ✅ all 8 = 200 |
+| 3 | OCI router | ✅ HTTPS 200 (DNS A record fixed) |
+| 4 | tracr | ✅ HTTPS 200 (CNAME added) |
+| 5 | lexaudit | ✅ HTTPS 200 (CNAME added) |
+| 6 | curator tunnel reachable | ✅ tunnel UP, 4 edge connections, service-mode permanent |
+| 7 | CF Access auth working | ✅ HTTP 200 with service token from Hetzner |
+| 8 | scout.py heartbeat fires | ⚠️ blocked on item A above (Ollama model mismatch) |
+| 9 | /api/ops/health responds | ⚠️ pending Vercel redeploy of `OPS_DASHBOARD_TOKEN` fix |
+| 10 | Telegram ops alerts bot | not retested this session |
+| 11 | Hub FAQ bot | not retested this session |
+
+**8 of 11 verified green.** The remaining 3 either land automatically (#9 once redeploy completes) or need ~30 min next session (#8 + investigation; #10/#11 are quick verifies).
