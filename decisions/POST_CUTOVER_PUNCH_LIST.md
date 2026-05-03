@@ -649,3 +649,55 @@ The rank pass should have the same try/except as the filter pass, so a single 40
 | ⚠️ blocked on Vercel dashboard click (Turbo overrides vercel.json) | 1 (/api/ops/health) |
 
 Next session: ~10 min of WSL fiddling unblocks scout, ~5 min of dashboard click unblocks Vercel. Both surface-area gains; the underlying systems all work.
+
+---
+
+## Final clean-up — 2026-05-04 03:30
+
+The earlier session-close docs were partially wrong. The right story:
+
+### What scout is using (correct version)
+
+- **Filter model:** `gemma4:e2b` (~7 GB — fast)
+- **Rank model:** `gemma4:latest` (~9 GB — better quality)
+
+These are the models Moses actually has on his **Windows Ollama**. The `llama3.2:3b` + `qwen2.5:7b-instruct-q4_K_M` I pulled earlier went into a WSL Ollama instance that exists on the machine accidentally (likely from Docker Desktop installing WSL2 silently). Those are stranded and can be cleaned up later — they're not blocking anything.
+
+### Why the tunnel routing self-fixed
+
+When `wslrelay.exe` died (likely from the Ollama process restart earlier), `127.0.0.1:11434` stopped being intercepted. cloudflared now forwards directly to Windows Ollama. We didn't have to touch the cloudflared config again — the system corrected itself.
+
+### What committed today across the whole session
+
+```
+e09d74b  fix(scout): switch to gemma4 models (Moses's actual local install)
+6125a4f  docs: scout pipeline 90% — RSS+filter green, rank dies on routing flip
+a455914  docs: final session close — 9 of 11 + Vercel needs dashboard click
+75f2090  fix(deploy): vercel.json at monorepo root for Turbo install/build override
+65221b7  fix(hub): override install/build commands for monorepo workspace deploys
+9020cac  chore: commit pnpm-lock.yaml (unblocks Vercel deploys)
+9abb075  fix(scout): cut to 2 working feeds + 3 items + keep_alive=24h
+9adb518  docs: scout 40-min run timed out — root cause + 3 fix options
+7a4baf5  docs: 2026-05-04 session — 9 of 11 Z7 rows verified
+941aacb  fix(curator-scout): bump TimeoutStartSec=2400 + PYTHONUNBUFFERED
+```
+
+### Cleanup that doesn't have to happen but would be nice
+
+1. **Remove WSL** if Moses doesn't use it for anything else. `wsl --list --verbose` shows what's there. If only `docker-desktop` distros, decide whether to keep Docker Desktop. Removing WSL: `wsl --unregister <distro-name>` per distro.
+
+2. **Wipe the stranded WSL Ollama models** (~7 GB):
+   ```powershell
+   wsl -d <distro-name> -- bash -c "ollama rm llama3.2:3b qwen2.5:7b-instruct-q4_K_M"
+   ```
+
+3. **Update `services/hetzner/CLAUDE.md`** to document that scout uses gemma4 models locally on Windows Ollama (not WSL). Reduces the surprise factor for future agent sessions.
+
+### The two outstanding Z7 rows
+
+| Row | Status | What it needs |
+|---|---|---|
+| 8 — scout heartbeat | running with gemma now | results from b63cr0p5k Monitor |
+| 9 — /api/ops/health | 404 | Vercel dashboard: Settings → Build & Development Settings → override Install Command + Build Command, then redeploy without cache |
+
+Both are unblockable with ~5 minutes of clicks each.
