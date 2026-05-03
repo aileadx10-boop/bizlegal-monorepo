@@ -701,3 +701,77 @@ a455914  docs: final session close — 9 of 11 + Vercel needs dashboard click
 | 9 — /api/ops/health | 404 | Vercel dashboard: Settings → Build & Development Settings → override Install Command + Build Command, then redeploy without cache |
 
 Both are unblockable with ~5 minutes of clicks each.
+
+---
+
+## 2026-05-04 thinking-model surprise
+
+`gemma4:e2b` and `gemma4:latest` are **thinking models** — they emit a `thinking` field with internal chain-of-thought reasoning BEFORE the actual `content`. Tested on a "reply: ok" prompt, response was:
+
+```json
+{
+  "message": {
+    "role": "assistant",
+    "content": "Hello! How can I help you today?",
+    "thinking": "Thinking Process:\n\n1. **Analyze the Input:** ..."
+  }
+}
+```
+
+Even with `format: "json"` set in the request, Ollama returns the thinking field separate from content. Scout's `ollama_chat()` returns `data["message"]["content"]` and parses it as JSON — that part should still work because content is the model's actual JSON output.
+
+But the **per-call latency** is ~12s on the simplest "reply: ok" prompt. Scout's filter prompt is much longer (regulatory news item title + summary), so per-call could be 30-60s. With 6 items, filter pass alone = 3-6 min.
+
+### Why scout is silent during filter pass
+
+Looking at scout.py:202-213, the loop only prints when an item is DROPPED on filter:
+
+```python
+for item in items:
+    try:
+        scored = score_filter(item)
+        if scored.relevant and scored.score >= MIN_RELEVANCE_SCORE:
+            out.append(scored)
+    except Exception as err:
+        print(f"[scout] filter pass dropped {item.title[:60]}: {err}")
+print(f"[scout] {len(out)}/{len(items)} items passed filter ...")
+```
+
+So no per-item progress is printed. Until the WHOLE loop finishes (or one fails), the journal looks frozen. With slow gemma, that's 3-6 min of silence before the summary line.
+
+### Recommendation for next session
+
+Two options:
+
+**A. Switch to a non-thinking model.** Pull a smaller, faster model that doesn't add the thinking overhead:
+```powershell
+# On Moses's Windows machine:
+ollama pull llama3.2:3b   # 2 GB, fast, no thinking
+ollama pull mistral:7b    # 4 GB, fast, no thinking
+```
+Then update scout.py + Hetzner .env to use those.
+
+**B. Keep gemma but add per-item progress logging.** Edit `services/hetzner/scout.py` to print after each filter call:
+```python
+for i, item in enumerate(items):
+    try:
+        scored = score_filter(item)
+        print(f"[scout] filter {i+1}/{len(items)}: {item.title[:50]} score={scored.score}", flush=True)
+        ...
+```
+This lets you tell whether the pipeline is stuck or just slow.
+
+**Recommended: A first (fix root cause), B as a debugging quality-of-life win regardless.**
+
+The 40-min systemd timeout is plenty for either path.
+
+### What we proved this session about scout
+
+- ✅ Tunnel routing works (HTTP 200 with model response in 12s)
+- ✅ CF Access auth works (service token validated, response delivered)
+- ✅ feedparser RSS phase works (6 items in ~10 min on 2 feeds)
+- ✅ scout.py imports work (firecrawl_enrich + ops_log present on Hetzner)
+- ✅ Models respond (just slowly with thinking-model overhead)
+- ⏳ Filter pass: probably running but silent (no per-item logging)
+
+The FOUNDATION is solid. The remaining work is pure tuning.
