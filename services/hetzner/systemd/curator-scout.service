@@ -1,18 +1,19 @@
 [Unit]
 Description=BizLegal-AI Curator scout (oneshot — fired by timer or n8n)
+StartLimitIntervalSec=3600
+StartLimitBurst=3
 
 [Service]
 Type=oneshot
 User=root
 WorkingDirectory=/opt/bizlegal/curator
 EnvironmentFile=/opt/bizlegal/curator/.env
-ExecStart=/opt/bizlegal/venv/bin/python /opt/bizlegal/curator/scout.py
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/bizlegal/venv/bin/python -u /opt/bizlegal/curator/scout.py
 StandardOutput=journal
 StandardError=journal
-TimeoutStartSec=600
+TimeoutStartSec=2400
 
 # Network may not be ready right at OnCalendar trigger; tolerate.
 Restart=on-failure
 RestartSec=120
-StartLimitIntervalSec=3600
-StartLimitBurst=3
