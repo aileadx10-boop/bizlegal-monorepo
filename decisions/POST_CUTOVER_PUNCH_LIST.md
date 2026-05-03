@@ -1,174 +1,276 @@
 # Post-Cutover Punch List — 2026-05-03
 
-After the Phase Z monorepo cutover (Vercel Root Directory swap for 7 projects), three RED items remain. All three are DNS-level issues, not code/build issues. They cannot be fixed from the agent side because each requires either Cloudflare dashboard access or the Vercel Preview UI.
+After the Phase Z monorepo cutover. **Updated** with the autonomous "take the wheel" pass: 3 items closed by the agent, 4 still need Moses (one new item discovered).
+
+Legend: ✅ done · ⚠️ partial / workaround in place · ❌ pending Moses
 
 ---
 
-## 1. tracr.bizlegal-ai.com — DNS record missing
+## Inventory — what's actually broken
 
-**Symptom:** `curl https://tracr.bizlegal-ai.com/api/digest` → `000` (timeout, never connects)
+| # | Item | Status | Owner |
+|---|---|---|---|
+| 1 | tracr.bizlegal-ai.com — DNS A/CNAME record missing | ❌ | Moses |
+| 2 | lexaudit.bizlegal-ai.com — DNS CNAME record missing | ❌ | Moses |
+| 3 | router.bizlegal-ai.com — DNS A record missing | ❌ | Moses |
+| 4 | FIRECRAWL_API_KEY missing on Hub Preview | ✅ | done by agent (Preview + Development) |
+| 5 | curator-gpu tunnel — daemon runs as LocalSystem with no config | ⚠️ | user-mode cloudflared running as workaround; service migration script is below |
+| 6 | OLLAMA_TUNNEL_TOKEN is wrong type (NEW) | ❌ | Moses — needs CF Access service token |
+| 7 | scout.py crash loop (824 restarts, killing Hetzner CPU) | ✅ | service stopped; will resume after #6 |
+| 8 | Ollama models not loaded on local GPU | ✅ | llama3.2:3b + qwen2.5:7b pulled |
+| 9 | Vercel projects/domains attached correctly | ✅ | trcr / lexaudit / others verified — DNS is the only blocker |
 
-**Root cause:** The DNS A/AAAA record for `tracr` does not exist on the `bizlegal-ai.com` zone.
+**TL;DR for Moses:** 4 items left, all involve dashboard/UI clicks or pasting credentials. Total ~10 min of your time.
 
-```
-$ nslookup tracr.bizlegal-ai.com
-*** can't find tracr.bizlegal-ai.com: Non-existent domain
-```
+---
 
-**Compare:** Working subdomains all resolve to Vercel's IPv6 anycast `2a06:98c1:31{20,21}::7`:
+## 1, 2, 3. DNS records missing for tracr / lexaudit / router
+
+DNS for `bizlegal-ai.com` is hosted at **Cloudflare** (NS records: `lars.ns.cloudflare.com`, `ali.ns.cloudflare.com`). The Vercel "Third Party Registrar" line is misleading — Namecheap is just the registrar; Cloudflare hosts the zone.
+
+### Working subdomains for reference
 
 | Subdomain | DNS state |
 |---|---|
-| bizlegal-ai.com (apex) | OK → 2a06:98c1:3121::7 |
-| brai.bizlegal-ai.com | OK → 2a06:98c1:3120::7 |
-| docai.bizlegal-ai.com | OK → 2a06:98c1:3121::7 |
-| forge.bizlegal-ai.com | OK → 2a06:98c1:3120::7 |
-| leadforge.bizlegal-ai.com | OK → 2a06:98c1:3120::7 |
-| **tracr.bizlegal-ai.com** | **MISSING** |
-| **lexaudit.bizlegal-ai.com** | **MISSING** |
-| **router.bizlegal-ai.com** | **MISSING** |
+| brai / docai / forge / leadforge / bizlegal-ai apex | OK → Cloudflare anycast `2a06:98c1:31{20,21}::7` |
+| **tracr / lexaudit** | **MISSING** — but Vercel project HAS the custom domain attached |
+| **router** | **MISSING** |
+| **curator** | OK (different concern — that's the tunnel hostname; works) |
 
-**Fix (Moses, ~1 min):**
+### Cloudflare Dashboard → bizlegal-ai.com → DNS → Records → Add record (×3)
 
-Cloudflare Dashboard → bizlegal-ai.com → DNS → Records → Add record:
-- Type: `CNAME`
-- Name: `tracr`
-- Target: `cname.vercel-dns.com`
-- Proxy status: **Proxied (orange cloud)** — same as the other working subdomains
-- TTL: Auto
+| Record | Type | Name | Target | Proxy |
+|---|---|---|---|---|
+| 1 | CNAME | `tracr` | `cname.vercel-dns.com` | 🟠 Proxied |
+| 2 | CNAME | `lexaudit` | `cname.vercel-dns.com` | 🟠 Proxied |
+| 3 | A | `router` | `151.145.81.139` | ⚪ DNS only |
 
-Then in the Vercel `tracr` project: Settings → Domains → confirm `tracr.bizlegal-ai.com` is listed and verified. If it shows "Invalid Configuration", click "Refresh".
+`router` MUST be gray-cloud (DNS only) because Caddy on the OCI VM issues its own LE cert via HTTP-01. If it's orange-proxied, ACME breaks. The gray cloud doesn't reduce security — Cloudflare can still serve as a public DNS resolver, the only difference is requests bypass Cloudflare's proxy and hit the OCI VM directly.
 
----
-
-## 2. lexaudit.bizlegal-ai.com — DNS record missing
-
-**Symptom:** Same as tracr — `000` timeout.
-
-**Root cause:** Same — DNS record missing.
-
-**Fix (Moses, ~1 min):**
-
-Cloudflare Dashboard → bizlegal-ai.com → DNS → Records → Add record:
-- Type: `CNAME`
-- Name: `lexaudit`
-- Target: `cname.vercel-dns.com`
-- Proxy status: **Proxied (orange cloud)**
-- TTL: Auto
-
-Verify in Vercel `lexaudit` project → Settings → Domains.
-
----
-
-## 3. router.bizlegal-ai.com — DNS record missing
-
-**Symptom:** `curl https://router.bizlegal-ai.com/health` → `000` (originally diagnosed as Caddy 401, but the actual issue is no DNS record reaches Caddy in the first place).
-
-**Root cause:** No A record exists.
-
-**Target IP:** `151.145.81.139` (OCI VM, region `il-jerusalem-1`, found in `services/oci/router/Dockerfile` + `services/oci/CLAUDE.md`).
-
-**Fix (Moses, ~1 min):**
-
-Cloudflare Dashboard → bizlegal-ai.com → DNS → Records → Add record:
-- Type: `A`
-- Name: `router`
-- IPv4: `151.145.81.139`
-- Proxy status: **DNS only (gray cloud)** — IMPORTANT, must be gray, NOT orange
-- TTL: Auto
-
-The gray cloud is required because Caddy on the OCI VM issues its own Let's Encrypt cert via the HTTP-01 challenge. If Cloudflare proxies the connection (orange), LE can't reach the origin and cert renewal fails.
-
-Then SSH into the VM and verify Caddy picks up the new cert:
-
-```
-ssh -i ~/.ssh/oci_id_rsa ubuntu@151.145.81.139
-sudo systemctl status caddy
-sudo journalctl -u caddy -n 50
-curl -k https://router.bizlegal-ai.com/health
-```
-
-Expected: `{"ok":true,...}` within 60s of DNS propagation.
-
----
-
-## 4. FIRECRAWL_API_KEY missing on Hub Preview environment
-
-**Symptom:** Preview deployments of `bizlegal-ai` (hub) fail policy-refresh audit calls because `process.env.FIRECRAWL_API_KEY` is undefined.
-
-**Root cause:** Vercel env vars are scoped per-environment. Production has the key, Preview does not.
-
-**Fix option A — Dashboard (~30 sec):**
-
-vercel.com/dashboard → bizlegal-ai project → Settings → Environment Variables → Add:
-- Name: `FIRECRAWL_API_KEY`
-- Value: paste from `C:/Users/Moshe Dor/Downloads/env-hub-bizlegal-ai.txt` (search for `FIRECRAWL_API_KEY`)
-- Environments: **check Preview only** (Production already has it)
-- Save
-
-**Fix option B — CLI:**
+### After saving, verify
 
 ```bash
-cd "C:/Users/Moshe Dor/bizlegal-monorepo/apps/hub"
-vercel env add FIRECRAWL_API_KEY preview
-# When prompted for the value, paste from canonical vault
-# When prompted for the branch, leave blank (applies to all preview branches)
-```
-
-After either option, trigger a fresh Preview deployment to pick up the new var (push any commit to a non-main branch).
-
----
-
-## 5. curator.bizlegal-ai-internal.com — Ollama tunnel still broken
-
-**Symptom:** `nslookup curator.bizlegal-ai-internal.com` → Non-existent domain.
-
-**Root cause:** Per Z6 plan + Moses confirmation: the original tunnel was deleted; a different tunnel exists but its name + token aren't yet in the canonical vault.
-
-**Fix (Moses, ~5 min):** Cloudflare Dashboard → Zero Trust → Networks → Tunnels → identify the active Hetzner tunnel → copy its hostname + token → append to canonical vault as:
-
-```
-OLLAMA_TUNNEL_URL=<new tunnel hostname>
-OLLAMA_TUNNEL_TOKEN=<new tunnel token>
-```
-
-Then SSH into the Hetzner box and restart the curator service:
-
-```bash
-ssh hetzner "cd /opt/curator && docker compose restart curator-scout"
-```
-
-Verify heartbeat:
-
-```bash
-curl -s "https://bizlegal-ai.com/api/ops/feed?token=$OPS_DASHBOARD_TOKEN" | jq '.events[] | select(.type=="curator.heartbeat") | .ts' | head -1
-```
-
-Expected: timestamp within last 10 min.
-
----
-
-## Verification — run after fixes
-
-```bash
-# DNS resolves
 for sub in tracr lexaudit router; do
   echo -n "$sub.bizlegal-ai.com: "
   nslookup "$sub.bizlegal-ai.com" 8.8.8.8 2>&1 | grep -E "Address|Non-existent" | tail -1
 done
 
-# Endpoints respond
-curl -sk -o /dev/null -w 'tracr=%{http_code}\n' --max-time 15 https://tracr.bizlegal-ai.com/
-curl -sk -o /dev/null -w 'lexaudit=%{http_code}\n' --max-time 15 https://lexaudit.bizlegal-ai.com/
-curl -sk -o /dev/null -w 'router=%{http_code}\n' --max-time 15 https://router.bizlegal-ai.com/health
+# Then hit the endpoints
+curl -sk -o /dev/null -w 'tracr=%{http_code}\n'    --max-time 15 https://tracr.bizlegal-ai.com/api/digest
+curl -sk -o /dev/null -w 'lexaudit=%{http_code}\n' --max-time 15 https://lexaudit.bizlegal-ai.com/api/digest
+curl -sk -o /dev/null -w 'router=%{http_code}\n'   --max-time 15 https://router.bizlegal-ai.com/health
 ```
 
-Expected: 3× `200` (or `405 Method Not Allowed` on root paths if the apps don't define a `/` route — that's still a sign of life).
+Expected: all three return non-000. tracr/lexaudit may take 30-60s for Vercel to issue TLS for the freshly-attached hostname after DNS propagates.
 
 ---
 
-## Why this happened
+## 4. ✅ FIRECRAWL_API_KEY — Hub Preview + Development (DONE)
 
-The Phase Z plan assumed the source repos had working DNS records that just needed Vercel Root Directory pointed at the new monorepo. But the original audit (2026-05-01) flagged the OCI router as a Caddy 401 — that diagnosis was wrong. Cleaning up tracr + lexaudit + router DNS-level state was deferred and never tracked back.
+Done by agent via Vercel CLI. Verification:
 
-**Lesson for the operating book:** any future "subdomain returning 000" symptom should run `nslookup` BEFORE assuming Caddy/Vercel/build issues. DNS first, code second.
+```bash
+cd "C:/Users/Moshe Dor/bizlegal-monorepo/apps/hub"
+vercel env ls | grep -i firecrawl
+# 3 lines: Production, Preview, Development
+```
+
+CLI bug note for future: Vercel CLI v50.39 wants an empty quoted string (`""`) for the "all preview branches" branch arg in non-interactive mode. The form `vercel env add NAME preview "" --value V --yes` works; without the empty string the CLI loops on `git_branch_required` even though the docs say to omit it.
+
+---
+
+## 5. ⚠️ Curator-gpu cloudflared service (workaround in place)
+
+### What was wrong
+
+The cloudflared Windows service binds to `LocalSystem` user, but the tunnel config + credentials live in `C:\Users\Moshe Dor\.cloudflared\` — a user dir LocalSystem can't read. The dashboard was correctly showing "no active connections" because the daemon never had config to load.
+
+### Workaround active now
+
+User-mode `cloudflared tunnel run d8f42728-b85a-4e69-b165-981791eacb86` is running in this session's PowerShell process. 4 connectors registered at Cloudflare edge (TLV02 + MRS06 — Tel Aviv + Marseille). Tunnel is healthy. Will die when this PowerShell session ends.
+
+### Permanent fix — run elevated PowerShell once
+
+```powershell
+# 1. Copy config to system location LocalSystem can read
+$src = "$env:USERPROFILE\.cloudflared"
+$dst = "$env:ProgramData\Cloudflare\.cloudflared"
+New-Item -ItemType Directory -Path $dst -Force | Out-Null
+Copy-Item -Path "$src\config.yml" -Destination $dst -Force
+Copy-Item -Path "$src\d8f42728-b85a-4e69-b165-981791eacb86.json" -Destination $dst -Force
+Copy-Item -Path "$src\cert.pem" -Destination $dst -Force
+
+# 2. Update credentials-file path inside the copied config to the new location
+$configPath = "$dst\config.yml"
+(Get-Content $configPath) `
+  -replace [regex]::Escape("C:\Users\Moshe Dor\.cloudflared"), $dst `
+  | Set-Content $configPath
+
+# 3. Tighten ACL — only SYSTEM + Administrators readable
+$acl = Get-Acl $dst
+$acl.SetAccessRuleProtection($true, $false)
+$acl.AddAccessRule((New-Object System.Security.AccessControl.FileSystemAccessRule(
+  "SYSTEM","FullControl","ContainerInherit,ObjectInherit","None","Allow")))
+$acl.AddAccessRule((New-Object System.Security.AccessControl.FileSystemAccessRule(
+  "Administrators","FullControl","ContainerInherit,ObjectInherit","None","Allow")))
+Set-Acl -Path $dst -AclObject $acl
+
+# 4. Reconfigure the service to read from the new location
+sc.exe config Cloudflared binPath= "`"C:\Program Files (x86)\cloudflared\cloudflared.exe`" --config `"$dst\config.yml`" tunnel run"
+
+# 5. Stop the user-mode tunnel I started, then restart the service
+Get-Process -Name "cloudflared" -ErrorAction SilentlyContinue | Where-Object { $_.SI -gt 0 } | Stop-Process -Force
+Restart-Service -Name "Cloudflared"
+
+# 6. Verify
+Start-Sleep -Seconds 5
+Get-Service -Name "Cloudflared"
+# Then check tunnel hits Cloudflare:
+& "C:\Program Files (x86)\cloudflared\cloudflared.exe" --config "$dst\config.yml" tunnel info d8f42728-b85a-4e69-b165-981791eacb86
+```
+
+That single elevated run permanently fixes #5. Tunnel will survive logoff/reboot.
+
+---
+
+## 6. ❌ OLLAMA_TUNNEL_TOKEN is the wrong type (NEW finding)
+
+### Why scout.py is in a crash loop
+
+`curator.bizlegal-ai.com` is gated by **Cloudflare Access** (verified: 302 redirect to `bizlegal.cloudflareaccess.com` on every request). scout.py authenticates by setting:
+
+```python
+h["cf-access-client-id"]     = OLLAMA_TUNNEL_TOKEN.split(".", 1)[0]
+h["cf-access-client-secret"] = OLLAMA_TUNNEL_TOKEN
+```
+
+— meaning `OLLAMA_TUNNEL_TOKEN` must be a **Cloudflare Access service token** in the format `<UUID>.<base64-secret>` (typically 100+ chars).
+
+What's currently in vault + Hetzner: a 44-char **tunnel connector secret** (no dot in it). Connector secrets authorize cloudflared-the-daemon to register with the edge; they don't satisfy Access policies on the front side. Two completely different credentials.
+
+### Fix — create a CF Access service token
+
+Cloudflare Dashboard → **Zero Trust** → Access → **Service Auth** → **Service Tokens** → **+ Create Service Token**
+
+- Name: `curator-scout-hetzner`
+- Duration: 1 year (or non-expiring)
+- Click Generate → you'll see a one-time view with:
+  - Client ID: `<UUID>` (32 hex chars + dashes)
+  - Client Secret: long base64 string
+  - **Access Token (full):** displayed as `<UUID>.<secret>` — **THIS is what scout.py wants**
+
+Now ensure the policy on `curator.bizlegal-ai.com` accepts this service token:
+
+Cloudflare Dashboard → Zero Trust → Access → **Applications** → find the application covering `curator.bizlegal-ai.com` → **Edit** → **Policies** → either:
+- Add a new policy: Action = "Service Auth" with Selector = "Service Token" and value = `curator-scout-hetzner`, OR
+- Edit an existing policy to include the service token in its Include list
+
+Save. Then update vault and Hetzner:
+
+```bash
+# Append to canonical vault (replace existing OLLAMA_TUNNEL_TOKEN line)
+nano "C:/Users/Moshe Dor/Downloads/env-hub-bizlegal-ai.txt"
+# Set:
+# OLLAMA_TUNNEL_TOKEN=<UUID>.<secret>     <-- the full token string
+
+# Push to Hetzner
+ssh -i ~/.ssh/id_ed25519 root@204.168.209.235 'nano /opt/bizlegal/curator/.env'
+# Update OLLAMA_TUNNEL_TOKEN to the same value
+
+# Test access works
+ssh -i ~/.ssh/id_ed25519 root@204.168.209.235 '
+  cd /opt/bizlegal/curator && set -a && source .env && set +a
+  CLIENT_ID="${OLLAMA_TUNNEL_TOKEN%%.*}"
+  curl -s --max-time 10 \
+    -H "cf-access-client-id: $CLIENT_ID" \
+    -H "cf-access-client-secret: $OLLAMA_TUNNEL_TOKEN" \
+    "$OLLAMA_TUNNEL_URL/api/tags" | head -c 300
+'
+# Expected: JSON listing models {"models":[{"name":"llama3.2:3b",...},{"name":"qwen2.5:7b-instruct-q4_K_M",...}]}
+
+# Resume scout
+ssh -i ~/.ssh/id_ed25519 root@204.168.209.235 'systemctl reset-failed curator-scout && systemctl start curator-scout'
+
+# Verify it ran clean
+ssh -i ~/.ssh/id_ed25519 root@204.168.209.235 'journalctl -u curator-scout -n 20 --no-pager'
+```
+
+---
+
+## 7. ✅ Scout crash loop stopped (until #6 lands)
+
+Done by agent. Hetzner had `curator-scout.service` retrying every 2 min, hanging on the Access redirect, getting SIGTERM after 10-min systemd timeout. Restart counter was at 824. Service is now in `failed` state (stopped). Resume with `systemctl reset-failed curator-scout && systemctl start curator-scout` after #6.
+
+---
+
+## 8. ✅ Ollama models loaded
+
+Both models pulled to local GPU machine:
+- `llama3.2:3b` (2.0 GB) — filter model
+- `qwen2.5:7b-instruct-q4_K_M` (4.7 GB) — rank model
+
+Verify: `ollama list`.
+
+---
+
+## 9. ✅ Vercel projects + custom domains attached
+
+| Project (Vercel name) | Custom domain | DNS state |
+|---|---|---|
+| `bizlegal-ai` | bizlegal-ai.com | ✅ |
+| `brai` | brai.bizlegal-ai.com | ✅ |
+| `docai-frontend` | docai.bizlegal-ai.com | ✅ |
+| `forge` | forge.bizlegal-ai.com | ✅ |
+| `leadforge-ai` | leadforge.bizlegal-ai.com | ✅ |
+| `lexaudit` | lexaudit.bizlegal-ai.com | attached, **needs CNAME** |
+| `trcr` (note: no 'a') | tracr.bizlegal-ai.com | attached, **needs CNAME** |
+
+The Vercel project for tracr is named `trcr` (without the 'a') — confusingly, the public domain has the 'a'. Don't rename the Vercel project; rename means losing the deployment URL aliases. Keep as-is.
+
+---
+
+## Verification — full Z7 matrix (run after Moses completes #1-3 + #6)
+
+```bash
+TOKEN=<from vault: OPS_DASHBOARD_TOKEN>
+
+echo "--- DNS ---"
+for sub in bizlegal-ai.com tracr.bizlegal-ai.com lexaudit.bizlegal-ai.com router.bizlegal-ai.com curator.bizlegal-ai.com brai.bizlegal-ai.com forge.bizlegal-ai.com docai.bizlegal-ai.com leadforge.bizlegal-ai.com; do
+  res=$(nslookup "$sub" 8.8.8.8 2>&1)
+  if echo "$res" | grep -q "Non-existent\|NXDOMAIN"; then echo "MISS: $sub"; else echo "OK:   $sub"; fi
+done
+
+echo ""
+echo "--- HTTP ---"
+for url in https://bizlegal-ai.com https://tracr.bizlegal-ai.com/api/digest https://lexaudit.bizlegal-ai.com/api/digest https://router.bizlegal-ai.com/health https://brai.bizlegal-ai.com https://forge.bizlegal-ai.com https://docai.bizlegal-ai.com https://leadforge.bizlegal-ai.com; do
+  printf '%-50s %s\n' "$url" "$(curl -sk -o /dev/null -w '%{http_code}' --max-time 15 "$url")"
+done
+
+echo ""
+echo "--- Ops dashboard ---"
+curl -s "https://bizlegal-ai.com/api/ops/health?t=$TOKEN" | jq '{ok:.ok, hmac:.hmac.ok}'
+curl -s "https://bizlegal-ai.com/api/ops/feed?token=$TOKEN" | jq '{events_24h:.summary.events_24h, sources:[.events[].source]|unique}'
+
+echo ""
+echo "--- Heartbeats ---"
+curl -s "https://bizlegal-ai.com/api/ops/feed?token=$TOKEN" | jq '[.events[] | select(.type|test("heartbeat"))] | group_by(.source) | map({source: .[0].source, latest: (max_by(.ts).ts)})'
+```
+
+Expected:
+- DNS: all OK
+- HTTP: 8 of 8 return 200 (or 405 on root paths without GET handler)
+- Ops health: `{ok:true, hmac:true}`
+- Feed: events_24h > 0, sources includes hub + worker + curator + publisher
+- Heartbeats: 4 sources, latest within 30 min
+
+---
+
+## What went sideways during this round
+
+- **DNS at Cloudflare, not Namecheap** — initial confusion because Vercel's "Third Party Registrar" UI suggests Namecheap, but the NS records actually delegate to Cloudflare. Lesson: always trust `nslookup -type=NS`, not the registrar's listing.
+- **OLLAMA_TUNNEL_TOKEN pasted as wrong credential type** — tunnel connector secret vs CF Access service token. Both come from Cloudflare, both look like base64 strings, but they auth different things. The 44-char no-dot format was a hint.
+- **cloudflared service ran but useless** — LocalSystem profile path != user profile path. Subtle but immediately fatal. Same root-cause family as the FIRECRAWL Preview env scope mismatch.
+- **Vercel CLI v50 has a non-interactive bug** — `vercel env add NAME preview --value V --yes` loops on git_branch_required. Workaround: pass empty string `""` as branch arg.
+- **Earlier "Hetzner unreachable" / "OCI router 401" diagnoses were false** — both servers SSH fine; ICMP just blocked. Always probe with the actual protocol you care about.
+
+**Pattern:** every blocker so far has been a **scope mismatch** (env var scope, user profile scope, credential type scope). Phase Z's "operating book" discipline is the right counter — write down which scope each value belongs in, mechanically enforce it.
