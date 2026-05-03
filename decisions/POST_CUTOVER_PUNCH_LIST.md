@@ -579,3 +579,73 @@ If scout times out at 40 min again, the next-session fix is: SSH into WSL inside
 | ⏳ in-progress (scout) | 1 |
 | ⚠️ blocked on dashboard click (Vercel) | 1 |
 
+
+---
+
+## Scout final status — 2026-05-04 03:00
+
+Scout v2 (cut feeds + payload-level keep_alive) ran but died at the very end:
+
+```
+22:39:00  Started
+22:43:41  fetched 6 items across 2 feeds                ✓ RSS phase
+22:56:43  5/6 items passed filter                        ✓ Filter pass (1 dropped on 404)
+22:58:44  HTTPStatusError 404 for /api/chat              ✗ Died on rank pass
+```
+
+90% of the pipeline ran. Just the final rank-pass-and-persist died.
+
+### Why it died
+
+The tunnel's models flipped mid-run. At session start: WSL Ollama (`llama3.2:3b` + `qwen2.5:7b-instruct-q4_K_M`). At session end: Windows Ollama (`gemma4:e2b` + `gemma4:latest`). Almost certainly because my OLLAMA_KEEP_ALIVE PowerShell restarted Windows Ollama processes, and that took down wslrelay along with them — leaving only Windows Ollama reachable on 127.0.0.1.
+
+The 5 successful filter calls happened during the brief window where wslrelay was still alive after restart. The 6th filter call and ALL rank calls happened after wslrelay was dead.
+
+### Actual fix for next session
+
+Get into WSL inside the Windows machine and:
+
+```bash
+wsl -d Ubuntu  # or whatever distro the existing WSL Ollama runs on
+
+# In WSL:
+ollama list                                    # confirm what's there now
+ollama pull llama3.2:3b                         # if missing
+ollama pull qwen2.5:7b-instruct-q4_K_M          # if missing
+echo 'OLLAMA_KEEP_ALIVE=24h' | sudo tee -a /etc/environment
+sudo systemctl restart ollama || pkill -9 ollama
+ollama serve > /tmp/ollama.log 2>&1 &
+```
+
+Then verify wslrelay sees it:
+```powershell
+# Back on Windows:
+Get-NetTCPConnection -State Listen -LocalPort 11434 | Format-Table LocalAddress,OwningProcess
+# Expect: 127.0.0.1 → wslrelay PID, :: → Windows ollama PID (or just one)
+```
+
+If wslrelay is no longer listening, restart it via `wsl --shutdown && wsl` or by relaunching Docker Desktop / VS Code Remote-WSL — whatever brought wslrelay to life originally.
+
+After the rank model is reliably reachable through the tunnel:
+```bash
+# from Hetzner:
+curl -sk -H "cf-access-client-id: $CF_ACCESS_CLIENT_ID" \
+  -H "cf-access-client-secret: $CF_ACCESS_CLIENT_SECRET" \
+  -d '{"model":"qwen2.5:7b-instruct-q4_K_M","messages":[{"role":"user","content":"hi"}],"stream":false,"keep_alive":"24h"}' \
+  "$OLLAMA_TUNNEL_URL/api/chat" | head -c 200
+```
+HTTP 200 = ready. Then `systemctl start --no-block curator-scout` from Hetzner.
+
+### Quality-of-life fix worth committing
+
+The rank pass should have the same try/except as the filter pass, so a single 404 doesn't kill the whole pipeline. Edit `services/hetzner/scout.py` rank function to wrap the httpx call. Filter pass dropped 1 item gracefully; rank should do the same.
+
+### Z7 final scoreboard
+
+| Status | Count |
+|---|---|
+| ✅ GREEN | 9 of 11 |
+| ⏳ pipeline runs but rank pass dies on tunnel-routed-to-wrong-Ollama | 1 (scout) |
+| ⚠️ blocked on Vercel dashboard click (Turbo overrides vercel.json) | 1 (/api/ops/health) |
+
+Next session: ~10 min of WSL fiddling unblocks scout, ~5 min of dashboard click unblocks Vercel. Both surface-area gains; the underlying systems all work.
