@@ -55,8 +55,8 @@ OLLAMA_TUNNEL_TOKEN = os.getenv("OLLAMA_TUNNEL_TOKEN", "")
 # OLLAMA_TUNNEL_TOKEN (split-on-dot) so old deployments keep working.
 CF_ACCESS_CLIENT_ID = os.getenv("CF_ACCESS_CLIENT_ID", "")
 CF_ACCESS_CLIENT_SECRET = os.getenv("CF_ACCESS_CLIENT_SECRET", "")
-OLLAMA_FILTER_MODEL = os.getenv("OLLAMA_FILTER_MODEL", "llama3.2:3b")
-OLLAMA_RANK_MODEL = os.getenv("OLLAMA_RANK_MODEL", "qwen2.5:7b-instruct-q4_K_M")
+OLLAMA_FILTER_MODEL = os.getenv("OLLAMA_FILTER_MODEL", "gemma4:e2b")
+OLLAMA_RANK_MODEL = os.getenv("OLLAMA_RANK_MODEL", "gemma4:latest")
 OLLAMA_TIMEOUT_S = 60
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
