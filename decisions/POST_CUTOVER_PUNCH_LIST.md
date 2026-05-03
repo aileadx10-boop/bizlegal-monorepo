@@ -497,3 +497,85 @@ cd /opt/bizlegal/curator && set -a && source .env && set +a && \
 ```
 
 If `time` is <20s, Ollama is warm. If >40s, it's reloading the model. Check `OLLAMA_KEEP_ALIVE` on the Windows machine.
+
+---
+
+## Final session-close — 2026-05-04 02:00
+
+### What works now (improved state)
+
+| Item | Before today | After today |
+|---|---|---|
+| Cloudflared tunnel | broken (LocalSystem can't see config) | ✅ permanent, IPv4 routing, Host header rewrite |
+| Tunnel → Ollama auth | 302/403 | ✅ HTTP 200 with model list + chat |
+| Telegram alerts bot | wrong vault format, wrong bot on Vercel | ✅ vault fixed, Vercel synced, synthetic delivered |
+| systemd scout unit | 600s timeout, buffered output | ✅ 2400s timeout, PYTHONUNBUFFERED=1 |
+| RSS phase | 18 min on 5 feeds | ✅ ~4 min on 2 working feeds |
+| pnpm-lock.yaml | missing | ✅ generated + committed (360K, 929 packages) |
+| Z7 rows green | 8 of 11 | ✅ 9 of 11 (alerts bot now end-to-end) |
+
+### Remaining blocker — needs your click
+
+**Vercel hub redeploy** — auto-detect runs `npm install` regardless of:
+- pnpm-lock.yaml at monorepo root ✅ committed
+- apps/hub/vercel.json `installCommand` override ❌ ignored
+- monorepo-root vercel.json `installCommand` override ❌ ignored
+
+The deploy log shows: `Detected Turbo. Adjusting default settings... Running "install" command: 'npm install'`. Vercel's Turbo auto-detection overrides vercel.json's installCommand — undocumented behavior.
+
+**The dashboard click that fixes it:**
+
+```
+vercel.com/dashboard
+  → bizlegal-ai project
+    → Settings
+      → Build & Development Settings
+        → Install Command → click "Override"
+          → enter: pnpm install --frozen-lockfile=false --ignore-scripts
+        → Save
+        → Build Command → click "Override"
+          → enter: pnpm --filter @bizlegal/hub build
+        → Save
+  → Settings
+    → Git
+      → confirm "Include source files outside of the Root Directory" is enabled (toggle if not)
+  → Deployments
+    → click "..." on the most recent
+      → Redeploy → check "Use existing Build Cache" OFF → Redeploy
+```
+
+After redeploy completes (~2 min), the OPS_DASHBOARD_TOKEN fix from yesterday goes live. Test:
+```bash
+TOKEN=$(grep '^OPS_DASHBOARD_TOKEN=' ~/Downloads/env-hub-bizlegal-ai.txt | cut -d= -f2-)
+curl -s "https://bizlegal-ai.com/api/ops/health?token=$TOKEN" | jq .ok
+# expect: true
+```
+
+### Scout status (in-flight)
+
+Started 22:39, fetched 6 items at 22:43:41 (4-min RSS phase ✓). Filter pass is taking longer than the 17s/call benchmark — either keep_alive=24h isn't sticking on the WSL Ollama side, or the prompt is heavier than the test prompt. Monitor `bd9ep4pyj` will notify on the next print:
+- `[scout] N/M items passed filter` — filter done
+- `[scout] persisted N candidates` — full pipeline success
+
+If scout times out at 40 min again, the next-session fix is: SSH into WSL inside Moses's Windows machine and set `OLLAMA_KEEP_ALIVE=24h` system-wide there (`echo 'export OLLAMA_KEEP_ALIVE=24h' | sudo tee -a /etc/environment`), then restart the WSL Ollama daemon.
+
+### Operating-book updates committed today
+
+```
+75f2090  fix(deploy): vercel.json at monorepo root for Turbo install/build override
+65221b7  fix(hub): override install/build commands for monorepo workspace deploys
+9020cac  chore: commit pnpm-lock.yaml (unblocks Vercel deploys)
+9abb075  fix(scout): cut to 2 working feeds + 3 items + keep_alive=24h
+9adb518  docs(post-cutover): scout 40-min run timed out — root cause + 3 fix options
+7a4baf5  docs(post-cutover): 2026-05-04 session — 9 of 11 Z7 rows verified
+941aacb  fix(curator-scout): bump TimeoutStartSec=2400 + PYTHONUNBUFFERED
+```
+
+### Z7 final scoreboard
+
+| Status | Count |
+|---|---|
+| ✅ GREEN | 9 of 11 |
+| ⏳ in-progress (scout) | 1 |
+| ⚠️ blocked on dashboard click (Vercel) | 1 |
+
