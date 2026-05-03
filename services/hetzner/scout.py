@@ -45,6 +45,12 @@ TOP_N = 3                 # picks per scout run
 
 OLLAMA_TUNNEL_URL = os.getenv("OLLAMA_TUNNEL_URL", "").rstrip("/")
 OLLAMA_TUNNEL_TOKEN = os.getenv("OLLAMA_TUNNEL_TOKEN", "")
+# CF Access service token (preferred, post-2026-05-03). When both
+# CF_ACCESS_CLIENT_ID and CF_ACCESS_CLIENT_SECRET are set we use them
+# directly; otherwise we fall back to the legacy single-string
+# OLLAMA_TUNNEL_TOKEN (split-on-dot) so old deployments keep working.
+CF_ACCESS_CLIENT_ID = os.getenv("CF_ACCESS_CLIENT_ID", "")
+CF_ACCESS_CLIENT_SECRET = os.getenv("CF_ACCESS_CLIENT_SECRET", "")
 OLLAMA_FILTER_MODEL = os.getenv("OLLAMA_FILTER_MODEL", "llama3.2:3b")
 OLLAMA_RANK_MODEL = os.getenv("OLLAMA_RANK_MODEL", "qwen2.5:7b-instruct-q4_K_M")
 OLLAMA_TIMEOUT_S = 60
@@ -121,7 +127,10 @@ class RankedItem:
 # ── Ollama (laptop GPU via tunnel) ────────────────────────────────
 def _ollama_headers() -> dict[str, str]:
     h = {"content-type": "application/json"}
-    if OLLAMA_TUNNEL_TOKEN:
+    if CF_ACCESS_CLIENT_ID and CF_ACCESS_CLIENT_SECRET:
+        h["cf-access-client-id"] = CF_ACCESS_CLIENT_ID
+        h["cf-access-client-secret"] = CF_ACCESS_CLIENT_SECRET
+    elif OLLAMA_TUNNEL_TOKEN:
         h["cf-access-client-id"] = OLLAMA_TUNNEL_TOKEN.split(".", 1)[0]
         h["cf-access-client-secret"] = OLLAMA_TUNNEL_TOKEN
     return h
