@@ -440,3 +440,60 @@ Currently running with patched unit. A Monitor task watches journal for completi
 | 11 | Hub FAQ bot | partial (getMe responds; no inbound test yet) |
 
 **9 of 11 verified green.**
+
+---
+
+## Update — 2026-05-04 23:30 (scout completion attempt)
+
+The 2026-05-04 patched unit ran scout to its 40-min budget but **didn't finish**. Real-world timing from the journal:
+
+| Phase | Expected (isolated test) | Actual (under scout load) |
+|---|---|---|
+| RSS fetch (5 feeds, 20 items) | ~2 min | **18 min** |
+| Ollama filter pass (~17s/call × 20) | ~6 min | **>22 min** (cut off by SIGTERM) |
+| Rank pass + persist + Telegram | ~1 min | did not reach |
+
+Per-call Ollama latency was **~66s** under scout's load, vs **17s** in isolated chat test. The 4× slowdown is most likely **model thrashing** — scout uses `llama3.2:3b` for filter and `qwen2.5:7b` for rank. Default Ollama behavior is to keep one model loaded; swapping between them adds ~30-50s per call (whichever isn't currently in VRAM gets reloaded).
+
+The RSS slowdown (18 min vs 2 min) is harder to explain. feedparser test in isolation timed each feed at 30s with `socket.setdefaulttimeout(15)`. Scout doesn't set that timeout, so feedparser may be doing longer retries or following more redirects per feed in the real run.
+
+### Fix options (any one unblocks scout — pick one next session)
+
+**Option 1 — reduce workload (5 min code edit):**
+- In `services/hetzner/scout.py`: set `MAX_ITEMS_PER_FEED = 3`
+- Remove the 3 broken feeds from `RSS_FEEDS` (FTC=403, EU=301, FinCEN=404)
+- New math: 2 feeds × 3 items × 17s warm = ~100s filter, ~30s rank, ~10s persist = ~3 min total
+
+**Option 2 — keep both models warm (1 line config):**
+- On Moses Windows machine: `setx OLLAMA_KEEP_ALIVE 24h` (or `24h0m0s`) and restart Ollama
+- This tells Ollama to keep models in memory for 24h between requests
+- Both llama3.2:3b + qwen2.5:7b loaded simultaneously needs ~7GB VRAM, fits comfortably in modern GPUs
+- After this, all Ollama calls should be ~17s warm
+- Scout total: 18 min RSS + 6 min filter + 1 min rank + 1 min persist = ~26 min — fits in current 40-min budget
+
+**Option 3 — brute force (1 line systemd):**
+- `TimeoutStartSec=5400` (90 min) in `services/hetzner/systemd/curator-scout.service`
+- Doesn't fix the underlying slowness, just gives the pipeline more rope
+- Bad option because cron timer fires daily — back-to-back failures stack up if a run blocks the next
+
+**Recommendation: Option 1 + Option 2 together.** Option 1 alone gives a fast iteration loop for development. Option 2 fixes the production case for whenever item count grows back. Option 3 is a backup safety net that doesn't address root cause.
+
+### Z7 row 8 (scout heartbeat) status
+
+Still ⏳ pending. Once one of the above fixes lands, scout will complete and emit a heartbeat ops_event to `/api/ops/log` (HMAC-signed). Expected in the feed within ~5 min of a successful run.
+
+### Operating-book note for next session
+
+Before re-firing scout, check that the underlying Ollama latency is fast. One-liner from Hetzner:
+
+```bash
+cd /opt/bizlegal/curator && set -a && source .env && set +a && \
+  time curl -sk --max-time 60 -o /dev/null -w "HTTP %{http_code}\n" \
+    -H "cf-access-client-id: $CF_ACCESS_CLIENT_ID" \
+    -H "cf-access-client-secret: $CF_ACCESS_CLIENT_SECRET" \
+    -H "Content-Type: application/json" \
+    -d '{"model":"llama3.2:3b","messages":[{"role":"user","content":"ok"}],"stream":false}' \
+    "$OLLAMA_TUNNEL_URL/api/chat"
+```
+
+If `time` is <20s, Ollama is warm. If >40s, it's reloading the model. Check `OLLAMA_KEEP_ALIVE` on the Windows machine.
