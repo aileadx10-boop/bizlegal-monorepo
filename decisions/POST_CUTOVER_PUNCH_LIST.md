@@ -338,3 +338,105 @@ Service is `activating`, hangs ~10 min on an Ollama call that 404s, then systemd
 | 11 | Hub FAQ bot | not retested this session |
 
 **8 of 11 verified green.** The remaining 3 either land automatically (#9 once redeploy completes) or need ~30 min next session (#8 + investigation; #10/#11 are quick verifies).
+
+---
+
+## Update — 2026-05-04 (next session)
+
+### Closed today
+
+#### 1. Cloudflared tunnel routing — TWO bugs cascaded
+
+**Bug 1: IPv4 vs IPv6 routing.** Two services bound port 11434 on Moses Windows machine:
+- ollama.exe PID 23972 listening on `::` (Windows Ollama with `gemma4` models)
+- wslrelay.exe PID 50784 listening on `127.0.0.1` (forwards to WSL Ollama with llama3.2:3b + qwen2.5:7b)
+
+cloudflared resolves `localhost:11434` → IPv6 first → hits Windows Ollama → returns model not found for llama3.2:3b. The models scout needs are in WSL.
+
+**Fix 1:** edit `%ProgramData%\Cloudflare\.cloudflared\config.yml` ingress to use `127.0.0.1:11434` instead of `localhost:11434`.
+
+**Bug 2: Host header rejection.** With Bug 1 fixed, Ollama returned HTTP 403 because cloudflared forwards `Host: curator.bizlegal-ai.com` and Ollamas default `OLLAMA_ORIGINS` rejects non-localhost origins.
+
+**Fix 2:** `originRequest.httpHostHeader: localhost:11434` in the same ingress block — tells cloudflared to rewrite Host before forwarding.
+
+End-to-end verified: chat call through tunnel returns HTTP 200 with model response.
+
+#### 2. Telegram alerts bot — vault format + Vercel mismatch
+
+`/api/cron/ops-alerts` ran fine but `alerts_sent: 0` because the bot could not authenticate to Telegram.
+
+**Discovery 1:** vault `BIZLEGALBOT_TOKEN` was 45 chars without the colon between bot_id and secret. Proper format: `<numeric_id>:<35_char_secret>` (46 chars total). Telegram returns 404 on malformed tokens.
+
+**Discovery 2:** Vercel `TELEGRAM_BOT_TOKEN` was the HUB bot (8645124750), not the alerts bot (8242535215).
+
+**Fixes:**
+- Vault edited in-place to add the missing colon
+- Vercel TELEGRAM_BOT_TOKEN removed + re-added with alerts bot value across Production / Preview / Development
+- Synthetic message via alerts bot landed in chat 989097520
+
+Z7 Row 10 passes — alerts pipeline works end-to-end.
+
+#### 3. systemd unit fix — silent crash loop
+
+scout.py runs were timing out at the 600s `TimeoutStartSec` boundary. Two reasons:
+
+**Cause 1:** Realistic runtime is 15-25 min. The 600s limit was always too short.
+
+**Cause 2:** Python stdout was fully buffered when going to systemd journal. First `print()` in scout.py is at line 184 (after all RSS fetches). feedparser blocks ~120s on slow feeds. So journal showed zero output until exit. Looked like silent hang.
+
+**Fix:** patched `/etc/systemd/system/curator-scout.service`:
+- `TimeoutStartSec=2400` (40 min)
+- `Environment=PYTHONUNBUFFERED=1` + `python -u`
+- Moved `StartLimitIntervalSec` to `[Unit]` section
+
+Synced to monorepo at services/hetzner/systemd/curator-scout.service (commit 941aacb).
+
+#### 4. RSS feed audit — three sources broken
+
+While diagnosing, found 3 of scout's 5 RSS sources have problems:
+- FTC: HTTP 403 (anti-bot). 0 entries.
+- EU: HTTP 301 redirect feedparser does not follow. 0 entries.
+- FinCEN: HTTP 404. URL is dead.
+
+Working: SEC (25 entries) + FCA (20 entries). Worth refreshing the feed list when there is time. Not session-blocking.
+
+### Still open
+
+#### A. Vercel hub redeploy is BLOCKED
+
+Today's CLI deploy failed with `Command "npm install" exited with 1`. Root cause: the monorepo has no `pnpm-lock.yaml` committed. Vercel auto-detects npm, runs `npm install`, fails because `package.json` uses `workspace:*` protocol.
+
+Fix path (next session):
+1. `cd bizlegal-monorepo && pnpm install` — generates `pnpm-lock.yaml`
+2. Audit + commit
+3. Verify Vercel project Include source files outside Root Directory setting is enabled
+4. Override Vercel install command to `pnpm install --frozen-lockfile=false` if auto-detect still picks npm
+5. Push lockfile commit, redeploy
+6. Test `/api/ops/health?token=<vault>` returns JSON
+
+Until then, the Production deployment has the OLD `OPS_DASHBOARD_TOKEN` value. Vercel-side env IS now correct; only the running serverless instance has stale value.
+
+#### B. scout end-to-end heartbeat
+
+Currently running with patched unit. A Monitor task watches journal for completion (bmkrfr39o). Expected first journal lines:
+- `[scout] fetched N items across M feeds`
+- `[scout] X/Y items passed filter`
+- `[scout] persisted N candidates`
+
+### Z7 row-by-row (post-2026-05-04 pass)
+
+| Row | Check | State |
+|---|---|---|
+| 1 | DNS resolves (9 surfaces) | OK all 9 |
+| 2 | HTTP endpoints (8 surfaces) | OK all 8 = 200 |
+| 3 | OCI router | OK 200 |
+| 4 | tracr | OK 200 |
+| 5 | lexaudit | OK 200 |
+| 6 | curator tunnel UP, service permanent | OK |
+| 7 | CF Access auth working | OK |
+| 8 | scout heartbeat fires | in-progress |
+| 9 | /api/ops/health responds with right token | blocked on item A |
+| 10 | Telegram ops alerts bot | OK end-to-end |
+| 11 | Hub FAQ bot | partial (getMe responds; no inbound test yet) |
+
+**9 of 11 verified green.**
