@@ -2,15 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getWalletData } from '@/app/lib/tracr-etherscan'
 import { calculateRisk } from '@/app/lib/tracr-risk-engine'
 import { generatePreview } from '@/app/lib/tracr-ai'
-import { createClient } from '@supabase/supabase-js'
 import { logEventAsync } from '@/lib/ops/log'
+import { supabaseAdmin as supabase } from '@/lib/supabase'
 
 export const dynamic = 'force-dynamic'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY!
-)
 
 export const maxDuration = 30
 

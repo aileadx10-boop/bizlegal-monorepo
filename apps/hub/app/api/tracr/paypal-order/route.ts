@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
 import { logEventAsync } from '@/lib/ops/log'
+import { supabaseAdmin as supabase } from '@/lib/supabase'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,11 +13,6 @@ const PRICES: Record<string, number> = {
   priority: 249,
   litigation: 500,
 }
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY!
-)
 
 async function getPayPalToken(): Promise<string> {
   const credentials = Buffer.from(
