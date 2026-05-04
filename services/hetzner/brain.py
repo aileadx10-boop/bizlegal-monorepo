@@ -39,6 +39,9 @@ from dotenv import load_dotenv
 from supabase import create_client, Client  # type: ignore
 
 from ops_log import log_event
+from quality_gate import validate as quality_validate, audit as quality_audit
+from humanize import humanize, HumanizeError
+from factual_review import review as factual_review, FactualReviewError
 
 load_dotenv()
 
@@ -335,6 +338,50 @@ def process_picked(force: bool = False) -> int:
         slug = re.sub(r"[^a-z0-9-]", "-", draft["slug"].lower()).strip("-")
         draft["slug"] = slug
 
+        # Pass 2: humanize. Best-effort — if Haiku hiccups, fall back to
+        # the raw Sonnet draft. Quality gate below catches AI-tells either
+        # way; this just smooths out the obvious ones cheaply.
+        try:
+            draft = humanize(draft)
+            print(f"[brain] {slug}: humanize ok")
+        except HumanizeError as err:
+            print(f"[brain] {slug}: humanize skipped — {err}")
+            log_event(
+                "cron.completed",
+                ref_id=f"curator/brain/{slug}",
+                status="ok",
+                metadata={"step": "brain.humanize", "outcome": "skipped",
+                          "slug": slug, "reason": str(err)[:160]},
+            )
+
+        # Pass 3: factual review. Hard gate — reject the draft on any
+        # uncited claim. The author has to retry with a primary source
+        # or drop the claim. We never ship un-cited specifics.
+        try:
+            review_result = factual_review(draft)
+            if not review_result.all_claims_cited:
+                _reject_draft(sb, row, slug, "factual_review",
+                              review_result.block_messages())
+                failed_count += 1
+                continue
+            print(f"[brain] {slug}: factual review ok "
+                  f"({review_result.primary_source_count} primary sources)")
+        except Exception as err:
+            print(f"[brain] {slug}: factual review crashed — {err}")
+            # Don't ship a draft we couldn't audit. Push back; let
+            # next run retry with a fresh Sonnet pass.
+            _reject_draft(sb, row, slug, "factual_review_crash", [str(err)[:200]])
+            failed_count += 1
+            continue
+
+        # Pass 4: structural quality gate (Python, fast, free).
+        gate_errors = quality_validate(draft)
+        if gate_errors:
+            _reject_draft(sb, row, slug, "quality_gate", gate_errors)
+            failed_count += 1
+            continue
+        print(f"[brain] {slug}: quality gate ok")
+
         mdx = build_mdx(draft)
         mdx_path = DRAFTS_DIR / f"{slug}.mdx"
         mdx_path.write_text(mdx, encoding="utf-8")
@@ -382,6 +429,48 @@ def process_picked(force: bool = False) -> int:
                       "rows_seen": len(rows), "drafted": drafted_count, "failed": failed_count},
         )
     return len(rows)
+
+
+def _reject_draft(sb: Client, row: dict, slug: str, gate: str, reasons: list[str]) -> None:
+    """Mark a row rejected with structured reasons + Telegram nudge.
+
+    Doesn't write the MDX to disk (saves the slot for retry). Caller
+    is responsible for `continue`-ing the for-loop after invoking this."""
+    print(f"[brain] {slug}: REJECTED at gate={gate}: {reasons[0] if reasons else '?'}")
+    sb.table("daily_gaps").update({
+        "status": "rejected_quality",
+        "draft_slug": slug,
+        "rejected_at": datetime.now(timezone.utc).isoformat(),
+        "rejection_gate": gate,
+        "rejection_reasons": reasons,
+    }).eq("url", row["url"]).execute()
+    log_event(
+        "cron.completed",
+        ref_id=f"curator/brain/{slug}",
+        status="failed",
+        metadata={
+            "step": "brain.gate",
+            "outcome": "rejected",
+            "slug": slug,
+            "gate": gate,
+            "reasons": reasons[:5],  # cap journal noise
+        },
+    )
+    # Telegram nudge so Moses can decide retry vs override.
+    if TG_TOKEN and TG_CHAT:
+        try:
+            text = (
+                f"🚫 draft rejected: {slug}\n"
+                f"gate: {gate}\n\n"
+                + "\n".join(f"• {r}" for r in reasons[:5])
+            )
+            httpx.post(
+                f"https://api.telegram.org/bot{TG_TOKEN}/sendMessage",
+                json={"chat_id": TG_CHAT, "text": text[:3500]},
+                timeout=10,
+            )
+        except Exception:
+            pass  # Telegram failures aren't worth crashing pipeline
 
 
 def _render_prompt(row: dict) -> str:

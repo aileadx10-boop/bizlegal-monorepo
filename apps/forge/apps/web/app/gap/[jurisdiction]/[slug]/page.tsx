@@ -65,9 +65,110 @@ export default async function GapPage({ params }: GapPageParams) {
 
   const ctaUrl = ctaUrls[gap.cta_product] || 'https://forge.bizlegal-ai.com'
   const valueProps: string[] = gap.value_props || []
+  const pageUrl = `https://forge.bizlegal-ai.com/gap/${gap.jurisdiction}/${gap.slug}`
+  const publishedAt = gap.published_at
+    ? new Date(gap.published_at).toISOString()
+    : new Date().toISOString()
+
+  // schema.org Article — establishes content type, recency, authorship.
+  // Adding this lifts SEO score 5-10 points and unlocks rich-snippet
+  // eligibility in Google results (date + author + summary card).
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: gap.title,
+    description: gap.meta_description || gap.summary?.slice(0, 160),
+    image: 'https://forge.bizlegal-ai.com/og-default.png',
+    datePublished: publishedAt,
+    dateModified: gap.updated_at
+      ? new Date(gap.updated_at).toISOString()
+      : publishedAt,
+    author: {
+      '@type': 'Organization',
+      name: 'BizLegal AI',
+      url: 'https://bizlegal-ai.com',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'BizLegal AI',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://forge.bizlegal-ai.com/logo.png',
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': pageUrl,
+    },
+    about: gap.regulation
+      ? { '@type': 'Thing', name: gap.regulation }
+      : undefined,
+    keywords: Array.isArray(gap.tags)
+      ? gap.tags.join(', ')
+      : undefined,
+  }
+
+  // BreadcrumbList — helps Google show breadcrumbs in result row,
+  // small but real CTR lift on long URLs.
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Forge',
+        item: 'https://forge.bizlegal-ai.com',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: gap.jurisdiction?.toUpperCase() || 'Jurisdiction',
+        item: `https://forge.bizlegal-ai.com/gap/${gap.jurisdiction}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: gap.title,
+        item: pageUrl,
+      },
+    ],
+  }
+
+  // FAQPage — only emit when the row has structured FAQ entries
+  // (gap.faqs jsonb column with [{q, a}, ...]). Schema validators
+  // reject FAQ blocks with zero entries.
+  const faqEntries = Array.isArray(gap.faqs) ? gap.faqs : []
+  const faqSchema =
+    faqEntries.length > 0
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: faqEntries.map((f: { q: string; a: string }) => ({
+            '@type': 'Question',
+            name: f.q,
+            acceptedAnswer: { '@type': 'Answer', text: f.a },
+          })),
+        }
+      : null
 
   return (
     <main className="min-h-screen bg-forge-dark text-forge-text">
+      {/* schema.org JSON-LD — structured-data signals for Google */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      {faqSchema ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      ) : null}
       <div className="max-w-4xl mx-auto px-6 py-20">
         {/* Risk Badge */}
         <div className="mb-6">
