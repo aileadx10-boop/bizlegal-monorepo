@@ -829,3 +829,90 @@ Picks are saved regardless — this just affects the "hey come look" nudge.
 2. **Telegram notify Markdown escape** in scout.py (15 min)
 3. **Schema.org + sitemap improvements** from `WEEKLY_ROUTINES_AND_SEO.md` (the P0 items, ~1 hr)
 4. **Bump scout cadence to daily** if Moses approves more content velocity
+
+---
+
+## 2026-05-04 14:00 — ALL 11 Z7 ROWS GREEN ✅
+
+After 6 deploy iterations the hub is live with the new code.
+
+### Deploy iteration (build pipeline fixes)
+
+| Attempt | Failure | Fix |
+|---|---|---|
+| v1 | npm install on workspace:* deps | committed pnpm-lock.yaml at monorepo root |
+| v2 | Vercel auto-detect ignored vercel.json's installCommand | added vercel.json at monorepo root + apps/hub level |
+| v3 | pnpm@9 hit ERR_INVALID_THIS on Node 24 | switched to `corepack pnpm` in installCommand |
+| v4 | workspace deps `@bizlegal/payment` + `@bizlegal/ops-log` not built before hub | switched buildCommand to `corepack pnpm turbo build --filter=@bizlegal/hub...` (`...` triggers Turbo to build deps first) |
+| v5 | `Error: supabaseKey is required` during Next.js "Collecting page data" — 11 routes had module-top `const supabase = createClient(...)` that fired during build-time module load | added `force-dynamic` to all 11; refactored `lib/supabase.ts` to use Proxy-based lazy clients; replaced 10 inline `createClient()` calls with imports from the lazy lib |
+| v6 | none — **DEPLOYMENT READY** | (n/a) |
+
+### Z7 final scoreboard
+
+| Row | Status |
+|---|---|
+| 1 — DNS resolves (9 surfaces) | ✅ 9/9 |
+| 2 — HTTP endpoints (8 surfaces) | ✅ 8/8 = 200 |
+| 3 — OCI router | ✅ 200 |
+| 4 — tracr | ✅ 200 |
+| 5 — lexaudit | ✅ 200 |
+| 6 — curator tunnel UP, service permanent | ✅ |
+| 7 — CF Access auth working | ✅ |
+| 8 — scout heartbeat fires | ✅ — verified persisted 3 candidates @ 06:35:53 UTC |
+| 9 — `/api/ops/health` responds with right token | ✅ — HTTP 200 with full JSON |
+| 10 — Telegram ops alerts bot | ✅ — synthetic delivered to chat 989097520 |
+| 11 — Hub FAQ bot | ✅ getMe responds |
+
+**ALL 11 Z7 ROWS GREEN.** 24-hour soak window starts now (2026-05-04 14:00 UTC).
+
+### One discovery worth pinning
+
+`OPS_DASHBOARD_TOKEN` ends in `+`. URLs need `+` encoded as `%2B` — otherwise the query string parser interprets `+` as space, the token mismatches, route returns 404 "not found". Affects `/api/ops/health?token=...` and `/api/ops/feed?token=...`.
+
+For curl: `curl ".../api/ops/health?token=$(python3 -c 'import urllib.parse,sys; print(urllib.parse.quote_plus(sys.argv[1]))' "$TOKEN")"` 
+
+For browsers: paste-and-go works because browsers auto-encode the address bar.
+
+For ops scripts (cron alerts, etc.): wrap the token through `urlencode` before interpolation. Worth opening a follow-up to make `OPS_DASHBOARD_TOKEN` rotation-time generate a URL-safe token (alphanumeric + `-_` only, no `+`/`/`/`=`).
+
+### Build settings now committed
+
+`vercel.json` at apps/hub:
+```json
+{
+  "framework": "nextjs",
+  "installCommand": "corepack enable && cd ../.. && corepack pnpm install --frozen-lockfile=false --ignore-scripts",
+  "buildCommand": "cd ../.. && corepack pnpm turbo build --filter=@bizlegal/hub..."
+}
+```
+
+That gets future Vercel deploys to work without dashboard intervention. Just `vercel --prod --yes` from monorepo root or git push (when auto-deploy is connected).
+
+### What 24h soak means
+
+For the next 24h, leave the system alone. The /ops dashboard tracks events; if anything breaks, it'll be visible there. After 24h of clean operation, that's the green light per the Phase Z plan to:
+- enable LemonSqueezy + Paddle live keys (when their approval emails arrive)
+- start customer outreach with the verified payment paths
+- run the SEO improvements from `WEEKLY_ROUTINES_AND_SEO.md`
+
+### Commits this session (final)
+
+```
+e5087f7  fix(hub): replace inline createClient in 10 routes with lazy supabaseAdmin import
+4503aaf  fix(hub): lazy supabase clients to survive Nextjs build-time module load
+b154f43  fix(hub): force-dynamic on supabase routes (skip build-time evaluation)
+0669b3d  fix(deploy): use turbo with dep-filter so workspace packages build first
+40d6f49  fix(deploy): switch to corepack for pnpm (avoids pnpm@9 ERR_INVALID_THIS on Node 24)
+f0f482e  fix(deploy): vercel.json at monorepo root for Turbo install/build override
+65221b7  fix(hub): override install/build commands for monorepo workspace deploys
+9020cac  chore: commit pnpm-lock.yaml (unblocks Vercel deploys)
+b1011d5  docs: SCOUT END-TO-END VERIFIED — 3 candidates persisted, Z7 row 8 GREEN
+4ab0b0b  docs: gemma4 are thinking models — explains scout's silent filter pass
+4d8a84f  docs(claude): index WEEKLY_ROUTINES_AND_SEO in decisions list
+1e4beac  docs: weekly routine table + programmatic SEO audit + priorities
+e09d74b  fix(scout): switch to gemma4 models (Moses's actual local install)
+9abb075  fix(scout): cut to 2 working feeds + 3 items + keep_alive=24h
+941aacb  fix(curator-scout): bump TimeoutStartSec=2400 + PYTHONUNBUFFERED
+```
+
+15+ commits total. The Phase Z plan that started 4 sessions ago is now CLOSED.
