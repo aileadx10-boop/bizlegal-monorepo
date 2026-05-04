@@ -5,7 +5,7 @@
   "description": "BizLegal AI consolidated workspace — apps + services + packages + agents under one git repo, one env vault, one deploy story.",
   "engines": {
     "node": ">=20",
-    "pnpm": ">=9"
+    "pnpm": ">=6"
   },
   "packageManager": "pnpm@9.12.3",
   "workspaces": [
