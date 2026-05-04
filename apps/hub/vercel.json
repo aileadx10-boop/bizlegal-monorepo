@@ -1,6 +1,6 @@
 {
   "framework": "nextjs",
-  "installCommand": "cd ../.. && pnpm install --frozen-lockfile=false --ignore-scripts",
+  "installCommand": "npm i -g pnpm@9 && cd ../.. && pnpm install --frozen-lockfile=false --ignore-scripts",
   "buildCommand": "cd ../.. && pnpm --filter @bizlegal/hub build",
   "functions": {
     "app/api/risk-assessment/route.ts": { "maxDuration": 30 },
