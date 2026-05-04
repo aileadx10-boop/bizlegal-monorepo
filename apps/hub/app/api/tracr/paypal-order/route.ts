@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { logEventAsync } from '@/lib/ops/log'
 
+export const dynamic = 'force-dynamic'
+
 export const maxDuration = 15
 
 const PAYPAL_BASE = 'https://api-m.paypal.com'

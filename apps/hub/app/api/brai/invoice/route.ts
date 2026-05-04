@@ -2,15 +2,17 @@ import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
 import { logEventAsync } from '@/lib/ops/log'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY!
-)
+export const dynamic = 'force-dynamic'
 
 // POST /api/brai/invoice
 // Creates a NOWPayments invoice for BRAI full report ($49)
 export async function POST(req: NextRequest) {
   try {
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_KEY!
+    )
+
     const { email, leadId } = await req.json()
 
     if (!email || !leadId) {

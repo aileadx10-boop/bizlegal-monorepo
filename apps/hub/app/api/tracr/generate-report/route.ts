@@ -6,6 +6,8 @@ import { generateFullReport } from '@/app/lib/tracr-ai'
 import { generateReportHTML } from '@/app/lib/tracr-pdf'
 import { logEventAsync } from '@/lib/ops/log'
 
+export const dynamic = 'force-dynamic'
+
 export const maxDuration = 60
 
 const supabase = createClient(
