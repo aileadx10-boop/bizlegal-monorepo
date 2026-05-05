@@ -101,6 +101,17 @@ function decisionToolFor(gap: {
       cta: 'Run monitoring screen',
     }
   }
+  if (
+    /\btcpa\b|can[ -]?spam|telemarketing|do not call|consent|outbound/i.test(reg) ||
+    /tcpa|leadgen|lead-gen|outbound/i.test(slug) ||
+    gap.cta_product === 'leadforge'
+  ) {
+    return {
+      href: 'https://leadforge.bizlegal-ai.com/decision-tree',
+      label: 'TCPA exposure decision tree',
+      cta: 'Run TCPA screen',
+    }
+  }
   return null
 }
 

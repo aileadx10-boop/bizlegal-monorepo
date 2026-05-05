@@ -112,22 +112,28 @@ def resend_partner_email(
         return None
     sender = os.environ.get("RESEND_FROM", "BizLegal-AI <team@intelligence.bizlegal-ai.com>")
     reply_to = os.environ.get("RESEND_REPLY_TO", "team@bizlegal-ai.com")
-    moses_cc = "mdmdmd63@gmail.com"
+    # D10 SECURITY-V3 M-1: founder PII was hardcoded as CC on every
+    # partner intro. Now driven by env so the CC can be a shared inbox
+    # (e.g. team@bizlegal-ai.com) and rotated independently. Empty
+    # string disables the CC entirely.
+    moses_cc = os.environ.get("OCI_PARTNER_CC", "")
     classification = lead_record.get("classification") or "lead"
     subject = f"BizLegal-AI Intelligence — {classification} match ({lead_record.get('lead_id')})"
     body = _terse_email_body(lead_record, partner_name)
+    payload: dict[str, Any] = {
+        "from": sender,
+        "to": [partner_email],
+        "reply_to": reply_to,
+        "subject": subject,
+        "text": body,
+    }
+    if moses_cc:
+        payload["cc"] = [moses_cc]
     return _post(
         "https://api.resend.com/emails",
         headers={
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
         },
-        json={
-            "from": sender,
-            "to": [partner_email],
-            "cc": [moses_cc],
-            "reply_to": reply_to,
-            "subject": subject,
-            "text": body,
-        },
+        json=payload,
     )

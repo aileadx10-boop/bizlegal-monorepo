@@ -1,13 +1,13 @@
 /**
- * LexAudit Decision Tree — lead capture endpoint.
+ * LeadForge Decision Tree — lead capture endpoint.
  *
- * Phase AA Day 9 — fourth instance of the V1 conversion-machine
- * pattern (Forge BOI → TRACR → DocAI → LexAudit).
+ * Phase AA Day 10 — sixth instance of the V1 conversion-machine
+ * pattern (BOI → TRACR → DocAI → LexAudit → BRAI → LeadForge).
  *
  * Flow:
  *  1. Validate email + verdict.
  *  2. Cloudflare Turnstile bot challenge (skip-if-not-configured).
- *  3. enqueueNurture vertical='lexaudit'.
+ *  3. enqueueNurture vertical='leadforge'.
  *  4. lead.qualified ops event.
  */
 
@@ -19,11 +19,7 @@ import { rateLimit } from '@bizlegal/rate-limit'
 
 export const dynamic = 'force-dynamic'
 
-const VALID_VERDICTS = new Set([
-  'continuous_monitoring_critical',
-  'baseline_audit_first',
-  'self_serve',
-])
+const VALID_VERDICTS = new Set(['tcpa_active_risk', 'consent_audit_now', 'light_friction'])
 
 interface DecisionTreePayload {
   email?: string
@@ -57,7 +53,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   // D10 SECURITY-V3 C-1: rate-limit before Turnstile.
   const ip = clientIpFromHeaders(req.headers) ?? 'unknown'
-  const rl = rateLimit('lexaudit-decision-tree-lead', ip, { windowMs: 60_000, limit: 10 })
+  const rl = rateLimit('leadforge-decision-tree-lead', ip, { windowMs: 60_000, limit: 10 })
   if (!rl.ok) {
     return NextResponse.json(
       { error: 'rate_limited', retry_after_ms: rl.retryAfterMs },
@@ -76,24 +72,24 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     )
   }
 
-  const leadId = `lexaudit-decision-tree-${email}`
+  const leadId = `leadforge-decision-tree-${email}`
 
   void enqueueNurture({
     lead_id: leadId,
     email,
-    vertical: 'lexaudit',
-    source: 'lexaudit:decision-tree',
+    vertical: 'leadforge',
+    source: 'leadforge:decision-tree',
     lead_classification: { verdict, answers },
-  }).catch((err) => console.warn('[lexaudit/decision-tree/lead] nurture enqueue failed:', err))
+  }).catch((err) => console.warn('[leadforge/decision-tree/lead] nurture enqueue failed:', err))
 
   logEventAsync({
     type: 'lead.qualified',
-    source: 'lexaudit',
+    source: 'leadforge',
     ref_id: leadId,
     email,
     status: 'ok',
     metadata: {
-      magnet: 'decision-tree-compliance-monitor',
+      magnet: 'decision-tree-tcpa',
       verdict,
       answer_count: Object.keys(answers).length,
     },

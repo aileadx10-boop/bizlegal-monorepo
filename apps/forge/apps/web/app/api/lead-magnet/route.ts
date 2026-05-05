@@ -1,19 +1,54 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { logEventAsync } from '@/lib/ops/log'
+import { rateLimit, clientIpFromHeaders } from '@bizlegal/rate-limit'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
-export async function POST(req: NextRequest) {
-  const formData = await req.formData()
-  const email = formData.get('email') as string
-  const gap_slug = formData.get('gap_slug') as string
-  const lead_magnet_url = formData.get('lead_magnet_url') as string
+// D10 SECURITY-V3 C-2: lead_magnet_url MUST be derived server-side
+// from the requested gap_slug, never from user-supplied form data.
+// Pre-D10, this endpoint accepted an arbitrary URL and rendered it
+// inside an email sent from a legit-SPF-aligned `hello@bizlegal-ai.com`
+// — i.e. an open phishing relay. The mapping below is the allow-list;
+// gap_slugs not in the mapping fall through to the generic guide.
+const SAFE_LEAD_MAGNET_URLS: Record<string, string> = {
+  // Specific magnet slugs go here. Examples (extend as gap pages add real assets):
+  // 'eu-ai-act-faq': 'https://bizlegal-ai.com/guides/eu-ai-act-faq.pdf',
+  // 'gdpr-checklist': 'https://bizlegal-ai.com/guides/gdpr-checklist.pdf',
+}
+const DEFAULT_LEAD_MAGNET_URL = 'https://bizlegal-ai.com/guides'
 
-  if (!email) return NextResponse.json({ error: 'Email required' }, { status: 400 })
+function isValidEmail(s: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s)
+}
+
+export async function POST(req: NextRequest) {
+  // Backstop rate-limit before any DB write or email send. C-2 fix
+  // closes the open-redirect relay; C-1 backstop closes the bot pump.
+  const ip = clientIpFromHeaders(req.headers) ?? 'unknown'
+  const rl = rateLimit('forge-lead-magnet', ip, { windowMs: 60_000, limit: 10 })
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: 'rate_limited', retry_after_ms: rl.retryAfterMs },
+      { status: 429, headers: { 'retry-after': String(Math.ceil(rl.retryAfterMs / 1000)) } },
+    )
+  }
+
+  const formData = await req.formData()
+  const emailRaw = (formData.get('email') as string | null) ?? ''
+  const gap_slug = (formData.get('gap_slug') as string | null) ?? ''
+  const email = emailRaw.trim().toLowerCase()
+
+  if (!email || !isValidEmail(email)) {
+    return NextResponse.json({ error: 'invalid_email' }, { status: 400 })
+  }
+
+  // D10 SECURITY-V3 C-2: pick the magnet URL from the server-side
+  // allow-list keyed by gap_slug. NEVER trust a user-supplied URL.
+  const lead_magnet_url = SAFE_LEAD_MAGNET_URLS[gap_slug] ?? DEFAULT_LEAD_MAGNET_URL
 
   // Save lead to Supabase
   await supabase.from('leads').upsert(
@@ -43,7 +78,7 @@ export async function POST(req: NextRequest) {
           <div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:40px 24px">
             <p style="color:#333;font-size:16px;line-height:1.7">Thank you for your interest in BizLegal AI compliance intelligence.</p>
             <p style="margin:24px 0">
-              <a href="${lead_magnet_url || 'https://bizlegal-ai.com/guides'}"
+              <a href="${lead_magnet_url}"
                  style="display:inline-block;padding:14px 28px;background:#020408;color:#00C8FF;font-weight:600;font-size:14px;text-decoration:none;border-radius:6px">
                 Download Your Free Guide &rarr;
               </a>

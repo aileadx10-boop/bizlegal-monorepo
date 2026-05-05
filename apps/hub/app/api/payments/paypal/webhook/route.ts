@@ -31,11 +31,18 @@ interface PayPalEvent {
 
 // Verify webhook via PayPal's verify-webhook-signature endpoint.
 // Requires PAYPAL_WEBHOOK_ID env var.
+//
+// D10 SECURITY-V3 H-3 fix: previously this function returned `true`
+// in any non-production env when PAYPAL_WEBHOOK_ID was unset, which
+// meant a Vercel preview deployment effectively accepted UNSIGNED
+// PayPal webhooks. Closed: missing env var now always rejects (return
+// false). Use a real test webhook ID in preview/staging if you need
+// to exercise this code path.
 async function verifyPayPalWebhook(req: NextRequest, rawBody: string): Promise<boolean> {
   const webhookId = process.env.PAYPAL_WEBHOOK_ID
   if (!webhookId) {
-    console.warn('[paypal/webhook] PAYPAL_WEBHOOK_ID missing — verification skipped')
-    return process.env.NODE_ENV !== 'production'  // allow in dev for testing
+    console.warn('[paypal/webhook] PAYPAL_WEBHOOK_ID missing — rejecting')
+    return false
   }
 
   const id = process.env.PAYPAL_CLIENT_ID

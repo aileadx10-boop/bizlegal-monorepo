@@ -1,6 +1,6 @@
 # Phase AA Week 1 — Moses ops queue
 
-**Last updated:** 2026-05-12 (end of Day 9)
+**Last updated:** 2026-05-13 (end of Day 10)
 **Owner:** Moses (or a sub-agent acting on Moses's behalf)
 **Why this exists:** Days 1-6 shipped all the code that can be shipped autonomously. The items below need a human (or an agent with write access to specific external systems) — apply migrations, redeploy services, run partner outreach. Each section is self-contained: copy-paste the commands; expected output is shown so you can verify.
 
@@ -32,6 +32,11 @@ Run these in any order **except** that #1 (picked_by migration) should land befo
 | 20 | Provision Cloudflare Turnstile site + secret keys (D9 INTEGRATION-V3 F-2) | 10 min | Bot-pump risk on 5 unauth decision-tree endpoints | ☐ |
 | 21 | Add `NEXT_PUBLIC_TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY` to 5 Vercel projects (D9) | 5 min | Activates Turnstile enforcement (skip-if-not-configured today) | ☐ |
 | 22 | Confirm LexAudit + BRAI decision-tree pages render post-redeploy (D9 magnets #4 + #5) | 4 min | New URLs `/decision-tree` on lexaudit + brai | ☐ |
+| 23 | Confirm LeadForge decision-tree page renders post-redeploy (D10 magnet #6) | 2 min | New URL `/decision-tree` on leadforge | ☐ |
+| 24 | Set `OCI_PARTNER_CC` env on the OCI router box (D10 SECURITY-V3 M-1) | 2 min | Partner intros CC'd to a shared inbox instead of hardcoded gmail | ☐ |
+| 25 | Set `PAYPAL_WEBHOOK_ID` on hub Vercel preview/staging (D10 SECURITY-V3 H-3) | 5 min | PayPal preview webhooks now reject without it (strict mode) | ☐ |
+| 26 | Scoped Supabase `nurture_writer` role to replace service-role on subdomains (D10 H-2) | 30 min | Reduces blast radius if any subdomain Vercel project is compromised | ☐ |
+| 27 | HMAC replay protection: add timestamp+nonce to inbound-lead + ops-log signatures (D10 H-1) | 90 min | Closes the post-24h replay window | ☐ |
 
 ---
 
@@ -789,6 +794,116 @@ ORDER BY captured_at DESC LIMIT 5;
 ```
 
 End of W2 D2 — the V1 conversion-machine pattern is now live for **5 of 7** verticals (BOI, TRACR, DocAI, LexAudit, BRAI). LeadForge and a generic-Forge tree are the remaining two; they're mechanical replications and ship when the redesigns Moses is doing land.
+
+---
+
+---
+
+## 23. Confirm LeadForge decision-tree page renders post-redeploy (Day 10)
+
+```bash
+curl -fsS https://leadforge.bizlegal-ai.com/decision-tree | head -c 500
+# expect: HTML containing "Are your outbound campaigns at TCPA risk?"
+```
+
+**Smoke** (one full pass):
+
+```bash
+curl -X POST 'https://leadforge.bizlegal-ai.com/api/decision-tree/lead' \
+  -H 'content-type: application/json' \
+  -d '{"email":"moses+leadforge-smoke@bizlegal-ai.com","verdict":"consent_audit_now","answers":{"sends_outbound_messages":true,"over_5k_messages_monthly":false,"no_per_lead_consent_record":true,"no_dnc_suppression_refresh":true}}'
+# expect: {"ok":true,"lead_id":"leadforge-decision-tree-..."}
+
+SELECT lead_id, vertical, source, captured_at
+FROM lead_nurture_state
+WHERE source = 'leadforge:decision-tree'
+ORDER BY captured_at DESC LIMIT 3;
+```
+
+End of W2 D3: V1 conversion machines now live for **6 of 7** verticals (BOI, TRACR, DocAI, LexAudit, BRAI, **LeadForge**). Generic-Forge is the remaining one.
+
+---
+
+## 24. Set `OCI_PARTNER_CC` env on the OCI router box (Day 10 — SECURITY-V3 M-1)
+
+**Why:** Day 10 audit found `mdmdmd63@gmail.com` (founder PII) hardcoded as the CC on every OCI partner intro email. Patched: now reads from `OCI_PARTNER_CC` env. Empty string disables the CC entirely. Recommendation: use a shared inbox like `team@bizlegal-ai.com` so the CC can be rotated without a code change.
+
+**How:**
+
+```bash
+ssh hetzner
+sudo -i
+
+# Add to whichever .env file the OCI Docker compose loads:
+nano /opt/bizlegal-monorepo/services/oci/.env
+# Append:
+#   OCI_PARTNER_CC=team@bizlegal-ai.com
+
+cd /opt/bizlegal-monorepo/services/oci
+docker compose restart router
+```
+
+**Verify** (after restart):
+
+```bash
+# Trigger a smoke partner email, confirm CC is the new address.
+# Or check the next live ROUTE_PARTNER lead's email headers in Resend dashboard.
+```
+
+If you'd rather not CC at all, set `OCI_PARTNER_CC=` (empty value).
+
+---
+
+## 25. Set `PAYPAL_WEBHOOK_ID` on hub Vercel preview/staging (Day 10 — SECURITY-V3 H-3)
+
+**Why:** Day 10 audit found that the hub PayPal webhook used `process.env.NODE_ENV !== 'production'` as a back-door: missing `PAYPAL_WEBHOOK_ID` would silently accept unsigned webhooks in any preview deploy. Patched: missing env now always rejects. So preview/staging branches must have `PAYPAL_WEBHOOK_ID` set if you ever exercise the webhook there.
+
+**How (Vercel dashboard for `bizlegal-ai.com`):**
+
+1. Project → Settings → Environment Variables.
+2. Add `PAYPAL_WEBHOOK_ID` for **Preview** + **Development** scopes (production scope already had it).
+3. Use the test webhook ID PayPal gives you in the developer dashboard, or copy the production one if you accept production-cert preview testing.
+4. Redeploy a preview to pick up the var.
+
+If you don't exercise PayPal in preview, you can skip this — the new strict-mode just means preview deploys can't fake-accept signatures, which is the desired behavior.
+
+---
+
+## 26. Scoped Supabase `nurture_writer` role (Day 10 — SECURITY-V3 H-2, deferred)
+
+**Why:** All 6 subdomain Vercel projects currently hold the `SUPABASE_SERVICE_ROLE_KEY`, which bypasses RLS on every table. If any one Vercel project were compromised, an attacker has full DB write access. The audit recommends a scoped role with INSERT-only on `lead_nurture_state` + INSERT/UPSERT on `leads`.
+
+**How** (Supabase SQL):
+
+```sql
+-- Create a custom role + grant table privileges narrowly:
+CREATE ROLE nurture_writer NOLOGIN;
+GRANT INSERT ON public.lead_nurture_state TO nurture_writer;
+GRANT INSERT ON public.leads TO nurture_writer;
+GRANT USAGE ON SCHEMA public TO nurture_writer;
+
+-- (For PostgREST API key generation, use Supabase Studio → API → Custom JWT,
+-- with `role: 'nurture_writer'` in the claims. Save as
+-- SUPABASE_NURTURE_WRITER_KEY env var.)
+```
+
+Then update each subdomain's `nurture-enqueue.ts` to prefer `SUPABASE_NURTURE_WRITER_KEY` over the service-role key when set. (Code change needed in `packages/nurture-enqueue/src/index.ts` — flag for next sprint, not blocking.)
+
+This is non-blocking; today's posture is "trust each Vercel project's env vars." Apply when convenient.
+
+---
+
+## 27. HMAC replay protection (Day 10 — SECURITY-V3 H-1, deferred)
+
+**Why:** Inbound-lead and ops-log endpoints verify HMAC over the body but don't enforce a timestamp window or nonce. An attacker who captures one signed request can replay it indefinitely. Today the OCI router has 24h Redis dedupe by `lead_id`, which closes most of the practical attack surface for that endpoint, but not the others.
+
+**How** (sketch — not blocking, for next sprint):
+
+1. Add `x-bizlegal-timestamp` header to every signed request (epoch seconds).
+2. Verifier rejects if `|now - timestamp| > 300` (5-min window) or if a nonce was seen in the last 10 min (Redis-backed nonce ledger).
+3. Update HMAC input to include the timestamp + nonce so the signature commits to them: `signature = HMAC(body || timestamp || nonce, secret)`.
+
+This is invasive (touches 6 senders + 2 verifiers + adds a Redis key namespace). Defer until traffic ramps or ops-log throughput grows.
 
 ---
 

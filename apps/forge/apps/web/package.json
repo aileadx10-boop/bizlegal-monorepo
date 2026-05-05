@@ -12,6 +12,7 @@
     "@anthropic-ai/sdk": "^0.27.0",
     "@bizlegal/nurture-enqueue": "workspace:*",
     "@bizlegal/payment": "workspace:*",
+    "@bizlegal/rate-limit": "workspace:*",
     "@bizlegal/turnstile-verify": "workspace:*",
     "@paypal/checkout-server-sdk": "^1.0.3",
     "@radix-ui/react-dialog": "^1.0.5",

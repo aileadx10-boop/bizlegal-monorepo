@@ -9,6 +9,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@bizlegal/nurture-enqueue": "workspace:*",
+    "@bizlegal/rate-limit": "workspace:*",
+    "@bizlegal/turnstile-verify": "workspace:*",
     "@supabase/ssr": "^0.5.0",
     "@supabase/supabase-js": "^2.45.0",
     "clsx": "^2.1.1",

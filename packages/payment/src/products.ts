@@ -7,7 +7,13 @@
  * Why centralized: per Phase Z, the rule is no NEXT_PUBLIC_*_URL env constants.
  * Pricing + product metadata lives in code; checkout URLs are generated on the
  * fly via the gateway clients (NOWPayments invoice / PayPal order / LS / Paddle).
+ *
+ * Phase AA D10: getProduct() applies any active pricing experiment from
+ * pricing-experiments.ts. The PRODUCTS table itself is immutable except
+ * via Moses-approved direct edits.
  */
+
+import { activeExperimentFor } from './pricing-experiments.js'
 
 export type ProductId =
   // BOI Tracker
@@ -334,5 +340,16 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
 export function getProduct(id: ProductId): ProductSpec {
   const product = PRODUCTS[id]
   if (!product) throw new Error(`Unknown product_id: ${id}`)
+
+  // Phase AA D10: pricing-experiment override layer. If an active
+  // experiment matches this product, swap amount_cents with the
+  // experimental price. Everything else (name, description, billing
+  // interval) stays the same. The pricing-experiments module imports
+  // ProductId from this file as a type-only import, so there's no
+  // runtime cycle.
+  const exp = activeExperimentFor(id)
+  if (exp) {
+    return { ...product, amount_cents: exp.experiment_amount_cents }
+  }
   return product
 }

@@ -20,6 +20,7 @@ import { createServerClient } from '@/lib/supabase/server'
 import { enqueueNurture } from '@/lib/nurture-enqueue'
 import { logEventAsync } from '@/lib/ops/log'
 import { verifyTurnstile, clientIpFromHeaders } from '@bizlegal/turnstile-verify'
+import { rateLimit } from '@bizlegal/rate-limit'
 
 export const dynamic = 'force-dynamic'
 
@@ -53,6 +54,18 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
   if (!VALID_VERDICTS.has(verdict)) {
     return NextResponse.json({ error: 'invalid_verdict' }, { status: 400 })
+  }
+
+  // D10 SECURITY-V3 C-1: rate-limit BEFORE Turnstile so a pump can't
+  // burn Turnstile verify-API quota either. 10 per IP per minute is
+  // generous for a 60-second decision tree, restrictive for a bot.
+  const ip = clientIpFromHeaders(req.headers) ?? 'unknown'
+  const rl = rateLimit('forge-decision-tree-lead', ip, { windowMs: 60_000, limit: 10 })
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: 'rate_limited', retry_after_ms: rl.retryAfterMs },
+      { status: 429, headers: { 'retry-after': String(Math.ceil(rl.retryAfterMs / 1000)) } },
+    )
   }
 
   // D9 INTEGRATION-V3 F-2: Turnstile bot challenge. Skip-if-not-
