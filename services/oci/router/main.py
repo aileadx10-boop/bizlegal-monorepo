@@ -177,32 +177,31 @@ async def ingest_lead(
     # welcome + 4-step cadence to the LEAD (not just the partner).
     # Best-effort: nurture-state insert failure must not affect the
     # partner-routing path. realestate is the canonical OCI vertical.
+    # D7 INTEGRATION-V3 B-2 fix: switched to idempotent insert so a
+    # re-fired /lead (Redis-dedupe miss) doesn't 409→raise→silently drop
+    # the row before the cron picks it up.
     contact_email = record.get("contact_email")
     if contact_email:
-        try:
-            from storage import supabase_insert as _sb_insert
-            _sb_insert(
-                "lead_nurture_state",
-                {
-                    "lead_id": f"oci-{lead_id}",
-                    "email": contact_email.lower().strip(),
-                    "vertical": "realestate",
-                    "source": f"oci:{record.get('source', 'unknown')}",
-                    "lead_classification": {
-                        "classification": classification,
-                        "intent": record.get("intent"),
-                        "buyer_type": record.get("buyer_type"),
-                        "priority": record.get("priority"),
-                    },
-                    "next_step": "welcome",
-                    "next_send_at": (datetime.now(timezone.utc) + timedelta(minutes=5)).isoformat(),
+        from storage import supabase_insert_idempotent as _sb_insert_idem
+        ok = _sb_insert_idem(
+            "lead_nurture_state",
+            {
+                "lead_id": f"oci-{lead_id}",
+                "email": contact_email.lower().strip(),
+                "vertical": "realestate",
+                "source": f"oci:{record.get('source', 'unknown')}",
+                "lead_classification": {
+                    "classification": classification,
+                    "intent": record.get("intent"),
+                    "buyer_type": record.get("buyer_type"),
+                    "priority": record.get("priority"),
                 },
-            )
-        except Exception as exc:
-            # 409 unique violation = already enqueued; safe to ignore.
-            # Anything else = log + continue with partner routing.
-            if "23505" not in str(exc) and "duplicate" not in str(exc).lower():
-                logger.warning("nurture enqueue failed for %s: %s", lead_id, exc)
+                "next_step": "welcome",
+                "next_send_at": (datetime.now(timezone.utc) + timedelta(minutes=5)).isoformat(),
+            },
+        )
+        if not ok:
+            logger.warning("nurture enqueue failed (transport) for %s", lead_id)
 
     if action == "ROUTE_PARTNER" and chosen_partner is not None:
         try:

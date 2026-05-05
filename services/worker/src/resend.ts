@@ -23,6 +23,13 @@ export interface GenericEmailArgs {
   readonly replyTo?: string;
   /** Optional extra headers (List-Unsubscribe, X-Entity-Ref-ID, etc). */
   readonly headers?: Record<string, string>;
+  /**
+   * Optional Resend Idempotency-Key — if a transient 5xx happens after
+   * Resend accepted the message, retrying with the same key collapses
+   * to a single delivery instead of double-sending. See
+   * https://resend.com/docs/api-reference/idempotency-keys
+   */
+  readonly idempotencyKey?: string;
 }
 
 export async function sendEmail(env: Env, args: GenericEmailArgs): Promise<SendEmailResult> {
@@ -43,12 +50,16 @@ export async function sendEmail(env: Env, args: GenericEmailArgs): Promise<SendE
   if (args.html) body.html = args.html;
   if (args.headers) body.headers = args.headers;
 
+  const fetchHeaders: Record<string, string> = {
+    Authorization: `Bearer ${env.RESEND_API_KEY}`,
+    "content-type": "application/json",
+  };
+  if (args.idempotencyKey) {
+    fetchHeaders["Idempotency-Key"] = args.idempotencyKey;
+  }
   const res = await fetch(RESEND_URL, {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${env.RESEND_API_KEY}`,
-      "content-type": "application/json",
-    },
+    headers: fetchHeaders,
     body: JSON.stringify(body),
   });
   if (!res.ok) {

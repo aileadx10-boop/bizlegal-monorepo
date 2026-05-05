@@ -81,12 +81,19 @@ export async function POST(req: NextRequest) {
     // sends a welcome email in 5 min and runs the 4-step cadence.
     // Fire-and-forget; a Supabase blip on the nurture table must not
     // fail the lead-capture POST.
+    //
+    // D7 INTEGRATION-V3 W-2 fix: lead_id falls back to `page` before
+    // 'unknown'. Older code collapsed every form lacking a `source`
+    // field into one row per email, silently dropping the second
+    // submission. `page` is set on every form, so this gives each
+    // funnel its own row.
     const normalizedEmail = email.toLowerCase().trim()
+    const leadIdSuffix = source ?? page ?? 'unknown'
     void enqueueNurture({
-      lead_id: `hub-${normalizedEmail}-${source ?? 'unknown'}`,
+      lead_id: `hub-${normalizedEmail}-${leadIdSuffix}`,
       email: normalizedEmail,
       vertical: pickVertical(product),
-      source: `hub:${source ?? 'unknown'}`,
+      source: `hub:${source ?? page ?? 'unknown'}`,
       lead_classification: { name, company, jurisdiction, page, product },
     }).catch((err) => console.warn('[leads] nurture enqueue failed:', err))
 

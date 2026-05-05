@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'node:crypto'
 import { supabaseAdmin } from '@/lib/supabase'
+import { markNurturePaid } from '@/lib/nurture-state'
 
 /**
  * LemonSqueezy webhook handler. Verifies HMAC-SHA256 signature, parses
@@ -135,6 +136,16 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
   } catch (err) {
     console.error('LemonSqueezy webhook handler exception', err)
+  }
+
+  // Phase AA D7 INTEGRATION-V3 B-3 fix: stop the nurture sequence on
+  // active subscription / completed order. Mirrors the NowPayments +
+  // PayPal webhooks. Fire-and-forget; failure is logged but cannot
+  // break the LS webhook ack (LS retries hard on non-2xx).
+  if (status === 'active' || eventName === 'order_created') {
+    void markNurturePaid(userEmail).catch((err) => {
+      console.warn('[lemonsqueezy] markNurturePaid failed:', err)
+    })
   }
 
   return NextResponse.json({ ok: true, event: eventName, subscription_id: subscriptionId })

@@ -49,6 +49,10 @@ export type OpsEventType =
   | 'referral.closed'          // deal closed; commission_usd computed
   | 'referral.paid'            // finder fee landed in BizLegal account
   | 'referral.alert'           // OCI Telegram-only paths mirrored to ops_log (V0.1)
+  | 'referral.contract_email'  // OCI sent the lead a transparent referral-contract email (Phase AA D5)
+  // Nurture machine (Phase AA V3)
+  | 'nurture.email.sent'       // worker sent step N (welcome / education / comparison / last_call)
+  | 'nurture.opt_out'          // user clicked one-click unsubscribe; row archived
   // Connection / monitoring (Phase V0)
   | 'routing.attempted'        // hub→OCI proxy attempt with status={ok|failed} + duration_ms
   | 'curation.action'          // Hetzner bot.py callback fired (pick / deploy / regen / reject)

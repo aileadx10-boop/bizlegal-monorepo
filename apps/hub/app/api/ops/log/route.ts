@@ -48,7 +48,9 @@ const ALLOWED_TYPES = new Set([
   'boi.subscribed', 'boi.alert.sent',
   // Referrals (OCI deal router — asymmetric pillar)
   'referral.received', 'referral.routed', 'referral.responded', 'referral.closed', 'referral.paid',
-  'referral.alert',
+  'referral.alert', 'referral.contract_email',
+  // Nurture machine (Phase AA V3)
+  'nurture.email.sent', 'nurture.opt_out',
   // Connection / monitoring (Phase V0)
   'routing.attempted', 'curation.action', 'heartbeat',
   // V2 agents (Phase V1-V6)

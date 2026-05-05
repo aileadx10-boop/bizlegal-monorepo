@@ -76,11 +76,33 @@ function baseHeaders(env: Env): Record<string, string> {
 // Fetch rows due for the next email. Capped to limit so a stale
 // queue (e.g. Resend outage caught up later) doesn't blow the
 // Worker's 30s CPU budget.
+//
+// D7 INTEGRATION-V3 W-1 fix: explicit column list (was `select=*`) so
+// future migrations adding columns don't silently propagate as
+// `unknown` through NurtureRow.
+const DUE_COLUMNS = [
+  "id",
+  "lead_id",
+  "email",
+  "vertical",
+  "source",
+  "lead_classification",
+  "captured_at",
+  "payment_status",
+  "opted_out",
+  "archived_at",
+  "next_step",
+  "next_send_at",
+  "last_sent_at",
+  "emails_sent",
+  "bounce_reason",
+].join(",");
+
 export async function due(opts: NurtureClientOpts, limit = 50): Promise<NurtureRow[]> {
   if (!nurtureConfigured(opts.env)) return [];
   const now = new Date().toISOString();
   const url = new URL(`${opts.env.SUPABASE_URL}/rest/v1/lead_nurture_state`);
-  url.searchParams.set("select", "*");
+  url.searchParams.set("select", DUE_COLUMNS);
   url.searchParams.set("payment_status", "eq.none");
   url.searchParams.set("opted_out", "eq.false");
   url.searchParams.set("next_step", "neq.done");

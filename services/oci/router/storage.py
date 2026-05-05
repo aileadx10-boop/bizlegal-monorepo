@@ -42,6 +42,35 @@ def supabase_insert(table: str, body: dict[str, Any] | list[dict[str, Any]]) -> 
         return resp.json()
 
 
+def supabase_insert_idempotent(
+    table: str,
+    body: dict[str, Any] | list[dict[str, Any]],
+) -> bool:
+    """Insert that treats unique-constraint conflicts as a quiet no-op.
+
+    Sets `Prefer: resolution=ignore-duplicates,return=minimal` so PostgREST
+    returns 201 on a fresh insert and 201 on a duplicate (no body, no
+    raise). Use for fire-and-forget writes where the dedupe key already
+    exists in the table (e.g. `lead_nurture_state.lead_id`).
+
+    Returns True on accepted (new or duplicate), False on transport error.
+    Callers that need the row back should use supabase_insert.
+    """
+    headers = {
+        **_supabase_headers(),
+        "Prefer": "resolution=ignore-duplicates,return=minimal",
+    }
+    try:
+        with httpx.Client(timeout=15.0) as client:
+            resp = client.post(_supabase_url(table), headers=headers, json=body)
+            # 201 = inserted, 409 should not happen with ignore-duplicates
+            # but guard regardless. Anything else is a real failure.
+            return resp.status_code in (200, 201, 204)
+    except Exception as exc:
+        logger.warning("idempotent insert into %s failed: %s", table, exc)
+        return False
+
+
 def supabase_patch(
     table: str,
     params: dict[str, Any],

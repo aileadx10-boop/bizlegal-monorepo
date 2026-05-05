@@ -1,6 +1,6 @@
 # Phase AA Week 1 — Moses ops queue
 
-**Last updated:** 2026-05-09 (end of Day 6)
+**Last updated:** 2026-05-10 (end of Day 7)
 **Owner:** Moses (or a sub-agent acting on Moses's behalf)
 **Why this exists:** Days 1-6 shipped all the code that can be shipped autonomously. The items below need a human (or an agent with write access to specific external systems) — apply migrations, redeploy services, run partner outreach. Each section is self-contained: copy-paste the commands; expected output is shown so you can verify.
 
@@ -23,6 +23,9 @@ Run these in any order **except** that #1 (picked_by migration) should land befo
 | 11 | Wire `oci_close.py` into Telegram (or alias on Hetzner) (D6) | 5 min | Optional revenue-tracking ergonomics | ☐ |
 | 12 | Add `payout-digest.timer` weekly to Hetzner systemd (D6) | 5 min | OCI weekly Telegram digest | ☐ |
 | 13 | Run synthetic-nurture-arc against post-fixes worker (D6 EVAL fixes) | 8 min | Verify single-anchor + word-count guards | ☐ |
+| 14 | Apply `lead_nurture_state` quarantine column migration (D7 INTEGRATION-V3 B-4) | 3 min | Stops perpetual Haiku-violation retry loops | ☐ |
+| 15 | Decide cross-vertical email policy (D7 INTEGRATION-V3 B-5) | 15 min | Spam-complaint risk if a single email opts into multiple verticals | ☐ |
+| 16 | Confirm TRACR decision-tree page renders post-redeploy (D7 V1 magnet #2) | 2 min | New URL `/decision-tree` on tracr subdomain | ☐ |
 
 ---
 
@@ -506,6 +509,92 @@ node scripts/synthetic-nurture-arc.mjs \
 **Expected:** all 4 emails arrive with exactly one anchor (the styled CTA button), word counts inside 90-180 / 60-120, subject ≤60 chars. Final state: `next_step=done, emails_sent=4, archived_at` set.
 
 If the arc fails on a contract violation (`compose contract violation for ...`), the EVAL-NURTURE remediation worked exactly as intended — Haiku tried to ship something that breached the prompt rules and the runtime guard caught it. Capture the violation string and we'll iterate on the system prompt.
+
+---
+
+---
+
+## 14. Apply quarantine column migration (Day 7 — INTEGRATION-V3 B-4)
+
+**Why:** Day 7 audit found the worker can spin in a perpetual retry loop if Haiku's output deterministically violates the post-D6 contract validators (subject ≤60, single anchor, word count) for some (vertical, step) pair. Without a failure counter, one stuck row = 288 wasted Haiku calls/day. Add `consecutive_failures` and the worker will archive a row after 5 strikes. Worker code patch ships in the **next** sprint commit (this one only ships the migration to be safe; rolling back the column is harder than rolling back code).
+
+**Where:** Supabase project `ydghhcuuopqzgqcicubg` → SQL Editor.
+
+**How:**
+
+```sql
+ALTER TABLE public.lead_nurture_state
+  ADD COLUMN IF NOT EXISTS consecutive_failures int NOT NULL DEFAULT 0;
+
+COMMENT ON COLUMN public.lead_nurture_state.consecutive_failures IS
+  'Number of times the worker has failed to compose this row''s next step. Auto-archived after 5.';
+
+-- Index isn't needed; the partial-due index already filters quarantined
+-- rows because their next_send_at gets pushed far into the future or
+-- the worker archives them outright (next_step=done).
+```
+
+**Verify:**
+
+```sql
+SELECT column_name, data_type, column_default
+FROM information_schema.columns
+WHERE table_name = 'lead_nurture_state' AND column_name = 'consecutive_failures';
+-- expect 1 row: integer / 0
+```
+
+The worker doesn't read or write this column today, so the migration is safe to apply now and the code patch can land later. Once the column is live, ping me and I'll wire the increment + archive-at-5 in the next sprint commit.
+
+---
+
+## 15. Cross-vertical email policy decision (Day 7 — INTEGRATION-V3 B-5)
+
+**Why:** Today, a single email captured by two different verticals (e.g. someone fills the BOI decision tree, then a TRACR funnel three days later) creates two parallel `lead_nurture_state` rows. They get 8 emails over 10 days from two voices. This is a spam-complaint magnet; Resend reputation hit if it scales.
+
+**The decision is yours, not engineering's.** Three options, with trade-offs:
+
+**Option A — globally one active sequence per email.** New row inserts skip if any non-archived row exists for that email. Simplest; but the second vertical never gets a sequence at all unless the first archives.
+
+**Option B — first-come-first-served + queue subsequent verticals.** Stash the new vertical in `pending_verticals JSONB`; on archive of the active row, pop the next vertical and start its sequence. Best UX; needs schema change + worker logic.
+
+**Option C — accept the parallelism (status quo).** Clear opt-out cue in every email reduces spam-complaint risk; some users genuinely want multi-vertical content. Lowest engineering cost; highest reputation risk.
+
+**Recommendation from engineering:** Option B is the right long-term shape, but ship Option A this sprint and revisit if a paying customer asks for B. Option A is one extra `select` at insert time; Option B is a migration + state-machine change.
+
+**Action requested:** reply with A / B / C and I'll wire the chosen path in the next sprint commit.
+
+---
+
+## 16. Confirm TRACR decision-tree page renders post-redeploy (Day 7)
+
+**Why:** Day 7 added `/decision-tree` to the TRACR subdomain (the V1 lead-magnet pattern's second instance, mirroring Forge BOI). Verify after the Vercel redeploy in #2 picks up the latest commit.
+
+**How:**
+
+```bash
+# After tracr.bizlegal-ai.com redeploys:
+curl -fsS https://tracr.bizlegal-ai.com/decision-tree | head -c 500
+# expect: HTML containing "Does your crypto activity need a compliance scan?"
+```
+
+If it 404s, the redeploy in #2 hasn't picked up the `8ef7421..` commit chain yet — wait for the latest Vercel deployment to settle, then retest.
+
+**Smoke** (one full pass through to verify the API):
+
+```bash
+LEAD_ID="smoke-tracr-$(date +%s)"
+curl -X POST 'https://tracr.bizlegal-ai.com/api/decision-tree/lead' \
+  -H 'content-type: application/json' \
+  -d '{"email":"moses+tracr-smoke@bizlegal-ai.com","verdict":"standard_review","answers":{"has_meaningful_volume":true}}'
+# expect: {"ok":true,"lead_id":"tracr-decision-tree-moses+tracr-smoke@bizlegal-ai.com"}
+
+# Then check Supabase:
+SELECT lead_id, vertical, next_step, captured_at
+FROM lead_nurture_state
+WHERE source = 'tracr:decision-tree'
+ORDER BY captured_at DESC LIMIT 3;
+# expect: 1 row with vertical='tracr'
+```
 
 ---
 

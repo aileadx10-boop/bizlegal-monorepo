@@ -47,6 +47,7 @@ ALLOWED_TYPES = {
     "referral.closed",
     "referral.paid",
     "referral.alert",  # V0.1 — Telegram-only HOT alerts mirrored
+    "referral.contract_email",  # Phase AA D5 — lead-facing contract email
     "error",
 }
 

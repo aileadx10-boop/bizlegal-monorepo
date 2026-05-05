@@ -145,6 +145,11 @@ async function processRow(env: Env, row: NurtureRow, now: Date): Promise<void> {
     subject,
     text: body_text,
     html: body_html,
+    // D7 INTEGRATION-V3 W-6 fix: Resend Idempotency-Key collapses
+    // a Resend retry (e.g. transient 5xx after the server already
+    // accepted the message) to a single delivery rather than a
+    // double-send.
+    idempotencyKey: `nurture-${row.id}-${step}`,
     headers: {
       "List-Unsubscribe": `<${unsubUrl}>, <mailto:unsubscribe@intelligence.bizlegal-ai.com>`,
       "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",

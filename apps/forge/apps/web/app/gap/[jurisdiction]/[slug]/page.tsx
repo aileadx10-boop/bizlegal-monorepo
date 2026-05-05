@@ -24,6 +24,35 @@ const ctaUrls: Record<string, string> = {
   forge: 'https://forge.bizlegal-ai.com',
 }
 
+interface DecisionTool {
+  readonly href: string
+  readonly label: string
+  readonly cta: string
+}
+
+// Match a gap page to a free preliminary-check tool on the same domain.
+// Currently only the BOI tree exists; TRACR and DocAI trees ship in D7+.
+function decisionToolFor(gap: {
+  cta_product?: string | null
+  regulation?: string | null
+  slug?: string | null
+}): DecisionTool | null {
+  const reg = (gap.regulation ?? '').toLowerCase()
+  const slug = (gap.slug ?? '').toLowerCase()
+  const isBoi =
+    /\bboi\b|beneficial[ -]ownership|corporate transparency|cta\b|fincen/i.test(reg) ||
+    /\bboi\b|beneficial-ownership/i.test(slug) ||
+    gap.cta_product === 'forge'
+  if (isBoi) {
+    return {
+      href: '/decision-tree',
+      label: 'BOI filing decision tree',
+      cta: 'Run BOI screen',
+    }
+  }
+  return null
+}
+
 async function getGapPage(slug: string) {
   const supabase = getSupabase()
   if (!supabase) return null
@@ -207,6 +236,36 @@ export default async function GapPage({ params }: GapPageParams) {
               </div>
             ))}
           </div>
+        )}
+
+        {/* Free-tool callout — surfaces a same-domain decision tree
+            for visitors not yet ready for the paid CTA. BOI gap pages
+            point at /decision-tree (the V1 conversion-machine pattern);
+            other regulators point at the matching domain landing for
+            now. Phase AA D7 cross-link work. */}
+        {decisionToolFor(gap) && (
+          <aside
+            className="border border-forge-border/60 rounded-xl p-6 mb-10 bg-forge-dark/30 flex flex-col md:flex-row md:items-center gap-4 md:gap-6"
+            aria-label="Free preliminary check"
+          >
+            <div className="flex-1">
+              <p className="text-xs uppercase tracking-widest text-forge-accent font-semibold mb-1">
+                Free · 60 seconds
+              </p>
+              <h3 className="text-lg font-bold text-white mb-1">
+                Not sure if this rule applies to you?
+              </h3>
+              <p className="text-sm text-forge-text-secondary leading-relaxed">
+                Run our preliminary {decisionToolFor(gap)!.label} — real signal, no signup until the result.
+              </p>
+            </div>
+            <a
+              href={decisionToolFor(gap)!.href}
+              className="inline-block border border-forge-accent text-forge-accent hover:bg-forge-accent hover:text-white font-semibold px-5 py-3 rounded-lg transition-colors text-sm whitespace-nowrap"
+            >
+              {decisionToolFor(gap)!.cta} →
+            </a>
+          </aside>
         )}
 
         {/* CTA */}
