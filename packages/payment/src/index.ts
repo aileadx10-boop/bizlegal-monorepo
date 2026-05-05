@@ -136,6 +136,123 @@ export async function createNowPaymentsInvoice(spec: CheckoutSpec): Promise<Chec
 }
 
 // ────────────────────────────────────────────────────────────────────
+// NOWPayments — raw invoice creator (escape hatch)
+// ────────────────────────────────────────────────────────────────────
+// Some surfaces (Forge per-vertical scan, Forge passport) carry
+// per-call pricing + custom redirect URLs that don't fit the
+// product-registry shape. The raw helper keeps the import boundary
+// at @bizlegal/payment while letting those surfaces pass arbitrary
+// amount + order_id + description + redirects.
+//
+// Use this when:
+//  - You have a per-call price (e.g. variable scan tiers)
+//  - You compose a custom order_id (e.g. `scan_<uuid>` for scan rows)
+//  - The IPN handler lives on the calling subdomain, not hub
+//
+// Otherwise prefer createNowPaymentsInvoice(spec) — the typed,
+// registry-backed path.
+
+export interface NowPaymentsRawOpts {
+  /** USD price; cents are inferred when amount_cents is supplied. */
+  readonly amount_usd?: number
+  /** Cents take priority over amount_usd. */
+  readonly amount_cents?: number
+  /** ISO currency code; defaults to USD. */
+  readonly price_currency?: string
+  /** Pay currency (e.g. 'usdtbsc'); leave empty for NOWPayments default. */
+  readonly pay_currency?: string
+  /** Caller-supplied order_id; should be deterministic to leverage NOWPayments dedupe. */
+  readonly order_id: string
+  /** Short order description shown in the invoice. */
+  readonly description: string
+  /** Fully-qualified URLs for redirect + IPN. */
+  readonly success_url: string
+  readonly cancel_url: string
+  readonly ipn_url: string
+}
+
+export interface NowPaymentsRawResult {
+  readonly ok: boolean
+  readonly provider: 'nowpayments'
+  readonly checkout_url?: string
+  readonly provider_invoice_id?: string
+  readonly amount_cents: number
+  readonly error?: string
+  readonly status_code: number
+}
+
+export async function createNowPaymentsInvoiceRaw(
+  opts: NowPaymentsRawOpts,
+): Promise<NowPaymentsRawResult> {
+  const apiKey = process.env.NOWPAYMENTS_API_KEY
+  const amount_cents =
+    opts.amount_cents ??
+    (typeof opts.amount_usd === 'number' ? Math.round(opts.amount_usd * 100) : 0)
+  if (!apiKey) {
+    return {
+      ok: false,
+      provider: 'nowpayments',
+      amount_cents,
+      error: 'NOWPAYMENTS_API_KEY unset',
+      status_code: 503,
+    }
+  }
+  if (amount_cents <= 0) {
+    return {
+      ok: false,
+      provider: 'nowpayments',
+      amount_cents,
+      error: 'amount_cents/amount_usd missing or non-positive',
+      status_code: 400,
+    }
+  }
+  const currency = (opts.price_currency ?? 'USD').toLowerCase()
+  try {
+    const body: Record<string, unknown> = {
+      price_amount: amount_cents / 100,
+      price_currency: currency,
+      order_id: opts.order_id,
+      order_description: opts.description,
+      success_url: opts.success_url,
+      cancel_url: opts.cancel_url,
+      ipn_callback_url: opts.ipn_url,
+    }
+    if (opts.pay_currency) body.pay_currency = opts.pay_currency
+    const res = await fetch('https://api.nowpayments.io/v1/invoice', {
+      method: 'POST',
+      headers: { 'x-api-key': apiKey, 'content-type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+    if (!res.ok) {
+      return {
+        ok: false,
+        provider: 'nowpayments',
+        amount_cents,
+        error: `nowpayments_${res.status}`,
+        status_code: res.status,
+      }
+    }
+    const payload = (await res.json()) as NowPaymentsInvoiceResponse
+    return {
+      ok: true,
+      provider: 'nowpayments',
+      checkout_url: payload.invoice_url,
+      provider_invoice_id: payload.id,
+      amount_cents,
+      status_code: 200,
+    }
+  } catch (err) {
+    return {
+      ok: false,
+      provider: 'nowpayments',
+      amount_cents,
+      error: err instanceof Error ? err.message : 'network_error',
+      status_code: 502,
+    }
+  }
+}
+
+// ────────────────────────────────────────────────────────────────────
 // PayPal — card / PayPal balance checkout (Orders API for one-time;
 // Subscriptions API would need a Plan ID, which we deliberately avoid
 // per Z3 — Plan IDs are env constants we promised not to add)

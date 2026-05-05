@@ -4,7 +4,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createServerClient } from '@/lib/supabase/server'
-import { createNOWPaymentsInvoice, getPayoneerLink, PRICES } from '@/lib/payments'
+import { createNowPaymentsInvoiceRaw } from '@bizlegal/payment'
+import { getPayoneerLink, PRICES } from '@/lib/payments'
 
 const PassportSchema = z.object({
   company_name: z.string().min(1),
@@ -66,18 +67,25 @@ export async function POST(req: NextRequest) {
     const passportId = record.id
     const appUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://forge.bizlegal-ai.com'
 
-    const invoice = await createNOWPaymentsInvoice({
-      amountUsd: PRICES.passport.crypto,
-      orderId: `passport_${passportId}`,
+    const invoice = await createNowPaymentsInvoiceRaw({
+      amount_usd: PRICES.passport.crypto,
+      order_id: `passport_${passportId}`,
       description: 'Forge Regulatory Passport',
-      successUrl: `${appUrl}/passport/success?id=${passportId}`,
-      cancelUrl: `${appUrl}/passport`,
-      ipnUrl: `${appUrl}/api/payment/webhook`,
+      success_url: `${appUrl}/passport/success?id=${passportId}`,
+      cancel_url: `${appUrl}/passport`,
+      ipn_url: `${appUrl}/api/payment/webhook`,
     })
+    if (!invoice.ok || !invoice.checkout_url) {
+      console.error('[forge/passport] invoice failed:', invoice.error)
+      return NextResponse.json(
+        { error: invoice.error ?? 'invoice_create_failed' },
+        { status: invoice.status_code },
+      )
+    }
 
     await supabase
       .from('passport_assessments')
-      .update({ stripe_session_id: invoice.invoiceId })
+      .update({ stripe_session_id: invoice.provider_invoice_id })
       .eq('id', passportId)
 
     return NextResponse.json({
@@ -85,7 +93,7 @@ export async function POST(req: NextRequest) {
       passport_id: passportId,
       payment_options: {
         crypto: {
-          invoiceUrl: invoice.invoiceUrl,
+          invoiceUrl: invoice.checkout_url,
           amount_usd: PRICES.passport.crypto,
         },
         payoneer: {

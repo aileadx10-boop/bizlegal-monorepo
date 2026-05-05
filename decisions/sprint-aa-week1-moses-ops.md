@@ -1,8 +1,8 @@
 # Phase AA Week 1 — Moses ops queue
 
-**Last updated:** 2026-05-08 (end of Day 5)
+**Last updated:** 2026-05-09 (end of Day 6)
 **Owner:** Moses (or a sub-agent acting on Moses's behalf)
-**Why this exists:** Day 1-5 shipped all the code that can be shipped autonomously. The items below need a human (or an agent with write access to specific external systems) — apply migrations, redeploy services, run partner outreach. Each section is self-contained: copy-paste the commands; expected output is shown so you can verify.
+**Why this exists:** Days 1-6 shipped all the code that can be shipped autonomously. The items below need a human (or an agent with write access to specific external systems) — apply migrations, redeploy services, run partner outreach. Each section is self-contained: copy-paste the commands; expected output is shown so you can verify.
 
 Run these in any order **except** that #1 (picked_by migration) should land before #5 (Hetzner systemd cadence change), because auto_pick.py logs picked_by once the column exists.
 
@@ -11,14 +11,18 @@ Run these in any order **except** that #1 (picked_by migration) should land befo
 | # | Item | Time | Blocking | Status |
 |---|---|---|---|---|
 | 1 | Apply `picked_by` migration to Supabase | 2 min | Hetzner cadence quality of life | ☐ |
-| 2 | Redeploy 5 subdomains on Vercel | 10 min | Subdomain nurture-enqueue | ☐ |
+| 2 | Redeploy 5 subdomains on Vercel | 10 min | Subdomain nurture-enqueue + Forge payment migration + decision-tree | ☐ |
 | 3 | Redeploy worker (already done by automation D4) | — | — | ✅ |
-| 4 | Move OCI router to monorepo path on Hetzner | 15 min | OCI re-deploys cleanly | ☐ |
+| 4 | Move OCI router to monorepo path on Hetzner | 15 min | OCI re-deploys cleanly + Day-6 email_contract + payout digest | ☐ |
 | 5 | Update Hetzner scout systemd timer to daily cadence | 5 min | Scout already running M/W/F | ☐ |
 | 6 | Verify replacement RSS feeds + restart scout | 5 min | Adds 3 new feeds | ☐ |
 | 7 | OCI partner outreach — send 3-5 emails | 30-60 min | OCI revenue channel | ☐ |
 | 8 | Lighthouse drill — fix brai SEO 91→100 | 60 min | Optional polish | ☐ |
 | 9 | Rotate the Anthropic API key found as a worker secret | 15 min | Security | ☐ |
+| 10 | `pnpm install` in repo root after Forge payment-pkg dep landed (D6) | 1 min | Forge build needs workspace link | ☐ |
+| 11 | Wire `oci_close.py` into Telegram (or alias on Hetzner) (D6) | 5 min | Optional revenue-tracking ergonomics | ☐ |
+| 12 | Add `payout-digest.timer` weekly to Hetzner systemd (D6) | 5 min | OCI weekly Telegram digest | ☐ |
+| 13 | Run synthetic-nurture-arc against post-fixes worker (D6 EVAL fixes) | 8 min | Verify single-anchor + word-count guards | ☐ |
 
 ---
 
@@ -378,6 +382,130 @@ node -e "console.log(JSON.parse(require('fs').readFileSync(process.env.LH).toStr
 curl -s "https://bizlegal-ai.com/api/ops/feed?token=$T_ENC&type=cron.completed&limit=3" | jq .
 # expect: ok statuses, no auth errors
 ```
+
+---
+
+---
+
+## 10. `pnpm install` after Forge payment-pkg dep landed (Day 6)
+
+**Why:** Day 6 added `@bizlegal/payment: workspace:*` to `apps/forge/apps/web/package.json`. Vercel runs `pnpm install` automatically as part of its build, so this is **not blocking** the redeploy in #2 — but if you ever build Forge locally (`pnpm --filter forge-web dev`), you need to refresh the workspace symlink.
+
+**How:**
+
+```bash
+cd "C:/Users/Moshe Dor/bizlegal-monorepo"
+pnpm install
+# expect: a single new symlink under apps/forge/apps/web/node_modules/@bizlegal/payment
+```
+
+**Verify:**
+
+```bash
+ls apps/forge/apps/web/node_modules/@bizlegal/payment
+# expect: package.json + dist/ + src/ (symlinked into packages/payment)
+```
+
+If the redeploy in #2 succeeds and Forge runs cleanly, you can skip this — Vercel handled it.
+
+---
+
+## 11. Wire `oci_close.py` into Telegram (Day 6)
+
+**Why:** Day 6 added `services/oci/router/oci_close.py` — a CLI helper Moses runs when a partner closes a referred deal. It POSTs to the running router's `/feedback` endpoint with `outcome=won` + commission_usd.
+
+The script lives on the Hetzner box; `ROUTER_BASE_URL=http://localhost:8080` works locally on the box. To make it Telegram-quotable, alias it on Hetzner so Moses can paste a one-liner.
+
+**How:**
+
+```bash
+ssh hetzner
+sudo -i
+
+cd /opt/bizlegal-monorepo/services/oci/router
+
+# Add a tiny launcher shim that loads the env + invokes the CLI:
+sudo tee /usr/local/bin/oci-close <<'SH'
+#!/usr/bin/env bash
+set -e
+set -a; source /opt/bizlegal-monorepo/.env 2>/dev/null || source /opt/oci-deal-router/.env; set +a
+export ROUTER_BASE_URL="${ROUTER_BASE_URL:-http://localhost:8080}"
+exec /usr/bin/python3 /opt/bizlegal-monorepo/services/oci/router/oci_close.py "$@"
+SH
+sudo chmod +x /usr/local/bin/oci-close
+
+# Quick smoke (won't actually close anything since lead_id is fake):
+oci-close lost smoke-fake-id 0 "smoke test"
+# expect: {"ok":true,"updated":0} (no lead matches)
+```
+
+**Telegram usage** once the alias is in place:
+
+```
+oci-close won bizlegal-7af3b2 1500 "client signed retainer with PartnerCo"
+oci-close lost bizlegal-91ab44 0 "client went with internal counsel"
+oci-close no_show bizlegal-44cd11 0 "no response after 3 follow-ups"
+```
+
+The `outcome=won` payload also patches the `payouts` row's `commission_usd`, so when reconciler runs Friday it'll fire `referral.paid` for that amount.
+
+---
+
+## 12. Add `payout-digest.timer` weekly to Hetzner systemd (Day 6)
+
+**Why:** Day 6 extended `payout_reconciler.py` with a Telegram weekly digest (last 7d routed/closed/paid + top partner). The reconciler already runs Fridays via `payout-reconciler.timer`. Confirm the timer file is up-to-date and the reconciler runs with `TELEGRAM_BOT_TOKEN`/`TELEGRAM_CHAT_ID` envs available.
+
+**How:**
+
+```bash
+ssh hetzner
+sudo -i
+
+cd /opt/bizlegal-monorepo
+git pull origin main
+
+# Confirm current systemd timer state:
+systemctl status payout-reconciler.timer
+systemctl list-timers | grep payout-reconciler
+
+# If the unit's WorkingDirectory is still /opt/oci-deal-router/, refresh:
+diff -u /etc/systemd/system/payout-reconciler.service \
+        /opt/bizlegal-monorepo/services/oci/systemd/payout-reconciler.service
+# If different, copy + reload (similar to OCI router move in #4).
+
+# Confirm the digest envs are present in the service env file:
+grep -E '^TELEGRAM_(BOT_TOKEN|CHAT_ID)=' /opt/bizlegal-monorepo/.env || \
+  echo "WARNING: Telegram envs missing — digest will skip silently"
+
+# Manual smoke (digest only, no event firing):
+cd /opt/bizlegal-monorepo/services/oci/router
+docker compose exec router python -m payout_reconciler --digest-only
+# expect: a Telegram message in the @Bizlegalbot chat with last-7d numbers
+```
+
+**Verify:** check the @Bizlegalbot Telegram chat for the digest message after a manual run, then wait for Friday's scheduled run.
+
+---
+
+## 13. Run synthetic-nurture-arc against post-fixes worker (Day 6)
+
+**Why:** Day 6 applied 3 ship-blocking remediations from the gsd-eval-auditor pass on the nurture prompts (single-anchor rule + runtime guards + concrete forge/generic regulators). Run the synthetic 4-email arc once with `--cleanup` to confirm Haiku output passes the new contract validators.
+
+**How:**
+
+```bash
+cd "C:/Users/Moshe Dor/bizlegal-monorepo/services/worker"
+export SUPABASE_URL=$(grep '^SUPABASE_URL=' "/c/Users/Moshe Dor/Downloads/env-hub-bizlegal-ai.txt" | cut -d= -f2-)
+export SUPABASE_SECRET=$(grep '^SUPABASE_SECRET=' "/c/Users/Moshe Dor/Downloads/env-hub-bizlegal-ai.txt" | cut -d= -f2-)
+node scripts/synthetic-nurture-arc.mjs \
+  --email moses+arc-d6@bizlegal-ai.com \
+  --vertical brai \
+  --cleanup
+```
+
+**Expected:** all 4 emails arrive with exactly one anchor (the styled CTA button), word counts inside 90-180 / 60-120, subject ≤60 chars. Final state: `next_step=done, emails_sent=4, archived_at` set.
+
+If the arc fails on a contract violation (`compose contract violation for ...`), the EVAL-NURTURE remediation worked exactly as intended — Haiku tried to ship something that breached the prompt rules and the runtime guard caught it. Capture the violation string and we'll iterate on the system prompt.
 
 ---
 

@@ -1,15 +1,20 @@
 // app/api/payment/crypto/route.ts
-// Creates a NOWPayments invoice for crypto payment
+// Creates a NOWPayments invoice for crypto payment via the canonical
+// @bizlegal/payment workspace package (Phase AA D6 migration).
+// PRICES still come from the local Forge constants because Forge runs
+// per-vertical pricing (scan tiers); the import boundary now sits at
+// @bizlegal/payment so all surfaces share one NOWPayments client.
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@/lib/supabase/server'
-import { createNOWPaymentsInvoice, PRICES } from '@/lib/payments'
+import { createNowPaymentsInvoiceRaw } from '@bizlegal/payment'
+import { PRICES } from '@/lib/payments'
 
 export const dynamic = 'force-dynamic'
 
 export async function POST(req: NextRequest) {
   try {
-    const { reference_id, reference_type, email } = await req.json()
+    const { reference_id, reference_type } = await req.json()
 
     if (!reference_id || !reference_type) {
       return NextResponse.json({ error: 'Missing reference_id or reference_type' }, { status: 400 })
@@ -29,21 +34,31 @@ export async function POST(req: NextRequest) {
       if (!record) return NextResponse.json({ error: 'Not found' }, { status: 404 })
       if (record.payment_status === 'paid') return NextResponse.json({ error: 'Already paid' }, { status: 409 })
 
-      const invoice = await createNOWPaymentsInvoice({
-        amountUsd: PRICES.passport.crypto,
-        orderId: `passport_${reference_id}`,
+      const invoice = await createNowPaymentsInvoiceRaw({
+        amount_usd: PRICES.passport.crypto,
+        order_id: `passport_${reference_id}`,
         description: 'Forge Regulatory Passport',
-        successUrl: `${appUrl}/passport/success?id=${reference_id}`,
-        cancelUrl: `${appUrl}/passport`,
-        ipnUrl,
+        success_url: `${appUrl}/passport/success?id=${reference_id}`,
+        cancel_url: `${appUrl}/passport`,
+        ipn_url: ipnUrl,
       })
+      if (!invoice.ok || !invoice.checkout_url) {
+        console.error('[forge/payment/crypto] passport invoice failed:', invoice.error)
+        return NextResponse.json(
+          { error: invoice.error ?? 'invoice_create_failed' },
+          { status: invoice.status_code },
+        )
+      }
 
       await supabase
         .from('passport_assessments')
-        .update({ stripe_session_id: invoice.invoiceId })
+        .update({ stripe_session_id: invoice.provider_invoice_id })
         .eq('id', reference_id)
 
-      return NextResponse.json({ invoiceUrl: invoice.invoiceUrl, invoiceId: invoice.invoiceId })
+      return NextResponse.json({
+        invoiceUrl: invoice.checkout_url,
+        invoiceId: invoice.provider_invoice_id,
+      })
     }
 
     if (reference_type === 'scan') {
@@ -56,21 +71,31 @@ export async function POST(req: NextRequest) {
       if (!record) return NextResponse.json({ error: 'Not found' }, { status: 404 })
       if (record.payment_status === 'paid') return NextResponse.json({ error: 'Already paid' }, { status: 409 })
 
-      const invoice = await createNOWPaymentsInvoice({
-        amountUsd: PRICES.scan.crypto,
-        orderId: `scan_${reference_id}`,
+      const invoice = await createNowPaymentsInvoiceRaw({
+        amount_usd: PRICES.scan.crypto,
+        order_id: `scan_${reference_id}`,
         description: 'Forge Web Compliance Scan Report',
-        successUrl: `${appUrl}/audit/success?id=${reference_id}`,
-        cancelUrl: `${appUrl}/audit`,
-        ipnUrl,
+        success_url: `${appUrl}/audit/success?id=${reference_id}`,
+        cancel_url: `${appUrl}/audit`,
+        ipn_url: ipnUrl,
       })
+      if (!invoice.ok || !invoice.checkout_url) {
+        console.error('[forge/payment/crypto] scan invoice failed:', invoice.error)
+        return NextResponse.json(
+          { error: invoice.error ?? 'invoice_create_failed' },
+          { status: invoice.status_code },
+        )
+      }
 
       await supabase
         .from('scans')
-        .update({ stripe_session_id: invoice.invoiceId })
+        .update({ stripe_session_id: invoice.provider_invoice_id })
         .eq('id', reference_id)
 
-      return NextResponse.json({ invoiceUrl: invoice.invoiceUrl, invoiceId: invoice.invoiceId })
+      return NextResponse.json({
+        invoiceUrl: invoice.checkout_url,
+        invoiceId: invoice.provider_invoice_id,
+      })
     }
 
     return NextResponse.json({ error: 'Invalid reference_type' }, { status: 400 })

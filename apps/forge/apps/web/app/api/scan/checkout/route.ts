@@ -1,11 +1,14 @@
 // app/api/scan/checkout/route.ts
 // Returns payment options for a scan: NOWPayments invoice URL + Payoneer link
-// Prices are per-vertical
+// Prices are per-vertical. NOWPayments now flows via @bizlegal/payment
+// (Phase AA D6 migration). Payoneer remains a static-link fallback that
+// is Forge-specific, so it stays in the local helper for now.
 
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createServerClient } from '@/lib/supabase/server'
-import { createNOWPaymentsInvoice, getPayoneerLink } from '@/lib/payments'
+import { createNowPaymentsInvoiceRaw } from '@bizlegal/payment'
+import { getPayoneerLink } from '@/lib/payments'
 
 const VERTICAL_PRICES: Record<string, { crypto: number; card: number }> = {
   cipa:     { crypto: 97,  card: 119 },
@@ -52,25 +55,32 @@ export async function POST(req: NextRequest) {
     const price = VERTICAL_PRICES[vertical] ?? DEFAULT_PRICE
     const appUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://forge.bizlegal-ai.com'
 
-    const invoice = await createNOWPaymentsInvoice({
-      amountUsd: price.crypto,
-      orderId: `scan_${scan_id}`,
+    const invoice = await createNowPaymentsInvoiceRaw({
+      amount_usd: price.crypto,
+      order_id: `scan_${scan_id}`,
       description: `Forge Compliance Report — ${vertical.toUpperCase()}`,
-      successUrl: `${appUrl}/audit/success?id=${scan_id}`,
-      cancelUrl: `${appUrl}/audit`,
-      ipnUrl: `${appUrl}/api/payment/webhook`,
+      success_url: `${appUrl}/audit/success?id=${scan_id}`,
+      cancel_url: `${appUrl}/audit`,
+      ipn_url: `${appUrl}/api/payment/webhook`,
     })
+    if (!invoice.ok || !invoice.checkout_url) {
+      console.error('[forge/scan/checkout] invoice failed:', invoice.error)
+      return NextResponse.json(
+        { error: invoice.error ?? 'invoice_create_failed' },
+        { status: invoice.status_code },
+      )
+    }
 
     await supabase
       .from('scans')
-      .update({ nowpayments_order_id: invoice.invoiceId })
+      .update({ nowpayments_order_id: invoice.provider_invoice_id })
       .eq('id', scan_id)
 
     return NextResponse.json({
       success: true,
       payment_options: {
         crypto: {
-          invoiceUrl: invoice.invoiceUrl,
+          invoiceUrl: invoice.checkout_url,
           amount_usd: price.crypto,
         },
         payoneer: {

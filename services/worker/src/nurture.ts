@@ -240,9 +240,14 @@ async function composeEmail(
         `Haiku returned incomplete email for ${step}/${row.vertical}: subject=${Boolean(subject)} text=${Boolean(body_text)} html=${Boolean(body_html)}`,
       );
     }
-    if (subject.length > 80) {
-      // Hard guard against runaway subjects (prompt says ≤60).
-      return { subject: subject.slice(0, 78) + "…", body_text, body_html };
+    // EVAL-NURTURE 2026-05-08 remediation #1: enforce hard rules at
+    // runtime so a model that drifts past the system-prompt contract
+    // gets caught before Resend send. Failure throws → cron retries.
+    const violation = validateComposed({ step, subject, body_text, body_html });
+    if (violation) {
+      throw new Error(
+        `compose contract violation for ${step}/${row.vertical}: ${violation}`,
+      );
     }
     return { subject, body_text, body_html };
   } catch (err) {
@@ -257,6 +262,41 @@ async function composeEmail(
     }
     throw err;
   }
+}
+
+// Hard-rule guards. Returns null when the email passes contract,
+// otherwise a short violation string for log/error context.
+function validateComposed(args: {
+  step: Exclude<NurtureStep, "done">;
+  subject: string;
+  body_text: string;
+  body_html: string;
+}): string | null {
+  if (args.subject.length > 60) {
+    return `subject too long (${args.subject.length} > 60)`;
+  }
+  if (/[A-Z]{6,}/.test(args.subject)) {
+    return `subject has all-caps run`;
+  }
+  // Word count: 90-180 for steps 1-3, 60-120 for last_call.
+  const wordCount = args.body_text.split(/\s+/).filter(Boolean).length;
+  const [minWords, maxWords] =
+    args.step === "last_call" ? [60, 120] : [90, 180];
+  if (wordCount < minWords || wordCount > maxWords) {
+    return `body word count ${wordCount} outside ${minWords}-${maxWords}`;
+  }
+  // Single-anchor rule: exactly one <a href> in body_html.
+  const anchorMatches = args.body_html.match(/<a\s[^>]*href=/gi) ?? [];
+  if (anchorMatches.length !== 1) {
+    return `body_html has ${anchorMatches.length} anchors, expected 1`;
+  }
+  // No-law-firm guard. Conservative — flags exact phrases the system
+  // prompt explicitly forbids; the prompt is the primary defense.
+  const forbidden = /\b(legal advice|your lawyer|attorney-client|we represent (?:you|your))\b/i;
+  if (forbidden.test(args.body_text) || forbidden.test(args.body_html)) {
+    return `body contains forbidden law-firm-claim phrase`;
+  }
+  return null;
 }
 
 function fallbackWelcome(vertical: NurtureVertical): ComposedEmail {

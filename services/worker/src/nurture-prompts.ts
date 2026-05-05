@@ -85,7 +85,7 @@ export const VERTICAL_CONTEXTS: Record<NurtureVertical, VerticalContext> = {
   forge: {
     product_name: "BizLegal Forge",
     product_url: "https://forge.bizlegal-ai.com",
-    regulator_focus: "BOI, sanctions, privacy — picks the right module from your scenario",
+    regulator_focus: "FinCEN BOI/CTA, OFAC sanctions, GDPR/CCPA privacy",
     pain_point: "small businesses face stacked compliance asks (BOI + sanctions + privacy) without budget for separate tools",
     deliverable: "single workflow that picks the right report + citations for your specific exposure",
     decision_pressure: "regulator timing varies by module; Forge sequences them so deadlines don't collide",
@@ -110,9 +110,12 @@ export const VERTICAL_CONTEXTS: Record<NurtureVertical, VerticalContext> = {
     comparison_alts: "Title-company default review (incomplete), specialist law firm ($3-8k per closing), DIY (per-deal risk you cannot quantify)",
   },
   generic: {
+    // Note: composer should prefer fallback over Haiku for this vertical
+    // unless lead_classification supplies a specific regulator/jurisdiction.
+    // Rationale: a generic regulator slot lets Haiku invent a fact.
     product_name: "BizLegal-AI",
     product_url: "https://bizlegal-ai.com/agents",
-    regulator_focus: "the agency or rule that fits your scenario",
+    regulator_focus: "FinCEN, OFAC, SEC, FTC, GDPR, CCPA — agent picks the right one based on your inputs",
     pain_point: "compliance asks accumulate quietly until something forces a response",
     deliverable: "agent-led baseline scan with primary-source citations matched to your specific exposure",
     decision_pressure: "regulators set the deadlines; the right time to act is before one is on the calendar",
@@ -169,23 +172,23 @@ interface StepBrief {
 const STEP_BRIEFS: Record<Exclude<NurtureStep, "done">, StepBrief> = {
   welcome: {
     intent: "Welcome the lead, set expectation for the next 7 days, point to the product. This is the first email; build trust by being concrete about what they will receive.",
-    structure: "1) Thank them for trying {product_name}. 2) Tell them what {product_name} does in one sentence (use {pain_point} + {deliverable}). 3) Set the cadence: 'over the next week, I'll send 3 short emails — an explainer of {regulator_focus}, an honest comparison, and a final ping with any updates.' 4) Link to {product_url}. 5) Soft opt-out cue + invite a reply.",
-    cta: "View the full report (single button linking to {product_url}).",
+    structure: "1) Thank them for trying {product_name}. 2) Tell them what {product_name} does in one sentence (use {pain_point} + {deliverable}). 3) Set the cadence: 'over the next week, I'll send 3 short emails — an explainer of {regulator_focus}, an honest comparison, and a final ping with any updates.' 4) Soft opt-out cue + invite a reply. The single CTA button at the bottom is the ONLY link to {product_url} — never repeat the URL elsewhere in the body.",
+    cta: "View the full report (single button linking to {product_url}). This is the only anchor in the email.",
   },
   education: {
     intent: "Explain WHY this regulation matters for them, citing one concrete consequence. No FUD — facts only. This is the email where they decide we're a credible source.",
-    structure: "1) Open with the specific risk they face: {pain_point}. 2) Cite the regulator + the concrete penalty/consequence (use {regulator_focus} + {decision_pressure}). 3) Briefly explain how {product_name} produces {deliverable}. 4) One-sentence soft CTA toward the product. 5) Soft opt-out cue.",
-    cta: "Run the scan now (single button linking to {product_url}).",
+    structure: "1) Open with the specific risk they face: {pain_point}. 2) Cite the regulator + the concrete penalty/consequence (use {regulator_focus} + {decision_pressure}). 3) Briefly explain how {product_name} produces {deliverable}. 4) Soft opt-out cue. The single CTA button at the bottom is the ONLY anchor — do not repeat {product_url} as plain text or a second link.",
+    cta: "Run the scan now (single button linking to {product_url}). This is the only anchor in the email.",
   },
   comparison: {
     intent: "Compare {product_name} honestly against alternatives. No bashing — neutral framing. Lead respects honesty here.",
-    structure: "1) Open by acknowledging this is a buy-vs-build moment. 2) Compare against {comparison_alts} — give one short pro/con per alternative (DIY, law firm, enterprise tool, other vendors). 3) Position {product_name} as the speed-to-defensible-evidence option, not the cheapest or most thorough. 4) Soft CTA. 5) Soft opt-out cue.",
-    cta: "See the report shape (single button linking to {product_url}).",
+    structure: "1) Open by acknowledging this is a buy-vs-build moment. 2) Compare against {comparison_alts} — give one short pro/con per alternative (DIY, law firm, enterprise tool, other vendors). 3) Position {product_name} as the speed-to-defensible-evidence option, not the cheapest or most thorough. 4) Soft opt-out cue. The single CTA button at the bottom is the ONLY anchor — do not link to {product_url} from inline text.",
+    cta: "See the report shape (single button linking to {product_url}). This is the only anchor in the email.",
   },
   last_call: {
     intent: "Final email before sequence ends. Short. One last concrete reason + a soft door-closer. No discount manufacturing.",
-    structure: "1) Acknowledge this is the last email in the sequence. 2) One concrete reason to act now (use {decision_pressure}). 3) Single CTA. 4) Door-closer: 'if the timing isn't right, no problem — the report's available whenever you come back.' 5) Soft opt-out cue (still required).",
-    cta: "Last link to the report (single button linking to {product_url}).",
+    structure: "1) Acknowledge this is the last email in the sequence. 2) One concrete reason to act now (use {decision_pressure}). 3) Door-closer: 'if the timing isn't right, no problem — the report's available whenever you come back.' 4) Soft opt-out cue (still required). The single CTA button at the bottom is the ONLY anchor — do not link to {product_url} elsewhere.",
+    cta: "Last link to the report (single button linking to {product_url}). This is the only anchor in the email.",
   },
 };
 
