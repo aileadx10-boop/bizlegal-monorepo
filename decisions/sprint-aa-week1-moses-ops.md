@@ -1,6 +1,6 @@
 # Phase AA Week 1 — Moses ops queue
 
-**Last updated:** 2026-05-10 (end of Day 7)
+**Last updated:** 2026-05-11 (end of Day 8)
 **Owner:** Moses (or a sub-agent acting on Moses's behalf)
 **Why this exists:** Days 1-6 shipped all the code that can be shipped autonomously. The items below need a human (or an agent with write access to specific external systems) — apply migrations, redeploy services, run partner outreach. Each section is self-contained: copy-paste the commands; expected output is shown so you can verify.
 
@@ -26,6 +26,9 @@ Run these in any order **except** that #1 (picked_by migration) should land befo
 | 14 | Apply `lead_nurture_state` quarantine column migration (D7 INTEGRATION-V3 B-4) | 3 min | Stops perpetual Haiku-violation retry loops | ☐ |
 | 15 | Decide cross-vertical email policy (D7 INTEGRATION-V3 B-5) | 15 min | Spam-complaint risk if a single email opts into multiple verticals | ☐ |
 | 16 | Confirm TRACR decision-tree page renders post-redeploy (D7 V1 magnet #2) | 2 min | New URL `/decision-tree` on tracr subdomain | ☐ |
+| 17 | `pnpm install` after `@bizlegal/nurture-enqueue` workspace link added (D8) | 1 min | New shared package — Vercel handles in #2 redeploy | ☐ |
+| 18 | Confirm DocAI decision-tree page renders post-redeploy (D8 V1 magnet #3) | 2 min | New URL `/decision-tree` on docai subdomain | ☐ |
+| 19 | Worker redeploy after D8 race fix + B-4 quarantine + F-1 (D8) | 1 min | `wrangler deploy` from services/worker — automation handles | ☐ |
 
 ---
 
@@ -594,6 +597,94 @@ FROM lead_nurture_state
 WHERE source = 'tracr:decision-tree'
 ORDER BY captured_at DESC LIMIT 3;
 # expect: 1 row with vertical='tracr'
+```
+
+---
+
+---
+
+## 17. `pnpm install` after `@bizlegal/nurture-enqueue` workspace link added (Day 8)
+
+**Why:** Day 8 lifted the 5 byte-identical `apps/<sub>/lib/nurture-enqueue.ts` files into a single `packages/nurture-enqueue` workspace package. Each subdomain's local file is now a thin re-export from `@bizlegal/nurture-enqueue`. Vercel runs `pnpm install` automatically as part of the build, so this is **not blocking** the redeploys in #2 — but if you build any of the 5 subdomains locally, refresh the workspace symlink first.
+
+**How:**
+
+```bash
+cd "C:/Users/Moshe Dor/bizlegal-monorepo"
+pnpm install
+# expect: 5 new symlinks under
+#   apps/forge/apps/web/node_modules/@bizlegal/nurture-enqueue
+#   apps/brai/node_modules/@bizlegal/nurture-enqueue
+#   apps/docai/web/node_modules/@bizlegal/nurture-enqueue
+#   apps/lexaudit/node_modules/@bizlegal/nurture-enqueue
+#   apps/tracr/node_modules/@bizlegal/nurture-enqueue
+```
+
+**Verify:**
+
+```bash
+ls apps/forge/apps/web/node_modules/@bizlegal/nurture-enqueue
+# expect: package.json + dist/ + src/ (symlink into packages/nurture-enqueue)
+```
+
+If the redeploys in #2 succeed and Forge / BRAI / DocAI / LexAudit / TRACR all build cleanly, you can skip this — Vercel handled it.
+
+---
+
+## 18. Confirm DocAI decision-tree page renders post-redeploy (Day 8)
+
+**Why:** Day 8 added `/decision-tree` to the DocAI subdomain — the third instance of the V1 lead-magnet pattern (Forge BOI → TRACR wallet-trace → DocAI privacy-scan). Verify after the Vercel redeploy in #2 picks up the latest commit.
+
+**How:**
+
+```bash
+# After docai.bizlegal-ai.com redeploys:
+curl -fsS https://docai.bizlegal-ai.com/decision-tree | head -c 500
+# expect: HTML containing "Does your business need a privacy scan?"
+```
+
+**Smoke** (one full pass through the API):
+
+```bash
+curl -X POST 'https://docai.bizlegal-ai.com/api/decision-tree/lead' \
+  -H 'content-type: application/json' \
+  -d '{"email":"moses+docai-smoke@bizlegal-ai.com","verdict":"moderate_review","answers":{"processes_personal_data":true,"eu_or_ca_subjects":true,"sensitive_categories":false,"over_50k_subjects":false,"has_dsar_process":false}}'
+# expect: {"ok":true,"lead_id":"docai-decision-tree-moses+docai-smoke@bizlegal-ai.com"}
+
+# Check Supabase:
+SELECT lead_id, vertical, next_step, captured_at
+FROM lead_nurture_state
+WHERE source = 'docai:decision-tree'
+ORDER BY captured_at DESC LIMIT 3;
+# expect: 1 row with vertical='docai'
+```
+
+---
+
+## 19. Worker redeploy after Day 8 race fix + quarantine + ops-event correlation
+
+**Why:** Day 8 patched the worker with three INTEGRATION-V3 fixes that need the new bundle to take effect:
+- W-4/W-5 race fix: re-read row state between compose and send (skips email if payment confirmed or opt-out fired during the Haiku call window)
+- B-4 quarantine: tracks `consecutive_failures`, exponential back-off, archive-at-5 (works pre-migration via PostgREST 400-tolerant fallback)
+- F-1: `email` field in worker `nurture.email.sent` ops events for /ops dashboard correlation
+
+**How:**
+
+```bash
+cd "C:/Users/Moshe Dor/bizlegal-monorepo/services/worker"
+npx wrangler deploy
+# expect: "Deployed bizlegal-lead-intake triggers" + a fresh Version ID
+```
+
+The automation orchestrator typically runs this at the end of the session; if you're verifying mid-flight, run it manually. After the deploy, the next */5 cron tick uses the new bundle.
+
+**Verify** (after the next cron tick):
+
+```bash
+TOKEN=$(grep '^OPS_DASHBOARD_TOKEN=' "/c/Users/Moshe Dor/Downloads/env-hub-bizlegal-ai.txt" | cut -d= -f2-)
+T_ENC=$(python3 -c "import urllib.parse,sys;print(urllib.parse.quote_plus(sys.argv[1]))" "$TOKEN")
+curl -s "https://bizlegal-ai.com/api/ops/feed?token=$T_ENC&type=nurture.email.sent&limit=3" | jq '.events[] | {ref_email, ref_id, metadata}'
+# expect: ref_email populated (was missing before D8 F-1 fix)
 ```
 
 ---

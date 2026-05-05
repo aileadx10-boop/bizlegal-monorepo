@@ -1,17 +1,16 @@
 /**
- * TRACR Decision Tree — lead capture endpoint.
+ * DocAI Decision Tree — lead capture endpoint.
  *
- * Phase AA Day 7 — replicates the V1 conversion-machine pattern from
- * Forge BOI (apps/forge/apps/web/app/api/decision-tree/lead/route.ts):
+ * Phase AA Day 8 — third instance of the V1 conversion-machine pattern
+ * (Forge BOI → TRACR → DocAI). Same shape:
  *  1. Validate email + verdict.
- *  2. Fire enqueueNurture with vertical='tracr' so the worker runs the
- *     4-step cadence over 7 days.
- *  3. Log a 'lead.qualified' ops event.
+ *  2. enqueueNurture vertical='docai' so the worker runs the 4-step
+ *     cadence over 7 days.
+ *  3. Log a `lead.qualified` ops event.
  *
  * Lead-id pinned to (email, magnet) so re-takes don't restart the
- * sequence. Fully unauthenticated POST — same shape as Forge today.
- * Bot-pump risk acknowledged in INTEGRATION-V3 F-2; Turnstile to
- * follow before launch.
+ * sequence. Fully unauthenticated POST today; INTEGRATION-V3 F-2 noted
+ * Turnstile/origin-allowlist as a follow-up before public launch.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -20,7 +19,7 @@ import { logEventAsync } from '@/lib/ops/log'
 
 export const dynamic = 'force-dynamic'
 
-const VALID_VERDICTS = new Set(['high_priority', 'standard_review', 'casual_use'])
+const VALID_VERDICTS = new Set(['high_risk', 'moderate_review', 'light_touch'])
 
 interface DecisionTreePayload {
   email?: string
@@ -51,25 +50,24 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'invalid_verdict' }, { status: 400 })
   }
 
-  const leadId = `tracr-decision-tree-${email}`
+  const leadId = `docai-decision-tree-${email}`
 
   void enqueueNurture({
     lead_id: leadId,
     email,
-    vertical: 'tracr',
-    source: 'tracr:decision-tree',
+    vertical: 'docai',
+    source: 'docai:decision-tree',
     lead_classification: { verdict, answers },
-  }).catch((err) => console.warn('[tracr/decision-tree/lead] nurture enqueue failed:', err))
+  }).catch((err) => console.warn('[docai/decision-tree/lead] nurture enqueue failed:', err))
 
-  // D8: ops-event parity with Forge BOI + DocAI privacy decision trees.
   logEventAsync({
     type: 'lead.qualified',
-    source: 'tracr',
+    source: 'docai',
     ref_id: leadId,
     email,
     status: 'ok',
     metadata: {
-      magnet: 'decision-tree-wallet-trace',
+      magnet: 'decision-tree-privacy',
       verdict,
       answer_count: Object.keys(answers).length,
     },

@@ -23,6 +23,9 @@ import {
   due,
   advance,
   archive,
+  getById,
+  recordFailure,
+  resetFailures,
   type NurtureRow,
   type NurtureStep,
   type NurtureVertical,
@@ -93,17 +96,40 @@ export async function runNurtureCron(env: Env, now: Date): Promise<void> {
       sent += 1;
     } catch (err) {
       failed += 1;
-      console.warn(`[nurture] row ${row.id} (${row.lead_id}) failed: ${(err as Error).message}`);
+      const errMsg = (err as Error).message;
+      console.warn(`[nurture] row ${row.id} (${row.lead_id}) failed: ${errMsg}`);
+
+      // INTEGRATION-V3 B-4: increment failure counter + back off
+      // next_send_at so a deterministic-violation row stops re-firing
+      // every 5 min. Archives the row at MAX_FAILURES.
+      let failureUpdate: Awaited<ReturnType<typeof recordFailure>> | null = null;
+      try {
+        failureUpdate = await recordFailure(
+          { env },
+          row.id,
+          row.consecutive_failures ?? 0,
+          now,
+        );
+      } catch (recordErr) {
+        console.warn(
+          `[nurture] recordFailure(${row.id}) itself failed: ${(recordErr as Error).message}`,
+        );
+      }
+
       await logEvent(env, {
         type: "cron.completed",
         ref_id: `worker/nurture/${row.id}`,
+        email: row.email,
         status: "failed",
         metadata: {
           outcome: "row_failed",
           lead_id: row.lead_id,
           step: row.next_step,
           vertical: row.vertical,
-          error: (err as Error).message.slice(0, 200),
+          error: errMsg.slice(0, 200),
+          attempt: failureUpdate?.attempt,
+          archived: failureUpdate?.archived ?? false,
+          next_send_at: failureUpdate?.nextSendAt,
         },
       }).catch(() => undefined);
     }
@@ -134,6 +160,29 @@ async function processRow(env: Env, row: NurtureRow, now: Date): Promise<void> {
 
   if (!body_text && !body_html) {
     throw new Error(`composer for step=${step} vertical=${row.vertical} returned empty`);
+  }
+
+  // INTEGRATION-V3 W-4 / W-5 race fix: re-read row state immediately
+  // before send. Compose can take 2-3s (Haiku call); during that window
+  // the row may have been flipped by markNurturePaid (payment confirm)
+  // or the unsubscribe webhook. Aborting here avoids one redundant
+  // upsell to a paying customer or one extra email after opt-out click.
+  const fresh = await getById({ env }, row.id);
+  if (fresh) {
+    if (fresh.payment_status !== "none") {
+      console.log(`[nurture] aborting send for ${row.lead_id} — payment_status=${fresh.payment_status}`);
+      await archive({ env }, row.id, "paid").catch(() => undefined);
+      return;
+    }
+    if (fresh.opted_out) {
+      console.log(`[nurture] aborting send for ${row.lead_id} — opted_out`);
+      // unsubscribe route already sets next_step=done + archived_at
+      return;
+    }
+    if (fresh.next_step === "done" || fresh.archived_at) {
+      // Another worker tick or admin action already archived; skip.
+      return;
+    }
   }
 
   // Build List-Unsubscribe header for one-click opt-out (RFC 8058).
@@ -175,9 +224,17 @@ async function processRow(env: Env, row: NurtureRow, now: Date): Promise<void> {
     });
   }
 
+  // D8 B-4: clear the failure counter on a successful send. Best-effort;
+  // only fires when prior failures > 0 to avoid an unnecessary PATCH on
+  // the common case (which is a clean send with counter=0).
+  if ((row.consecutive_failures ?? 0) > 0) {
+    await resetFailures({ env }, row.id);
+  }
+
   await logEvent(env, {
     type: "nurture.email.sent",
     ref_id: `worker/nurture/${row.id}`,
+    email: row.email, // D8 INTEGRATION-V3 F-1: ops dashboard correlation
     status: "ok",
     metadata: {
       lead_id: row.lead_id,

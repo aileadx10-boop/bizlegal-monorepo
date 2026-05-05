@@ -51,6 +51,11 @@ export interface NurtureRow {
   readonly last_sent_at: string | null;
   readonly emails_sent: number;
   readonly bounce_reason: string | null;
+  /** Phase AA D8 INTEGRATION-V3 B-4: increments on contract violation;
+   *  worker archives the row when it crosses MAX_FAILURES. Optional —
+   *  the column may not exist yet in the migration; the row is read
+   *  through PostgREST so missing columns come back as undefined. */
+  readonly consecutive_failures?: number | null;
 }
 
 interface NurtureClientOpts {
@@ -80,6 +85,11 @@ function baseHeaders(env: Env): Record<string, string> {
 // D7 INTEGRATION-V3 W-1 fix: explicit column list (was `select=*`) so
 // future migrations adding columns don't silently propagate as
 // `unknown` through NurtureRow.
+// `consecutive_failures` is intentionally NOT in this list. The column
+// may not exist yet (Moses ops #14 migration) and PostgREST 400s on
+// unknown columns in `select`. Reads come back as `undefined` on the
+// row instead, which `recordFailure` tolerates. Add to this list once
+// the migration is confirmed applied.
 const DUE_COLUMNS = [
   "id",
   "lead_id",
@@ -140,6 +150,120 @@ export async function advance(
     const detail = await res.text().catch(() => "");
     throw new Error(`advance(${rowId}) ${res.status}: ${detail.slice(0, 200)}`);
   }
+}
+
+// Phase AA D8 INTEGRATION-V3 B-4: increment a row's failure counter
+// after compose/send fails, push next_send_at out by exponential backoff,
+// and quarantine the row at MAX_FAILURES so a deterministic-violation
+// row stops re-firing every cron tick.
+//
+// Defensive: if the consecutive_failures column doesn't exist yet (Moses
+// ops #14 migration not yet applied) the increment PATCH 400s, we fall
+// back to the next_send_at backoff alone (still effective because the
+// row stops being due for the duration). The archive-at-N step is
+// gated on the column existing — until the column lands, a hot-loop
+// row backs off instead of being archived.
+const MAX_FAILURES = 5;
+const FAILURE_BACKOFF_MS_PER_ATTEMPT = 5 * 60 * 1000; // 5min × failureCount
+
+export interface FailureUpdate {
+  readonly nextSendAt: string;
+  readonly archived: boolean;
+  readonly attempt: number;
+}
+
+export async function recordFailure(
+  opts: NurtureClientOpts,
+  rowId: string,
+  /** prior failure count from the row read; treat undefined/null as 0 */
+  priorFailures: number | null | undefined,
+  now: Date,
+): Promise<FailureUpdate> {
+  const attempt = (priorFailures ?? 0) + 1;
+  const archived = attempt >= MAX_FAILURES;
+  const nextSendAt = new Date(
+    now.getTime() + attempt * FAILURE_BACKOFF_MS_PER_ATTEMPT,
+  ).toISOString();
+
+  if (!nurtureConfigured(opts.env)) {
+    return { nextSendAt, archived, attempt };
+  }
+
+  // Try the full update first — increments counter + bumps next_send_at +
+  // archives if at threshold. If consecutive_failures doesn't exist yet,
+  // PostgREST 400s; fall back to the next_send_at-only path.
+  const fullPatch: Record<string, unknown> = {
+    consecutive_failures: attempt,
+    next_send_at: nextSendAt,
+  };
+  if (archived) {
+    fullPatch.next_step = "done";
+    fullPatch.archived_at = now.toISOString();
+  }
+
+  const url = `${opts.env.SUPABASE_URL}/rest/v1/lead_nurture_state?id=eq.${rowId}`;
+  let res = await fetch(url, {
+    method: "PATCH",
+    headers: baseHeaders(opts.env),
+    body: JSON.stringify(fullPatch),
+  });
+  if (res.ok) return { nextSendAt, archived, attempt };
+
+  // Likely PGRST204 / 400 because consecutive_failures column missing.
+  // Fall back to the backoff-only patch.
+  if (res.status === 400 || res.status === 404) {
+    const fallback: Record<string, unknown> = { next_send_at: nextSendAt };
+    if (archived) {
+      fallback.next_step = "done";
+      fallback.archived_at = now.toISOString();
+    }
+    res = await fetch(url, {
+      method: "PATCH",
+      headers: baseHeaders(opts.env),
+      body: JSON.stringify(fallback),
+    });
+    if (res.ok) {
+      return { nextSendAt, archived, attempt };
+    }
+  }
+  const detail = await res.text().catch(() => "");
+  throw new Error(`recordFailure(${rowId}) ${res.status}: ${detail.slice(0, 200)}`);
+}
+
+// Re-read a single row by id. Used to close the W-4/W-5 race window
+// between compose (slow Haiku call) and send: if payment confirmed or
+// opt-out fired during compose, we abort the send.
+export async function getById(
+  opts: NurtureClientOpts,
+  rowId: string,
+): Promise<Pick<NurtureRow, "payment_status" | "opted_out" | "next_step" | "archived_at"> | null> {
+  if (!nurtureConfigured(opts.env)) return null;
+  const url = new URL(`${opts.env.SUPABASE_URL}/rest/v1/lead_nurture_state`);
+  url.searchParams.set("select", "payment_status,opted_out,next_step,archived_at");
+  url.searchParams.set("id", `eq.${rowId}`);
+  url.searchParams.set("limit", "1");
+  const res = await fetch(url, { headers: baseHeaders(opts.env) });
+  if (!res.ok) return null;
+  const rows = (await res.json().catch(() => [])) as Array<
+    Pick<NurtureRow, "payment_status" | "opted_out" | "next_step" | "archived_at">
+  >;
+  return rows[0] ?? null;
+}
+
+// Reset the consecutive_failures counter to 0 after a successful send.
+// Best-effort: silently no-ops if the column doesn't exist yet.
+// Caller should only invoke when prior failures > 0.
+export async function resetFailures(
+  opts: NurtureClientOpts,
+  rowId: string,
+): Promise<void> {
+  if (!nurtureConfigured(opts.env)) return;
+  const url = `${opts.env.SUPABASE_URL}/rest/v1/lead_nurture_state?id=eq.${rowId}`;
+  await fetch(url, {
+    method: "PATCH",
+    headers: baseHeaders(opts.env),
+    body: JSON.stringify({ consecutive_failures: 0 }),
+  }).catch(() => undefined);
 }
 
 // Mark a row terminally done (after last_call sent OR opt-out OR paid).
