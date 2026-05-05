@@ -19,7 +19,13 @@ import { rateLimit } from '@bizlegal/rate-limit'
 
 export const dynamic = 'force-dynamic'
 
-const VALID_VERDICTS = new Set(['tcpa_active_risk', 'consent_audit_now', 'light_friction'])
+const VALID_VERDICTS = new Set([
+  'tcpa_active_risk',
+  'consent_audit_now',
+  'light_friction',
+  // D-design-pass: sentinel for hero quick-capture / contact intake.
+  'home_capture',
+])
 
 interface DecisionTreePayload {
   email?: string

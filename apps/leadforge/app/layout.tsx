@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Sora, Syne } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider, themeFOUCScript } from '@bizlegal/themes';
 
 const sora = Sora({
   subsets: ["latin"],
@@ -27,6 +28,13 @@ export const metadata: Metadata = {
     "LeadForge powers the main deals funnel while Pipeforge handles the unclaimed funds upsell inside one unified Next.js deployment.",
 };
 
+// Daybreak only — no toggle.
+const LANDING_FOUC = themeFOUCScript({
+  primary: 'daybreak',
+  alternate: null,
+  storageKey: 'leadforge-theme',
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -34,10 +42,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,0,400;9..144,1,300;9..144,1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+        {/* Subdomain Design Pass FOUC — applies the Daybreak theme CSS vars before paint. */}
+        <script dangerouslySetInnerHTML={{ __html: LANDING_FOUC }} />
+      </head>
       <body
         className={`${sora.variable} ${syne.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
-        {children}
+        <ThemeProvider primary="daybreak" alternate={null} storageKey="leadforge-theme">
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

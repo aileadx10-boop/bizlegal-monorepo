@@ -8,6 +8,8 @@ import { useEffect, useRef, useState } from 'react'
 import { Zap, FileCheck, Globe, ShieldCheck, Award } from 'lucide-react'
 import { Hero } from './components/ui-v2/Hero'
 import { IntelligenceCard } from './components/ui-v2/IntelligenceCard'
+import { ForgeLandingPreBanner } from './components/landing-pre-banner'
+import { StickyLeadBadge } from '@bizlegal/themes'
 
 function Counter({ end, suffix = '', duration = 2 }: { end: number; suffix?: string; duration?: number }) {
   const [count, setCount] = useState(0)
@@ -119,6 +121,7 @@ const METRICS = [
 export default function ForgeHomepage() {
   return (
     <>
+      <ForgeLandingPreBanner />
       <Hero
         eyebrow="Forge · Compliance scanner for US LLC owners + cross-border founders"
         headline={
@@ -337,6 +340,7 @@ export default function ForgeHomepage() {
           </Link>
         </div>
       </section>
+      <StickyLeadBadge href="/decision-tree" label="Run free Forge BOI screen →" />
     </>
   )
 }

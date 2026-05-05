@@ -7,6 +7,14 @@ import { StickyConversionBar } from './components/sticky-conversion-bar'
 import CookieConsent from './components/CookieConsent'
 import LegalShield from '@/components/layout/LegalShield'
 import { ThemeToggle } from './components/ui-v2/ThemeToggle'
+import { ThemeProvider, themeFOUCScript } from '@bizlegal/themes'
+
+// Daybreak only — no toggle.
+const LANDING_FOUC = themeFOUCScript({
+  primary: 'daybreak',
+  alternate: null,
+  storageKey: 'forge-theme',
+})
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -47,18 +55,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable}`}>
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,0,400;9..144,1,300;9..144,1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
         {/* Theme V2 — set data-theme synchronously to avoid flash. */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem('bl-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`,
           }}
         />
+        {/* Subdomain Design Pass FOUC — applies the Daybreak theme CSS vars before paint. */}
+        <script dangerouslySetInnerHTML={{ __html: LANDING_FOUC }} />
       </head>
       <body className="min-h-screen bg-forge-dark text-forge-text font-sans antialiased">
         <a href="https://bizlegal-ai.com" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '6px 0', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', background: '#0f172a', borderBottom: '1px solid #1e293b', color: '#64748b', textDecoration: 'none', fontFamily: 'Inter, sans-serif', transition: 'color 0.2s' }}>&larr; Back to BizLegal AI</a>
         <div style={{ paddingTop: '32px' }}>
         <StickyConversionBar />
         <CommandMenuWrapper>
+        <ThemeProvider primary="daybreak" alternate={null} storageKey="forge-theme">
         {/* HEADER NAV */}
         <header className="sticky top-0 z-50 border-b border-forge-border bg-forge-dark/80 backdrop-blur-xl">
           <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -178,6 +192,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
           <LegalShield variant="micro" />
         </footer>
+        </ThemeProvider>
         </CommandMenuWrapper>
         <CookieConsent />
         </div>

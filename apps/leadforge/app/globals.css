@@ -4,15 +4,21 @@
 
 @layer base {
   :root {
-    --lead-ink: #07111f;
-    --lead-panel: #0f1a2c;
-    --lead-sand: #f7f4ec;
-    --lead-accent: #19c37d;
-    --lead-accent-soft: #82e7bf;
-    --lead-line: rgba(7, 17, 31, 0.08);
-    --pipe-gold: #caa145;
-    --pipe-azure: #5da7dc;
-    --pipe-smoke: #090b11;
+    /* Phase AA Subdomain Design Pass — LeadForge rebrand to Daybreak.
+       Token names preserved (`--lead-*`) so existing LeadForgeLanding +
+       Pipeforge components keep working; values mapped to the Daybreak
+       palette from @bizlegal/themes. The Daybreak `--brand`, `--ink`,
+       `--paper` vars themselves are applied by the FOUC script in
+       layout.tsx onto documentElement.style so they coexist. */
+    --lead-ink: #1A1530;        /* daybreak --paper (dark type) */
+    --lead-panel: #F2EEE5;      /* daybreak --ink-2 */
+    --lead-sand: #FBF9F4;       /* daybreak --ink (page bg) */
+    --lead-accent: #5B49E0;     /* daybreak --brand (violet) */
+    --lead-accent-soft: #7E6DFF;/* daybreak --brand-soft */
+    --lead-line: rgba(26, 21, 48, 0.12); /* daybreak --line */
+    --pipe-gold: #B8852D;       /* daybreak --accent-b */
+    --pipe-azure: #7E6DFF;      /* daybreak --brand-soft (was sky blue, now soft violet) */
+    --pipe-smoke: #1A1530;      /* daybreak --paper */
     --font-sans: var(--font-sora);
     --font-display: var(--font-syne);
     --font-mono: var(--font-jetbrains-mono);
