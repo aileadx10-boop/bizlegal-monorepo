@@ -17,6 +17,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { enqueueNurture } from '@/lib/nurture-enqueue'
 import { logEventAsync } from '@/lib/ops/log'
+import { verifyTurnstile, clientIpFromHeaders } from '@bizlegal/turnstile-verify'
 
 export const dynamic = 'force-dynamic'
 
@@ -26,6 +27,7 @@ interface DecisionTreePayload {
   email?: string
   verdict?: string
   answers?: Record<string, boolean>
+  turnstile_token?: string
 }
 
 function isValidEmail(s: string): boolean {
@@ -49,6 +51,18 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
   if (!VALID_VERDICTS.has(verdict)) {
     return NextResponse.json({ error: 'invalid_verdict' }, { status: 400 })
+  }
+
+  // D9 INTEGRATION-V3 F-2: Turnstile bot challenge (skip if not configured).
+  const turnstile = await verifyTurnstile({
+    token: body.turnstile_token,
+    clientIp: clientIpFromHeaders(req.headers),
+  })
+  if (!turnstile.ok) {
+    return NextResponse.json(
+      { error: 'turnstile_failed', codes: turnstile.errorCodes },
+      { status: 403 },
+    )
   }
 
   const leadId = `tracr-decision-tree-${email}`

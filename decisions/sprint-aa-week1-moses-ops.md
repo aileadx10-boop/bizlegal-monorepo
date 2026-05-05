@@ -1,6 +1,6 @@
 # Phase AA Week 1 — Moses ops queue
 
-**Last updated:** 2026-05-11 (end of Day 8)
+**Last updated:** 2026-05-12 (end of Day 9)
 **Owner:** Moses (or a sub-agent acting on Moses's behalf)
 **Why this exists:** Days 1-6 shipped all the code that can be shipped autonomously. The items below need a human (or an agent with write access to specific external systems) — apply migrations, redeploy services, run partner outreach. Each section is self-contained: copy-paste the commands; expected output is shown so you can verify.
 
@@ -28,7 +28,10 @@ Run these in any order **except** that #1 (picked_by migration) should land befo
 | 16 | Confirm TRACR decision-tree page renders post-redeploy (D7 V1 magnet #2) | 2 min | New URL `/decision-tree` on tracr subdomain | ☐ |
 | 17 | `pnpm install` after `@bizlegal/nurture-enqueue` workspace link added (D8) | 1 min | New shared package — Vercel handles in #2 redeploy | ☐ |
 | 18 | Confirm DocAI decision-tree page renders post-redeploy (D8 V1 magnet #3) | 2 min | New URL `/decision-tree` on docai subdomain | ☐ |
-| 19 | Worker redeploy after D8 race fix + B-4 quarantine + F-1 (D8) | 1 min | `wrangler deploy` from services/worker — automation handles | ☐ |
+| 19 | Worker redeploy after D8 race fix + B-4 quarantine + F-1 (D8) | 1 min | ✅ ran D8 — `e8f6251e` | ✅ |
+| 20 | Provision Cloudflare Turnstile site + secret keys (D9 INTEGRATION-V3 F-2) | 10 min | Bot-pump risk on 5 unauth decision-tree endpoints | ☐ |
+| 21 | Add `NEXT_PUBLIC_TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY` to 5 Vercel projects (D9) | 5 min | Activates Turnstile enforcement (skip-if-not-configured today) | ☐ |
+| 22 | Confirm LexAudit + BRAI decision-tree pages render post-redeploy (D9 magnets #4 + #5) | 4 min | New URLs `/decision-tree` on lexaudit + brai | ☐ |
 
 ---
 
@@ -686,6 +689,106 @@ T_ENC=$(python3 -c "import urllib.parse,sys;print(urllib.parse.quote_plus(sys.ar
 curl -s "https://bizlegal-ai.com/api/ops/feed?token=$T_ENC&type=nurture.email.sent&limit=3" | jq '.events[] | {ref_email, ref_id, metadata}'
 # expect: ref_email populated (was missing before D8 F-1 fix)
 ```
+
+---
+
+---
+
+## 20. Provision Cloudflare Turnstile (Day 9 — INTEGRATION-V3 F-2)
+
+**Why:** Day 9 wired Cloudflare Turnstile into all 5 decision-tree lead-capture endpoints (Forge BOI, TRACR, DocAI, LexAudit, BRAI) plus their client widgets. The verifier uses **skip-if-not-configured** semantics, so today the endpoints still work without a Turnstile site — but they're also still bot-pumpable. Provisioning the keys flips enforcement on, no code change needed.
+
+**One-time setup** (Cloudflare dashboard):
+
+1. https://dash.cloudflare.com → **Turnstile** → **Add site**.
+2. Create one widget per subdomain (5 total) — domain names exact:
+   - `forge.bizlegal-ai.com`
+   - `tracr.bizlegal-ai.com`
+   - `docai.bizlegal-ai.com`
+   - `lexaudit.bizlegal-ai.com`
+   - `brai.bizlegal-ai.com`
+3. Widget mode: **Managed** (auto-difficulty).
+4. Save the **Site Key** (public, safe in client) and **Secret Key** (server-only) for each.
+
+You can also create a single widget with all 5 domains listed if you prefer — Turnstile supports multi-domain widgets. Same site key + secret apply to all 5 then.
+
+---
+
+## 21. Add Turnstile env vars to 5 Vercel projects (Day 9)
+
+**Why:** Turnstile is enforced only when both env vars are present on a project. Until you set them, the verifier returns `ok: true, skipped: true` and the form posts without a token (no breakage, no protection).
+
+**For each Vercel project** (forge / tracr / docai / lexaudit / brai), add:
+
+```
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=<the-public-site-key-from-step-20>
+TURNSTILE_SECRET_KEY=<the-secret-key-from-step-20>
+```
+
+The `NEXT_PUBLIC_` prefix is required so the client-side widget can read it; without it, the React widget silently doesn't render and the form still works (graceful degradation, but no challenge).
+
+Both vars need to land **before** the next deploy. If they're added after the deploy, redeploy that project to pick them up (Vercel Dashboard → Deployments → Redeploy).
+
+**Verify** (per project, after redeploy):
+
+```bash
+# 1. The page renders with the widget visible:
+curl -fsS https://forge.bizlegal-ai.com/decision-tree | grep -c 'cf-turnstile\|turnstile'
+# expect: ≥1 (script tag injected by the widget)
+
+# 2. POSTing without a token returns 403 once Turnstile is enforced:
+curl -X POST 'https://forge.bizlegal-ai.com/api/decision-tree/lead' \
+  -H 'content-type: application/json' \
+  -d '{"email":"smoke@test.com","verdict":"must_file","answers":{}}'
+# pre-Turnstile: {"ok":true,...}
+# post-Turnstile: {"error":"turnstile_failed","codes":["missing-input-response"]}
+```
+
+---
+
+## 22. Confirm LexAudit + BRAI decision-tree pages render post-redeploy (Day 9)
+
+**Why:** Day 9 added 2 new V1 magnets:
+- LexAudit `/decision-tree` — compliance-monitoring vs baseline-audit screen
+- BRAI `/decision-tree` — sanctions/OFAC strict-liability exposure screen
+
+Verify after the Vercel redeploy in #2 picks up the latest commit chain.
+
+**How:**
+
+```bash
+curl -fsS https://lexaudit.bizlegal-ai.com/decision-tree | head -c 500
+# expect: HTML containing "Continuous monitoring or a baseline audit?"
+
+curl -fsS https://brai.bizlegal-ai.com/decision-tree | head -c 500
+# expect: HTML containing "Do you need a sanctions scan?"
+```
+
+**Smoke** (one full pass through each API):
+
+```bash
+# LexAudit
+curl -X POST 'https://lexaudit.bizlegal-ai.com/api/decision-tree/lead' \
+  -H 'content-type: application/json' \
+  -d '{"email":"moses+lexaudit-smoke@bizlegal-ai.com","verdict":"baseline_audit_first","answers":{"multi_jurisdiction":false,"regulator_attention_vertical":true,"enforcement_in_last_24_months":true}}'
+# expect: {"ok":true,"lead_id":"lexaudit-decision-tree-..."}
+# (returns 403 once Turnstile is enforced — that's expected, supply a token to verify the rest)
+
+# BRAI
+curl -X POST 'https://brai.bizlegal-ai.com/api/decision-tree/lead' \
+  -H 'content-type: application/json' \
+  -d '{"email":"moses+brai-smoke@bizlegal-ai.com","verdict":"periodic_screen","answers":{"crypto_or_high_risk_geo":false,"us_or_eu_subject_to_sanctions":true,"b2b_with_unverified_counterparties":true}}'
+# expect: {"ok":true,"lead_id":"brai-decision-tree-..."}
+
+# Then check Supabase:
+SELECT lead_id, vertical, source, captured_at
+FROM lead_nurture_state
+WHERE source IN ('lexaudit:decision-tree', 'brai:decision-tree')
+ORDER BY captured_at DESC LIMIT 5;
+# expect: 2 rows, vertical lexaudit + brai
+```
+
+End of W2 D2 — the V1 conversion-machine pattern is now live for **5 of 7** verticals (BOI, TRACR, DocAI, LexAudit, BRAI). LeadForge and a generic-Forge tree are the remaining two; they're mechanical replications and ship when the redesigns Moses is doing land.
 
 ---
 

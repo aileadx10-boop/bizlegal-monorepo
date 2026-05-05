@@ -1,16 +1,14 @@
 /**
- * DocAI Decision Tree — lead capture endpoint.
+ * LexAudit Decision Tree — lead capture endpoint.
  *
- * Phase AA Day 8 — third instance of the V1 conversion-machine pattern
- * (Forge BOI → TRACR → DocAI). Same shape:
+ * Phase AA Day 9 — fourth instance of the V1 conversion-machine
+ * pattern (Forge BOI → TRACR → DocAI → LexAudit).
+ *
+ * Flow:
  *  1. Validate email + verdict.
- *  2. enqueueNurture vertical='docai' so the worker runs the 4-step
- *     cadence over 7 days.
- *  3. Log a `lead.qualified` ops event.
- *
- * Lead-id pinned to (email, magnet) so re-takes don't restart the
- * sequence. Fully unauthenticated POST today; INTEGRATION-V3 F-2 noted
- * Turnstile/origin-allowlist as a follow-up before public launch.
+ *  2. Cloudflare Turnstile bot challenge (skip-if-not-configured).
+ *  3. enqueueNurture vertical='lexaudit'.
+ *  4. lead.qualified ops event.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -20,7 +18,11 @@ import { verifyTurnstile, clientIpFromHeaders } from '@bizlegal/turnstile-verify
 
 export const dynamic = 'force-dynamic'
 
-const VALID_VERDICTS = new Set(['high_risk', 'moderate_review', 'light_touch'])
+const VALID_VERDICTS = new Set([
+  'continuous_monitoring_critical',
+  'baseline_audit_first',
+  'self_serve',
+])
 
 interface DecisionTreePayload {
   email?: string
@@ -52,7 +54,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'invalid_verdict' }, { status: 400 })
   }
 
-  // D9 INTEGRATION-V3 F-2: Turnstile bot challenge (skip if not configured).
   const turnstile = await verifyTurnstile({
     token: body.turnstile_token,
     clientIp: clientIpFromHeaders(req.headers),
@@ -64,24 +65,24 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     )
   }
 
-  const leadId = `docai-decision-tree-${email}`
+  const leadId = `lexaudit-decision-tree-${email}`
 
   void enqueueNurture({
     lead_id: leadId,
     email,
-    vertical: 'docai',
-    source: 'docai:decision-tree',
+    vertical: 'lexaudit',
+    source: 'lexaudit:decision-tree',
     lead_classification: { verdict, answers },
-  }).catch((err) => console.warn('[docai/decision-tree/lead] nurture enqueue failed:', err))
+  }).catch((err) => console.warn('[lexaudit/decision-tree/lead] nurture enqueue failed:', err))
 
   logEventAsync({
     type: 'lead.qualified',
-    source: 'docai',
+    source: 'lexaudit',
     ref_id: leadId,
     email,
     status: 'ok',
     metadata: {
-      magnet: 'decision-tree-privacy',
+      magnet: 'decision-tree-compliance-monitor',
       verdict,
       answer_count: Object.keys(answers).length,
     },

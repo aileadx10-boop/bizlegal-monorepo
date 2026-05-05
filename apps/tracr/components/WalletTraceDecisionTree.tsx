@@ -16,6 +16,7 @@
  */
 
 import { useState } from 'react'
+import TurnstileWidget from './TurnstileWidget'
 
 type Verdict = 'high_priority' | 'standard_review' | 'casual_use'
 
@@ -97,6 +98,8 @@ export function WalletTraceDecisionTree(): JSX.Element {
   const [submitting, setSubmitting] = useState<boolean>(false)
   const [submitted, setSubmitted] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const turnstileRequired = Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY)
 
   function answer(value: boolean): void {
     const q = QUESTIONS[step]
@@ -124,6 +127,7 @@ export function WalletTraceDecisionTree(): JSX.Element {
           email: email.trim().toLowerCase(),
           verdict: done.verdict,
           answers,
+          turnstile_token: turnstileToken,
         }),
       })
       if (!res.ok) throw new Error(`signup_${res.status}`)
@@ -221,9 +225,10 @@ export function WalletTraceDecisionTree(): JSX.Element {
               className="w-full border border-slate-300 focus:border-indigo-600 rounded-xl px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition-colors"
             />
           </label>
+          <TurnstileWidget onToken={setTurnstileToken} theme="light" />
           <button
             type="submit"
-            disabled={submitting || !email}
+            disabled={submitting || !email || (turnstileRequired && !turnstileToken)}
             className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors"
           >
             {submitting ? 'Sending…' : 'Email me the TRACR scan shape'}

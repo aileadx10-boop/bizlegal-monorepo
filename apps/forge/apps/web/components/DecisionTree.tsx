@@ -17,6 +17,7 @@
  */
 
 import { useState } from 'react'
+import TurnstileWidget from './TurnstileWidget'
 
 type Verdict = 'must_file' | 'likely_exempt' | 'edge_case'
 
@@ -95,6 +96,8 @@ export function DecisionTree(): JSX.Element {
   const [submitting, setSubmitting] = useState<boolean>(false)
   const [submitted, setSubmitted] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const turnstileRequired = Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY)
 
   function answer(value: boolean): void {
     const q = QUESTIONS[step]
@@ -130,6 +133,7 @@ export function DecisionTree(): JSX.Element {
           email: email.trim().toLowerCase(),
           verdict: done.verdict,
           answers,
+          turnstile_token: turnstileToken,
         }),
       })
       if (!res.ok) throw new Error(`signup_${res.status}`)
@@ -228,9 +232,10 @@ export function DecisionTree(): JSX.Element {
               className="w-full bg-forge-dark border border-forge-border focus:border-forge-accent rounded-xl px-4 py-3 text-white placeholder:text-forge-muted outline-none transition-colors"
             />
           </label>
+          <TurnstileWidget onToken={setTurnstileToken} theme="dark" />
           <button
             type="submit"
-            disabled={submitting || !email}
+            disabled={submitting || !email || (turnstileRequired && !turnstileToken)}
             className="w-full bg-forge-accent hover:bg-forge-accent-hover disabled:bg-forge-border disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors"
           >
             {submitting ? 'Sending…' : 'Email me the BOI report'}

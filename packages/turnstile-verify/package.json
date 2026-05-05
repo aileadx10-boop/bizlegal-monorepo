@@ -1,0 +1,25 @@
+{
+  "name": "@bizlegal/turnstile-verify",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Server-side Cloudflare Turnstile verifier. Skip-if-not-configured semantics so dev + pre-launch deploys keep working without a Turnstile site key. Phase AA D9 (INTEGRATION-V3 F-2).",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "echo ok",
+    "test": "echo 'no tests yet'"
+  },
+  "devDependencies": {
+    "@types/node": "^20.16.0",
+    "typescript": "^5.7.2"
+  }
+}

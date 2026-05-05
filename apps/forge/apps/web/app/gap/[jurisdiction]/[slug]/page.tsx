@@ -30,8 +30,14 @@ interface DecisionTool {
   readonly cta: string
 }
 
-// Match a gap page to a free preliminary-check tool on the same domain.
-// Currently only the BOI tree exists; TRACR and DocAI trees ship in D7+.
+// Match a gap page to a free preliminary-check tool. BOI tree lives
+// on this domain (/decision-tree); the other 4 V1 magnets live on
+// their respective subdomains. We deep-link cross-domain to keep each
+// surface's onboarding consistent.
+//
+// As of D9 the available trees are: Forge BOI (this domain), TRACR
+// wallet trace, DocAI privacy scan, LexAudit compliance monitor, BRAI
+// sanctions screening.
 function decisionToolFor(gap: {
   cta_product?: string | null
   regulation?: string | null
@@ -39,15 +45,60 @@ function decisionToolFor(gap: {
 }): DecisionTool | null {
   const reg = (gap.regulation ?? '').toLowerCase()
   const slug = (gap.slug ?? '').toLowerCase()
-  const isBoi =
+
+  if (
     /\bboi\b|beneficial[ -]ownership|corporate transparency|cta\b|fincen/i.test(reg) ||
     /\bboi\b|beneficial-ownership/i.test(slug) ||
     gap.cta_product === 'forge'
-  if (isBoi) {
+  ) {
     return {
       href: '/decision-tree',
       label: 'BOI filing decision tree',
       cta: 'Run BOI screen',
+    }
+  }
+  if (
+    /\bofac\b|sanctions|sdn\b|ofsi/i.test(reg) ||
+    /sanctions|ofac/i.test(slug) ||
+    gap.cta_product === 'brai'
+  ) {
+    return {
+      href: 'https://brai.bizlegal-ai.com/decision-tree',
+      label: 'sanctions screening decision tree',
+      cta: 'Run sanctions screen',
+    }
+  }
+  if (
+    /travel rule|fincen msb|aml|crypto|digital asset|wallet/i.test(reg) ||
+    /tracr|wallet|crypto/i.test(slug) ||
+    gap.cta_product === 'tracr'
+  ) {
+    return {
+      href: 'https://tracr.bizlegal-ai.com/decision-tree',
+      label: 'wallet-trace exposure decision tree',
+      cta: 'Run wallet-trace screen',
+    }
+  }
+  if (
+    /\bgdpr\b|ccpa|cpra|privacy|dsar|pii/i.test(reg) ||
+    /privacy|gdpr|ccpa/i.test(slug) ||
+    gap.cta_product === 'docai'
+  ) {
+    return {
+      href: 'https://docai.bizlegal-ai.com/decision-tree',
+      label: 'privacy exposure decision tree',
+      cta: 'Run privacy screen',
+    }
+  }
+  if (
+    /multi[ -]?jurisdiction|compliance monitor|regulatory drift|ongoing compliance/i.test(reg) ||
+    /lexaudit|compliance/i.test(slug) ||
+    gap.cta_product === 'lexaudit'
+  ) {
+    return {
+      href: 'https://lexaudit.bizlegal-ai.com/decision-tree',
+      label: 'compliance monitoring decision tree',
+      cta: 'Run monitoring screen',
     }
   }
   return null

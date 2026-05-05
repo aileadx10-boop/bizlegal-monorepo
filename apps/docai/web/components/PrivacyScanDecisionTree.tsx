@@ -17,6 +17,7 @@
  */
 
 import { useState } from 'react'
+import TurnstileWidget from './TurnstileWidget'
 
 type Verdict = 'high_risk' | 'moderate_review' | 'light_touch'
 
@@ -101,6 +102,8 @@ export function PrivacyScanDecisionTree(): JSX.Element {
   const [submitting, setSubmitting] = useState<boolean>(false)
   const [submitted, setSubmitted] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const turnstileRequired = Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY)
 
   function answer(value: boolean): void {
     const q = QUESTIONS[step]
@@ -134,6 +137,7 @@ export function PrivacyScanDecisionTree(): JSX.Element {
           email: email.trim().toLowerCase(),
           verdict: done.verdict,
           answers,
+          turnstile_token: turnstileToken,
         }),
       })
       if (!res.ok) throw new Error(`signup_${res.status}`)
@@ -275,12 +279,13 @@ export function PrivacyScanDecisionTree(): JSX.Element {
               }}
             />
           </label>
+          <TurnstileWidget onToken={setTurnstileToken} theme="dark" />
           <button
             type="submit"
-            disabled={submitting || !email}
+            disabled={submitting || !email || (turnstileRequired && !turnstileToken)}
             style={{
               width: '100%',
-              background: submitting || !email
+              background: submitting || !email || (turnstileRequired && !turnstileToken)
                 ? 'rgba(0,200,255,0.2)'
                 : 'linear-gradient(135deg, var(--cyan, #00c8ff), var(--cyan-2, #00e5ff))',
               color: '#001020',
@@ -288,7 +293,7 @@ export function PrivacyScanDecisionTree(): JSX.Element {
               padding: '12px 0',
               borderRadius: 12,
               border: 'none',
-              cursor: submitting || !email ? 'not-allowed' : 'pointer',
+              cursor: submitting || !email || (turnstileRequired && !turnstileToken) ? 'not-allowed' : 'pointer',
             }}
           >
             {submitting ? 'Sending…' : 'Email me the DocAI scan shape'}

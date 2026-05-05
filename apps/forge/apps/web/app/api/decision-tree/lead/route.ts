@@ -19,6 +19,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@/lib/supabase/server'
 import { enqueueNurture } from '@/lib/nurture-enqueue'
 import { logEventAsync } from '@/lib/ops/log'
+import { verifyTurnstile, clientIpFromHeaders } from '@bizlegal/turnstile-verify'
 
 export const dynamic = 'force-dynamic'
 
@@ -28,6 +29,7 @@ interface DecisionTreePayload {
   email?: string
   verdict?: string
   answers?: Record<string, boolean>
+  turnstile_token?: string
 }
 
 function isValidEmail(s: string): boolean {
@@ -51,6 +53,21 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
   if (!VALID_VERDICTS.has(verdict)) {
     return NextResponse.json({ error: 'invalid_verdict' }, { status: 400 })
+  }
+
+  // D9 INTEGRATION-V3 F-2: Turnstile bot challenge. Skip-if-not-
+  // configured semantics — if TURNSTILE_SECRET_KEY is unset on Vercel
+  // the verifier returns ok=true so dev / pre-launch deploys keep
+  // working. Set the secret to enable enforcement.
+  const turnstile = await verifyTurnstile({
+    token: body.turnstile_token,
+    clientIp: clientIpFromHeaders(req.headers),
+  })
+  if (!turnstile.ok) {
+    return NextResponse.json(
+      { error: 'turnstile_failed', codes: turnstile.errorCodes },
+      { status: 403 },
+    )
   }
 
   const supabase = createServerClient()
