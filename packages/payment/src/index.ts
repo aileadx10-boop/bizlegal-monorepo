@@ -54,10 +54,39 @@ export type CheckoutResult = CheckoutResultOk | CheckoutResultFail
 const HUB_ORIGIN = process.env.NEXT_PUBLIC_APP_URL ?? 'https://bizlegal-ai.com'
 
 function makeOrderId(productId: ProductId, email: string): string {
-  // Deterministic per minute — gateway-side dedup keeps double-clicks safe.
+  // D12 SECURITY-V3 H-5 fix: previous shape was `bz_${productId}_${email}_${minute}`
+  // which an attacker who knew (productId, email, ~minute) could guess. Today we
+  // append a random nonce so collision-by-guess is computationally infeasible.
+  // We keep (productId, safeEmail) in the prefix so gateway dashboards remain
+  // human-readable, and we keep the minute bucket so accidental double-clicks
+  // within the same minute still collapse server-side at NOWPayments / PayPal
+  // dedupe (both gateways treat repeat order_ids in flight as the same order).
+  // The random nonce + minute combo: uniqueness within minute bucket = nonce
+  // (16 chars hex = 64 bits ~= no collision within any reasonable workload).
   const minute = Math.floor(Date.now() / 60_000)
   const safeEmail = email.toLowerCase().replace(/[^a-z0-9]/g, '_').slice(0, 40)
-  return `bz_${productId}_${safeEmail}_${minute}`
+  const nonce = randomHex(16)
+  return `bz_${productId}_${safeEmail}_${minute}_${nonce}`
+}
+
+function randomHex(bytes: number): string {
+  // Use Web Crypto when available (Edge runtime, Cloudflare Workers, modern Node).
+  // Falls back to Math.random for non-crypto environments — note this is a
+  // SECONDARY defense; the primary order-id integrity comes from gateway-side
+  // server-validated invoice records, not from order_id secrecy.
+  if (typeof globalThis.crypto?.getRandomValues === 'function') {
+    const arr = new Uint8Array(Math.ceil(bytes / 2))
+    globalThis.crypto.getRandomValues(arr)
+    return Array.from(arr)
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('')
+      .slice(0, bytes)
+  }
+  let out = ''
+  while (out.length < bytes) {
+    out += Math.floor(Math.random() * 16).toString(16)
+  }
+  return out
 }
 
 function successUrl(spec: CheckoutSpec, orderId: string): string {

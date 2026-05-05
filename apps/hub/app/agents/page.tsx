@@ -243,6 +243,36 @@ export default function AgentsPage() {
             diligence, monitoring. Subscribe individually with crypto or card,
             no parent product subscription required. $29–49/mo.
           </p>
+          {/* D12: visible-from-the-hero free triage CTA. Drives unsure
+              visitors to /triage which routes to one of 6 decision trees. */}
+          <div
+            style={{
+              marginTop: '1.5rem',
+              padding: '0.85rem 1.1rem',
+              background: 'color-mix(in oklab, var(--bl-accent) 8%, transparent)',
+              border: '1px solid color-mix(in oklab, var(--bl-accent) 25%, var(--bl-border))',
+              borderRadius: 'var(--bl-radius-md)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              flexWrap: 'wrap',
+            }}
+          >
+            <span style={{ fontSize: 12, color: 'var(--bl-text-muted)', letterSpacing: '0.04em', textTransform: 'uppercase', fontWeight: 600 }}>
+              Not sure which one fits?
+            </span>
+            <Link
+              href="/triage"
+              style={{
+                fontSize: 13,
+                fontWeight: 700,
+                color: 'var(--bl-accent)',
+                textDecoration: 'none',
+              }}
+            >
+              Run free 60-second triage →
+            </Link>
+          </div>
         </div>
       </section>
 
