@@ -1,0 +1,14 @@
+[Unit]
+Description=BizLegal-AI Curator auto-pick fallback (no manual pick within 4h)
+After=curator-scout.service
+
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/opt/bizlegal/curator
+EnvironmentFile=/opt/bizlegal/curator/.env
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/bizlegal/venv/bin/python -u /opt/bizlegal/curator/auto_pick.py
+StandardOutput=journal
+StandardError=journal
+TimeoutStartSec=300

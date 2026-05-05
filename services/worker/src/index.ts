@@ -5,6 +5,7 @@ import { runSnapshotPipeline } from "./pipeline-report";
 import { verifyTurnstile } from "./turnstile";
 import { aggregateDigest, readLatestDigest } from "./digest";
 import { logEvent } from "./ops-log";
+import { runNurtureCron } from "./nurture";
 
 // Worker: lead-intake + snapshot pipeline + product-digest aggregator.
 // POST /intake                  — landing-form lead submission (auth: shared secret)
@@ -29,6 +30,14 @@ export default {
     }
     if (event.cron === "0 9 * * *") {
       ctx.waitUntil(runSmokeTest(env, event));
+      return;
+    }
+    if (event.cron === "*/5 * * * *") {
+      // Phase AA V3 — lead nurture (welcome → education → comparison → last_call).
+      // Idempotent: rows are picked one-at-a-time, advanced atomically; a
+      // missed tick replays naturally on the next invocation. Hard cap on
+      // rows-per-tick keeps Worker CPU under budget.
+      ctx.waitUntil(runNurtureCron(env, new Date(event.scheduledTime)));
       return;
     }
     // Unknown cron — log and no-op. Better than silently misfiring.

@@ -35,17 +35,24 @@ enabled = true
 head_sampling_rate = 1.0
 
 # Cron triggers — handler in src/index.ts branches on event.cron.
-#   "0 6 * * *" — Phase 3.2 daily product-digest aggregation
-#                  (fetch /api/digest from each subdomain, write
-#                   KV `hub:digest:latest`, commit audit JSON to
-#                   bizlegal-ea/digests/{date}.json). Runs even if
-#                   DIGEST_KV is unbound — graceful no-op on the KV
-#                   write so partial config never breaks the audit
-#                   trail.
-#   "0 9 * * *" — daily synthetic snapshot smoke test against the
-#                  Anthropic + GitHub + Telegram + Resend chain.
+#   "0 6 * * *"      — Phase 3.2 daily product-digest aggregation
+#                      (fetch /api/digest from each subdomain, write
+#                       KV `hub:digest:latest`, commit audit JSON to
+#                       bizlegal-ea/digests/{date}.json). Runs even if
+#                       DIGEST_KV is unbound — graceful no-op on the KV
+#                       write so partial config never breaks the audit
+#                       trail.
+#   "0 9 * * *"      — daily synthetic snapshot smoke test against the
+#                       Anthropic + GitHub + Telegram + Resend chain.
+#   "*/5 * * * *"    — Phase AA V3 lead-nurture machine. Reads due rows
+#                       from public.lead_nurture_state, composes email
+#                       (Haiku, $0.10/article-equiv), sends via Resend,
+#                       advances state. Hard cap 8 rows/tick to stay
+#                       inside Worker CPU budget; missed rows pick up
+#                       on next 5-min tick. No-op if SUPABASE_SECRET
+#                       isn't bound (defensive).
 [triggers]
-crons = ["0 6 * * *", "0 9 * * *"]
+crons = ["0 6 * * *", "0 9 * * *", "*/5 * * * *"]
 
 # Required secrets (set via: wrangler secret put <NAME>):
 # - ANTHROPIC_API_KEY

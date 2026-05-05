@@ -25,6 +25,12 @@ export interface Env {
   readonly PUBLIC_SNAPSHOT_ENABLED?: string; // "1" to enable the unauthenticated public endpoint
   readonly OPS_LOG_URL?: string;          // Optional override; defaults to https://bizlegal-ai.com/api/ops/log
 
+  // Phase AA V3 — lead-nurture machine. Worker reads/writes
+  // public.lead_nurture_state via Supabase REST. SUPABASE_SECRET is
+  // the service-role key (full RW); RLS on the table is service_role-only.
+  readonly SUPABASE_URL?: string;
+  readonly SUPABASE_SECRET?: string;
+
   // KV bindings
   readonly DIGEST_KV?: KVNamespace; // Optional — Phase 3.2 product-digest cache (`hub:digest:latest`)
 }

@@ -1,0 +1,14 @@
+[Unit]
+Description=BizLegal-AI Curator auto-pick — daily 10:00 UTC (4h after scout)
+# Fallback for when Moses doesn't pick a candidate manually within 4h.
+# Picks the top-scored row from any pending_pick batch older than the
+# threshold, marking it 'picked' so brain.py drafts it. Idempotent;
+# safe to re-run.
+
+[Timer]
+OnCalendar=*-*-* 10:00 UTC
+Persistent=true
+Unit=curator-auto-pick.service
+
+[Install]
+WantedBy=timers.target

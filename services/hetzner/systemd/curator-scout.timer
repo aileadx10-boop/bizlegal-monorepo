@@ -1,9 +1,11 @@
 [Unit]
-Description=BizLegal-AI Curator scout — Mon/Wed/Fri 06:00 UTC
-# Backup trigger if n8n is down. Scout is idempotent (dedupes on URL).
+Description=BizLegal-AI Curator scout — daily 06:00 UTC
+# Phase AA: cadence bumped from Mon/Wed/Fri to daily so we can hit
+# the 25-30 articles/month target. Scout is idempotent (dedupes on URL),
+# so running daily is safe even if n8n also fires it.
 
 [Timer]
-OnCalendar=Mon,Wed,Fri 06:00 UTC
+OnCalendar=*-*-* 06:00 UTC
 Persistent=true
 Unit=curator-scout.service
 
