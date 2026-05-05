@@ -204,10 +204,29 @@ def _check_faq(draft: dict) -> Iterable[Finding]:
 
 def _check_internal_links(draft: dict) -> Iterable[Finding]:
     """WARN-level — internal cross-links matter for SEO clusters but
-    early posts can't link to siblings that don't exist yet."""
+    early posts can't link to siblings that don't exist yet.
+
+    Pattern matches both:
+      - subdomain links: https://blog.bizlegal-ai.com/, https://forge.bizlegal-ai.com/
+      - apex links:      https://bizlegal-ai.com/
+      - relative links:  /blog/, /gap/, /agents/
+
+    The earlier pattern `(?:blog|forge|bizlegal-ai)\\.bizlegal-ai\\.com`
+    matched the nonexistent host `bizlegal-ai.bizlegal-ai.com` and
+    missed apex links — fixed here so when this gate flips from WARN
+    to BLOCK (after the cluster reaches ≥3 articles), real internal
+    links don't get falsely rejected.
+    """
     body = draft.get("mdx_body", "")
     fm_links = draft.get("internal_links") or []
-    pattern_inline = r"\]\((?:https?://(?:blog|forge|bizlegal-ai)\.bizlegal-ai\.com|/(?:blog|gap|agents))/"
+    pattern_inline = (
+        r"\]\("
+        r"(?:"
+        r"https?://(?:(?:blog|forge)\.)?bizlegal-ai\.com"  # apex + sub
+        r"|/(?:blog|gap|agents)"                           # relative
+        r")"
+        r"/"
+    )
     inline = len(re.findall(pattern_inline, body))
     declared = len(fm_links) if isinstance(fm_links, list) else 0
     total = inline + declared

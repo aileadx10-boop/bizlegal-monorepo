@@ -53,7 +53,8 @@ HUMANIZE_PROMPT = textwrap.dedent("""
     HARD RULES (every one is a fail):
       1. Keep the H1, every H2, and every H3 exactly as-is.
       2. Keep all citations, all linked URLs, all numeric claims unchanged.
-      3. Keep the same overall length within 10% of original word count.
+      3. Keep the same overall length within 15% of original word count
+         (the post-pass sanity check tolerates up to 35%, but stay tight).
       4. Keep all the agent CTAs (e.g. links to bizlegal-ai.com/agents/*)
          exactly as the source draft has them.
       5. Keep all code fences (```mermaid ...```, ```python ...```) untouched.
@@ -132,10 +133,15 @@ def humanize(draft: dict) -> dict:
     if not new_body or not isinstance(new_body, str):
         raise HumanizeError("Haiku response missing mdx_body")
 
-    # Sanity check: length within 25% of original (allow some swing).
+    # Sanity check: length within 35% of original. Prompt asks for
+    # ≤15% but Haiku occasionally rewrites with more conversational
+    # asides (which is the whole point) and the natural rewrite swings
+    # 15-30%. 35% is the "something went really wrong" boundary.
+    # Caller catches HumanizeError and falls back to original draft;
+    # quality_gate then catches surviving AI-tells either way.
     orig_words = len(re.findall(r"\b\w+\b", body))
     new_words = len(re.findall(r"\b\w+\b", new_body))
-    if orig_words and abs(new_words - orig_words) / orig_words > 0.25:
+    if orig_words and abs(new_words - orig_words) / orig_words > 0.35:
         raise HumanizeError(
             f"length swing too big: {orig_words} -> {new_words} words "
             f"({abs(new_words - orig_words) / orig_words * 100:.0f}%)"
@@ -159,7 +165,12 @@ def _call_haiku(prompt: str) -> dict:
         json={
             "model": ANTHROPIC_HUMANIZE_MODEL,
             "max_tokens": 8192,
-            "temperature": 0.4,  # slightly higher than drafting; voice variety
+            # 0.2 — tight enough that Haiku follows the "≤15% length swing"
+            # rule reliably; loose enough to actually vary sentence openings.
+            # 0.4 (the original) was producing 25-30% length blowouts that
+            # tripped the post-pass sanity check and silently fell back to
+            # the un-humanized Sonnet draft.
+            "temperature": 0.2,
             "messages": [{"role": "user", "content": prompt}],
         },
         timeout=120,
@@ -171,6 +182,12 @@ def _call_haiku(prompt: str) -> dict:
         raise RuntimeError("Haiku empty response")
     cleaned = re.sub(r"^```(?:json)?\s*", "", text.strip())
     cleaned = re.sub(r"\s*```$", "", cleaned)
+    # Defensive: if Haiku narrates before the JSON ("Here's the rewrite: {...}"),
+    # extract the first balanced {...} block. Rare at temp=0.2 but cheap
+    # to guard. Same pattern in factual_review.py._call_sonnet.
+    m = re.search(r"\{.*\}", cleaned, re.DOTALL)
+    if m:
+        cleaned = m.group(0)
     return json.loads(cleaned)
 
 

@@ -195,6 +195,13 @@ def _call_sonnet(prompt: str) -> dict:
         raise RuntimeError("Sonnet empty response")
     cleaned = re.sub(r"^```(?:json)?\s*", "", text.strip())
     cleaned = re.sub(r"\s*```$", "", cleaned)
+    # Defensive: if Sonnet narrates before the JSON, extract first {...}.
+    # At temperature=0 this is rare but not impossible. Failure here was
+    # propagating as RuntimeError into brain.py, marking rows
+    # 'rejected_factual_crash' permanently — losing real audits.
+    m = re.search(r"\{.*\}", cleaned, re.DOTALL)
+    if m:
+        cleaned = m.group(0)
     return json.loads(cleaned)
 
 

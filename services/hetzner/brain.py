@@ -338,9 +338,26 @@ def process_picked(force: bool = False) -> int:
         slug = re.sub(r"[^a-z0-9-]", "-", draft["slug"].lower()).strip("-")
         draft["slug"] = slug
 
+        # Gate ordering (cost-aware): structural gates first (free, fast),
+        # paid Claude passes only on drafts that pass cheap checks.
+        # Sequence:
+        #   1. quality_gate (Python, free) — structure / words / visuals / FAQ
+        #   2. humanize     (Haiku ~$0.10) — strip AI-tells, add asides
+        #   3. quality_gate (Python, free) — re-check for surviving AI-tells
+        #   4. factual_review (Sonnet ~$0.30) — primary-source citations
+        # Bad drafts die in step 1, saving ~$0.40 each on rejection.
+
+        # Pass 1: structural quality gate (Python, fast, free).
+        gate_errors = quality_validate(draft)
+        if gate_errors:
+            _reject_draft(sb, row, slug, "quality_gate", gate_errors)
+            failed_count += 1
+            continue
+        print(f"[brain] {slug}: quality gate (structure) ok")
+
         # Pass 2: humanize. Best-effort — if Haiku hiccups, fall back to
-        # the raw Sonnet draft. Quality gate below catches AI-tells either
-        # way; this just smooths out the obvious ones cheaply.
+        # the raw Sonnet draft. The post-humanize quality gate (pass 3)
+        # catches AI-tells either way.
         try:
             draft = humanize(draft)
             print(f"[brain] {slug}: humanize ok")
@@ -354,7 +371,17 @@ def process_picked(force: bool = False) -> int:
                           "slug": slug, "reason": str(err)[:160]},
             )
 
-        # Pass 3: factual review. Hard gate — reject the draft on any
+        # Pass 3: re-run quality gate post-humanize. Catches banned phrases
+        # introduced (or surviving) the rewrite. Free, ~50ms — cheaper to
+        # double-check than to ship un-humanized AI prose.
+        gate_errors = quality_validate(draft)
+        if gate_errors:
+            _reject_draft(sb, row, slug, "quality_gate_post_humanize", gate_errors)
+            failed_count += 1
+            continue
+        print(f"[brain] {slug}: quality gate (post-humanize) ok")
+
+        # Pass 4: factual review. Hard gate — reject the draft on any
         # uncited claim. The author has to retry with a primary source
         # or drop the claim. We never ship un-cited specifics.
         try:
@@ -368,19 +395,11 @@ def process_picked(force: bool = False) -> int:
                   f"({review_result.primary_source_count} primary sources)")
         except Exception as err:
             print(f"[brain] {slug}: factual review crashed — {err}")
-            # Don't ship a draft we couldn't audit. Push back; let
-            # next run retry with a fresh Sonnet pass.
+            # Don't ship a draft we couldn't audit. Push back; next run
+            # retries with a fresh Sonnet pass.
             _reject_draft(sb, row, slug, "factual_review_crash", [str(err)[:200]])
             failed_count += 1
             continue
-
-        # Pass 4: structural quality gate (Python, fast, free).
-        gate_errors = quality_validate(draft)
-        if gate_errors:
-            _reject_draft(sb, row, slug, "quality_gate", gate_errors)
-            failed_count += 1
-            continue
-        print(f"[brain] {slug}: quality gate ok")
 
         mdx = build_mdx(draft)
         mdx_path = DRAFTS_DIR / f"{slug}.mdx"
