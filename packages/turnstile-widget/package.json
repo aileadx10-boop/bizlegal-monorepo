@@ -1,0 +1,29 @@
+{
+  "name": "@bizlegal/turnstile-widget",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Conditional Cloudflare Turnstile React widget. Mounts only when NEXT_PUBLIC_TURNSTILE_SITE_KEY is set so dev + pre-launch deploys stay green. Phase AA D11 lift from 6 byte-identical vendor copies.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "echo ok",
+    "test": "echo 'no tests yet'"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.16.0",
+    "@types/react": "^18.3.0",
+    "typescript": "^5.7.2"
+  }
+}

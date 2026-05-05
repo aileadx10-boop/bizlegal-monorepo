@@ -1,6 +1,6 @@
 # Phase AA Week 1 — Moses ops queue
 
-**Last updated:** 2026-05-13 (end of Day 10)
+**Last updated:** 2026-05-14 (end of Day 11)
 **Owner:** Moses (or a sub-agent acting on Moses's behalf)
 **Why this exists:** Days 1-6 shipped all the code that can be shipped autonomously. The items below need a human (or an agent with write access to specific external systems) — apply migrations, redeploy services, run partner outreach. Each section is self-contained: copy-paste the commands; expected output is shown so you can verify.
 
@@ -37,6 +37,8 @@ Run these in any order **except** that #1 (picked_by migration) should land befo
 | 25 | Set `PAYPAL_WEBHOOK_ID` on hub Vercel preview/staging (D10 SECURITY-V3 H-3) | 5 min | PayPal preview webhooks now reject without it (strict mode) | ☐ |
 | 26 | Scoped Supabase `nurture_writer` role to replace service-role on subdomains (D10 H-2) | 30 min | Reduces blast radius if any subdomain Vercel project is compromised | ☐ |
 | 27 | HMAC replay protection: add timestamp+nonce to inbound-lead + ops-log signatures (D10 H-1) | 90 min | Closes the post-24h replay window | ☐ |
+| 28 | Confirm hub `/triage` page renders post-redeploy (D11 meta-router) | 1 min | New URL on apex bizlegal-ai.com | ☐ |
+| 29 | **HIGH-IMPACT: Items 1, 4, 5, 6 are the critical path** (mid-sprint verifier verdict, D11) | 30 min | Without Hetzner redeploy + RSS verify, V1 articles can't ship — sprint W3 article-volume target collapses | ☐ |
 
 ---
 
@@ -904,6 +906,47 @@ This is non-blocking; today's posture is "trust each Vercel project's env vars."
 3. Update HMAC input to include the timestamp + nonce so the signature commits to them: `signature = HMAC(body || timestamp || nonce, secret)`.
 
 This is invasive (touches 6 senders + 2 verifiers + adds a Redis key namespace). Defer until traffic ramps or ops-log throughput grows.
+
+---
+
+---
+
+## 28. Confirm hub `/triage` page renders post-redeploy (Day 11)
+
+**Why:** Day 11 added `/triage` to the hub apex — a meta-router landing that sends visitors to one of the 6 V1 decision-tree magnets based on which compliance category fits their scenario. This is the highest-leverage acquisition page for visitors who don't yet know which subdomain they need.
+
+```bash
+curl -fsS https://bizlegal-ai.com/triage | head -c 500
+# expect: HTML containing "Where do you start?"
+```
+
+If you ever wire it into nav, the path is `/triage` (apex domain). Add to `apps/hub/app/layout.tsx` nav links if appropriate.
+
+---
+
+## 29. HIGH-IMPACT critical path (mid-sprint verifier verdict, Day 11)
+
+The gsd-verifier read-through of Phase AA progress identified the **critical path** for the remainder of the sprint. The TL;DR:
+
+> Infrastructure-on-track, revenue-at-risk. Plan end-of-W4 success criteria are reachable IF Moses spends ~2 hours on runbook items 1-7 in the next 3-5 days. If Moses ops slips past D15, M1 article-volume + partner-outreach assumptions collapse and the sprint closes foundation-complete-revenue-inconclusive.
+
+The 4 items you should batch-do **in one ssh session this week**, in order:
+
+1. **Item 1** — apply `picked_by` migration (2 min, Supabase SQL Editor)
+2. **Item 5** — update Hetzner scout systemd timer to daily cadence (5 min, ssh)
+3. **Item 6** — verify replacement RSS feeds + restart scout (5 min, ssh)
+4. **Item 4** — move OCI router to monorepo path on Hetzner (15 min, ssh)
+
+Total: ~30 min. Without those four, V1 articles (the SEO compounding lever for Months 2-12) and OCI commission flow (the asymmetric pillar) both stay parked.
+
+Then any of these unblock real revenue testing:
+
+5. **Item 2** — redeploy 5 subdomains on Vercel (10 min, dashboard) → all D6-D11 work goes live
+6. **Item 7** — OCI partner outreach (30-60 min, ~5 emails) → starts the OCI revenue channel
+
+If you want a shortcut: just paste runbook items #1, #5, #6 into ssh tonight, then a second session for #2 + #4. That's the unlock.
+
+Full mid-sprint verification report: `decisions/.planning/VERIFICATION-AA-MID-SPRINT-2026-05-13.md`
 
 ---
 

@@ -12,6 +12,7 @@
     "@bizlegal/nurture-enqueue": "workspace:*",
     "@bizlegal/rate-limit": "workspace:*",
     "@bizlegal/turnstile-verify": "workspace:*",
+    "@bizlegal/turnstile-widget": "workspace:*",
     "@supabase/ssr": "^0.5.0",
     "@supabase/supabase-js": "^2.45.0",
     "clsx": "^2.1.1",
