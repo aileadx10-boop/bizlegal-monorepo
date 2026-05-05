@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { enqueueNurture } from "@/lib/nurture-enqueue"
 
 interface IntakeBody {
   email?: string
@@ -40,6 +41,25 @@ export async function POST(request: Request): Promise<Response> {
     ...body,
     server_received_at: new Date().toISOString(),
   }
+
+  // Phase AA V3 — enqueue nurture (fires whether or not Resend is
+  // configured for the ops-inbox notification). Lead-id derived from
+  // email + product so re-submits don't restart the sequence.
+  const normalizedEmail = body.email.toLowerCase().trim()
+  void enqueueNurture({
+    lead_id: `brai-${normalizedEmail}-${body.product ?? 'network'}`,
+    email: normalizedEmail,
+    vertical: 'brai',
+    source: 'brai:network-intake',
+    lead_classification: {
+      organisation: body.organisation,
+      use_case: body.use_case,
+      jurisdictions: body.jurisdictions,
+      timeline: body.timeline,
+      budget: body.budget,
+      product: body.product,
+    },
+  }).catch((err) => console.warn('[network-intake] nurture enqueue failed:', err))
 
   if (!apiKey) {
     // Preview-mode: no Resend wired yet.

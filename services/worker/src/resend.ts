@@ -9,6 +9,57 @@ export interface SendEmailResult {
   readonly error?: string;
 }
 
+// Generic Resend send for arbitrary transactional emails (welcome,
+// nurture sequence, opt-out confirmation, etc). Snapshot-specific
+// rendering stays in sendSnapshotEmail; this is the building block.
+export interface GenericEmailArgs {
+  readonly to: string;
+  readonly subject: string;
+  readonly text?: string;
+  readonly html?: string;
+  /** Optional From override; defaults to env.RESEND_FROM. */
+  readonly from?: string;
+  /** Optional Reply-To override; defaults to env.RESEND_REPLY_TO. */
+  readonly replyTo?: string;
+  /** Optional extra headers (List-Unsubscribe, X-Entity-Ref-ID, etc). */
+  readonly headers?: Record<string, string>;
+}
+
+export async function sendEmail(env: Env, args: GenericEmailArgs): Promise<SendEmailResult> {
+  if (!env.RESEND_API_KEY) {
+    console.log("[resend] RESEND_API_KEY not set; skipping email delivery");
+    return { ok: false, error: "resend_not_configured" };
+  }
+  if (!args.text && !args.html) {
+    return { ok: false, error: "no_body" };
+  }
+  const body: Record<string, unknown> = {
+    from: args.from ?? env.RESEND_FROM ?? "BizLegal-AI <team@intelligence.bizlegal-ai.com>",
+    to: args.to,
+    subject: args.subject,
+    reply_to: args.replyTo ?? env.RESEND_REPLY_TO ?? "team@bizlegal-ai.com",
+  };
+  if (args.text) body.text = args.text;
+  if (args.html) body.html = args.html;
+  if (args.headers) body.headers = args.headers;
+
+  const res = await fetch(RESEND_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${env.RESEND_API_KEY}`,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const detail = (await res.text().catch(() => "<unreadable>")).slice(0, 300);
+    console.warn(`[resend] send failed ${res.status}: ${detail}`);
+    return { ok: false, error: `${res.status}: ${detail}` };
+  }
+  const respBody = (await res.json().catch(() => ({}))) as { id?: string };
+  return { ok: true, id: respBody.id };
+}
+
 export interface EmailAttachment {
   readonly filename: string;
   readonly content: string; // base64

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'node:crypto'
+import { enqueueNurture } from '@/lib/nurture-enqueue'
 
 /**
  * LexAudit /api/inbound-lead — receives leads routed from the hub's
@@ -69,6 +70,21 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     `[inbound-lead] LexAudit received lead=${leadId} email=${email} ` +
       `confidence=${payload.classification.confidence}`
   )
+
+  // Phase AA V3 — enqueue into lead_nurture_state. Fire-and-forget;
+  // a Supabase blip on the nurture side never fails the verified inbound.
+  if (email && email !== 'unknown' && leadId !== 'unknown') {
+    void enqueueNurture({
+      lead_id: leadId,
+      email,
+      vertical: 'lexaudit',
+      source: 'lexaudit:inbound-lead',
+      lead_classification: {
+        confidence: payload.classification.confidence,
+        reason: payload.classification.reason,
+      },
+    }).catch((err) => console.warn('[inbound-lead] nurture enqueue failed:', err))
+  }
 
   // TODO: persist to Supabase `inbound_leads` table once schema is live.
   return NextResponse.json({ ok: true, accepted: true, lead_id: leadId })

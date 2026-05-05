@@ -15,6 +15,27 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
 import { logEventAsync } from '@/lib/ops/log'
+import { enqueueNurture, type NurtureVertical } from '@/lib/nurture-state'
+
+export const dynamic = 'force-dynamic'
+
+// Map a `product` string from the form payload to a nurture vertical.
+// Accepts loose synonyms; falls back to 'generic' so the row still
+// gets a welcome email even if the form sent something we don't
+// recognize.
+function pickVertical(product: string | null | undefined): NurtureVertical {
+  if (!product) return 'generic'
+  const p = product.toLowerCase()
+  if (p.includes('boi')) return 'boi'
+  if (p.includes('brai') || p.includes('sanction')) return 'brai'
+  if (p.includes('tracr') || p.includes('wallet')) return 'tracr'
+  if (p.includes('lexaudit') || p.includes('compliance-monitor')) return 'lexaudit'
+  if (p.includes('docai') || p.includes('privacy')) return 'docai'
+  if (p.includes('forge')) return 'forge'
+  if (p.includes('leadforge')) return 'leadforge'
+  if (p.includes('realestate') || p.includes('real-estate')) return 'realestate'
+  return 'generic'
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -55,6 +76,19 @@ export async function POST(req: NextRequest) {
       status: 'ok',
       metadata: { source: source ?? 'unknown', page, product, jurisdiction, company },
     })
+
+    // Phase AA V3 — enqueue into lead_nurture_state so the CF Worker
+    // sends a welcome email in 5 min and runs the 4-step cadence.
+    // Fire-and-forget; a Supabase blip on the nurture table must not
+    // fail the lead-capture POST.
+    const normalizedEmail = email.toLowerCase().trim()
+    void enqueueNurture({
+      lead_id: `hub-${normalizedEmail}-${source ?? 'unknown'}`,
+      email: normalizedEmail,
+      vertical: pickVertical(product),
+      source: `hub:${source ?? 'unknown'}`,
+      lead_classification: { name, company, jurisdiction, page, product },
+    }).catch((err) => console.warn('[leads] nurture enqueue failed:', err))
 
     return NextResponse.json({ success: true })
   } catch (err) {

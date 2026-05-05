@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'node:crypto'
 import { logEventAsync } from '@/lib/ops/log'
+import { enqueueNurture } from '@/lib/nurture-enqueue'
 
 /**
  * Forge /api/inbound-lead — see lexaudit equivalent for protocol.
@@ -63,6 +64,21 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       confidence: payload.classification?.confidence,
     },
   })
+
+  // Phase AA V3 — enqueue nurture (fire-and-forget).
+  const email = payload.lead?.contact?.email
+  if (email && leadId !== 'unknown') {
+    void enqueueNurture({
+      lead_id: leadId,
+      email,
+      vertical: 'forge',
+      source: 'forge:inbound-lead',
+      lead_classification: {
+        confidence: payload.classification.confidence,
+        reason: payload.classification.reason,
+      },
+    }).catch((err) => console.warn('[inbound-lead] nurture enqueue failed:', err))
+  }
 
   return NextResponse.json({ ok: true, accepted: true, lead_id: leadId })
 }

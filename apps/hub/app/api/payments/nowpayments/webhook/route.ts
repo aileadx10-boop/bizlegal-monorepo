@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import crypto from 'node:crypto'
 import { logEventAsync } from '@/lib/ops/log'
+import { markNurturePaid } from '@/lib/nurture-state'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
@@ -160,6 +161,17 @@ export async function POST(req: NextRequest) {
           order_source: order.source,
         },
       })
+
+      // Phase AA V3 — stop the nurture sequence the moment a customer
+      // pays. One user can have multiple nurture rows across verticals;
+      // mark them all paid so they don't get last_call upsells. Skipped
+      // for refunded/failed because the cadence might still convert
+      // them on a future visit.
+      if (newStatus === 'active' && order.user_email) {
+        void markNurturePaid(order.user_email).catch((err) =>
+          console.warn('[nowpayments/webhook] mark-paid failed:', err),
+        )
+      }
     }
 
     return NextResponse.json({ ok: true, status: newStatus ?? ipn.payment_status })

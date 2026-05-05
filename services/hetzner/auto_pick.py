@@ -159,11 +159,26 @@ def auto_pick(force: bool = False) -> int:
             continue
 
         # Mark this row picked. brain.py's next sweep picks it up.
-        sb.table("daily_gaps").update({
+        # `picked_by='auto_pick'` is appended ONLY when the column exists
+        # — the migration at migration-daily-gaps-picked-by.sql adds it.
+        # Until Moses applies that migration, fall back to status-only update.
+        update_payload = {
             "status": "picked",
             "picked_at": datetime.now(timezone.utc).isoformat(),
-            "picked_by": "auto_pick",
-        }).eq("url", top["url"]).execute()
+        }
+        try:
+            sb.table("daily_gaps").update({
+                **update_payload,
+                "picked_by": "auto_pick",
+            }).eq("url", top["url"]).execute()
+        except Exception as err:
+            # PGRST204 — picked_by column not in schema cache yet.
+            # Fall back to status-only update; ops_log records the
+            # source as auto_pick anyway.
+            if "picked_by" in str(err) or "PGRST204" in str(err):
+                sb.table("daily_gaps").update(update_payload).eq("url", top["url"]).execute()
+            else:
+                raise
         picked_count += 1
 
         print(f"[auto_pick] batch {batch_key}: auto-picked '{top.get('title', '')[:80]}' "

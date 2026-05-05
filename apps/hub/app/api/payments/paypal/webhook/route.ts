@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { logEventAsync } from '@/lib/ops/log'
+import { markNurturePaid } from '@/lib/nurture-state'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
@@ -178,6 +179,13 @@ export async function POST(req: NextRequest) {
             order_source: orderRow?.source,
           },
         })
+
+        // Phase AA V3 — stop nurture cadence on confirmed payment.
+        if (opsType === 'payment.confirmed' && orderRow?.user_email) {
+          void markNurturePaid(orderRow.user_email).catch((err) =>
+            console.warn('[paypal/webhook] mark-paid failed:', err),
+          )
+        }
       }
     }
 

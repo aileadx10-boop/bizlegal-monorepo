@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'node:crypto'
+import { enqueueNurture } from '@/lib/nurture-enqueue'
 
 /**
  * DocAI /api/inbound-lead — see lexaudit equivalent for protocol.
@@ -49,7 +50,22 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 
   const leadId = payload.lead?.lead_id ?? 'unknown'
+  const email = payload.lead?.contact?.email
   console.log(`[inbound-lead] DocAI received lead=${leadId} confidence=${payload.classification.confidence}`)
+
+  if (email && leadId !== 'unknown') {
+    void enqueueNurture({
+      lead_id: leadId,
+      email,
+      vertical: 'docai',
+      source: 'docai:inbound-lead',
+      lead_classification: {
+        confidence: payload.classification.confidence,
+        reason: payload.classification.reason,
+      },
+    }).catch((err) => console.warn('[inbound-lead] nurture enqueue failed:', err))
+  }
+
   return NextResponse.json({ ok: true, accepted: true, lead_id: leadId })
 }
 
