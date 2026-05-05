@@ -1,6 +1,6 @@
 # Phase AA Week 1 — Moses ops queue
 
-**Last updated:** 2026-05-14 (end of Day 11)
+**Last updated:** 2026-05-17 (end of Day 14 / W2 close — Days 12-14 mega-session bundled)
 **Owner:** Moses (or a sub-agent acting on Moses's behalf)
 **Why this exists:** Days 1-6 shipped all the code that can be shipped autonomously. The items below need a human (or an agent with write access to specific external systems) — apply migrations, redeploy services, run partner outreach. Each section is self-contained: copy-paste the commands; expected output is shown so you can verify.
 
@@ -39,6 +39,8 @@ Run these in any order **except** that #1 (picked_by migration) should land befo
 | 27 | HMAC replay protection: add timestamp+nonce to inbound-lead + ops-log signatures (D10 H-1) | 90 min | Closes the post-24h replay window | ☐ |
 | 28 | Confirm hub `/triage` page renders post-redeploy (D11 meta-router) | 1 min | New URL on apex bizlegal-ai.com | ☐ |
 | 29 | **HIGH-IMPACT: Items 1, 4, 5, 6 are the critical path** (mid-sprint verifier verdict, D11) | 30 min | Without Hetzner redeploy + RSS verify, V1 articles can't ship — sprint W3 article-volume target collapses | ☐ |
+| 30 | Add `NURTURE_CROSS_VERTICAL_POLICY` env vars (D13 — optional override) | 2 min | Default `skip_on_existing` is now active; set `allow_parallel` per subdomain only if you want B-5 reverted | ☐ |
+| 31 | Smoke-run `node services/worker/scripts/conversion-report.mjs --format table` (D13) | 1 min | Once leads start landing, the report drives the price-test skill workflow | ☐ |
 
 ---
 
