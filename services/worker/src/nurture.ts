@@ -29,6 +29,14 @@ import {
 } from "./nurture-state";
 import { sendEmail } from "./resend";
 import { logEvent } from "./ops-log";
+import { callHaikuJson, AnthropicCallFailed } from "./anthropic";
+import {
+  NURTURE_SYSTEM_PROMPT,
+  buildUserPrompt,
+  contextFor,
+} from "./nurture-prompts";
+
+const HAIKU_MODEL = "claude-haiku-4-5-20251001";
 
 // Step cadence in days from previous send.
 const STEP_DELAYS: Record<NurtureStep, number> = {
@@ -122,14 +130,8 @@ async function processRow(env: Env, row: NurtureRow, now: Date): Promise<void> {
     return; // Defensive — shouldn't be in `due` query result.
   }
 
-  const compose = pickComposer(step, row.vertical);
-  const { subject, body_text, body_html } = await compose(env, row);
+  const { subject, body_text, body_html } = await composeEmail(env, row, step);
 
-  // Welcome step (Phase AA week 1) — only step we actually compose
-  // and send right now. education/comparison/last_call composers throw
-  // BlockingNotImplemented; cron will mark archive('completed') after
-  // welcome until we ship the rest in week 2. That keeps the queue
-  // moving without sending placeholder content.
   if (!body_text && !body_html) {
     throw new Error(`composer for step=${step} vertical=${row.vertical} returned empty`);
   }
@@ -182,10 +184,12 @@ async function processRow(env: Env, row: NurtureRow, now: Date): Promise<void> {
   }).catch(() => undefined);
 }
 
-// ── Composers ─────────────────────────────────────────────────────
-// Each composer takes a NurtureRow and returns subject + body.
-// Welcome composer is implemented; other 3 stubs throw to gate the
-// pipeline until real prompts ship in Phase AA week 2.
+// ── Composer ──────────────────────────────────────────────────────
+// Single Haiku-driven path for all 4 steps. The system prompt + step
+// brief live in nurture-prompts.ts. If Haiku fails, we fall back to
+// a hand-written welcome ONLY for step=welcome (so the very first
+// touch always lands); other steps re-throw so the row retries on
+// the next cron tick.
 
 interface ComposedEmail {
   readonly subject: string;
@@ -193,122 +197,105 @@ interface ComposedEmail {
   readonly body_html: string;
 }
 
-type Composer = (env: Env, row: NurtureRow) => Promise<ComposedEmail>;
-
-function pickComposer(step: NurtureStep, vertical: NurtureVertical): Composer {
-  if (step === "welcome") return composeWelcome(vertical);
-  // Week-2 placeholders. Until we ship real prompts, education/comparison/
-  // last_call composers archive the row gracefully (next iteration of
-  // processRow won't fire because next_step="done").
-  return composeNotYetImplemented(step, vertical);
+interface HaikuEmailJson {
+  readonly subject?: unknown;
+  readonly body_text?: unknown;
+  readonly body_html?: unknown;
 }
 
-function composeWelcome(vertical: NurtureVertical): Composer {
-  return async (env, row) => {
-    const productLink = productUrlFor(vertical);
-    const productName = productLabelFor(vertical);
-    // Stage-1 welcome: simple, hand-written template. Will be
-    // replaced by Claude Haiku composition in Week-1 D5 when we
-    // ship the full prompt suite at agents/ea/prompts/email-welcome-{vertical}.md.
-    // The handwritten version below ships TODAY so the cron has
-    // real content to send while the prompt-driven composer is
-    // built; it's deliberately personal and tight.
-    const subject = `Quick thanks for trying ${productName}`;
-    const text = [
-      `Hi,`,
-      ``,
-      `Thanks for checking out ${productName}. Quick context on what we do and what to expect over the next few days:`,
-      ``,
-      `1. ${productName} runs a baseline scan / audit on whatever you submitted. You'll see the preview shortly if you haven't already.`,
-      `2. The full report (citations, risk scoring, regulator-by-regulator breakdown) unlocks behind a one-time fee — link below.`,
-      `3. Over the next week I'll send you 3 short emails: an explainer of the regulation that applies to your scenario, a comparison vs other approaches (DIY, law firm, other vendors), and a final ping with any updates.`,
-      ``,
-      `If any of that's the wrong cadence, hit unsubscribe at the bottom and you'll never hear from me again. No hard feelings.`,
-      ``,
-      `Full report: ${productLink}`,
-      ``,
-      `— BizLegal-AI`,
-      ``,
-      `(Reply to this email if you want to talk to a human first. We do read these.)`,
-    ].join("\n");
+async function composeEmail(
+  env: Env,
+  row: NurtureRow,
+  step: Exclude<NurtureStep, "done">,
+): Promise<ComposedEmail> {
+  if (!env.ANTHROPIC_API_KEY) {
+    if (step === "welcome") return fallbackWelcome(row.vertical);
+    throw new Error(
+      `ANTHROPIC_API_KEY missing — cannot compose ${step} for row ${row.id}`,
+    );
+  }
 
-    const html = [
-      `<p>Hi,</p>`,
-      `<p>Thanks for checking out <strong>${productName}</strong>. Quick context on what we do and what to expect over the next few days:</p>`,
-      `<ol>`,
-      `<li>${productName} runs a baseline scan / audit on whatever you submitted. You'll see the preview shortly if you haven't already.</li>`,
-      `<li>The full report (citations, risk scoring, regulator-by-regulator breakdown) unlocks behind a one-time fee — link below.</li>`,
-      `<li>Over the next week I'll send you 3 short emails: an explainer of the regulation that applies to your scenario, a comparison vs other approaches (DIY, law firm, other vendors), and a final ping with any updates.</li>`,
-      `</ol>`,
-      `<p>If any of that's the wrong cadence, hit unsubscribe at the bottom and you'll never hear from me again. No hard feelings.</p>`,
-      `<p><a href="${productLink}" style="display:inline-block;background:#0a2540;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none;">View the full report →</a></p>`,
-      `<p style="margin-top:24px;color:#444;">— BizLegal-AI</p>`,
-      `<p style="font-size:12px;color:#888;">(Reply to this email if you want to talk to a human first. We do read these.)</p>`,
-    ].join("\n");
+  const userPrompt = buildUserPrompt({
+    step,
+    vertical: row.vertical,
+    classification: row.lead_classification,
+    source: row.source,
+  });
 
-    return { subject, body_text: text, body_html: html };
-  };
-}
-
-function composeNotYetImplemented(step: NurtureStep, vertical: NurtureVertical): Composer {
-  // Returns empty body — processRow throws and we log the row as
-  // failed for this tick. The row's next_send_at stays put so the
-  // next cron tick re-attempts. When week-2 ships the real composer,
-  // queued rows pick up automatically.
-  return async () => {
-    return {
-      subject: `[nurture skeleton] ${step}/${vertical}`,
-      body_text: "",
-      body_html: "",
-    };
-  };
-}
-
-// ── Vertical → product URL/label map ──────────────────────────────
-function productUrlFor(vertical: NurtureVertical): string {
-  switch (vertical) {
-    case "boi":
-      return "https://forge.bizlegal-ai.com/boi";
-    case "brai":
-      return "https://brai.bizlegal-ai.com";
-    case "tracr":
-      return "https://tracr.bizlegal-ai.com";
-    case "lexaudit":
-      return "https://lexaudit.bizlegal-ai.com";
-    case "docai":
-      return "https://docai.bizlegal-ai.com";
-    case "leadforge":
-      return "https://leadforge.bizlegal-ai.com";
-    case "forge":
-      return "https://forge.bizlegal-ai.com";
-    case "realestate":
-      return "https://bizlegal-ai.com/realestate";
-    case "generic":
-    default:
-      return "https://bizlegal-ai.com/agents";
+  try {
+    const result = await callHaikuJson<HaikuEmailJson>(env, {
+      model: HAIKU_MODEL,
+      system: NURTURE_SYSTEM_PROMPT,
+      user: userPrompt,
+      maxTokens: 1024,
+      temperature: 0.4,
+      maxRetries: 2,
+    });
+    const data = result.data;
+    const subject = typeof data.subject === "string" ? data.subject.trim() : "";
+    const body_text = typeof data.body_text === "string" ? data.body_text.trim() : "";
+    const body_html = typeof data.body_html === "string" ? data.body_html.trim() : "";
+    if (!subject || !body_text || !body_html) {
+      throw new Error(
+        `Haiku returned incomplete email for ${step}/${row.vertical}: subject=${Boolean(subject)} text=${Boolean(body_text)} html=${Boolean(body_html)}`,
+      );
+    }
+    if (subject.length > 80) {
+      // Hard guard against runaway subjects (prompt says ≤60).
+      return { subject: subject.slice(0, 78) + "…", body_text, body_html };
+    }
+    return { subject, body_text, body_html };
+  } catch (err) {
+    const detail = err instanceof AnthropicCallFailed ? err.message : String(err);
+    console.warn(
+      `[nurture] Haiku compose failed step=${step} vertical=${row.vertical} row=${row.id}: ${detail}`,
+    );
+    if (step === "welcome") {
+      // Welcome must always send — fall back to a hand-written copy
+      // so first-touch trust is preserved even when the model hiccups.
+      return fallbackWelcome(row.vertical);
+    }
+    throw err;
   }
 }
 
-function productLabelFor(vertical: NurtureVertical): string {
-  switch (vertical) {
-    case "boi":
-      return "BOI Tracker";
-    case "brai":
-      return "BRAI Sanctions Scan";
-    case "tracr":
-      return "TRACR Wallet Trace";
-    case "lexaudit":
-      return "LexAudit Compliance Monitor";
-    case "docai":
-      return "DocAI Privacy Scanner";
-    case "leadforge":
-      return "LeadForge";
-    case "forge":
-      return "BizLegal Forge";
-    case "realestate":
-      return "BizLegal Realestate Compliance";
-    case "generic":
-    default:
-      return "BizLegal-AI";
-  }
+function fallbackWelcome(vertical: NurtureVertical): ComposedEmail {
+  const ctx = contextFor(vertical);
+  const productLink = ctx.product_url;
+  const productName = ctx.product_name;
+  const subject = `Quick thanks for trying ${productName}`;
+  const text = [
+    `Hi,`,
+    ``,
+    `Thanks for checking out ${productName}. Quick context on what we do and what to expect over the next few days:`,
+    ``,
+    `1. ${productName} runs a baseline scan / audit on ${ctx.regulator_focus}. You'll see the preview shortly if you haven't already.`,
+    `2. The full report (citations, risk scoring, regulator-by-regulator breakdown) unlocks behind a one-time fee — link below.`,
+    `3. Over the next week I'll send you 3 short emails: an explainer of the regulation that applies to your scenario, an honest comparison vs other approaches, and a final ping with any updates.`,
+    ``,
+    `If any of that's the wrong cadence, hit unsubscribe at the bottom and you'll never hear from me again. No hard feelings.`,
+    ``,
+    `Full report: ${productLink}`,
+    ``,
+    `— BizLegal-AI`,
+    ``,
+    `(Reply to this email if you want to talk to a human first. We do read these.)`,
+  ].join("\n");
+  const html = [
+    `<p>Hi,</p>`,
+    `<p>Thanks for checking out <strong>${productName}</strong>. Quick context on what we do and what to expect over the next few days:</p>`,
+    `<ol>`,
+    `<li>${productName} runs a baseline scan / audit on ${ctx.regulator_focus}. You'll see the preview shortly if you haven't already.</li>`,
+    `<li>The full report (citations, risk scoring, regulator-by-regulator breakdown) unlocks behind a one-time fee — link below.</li>`,
+    `<li>Over the next week I'll send you 3 short emails: an explainer of the regulation that applies to your scenario, an honest comparison vs other approaches, and a final ping with any updates.</li>`,
+    `</ol>`,
+    `<p>If any of that's the wrong cadence, hit unsubscribe at the bottom and you'll never hear from me again. No hard feelings.</p>`,
+    `<p><a href="${productLink}" style="display:inline-block;background:#0a2540;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none;">View the full report →</a></p>`,
+    `<p style="margin-top:24px;color:#444;">— BizLegal-AI</p>`,
+    `<p style="font-size:12px;color:#888;">(Reply to this email if you want to talk to a human first. We do read these.)</p>`,
+  ].join("\n");
+  return { subject, body_text: text, body_html: html };
 }
+
+// (vertical → product URL/label has moved to nurture-prompts.ts as
+// VERTICAL_CONTEXTS / contextFor — keeps single source of truth.)

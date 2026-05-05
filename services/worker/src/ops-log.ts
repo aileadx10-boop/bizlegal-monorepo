@@ -21,6 +21,8 @@ export type WorkerOpsEventType =
   | "lead.qualified"
   | "snapshot.generated"
   | "cron.completed"
+  | "nurture.email.sent"
+  | "nurture.opt_out"
   | "error";
 
 export interface OpsEventInput {
