@@ -46,6 +46,59 @@ export interface EnqueueArgs {
 /** Backwards-compatible alias from the per-subdomain shim. */
 export type SubdomainEnqueueArgs = EnqueueArgs
 
+/**
+ * Phase AA D13 — INTEGRATION-V3 B-5 mitigation, Option A:
+ * skip-on-existing-active-sequence. By default, if the same email
+ * already has an unarchived nurture row anywhere in the system, we
+ * skip the new insert. This prevents the spam-complaint scenario
+ * where a single email lands in two parallel cadences from two
+ * different verticals (8 emails over 10 days, 2 voices, 2 products).
+ *
+ * Override behaviour:
+ *   NURTURE_CROSS_VERTICAL_POLICY=allow_parallel
+ *     → revert to pre-D13 behaviour (every vertical gets its own row;
+ *       lead_id-based dedupe only, not email-based)
+ *   NURTURE_CROSS_VERTICAL_POLICY=skip_on_existing  (DEFAULT)
+ *     → check for any unarchived row with this email; skip insert if found
+ *
+ * The env knob is server-side per Vercel project. To allow product to
+ * reverse the default for one subdomain (e.g. forge wants parallel for
+ * BOI + sanctions on the same lead), set the env there only.
+ */
+const POLICY_ALLOW_PARALLEL = 'allow_parallel'
+
+async function emailHasActiveSequence(
+  url: string,
+  key: string,
+  email: string,
+): Promise<boolean> {
+  const lc = email.toLowerCase().trim()
+  // Encode the email so PostgREST treats `+` and other reserved chars as data.
+  const safeEmail = encodeURIComponent(lc)
+  const queryUrl =
+    `${url}/rest/v1/lead_nurture_state?select=id` +
+    `&email=eq.${safeEmail}` +
+    `&archived_at=is.null` +
+    `&limit=1`
+  try {
+    const res = await fetch(queryUrl, {
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+      },
+    })
+    if (!res.ok) return false
+    const rows = (await res.json().catch(() => [])) as unknown[]
+    return rows.length > 0
+  } catch {
+    // If the lookup fails (transient network, Supabase blip), fail OPEN
+    // and allow the insert. The unique index on lead_id still catches
+    // exact re-inserts; the only thing the lookup defended against is
+    // the cross-vertical case, which is a UX issue, not a correctness one.
+    return false
+  }
+}
+
 export async function enqueueNurture(args: EnqueueArgs): Promise<boolean> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
   const key = process.env.SUPABASE_SERVICE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -56,6 +109,19 @@ export async function enqueueNurture(args: EnqueueArgs): Promise<boolean> {
   if (!args.lead_id || !args.email || !args.vertical || !args.source) {
     console.warn('[nurture] enqueue called with missing fields')
     return false
+  }
+
+  const policy = process.env.NURTURE_CROSS_VERTICAL_POLICY
+  if (policy !== POLICY_ALLOW_PARALLEL) {
+    // Default = skip-on-existing. Look up before insert.
+    const exists = await emailHasActiveSequence(url, key, args.email)
+    if (exists) {
+      console.info(
+        `[nurture] cross-vertical skip — email already has an active sequence (lead_id=${args.lead_id})`,
+      )
+      // Treat as idempotent success so the caller's UX shows "saved".
+      return true
+    }
   }
 
   const delay = args.welcome_delay_minutes ?? 5
