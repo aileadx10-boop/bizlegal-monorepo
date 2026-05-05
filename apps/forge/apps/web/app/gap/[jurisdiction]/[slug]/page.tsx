@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import AuthorBio from '@/components/AuthorBio'
 
 export const dynamic = 'force-dynamic'
 
@@ -244,6 +245,19 @@ export default async function GapPage({ params }: GapPageParams) {
             </div>
           </div>
         )}
+
+        {/* E-E-A-T author + reviewer block. Last-reviewed prefers
+            an explicit reviewed_at column on gap_pages, falls back to
+            updated_at, then published_at. Authorship metadata also
+            ships in the JSON-LD Article schema for crawlers. */}
+        <AuthorBio
+          author={gap.author_name || undefined}
+          authorRole={gap.author_role || undefined}
+          reviewer={gap.reviewer_name || undefined}
+          reviewerRole={gap.reviewer_role || undefined}
+          lastReviewed={gap.reviewed_at || gap.updated_at || gap.published_at || undefined}
+          bio={gap.author_bio || undefined}
+        />
 
         {/* Published date */}
         {gap.published_at && (

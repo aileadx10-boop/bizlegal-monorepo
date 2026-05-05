@@ -37,13 +37,23 @@ RSS_FEEDS = [
     # EU (HTTP 301 redirect feedparser doesn't follow correctly), and
     # FinCEN (HTTP 404, URL is dead). When refreshing the feed list,
     # check each with `curl -sk -o /dev/null -w "%{http_code}\n" <URL>`
-    # before adding back. Each broken feed costs ~30s of feedparser hang.
+    # AND `python3 -c "import urllib.request; ..."` to confirm the body
+    # is real RSS, not an anti-bot HTML challenge. Each broken feed
+    # costs ~30s of feedparser hang.
     ("SEC", "https://www.sec.gov/news/pressreleases.rss"),
     ("FCA", "https://www.fca.org.uk/news/rss.xml"),
+    # 2026-05-08: Replacements for the 3 dead feeds, vetted live.
+    # CISA publishes daily cyber advisories (relevant to docai PII +
+    # brai sanctions watch lists). CFTC enforcement covers crypto/MSB
+    # actions (tracr + forge audience). NIST news skews broader cyber
+    # but lifts compliance content quality.
+    ("CISA", "https://www.cisa.gov/cybersecurity-advisories/all.xml"),
+    ("CFTC", "https://www.cftc.gov/RSS/RSSENF/rssenf.xml"),
+    ("NIST", "https://www.nist.gov/news-events/news/rss.xml"),
 ]
 MAX_ITEMS_PER_FEED = 3   # cut from 10 — covers the daily-news lookback window
-                         # but keeps Ollama call count low. With 2 working feeds
-                         # × 3 items = 6 LLM calls × ~17s warm = ~100s filter pass.
+                         # but keeps Ollama call count low. With 5 working feeds
+                         # × 3 items = 15 LLM calls × ~17s warm = ~255s filter pass.
 MIN_RELEVANCE_SCORE = 4   # 1-5 from filter pass
 TOP_N = 3                 # picks per scout run
 

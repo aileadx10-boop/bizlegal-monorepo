@@ -19,6 +19,7 @@ from typing import Any
 from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import JSONResponse
 
+from email_contract import send_referral_contract
 from hmac_verify import verify_signature
 from llm import classify
 from notify import resend_partner_email, telegram_alert_if_hot
@@ -213,6 +214,16 @@ async def ingest_lead(
             )
         except Exception as exc:
             logger.exception("partner email failed: %s", exc)
+        # Phase AA D5 — also email the LEAD a transparent referral
+        # contract with finder-fee disclosure + 48h opt-out. This is
+        # the lead's first written contact about the introduction;
+        # the partner is CC'd implicitly only after the lead replies.
+        try:
+            send_referral_contract(record, chosen_partner)
+        except Exception as exc:
+            # Fallback inside send_referral_contract handles compose
+            # failures; only catastrophic httpx/resend errors land here.
+            logger.exception("referral contract email failed: %s", exc)
         try:
             store_payout_pending(lead_id, chosen_partner["id"], commission_usd=0)
         except Exception as exc:
