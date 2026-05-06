@@ -41,7 +41,7 @@ export const lexCSSv2 = `
   overflow-x: hidden;
 }
 
-/* Visually-hidden, screen-reader-accessible (a11y A11Y-020 fix). */
+/* sr-only utility — WCAG 2.4.6 visually-hidden helper for screen readers. */
 .lex-page .sr-only {
   position: absolute !important;
   width: 1px; height: 1px;
@@ -50,7 +50,7 @@ export const lexCSSv2 = `
   white-space: nowrap; border: 0;
 }
 
-/* Form error region — assertive live (a11y H1/H2 fix). */
+/* Assertive live region for inline form errors (paired with role=alert). */
 .lex-page [role="alert"] {
   color: #ef4444;
   font-size: 13px;
@@ -108,8 +108,8 @@ export const lexCSSv2 = `
 .lex-nav-cta {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 10px 16px 10px 18px; border-radius: 999px;
-  /* a11y AA1/AA2 fix — gradient stops shifted darker so white text passes 4.5:1.
-     Was: var(--ember, #FFB347) → var(--ember-2, #FF3D00) (1.80–3.92:1). */
+  /* Gradient stops shifted darker so white text passes WCAG 1.4.3 contrast (4.5:1).
+     Earlier value (--ember #FFB347 → --ember-2 #FF3D00) measured 1.80–3.92:1. */
   background: linear-gradient(135deg, var(--ember-2, #FF3D00), #B22A00);
   color: #fff; font-size: 12.5px; font-weight: 600; letter-spacing: .01em;
   border: 0; cursor: pointer; text-decoration: none;
@@ -197,7 +197,7 @@ export const lexCSSv2 = `
 }
 .lex-quick-form input::placeholder { color: var(--paper-dim); }
 .lex-quick-form input:focus { outline: none; border-color: var(--brand); }
-/* a11y AA4 fix — restore visible focus indicator on keyboard focus. */
+/* Restore visible focus indicator on keyboard focus (WCAG 2.4.7 + 2.4.11). */
 .lex-quick-form input:focus-visible {
   outline: 2px solid var(--brand-soft);
   outline-offset: 2px;
@@ -252,7 +252,7 @@ export const lexCSSv2 = `
   .lex-brief, .lex-audits, .lex-spotlight, .lex-pricing, .lex-contact { padding-left: 18px; padding-right: 18px; }
 }
 
-/* Brief — no-card chrome, editorial 3-step rail (UI auditor card-vocabulary fix).
+/* Brief — no-card chrome, editorial 3-step rail (distinct from spotlight + pricing).
    Numbered badges sit prominently OFF the text block; no surface, no
    border, no hover lift — the brief is meant to read like body copy
    not a card grid. */
@@ -314,7 +314,7 @@ export const lexCSSv2 = `
 }
 .lex-spot-quote::before { content: '"'; color: var(--brand-soft); font-size: 1.4em; margin-right: 4px; }
 .lex-spot-meta { margin-top: 18px; color: var(--paper-dim); font-size: 13px; }
-/* Spotlight stats — editorial numeric portrait (UI auditor card-vocabulary fix).
+/* Spotlight stats — editorial numeric portrait (distinct chrome from brief + pricing).
    No card chrome; just a vertical rule + oversized display num. Reads
    as data not as a card; distinct from brief (no surface) AND pricing
    (full card chrome). */
@@ -334,7 +334,7 @@ export const lexCSSv2 = `
   letter-spacing: 0.14em; text-transform: uppercase; margin-top: 6px;
 }
 
-/* Pricing — explicit elevation hierarchy (UI auditor card-vocabulary fix).
+/* Pricing — explicit elevation hierarchy (distinct chrome from brief + spotlight).
    The .feat tier is permanently elevated (translated up + brand glow),
    non-feat tiers are flatter with subtler chrome. Both still get a
    distinct hover, but the resting states already communicate priority. */
@@ -397,7 +397,7 @@ export const lexCSSv2 = `
 }
 .lex-contact-form input:focus,
 .lex-contact-form textarea:focus { outline: none; border-color: var(--brand); }
-/* a11y AA4 fix — keyboard-only focus ring (WCAG 2.4.7 + 2.4.11). */
+/* Keyboard-only focus ring (WCAG 2.4.7 + 2.4.11). */
 .lex-contact-form input:focus-visible,
 .lex-contact-form textarea:focus-visible {
   outline: 2px solid var(--brand-soft);

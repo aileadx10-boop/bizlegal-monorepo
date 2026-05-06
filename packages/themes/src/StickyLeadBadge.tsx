@@ -26,9 +26,9 @@ function getDismissedUntil(): number {
     const v = localStorage.getItem(DISMISS_KEY)
     if (!v) return 0
     const ts = Number(v)
-    // H7 fix — clear corrupt timestamp instead of silently treating it
-    // as "never dismissed". A user who got a malformed write would
-    // otherwise see the badge reappear forever with no way to debug.
+    // Clear corrupt timestamp instead of silently treating it as
+    // "never dismissed" — otherwise the badge reappears forever for
+    // any user with a malformed write, with no way to self-recover.
     if (!Number.isFinite(ts) || ts <= 0) {
       try {
         localStorage.removeItem(DISMISS_KEY)
@@ -139,7 +139,7 @@ export function StickyLeadBadge(props: StickyLeadBadgeProps): React.ReactElement
           border: 'none',
           color: 'var(--paper-dim, rgba(255,255,255,.6))',
           cursor: 'pointer',
-          // a11y AA5 fix — WCAG 2.2 SC 2.5.8 Target Size (Minimum) requires 24×24.
+          // WCAG 2.2 SC 2.5.8 Target Size (Minimum) requires 24×24.
           width: 24,
           height: 24,
           fontSize: 16,

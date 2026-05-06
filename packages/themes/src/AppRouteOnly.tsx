@@ -12,8 +12,9 @@
  * Wrap the legacy bar in this component so it disappears on marketing
  * routes without server-side path checks in the layout.
  *
- * a11y A11Y-034 fix — closes the duplicate-ThemeToggle finding from
- * the Phase AA a11y audit.
+ * Closes the duplicate-ThemeToggle a11y issue: legacy bl-theme bar
+ * + SiteShell ThemeToggleButton appearing simultaneously on
+ * marketing routes.
  */
 
 import * as React from 'react'

@@ -122,7 +122,7 @@ export const DAYBREAK: ThemeSpec = {
     '--surface': 'rgba(255,255,255,.7)',
     '--surface-2': 'rgba(255,255,255,.85)',
     '--brand': '#5B49E0',
-    /* a11y AA3 fix — was #7E6DFF (3.78:1 on cream); darkened to pass 4.5:1
+    /* Was #7E6DFF (3.78:1 on cream); darkened to pass WCAG 1.4.3 4.5:1
        on small text while preserving the violet hue of brand-soft. */
     '--brand-soft': '#3F33B8',
     '--accent-a': '#0F8C6E',
@@ -239,10 +239,10 @@ export const ROYAL_LIGHT: ThemeSpec = {
     '--surface': 'rgba(255,255,255,.75)',
     '--surface-2': 'rgba(255,255,255,.9)',
     '--brand': '#2B5BFF',
-    /* a11y AA3 fix — was #6E8CFF (2.92:1 on light blue); darkened to pass
+    /* Was #6E8CFF (2.92:1 on light blue); darkened to pass WCAG 1.4.3
        4.5:1 on small text while keeping the royal-blue brand identity. */
     '--brand-soft': '#1E47CC',
-    /* a11y AA6 fix — was #0FA9C0 (~3.4:1 chip text); darkened to ~5:1. */
+    /* Was #0FA9C0 (~3.4:1 chip text); darkened to ~5:1 for WCAG 1.4.3. */
     '--accent-a': '#0A6F84',
     '--accent-b': '#B8852D',
     '--accent-c': '#FF6A2C',
