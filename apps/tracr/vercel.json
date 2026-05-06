@@ -1,8 +1,8 @@
 {
   "framework": "nextjs",
-  "buildCommand": "npm run build",
   "devCommand": "next dev",
-  "installCommand": "npm install",
+  "installCommand": "corepack enable && cd ../.. && corepack pnpm install --frozen-lockfile=false --ignore-scripts",
+  "buildCommand": "cd ../.. && corepack pnpm turbo build --filter=@bizlegal/tracr...",
   "functions": {
     "app/api/generate-report/route.ts": { "maxDuration": 60 },
     "app/api/analyze/route.ts": { "maxDuration": 30 }

@@ -1,10 +1,10 @@
 {
   "name": "lexaudit",
-  "buildCommand": "next build",
-  "devCommand": "next dev",
-  "installCommand": "npm install",
   "framework": "nextjs",
   "outputDirectory": ".next",
+  "devCommand": "next dev",
+  "installCommand": "corepack enable && cd ../.. && corepack pnpm install --frozen-lockfile=false --ignore-scripts",
+  "buildCommand": "cd ../.. && corepack pnpm turbo build --filter=@bizlegal/lexaudit...",
   "functions": {
     "app/api/cron/monitor/diff/route.ts": { "maxDuration": 60 },
     "app/api/monitor/check/route.ts": { "maxDuration": 30 }
