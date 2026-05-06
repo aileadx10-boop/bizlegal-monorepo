@@ -27,14 +27,14 @@ export const siteShellCSS = `
 .bl-shell button { font-family: inherit; }
 .bl-shell main { flex: 1; }
 
-/* Skip-to-main link (a11y A1 fix — WCAG 2.4.1 Bypass Blocks) */
+/* Skip-to-main link — WCAG 2.4.1 Bypass Blocks. */
 .bl-skip { position: absolute; left: 12px; top: 12px; z-index: 100; padding: 10px 16px; background: var(--paper, #fff); color: var(--ink, #0B0717); border-radius: 6px; font-size: 14px; font-weight: 600; transform: translateY(-150%); transition: transform 180ms ease; }
 .bl-skip:focus { transform: translateY(0); outline: 3px solid var(--brand-soft, #fff); outline-offset: 2px; }
 
 /* Visually-hidden helper (matches LandingV2 .sr-only) */
 .bl-shell .sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
-/* Focus-visible everywhere in the shell (a11y AA4 fix — WCAG 2.4.7) */
+/* Focus-visible everywhere in the shell — WCAG 2.4.7. */
 .bl-shell a:focus-visible, .bl-shell button:focus-visible {
   outline: 2px solid var(--brand-soft, #fff);
   outline-offset: 2px;
@@ -49,7 +49,7 @@ export const siteShellCSS = `
 .bl-navmid a { padding: 6px 0; transition: color 200ms ease; }
 .bl-navmid a:hover { color: var(--paper); }
 .bl-navend { display: flex; align-items: center; gap: 10px; }
-/* a11y AA1/AA2 fix — gradient stops shifted darker so white passes 4.5:1 (was 1.80–3.92:1). */
+/* Gradient stops shifted darker so white text passes WCAG 1.4.3 4.5:1 (was 1.80–3.92:1). */
 .bl-nav-cta { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px 10px 18px; border-radius: 999px; background: linear-gradient(135deg, var(--ember-2, #FF3D00), #B22A00); color: #fff; font-size: 12.5px; font-weight: 600; letter-spacing: .01em; border: 0; cursor: pointer; box-shadow: 0 10px 28px -10px color-mix(in srgb, var(--ember-2, #FF3D00) 70%, transparent), inset 0 1px 0 rgba(255,255,255,0.28); transition: transform 200ms ease, box-shadow 250ms ease; }
 .bl-nav-cta:hover { transform: translateY(-1px); }
 .bl-nav-cta .pulse { width: 8px; height: 8px; border-radius: 99px; background: #fff; animation: bl-pulse 2.2s ease-out infinite; }
@@ -124,7 +124,7 @@ const DEFAULT_CHROME_SUPPRESS: ReadonlyArray<string> = [
 ]
 
 function normalizePath(pathname: string): string {
-  // H6 fix — strip trailing slash (Next can return either depending on
+  // Strip trailing slash (Next can return either depending on
   // trailingSlash config). Keep '/' as-is. Strip query/hash defensively
   // even though usePathname() drops them today.
   let p = pathname

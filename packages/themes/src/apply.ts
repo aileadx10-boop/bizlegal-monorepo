@@ -21,22 +21,14 @@ import { THEMES, type ThemeId, type ThemeSpec } from './themes'
  * CSS or DevTools.
  */
 /** Default to fall back to when an unknown theme id is requested.
- *  C4 fix — was silently no-op'ing, leaving the page with no CSS vars
- *  set at all (brand-coherence break). */
+ *  Previously no-op'd silently, leaving the page with no CSS vars
+ *  applied at all — brand-coherence break with no diagnostic. */
 const FALLBACK_THEME: ThemeId = 'twilight'
 
-export function applyTheme(id: ThemeId, root: HTMLElement | null = null): void {
-  if (typeof document === 'undefined') return
-  const target = root ?? document.documentElement
-  const spec = THEMES[id]
-  if (!spec) {
-    // eslint-disable-next-line no-console
-    console.warn(
-      `[applyTheme] Unknown theme id "${id}" — falling back to "${FALLBACK_THEME}"`,
-    )
-    if (id !== FALLBACK_THEME) applyTheme(FALLBACK_THEME, target)
-    return
-  }
+/** Internal strict path — assumes the id is known. Single caller.
+ *  Used by both applyTheme (after the runtime check) and the FOUC
+ *  script via THEMES lookup. */
+function applyThemeStrict(spec: ThemeSpec, id: ThemeId, target: HTMLElement): void {
   for (const [k, v] of Object.entries(spec.vars)) {
     target.style.setProperty(k, v)
   }
@@ -46,13 +38,37 @@ export function applyTheme(id: ThemeId, root: HTMLElement | null = null): void {
   target.setAttribute('data-bl-theme-v2-mode', spec.mode)
 }
 
+/** Public surface — accepts `string` because callers crossing a
+ *  serialization boundary (e.g. localStorage rehydration) pass
+ *  unverified data. Validates against the THEMES registry, falls
+ *  back to FALLBACK_THEME with a console warning if the id is
+ *  unknown.
+ *
+ *  Type-design F-3 — was typed `(id: ThemeId)` but ran a runtime
+ *  fallback for unknown ids; that "claims-strict-behaves-loose"
+ *  signature lied to TypeScript users. The signature now matches
+ *  the actual contract. */
+export function applyTheme(id: string, root: HTMLElement | null = null): void {
+  if (typeof document === 'undefined') return
+  const target = root ?? document.documentElement
+  if (id in THEMES) {
+    applyThemeStrict(THEMES[id as ThemeId], id as ThemeId, target)
+    return
+  }
+  // eslint-disable-next-line no-console
+  console.warn(
+    `[applyTheme] Unknown theme id "${id}" — falling back to "${FALLBACK_THEME}"`,
+  )
+  applyThemeStrict(THEMES[FALLBACK_THEME], FALLBACK_THEME, target)
+}
+
 export function getStoredTheme(key: string): ThemeId | null {
   if (typeof localStorage === 'undefined') return null
   try {
     const v = localStorage.getItem(key)
     if (v && v in THEMES) return v as ThemeId
   } catch (err) {
-    // M1 fix — surface the failure so devs can correlate "toggle didn't
+    // Surface the failure so devs can correlate "toggle didn't
     // persist on next visit" with private-browsing / quota-exceeded.
     if (typeof console !== 'undefined') {
       // eslint-disable-next-line no-console
@@ -67,7 +83,7 @@ export function setStoredTheme(key: string, id: ThemeId): void {
   try {
     localStorage.setItem(key, id)
   } catch (err) {
-    // M1 fix — see getStoredTheme.
+    // Same surface as getStoredTheme above.
     if (typeof console !== 'undefined') {
       // eslint-disable-next-line no-console
       console.warn(
@@ -128,7 +144,7 @@ export function themeFOUCScript(args: {
   root.setAttribute('data-bl-theme-v2-mode',spec.mode);
 }catch(e){
   /* never break first paint, but surface to localhost dev consoles
-     (M2 fix — was silently masking future regressions in this path). */
+     Previously silent — masked future regressions in this path. */
   try{if(location&&(location.hostname==='localhost'||location.hostname==='127.0.0.1')){console.warn('[bl-theme-v2 FOUC]',e&&e.message)}}catch(_){}
 }})();`
 }

@@ -42,8 +42,8 @@ export function ThemeProvider(props: ThemeProviderProps): React.ReactElement {
       setThemeState(pick)
       applyTheme(pick)
     }
-    // H3 fix — re-run when primary/alternate/storageKey change so a host
-    // that swaps brand props at runtime (cookie-based brand swap, A/B test)
+    // Re-run when primary/alternate/storageKey change so a host that
+    // swaps brand props at runtime (cookie-based brand swap, A/B test)
     // re-syncs the persisted state instead of staying on the stale theme.
   }, [primary, alternate, storageKey])
 
@@ -77,8 +77,8 @@ export function useTheme(): ThemeContextValue {
   return ctx
 }
 
-/** H4 fix — non-throwing variant for components that may render outside
- *  a provider (e.g. ThemeToggleButton mounted unconditionally in
+/** Non-throwing variant for components that may render outside a
+ *  provider (e.g. ThemeToggleButton mounted unconditionally in
  *  SiteShell). Returns null when no provider; caller should render
  *  null in that case rather than blanking the whole tree. */
 export function useThemeOptional(): ThemeContextValue | null {
@@ -97,8 +97,8 @@ export function ThemeToggleButton(props: {
   readonly labelPrimary?: string
   readonly labelAlternate?: string
 }): React.ReactElement | null {
-  // H4 fix — non-throwing optional consumer so a layout that mounts
-  // SiteShell without ThemeProvider doesn't blank the entire shell tree.
+  // Non-throwing optional consumer so a layout that mounts SiteShell
+  // without ThemeProvider doesn't blank the entire shell tree.
   const ctx = useThemeOptional()
   if (!ctx) return null
   const { theme, primary, alternate, toggle } = ctx
