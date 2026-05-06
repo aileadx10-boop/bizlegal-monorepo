@@ -471,20 +471,32 @@ export interface LandingV2Content {
 }
 
 // ── component ─────────────────────────────────────────────────────
+
+/** Source slugs the shared LandingV2 forms use; literal union closes
+ *  the door on free-string typos at the call site. */
+export type LeadSubmitSource = 'home-quick-capture' | 'home-intake'
+
+export interface LeadSubmitArgs {
+  readonly email: string
+  readonly name?: string
+  readonly scenario?: string
+  readonly source: LeadSubmitSource
+  /** Cloudflare Turnstile bot-challenge token; required at runtime
+   *  when NEXT_PUBLIC_TURNSTILE_SITE_KEY is set, optional otherwise. */
+  readonly turnstile_token?: string
+}
+
+/** Discriminated Result so consumers cannot construct `{ok:false}` with
+ *  no error or `{ok:true, error: 'oops'}`. The `if (res.ok)` narrowing
+ *  in Hero/Contact relies on this. */
+export type LeadSubmitResult =
+  | { readonly ok: true }
+  | { readonly ok: false; readonly error: string }
+
 export interface LandingV2Props {
   readonly content: LandingV2Content
-  /** Submit handler for hero quick-capture + bottom intake forms.
-   *  Receives source slug ("home-quick-capture" | "home-intake") plus
-   *  a Turnstile token (S-1 fix — was missing in shipped LandingV2). */
-  readonly onLeadSubmit: (
-    args: {
-      email: string
-      name?: string
-      scenario?: string
-      source: string
-      turnstile_token?: string
-    },
-  ) => Promise<{ ok: boolean; error?: string }>
+  /** Submit handler for hero quick-capture + bottom intake forms. */
+  readonly onLeadSubmit: (args: LeadSubmitArgs) => Promise<LeadSubmitResult>
 }
 
 export function LandingV2(props: LandingV2Props): React.ReactElement {
@@ -554,7 +566,9 @@ function Hero(props: {
         ...(token ? { turnstile_token: token } : {}),
       })
       if (!res.ok) {
-        const detail = res.error?.trim() ? `: ${res.error}` : ''
+        // Discriminated Result narrows res.error to string on the failure
+        // branch — no optional chain needed.
+        const detail = res.error.trim() ? `: ${res.error}` : ''
         throw new Error(`submit_failed${detail}`)
       }
       setSubmitted(true)
@@ -763,7 +777,9 @@ function Contact(props: {
         ...(token ? { turnstile_token: token } : {}),
       })
       if (!res.ok) {
-        const detail = res.error?.trim() ? `: ${res.error}` : ''
+        // Discriminated Result narrows res.error to string on the failure
+        // branch — no optional chain needed.
+        const detail = res.error.trim() ? `: ${res.error}` : ''
         throw new Error(`submit_failed${detail}`)
       }
       setSubmitted(true)
