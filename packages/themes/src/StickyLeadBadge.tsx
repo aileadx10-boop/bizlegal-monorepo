@@ -24,7 +24,22 @@ function getDismissedUntil(): number {
   if (typeof localStorage === 'undefined') return 0
   try {
     const v = localStorage.getItem(DISMISS_KEY)
-    return v ? Number(v) || 0 : 0
+    if (!v) return 0
+    const ts = Number(v)
+    // H7 fix — clear corrupt timestamp instead of silently treating it
+    // as "never dismissed". A user who got a malformed write would
+    // otherwise see the badge reappear forever with no way to debug.
+    if (!Number.isFinite(ts) || ts <= 0) {
+      try {
+        localStorage.removeItem(DISMISS_KEY)
+      } catch {
+        /* noop */
+      }
+      // eslint-disable-next-line no-console
+      console.warn('[StickyLeadBadge] Cleared malformed dismiss timestamp')
+      return 0
+    }
+    return ts
   } catch {
     return 0
   }

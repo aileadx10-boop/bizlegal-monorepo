@@ -51,8 +51,13 @@ export function getStoredTheme(key: string): ThemeId | null {
   try {
     const v = localStorage.getItem(key)
     if (v && v in THEMES) return v as ThemeId
-  } catch {
-    /* localStorage may be blocked in strict iframes / privacy modes */
+  } catch (err) {
+    // M1 fix — surface the failure so devs can correlate "toggle didn't
+    // persist on next visit" with private-browsing / quota-exceeded.
+    if (typeof console !== 'undefined') {
+      // eslint-disable-next-line no-console
+      console.warn('[bl-theme-v2] localStorage read failed:', (err as Error)?.name ?? err)
+    }
   }
   return null
 }
@@ -61,8 +66,15 @@ export function setStoredTheme(key: string, id: ThemeId): void {
   if (typeof localStorage === 'undefined') return
   try {
     localStorage.setItem(key, id)
-  } catch {
-    /* ignore */
+  } catch (err) {
+    // M1 fix — see getStoredTheme.
+    if (typeof console !== 'undefined') {
+      // eslint-disable-next-line no-console
+      console.warn(
+        '[bl-theme-v2] localStorage write failed (theme toggle will not persist):',
+        (err as Error)?.name ?? err,
+      )
+    }
   }
 }
 
@@ -114,5 +126,9 @@ export function themeFOUCScript(args: {
   /* parallel attribute so we don't clobber existing data-theme=light|dark systems */
   root.setAttribute('data-bl-theme-v2',pick);
   root.setAttribute('data-bl-theme-v2-mode',spec.mode);
-}catch(e){/* never break first paint */}})();`
+}catch(e){
+  /* never break first paint, but surface to localhost dev consoles
+     (M2 fix — was silently masking future regressions in this path). */
+  try{if(location&&(location.hostname==='localhost'||location.hostname==='127.0.0.1')){console.warn('[bl-theme-v2 FOUC]',e&&e.message)}}catch(_){}
+}})();`
 }
