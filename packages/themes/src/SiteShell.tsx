@@ -20,6 +20,7 @@ import * as React from 'react'
 import { usePathname } from 'next/navigation'
 import { ThemeToggleButton } from './provider'
 import { StickyLeadBadge } from './StickyLeadBadge'
+import type { NavLink } from './types'
 
 export const siteShellCSS = `
 .bl-shell { min-height: 100vh; display: flex; flex-direction: column; background: var(--ink, #0B0717); color: var(--paper, #E9E5F5); font-family: var(--lex-body, 'Inter', system-ui, sans-serif); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
@@ -84,16 +85,16 @@ const DEFAULT_BRAND_MARK = (
 
 export interface SiteShellProps {
   readonly brand: string
-  readonly nav: ReadonlyArray<{ label: string; href: string }>
-  readonly cta: { label: string; href: string }
+  readonly nav: ReadonlyArray<NavLink>
+  readonly cta: NavLink
   readonly footer: {
     readonly tagline: string
     readonly disclaimer: string
-    readonly links?: ReadonlyArray<{ label: string; href: string }>
+    readonly links?: ReadonlyArray<NavLink>
   }
   /** Sticky lead badge — vertical-aware label + decision-tree href.
-   *  Pass `null` to disable globally for this subdomain. */
-  readonly stickyLead: { label: string; href: string } | null
+   *  Omit to disable globally for this subdomain. */
+  readonly stickyLead?: NavLink
   /** Routes where the sticky lead badge should NOT render. Defaults
    *  to suppress on /decision-tree*, /thank-you*, /api*. */
   readonly stickyLeadSuppressPaths?: ReadonlyArray<string>
@@ -104,7 +105,7 @@ export interface SiteShellProps {
   readonly children: React.ReactNode
 }
 
-const DEFAULT_FOOTER_LINKS: ReadonlyArray<{ label: string; href: string }> = [
+const DEFAULT_FOOTER_LINKS: ReadonlyArray<NavLink> = [
   { label: 'Disclaimer', href: '/disclaimer' },
   { label: 'Privacy', href: '/privacy' },
   { label: 'Terms', href: '/terms' },
@@ -162,7 +163,7 @@ export function SiteShell(props: SiteShellProps): React.ReactElement {
   const pathname = usePathname() ?? '/'
   const suppressChrome = pathMatches(pathname, chromeSuppressPaths)
   const showBadge =
-    !suppressChrome && stickyLead !== null && !pathMatches(pathname, stickyLeadSuppressPaths)
+    !suppressChrome && !!stickyLead && !pathMatches(pathname, stickyLeadSuppressPaths)
 
   // App-internal routes (login/dashboard/etc.) — render children raw.
   if (suppressChrome) {
@@ -219,7 +220,7 @@ export function SiteShell(props: SiteShellProps): React.ReactElement {
         <p className="bl-footer-disc">{footer.disclaimer}</p>
       </footer>
 
-      {showBadge && stickyLead !== null ? (
+      {showBadge && stickyLead ? (
         <StickyLeadBadge href={stickyLead.href} label={stickyLead.label} />
       ) : null}
     </div>

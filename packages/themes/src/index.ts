@@ -1,3 +1,4 @@
+export type { NavLink } from './types'
 export type { ThemeId, ThemeSpec, ThemeVarKey } from './themes'
 export { THEMES, TWILIGHT, DAYBREAK, ROYAL_DARK, ROYAL_LIGHT, THEME_VAR_KEYS, getTheme } from './themes'
 export { applyTheme, getStoredTheme, setStoredTheme, themeFOUCScript } from './apply'

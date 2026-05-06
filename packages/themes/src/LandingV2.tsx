@@ -26,6 +26,7 @@
 
 import * as React from 'react'
 import { TurnstileWidget } from '@bizlegal/turnstile-widget'
+import type { NavLink } from './types'
 
 // ── shared CSS exported so subdomains can layer overrides ────────
 export const lexCSSv2 = `
@@ -447,11 +448,11 @@ export interface PricingTier {
 }
 export interface LandingV2Content {
   readonly brand: string
-  readonly nav: ReadonlyArray<{ label: string; href: string }>
+  readonly nav: ReadonlyArray<NavLink>
   readonly heroEyebrow: string
   readonly heroHeadline: React.ReactNode
   readonly heroSub: string
-  readonly heroPrimaryCta: { label: string; href: string }
+  readonly heroPrimaryCta: NavLink
   readonly heroQuickFormPlaceholder: string
   readonly briefIntro: string
   readonly briefSteps: ReadonlyArray<{ title: string; body: string }>
