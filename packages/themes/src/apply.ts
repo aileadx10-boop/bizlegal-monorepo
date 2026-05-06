@@ -7,7 +7,7 @@
  * uses for the existing `bl-theme` key — generalized here.
  */
 
-import { THEMES, type ThemeId, type ThemeSpec } from './themes.js'
+import { THEMES, type ThemeId, type ThemeSpec } from './themes'
 
 /**
  * Apply theme — write CSS custom properties to the target element's

@@ -7,6 +7,15 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const nextConfig = {
   reactStrictMode: true,
   outputFileTracingRoot: __dirname,
+  transpilePackages: [
+    '@bizlegal/themes',
+    '@bizlegal/turnstile-widget',
+    '@bizlegal/turnstile-verify',
+    '@bizlegal/nurture-enqueue',
+    '@bizlegal/rate-limit',
+    '@bizlegal/ops-log',
+    '@bizlegal/payment',
+  ],
 };
 
 export default nextConfig;

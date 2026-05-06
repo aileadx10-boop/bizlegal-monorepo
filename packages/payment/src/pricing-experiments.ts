@@ -31,7 +31,7 @@
  * The first ones land when conversion data justifies them.
  */
 
-import type { ProductId } from './products.js'
+import type { ProductId } from './products'
 
 export interface ConversionMetric {
   /** Window-grouped conversions actually reaching paid status. */

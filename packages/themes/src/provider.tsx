@@ -1,8 +1,8 @@
 'use client'
 
 import * as React from 'react'
-import { applyTheme, getStoredTheme, setStoredTheme } from './apply.js'
-import type { ThemeId } from './themes.js'
+import { applyTheme, getStoredTheme, setStoredTheme } from './apply'
+import type { ThemeId } from './themes'
 
 interface ThemeContextValue {
   readonly theme: ThemeId

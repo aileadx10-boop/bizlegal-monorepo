@@ -25,7 +25,7 @@
  */
 
 import * as React from 'react'
-import { ThemeToggleButton } from './provider.js'
+import { ThemeToggleButton } from './provider'
 
 // ── shared CSS exported so subdomains can layer overrides ────────
 export const lexCSSv2 = `

@@ -17,9 +17,9 @@
  * returns the same checkout URL.
  */
 
-import { getProduct, type ProductId, type ProductSpec } from './products.js'
+import { getProduct, type ProductId, type ProductSpec } from './products'
 
-export * from './products.js'
+export * from './products'
 
 export interface CheckoutSpec {
   product_id: ProductId
