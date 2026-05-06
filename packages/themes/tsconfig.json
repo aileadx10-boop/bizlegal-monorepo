@@ -8,5 +8,6 @@
     "declaration": true,
     "jsx": "react-jsx"
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["src/themes.validate.ts"]
 }

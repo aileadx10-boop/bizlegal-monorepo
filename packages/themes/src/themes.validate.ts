@@ -12,6 +12,9 @@
  * Exits non-zero on any failure so it can gate a deploy.
  */
 
+// Use .ts extension so node --experimental-strip-types resolves it.
+// Excluded from tsc via tsconfig.json `exclude`.
+// @ts-expect-error -- runtime-only script imports the .ts file directly
 import { THEMES, THEME_VAR_KEYS, type ThemeId, type ThemeVarKey } from './themes.ts'
 
 interface Failure {

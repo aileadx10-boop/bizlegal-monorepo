@@ -18,7 +18,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "echo ok",
     "test": "echo 'no tests yet'",
-    "validate-themes": "node --experimental-strip-types src/themes.validate.ts"
+    "validate-themes": "node --experimental-strip-types --no-warnings=ExperimentalWarning src/themes.validate.ts"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
