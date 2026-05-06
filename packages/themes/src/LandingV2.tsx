@@ -25,6 +25,7 @@
  */
 
 import * as React from 'react'
+import { TurnstileWidget } from '@bizlegal/turnstile-widget'
 
 // ── shared CSS exported so subdomains can layer overrides ────────
 export const lexCSSv2 = `
@@ -38,6 +39,22 @@ export const lexCSSv2 = `
   width: 100%;
   position: relative;
   overflow-x: hidden;
+}
+
+/* Visually-hidden, screen-reader-accessible (a11y A11Y-020 fix). */
+.lex-page .sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0);
+  white-space: nowrap; border: 0;
+}
+
+/* Form error region — assertive live (a11y H1/H2 fix). */
+.lex-page [role="alert"] {
+  color: #ef4444;
+  font-size: 13px;
+  margin-top: 8px;
 }
 .lex-page a { color: inherit; text-decoration: none; }
 .lex-page button { font-family: inherit; }
@@ -91,14 +108,20 @@ export const lexCSSv2 = `
 .lex-nav-cta {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 10px 16px 10px 18px; border-radius: 999px;
-  background: linear-gradient(135deg, var(--ember, #FFB347), var(--ember-2, #FF3D00));
-  color: #fff; font-size: 12.5px; font-weight: 500; letter-spacing: .01em;
+  /* a11y AA1/AA2 fix — gradient stops shifted darker so white text passes 4.5:1.
+     Was: var(--ember, #FFB347) → var(--ember-2, #FF3D00) (1.80–3.92:1). */
+  background: linear-gradient(135deg, var(--ember-2, #FF3D00), #B22A00);
+  color: #fff; font-size: 12.5px; font-weight: 600; letter-spacing: .01em;
   border: 0; cursor: pointer; text-decoration: none;
   box-shadow: 0 10px 28px -10px color-mix(in srgb, var(--ember-2, #FF3D00) 70%, transparent),
               inset 0 1px 0 rgba(255,255,255,0.28);
   transition: transform 200ms ease, box-shadow 250ms ease;
 }
 .lex-nav-cta:hover { transform: translateY(-1px); }
+.lex-nav-cta:focus-visible {
+  outline: 2px solid var(--brand-soft, #fff);
+  outline-offset: 3px;
+}
 .lex-nav-cta .pulse {
   width: 8px; height: 8px; border-radius: 99px; background: #fff;
   animation: lex-pulse 2.2s ease-out infinite;
@@ -388,9 +411,16 @@ export interface LandingV2Content {
 export interface LandingV2Props {
   readonly content: LandingV2Content
   /** Submit handler for hero quick-capture + bottom intake forms.
-   *  Receives source slug ("home-quick-capture" | "home-intake"). */
+   *  Receives source slug ("home-quick-capture" | "home-intake") plus
+   *  a Turnstile token (S-1 fix — was missing in shipped LandingV2). */
   readonly onLeadSubmit: (
-    args: { email: string; name?: string; scenario?: string; source: string },
+    args: {
+      email: string
+      name?: string
+      scenario?: string
+      source: string
+      turnstile_token?: string
+    },
   ) => Promise<{ ok: boolean; error?: string }>
 }
 
@@ -440,9 +470,14 @@ function Hero(props: {
 }): React.ReactElement {
   const { content, onLeadSubmit } = props
   const [email, setEmail] = React.useState('')
+  const [token, setToken] = React.useState<string | null>(null)
   const [submitting, setSubmitting] = React.useState(false)
   const [submitted, setSubmitted] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
+
+  // Turnstile only blocks submission when the env site-key is configured
+  // (skip-if-not-configured stays compatible with dev + pre-launch deploys).
+  const turnstileEnabled = typeof window !== 'undefined' && !!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
@@ -450,11 +485,26 @@ function Hero(props: {
     setSubmitting(true)
     setError(null)
     try {
-      const res = await onLeadSubmit({ email, source: 'home-quick-capture' })
-      if (!res.ok) throw new Error(res.error ?? 'submit_failed')
+      const res = await onLeadSubmit({
+        email,
+        source: 'home-quick-capture',
+        ...(token ? { turnstile_token: token } : {}),
+      })
+      if (!res.ok) {
+        const detail = res.error?.trim() ? `: ${res.error}` : ''
+        throw new Error(`submit_failed${detail}`)
+      }
       setSubmitted(true)
-    } catch {
-      setError('Could not save your email — please try again.')
+    } catch (err) {
+      // C1 fix — preserve and log the actual error instead of swallowing.
+      const msg = err instanceof Error ? err.message : String(err)
+      // eslint-disable-next-line no-console
+      console.error('[lead-submit:hero] failed', err)
+      setError(
+        msg.includes('turnstile')
+          ? 'Bot challenge failed — please refresh and try again.'
+          : `Could not save your email — please try again. (${msg.slice(0, 100)})`,
+      )
     } finally {
       setSubmitting(false)
     }
@@ -464,20 +514,20 @@ function Hero(props: {
     <section className="lex-hero" id="hero">
       <div className="lex-hero-inner">
         <span className="lex-eyebrow">
-          <span className="dot" />
+          <span className="dot" aria-hidden="true" />
           {content.heroEyebrow}
         </span>
         <h1 className="serif">{content.heroHeadline}</h1>
         <p className="lex-hero-sub">{content.heroSub}</p>
         <div className="lex-hero-ctas">
           <a className="lex-cta-primary" href={content.heroPrimaryCta.href}>
-            <span className="dot" />
+            <span className="dot" aria-hidden="true" />
             {content.heroPrimaryCta.label}
           </a>
           {submitted ? (
-            <span className="lex-quick-success">Sent — check your inbox</span>
+            <span className="lex-quick-success" role="status">Sent — check your inbox</span>
           ) : (
-            <form className="lex-quick-form" onSubmit={submit}>
+            <form className="lex-quick-form" onSubmit={submit} aria-describedby="hero-quick-error">
               <label className="sr-only" htmlFor="hero-quick-email">
                 Email address
               </label>
@@ -488,14 +538,30 @@ function Hero(props: {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={content.heroQuickFormPlaceholder}
+                aria-invalid={error ? true : undefined}
               />
-              <button type="submit" disabled={submitting || !email}>
+              <button
+                type="submit"
+                disabled={submitting || !email || (turnstileEnabled && !token)}
+              >
                 {submitting ? 'Sending…' : 'Email me'}
               </button>
             </form>
           )}
         </div>
-        {error && <p style={{ color: '#ef4444', fontSize: 13 }}>{error}</p>}
+        {!submitted ? (
+          <div style={{ marginTop: 12 }}>
+            <TurnstileWidget onToken={setToken} />
+          </div>
+        ) : null}
+        <p
+          id="hero-quick-error"
+          role="alert"
+          aria-live="assertive"
+          style={{ minHeight: 0 }}
+        >
+          {error ?? ''}
+        </p>
       </div>
     </section>
   )
@@ -611,9 +677,12 @@ function Contact(props: {
   const [name, setName] = React.useState('')
   const [email, setEmail] = React.useState('')
   const [scenario, setScenario] = React.useState('')
+  const [token, setToken] = React.useState<string | null>(null)
   const [submitting, setSubmitting] = React.useState(false)
   const [submitted, setSubmitted] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
+
+  const turnstileEnabled = typeof window !== 'undefined' && !!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
@@ -621,11 +690,28 @@ function Contact(props: {
     setSubmitting(true)
     setError(null)
     try {
-      const res = await onLeadSubmit({ email, name, scenario, source: 'home-intake' })
-      if (!res.ok) throw new Error(res.error ?? 'submit_failed')
+      const res = await onLeadSubmit({
+        email,
+        name,
+        scenario,
+        source: 'home-intake',
+        ...(token ? { turnstile_token: token } : {}),
+      })
+      if (!res.ok) {
+        const detail = res.error?.trim() ? `: ${res.error}` : ''
+        throw new Error(`submit_failed${detail}`)
+      }
       setSubmitted(true)
-    } catch {
-      setError('Could not save your details — please try again.')
+    } catch (err) {
+      // C2 fix — preserve and log the actual error instead of swallowing.
+      const msg = err instanceof Error ? err.message : String(err)
+      // eslint-disable-next-line no-console
+      console.error('[lead-submit:contact] failed', err)
+      setError(
+        msg.includes('turnstile')
+          ? 'Bot challenge failed — please refresh and try again.'
+          : `Could not save your details — please try again. (${msg.slice(0, 100)})`,
+      )
     } finally {
       setSubmitting(false)
     }
@@ -637,35 +723,65 @@ function Contact(props: {
         <h2 className="serif">{content.contactTitle}</h2>
         <p className="lex-section-sub">{content.contactSub}</p>
         {submitted ? (
-          <p className="lex-quick-success" style={{ marginTop: 32 }}>
+          <p className="lex-quick-success" role="status" style={{ marginTop: 32 }}>
             Sent — we&apos;ll be in touch within a business day.
           </p>
         ) : (
-          <form className="lex-contact-form" onSubmit={submit}>
+          <form
+            className="lex-contact-form"
+            onSubmit={submit}
+            aria-describedby="contact-error"
+          >
+            <label className="sr-only" htmlFor="contact-name">
+              Your name
+            </label>
             <input
+              id="contact-name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Your name"
               autoComplete="name"
             />
+            <label className="sr-only" htmlFor="contact-email">
+              Email address
+            </label>
             <input
+              id="contact-email"
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@company.com"
               autoComplete="email"
+              aria-invalid={error ? true : undefined}
             />
+            <label className="sr-only" htmlFor="contact-scenario">
+              Briefly describe your scenario
+            </label>
             <textarea
+              id="contact-scenario"
               value={scenario}
               onChange={(e) => setScenario(e.target.value)}
               placeholder="Briefly: what are you hoping we help with?"
             />
-            <button type="submit" disabled={submitting || !email}>
+            <div style={{ margin: '8px 0' }}>
+              <TurnstileWidget onToken={setToken} />
+            </div>
+            <button
+              type="submit"
+              disabled={submitting || !email || (turnstileEnabled && !token)}
+            >
               {submitting ? 'Sending…' : 'Talk to us'}
             </button>
-            {error && <p style={{ color: '#ef4444', fontSize: 13 }}>{error}</p>}
+            <p
+              id="contact-error"
+              role="alert"
+              aria-live="assertive"
+              style={{ minHeight: 0 }}
+            >
+              {error ?? ''}
+            </p>
           </form>
         )}
       </div>

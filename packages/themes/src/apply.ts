@@ -20,11 +20,23 @@ import { THEMES, type ThemeId, type ThemeSpec } from './themes'
  * callers that need to inspect the active landing theme from
  * CSS or DevTools.
  */
+/** Default to fall back to when an unknown theme id is requested.
+ *  C4 fix — was silently no-op'ing, leaving the page with no CSS vars
+ *  set at all (brand-coherence break). */
+const FALLBACK_THEME: ThemeId = 'twilight'
+
 export function applyTheme(id: ThemeId, root: HTMLElement | null = null): void {
   if (typeof document === 'undefined') return
   const target = root ?? document.documentElement
   const spec = THEMES[id]
-  if (!spec) return
+  if (!spec) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      `[applyTheme] Unknown theme id "${id}" — falling back to "${FALLBACK_THEME}"`,
+    )
+    if (id !== FALLBACK_THEME) applyTheme(FALLBACK_THEME, target)
+    return
+  }
   for (const [k, v] of Object.entries(spec.vars)) {
     target.style.setProperty(k, v)
   }
@@ -91,7 +103,9 @@ export function themeFOUCScript(args: {
   var allowed=alt?[primary,alt]:[primary];
   var stored=null;try{stored=localStorage.getItem(key)}catch(e){}
   var pick=allowed.indexOf(stored)>-1?stored:primary;
-  var spec=THEMES[pick];if(!spec)return;
+  if(stored&&stored!==pick){try{console.warn('[bl-theme-v2] Stored theme '+JSON.stringify(stored)+' not in allowed set, falling back to '+JSON.stringify(pick))}catch(e){}}
+  var spec=THEMES[pick];
+  if(!spec){try{console.warn('[bl-theme-v2] No spec for '+JSON.stringify(pick))}catch(e){}return;}
   var root=document.documentElement;
   var vars=spec.vars;
   for(var k in vars){if(Object.prototype.hasOwnProperty.call(vars,k)){root.style.setProperty(k,vars[k])}}

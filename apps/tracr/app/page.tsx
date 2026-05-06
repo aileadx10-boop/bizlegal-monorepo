@@ -12,7 +12,7 @@ export default function HomePage() {
   return (
     <LandingV2
       content={TRACR_CONTENT}
-      onLeadSubmit={async ({ email, name, scenario, source }) => {
+      onLeadSubmit={async ({ email, name, scenario, source, turnstile_token }) => {
         try {
           const res = await fetch('/api/decision-tree/lead', {
             method: 'POST',
@@ -20,6 +20,7 @@ export default function HomePage() {
             body: JSON.stringify({
               email,
               verdict: 'home_capture',
+              ...(turnstile_token ? { turnstile_token } : {}),
               answers: {
                 home_capture: true,
                 source,
@@ -29,12 +30,23 @@ export default function HomePage() {
             }),
           })
           if (!res.ok) {
-            const detail = await res.text().catch(() => '')
-            return { ok: false, error: detail.slice(0, 160) || `http_${res.status}` }
+            let detail = ''
+            const ct = res.headers.get('content-type') ?? ''
+            try {
+              detail = ct.includes('application/json')
+                ? JSON.stringify(await res.json())
+                : await res.text()
+            } catch (readErr) {
+              // eslint-disable-next-line no-console
+              console.error('[lead-submit:tracr] body-read failed', readErr)
+            }
+            return { ok: false, error: detail.slice(0, 240) || `http_${res.status}` }
           }
           return { ok: true }
         } catch (err) {
-          return { ok: false, error: (err as Error).message }
+          // eslint-disable-next-line no-console
+          console.error('[lead-submit:tracr] network/throw', err)
+          return { ok: false, error: err instanceof Error ? err.message : String(err) }
         }
       }}
     />

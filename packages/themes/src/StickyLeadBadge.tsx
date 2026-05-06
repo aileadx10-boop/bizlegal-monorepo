@@ -124,11 +124,16 @@ export function StickyLeadBadge(props: StickyLeadBadgeProps): React.ReactElement
           border: 'none',
           color: 'var(--paper-dim, rgba(255,255,255,.6))',
           cursor: 'pointer',
+          // a11y AA5 fix — WCAG 2.2 SC 2.5.8 Target Size (Minimum) requires 24×24.
+          width: 24,
+          height: 24,
+          fontSize: 16,
+          lineHeight: '24px',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: 4,
           padding: 0,
-          width: 18,
-          height: 18,
-          fontSize: 14,
-          lineHeight: '18px',
         }}
       >
         ×

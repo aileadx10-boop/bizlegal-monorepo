@@ -27,6 +27,20 @@ export const siteShellCSS = `
 .bl-shell button { font-family: inherit; }
 .bl-shell main { flex: 1; }
 
+/* Skip-to-main link (a11y A1 fix — WCAG 2.4.1 Bypass Blocks) */
+.bl-skip { position: absolute; left: 12px; top: 12px; z-index: 100; padding: 10px 16px; background: var(--paper, #fff); color: var(--ink, #0B0717); border-radius: 6px; font-size: 14px; font-weight: 600; transform: translateY(-150%); transition: transform 180ms ease; }
+.bl-skip:focus { transform: translateY(0); outline: 3px solid var(--brand-soft, #fff); outline-offset: 2px; }
+
+/* Visually-hidden helper (matches LandingV2 .sr-only) */
+.bl-shell .sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+/* Focus-visible everywhere in the shell (a11y AA4 fix — WCAG 2.4.7) */
+.bl-shell a:focus-visible, .bl-shell button:focus-visible {
+  outline: 2px solid var(--brand-soft, #fff);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 /* Nav (mirrors lex-nav so LandingV2 inheritance is seamless) */
 .bl-nav { position: sticky; top: 0; z-index: 50; display: flex; justify-content: space-between; align-items: center; padding: 18px 32px; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); background: linear-gradient(180deg, color-mix(in srgb, var(--ink) 78%, transparent), color-mix(in srgb, var(--ink) 30%, transparent)); border-bottom: 1px solid var(--line-2, rgba(233,229,245,.06)); }
 .bl-brand { display: flex; align-items: center; gap: 10px; font-family: var(--lex-display, 'Fraunces', serif); font-weight: 300; font-size: 22px; letter-spacing: 0.02em; color: var(--paper); }
@@ -35,7 +49,8 @@ export const siteShellCSS = `
 .bl-navmid a { padding: 6px 0; transition: color 200ms ease; }
 .bl-navmid a:hover { color: var(--paper); }
 .bl-navend { display: flex; align-items: center; gap: 10px; }
-.bl-nav-cta { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px 10px 18px; border-radius: 999px; background: linear-gradient(135deg, var(--ember, #FFB347), var(--ember-2, #FF3D00)); color: #fff; font-size: 12.5px; font-weight: 500; letter-spacing: .01em; border: 0; cursor: pointer; box-shadow: 0 10px 28px -10px color-mix(in srgb, var(--ember-2, #FF3D00) 70%, transparent), inset 0 1px 0 rgba(255,255,255,0.28); transition: transform 200ms ease, box-shadow 250ms ease; }
+/* a11y AA1/AA2 fix — gradient stops shifted darker so white passes 4.5:1 (was 1.80–3.92:1). */
+.bl-nav-cta { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px 10px 18px; border-radius: 999px; background: linear-gradient(135deg, var(--ember-2, #FF3D00), #B22A00); color: #fff; font-size: 12.5px; font-weight: 600; letter-spacing: .01em; border: 0; cursor: pointer; box-shadow: 0 10px 28px -10px color-mix(in srgb, var(--ember-2, #FF3D00) 70%, transparent), inset 0 1px 0 rgba(255,255,255,0.28); transition: transform 200ms ease, box-shadow 250ms ease; }
 .bl-nav-cta:hover { transform: translateY(-1px); }
 .bl-nav-cta .pulse { width: 8px; height: 8px; border-radius: 99px; background: #fff; animation: bl-pulse 2.2s ease-out infinite; }
 @keyframes bl-pulse { 0% { box-shadow: 0 0 0 0 rgba(255,255,255,.6); } 70% { box-shadow: 0 0 0 10px rgba(255,255,255,0); } 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); } }
@@ -141,6 +156,10 @@ export function SiteShell(props: SiteShellProps): React.ReactElement {
     <div className="bl-shell">
       <style dangerouslySetInnerHTML={{ __html: siteShellCSS }} />
 
+      <a href="#main-content" className="bl-skip">
+        Skip to main content
+      </a>
+
       <header className="bl-nav" role="banner">
         <a href="/" className="bl-brand" aria-label={`${brand} home`}>
           <span className="mark">{DEFAULT_BRAND_MARK}</span>
@@ -156,13 +175,13 @@ export function SiteShell(props: SiteShellProps): React.ReactElement {
         <div className="bl-navend">
           <ThemeToggleButton />
           <a className="bl-nav-cta" href={cta.href}>
-            <span className="pulse" />
+            <span className="pulse" aria-hidden="true" />
             {cta.label}
           </a>
         </div>
       </header>
 
-      <main>{children}</main>
+      <main id="main-content" tabIndex={-1}>{children}</main>
 
       <footer className="bl-footer" role="contentinfo">
         <div className="bl-footer-inner">
