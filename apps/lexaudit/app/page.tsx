@@ -35,7 +35,8 @@ export default function HomePage() {
             }),
           })
           if (!res.ok) {
-            // C3 fix — try JSON first, log body-read failures, preserve full error.
+            // Try JSON first, fall back to text; never let a body-read
+            // failure mask the original status by collapsing to ''.
             let detail = ''
             const ct = res.headers.get('content-type') ?? ''
             try {

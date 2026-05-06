@@ -30,6 +30,8 @@ export default function HomePage() {
             }),
           })
           if (!res.ok) {
+            // Try JSON first, fall back to text; never let a body-read
+            // failure mask the original status by collapsing to ''.
             let detail = ''
             const ct = res.headers.get('content-type') ?? ''
             try {

@@ -1,11 +1,8 @@
 /**
- * BizLegal-AI theme registry.
- *
- * Lifted directly from `C:\Users\Moshe Dor\Downloads\products page\lexaudit-themes.jsx`
- * (the source of truth from the design pass on 2026-05-06).
- * Twilight Violet / Daybreak / Royal Blue are verbatim; royal-light is
- * derived to give DocAI/BRAI/TRACR a bright counterpart that keeps the
- * royal-blue brand identity instead of crossing into violet.
+ * BizLegal-AI theme registry. Twilight, Daybreak, and Royal Dark are
+ * the canonical brand themes; Royal Light is derived from Daybreak's
+ * shape with the royal-blue brand identity preserved (the bright
+ * alternate for BRAI / TRACR / DocAI).
  */
 
 export type ThemeId = 'twilight' | 'daybreak' | 'royal-dark' | 'royal-light'
@@ -196,7 +193,7 @@ export const ROYAL_DARK: ThemeSpec = {
 /**
  * Royal Light — derived. Daybreak shape (light surfaces, dark type)
  * but the royal-blue brand identity preserved on toggle. Used as the
- * bright alternate for DocAI / BRAI / TRACR per Moses 2026-05-06 Q&A.
+ * bright alternate for DocAI / BRAI / TRACR.
  */
 export const ROYAL_LIGHT: ThemeSpec = {
   id: 'royal-light',
