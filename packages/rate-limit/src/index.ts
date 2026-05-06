@@ -66,7 +66,7 @@ function evictIfFull(store: Map<string, KeyState>, maxKeys: number): void {
   if (store.size < maxKeys) return
   // Evict the oldest 10% so we don't run this every single insert.
   const toEvict = Math.max(1, Math.floor(maxKeys * 0.1))
-  const sorted = [...store.entries()].sort((a, b) => a[1].lastSeen - b[1].lastSeen)
+  const sorted = Array.from(store.entries()).sort((a, b) => a[1].lastSeen - b[1].lastSeen)
   for (let i = 0; i < toEvict; i++) {
     const entry = sorted[i]
     if (entry) store.delete(entry[0])

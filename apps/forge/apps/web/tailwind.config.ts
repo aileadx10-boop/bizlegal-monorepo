@@ -25,20 +25,26 @@ const config: Config = {
         'overline': ['0.6875rem', { lineHeight: '1.3', letterSpacing: '0.06em', fontWeight: '600' }],
       },
       colors: {
+        // Phase AA Subdomain Design Pass — Forge rebrand to Daybreak.
+        // The token names stay (Tailwind classes still resolve), but
+        // values pull from CSS vars set by @bizlegal/themes' Daybreak
+        // FOUC script in layout.tsx. Falls back to literal hex for
+        // build-time evaluation in `text-forge-text-secondary` class
+        // generation. Daybreak is light-mode so the palette inverts.
         forge: {
-          dark: '#0a0b0f',
-          card: '#12141c',
-          border: '#1e2030',
-          accent: '#6366f1',
-          'accent-hover': '#4f46e5',
-          'accent-glow': 'rgba(99, 102, 241, 0.15)',
-          muted: '#6b7280',
-          text: '#f1f5f9',
-          'text-secondary': '#94a3b8',
-          success: '#10b981',
-          warning: '#f59e0b',
-          error: '#ef4444',
-          info: '#3b82f6',
+          dark: 'var(--ink, #FBF9F4)',           // page bg (paper)
+          card: 'var(--ink-2, #F2EEE5)',         // surface
+          border: 'var(--line, rgba(26,21,48,.12))',
+          accent: 'var(--brand, #5B49E0)',       // violet
+          'accent-hover': 'var(--brand-soft, #7E6DFF)',
+          'accent-glow': 'rgba(91, 73, 224, 0.15)',
+          muted: 'var(--paper-dim, #5C5670)',
+          text: 'var(--paper, #1A1530)',         // dark type on paper
+          'text-secondary': 'var(--paper-dim, #5C5670)',
+          success: 'var(--accent-a, #0F8C6E)',
+          warning: 'var(--accent-b, #B8852D)',
+          error: 'var(--accent-c, #E14B16)',
+          info: 'var(--brand-soft, #7E6DFF)',
         },
         gradient: {
           'hero-start': 'rgba(99, 102, 241, 0.08)',

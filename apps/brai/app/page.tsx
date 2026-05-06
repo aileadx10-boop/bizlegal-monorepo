@@ -1,73 +1,55 @@
-import Link from "next/link"
-import LegalShield from "@/components/layout/LegalShield"
-import { DISCLAIMER_VERSION } from "@/lib/legal/disclaimer"
+'use client'
 
+import { LandingV2 } from '@bizlegal/themes'
+import { BRAI_CONTENT } from './landing-content'
+
+/**
+ * BRAI homepage — Phase AA Subdomain Design Pass.
+ * Replaces the prior pricing/methodology link page with the shared
+ * LandingV2 template (royal-dark theme primary, royal-light alternate).
+ * Nav + footer + sticky lead badge now provided by SiteShell at layout.
+ */
 export default function HomePage() {
   return (
-    <>
-      <section style={{ maxWidth: 960, margin: "0 auto", padding: "80px 24px" }}>
-        <p
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 11,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            color: "var(--accent)",
-            margin: 0,
-          }}
-        >
-          Disclosure {DISCLAIMER_VERSION}
-        </p>
-        <h1
-          style={{
-            fontFamily: "var(--font-display)",
-            fontSize: 48,
-            color: "var(--on-surface)",
-            margin: "10px 0 24px",
-            lineHeight: 1.1,
-          }}
-        >
-          Blockchain regulatory intelligence.
-          <br />
-          Source-cited. Human-reviewed.
-        </h1>
-        <p style={{ fontSize: 16, color: "var(--on-surface-var)", maxWidth: 720, lineHeight: 1.6 }}>
-          BRAI evaluates the regulatory posture of digital-asset ventures across US, EU, UAE,
-          and Singapore frameworks. Every output ships with cited regulator sources, a
-          reviewer signoff, and a disclosure-version stamp. We are not a law firm and this is
-          not legal advice.
-        </p>
-        <div style={{ marginTop: 32, display: "flex", gap: 12, flexWrap: "wrap" }}>
-          <Link
-            href="/methodology"
-            style={{
-              padding: "12px 20px",
-              border: "1px solid var(--accent)",
-              background: "var(--accent)",
-              color: "var(--bg)",
-              textDecoration: "none",
-              fontWeight: 600,
-              borderRadius: 4,
-            }}
-          >
-            See the methodology →
-          </Link>
-          <Link
-            href="/pricing"
-            style={{
-              padding: "12px 20px",
-              border: "1px solid var(--outline-var)",
-              color: "var(--on-surface)",
-              textDecoration: "none",
-              fontWeight: 600,
-              borderRadius: 4,
-            }}
-          >
-            Pricing
-          </Link>
-        </div>
-      </section>
-      <LegalShield variant="micro" />
-    </>
+    <LandingV2
+      content={BRAI_CONTENT}
+      onLeadSubmit={async ({ email, name, scenario, source, turnstile_token }) => {
+        try {
+          const res = await fetch('/api/decision-tree/lead', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+              email,
+              verdict: 'home_capture',
+              ...(turnstile_token ? { turnstile_token } : {}),
+              answers: {
+                home_capture: true,
+                source,
+                ...(name ? { name } : {}),
+                ...(scenario ? { scenario } : {}),
+              },
+            }),
+          })
+          if (!res.ok) {
+            let detail = ''
+            const ct = res.headers.get('content-type') ?? ''
+            try {
+              detail = ct.includes('application/json')
+                ? JSON.stringify(await res.json())
+                : await res.text()
+            } catch (readErr) {
+              // eslint-disable-next-line no-console
+              console.error('[lead-submit:brai] body-read failed', readErr)
+            }
+            return { ok: false, error: detail.slice(0, 240) || `http_${res.status}` }
+          }
+          return { ok: true }
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.error('[lead-submit:brai] network/throw', err)
+          return { ok: false, error: err instanceof Error ? err.message : String(err) }
+        }
+      }}
+    />
   )
 }

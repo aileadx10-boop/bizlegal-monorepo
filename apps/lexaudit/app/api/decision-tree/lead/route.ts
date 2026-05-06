@@ -23,6 +23,9 @@ const VALID_VERDICTS = new Set([
   'continuous_monitoring_critical',
   'baseline_audit_first',
   'self_serve',
+  // D-design-pass: sentinel for hero quick-capture / contact intake
+  // (user submitted email without taking the decision tree).
+  'home_capture',
 ])
 
 interface DecisionTreePayload {

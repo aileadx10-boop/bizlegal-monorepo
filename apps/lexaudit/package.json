@@ -13,6 +13,7 @@
     "react-dom": "^18",
     "@bizlegal/nurture-enqueue": "workspace:*",
     "@bizlegal/rate-limit": "workspace:*",
+    "@bizlegal/themes": "workspace:*",
     "@bizlegal/turnstile-verify": "workspace:*",
     "@bizlegal/turnstile-widget": "workspace:*",
     "@supabase/supabase-js": "^2.43.4",

@@ -1,5 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  transpilePackages: [
+    '@bizlegal/themes',
+    '@bizlegal/turnstile-widget',
+    '@bizlegal/turnstile-verify',
+    '@bizlegal/nurture-enqueue',
+    '@bizlegal/rate-limit',
+    '@bizlegal/ops-log',
+    '@bizlegal/payment',
+  ],
   async redirects() {
     return [
       { source: '/legal/disclaimer', destination: '/disclaimer', permanent: true },

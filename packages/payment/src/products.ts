@@ -13,7 +13,7 @@
  * via Moses-approved direct edits.
  */
 
-import { activeExperimentFor } from './pricing-experiments.js'
+import { activeExperimentFor } from './pricing-experiments'
 
 export type ProductId =
   // BOI Tracker

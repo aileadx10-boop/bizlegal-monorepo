@@ -11,6 +11,7 @@
   "dependencies": {
     "@bizlegal/nurture-enqueue": "workspace:*",
     "@bizlegal/rate-limit": "workspace:*",
+    "@bizlegal/themes": "workspace:*",
     "@bizlegal/turnstile-verify": "workspace:*",
     "@bizlegal/turnstile-widget": "workspace:*",
     "@supabase/ssr": "^0.5.0",

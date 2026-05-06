@@ -13,6 +13,7 @@
     "@bizlegal/nurture-enqueue": "workspace:*",
     "@bizlegal/payment": "workspace:*",
     "@bizlegal/rate-limit": "workspace:*",
+    "@bizlegal/themes": "workspace:*",
     "@bizlegal/turnstile-verify": "workspace:*",
     "@bizlegal/turnstile-widget": "workspace:*",
     "@paypal/checkout-server-sdk": "^1.0.3",
