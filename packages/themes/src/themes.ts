@@ -7,6 +7,37 @@
 
 export type ThemeId = 'twilight' | 'daybreak' | 'royal-dark' | 'royal-light'
 
+/** Canonical CSS custom-property keys every ThemeSpec must define.
+ *  Adding a key here forces all 4 themes to populate it (the
+ *  Record<ThemeVarKey, string> type below is exhaustive, not Partial),
+ *  so TypeScript catches both typos and missing-on-one-theme drift. */
+export const THEME_VAR_KEYS = [
+  '--ink',
+  '--ink-2',
+  '--ink-3',
+  '--surface',
+  '--surface-2',
+  '--brand',
+  '--brand-soft',
+  '--accent-a',
+  '--accent-b',
+  '--accent-c',
+  '--ember',
+  '--ember-2',
+  '--paper',
+  '--paper-dim',
+  '--line',
+  '--line-2',
+  '--hero-bg',
+  '--audits-bg',
+  '--spotlight-bg',
+  '--bleed-bg',
+  '--contact-bg',
+  '--footer-bg',
+  '--shield-grad',
+] as const
+export type ThemeVarKey = typeof THEME_VAR_KEYS[number]
+
 export interface ThemeSpec {
   readonly id: ThemeId
   readonly name: string
@@ -14,8 +45,7 @@ export interface ThemeSpec {
   readonly mode: 'dark' | 'light'
   readonly displayFamily: string
   readonly bodyFamily: string
-  /** CSS custom properties applied at :root when this theme is active. */
-  readonly vars: Readonly<Record<string, string>>
+  readonly vars: Readonly<Record<ThemeVarKey, string>>
 }
 
 const FAMILIES = {
