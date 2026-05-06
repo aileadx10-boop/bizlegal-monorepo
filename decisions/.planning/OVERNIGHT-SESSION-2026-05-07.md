@@ -22,13 +22,15 @@ Both merged to `main`. Vercel will pick up the 7 commits and redeploy each subdo
 |---|---|---|---|
 | `claude/phase-aa-forge-a11y` | 1 | Forge layout retrofit: aria-hidden on decorative SVGs/emojis/dots, accessible names on LinkedIn + X social links, role=banner/contentinfo, skip-to-main link, main-content target | Low — Forge layout-only edit, no behavior change |
 | `claude/phase-aa-tier1.5-silent-fail-highs` | 1 | Silent-fail HIGH H3/H4/H6/H7 + MEDIUM M1/M2 — provider stale-dep, useThemeOptional non-throwing variant, pathMatches normalization, StickyLeadBadge corrupt-timestamp clear, localStorage error logging, FOUC dev-time warning | Low — surgical fixes, tsc clean |
+| `claude/phase-aa-a11y-034-toggle-dedup` | 1 | A11Y-034 closed: legacy bl-theme bar hidden on marketing routes via new `<AppRouteOnly>` client component (shows only on /login, /signup, /dashboard, /admin, /account, /certificate, /api). Plus 4 HIGH comment-audit fixes (themes.ts hardcoded Windows path removed, misleading C1/C2/C3 comments rewritten). | Low — additive component + comment hygiene |
+| `claude/phase-aa-type-design-f1-f2` | 1 | Type-design F-1 (ThemeSpec.vars now uses literal-key union THEME_VAR_KEYS — typos fail the build) + F-2 (LandingV2 onLeadSubmit uses discriminated `LeadSubmitResult` + literal `LeadSubmitSource` — error required on failure, source-typo door closed). Audit doc: `TYPE-DESIGN-PHASE-AA-2026-05-07.md`. | Low — backward-compatible type tightening, no runtime change |
 
 To merge:
 ```bash
-gh pr create --base main --head claude/phase-aa-forge-a11y --title "Phase AA: Forge a11y retrofit (A11Y-035)" --body "..."
-gh pr merge <N> --merge --delete-branch
-gh pr create --base main --head claude/phase-aa-tier1.5-silent-fail-highs --title "Phase AA: silent-fail HIGH/MEDIUM remediation" --body "..."
-gh pr merge <N> --merge --delete-branch
+for branch in phase-aa-forge-a11y phase-aa-tier1.5-silent-fail-highs phase-aa-a11y-034-toggle-dedup phase-aa-type-design-f1-f2; do
+  gh pr create --base main --head claude/$branch --title "Phase AA: $branch" --body "see commit message"
+done
+# then merge each in turn
 ```
 
 ---
