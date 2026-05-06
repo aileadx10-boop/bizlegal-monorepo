@@ -42,9 +42,10 @@ export function ThemeProvider(props: ThemeProviderProps): React.ReactElement {
       setThemeState(pick)
       applyTheme(pick)
     }
-    // run once on mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    // H3 fix — re-run when primary/alternate/storageKey change so a host
+    // that swaps brand props at runtime (cookie-based brand swap, A/B test)
+    // re-syncs the persisted state instead of staying on the stale theme.
+  }, [primary, alternate, storageKey])
 
   const setTheme = React.useCallback(
     (id: ThemeId) => {
@@ -76,6 +77,14 @@ export function useTheme(): ThemeContextValue {
   return ctx
 }
 
+/** H4 fix — non-throwing variant for components that may render outside
+ *  a provider (e.g. ThemeToggleButton mounted unconditionally in
+ *  SiteShell). Returns null when no provider; caller should render
+ *  null in that case rather than blanking the whole tree. */
+export function useThemeOptional(): ThemeContextValue | null {
+  return React.useContext(ThemeCtx)
+}
+
 /**
  * ThemeToggleButton — accessible 2-state switch. Renders nothing when
  * the active provider has no `alternate` (e.g. LeadForge, Forge are
@@ -88,7 +97,11 @@ export function ThemeToggleButton(props: {
   readonly labelPrimary?: string
   readonly labelAlternate?: string
 }): React.ReactElement | null {
-  const { theme, primary, alternate, toggle } = useTheme()
+  // H4 fix — non-throwing optional consumer so a layout that mounts
+  // SiteShell without ThemeProvider doesn't blank the entire shell tree.
+  const ctx = useThemeOptional()
+  if (!ctx) return null
+  const { theme, primary, alternate, toggle } = ctx
   if (!alternate) return null
   const isPrimary = theme === primary
   const label = isPrimary

@@ -123,9 +123,26 @@ const DEFAULT_CHROME_SUPPRESS: ReadonlyArray<string> = [
   '/api',
 ]
 
+function normalizePath(pathname: string): string {
+  // H6 fix — strip trailing slash (Next can return either depending on
+  // trailingSlash config). Keep '/' as-is. Strip query/hash defensively
+  // even though usePathname() drops them today.
+  let p = pathname
+  const qIdx = p.indexOf('?')
+  if (qIdx >= 0) p = p.slice(0, qIdx)
+  const hIdx = p.indexOf('#')
+  if (hIdx >= 0) p = p.slice(0, hIdx)
+  if (p.length > 1 && p.endsWith('/')) p = p.slice(0, -1)
+  return p
+}
+
 function pathMatches(pathname: string, prefixes: ReadonlyArray<string>): boolean {
-  for (const p of prefixes) {
-    if (pathname === p || pathname.startsWith(p + '/')) return true
+  const norm = normalizePath(pathname)
+  for (const raw of prefixes) {
+    const p = normalizePath(raw)
+    // exact match OR child path with explicit '/' boundary so '/certificate'
+    // does NOT match '/certificates' (a future similarly-named route).
+    if (norm === p || norm.startsWith(p + '/')) return true
   }
   return false
 }

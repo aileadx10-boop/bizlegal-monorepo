@@ -1,7 +1,7 @@
 export type { ThemeId, ThemeSpec } from './themes'
 export { THEMES, TWILIGHT, DAYBREAK, ROYAL_DARK, ROYAL_LIGHT, getTheme } from './themes'
 export { applyTheme, getStoredTheme, setStoredTheme, themeFOUCScript } from './apply'
-export { ThemeProvider, useTheme, ThemeToggleButton } from './provider'
+export { ThemeProvider, useTheme, useThemeOptional, ThemeToggleButton } from './provider'
 export type { ThemeProviderProps } from './provider'
 export { StickyLeadBadge } from './StickyLeadBadge'
 export type { StickyLeadBadgeProps } from './StickyLeadBadge'
