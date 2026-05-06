@@ -232,36 +232,50 @@ export const lexCSSv2 = `
 }
 
 /* Brief */
+/* Section rhythm — varied padding per section type to break the
+   uniform-padding-everywhere anti-pattern flagged by the UI auditor.
+   Each section has a deliberate cadence relationship to its neighbors:
+   tight intro (Brief) → wide data shelf (Audits) → editorial pause
+   (Spotlight) → decision moment (Pricing, bottom-weighted) → close
+   (Contact). */
 .lex-section { padding: 96px 24px; }
 .lex-section-inner { max-width: 1080px; margin: 0 auto; }
 .lex-section h2 { font-size: clamp(28px, 3.4vw, 40px); margin-bottom: 16px; }
 .lex-section .lex-section-sub { color: var(--paper-dim); font-size: 15px; max-width: 640px; line-height: 1.6; }
+/* Per-section overrides — each tells a different story rhythmically. */
+.lex-brief { padding: 72px 24px 48px; }
+.lex-audits { padding: 96px 24px 88px; }
+.lex-spotlight { padding: 128px 24px 96px; }
+.lex-pricing { padding: 96px 24px 128px; }
+.lex-contact { padding: 80px 24px 56px; }
+@media (max-width: 720px) {
+  .lex-brief, .lex-audits, .lex-spotlight, .lex-pricing, .lex-contact { padding-left: 18px; padding-right: 18px; }
+}
 
+/* Brief — no-card chrome, editorial 3-step rail (UI auditor card-vocabulary fix).
+   Numbered badges sit prominently OFF the text block; no surface, no
+   border, no hover lift — the brief is meant to read like body copy
+   not a card grid. */
 .lex-brief { background: var(--audits-bg); }
 .lex-brief-grid {
-  display: grid; gap: 18px; margin-top: 40px;
+  display: grid; gap: 56px 32px; margin-top: 48px;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 .lex-brief-card {
-  position: relative; padding: 28px 24px;
-  border: 1px solid var(--line); border-radius: 18px;
-  background: var(--surface); backdrop-filter: blur(12px);
-  transition: transform 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
-}
-.lex-brief-card:hover {
-  transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--brand) 40%, var(--line));
-  box-shadow: 0 18px 40px -18px color-mix(in srgb, var(--brand) 50%, transparent);
+  position: relative; padding: 0;
+  /* deliberately no surface / border / shadow — distinct from spotlight + pricing */
 }
 .lex-brief-num {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 36px; height: 36px; border-radius: 12px;
-  background: color-mix(in srgb, var(--brand) 18%, var(--surface));
-  color: var(--brand); font-family: var(--lex-display); font-size: 18px;
-  margin-bottom: 16px;
+  width: 44px; height: 44px; border-radius: 999px;
+  background: var(--brand); color: #fff;
+  font-family: var(--lex-display); font-size: 18px; font-weight: 500;
+  margin-bottom: 18px;
+  box-shadow: 0 12px 28px -10px color-mix(in srgb, var(--brand) 60%, transparent);
 }
-.lex-brief-card h3 { font-size: 17px; margin-bottom: 8px; }
-.lex-brief-card p { color: var(--paper-dim); font-size: 14px; line-height: 1.6; }
+.lex-brief-card h3 { font-size: 19px; margin-bottom: 10px; font-family: var(--lex-display); font-weight: 400; }
+.lex-brief-card p { color: var(--paper-dim); font-size: 14.5px; line-height: 1.7; }
+@media (max-width: 720px) { .lex-brief-grid { gap: 36px 24px; } }
 
 /* Audits */
 .lex-audits { background: var(--audits-bg); }
@@ -300,34 +314,62 @@ export const lexCSSv2 = `
 }
 .lex-spot-quote::before { content: '"'; color: var(--brand-soft); font-size: 1.4em; margin-right: 4px; }
 .lex-spot-meta { margin-top: 18px; color: var(--paper-dim); font-size: 13px; }
-.lex-spot-stats { display: grid; gap: 12px; }
+/* Spotlight stats — editorial numeric portrait (UI auditor card-vocabulary fix).
+   No card chrome; just a vertical rule + oversized display num. Reads
+   as data not as a card; distinct from brief (no surface) AND pricing
+   (full card chrome). */
+.lex-spot-stats { display: grid; gap: 28px; }
 .lex-spot-stat {
-  padding: 22px 24px; border: 1px solid var(--line); border-radius: 16px;
-  background: var(--surface); display: flex; flex-direction: column; gap: 4px;
+  padding: 4px 0 4px 22px;
+  border-left: 2px solid color-mix(in srgb, var(--brand) 40%, var(--line));
+  display: flex; flex-direction: column; gap: 4px;
 }
-.lex-spot-stat .num { font-family: var(--lex-display); font-size: 32px; color: var(--brand-soft); }
-.lex-spot-stat .lbl { font-size: 12px; color: var(--paper-dim); }
+.lex-spot-stat .num {
+  font-family: var(--lex-display); font-weight: 300;
+  font-size: clamp(38px, 4.4vw, 52px); line-height: 1; letter-spacing: -0.02em;
+  color: var(--paper);
+}
+.lex-spot-stat .lbl {
+  font-size: 11px; color: var(--paper-dim);
+  letter-spacing: 0.14em; text-transform: uppercase; margin-top: 6px;
+}
 
-/* Pricing */
+/* Pricing — explicit elevation hierarchy (UI auditor card-vocabulary fix).
+   The .feat tier is permanently elevated (translated up + brand glow),
+   non-feat tiers are flatter with subtler chrome. Both still get a
+   distinct hover, but the resting states already communicate priority. */
 .lex-pricing { background: var(--bleed-bg); }
 .lex-tiers {
-  display: grid; gap: 16px; margin-top: 32px;
+  display: grid; gap: 20px; margin-top: 40px;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: start;
 }
 .lex-tier {
-  padding: 28px 26px; border: 1px solid var(--line); border-radius: 18px;
-  background: var(--surface); display: flex; flex-direction: column; gap: 16px;
-  transition: transform 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
+  padding: 32px 28px;
+  border: 1px solid var(--line-2);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
+  display: flex; flex-direction: column; gap: 16px;
+  transition: transform 250ms ease, border-color 250ms ease, box-shadow 250ms ease, background 250ms ease;
 }
 .lex-tier:hover {
-  transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--brand) 40%, var(--line));
-  box-shadow: 0 24px 60px -28px color-mix(in srgb, var(--brand) 60%, transparent);
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--brand) 35%, var(--line));
+  background: var(--surface);
+  box-shadow: 0 24px 60px -28px color-mix(in srgb, var(--brand) 50%, transparent);
 }
 .lex-tier.feat {
-  border-color: color-mix(in srgb, var(--brand) 50%, var(--line));
-  background: color-mix(in srgb, var(--brand) 8%, var(--surface));
+  /* Resting elevation — feat tier is "already lifted" so the hierarchy
+     reads at first glance, not only on hover. */
+  transform: translateY(-12px);
+  padding: 36px 28px;
+  border: 1px solid color-mix(in srgb, var(--brand) 60%, var(--line));
+  background: color-mix(in srgb, var(--brand) 12%, var(--surface));
+  box-shadow: 0 28px 80px -32px color-mix(in srgb, var(--brand) 70%, transparent),
+              inset 0 1px 0 color-mix(in srgb, var(--brand) 20%, rgba(255,255,255,.1));
 }
+.lex-tier.feat:hover { transform: translateY(-15px); }
+@media (max-width: 720px) { .lex-tier.feat { transform: translateY(0); } .lex-tier.feat:hover { transform: translateY(-3px); } }
 .lex-tier h3 { font-size: 17px; }
 .lex-tier .price { font-family: var(--lex-display); font-size: 36px; color: var(--paper); }
 .lex-tier .price small { font-size: 14px; color: var(--paper-dim); margin-left: 4px; }
