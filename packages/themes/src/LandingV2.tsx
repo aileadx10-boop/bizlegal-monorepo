@@ -559,7 +559,9 @@ function Hero(props: {
       }
       setSubmitted(true)
     } catch (err) {
-      // C1 fix — preserve and log the actual error instead of swallowing.
+      // Log the original error to console + ops, surface a sanitized
+      // message (truncated, turnstile-aware) to the user. Never let the
+      // catch block swallow the failure into a generic retry prompt.
       const msg = err instanceof Error ? err.message : String(err)
       // eslint-disable-next-line no-console
       console.error('[lead-submit:hero] failed', err)
@@ -766,7 +768,8 @@ function Contact(props: {
       }
       setSubmitted(true)
     } catch (err) {
-      // C2 fix — preserve and log the actual error instead of swallowing.
+      // Log the original error to console + ops, surface a sanitized
+      // message (truncated, turnstile-aware) to the user.
       const msg = err instanceof Error ? err.message : String(err)
       // eslint-disable-next-line no-console
       console.error('[lead-submit:contact] failed', err)

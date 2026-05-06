@@ -3,7 +3,7 @@ import './globals.css'
 import './styles/theme-v2.css'
 import CookieConsent from './components/CookieConsent'
 import { ThemeToggle } from './components/ui-v2/ThemeToggle'
-import { ThemeProvider, themeFOUCScript, SiteShell } from '@bizlegal/themes'
+import { ThemeProvider, themeFOUCScript, SiteShell, AppRouteOnly } from '@bizlegal/themes'
 import { TRACR_CONTENT } from './landing-content'
 
 const LANDING_FOUC = themeFOUCScript({
@@ -49,11 +49,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: LANDING_FOUC }} />
       </head>
       <body>
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 16px', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase' as const, background: 'var(--bl-bg-low, #0b1326)', borderBottom: '1px solid var(--bl-divider, rgba(255,255,255,0.06))', color: 'var(--bl-text-muted, #636680)', fontFamily: 'var(--bl-font-body, DM Sans, sans-serif)' }}>
-          <a href="https://bizlegal-ai.com" style={{ color: 'inherit', textDecoration: 'none' }}>&larr; Back to BizLegal AI</a>
-          <ThemeToggle size={24} />
-        </div>
-        <div style={{ paddingTop: '36px' }}>
+        {/* a11y A11Y-034 — legacy bl-theme bar hidden on marketing routes. */}
+        <AppRouteOnly>
+          <>
+            <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 16px', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase' as const, background: 'var(--bl-bg-low, #0b1326)', borderBottom: '1px solid var(--bl-divider, rgba(255,255,255,0.06))', color: 'var(--bl-text-muted, #636680)', fontFamily: 'var(--bl-font-body, DM Sans, sans-serif)' }}>
+              <a href="https://bizlegal-ai.com" style={{ color: 'inherit', textDecoration: 'none' }}>&larr; Back to BizLegal AI</a>
+              <ThemeToggle size={24} />
+            </div>
+            <div style={{ height: '36px' }} aria-hidden="true" />
+          </>
+        </AppRouteOnly>
+        <div>
           <ThemeProvider primary="royal-dark" alternate="royal-light" storageKey="tracr-theme">
             <SiteShell
               brand={TRACR_CONTENT.brand}

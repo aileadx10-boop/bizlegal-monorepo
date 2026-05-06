@@ -4,7 +4,7 @@ import './styles/theme-v2.css'
 import CookieConsent from './components/CookieConsent'
 import LegalShield from '@/components/layout/LegalShield'
 import { ThemeToggle } from './components/ui-v2/ThemeToggle'
-import { ThemeProvider, themeFOUCScript, SiteShell } from '@bizlegal/themes'
+import { ThemeProvider, themeFOUCScript, SiteShell, AppRouteOnly } from '@bizlegal/themes'
 import { LEXAUDIT_CONTENT } from './landing-content'
 
 export const metadata: Metadata = {
@@ -40,11 +40,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: LANDING_FOUC }} />
       </head>
       <body>
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 16px', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', background: '#050509', borderBottom: '1px solid rgba(255,255,255,0.06)', color: '#636680', fontFamily: "'DM Sans', sans-serif" }}>
-          <a href="https://bizlegal-ai.com" style={{ color: 'inherit', textDecoration: 'none' }}>&larr; Back to BizLegal AI</a>
-          <ThemeToggle size={24} />
-        </div>
-        <div style={{ paddingTop: '36px' }}>
+        {/* a11y A11Y-034 — legacy bl-theme bar (light/dark for /login, /dashboard,
+            /certificate) hidden on marketing routes since SiteShell already
+            provides nav + theme toggle there. Eliminates the duplicate-toggle
+            confusion the a11y audit flagged. */}
+        <AppRouteOnly>
+          <>
+            <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 16px', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', background: '#050509', borderBottom: '1px solid rgba(255,255,255,0.06)', color: '#636680', fontFamily: "'DM Sans', sans-serif" }}>
+              <a href="https://bizlegal-ai.com" style={{ color: 'inherit', textDecoration: 'none' }}>&larr; Back to BizLegal AI</a>
+              <ThemeToggle size={24} />
+            </div>
+            {/* Spacer for the fixed legacy bar; only when bar is visible. */}
+            <div style={{ height: '36px' }} aria-hidden="true" />
+          </>
+        </AppRouteOnly>
+        <div>
           <ThemeProvider primary="twilight" alternate="daybreak" storageKey="lex-theme">
             <SiteShell
               brand={LEXAUDIT_CONTENT.brand}

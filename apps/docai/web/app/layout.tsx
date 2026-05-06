@@ -5,7 +5,7 @@ import "./globals.css";
 import "./styles/theme-v2.css";
 import CookieConsent from "@/components/CookieConsent";
 import { ThemeToggle } from "./components/ui-v2/ThemeToggle";
-import { ThemeProvider, themeFOUCScript, SiteShell } from '@bizlegal/themes';
+import { ThemeProvider, themeFOUCScript, SiteShell, AppRouteOnly } from '@bizlegal/themes';
 
 const LANDING_FOUC = themeFOUCScript({
   primary: 'royal-dark',
@@ -58,12 +58,18 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: LANDING_FOUC }} />
       </head>
       <body className={`${dmSans.variable} ${dmMono.variable} ${playfair.variable}`}>
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 16px', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', background: 'var(--bl-bg-low, #0b1326)', borderBottom: '1px solid var(--bl-divider, rgba(218,226,253,0.08))', color: 'var(--bl-text-muted, rgba(218,226,253,0.4))', fontFamily: 'var(--bl-font-mono, var(--font-mono))' }}>
-          <a href="https://bizlegal-ai.com" style={{ color: 'inherit', textDecoration: 'none' }}>← Back to BizLegal AI</a>
-          <ThemeToggle size={24} />
-        </div>
+        {/* a11y A11Y-034 — legacy bl-theme bar hidden on marketing routes. */}
+        <AppRouteOnly>
+          <>
+            <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 16px', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', background: 'var(--bl-bg-low, #0b1326)', borderBottom: '1px solid var(--bl-divider, rgba(218,226,253,0.08))', color: 'var(--bl-text-muted, rgba(218,226,253,0.4))', fontFamily: 'var(--bl-font-mono, var(--font-mono))' }}>
+              <a href="https://bizlegal-ai.com" style={{ color: 'inherit', textDecoration: 'none' }}>← Back to BizLegal AI</a>
+              <ThemeToggle size={24} />
+            </div>
+            <div style={{ height: '36px' }} aria-hidden="true" />
+          </>
+        </AppRouteOnly>
         <ThemeProvider primary="royal-dark" alternate="royal-light" storageKey="docai-theme">
-          <div style={{ paddingTop: '36px' }}>
+          <div>
             <SiteShell
               brand="DocAI"
               nav={[
