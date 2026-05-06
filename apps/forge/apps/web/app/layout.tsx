@@ -73,13 +73,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <StickyConversionBar />
         <CommandMenuWrapper>
         <ThemeProvider primary="daybreak" alternate={null} storageKey="forge-theme">
+        {/* Skip-to-main link (WCAG 2.4.1) */}
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:rounded">
+          Skip to main content
+        </a>
         {/* HEADER NAV */}
-        <header className="sticky top-0 z-50 border-b border-forge-border bg-forge-dark/80 backdrop-blur-xl">
+        <header className="sticky top-0 z-50 border-b border-forge-border bg-forge-dark/80 backdrop-blur-xl" role="banner">
           <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-            <a href="/" className="text-xl font-bold tracking-tight text-white hover:text-forge-accent transition-colors">
-              Forge<span className="text-forge-accent">.</span>
+            <a href="/" className="text-xl font-bold tracking-tight text-white hover:text-forge-accent transition-colors" aria-label="Forge home">
+              Forge<span className="text-forge-accent" aria-hidden="true">.</span>
             </a>
-            <nav className="hidden md:flex items-center gap-8 text-sm text-forge-text-secondary">
+            <nav className="hidden md:flex items-center gap-8 text-sm text-forge-text-secondary" aria-label="Primary">
               <a href="/boi" className="hover:text-white transition-colors">BOI Report</a>
               <a href="/passport" className="hover:text-white transition-colors">Regulatory Passport</a>
               <a href="/audit" className="hover:text-white transition-colors">Web Scanner</a>
@@ -88,7 +92,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </nav>
             <div className="flex items-center gap-3">
               <ThemeToggle size={32} />
-              <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-1 text-xs text-forge-text-secondary bg-forge-border rounded border border-forge-border">⌘K</kbd>
+              <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-1 text-xs text-forge-text-secondary bg-forge-border rounded border border-forge-border" aria-hidden="true">⌘K</kbd>
               <a href="/boi" className="btn-primary text-sm px-4 py-2 hidden sm:inline-block">
                 File BOI — $149
               </a>
@@ -96,20 +100,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </header>
 
-        <main>{children}</main>
+        <main id="main-content" tabIndex={-1}>{children}</main>
 
         {/* FOOTER */}
-        <footer className="border-t border-forge-border bg-forge-dark">
+        <footer className="border-t border-forge-border bg-forge-dark" role="contentinfo">
           <div className="max-w-6xl mx-auto px-6 py-12">
             <div className="grid md:grid-cols-4 gap-8 mb-8">
               {/* Brand */}
               <div>
-                <div className="text-xl font-bold text-white mb-3">Forge<span className="text-forge-accent">.</span></div>
+                <div className="text-xl font-bold text-white mb-3">Forge<span className="text-forge-accent" aria-hidden="true">.</span></div>
                 <p className="text-sm text-forge-muted leading-relaxed">
                   Continuous compliance scanning. Practitioner-reviewed regulatory intelligence for modern businesses.
                 </p>
                 <div className="mt-4 flex items-center gap-2 text-sm text-forge-muted">
-                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" aria-hidden="true" />
                   <span>Multi-framework coverage live</span>
                 </div>
               </div>
@@ -140,16 +144,28 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <div>
                 <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-3">Contact</h3>
                 <ul className="space-y-2 text-sm text-forge-muted">
-                  <li>📧 <a href="mailto:support@bizlegal-ai.com" className="hover:text-forge-accent">support@bizlegal-ai.com</a></li>
-                  <li>🕐 24h response time</li>
-                  <li>🌍 US & Israel</li>
+                  <li><span aria-hidden="true">📧</span> <a href="mailto:support@bizlegal-ai.com" className="hover:text-forge-accent">support@bizlegal-ai.com</a></li>
+                  <li><span aria-hidden="true">🕐</span> 24h response time</li>
+                  <li><span aria-hidden="true">🌍</span> US & Israel</li>
                 </ul>
                 <div className="mt-4 flex gap-3">
-                  <a href="https://www.linkedin.com/company/bizlegal-ai" target="_blank" rel="noopener noreferrer" className="text-forge-muted hover:text-forge-accent transition-colors">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                  <a
+                    href="https://www.linkedin.com/company/bizlegal-ai"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-forge-muted hover:text-forge-accent transition-colors"
+                    aria-label="BizLegal AI on LinkedIn (opens in new tab)"
+                  >
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                   </a>
-                  <a href="https://x.com/bizlegal_ai" target="_blank" rel="noopener noreferrer" className="text-forge-muted hover:text-forge-accent transition-colors">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                  <a
+                    href="https://x.com/bizlegal_ai"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-forge-muted hover:text-forge-accent transition-colors"
+                    aria-label="BizLegal AI on X / Twitter (opens in new tab)"
+                  >
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                   </a>
                 </div>
               </div>
@@ -158,19 +174,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {/* Trust Badges */}
             <div className="border-t border-forge-border pt-6 flex flex-wrap items-center justify-center gap-6 mb-6">
               <div className="flex items-center gap-2 text-sm text-forge-muted">
-                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
+                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
                 SSL Secured
               </div>
               <div className="flex items-center gap-2 text-sm text-forge-muted">
-                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
+                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
                 NOWPayments Verified
               </div>
               <div className="flex items-center gap-2 text-sm text-forge-muted">
-                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
+                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
                 256-bit Encryption
               </div>
               <div className="flex items-center gap-2 text-sm text-forge-muted">
-                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
+                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
                 Practitioner-Reviewed
               </div>
             </div>
