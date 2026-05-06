@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Sora, Syne } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider, themeFOUCScript } from '@bizlegal/themes';
+import { ThemeProvider, themeFOUCScript, SiteShell } from '@bizlegal/themes';
 
 const sora = Sora({
   subsets: ["latin"],
@@ -53,7 +53,34 @@ export default function RootLayout({
         className={`${sora.variable} ${syne.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
         <ThemeProvider primary="daybreak" alternate={null} storageKey="leadforge-theme">
-          {children}
+          <SiteShell
+            brand="LeadForge"
+            nav={[
+              { label: 'Pipeline', href: '/#pipeline' },
+              { label: 'Decision tree', href: '/decision-tree' },
+              { label: 'Pricing', href: '/pricing' },
+              { label: 'Contact', href: '/contact' },
+            ]}
+            cta={{ label: 'Run free lead-intake screen', href: '/decision-tree' }}
+            footer={{
+              tagline: 'Lead intake & deal routing for compliance practices',
+              disclaimer:
+                'LeadForge is intake automation — not legal advice. Each routed lead retains a named human reviewer for high-stakes engagements.',
+            }}
+            stickyLead={{ label: 'Run free lead-intake screen →', href: '/decision-tree' }}
+            chromeSuppressPaths={[
+              '/login',
+              '/signup',
+              '/dashboard',
+              '/admin',
+              '/account',
+              '/certificate',
+              '/api',
+              '/',
+            ]}
+          >
+            {children}
+          </SiteShell>
         </ThemeProvider>
       </body>
     </html>

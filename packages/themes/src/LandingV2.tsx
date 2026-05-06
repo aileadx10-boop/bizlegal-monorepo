@@ -25,7 +25,6 @@
  */
 
 import * as React from 'react'
-import { ThemeToggleButton } from './provider'
 
 // ── shared CSS exported so subdomains can layer overrides ────────
 export const lexCSSv2 = `
@@ -416,51 +415,24 @@ export function LandingV2(props: LandingV2Props): React.ReactElement {
     return () => io.disconnect()
   }, [])
 
+  // Nav + Footer now provided by SiteShell at layout level. LandingV2
+  // renders only the page-body sections so it can be embedded inside
+  // SiteShell without doubling up.
   return (
-    <main className="lex-page">
+    <div className="lex-page">
       <style dangerouslySetInnerHTML={{ __html: lexCSSv2 }} />
 
-      <Nav content={content} />
       <Hero content={content} onLeadSubmit={onLeadSubmit} />
       <Brief content={content} />
       <Audits content={content} />
       <Spotlight content={content} />
       <Pricing content={content} />
       <Contact content={content} onLeadSubmit={onLeadSubmit} />
-      <Footer content={content} />
-    </main>
+    </div>
   )
 }
 
 // ── sections ──────────────────────────────────────────────────────
-function Nav({ content }: { content: LandingV2Content }): React.ReactElement {
-  return (
-    <nav className="lex-nav">
-      <a href="/" className="lex-brand" aria-label={`${content.brand} home`}>
-        <span className="mark">
-          <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M11 2 L19 6 V12 C19 16 15 19 11 20 C7 19 3 16 3 12 V6 Z" fill="currentColor" opacity="0.9" />
-            <path d="M11 7 L11 14" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" />
-            <circle cx="11" cy="16.5" r="1" fill="#fff" />
-          </svg>
-        </span>
-        <span>{content.brand}</span>
-      </a>
-      <div className="lex-navmid" aria-label="Sections">
-        {content.nav.map((n) => (
-          <a key={n.href} href={n.href}>{n.label}</a>
-        ))}
-      </div>
-      <div className="lex-navend">
-        <ThemeToggleButton />
-        <a className="lex-nav-cta" href={content.heroPrimaryCta.href}>
-          <span className="pulse" />
-          {content.heroPrimaryCta.label}
-        </a>
-      </div>
-    </nav>
-  )
-}
 
 function Hero(props: {
   content: LandingV2Content
@@ -701,23 +673,3 @@ function Contact(props: {
   )
 }
 
-function Footer({ content }: { content: LandingV2Content }): React.ReactElement {
-  return (
-    <footer className="lex-footer">
-      <div className="lex-footer-inner">
-        <div>
-          <strong style={{ color: 'var(--paper)', fontFamily: 'var(--lex-display)', fontWeight: 300 }}>
-            {content.brand}
-          </strong>
-          <span style={{ marginLeft: 8 }}>· {content.footerTagline}</span>
-        </div>
-        <div style={{ display: 'flex', gap: 24 }}>
-          <a href="/disclaimer">Disclaimer</a>
-          <a href="/acceptable-use">Acceptable use</a>
-          <a href="/contact">Contact</a>
-        </div>
-      </div>
-      <p className="lex-footer-disc">{content.disclaimer}</p>
-    </footer>
-  )
-}

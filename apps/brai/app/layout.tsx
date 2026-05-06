@@ -1,10 +1,9 @@
 import type { Metadata } from "next"
 import type { ReactNode } from "react"
-import Link from "next/link"
 import "./globals.css"
 import "./styles/theme-v2.css"
-import { ThemeToggle } from "./components/ui-v2/ThemeToggle"
-import { ThemeProvider, themeFOUCScript } from '@bizlegal/themes'
+import { ThemeProvider, themeFOUCScript, SiteShell } from '@bizlegal/themes'
+import { BRAI_CONTENT } from './landing-content'
 
 export const metadata: Metadata = {
   title: "BRAI — Blockchain Regulatory Intelligence",
@@ -36,41 +35,24 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: LANDING_FOUC }} />
       </head>
       <body>
-        <header
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "14px 28px",
-            borderBottom: "1px solid var(--outline-var)",
-            background: "var(--bg-low)",
-            fontFamily: "var(--font-mono, ui-monospace)",
-            fontSize: 12,
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <Link href="https://bizlegal-ai.com" style={{ color: "var(--muted)", textDecoration: "none" }}>
-              ← BizLegal AI
-            </Link>
-            <span style={{ color: "var(--outline)" }}>·</span>
-            <Link href="/" style={{ color: "var(--on-surface)", fontWeight: 600, textDecoration: "none", letterSpacing: "0.08em" }}>
-              BRAI
-            </Link>
-          </div>
-          <nav style={{ display: "flex", gap: 16, alignItems: "center" }}>
-            <Link href="/pricing" style={navLink}>Pricing</Link>
-            <Link href="/methodology" style={navLink}>Methodology</Link>
-            <Link href="/trust" style={navLink}>Trust</Link>
-            <Link href="/contact" style={navLink}>Contact</Link>
-            <ThemeToggle size={22} />
-          </nav>
-        </header>
         <ThemeProvider primary="royal-dark" alternate="royal-light" storageKey="brai-theme">
-          <main>{children}</main>
+          <SiteShell
+            brand={BRAI_CONTENT.brand}
+            nav={BRAI_CONTENT.nav.map((n) => ({
+              label: n.label,
+              href: n.href.startsWith('#') ? `/${n.href}` : n.href,
+            }))}
+            cta={BRAI_CONTENT.heroPrimaryCta}
+            footer={{
+              tagline: BRAI_CONTENT.footerTagline,
+              disclaimer: BRAI_CONTENT.disclaimer,
+            }}
+            stickyLead={{ label: 'Run free sanctions screen →', href: '/decision-tree' }}
+          >
+            {children}
+          </SiteShell>
         </ThemeProvider>
       </body>
     </html>
   )
 }
-
-const navLink = { color: "var(--muted)", textDecoration: "none" }

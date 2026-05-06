@@ -5,7 +5,7 @@ import "./globals.css";
 import "./styles/theme-v2.css";
 import CookieConsent from "@/components/CookieConsent";
 import { ThemeToggle } from "./components/ui-v2/ThemeToggle";
-import { ThemeProvider, themeFOUCScript } from '@bizlegal/themes';
+import { ThemeProvider, themeFOUCScript, SiteShell } from '@bizlegal/themes';
 
 const LANDING_FOUC = themeFOUCScript({
   primary: 'royal-dark',
@@ -63,7 +63,36 @@ export default function RootLayout({
           <ThemeToggle size={24} />
         </div>
         <ThemeProvider primary="royal-dark" alternate="royal-light" storageKey="docai-theme">
-          <div style={{ paddingTop: '36px' }}>{children}</div>
+          <div style={{ paddingTop: '36px' }}>
+            <SiteShell
+              brand="DocAI"
+              nav={[
+                { label: 'Scan', href: '/#scan' },
+                { label: 'Decision tree', href: '/decision-tree' },
+                { label: 'Pricing', href: '/pricing' },
+                { label: 'Contact', href: '/contact' },
+              ]}
+              cta={{ label: 'Run free privacy screen', href: '/decision-tree' }}
+              footer={{
+                tagline: 'Document privacy & compliance, source-cited',
+                disclaimer:
+                  'DocAI is regulatory intelligence — not legal advice. For a binding opinion, consult a licensed attorney in your jurisdiction.',
+              }}
+              stickyLead={{ label: 'Run free DocAI privacy screen →', href: '/decision-tree' }}
+              chromeSuppressPaths={[
+                '/login',
+                '/signup',
+                '/dashboard',
+                '/admin',
+                '/account',
+                '/certificate',
+                '/api',
+                '/',
+              ]}
+            >
+              {children}
+            </SiteShell>
+          </div>
         </ThemeProvider>
         <CookieConsent />
       </body>

@@ -4,7 +4,8 @@ import './styles/theme-v2.css'
 import CookieConsent from './components/CookieConsent'
 import LegalShield from '@/components/layout/LegalShield'
 import { ThemeToggle } from './components/ui-v2/ThemeToggle'
-import { ThemeProvider, themeFOUCScript } from '@bizlegal/themes'
+import { ThemeProvider, themeFOUCScript, SiteShell } from '@bizlegal/themes'
+import { LEXAUDIT_CONTENT } from './landing-content'
 
 export const metadata: Metadata = {
   title: 'LexAudit — Compliance Health Scores for Lawyers',
@@ -45,7 +46,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
         <div style={{ paddingTop: '36px' }}>
           <ThemeProvider primary="twilight" alternate="daybreak" storageKey="lex-theme">
-            {children}
+            <SiteShell
+              brand={LEXAUDIT_CONTENT.brand}
+              nav={LEXAUDIT_CONTENT.nav.map((n) => ({
+                label: n.label,
+                href: n.href.startsWith('#') ? `/${n.href}` : n.href,
+              }))}
+              cta={LEXAUDIT_CONTENT.heroPrimaryCta}
+              footer={{
+                tagline: LEXAUDIT_CONTENT.footerTagline,
+                disclaimer: LEXAUDIT_CONTENT.disclaimer,
+              }}
+              stickyLead={{ label: 'Run free compliance screen →', href: '/decision-tree' }}
+            >
+              {children}
+            </SiteShell>
           </ThemeProvider>
         </div>
         <LegalShield variant="micro" />

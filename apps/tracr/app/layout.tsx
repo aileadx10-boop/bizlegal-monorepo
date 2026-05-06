@@ -3,7 +3,8 @@ import './globals.css'
 import './styles/theme-v2.css'
 import CookieConsent from './components/CookieConsent'
 import { ThemeToggle } from './components/ui-v2/ThemeToggle'
-import { ThemeProvider, themeFOUCScript } from '@bizlegal/themes'
+import { ThemeProvider, themeFOUCScript, SiteShell } from '@bizlegal/themes'
+import { TRACR_CONTENT } from './landing-content'
 
 const LANDING_FOUC = themeFOUCScript({
   primary: 'royal-dark',
@@ -54,7 +55,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
         <div style={{ paddingTop: '36px' }}>
           <ThemeProvider primary="royal-dark" alternate="royal-light" storageKey="tracr-theme">
-            {children}
+            <SiteShell
+              brand={TRACR_CONTENT.brand}
+              nav={TRACR_CONTENT.nav.map((n) => ({
+                label: n.label,
+                href: n.href.startsWith('#') ? `/${n.href}` : n.href,
+              }))}
+              cta={TRACR_CONTENT.heroPrimaryCta}
+              footer={{
+                tagline: TRACR_CONTENT.footerTagline,
+                disclaimer: TRACR_CONTENT.disclaimer,
+              }}
+              stickyLead={{ label: 'Run free wallet provenance screen →', href: '/decision-tree' }}
+            >
+              {children}
+            </SiteShell>
           </ThemeProvider>
         </div>
         <CookieConsent />
