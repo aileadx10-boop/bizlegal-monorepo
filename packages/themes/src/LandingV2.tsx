@@ -193,10 +193,20 @@ export const lexCSSv2 = `
   padding: 13px 16px; border-radius: 12px;
   background: var(--surface); border: 1px solid var(--line);
   color: var(--paper); font-size: 13px;
-  outline: none; transition: border-color 200ms ease;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
 }
 .lex-quick-form input::placeholder { color: var(--paper-dim); }
-.lex-quick-form input:focus { border-color: var(--brand); }
+.lex-quick-form input:focus { outline: none; border-color: var(--brand); }
+/* a11y AA4 fix — restore visible focus indicator on keyboard focus. */
+.lex-quick-form input:focus-visible {
+  outline: 2px solid var(--brand-soft);
+  outline-offset: 2px;
+  border-color: var(--brand);
+}
+.lex-quick-form button:focus-visible {
+  outline: 2px solid var(--brand-soft);
+  outline-offset: 2px;
+}
 .lex-quick-form button {
   padding: 13px 18px; border-radius: 12px;
   background: var(--surface-2); color: var(--paper);
@@ -341,10 +351,17 @@ export const lexCSSv2 = `
   padding: 14px 16px; border-radius: 12px;
   background: var(--surface); border: 1px solid var(--line);
   color: var(--paper); font-size: 14px; font-family: inherit;
-  outline: none; transition: border-color 200ms ease;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
 }
 .lex-contact-form input:focus,
-.lex-contact-form textarea:focus { border-color: var(--brand); }
+.lex-contact-form textarea:focus { outline: none; border-color: var(--brand); }
+/* a11y AA4 fix — keyboard-only focus ring (WCAG 2.4.7 + 2.4.11). */
+.lex-contact-form input:focus-visible,
+.lex-contact-form textarea:focus-visible {
+  outline: 2px solid var(--brand-soft);
+  outline-offset: 2px;
+  border-color: var(--brand);
+}
 .lex-contact-form textarea { min-height: 120px; resize: vertical; }
 .lex-contact-form button {
   padding: 14px 18px; border-radius: 12px;
@@ -353,6 +370,10 @@ export const lexCSSv2 = `
   transition: filter 200ms ease;
 }
 .lex-contact-form button:hover:not(:disabled) { filter: brightness(1.1); }
+.lex-contact-form button:focus-visible {
+  outline: 2px solid var(--brand-soft);
+  outline-offset: 3px;
+}
 
 /* Footer */
 .lex-footer {
