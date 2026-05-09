@@ -20,6 +20,9 @@ export function buildFallbackAnalysis(contractType: string, riskScore: number): 
     missing_clauses: [],
     compliance_issues: [],
     summary: "The scan exists, but the structured report payload could not be fully reconstructed.",
+    confidence: 0,
+    evidence_refs: [],
+    unsupported_claims: [],
   });
 }
 
@@ -44,6 +47,9 @@ export function parseStoredAnalysis(scan: Pick<ScanRow, "ai_content" | "contract
       red_flags: Array.isArray(parsed.red_flags) ? parsed.red_flags : fallback.red_flags,
       missing_clauses: Array.isArray(parsed.missing_clauses) ? parsed.missing_clauses : fallback.missing_clauses,
       compliance_issues: Array.isArray(parsed.compliance_issues) ? parsed.compliance_issues : fallback.compliance_issues,
+      confidence: typeof parsed.confidence === "number" ? parsed.confidence : fallback.confidence,
+      evidence_refs: Array.isArray(parsed.evidence_refs) ? parsed.evidence_refs : fallback.evidence_refs,
+      unsupported_claims: Array.isArray(parsed.unsupported_claims) ? parsed.unsupported_claims : fallback.unsupported_claims,
     });
   } catch (error) {
     console.error("Failed to parse stored report payload.", error);

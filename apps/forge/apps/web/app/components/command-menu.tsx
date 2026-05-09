@@ -171,9 +171,8 @@ export function CommandMenu({ isOpen, onClose }: CommandMenuProps) {
                 {/* Recent Items */}
                 {recentItems.length > 0 && !search && (
                   <Command.Group heading="Recent" className="px-2 mb-2">
-                    <Command.GroupHeading className="text-xs text-forge-text-secondary uppercase tracking-wider px-2 mb-2">
-                      Recent
-                    </Command.GroupHeading>
+                    {/* Command.Group `heading` prop already renders the label;
+                        Command.GroupHeading does not exist in this cmdk version. */}
                     {recentItems.map(item => (
                       <Command.Item
                         key={item.id}
@@ -194,10 +193,8 @@ export function CommandMenu({ isOpen, onClose }: CommandMenuProps) {
                   <Command.Group
                     key={group.group}
                     value={group.group}
+                    heading={group.group}
                   >
-                    <Command.GroupHeading className="text-xs text-forge-text-secondary uppercase tracking-wider px-2 mb-2">
-                      {group.group}
-                    </Command.GroupHeading>
                     {group.items.map(item => {
                       const Icon = item.icon
                       return (

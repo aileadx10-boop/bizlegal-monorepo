@@ -4,6 +4,8 @@ import { analyzeContractDocument } from "@/lib/contract-analysis";
 import { supabaseAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
+// Skip static prerender — runtime env vars (Supabase) required.
+export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
   try {
