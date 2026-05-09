@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { analyzeContractDocument } from "@/lib/contract-analysis";
+import { logEventAsync } from "@/lib/ops/log";
 import { supabaseAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
@@ -48,12 +49,29 @@ export async function POST(request: NextRequest) {
       throw new Error(error.message);
     }
 
-    await supabaseAdmin.from("leads").insert({
+    // C-2 fix: Treat lead capture as best-effort; surface failures via ops_log
+    // so we notice when nurture pipeline silently loses an email. Don't throw —
+    // the contract scan itself succeeded and the user has a valid scan_id.
+    const { error: leadInsertErr } = await supabaseAdmin.from("leads").insert({
       email: email.trim().toLowerCase(),
       source: "docai-scan",
       page: "report",
       product: result.contract_type || contract_type || "Commercial Contract",
     });
+    if (leadInsertErr) {
+      logEventAsync({
+        type: "error",
+        source: "docai",
+        email: email.trim().toLowerCase(),
+        status: "failed",
+        metadata: {
+          stage: "lead_insert",
+          err: leadInsertErr.message,
+          scan_id: scanId,
+          page: "documents/scan",
+        },
+      });
+    }
 
     return NextResponse.json({
       scan_id: scanId,

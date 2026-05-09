@@ -60,8 +60,11 @@ export async function POST(req: NextRequest) {
   // allow-list keyed by gap_slug. NEVER trust a user-supplied URL.
   const lead_magnet_url = SAFE_LEAD_MAGNET_URLS[gap_slug] ?? DEFAULT_LEAD_MAGNET_URL
 
-  // Save lead to Supabase
-  await getSupabase().from('leads').upsert(
+  // Save lead to Supabase. C-1 fix: capture upsertErr — Supabase returns
+  // 200 with `{ error }` on RLS denial / constraint failure / schema drift,
+  // which JS does not throw. Without this check we email the magnet, redirect
+  // to /thank-you, and silently lose the lead.
+  const { error: upsertErr } = await getSupabase().from('leads').upsert(
     {
       email,
       source: 'gap_page',
@@ -70,6 +73,15 @@ export async function POST(req: NextRequest) {
     },
     { onConflict: 'email' }
   )
+  if (upsertErr) {
+    logEventAsync({
+      type: 'error',
+      source: 'forge',
+      email,
+      status: 'failed',
+      metadata: { stage: 'lead_upsert', err: upsertErr.message, gap_slug, page: 'lead-magnet' },
+    })
+  }
 
   // Send lead magnet via Resend
   const resendKey = process.env.RESEND_API_KEY
