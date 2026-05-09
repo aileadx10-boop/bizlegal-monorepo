@@ -388,3 +388,81 @@
     animation: none;
   }
 }
+
+/* ==========================================================================
+ * V2 Bridge — Daybreak / Twilight Violet (data-bl-theme-v2)
+ * ==========================================================================
+ *
+ * Maps the @bizlegal/themes V2 palette onto the legacy Quantum tokens
+ * (--bg, --primary, --gold, --on-surface, --outline, --border) that
+ * NavBar / Footer / CommandMenu still consume. Activates only when
+ * <html data-bl-theme-v2="daybreak"> or "twilight" is set by the FOUC
+ * script in app/layout.tsx — opt-in, no clobber on the legacy
+ * data-theme=light|dark system.
+ *
+ * Source palette: packages/themes/src/themes.ts (Daybreak + Twilight).
+ * ──────────────────────────────────────────────────────────────────────── */
+
+[data-bl-theme-v2='daybreak'] {
+  /* Daybreak — bright paper, ink type, violet accents */
+  --bg:               #FBF9F4;
+  --bg-low:           #F2EEE5;
+  --bg-mid:           #EAE4D5;
+  --bg-high:          #FFFDF7;
+  --bg-highest:       #FFFFFF;
+  --bg-card:          rgba(255, 255, 255, 0.85);
+
+  --primary:          #5B49E0;
+  --primary-glow:     rgba(91, 73, 224, 0.18);
+  --gold:             #B8852D;
+  --gold-light:       #E0C46A;
+  --gold-glow:        rgba(184, 133, 45, 0.18);
+  --secondary:        #3F33B8;
+  --accent:           #0F8C6E;
+  --cta:              #E14B16;
+
+  --product-accent:   #5B49E0;
+  --product-glow:     rgba(91, 73, 224, 0.18);
+
+  --on-surface:       #1A1530;
+  --on-surface-var:   #5C5670;
+  --white:            #1A1530;
+  --muted:            #7E7990;
+  --dim:              #ABA5BA;
+
+  --outline:          rgba(26, 21, 48, 0.12);
+  --outline-var:      rgba(26, 21, 48, 0.06);
+  --border:           rgba(26, 21, 48, 0.1);
+}
+
+[data-bl-theme-v2='twilight'] {
+  /* Twilight Violet — deep purple twilight, the LexAudit anchor */
+  --bg:               #0B0717;
+  --bg-low:           #0F0A1F;
+  --bg-mid:           #15102B;
+  --bg-high:          #1A1340;
+  --bg-highest:       #221A52;
+  --bg-card:          rgba(20, 14, 40, 0.85);
+
+  --primary:          #6E5CFF;
+  --primary-glow:     rgba(110, 92, 255, 0.18);
+  --gold:             #F5C26B;
+  --gold-light:       #FFD79A;
+  --gold-glow:        rgba(245, 194, 107, 0.20);
+  --secondary:        #9C8EFF;
+  --accent:           #27D4B0;
+  --cta:              #FF5A1F;
+
+  --product-accent:   #6E5CFF;
+  --product-glow:     rgba(110, 92, 255, 0.18);
+
+  --on-surface:       #E9E5F5;
+  --on-surface-var:   #B8B0D6;
+  --white:            #F0EBFB;
+  --muted:            #8A82A8;
+  --dim:              #4D4761;
+
+  --outline:          rgba(233, 229, 245, 0.10);
+  --outline-var:      rgba(233, 229, 245, 0.06);
+  --border:           rgba(233, 229, 245, 0.12);
+}

@@ -9,6 +9,18 @@ import { CommandMenuWrapper } from './components/command-menu-wrapper'
 import { StickyConversionBar } from './components/sticky-conversion-bar'
 import { BackgroundGlow } from './components/ui/BackgroundGlow'
 import { FloatingParticles } from './components/ui/FloatingParticles'
+import { ThemeProvider, themeFOUCScript } from '@bizlegal/themes'
+
+// Daybreak primary, Twilight Violet alternate. Sets `data-bl-theme-v2`
+// (parallel attribute) so it coexists with the legacy `data-theme=light|dark`
+// system without clobbering it. CSS bridge in styles/theme-v2.css maps
+// the new V2 palette onto the existing Quantum tokens (--bg, --primary,
+// --gold, --on-surface) so existing components rebrand without rewrite.
+const LANDING_FOUC = themeFOUCScript({
+  primary: 'daybreak',
+  alternate: 'twilight',
+  storageKey: 'bizlegal-theme',
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://bizlegal-ai.com'),
@@ -40,18 +52,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: `(function(){try{var t=localStorage.getItem('bl-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`,
           }}
         />
+        {/* Subdomain Design Pass FOUC — Daybreak/Twilight V2 themes via parallel
+            data-bl-theme-v2 attribute (does NOT clobber legacy data-theme above). */}
+        <script dangerouslySetInnerHTML={{ __html: LANDING_FOUC }} />
       </head>
       <body className="bg-[var(--bg)]">
         <BackgroundGlow />
         <FloatingParticles />
         <StickyConversionBar />
         <CommandMenuWrapper>
-          <NavBar />
-          <TickerBar />
-          <main style={{ paddingTop: 92 }}>
-            {children}
-          </main>
-          <Footer />
+          <ThemeProvider primary="daybreak" alternate="twilight" storageKey="bizlegal-theme">
+            <NavBar />
+            <TickerBar />
+            <main style={{ paddingTop: 92 }}>
+              {children}
+            </main>
+            <Footer />
+          </ThemeProvider>
         </CommandMenuWrapper>
         <CookieConsent />
       </body>

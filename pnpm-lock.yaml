@@ -250,6 +250,12 @@ importers:
       '@bizlegal/payment':
         specifier: workspace:*
         version: link:../../packages/payment
+      '@bizlegal/themes':
+        specifier: workspace:*
+        version: link:../../packages/themes
+      '@bizlegal/turnstile-widget':
+        specifier: workspace:*
+        version: link:../../packages/turnstile-widget
       '@google/generative-ai':
         specifier: ^0.24.1
         version: 0.24.1
