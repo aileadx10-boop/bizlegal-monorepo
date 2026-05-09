@@ -48,6 +48,7 @@ function RegulatoryGlobe() {
       </Sphere>
 
       {/* Orbit rings */}
+      {/* @ts-expect-error -- @types/react vs @react-three/fiber Group ref drift */}
       <group ref={ringsRef}>
         {/* Ring 1 — horizontal */}
         <mesh rotation={[Math.PI / 2, 0, 0]}>
