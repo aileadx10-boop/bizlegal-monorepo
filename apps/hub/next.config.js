@@ -14,6 +14,15 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
 
+  // Source-only @bizlegal/* packages (no dist). Mirrors the pattern
+  // shipped to the 6 subdomains in PR #46e7e2e.
+  transpilePackages: [
+    '@bizlegal/themes',
+    '@bizlegal/turnstile-widget',
+    '@bizlegal/ops-log',
+    '@bizlegal/payment',
+  ],
+
   experimental: {
     turbopack: true,
   },
