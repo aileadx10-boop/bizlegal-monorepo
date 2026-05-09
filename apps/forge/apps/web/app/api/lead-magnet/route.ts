@@ -1,12 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import { logEventAsync } from '@/lib/ops/log'
 import { rateLimit, clientIpFromHeaders } from '@bizlegal/rate-limit'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+// Force-dynamic + lazy init: avoids Vercel build-time `collect page data`
+// failure when SUPABASE_SERVICE_ROLE_KEY isn't present in the build env.
+// (createClient throws "supabaseKey is required" if called at module load.)
+export const dynamic = 'force-dynamic'
+
+let _supabase: SupabaseClient | null = null
+function getSupabase(): SupabaseClient {
+  if (_supabase) return _supabase
+  _supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+  return _supabase
+}
 
 // D10 SECURITY-V3 C-2: lead_magnet_url MUST be derived server-side
 // from the requested gap_slug, never from user-supplied form data.
@@ -51,7 +61,7 @@ export async function POST(req: NextRequest) {
   const lead_magnet_url = SAFE_LEAD_MAGNET_URLS[gap_slug] ?? DEFAULT_LEAD_MAGNET_URL
 
   // Save lead to Supabase
-  await supabase.from('leads').upsert(
+  await getSupabase().from('leads').upsert(
     {
       email,
       source: 'gap_page',
