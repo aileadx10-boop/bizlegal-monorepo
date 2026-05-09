@@ -24,7 +24,14 @@ export const metadata: Metadata = {
   },
   twitter: { card: 'summary_large_image' },
   robots: { index: true, follow: true },
-  alternates: { canonical: 'https://bizlegal-ai.com' }
+  alternates: { canonical: 'https://bizlegal-ai.com' },
+  // W3.4 — Google Search Console site verification. Set
+  // NEXT_PUBLIC_GSC_VERIFICATION in Vercel env (a 43-char token GSC
+  // issues at "Add property → HTML tag" flow). Renders only when
+  // present so the slot is invisible until Moses adds the env var.
+  ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION
+    ? { verification: { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION } }
+    : {}),
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
