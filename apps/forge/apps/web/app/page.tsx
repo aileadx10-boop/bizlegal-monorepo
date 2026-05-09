@@ -290,9 +290,9 @@ export default function ForgeHomepage() {
                 }}
               >
                 Every Forge output template is reviewed by a qualified
-                commercial attorney before publication. AI generates the
-                content from your inputs; the framework is human-vetted.
-                Intelligence — not legal advice.
+                commercial attorney before publication. Forge generates
+                the content from your inputs; the framework is
+                human-vetted. Intelligence — not legal advice.
               </p>
             </div>
           </Reveal>
