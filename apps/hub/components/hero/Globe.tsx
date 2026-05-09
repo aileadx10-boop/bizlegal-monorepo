@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, type RefObject } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Sphere, MeshDistortMaterial, OrbitControls } from '@react-three/drei'
 import * as THREE from 'three'
@@ -22,7 +22,10 @@ function RegulatoryGlobe() {
   return (
     <group>
       {/* Main sphere */}
-      <Sphere ref={meshRef} args={[1.8, 64, 64]}>
+      {/* @types/three vs @react-three/drei type drift — drei's Sphere ref expects
+          Mesh<BufferGeometry<…, BufferGeometryEventMap>>, but THREE.Mesh widens to
+          BufferGeometry<NormalBufferAttributes>. Cast through unknown. */}
+      <Sphere ref={meshRef as unknown as RefObject<never>} args={[1.8, 64, 64]}>
         <MeshDistortMaterial
           color="#1a4d99"
           emissive="#0066ff"
