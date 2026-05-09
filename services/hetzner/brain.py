@@ -83,9 +83,23 @@ DRAFT_PROMPT = textwrap.dedent("""
       "target": "<blog | hub | both>",
       "mdx_body": "<the full article body, 1500-2500 words, MDX formatting>",
       "mermaid": ["<one to three Mermaid syntax diagrams>"],
+      "faqs": [
+        { "q": "<exact question>", "a": "<2-4 sentence answer>" }
+      ],
       "hero_prompt": "<editorial hero image prompt, navy/indigo/gold palette, no robots>",
       "sources": ["<every URL we gave you>"]
     }
+
+    faqs requirements (W3.2 — drives FAQPage JSON-LD on gap-pages):
+      - 3-5 entries, no fewer, no more.
+      - Each "q" is a complete question a real practitioner would type
+        into Google (think "what triggers the new MiCA disclosure?").
+      - Each "a" is a 2-4 sentence answer that stands alone — the
+        same answer must work as the MDX body's "## FAQ" section
+        AND as a standalone rich snippet in a Google SERP.
+      - The faqs array is the same Q/A pairs as the "## FAQ" section
+        in mdx_body — keep them in sync. Faqs is the structured
+        version; the MDX body is the prose version.
 
     target rules:
       - "blog" — default; goes to blog.bizlegal-ai.com only

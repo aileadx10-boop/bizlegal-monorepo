@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import AuthorBio from '@/components/AuthorBio'
+import { isFaqEntry, type GapPage } from '@/lib/types/gap-page'
 
 export const dynamic = 'force-dynamic'
 
@@ -115,7 +116,7 @@ function decisionToolFor(gap: {
   return null
 }
 
-async function getGapPage(slug: string) {
+async function getGapPage(slug: string): Promise<GapPage | null> {
   const supabase = getSupabase()
   if (!supabase) return null
   const { data } = await supabase
@@ -123,7 +124,7 @@ async function getGapPage(slug: string) {
     .select('*')
     .eq('slug', slug)
     .single()
-  return data
+  return (data as GapPage | null) ?? null
 }
 
 export async function generateMetadata({ params }: GapPageParams): Promise<Metadata> {
@@ -156,7 +157,7 @@ export default async function GapPage({ params }: GapPageParams) {
   if (!gap) notFound()
 
   const ctaUrl = ctaUrls[gap.cta_product] || 'https://forge.bizlegal-ai.com'
-  const valueProps: string[] = gap.value_props || []
+  const valueProps: readonly string[] = gap.value_props ?? []
   const pageUrl = `https://forge.bizlegal-ai.com/gap/${gap.jurisdiction}/${gap.slug}`
   const publishedAt = gap.published_at
     ? new Date(gap.published_at).toISOString()
@@ -229,14 +230,16 @@ export default async function GapPage({ params }: GapPageParams) {
 
   // FAQPage — only emit when the row has structured FAQ entries
   // (gap.faqs jsonb column with [{q, a}, ...]). Schema validators
-  // reject FAQ blocks with zero entries.
-  const faqEntries = Array.isArray(gap.faqs) ? gap.faqs : []
+  // reject FAQ blocks with zero entries. The audit (type-design F-9)
+  // flagged the implicit narrowing — we now filter through isFaqEntry
+  // so a typo on a column or a stray null doesn't render `name: undefined`.
+  const faqEntries = Array.isArray(gap.faqs) ? gap.faqs.filter(isFaqEntry) : []
   const faqSchema =
     faqEntries.length > 0
       ? {
           '@context': 'https://schema.org',
           '@type': 'FAQPage',
-          mainEntity: faqEntries.map((f: { q: string; a: string }) => ({
+          mainEntity: faqEntries.map(f => ({
             '@type': 'Question',
             name: f.q,
             acceptedAnswer: { '@type': 'Answer', text: f.a },
