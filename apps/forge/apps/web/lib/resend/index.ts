@@ -1,8 +1,22 @@
 import { Resend } from 'resend'
 import type { PassportResult } from '@/lib/claude/index'
 
-const resend = new Resend(process.env.RESEND_API_KEY!)
+// Lazy-init: avoid throwing at module load if RESEND_API_KEY is absent
+// during Vercel's collect-page-data step.
+let _resend: Resend | null = null
+function resendClient(): Resend {
+  if (_resend) return _resend
+  _resend = new Resend(process.env.RESEND_API_KEY ?? '')
+  return _resend
+}
 const FROM = process.env.RESEND_FROM ?? 'Forge Compliance <forge@resend.dev>'
+const resend = new Proxy({} as Resend, {
+  get(_t, p) {
+    const r = resendClient() as unknown as Record<string | symbol, unknown>
+    const v = r[p]
+    return typeof v === 'function' ? (v as (...a: unknown[]) => unknown).bind(r) : v
+  },
+})
 
 export async function sendPassportDelivery(
   email: string,
