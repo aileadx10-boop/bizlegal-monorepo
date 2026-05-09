@@ -1,6 +1,19 @@
 import Anthropic from '@anthropic-ai/sdk'
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY ?? '' })
+// Lazy-init Anthropic client (env vars absent during Vercel build).
+let _anthropic: Anthropic | null = null
+function anthropicClient(): Anthropic {
+  if (_anthropic) return _anthropic
+  _anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY ?? '' })
+  return _anthropic
+}
+const anthropic = new Proxy({} as Anthropic, {
+  get(_t, p) {
+    const r = anthropicClient() as unknown as Record<string | symbol, unknown>
+    const v = r[p]
+    return typeof v === 'function' ? (v as (...a: unknown[]) => unknown).bind(r) : v
+  },
+})
 
 export type VerticalType =
   | 'noncompete'
