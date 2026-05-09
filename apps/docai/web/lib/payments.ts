@@ -4,8 +4,7 @@ type InvoiceParams = {
   scanId: string;
   email: string;
   description: string;
-  /** Price in USD. Defaults to 24 for backwards compatibility with the
-   * pre-tier scan/report flow. New 3-tier pricing matrix supplies the
+  /** Price in USD. Defaults to 97 for the evidence-cited risk report flow. New 3-tier pricing matrix supplies the
    * tier-specific dollar amount. */
   priceUsd?: number;
   /** Optional success URL override. Defaults to /report?scan_id=... */
@@ -33,7 +32,7 @@ export async function createNOWPaymentsInvoice({
       "content-type": "application/json",
     },
     body: JSON.stringify({
-      price_amount: priceUsd ?? 24,
+      price_amount: priceUsd ?? 97,
       price_currency: "usd",
       pay_currency: "usdtbsc",
       order_id: scanId,

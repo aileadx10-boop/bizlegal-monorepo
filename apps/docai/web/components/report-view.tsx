@@ -1,4 +1,4 @@
-import type { AnalyzeResult } from "@/lib/contract-analysis";
+import type { AnalyzeResult, RedFlag, UnsupportedClaim } from "@/lib/contract-analysis";
 
 type ReportViewProps = {
   scanId: string;
@@ -12,6 +12,8 @@ type ReportViewProps = {
   payoneerLink?: string | null;
   invoiceError?: string | null;
 };
+
+const SEVERITY_ORDER: Record<string, number> = { critical: 0, high: 1, medium: 2, low: 3 };
 
 function normalizeScore(score: number) {
   return Math.max(0, Math.min(100, score));
@@ -30,6 +32,77 @@ function riskTone(level: string) {
   }
 }
 
+function severity(issue: RedFlag) {
+  return issue.severity?.toLowerCase() || "medium";
+}
+
+function sortBySeverity(issues: RedFlag[]) {
+  return [...issues].sort((left, right) => (SEVERITY_ORDER[severity(left)] ?? 2) - (SEVERITY_ORDER[severity(right)] ?? 2));
+}
+
+function previewIssues(issues: RedFlag[]) {
+  const prioritized = sortBySeverity(issues.filter((issue) => ["critical", "high", "medium"].includes(severity(issue))));
+  return (prioritized.length ? prioritized : sortBySeverity(issues)).slice(0, 2);
+}
+
+function lockedSeveritySummary(allIssues: RedFlag[], visibleIssues: RedFlag[], missingClauseCount: number) {
+  const visible = new Set(visibleIssues);
+  const locked = allIssues.filter((issue) => !visible.has(issue));
+  const counts = locked.reduce<Record<string, number>>((accumulator, issue) => {
+    const key = severity(issue);
+    accumulator[key] = (accumulator[key] || 0) + 1;
+    return accumulator;
+  }, {});
+
+  return [
+    counts.critical ? `+${counts.critical} critical` : "",
+    counts.high ? `+${counts.high} high-severity` : "",
+    counts.medium ? `+${counts.medium} medium-severity` : "",
+    missingClauseCount ? `+${missingClauseCount} missing protections` : "",
+  ].filter(Boolean);
+}
+
+function confidenceLabel(confidence?: number) {
+  if (typeof confidence !== "number") {
+    return "Confidence pending";
+  }
+  return `${Math.round(confidence * 100)}% confidence`;
+}
+
+function needsHumanReview(analysis: AnalyzeResult): UnsupportedClaim[] {
+  return Array.isArray(analysis.unsupported_claims) ? analysis.unsupported_claims : [];
+}
+
+function evidenceRefs(analysis: AnalyzeResult) {
+  const refs = new Map<string, { id: string; location: string; quote: string }>();
+
+  for (const ref of analysis.evidence_refs || []) {
+    if (ref.id && ref.quote) refs.set(ref.id, ref);
+  }
+
+  for (const issue of analysis.red_flags || []) {
+    for (const ref of issue.evidence_refs || []) {
+      if (ref.id && ref.quote) refs.set(ref.id, ref);
+    }
+  }
+
+  return [...refs.values()];
+}
+
+function EvidenceList({ issue }: { issue: RedFlag }) {
+  if (!issue.evidence_refs?.length) return null;
+
+  return (
+    <div className="evidence-list">
+      {issue.evidence_refs.map((ref) => (
+        <p key={`${issue.clause}-${ref.id}`} className="issue-fix">
+          Evidence {ref.location}: “{ref.quote}”
+        </p>
+      ))}
+    </div>
+  );
+}
+
 export function ReportView({
   scanId,
   email,
@@ -42,8 +115,10 @@ export function ReportView({
   payoneerLink,
   invoiceError,
 }: ReportViewProps) {
-  const visibleIssues = analysis.red_flags.slice(0, 2);
-  const hiddenIssueCount = Math.max(0, analysis.red_flags.length - visibleIssues.length);
+  const visibleIssues = previewIssues(analysis.red_flags);
+  const lockedSummary = lockedSeveritySummary(analysis.red_flags, visibleIssues, analysis.missing_clauses.length);
+  const humanReviewItems = needsHumanReview(analysis);
+  const reportEvidence = evidenceRefs(analysis);
 
   return (
     <div className="report-shell">
@@ -70,11 +145,13 @@ export function ReportView({
             <div>
               <p className="eyebrow">Risk Score</p>
               <h2>{riskLevel.toUpperCase()}</h2>
+              <p className="section-subtitle">{confidenceLabel(analysis.confidence)}</p>
             </div>
           </div>
           <div className="summary-box">
             <p className="eyebrow">Executive Summary</p>
             <p>{analysis.summary}</p>
+            <p className="section-subtitle">This is not legal advice. Use this evidence-cited scan to prepare for attorney review.</p>
           </div>
         </div>
 
@@ -88,19 +165,21 @@ export function ReportView({
                     <strong>{issue.clause}</strong>
                   </div>
                   <p>{issue.issue}</p>
+                  <EvidenceList issue={issue} />
                 </article>
               ))}
               <article className="issue-card issue-card-locked">
-                <strong>{hiddenIssueCount > 0 ? `${hiddenIssueCount}+ more flagged issues` : "Missing clause list"}</strong>
-                <p>Unlock the full report to see every risk, every missing protection, and the fix path.</p>
+                <strong>{lockedSummary.length ? lockedSummary.join(" · ") : "Full evidence basis locked"}</strong>
+                <p>Unlock the full report to see every cited issue, every missing protection, and the attorney-ready fix path.</p>
               </article>
             </div>
 
             <div className="paywall">
               <div>
-                <p className="eyebrow">Get Your Full Report</p>
-                <h2>Unlock all red flags, missing clauses, compliance issues, and suggested fixes.</h2>
-                <p className="section-subtitle">Crypto via NOWPayments · Card via Payoneer</p>
+                <p className="eyebrow">Get Your Full Evidence-Cited Report</p>
+                <h2>Unlock all clause-cited risks, missing protections, confidence notes, and suggested fixes.</h2>
+                <p className="section-subtitle">$97 · formatted for attorney action · This is not legal advice.</p>
+                <p className="section-subtitle">Refund promise: if we cite an issue that is not supported by your uploaded document, request a refund within 7 days.</p>
               </div>
 
               <form className="paywall-form" action="/api/payment/checkout" method="POST">
@@ -114,7 +193,7 @@ export function ReportView({
 
                 <div className="paywall-actions">
                   <button className="button-primary" type="submit">
-                    Pay $24 Crypto
+                    Pay $97 Crypto
                   </button>
                   <a
                     className={`button-secondary ${payoneerLink ? "" : "button-disabled"}`}
@@ -122,7 +201,7 @@ export function ReportView({
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Pay $29 By Card
+                    Pay $97 By Card
                   </a>
                 </div>
               </form>
@@ -132,7 +211,7 @@ export function ReportView({
           <>
             <div className="report-sections">
               <section className="report-section">
-                <p className="eyebrow">Red Flags</p>
+                <p className="eyebrow">Supported Red Flags</p>
                 <div className="preview-grid">
                   {analysis.red_flags.map((issue) => (
                     <article key={`${issue.clause}-${issue.issue}`} className="issue-card">
@@ -141,12 +220,28 @@ export function ReportView({
                         <strong>{issue.clause}</strong>
                       </div>
                       <p>{issue.issue}</p>
+                      <EvidenceList issue={issue} />
+                      {typeof issue.confidence === "number" ? <p className="issue-fix">Finding confidence: {Math.round(issue.confidence * 100)}%</p> : null}
                       {issue.recommendation ? <p className="issue-fix">Suggested fix: {issue.recommendation}</p> : null}
                       {issue.suggested_fix ? <p className="issue-fix">Draft language: {issue.suggested_fix}</p> : null}
                     </article>
                   ))}
                 </div>
               </section>
+
+              {humanReviewItems.length ? (
+                <section className="report-section">
+                  <p className="eyebrow">Needs Human Review</p>
+                  <div className="preview-grid">
+                    {humanReviewItems.map((item) => (
+                      <article key={`${item.claim}-${item.reason}`} className="issue-card issue-card-locked">
+                        <strong>{item.claim}</strong>
+                        <p>{item.reason}</p>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              ) : null}
 
               <section className="report-section">
                 <p className="eyebrow">Missing Clauses</p>
@@ -167,6 +262,19 @@ export function ReportView({
                   ))}
                 </ul>
               </section>
+
+              {reportEvidence.length ? (
+                <section className="report-section">
+                  <p className="eyebrow">Evidence Basis</p>
+                  <ul className="report-list">
+                    {reportEvidence.map((ref) => (
+                      <li key={ref.id}>
+                        <strong>{ref.location}:</strong> “{ref.quote}”
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ) : null}
 
               <section className="report-section highlight-section">
                 <p className="eyebrow">Fix This With DocAI</p>

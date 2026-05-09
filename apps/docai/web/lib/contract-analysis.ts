@@ -9,12 +9,25 @@ import {
 
 export type RiskLevel = "low" | "medium" | "high" | "critical";
 
+export type EvidenceRef = {
+  id: string;
+  location: string;
+  quote: string;
+};
+
+export type UnsupportedClaim = {
+  claim: string;
+  reason: string;
+};
+
 export type RedFlag = {
   clause: string;
   issue: string;
   severity: string;
   recommendation?: string;
   suggested_fix?: string;
+  evidence_refs?: EvidenceRef[];
+  confidence?: number;
 };
 
 export type AnalyzeResult = {
@@ -25,6 +38,9 @@ export type AnalyzeResult = {
   missing_clauses: string[];
   compliance_issues: string[];
   summary: string;
+  confidence?: number;
+  evidence_refs?: EvidenceRef[];
+  unsupported_claims?: UnsupportedClaim[];
   strengths?: string[];
   recommended_action?: string;
   action_detail?: string;
@@ -68,18 +84,53 @@ function normalizeRiskLevel(value: string): RiskLevel {
   return "medium";
 }
 
+function normalizeConfidence(value: unknown) {
+  if (typeof value !== "number" || Number.isNaN(value)) {
+    return undefined;
+  }
+  return Math.max(0, Math.min(1, value));
+}
+
+function hasEvidence(issue: RedFlag) {
+  return Array.isArray(issue.evidence_refs) && issue.evidence_refs.some((ref) => ref.quote?.trim() && ref.location?.trim());
+}
+
+function normalizeDocumentForPrompt(documentText: string) {
+  return documentText
+    .split(/\r?\n/)
+    .map((line, index) => `L${index + 1}: ${line}`)
+    .join("\n")
+    .slice(0, 90_000);
+}
+
+
 export function enrichAnalyzeResult(result: AnalyzeResult): AnalyzeResult {
   const contractType = result.contract_type || "General Commercial Contract";
   const templateKey = inferDocStackTemplateKey(contractType);
   const template = findTemplateByKey(templateKey);
 
+  const redFlags = Array.isArray(result.red_flags) ? result.red_flags : [];
+  const supportedRedFlags = redFlags.filter(hasEvidence);
+  const unsupportedFromRisks = redFlags
+    .filter((risk) => !hasEvidence(risk))
+    .map((risk) => ({
+      claim: `${risk.clause}: ${risk.issue}`,
+      reason: "No supporting clause quote or line reference was returned by the model.",
+    }));
+
   return {
     ...result,
     contract_type: contractType,
     risk_level: normalizeRiskLevel(result.risk_level),
-    red_flags: Array.isArray(result.red_flags) ? result.red_flags : [],
+    red_flags: supportedRedFlags,
     missing_clauses: Array.isArray(result.missing_clauses) ? result.missing_clauses : [],
     compliance_issues: Array.isArray(result.compliance_issues) ? result.compliance_issues : [],
+    evidence_refs: Array.isArray(result.evidence_refs) ? result.evidence_refs : [],
+    unsupported_claims: [
+      ...(Array.isArray(result.unsupported_claims) ? result.unsupported_claims : []),
+      ...unsupportedFromRisks,
+    ],
+    confidence: normalizeConfidence(result.confidence),
     strengths: Array.isArray(result.strengths) ? result.strengths : [],
     docstack_recommendation: {
       template_key: templateKey,
@@ -103,19 +154,24 @@ export async function analyzeContractDocument({
 }) {
   const result = await callClaudeJson<AnalyzeResult>({
     system:
-      "You are a contract risk analyst. Return JSON only: " +
-      "{ risk_level: 'low'|'medium'|'high'|'critical', risk_score: number (0-100), " +
-      "contract_type: string, red_flags: [{ clause: string, issue: string, severity: string, recommendation?: string, suggested_fix?: string }], " +
-      "missing_clauses: string[], compliance_issues: string[], summary: string, strengths?: string[], recommended_action?: string, action_detail?: string }. " +
-      "Be commercially practical. Recommendations should be short and concrete.",
+      "You are a contract risk analyst. Return JSON only. This is not legal advice. " +
+      "Use only the supplied line-numbered document text. Do not invent parties, jurisdictions, clauses, dates, obligations, or legal conclusions. " +
+      "Every red flag must include evidence_refs with an exact quote and line location from the document. " +
+      "If support is weak, omit the item from red_flags and put it in unsupported_claims instead. " +
+      "Return: { risk_level: 'low'|'medium'|'high'|'critical', risk_score: number (0-100), contract_type: string, " +
+      "confidence: number (0-1), evidence_refs: [{ id: string, location: string, quote: string }], " +
+      "red_flags: [{ clause: string, issue: string, severity: 'low'|'medium'|'high'|'critical', recommendation?: string, suggested_fix?: string, confidence: number (0-1), evidence_refs: [{ id: string, location: string, quote: string }] }], " +
+      "missing_clauses: string[], compliance_issues: string[], unsupported_claims: [{ claim: string, reason: string }], summary: string, strengths?: string[], recommended_action?: string, action_detail?: string }. " +
+      "Be commercially practical. Recommendations should be short, concrete, and tied to the cited text.",
     user: [
       `Jurisdiction: ${jurisdiction || "general"}`,
       `Declared contract type: ${contractType || "unknown"}`,
-      "Analyze the following contract text and return only JSON.",
-      documentText,
+      "Analyze the following line-numbered contract text and return only JSON.",
+      normalizeDocumentForPrompt(documentText),
     ].join("\n\n"),
-    maxTokens: 3000,
+    maxTokens: 3500,
   });
+
 
   return enrichAnalyzeResult(result);
 }

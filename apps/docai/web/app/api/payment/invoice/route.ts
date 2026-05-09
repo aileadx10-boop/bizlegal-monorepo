@@ -4,6 +4,8 @@ import { createNOWPaymentsInvoice } from "@/lib/payments";
 import { supabaseAdmin } from "@/lib/supabase";
 
 export const runtime = "nodejs";
+// Skip static prerender — runtime env vars (Supabase) required.
+export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,7 +31,8 @@ export async function POST(request: NextRequest) {
     const invoice = await createNOWPaymentsInvoice({
       scanId: scan_id,
       email: email.trim().toLowerCase(),
-      description: "DocAI contract scan report",
+      description: "DocAI evidence-cited contract risk report",
+      priceUsd: 97,
     });
 
     const { error: updateError } = await supabaseAdmin
