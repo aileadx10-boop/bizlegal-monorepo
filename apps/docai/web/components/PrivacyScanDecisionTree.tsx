@@ -343,12 +343,12 @@ function computeVerdict(answers: Record<string, boolean>): VerdictPayload {
   // guard here for safety.
   if (answers.processes_personal_data === false) return VERDICTS.light_touch
 
-  // High-risk: sensitive categories OR (high volume + DSAR gap) OR
-  // (EU/CA + sensitive).
+  // High-risk: sensitive categories OR (high volume + DSAR gap).
+  // (The third "EU/CA + sensitive" branch was redundant — already
+  // covered by the first sensitive-categories clause; tsc flagged it.)
   if (
     answers.sensitive_categories === true ||
-    (answers.over_50k_subjects === true && answers.has_dsar_process === false) ||
-    (answers.eu_or_ca_subjects === true && answers.sensitive_categories === true)
+    (answers.over_50k_subjects === true && answers.has_dsar_process === false)
   ) {
     return VERDICTS.high_risk
   }
