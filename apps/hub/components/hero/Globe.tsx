@@ -48,6 +48,12 @@ function RegulatoryGlobe() {
       </Sphere>
 
       {/* Orbit rings */}
+      {/* @ts-ignore -- @types/three vs @react-three/fiber type drift on Group ref.
+          Vercel's `next build` re-surfaces this drift even when local
+          `tsc --noEmit` accepts the bare ref (different hoisted versions).
+          Production was 502'd on 2026-05-09 after a redeploy without it.
+          Use @ts-ignore not @ts-expect-error so local typecheck stays clean
+          regardless of which side wins the drift on a given day. */}
       <group ref={ringsRef}>
         {/* Ring 1 — horizontal */}
         <mesh rotation={[Math.PI / 2, 0, 0]}>
