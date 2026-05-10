@@ -21,9 +21,12 @@ export default function ContactPage() {
 
       <section style={{ maxWidth: 800, margin: '0 auto', padding: '0 32px 80px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, alignItems: 'start' }}>
-          {/* Form */}
+          {/* Form — W4.1: posts to /api/contact which fan-outs to the
+              OCI deal-router (HMAC-signed) AND to Formspree, then
+              redirects to /contact/thank-you. The classifier on the
+              router-side decides if this becomes a partner referral. */}
           <form
-            action="https://formspree.io/f/team@bizlegal-ai.com"
+            action="/api/contact"
             method="POST"
             style={{ display: 'flex', flexDirection: 'column', gap: 16 }}
           >
@@ -39,11 +42,11 @@ export default function ContactPage() {
               <label style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--secondary)', display: 'block', marginBottom: 6 }}>Subject</label>
               <select name="subject" className="input" style={{ cursor: 'pointer', appearance: 'none' }}>
                 <option value="">Select topic</option>
-                <option value="partnership">Partnership & bulk</option>
+                <option value="partnership">Partnership &amp; bulk</option>
                 <option value="expert-review">Expert review request</option>
                 <option value="compliance">Compliance question</option>
                 <option value="support">Product support</option>
-                <option value="partnership">Partnership</option>
+                <option value="enterprise">Enterprise inquiry</option>
                 <option value="other">Other</option>
               </select>
             </div>
