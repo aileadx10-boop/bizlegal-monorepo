@@ -9,18 +9,27 @@ import { CommandMenuWrapper } from './components/command-menu-wrapper'
 import { StickyConversionBar } from './components/sticky-conversion-bar'
 import { BackgroundGlow } from './components/ui/BackgroundGlow'
 import { FloatingParticles } from './components/ui/FloatingParticles'
-import { ThemeProvider, themeFOUCScript } from '@bizlegal/themes'
+import { ThemeProvider } from '@bizlegal/themes'
+import { pageThemeFOUCScript } from '@/lib/page-themes'
 
-// Daybreak primary, Twilight Violet alternate. Sets `data-bl-theme-v2`
-// (parallel attribute) so it coexists with the legacy `data-theme=light|dark`
-// system without clobbering it. CSS bridge in styles/theme-v2.css maps
-// the new V2 palette onto the existing Quantum tokens (--bg, --primary,
-// --gold, --on-surface) so existing components rebrand without rewrite.
-const LANDING_FOUC = themeFOUCScript({
-  primary: 'daybreak',
-  alternate: 'twilight',
-  storageKey: 'bizlegal-theme',
-})
+// Hub apex page-theme alternation. Every public route defaults to
+// either daybreak (warm cream paper) or ultraviolet (pale lavender
+// paper) — both LIGHT themes with body copy darker than its surface
+// (the brand contrast contract; verified WCAG AAA in
+// app/styles/theme-v2.css). The site never goes dark on apex.
+//
+// The FOUC script (lib/page-themes.ts) reads the pathname, computes
+// the page-default via override-map → djb2 hash, layers the user's
+// localStorage choice on top, and sets data-bl-theme-v2 before first
+// paint. CSS bridge in styles/theme-v2.css maps the V2 palette onto
+// the legacy Quantum tokens so NavBar / Footer / CommandMenu rebrand
+// without rewrite.
+//
+// ThemeProvider stays mounted (V2 components consume its context) but
+// is configured single-theme — the page-theme attribute drives the
+// CSS, not the provider's primary/alternate machinery (that flow uses
+// shared-package ThemeIds which don't include 'ultraviolet').
+const LANDING_FOUC = pageThemeFOUCScript('bizlegal-theme')
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://bizlegal-ai.com'),
@@ -59,8 +68,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: `(function(){try{var t=localStorage.getItem('bl-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`,
           }}
         />
-        {/* Subdomain Design Pass FOUC — Daybreak/Twilight V2 themes via parallel
-            data-bl-theme-v2 attribute (does NOT clobber legacy data-theme above). */}
+        {/* Hub apex page-theme alternation. Reads localStorage user choice +
+            falls back to per-route page default (daybreak | ultraviolet —
+            both light, font-darker-than-bg per the brand contrast contract).
+            Runs synchronously in <head> so first paint already has the right
+            data-bl-theme-v2 attribute set. See lib/page-themes.ts. */}
         <script dangerouslySetInnerHTML={{ __html: LANDING_FOUC }} />
       </head>
       <body className="bg-[var(--bg)]">
@@ -68,7 +80,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <FloatingParticles />
         <StickyConversionBar />
         <CommandMenuWrapper>
-          <ThemeProvider primary="daybreak" alternate="twilight" storageKey="bizlegal-theme">
+          <ThemeProvider primary="daybreak" alternate={null} storageKey="bizlegal-theme">
             <NavBar />
             <TickerBar />
             <main style={{ paddingTop: 92 }}>

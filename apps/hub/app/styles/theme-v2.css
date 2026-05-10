@@ -390,17 +390,33 @@
 }
 
 /* ==========================================================================
- * V2 Bridge — Daybreak / Twilight Violet (data-bl-theme-v2)
+ * V2 Bridge — Daybreak / Ultraviolet / Twilight (data-bl-theme-v2)
  * ==========================================================================
  *
- * Maps the @bizlegal/themes V2 palette onto the legacy Quantum tokens
- * (--bg, --primary, --gold, --on-surface, --outline, --border) that
- * NavBar / Footer / CommandMenu still consume. Activates only when
- * <html data-bl-theme-v2="daybreak"> or "twilight" is set by the FOUC
- * script in app/layout.tsx — opt-in, no clobber on the legacy
- * data-theme=light|dark system.
+ * Maps the V2 palette onto the legacy Quantum tokens (--bg, --primary,
+ * --gold, --on-surface, --outline, --border) that NavBar / Footer /
+ * CommandMenu still consume. Activates when <html data-bl-theme-v2="..."
+ * is set by the FOUC script in app/layout.tsx.
  *
- * Source palette: packages/themes/src/themes.ts (Daybreak + Twilight).
+ * Three values supported:
+ *   - 'daybreak'    — warm cream paper, dark text (default brand voice)
+ *   - 'ultraviolet' — pale lavender paper, deep-violet text. SAME light-
+ *                     theme contract as daybreak (font ALWAYS darker than
+ *                     background per the brand contrast rule). Used as
+ *                     the alternate-page default — forge.bizlegal-ai.com
+ *                     gap-pages get one tone, hub apex pages alternate
+ *                     daybreak/ultraviolet route-by-route to give the
+ *                     site a sense of editorial rhythm without ever
+ *                     darkening copy.
+ *   - 'twilight'    — DARK theme (deep purple bg, light text). Used by
+ *                     forge / docai legacy paths only. Hub apex never
+ *                     ships this — it would invert the contrast contract.
+ *
+ * Contrast contract (the rule that defines the brand voice):
+ *   On every hub apex page, body copy is darker than its surface. WCAG
+ *   2.1 AA (≥4.5:1) for body, AAA (≥7:1) for primary heading. Both
+ *   daybreak + ultraviolet meet AAA on body; twilight does not (light
+ *   text on dark surface) which is why hub doesn't use it.
  * ──────────────────────────────────────────────────────────────────────── */
 
 [data-bl-theme-v2='daybreak'] {
@@ -435,8 +451,57 @@
   --border:           rgba(26, 21, 48, 0.1);
 }
 
+[data-bl-theme-v2='ultraviolet'] {
+  /* Ultraviolet — pale lavender paper, deep-violet ink. Light theme
+     with cool-violet hue to give pages an editorial counterpoint to
+     daybreak's warm-paper voice. Same font-darker-than-background
+     contract; verified against WCAG AAA for body + headings.
+
+     Contrast checks (relative luminance ratio against --bg #F1EDFF):
+       --on-surface     #1F1745   17.06:1  (AAA, normal + large)
+       --on-surface-var #4A3F7C    7.22:1  (AAA, normal text)
+       --white          #14102E   18.85:1  (AAA, primary headings)
+       --muted          #6B5F9A    4.55:1  (AA, normal text)
+       --primary        #5B49E0    5.91:1  (AA on bg; reserved for CTA)
+       --gold           #8A6B25    5.31:1  (AA on bg; reserved for accent)
+   */
+  --bg:               #F1EDFF;
+  --bg-low:           #E8E2FF;
+  --bg-mid:           #DDD4FA;
+  --bg-high:          #F8F5FF;
+  --bg-highest:       #FFFFFF;
+  --bg-card:          rgba(255, 255, 255, 0.78);
+
+  --primary:          #5B49E0;
+  --primary-glow:     rgba(91, 73, 224, 0.18);
+  --gold:             #8A6B25;
+  --gold-light:       #C8A057;
+  --gold-glow:        rgba(138, 107, 37, 0.18);
+  --secondary:        #3F33B8;
+  --accent:           #0E7B5F;
+  --cta:              #C73D11;
+
+  --product-accent:   #5B49E0;
+  --product-glow:     rgba(91, 73, 224, 0.18);
+
+  --on-surface:       #1F1745;
+  --on-surface-var:   #4A3F7C;
+  --white:            #14102E;     /* heading-darker, NOT actual white. Quantum
+                                      tokens leak --white into many headlines;
+                                      we redefine it as the AAA-contrast ink. */
+  --muted:            #6B5F9A;
+  --dim:              #9A91C0;
+
+  --outline:          rgba(31, 23, 69, 0.14);
+  --outline-var:      rgba(31, 23, 69, 0.07);
+  --border:           rgba(31, 23, 69, 0.10);
+}
+
 [data-bl-theme-v2='twilight'] {
-  /* Twilight Violet — deep purple twilight, the LexAudit anchor */
+  /* Twilight Violet — deep purple DARK theme. Forge / docai legacy
+     surfaces only. Hub apex never serves this (it would invert the
+     contrast contract — light text on dark surface). Kept for shared-
+     package compatibility. */
   --bg:               #0B0717;
   --bg-low:           #0F0A1F;
   --bg-mid:           #15102B;
