@@ -47,13 +47,13 @@ function RegulatoryGlobe() {
         />
       </Sphere>
 
-      {/* Orbit rings */}
-      {/* @ts-ignore -- @types/three vs @react-three/fiber type drift on Group ref.
-          Vercel's `next build` re-surfaces this drift even when local
-          `tsc --noEmit` accepts the bare ref (different hoisted versions).
-          Production was 502'd on 2026-05-09 after a redeploy without it.
-          Use @ts-ignore not @ts-expect-error so local typecheck stays clean
-          regardless of which side wins the drift on a given day. */}
+      {/* Orbit rings — @ts-ignore directive on the IMMEDIATELY adjacent
+          line below suppresses @types/three vs @react-three/fiber drift
+          that Vercel's next build catches but local tsc --noEmit doesn't.
+          Don't insert any non-blank line between @ts-ignore and the JSX
+          tag or the suppression chain breaks (Vercel 502 reproduced on
+          2026-05-09 with a multi-line comment in between). */}
+      {/* @ts-ignore */}
       <group ref={ringsRef}>
         {/* Ring 1 — horizontal */}
         <mesh rotation={[Math.PI / 2, 0, 0]}>
