@@ -270,6 +270,34 @@ export function OpsDashboardClient({ token }: { token: string }) {
     return data.events.filter((e) => e.event_type.startsWith(filter) || e.source === filter)
   }, [data, filter])
 
+  // W3.1 — derive curator-pipeline stats from existing ops_events.
+  // Hetzner curator emits via services/hetzner/ops_log.py with
+  // source='worker' + ref_id='curator/<step>' + metadata.step in
+  // {scout,brain,publisher,auto_pick}. Reuses the data we already
+  // fetch — no new schema, no new endpoint.
+  const curatorStats = useMemo(() => {
+    if (!data) {
+      return { scouts24h: 0, drafts24h: 0, published24h: 0, lastScout: null as OpsEvent | null, lastPublish: null as OpsEvent | null }
+    }
+    const isCurator = (e: OpsEvent) =>
+      e.source === 'worker' && typeof e.ref_id === 'string' && e.ref_id.startsWith('curator/')
+    const stepIs = (e: OpsEvent, step: string) =>
+      typeof (e.metadata as { step?: unknown }).step === 'string' && (e.metadata as { step: string }).step === step
+    const outcomeIs = (e: OpsEvent, outcome: string) =>
+      typeof (e.metadata as { outcome?: unknown }).outcome === 'string' && (e.metadata as { outcome: string }).outcome === outcome
+    const curator = data.events.filter(isCurator)
+    const scouts = curator.filter(e => stepIs(e, 'scout') && e.event_type === 'cron.completed' && outcomeIs(e, 'picked'))
+    const drafts = curator.filter(e => stepIs(e, 'brain') && outcomeIs(e, 'drafted'))
+    const published = curator.filter(e => stepIs(e, 'publisher') && outcomeIs(e, 'published'))
+    return {
+      scouts24h: scouts.length,
+      drafts24h: drafts.length,
+      published24h: published.length,
+      lastScout: scouts[0] ?? null,
+      lastPublish: published[0] ?? null,
+    }
+  }, [data])
+
   const eventTypeFilters = useMemo(() => {
     if (!data) return []
     const set = new Set<string>()
@@ -459,6 +487,31 @@ export function OpsDashboardClient({ token }: { token: string }) {
           value={data.summary.framework_changes_recent.toLocaleString()}
           meta="Last 30 hashes"
           tone={data.summary.framework_changes_recent > 0 ? 'warning' : 'default'}
+        />
+        {/* W3.1 — curator pipeline visibility. Derived in-place from
+            data.events; no new schema. Green when scout fired in last
+            24h with picks, default otherwise. */}
+        <SummaryCard
+          icon={<RefreshCw size={16} />}
+          label="Scout runs · 24h"
+          value={curatorStats.scouts24h.toLocaleString()}
+          meta={
+            curatorStats.lastScout
+              ? `Last picked ${formatRelative(curatorStats.lastScout.created_at)}`
+              : 'No picked runs in 24h'
+          }
+          tone={curatorStats.scouts24h > 0 ? 'success' : 'warning'}
+        />
+        <SummaryCard
+          icon={<FileText size={16} />}
+          label="Articles · 24h"
+          value={`${curatorStats.published24h}/${curatorStats.drafts24h}`}
+          meta={
+            curatorStats.lastPublish && typeof (curatorStats.lastPublish.metadata as { slug?: unknown }).slug === 'string'
+              ? `Last: ${(curatorStats.lastPublish.metadata as { slug: string }).slug} · ${formatRelative(curatorStats.lastPublish.created_at)}`
+              : `${curatorStats.drafts24h} drafted · ${curatorStats.published24h} published`
+          }
+          tone={curatorStats.published24h > 0 ? 'success' : 'default'}
         />
       </section>
 
