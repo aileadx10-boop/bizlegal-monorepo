@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { ThemeToggle } from '@/app/components/ui-v2/ThemeToggle'
-import { ThemeToggleButton } from '@bizlegal/themes'
+import { PageThemeToggle } from './PageThemeToggle'
 
 const PRODUCTS = [
   { label: 'TRACR', sub: 'Wallet & Tx Intelligence', href: 'https://tracr.bizlegal-ai.com', accent: '#7dd3fc' },
@@ -185,9 +185,11 @@ export default function NavBar() {
 
         {/* Right */}
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-          {/* V2 Daybreak/Twilight toggle (parallel to legacy light/dark — bridge
-              layer in app/styles/theme-v2.css activates only when this flips). */}
-          <ThemeToggleButton labelPrimary="Switch to twilight" labelAlternate="Switch to daybreak" />
+          {/* Daybreak / Ultraviolet toggle — flips data-bl-theme-v2 between
+              the two LIGHT hub themes (warm cream vs pale lavender). Writes
+              localStorage so the next navigation respects the choice over
+              the per-route page-default. */}
+          <PageThemeToggle />
           <ThemeToggle size={32} />
           <Link
             href="/risk-engine"
