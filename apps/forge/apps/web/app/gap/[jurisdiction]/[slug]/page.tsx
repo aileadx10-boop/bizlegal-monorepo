@@ -23,6 +23,35 @@ const ctaUrls: Record<string, string> = {
   lexaudit: 'https://lexaudit.bizlegal-ai.com',
   docai: 'https://docai.bizlegal-ai.com',
   forge: 'https://forge.bizlegal-ai.com',
+  leadforge: 'https://leadforge.bizlegal-ai.com',
+}
+
+// W4.2 — append UTM params to cross-domain CTA links so the destination
+// subdomain's analytics can attribute the visit back to the originating
+// gap-page slug. Same-domain links (relative paths like /decision-tree)
+// don't need UTMs since session-level analytics already cover them.
+//
+// Convention: utm_source=forge_gap (always), utm_medium=cta (always),
+// utm_campaign=<gap_slug> (per-page), utm_content=<cta_id> (which
+// button on the page — currently 'tree' for the decision-tree
+// preliminary check, 'audit' for the main paid-CTA).
+function withCtaUtm(href: string, slug: string, cta_id: 'tree' | 'audit'): string {
+  if (!href) return href
+  // Relative URL → same domain → no UTM rewrite (would create an
+  // invalid base when passed to URL()). Forge BOI tree is the case.
+  if (!/^https?:\/\//i.test(href)) return href
+  try {
+    const u = new URL(href)
+    // Don't clobber pre-set UTMs (e.g. if a future ctaUrls entry
+    // already pre-encodes campaign tracking).
+    if (!u.searchParams.has('utm_source')) u.searchParams.set('utm_source', 'forge_gap')
+    if (!u.searchParams.has('utm_medium')) u.searchParams.set('utm_medium', 'cta')
+    if (!u.searchParams.has('utm_campaign')) u.searchParams.set('utm_campaign', slug)
+    u.searchParams.set('utm_content', cta_id)
+    return u.toString()
+  } catch {
+    return href
+  }
 }
 
 interface DecisionTool {
@@ -325,8 +354,10 @@ export default async function GapPage({ params }: GapPageParams) {
               </p>
             </div>
             <a
-              href={decisionToolFor(gap)!.href}
+              href={withCtaUtm(decisionToolFor(gap)!.href, gap.slug, 'tree')}
               className="inline-block border border-forge-accent text-forge-accent hover:bg-forge-accent hover:text-white font-semibold px-5 py-3 rounded-lg transition-colors text-sm whitespace-nowrap"
+              data-cta="forge-gap-tree"
+              data-cta-slug={gap.slug}
             >
               {decisionToolFor(gap)!.cta} →
             </a>
@@ -342,8 +373,10 @@ export default async function GapPage({ params }: GapPageParams) {
             Get ahead of this regulation with automated compliance tooling. Audit your exposure in minutes.
           </p>
           <a
-            href={ctaUrl}
+            href={withCtaUtm(ctaUrl, gap.slug, 'audit')}
             className="inline-block bg-forge-accent hover:bg-forge-accent-hover text-white font-semibold px-8 py-4 rounded-xl text-lg transition-colors"
+            data-cta="forge-gap-audit"
+            data-cta-slug={gap.slug}
           >
             Start Compliance Audit →
           </a>
