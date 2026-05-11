@@ -22,15 +22,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/agents`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE}/risk-engine`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE}/jurisdictions`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${BASE}/marketplace`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
+    // /marketplace also 308-redirects; omitted (same rationale as the
+    // subdomain landings below).
 
-    // Subdomain landing pages on the hub (drive crawlers to product surfaces)
-    { url: `${BASE}/tracr`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
-    { url: `${BASE}/brai`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
-    { url: `${BASE}/docai`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
-    { url: `${BASE}/lexaudit`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
-    { url: `${BASE}/leadforge`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
-    { url: `${BASE}/forge`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
+    // Subdomain-landing routes intentionally OMITTED from the hub
+    // sitemap. Each is a 308 redirect to the canonical subdomain
+    // (apps/hub/next.config.js redirects() block). Advertising them
+    // here would waste Google's crawl budget and create the redirect
+    // chain that the 2026-05-11 GSC report flagged as "Page redirects
+    // to another URL." Each subdomain has its OWN sitemap (advertised
+    // via sitemap-index.xml) so the destinations are still discoverable.
+    //
+    // Removed: /tracr, /brai, /docai, /lexaudit, /leadforge, /forge,
+    // /marketplace (all 308s confirmed via curl, 2026-05-11).
 
     // Vertical SEO landing pages
     { url: `${BASE}/digital-asset-risk-analysis`, lastModified: now, changeFrequency: 'weekly', priority: 0.75 },
