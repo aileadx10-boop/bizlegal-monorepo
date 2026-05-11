@@ -449,6 +449,18 @@
   --outline:          rgba(26, 21, 48, 0.12);
   --outline-var:      rgba(26, 21, 48, 0.06);
   --border:           rgba(26, 21, 48, 0.1);
+
+  /* 2026-05-11 — glass-card surface tokens. .glass-card (defined in
+     globals.css) reads --glass-bg/border/shadow/blur. Default values
+     at :root are a dark navy from the legacy Quantum dark theme, which
+     created the "bg too dark, letters too bright" pattern Moses
+     flagged on Today's Brief (5 cards on /). Override here so glass
+     cards in Daybreak read as light paper with the ink-color text
+     remapped above. */
+  --glass-bg:         rgba(255, 255, 255, 0.78);
+  --glass-border:     rgba(26, 21, 48, 0.10);
+  --glass-shadow:     0 8px 28px rgba(26, 21, 48, 0.08), 0 0 0 1px rgba(91, 73, 224, 0.04);
+  --glass-blur:       blur(12px) saturate(140%);
 }
 
 [data-bl-theme-v2='ultraviolet'] {
@@ -456,6 +468,9 @@
      with cool-violet hue to give pages an editorial counterpoint to
      daybreak's warm-paper voice. Same font-darker-than-background
      contract; verified against WCAG AAA for body + headings.
+
+     glass-card tokens here mirror daybreak's light-paper treatment
+     with a violet-tinted shadow — same readability contract.
 
      Contrast checks (relative luminance ratio against --bg #F1EDFF):
        --on-surface     #1F1745   17.06:1  (AAA, normal + large)
@@ -495,6 +510,12 @@
   --outline:          rgba(31, 23, 69, 0.14);
   --outline-var:      rgba(31, 23, 69, 0.07);
   --border:           rgba(31, 23, 69, 0.10);
+
+  /* Glass surface tokens — light paper over the pale-lavender bg. */
+  --glass-bg:         rgba(255, 255, 255, 0.72);
+  --glass-border:     rgba(31, 23, 69, 0.12);
+  --glass-shadow:     0 8px 28px rgba(31, 23, 69, 0.10), 0 0 0 1px rgba(91, 73, 224, 0.05);
+  --glass-blur:       blur(12px) saturate(140%);
 }
 
 [data-bl-theme-v2='twilight'] {
