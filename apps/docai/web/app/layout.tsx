@@ -7,9 +7,19 @@ import CookieConsent from "@/components/CookieConsent";
 import { ThemeToggle } from "./components/ui-v2/ThemeToggle";
 import { ThemeProvider, themeFOUCScript, SiteShell, AppRouteOnly } from '@bizlegal/themes';
 
+// 2026-05-11 — Flipped from royal-dark/royal-light to daybreak.
+// Brand contract: every BizLegal AI surface is LIGHT with body copy
+// darker than background. Royal-dark inverted that contract (dark
+// navy bg, light text) — replaced with daybreak (warm cream bg,
+// dark ink text). DocAI now matches hub apex's brand voice.
+//
+// alternate: null because the shared ThemeId union doesn't include
+// 'ultraviolet' (hub-local concept) and we don't want to expose the
+// twilight dark theme as a toggle option on DocAI either. Single-
+// theme deployment with no toggle = simplest, most consistent UX.
 const LANDING_FOUC = themeFOUCScript({
-  primary: 'royal-dark',
-  alternate: 'royal-light',
+  primary: 'daybreak',
+  alternate: null,
   storageKey: 'docai-theme',
 });
 
@@ -68,7 +78,7 @@ export default function RootLayout({
             <div style={{ height: '36px' }} aria-hidden="true" />
           </>
         </AppRouteOnly>
-        <ThemeProvider primary="royal-dark" alternate="royal-light" storageKey="docai-theme">
+        <ThemeProvider primary="daybreak" alternate={null} storageKey="docai-theme">
           <div>
             <SiteShell
               brand="DocAI"
