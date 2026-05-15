@@ -2,9 +2,16 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { logEventAsync } from '@/lib/ops/log'
 import { markNurturePaid } from '@/lib/nurture-state'
+import { claimWebhookEvent } from '@/lib/payments/webhook-idempotency'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
+
+// Terminal states — once we've moved to one of these, a stale earlier
+// event (e.g. out-of-order ACTIVATED arriving after CANCELLED) must NOT
+// rewind state. Closes CODE-REVIEW-W5 H-01 second half. See lookup in
+// the switch below.
+const TERMINAL_STATES = new Set(['cancelled', 'expired', 'refunded'])
 
 function getSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -87,21 +94,37 @@ export async function POST(req: NextRequest) {
     const rawBody = await req.text()
     const verified = await verifyPayPalWebhook(req, rawBody)
     if (!verified) {
-      return NextResponse.json({ error: 'webhook verification failed' }, { status: 401 })
+      return NextResponse.json({ error: 'webhook_verification_failed' }, { status: 401 })
     }
 
-    const event = JSON.parse(rawBody) as PayPalEvent
+    const event = JSON.parse(rawBody) as PayPalEvent & { create_time?: string }
     const supabase = getSupabase()
 
+    // 2026-05-11 idempotency claim (CODE-REVIEW-W5 H-01 + SECURITY-W5 S-C1):
+    // PayPal re-delivers any event for up to 25h. Without this claim,
+    // a replayed ACTIVATED arriving after CANCELLED revives a cancelled
+    // sub. Claim before processing; duplicates 200-fast.
+    const claim = await claimWebhookEvent({
+      gateway: 'paypal',
+      eventId: event.id,
+      eventType: event.event_type,
+      eventReceivedAt: event.create_time ?? null,
+    })
+    if (claim === 'duplicate') {
+      return NextResponse.json({ ok: true, deduped: true })
+    }
+    if (claim === 'error') {
+      // Storage layer down → 500 so PayPal retries with backoff.
+      return NextResponse.json(
+        { error: 'idempotency_storage_failed' },
+        { status: 500 },
+      )
+    }
+
     // PayPal Subscriptions: custom_id we set during start() ties back to our order.id
-    const orderId =
-      event.resource.custom_id ??
-      ((event.resource as { custom_id?: string }).custom_id as string | undefined)
+    const orderId = event.resource.custom_id
 
     if (!orderId) {
-      // Some events (refunds via /v2/payments/captures/...) reference the
-      // capture only — fall back to gateway_subscription_id lookup if we
-      // wired that earlier. For now, log + ack.
       console.warn('[paypal/webhook] no custom_id on event', event.event_type)
       return NextResponse.json({ ok: true, ignored: true })
     }
@@ -109,6 +132,18 @@ export async function POST(req: NextRequest) {
     const updates: Record<string, unknown> = {
       metadata: { last_event: event },
     }
+
+    // Terminal-state guard: read the row's current status BEFORE applying
+    // the transition. If we've already moved to cancelled/expired/refunded,
+    // a stale earlier event must not rewind state. Closes CODE-REVIEW-W5
+    // H-01 second half (out-of-order delivery).
+    const { data: currentRow } = await supabase
+      .from('payment_orders')
+      .select('status')
+      .eq('id', orderId)
+      .maybeSingle()
+    const currentStatus = typeof currentRow?.status === 'string' ? currentRow.status : null
+    const isTerminal = currentStatus !== null && TERMINAL_STATES.has(currentStatus)
 
     // Map PayPal event_type → our status
     switch (event.event_type) {
@@ -142,14 +177,33 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ ok: true, ignored: true })
     }
 
+    // Terminal-state guard: if the row is already cancelled/expired/refunded,
+    // ONLY allow updates that don't transition status back. Refunds are
+    // allowed to overwrite cancelled (a cancelled-then-refunded path is real).
+    if (isTerminal && typeof updates.status === 'string') {
+      const incoming = updates.status as string
+      const allowedFromTerminal: Record<string, ReadonlyArray<string>> = {
+        cancelled: ['refunded'],
+        expired: ['refunded'],
+        refunded: [],  // refunded is final
+      }
+      const permitted = currentStatus ? allowedFromTerminal[currentStatus] ?? [] : []
+      if (!permitted.includes(incoming)) {
+        console.warn(
+          `[paypal/webhook] refused stale transition order=${orderId} current=${currentStatus} incoming=${incoming} event=${event.event_type}`,
+        )
+        return NextResponse.json({ ok: true, refused_stale_transition: true })
+      }
+    }
+
     const { error: updateErr } = await supabase
       .from('payment_orders')
       .update(updates)
       .eq('id', orderId)
 
     if (updateErr) {
-      console.error('[paypal/webhook] update failed', updateErr)
-      return NextResponse.json({ error: 'update failed' }, { status: 500 })
+      console.error('[paypal/webhook] update failed', updateErr.message)
+      return NextResponse.json({ error: 'update_failed' }, { status: 500 })
     }
 
     if (typeof updates.status === 'string') {
@@ -198,8 +252,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true, status: updates.status })
   } catch (err) {
-    const msg = err instanceof Error ? err.message : 'unknown error'
-    console.error('[paypal/webhook]', msg)
-    return NextResponse.json({ error: msg }, { status: 500 })
+    // H-02 fix: opaque code to client; full detail stays server-side
+    console.error('[paypal/webhook]', err instanceof Error ? err.message : err)
+    return NextResponse.json({ error: 'webhook_processing_failed' }, { status: 500 })
   }
 }
