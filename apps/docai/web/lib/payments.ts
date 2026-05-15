@@ -72,7 +72,23 @@ export function verifyNOWPaymentsSignature(rawBody: string, signature: string | 
     return false;
   }
 
-  const payload = JSON.parse(rawBody) as Record<string, unknown>;
+  // 2026-05-11 hardening (CODE-REVIEW-W5 H-03): defensive JSON parse +
+  // timing-safe compare. The previous `expected === signature` is
+  // timing-leaky (early-exit on first mismatched char), which lets an
+  // attacker brute-force one byte at a time over the wire. Hub's
+  // NOWPayments webhook already uses crypto.timingSafeEqual; this brings
+  // DocAI in line.
+  let payload: Record<string, unknown>;
+  try {
+    const parsed: unknown = JSON.parse(rawBody);
+    if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+      return false;
+    }
+    payload = parsed as Record<string, unknown>;
+  } catch {
+    return false;
+  }
+
   const sorted = Object.keys(payload)
     .sort()
     .reduce<Record<string, unknown>>((accumulator, key) => {
@@ -81,5 +97,13 @@ export function verifyNOWPaymentsSignature(rawBody: string, signature: string | 
     }, {});
 
   const expected = crypto.createHmac("sha512", secret).update(JSON.stringify(sorted)).digest("hex");
-  return expected === signature;
+  const trimmed = signature.trim();
+  if (expected.length !== trimmed.length) {
+    return false;
+  }
+  try {
+    return crypto.timingSafeEqual(Buffer.from(expected, "hex"), Buffer.from(trimmed, "hex"));
+  } catch {
+    return false;
+  }
 }

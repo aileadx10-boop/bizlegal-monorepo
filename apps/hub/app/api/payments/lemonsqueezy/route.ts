@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'node:crypto'
 import { supabaseAdmin } from '@/lib/supabase'
 import { markNurturePaid } from '@/lib/nurture-state'
+import { claimWebhookEvent } from '@/lib/payments/webhook-idempotency'
 
 /**
  * LemonSqueezy webhook handler. Verifies HMAC-SHA256 signature, parses
@@ -88,6 +89,28 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
 
+  // 2026-05-11 idempotency claim (CODE-REVIEW-W5 H-01 + SECURITY-W5 S-C1).
+  // LemonSqueezy doesn't send a stable event_id in headers (the X-Signature
+  // changes per-delivery even for re-tries), so we derive a deterministic
+  // event_id from a hash of the canonical body. Identical bodies = identical
+  // event_id = deduped. The eventName + data.id are stable across retries.
+  const lsEventId = crypto.createHash('sha256').update(rawBody).digest('hex').slice(0, 48)
+  const claim = await claimWebhookEvent({
+    gateway: 'lemonsqueezy',
+    eventId: lsEventId,
+    eventType: event.meta?.event_name,
+  })
+  if (claim === 'duplicate') {
+    return NextResponse.json({ ok: true, deduped: true })
+  }
+  if (claim === 'error') {
+    // Storage layer down → 500 so LS retries with backoff.
+    return NextResponse.json(
+      { error: 'idempotency_storage_failed' },
+      { status: 500 },
+    )
+  }
+
   const eventName = event.meta?.event_name
   const dataAttrs = event.data?.attributes ?? {}
   const subscriptionId = String(event.data?.id ?? '')
@@ -129,13 +152,34 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       { onConflict: 'id' }
     )
     if (error) {
-      // We still 200 to LemonSqueezy so they don't retry storms; the
-      // failure is logged for ops review. (If the table doesn't exist
-      // yet, Moses runs the migration above before going live.)
-      console.error('LemonSqueezy webhook DB write failed', { event: eventName, error: error.message })
+      // SF-C3 fix (2026-05-11): previously this swallowed the DB error and
+      // returned 200 to "avoid retry storms" — which meant a 5-minute
+      // Supabase blip during a webhook burst PERMANENTLY lost subscription
+      // state (LS doesn't retry on 2xx). The moment entitlements ship,
+      // that silent loss = silent revenue leak.
+      //
+      // Now: return 500 so LS retries with exponential backoff. The
+      // claimWebhookEvent above ensures the retry won't double-process
+      // (claim is registered before this point, but the retry will see
+      // a duplicate event_id and 200 fast). Net effect: at-least-once
+      // delivery with idempotency, vs at-most-once with silent loss.
+      console.error('[lemonsqueezy] DB write failed; returning 500 for LS retry', {
+        event: eventName,
+        subscriptionId,
+        err: error.message,
+      })
+      return NextResponse.json(
+        { error: 'subscription_write_failed' },
+        { status: 500 },
+      )
     }
   } catch (err) {
-    console.error('LemonSqueezy webhook handler exception', err)
+    // Unexpected exception — log + 500 so LS retries.
+    console.error('[lemonsqueezy] handler exception:', err)
+    return NextResponse.json(
+      { error: 'webhook_processing_failed' },
+      { status: 500 },
+    )
   }
 
   // Phase AA D7 INTEGRATION-V3 B-3 fix: stop the nurture sequence on

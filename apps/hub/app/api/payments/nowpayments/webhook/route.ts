@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import crypto from 'node:crypto'
 import { logEventAsync } from '@/lib/ops/log'
 import { markNurturePaid } from '@/lib/nurture-state'
+import { claimWebhookEvent } from '@/lib/payments/webhook-idempotency'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
@@ -78,7 +79,31 @@ export async function POST(req: NextRequest) {
     const ipn = JSON.parse(rawBody) as NowPaymentsIpn
 
     if (!ipn.order_id) {
-      return NextResponse.json({ error: 'missing order_id' }, { status: 400 })
+      return NextResponse.json({ error: 'missing_order_id' }, { status: 400 })
+    }
+
+    // 2026-05-11 idempotency claim (CODE-REVIEW-W5 H-01 + SECURITY-W5 S-C1).
+    // NOWPayments retries IPN deliveries until they see 2xx. Without a
+    // claim, multiple retries for the same payment_id duplicate the
+    // payment.confirmed event and double-fire markNurturePaid.
+    //
+    // We claim on (payment_id, payment_status) so transitions through
+    // multiple statuses (waiting → confirming → finished) each get
+    // processed once, but the SAME status delivered twice is deduped.
+    const npEventId = `${ipn.payment_id}:${ipn.payment_status}`
+    const claim = await claimWebhookEvent({
+      gateway: 'nowpayments',
+      eventId: npEventId,
+      eventType: ipn.payment_status,
+    })
+    if (claim === 'duplicate') {
+      return NextResponse.json({ ok: true, deduped: true })
+    }
+    if (claim === 'error') {
+      return NextResponse.json(
+        { error: 'idempotency_storage_failed' },
+        { status: 500 },
+      )
     }
 
     const supabase = getSupabase()
