@@ -34,11 +34,17 @@ bizlegal-monorepo/
 │   ├── firecrawl/    @bizlegal/firecrawl — scrape + Sonnet semantic-diff
 │   ├── safe/         @bizlegal/safe — PII redaction (LexAudit Safe)
 │   ├── ui-v2/        @bizlegal/ui-v2 — PricingTierCard + AgentCheckoutButton + theme tokens
+│   ├── nurture-enqueue/ @bizlegal/nurture-enqueue — cross-surface nurture enqueue helper
+│   ├── rate-limit/   @bizlegal/rate-limit — shared public route limiter helpers
 │   ├── theme/        @bizlegal/theme — CSS custom properties only
+│   ├── themes/       @bizlegal/themes — shared shell, FOUC, and theme tokens
 │   ├── policy-refresh/ @bizlegal/policy-refresh — 7-framework registry (V2)
-│   └── payment/      @bizlegal/payment — NOWPayments + PayPal + LemonSqueezy + Paddle clients (Z3)
+│   ├── payment/      @bizlegal/payment — NOWPayments + PayPal + LemonSqueezy + Paddle clients (Z3)
+│   ├── turnstile-verify/ @bizlegal/turnstile-verify — server-side Turnstile verification helper
+│   └── turnstile-widget/ @bizlegal/turnstile-widget — client-side Turnstile widget wrapper
 ├── agents/           AGENTS.md + agent prompt seeds + WAT specs
-│   └── ea/           Executive Assistant brain — prompts, schemas, templates, context (Z1.F)
+│   ├── ea/           Executive Assistant brain — prompts, schemas, templates, context (Z1.F)
+│   └── socials/      Consent-based social acquisition plans, skills, and prompt seeds
 ├── decisions/        all planning + ops docs (single canonical location)
 │   └── strategy/     SKOOL-NATE strategy chapters (01-11) + THE-MACHINE + master plans (Z1.G)
 ├── infrastructure/   Caddyfile, docker-compose, systemd units, Hetzner/OCI provisioning
@@ -163,6 +169,7 @@ Every planning + ops doc lives in `decisions/`:
 - `decisions/WEEKLY_ROUTINES_AND_SEO.md` — full UTC schedule of crons / timers / event-driven services (every cron mapped Sun-Sat by surface) + programmatic SEO audit (3 gap pages currently, 6 P0/P1 improvements scoped at ~11h total work)
 - `decisions/PHASE_AA_NEXT_STEPS.md` — Post-Phase-Z roadmap: workspace map + daily runbook + 6-gate article quality system + Paddle/LS application criteria + 3-week SEO 95+ plan. Read this when planning the next sprint.
 - `decisions/LOW_RISK_DOCAI_FUNNEL.md` — consent-based DocAI acquisition wrapper: bot safety gate, classifier precision gate, Z7 definition, 14-day revenue review.
+- decisions/DOCAI_FUNNEL_COMPLETION_REPORT_2026-05-16.md — DocAI funnel completion, payment env blockers, and go-live test order.
 - *current plan is at `~/.claude/plans/concurrent-bouncing-kitten.md` (lives outside the repo since plans are per-session ephemera)*
 
 When you write a new decision, add it here.
@@ -193,3 +200,5 @@ When you write a new decision, add it here.
 If you see a doc contradicting current code: **trust the code; update the doc**. Stale docs are worse than missing docs.
 
 If you see code contradicting the user's stated intent: **trust the user; fix the code**. Moses is the source of truth on what BizLegal-AI is for.
+
+
