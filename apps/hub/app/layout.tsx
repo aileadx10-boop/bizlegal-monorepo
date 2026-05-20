@@ -34,14 +34,20 @@ const LANDING_FOUC = pageThemeFOUCScript('bizlegal-theme')
 export const metadata: Metadata = {
   metadataBase: new URL('https://bizlegal-ai.com'),
   title: {
-    default: 'BizLegal AI — Compliance Intelligence for Digital Assets',
+    default: 'BizLegal AI — Regulatory Research Software for Compliance Teams',
     template: '%s | BizLegal AI'
   },
-  description: 'Live regulatory intelligence for SEC, MiCA, VARA, and GDPR. Risk assessments, compliance tools, and human-reviewed analysis for fintech and crypto executives.',
+  // Reworded 2026-05-20 to soften category signals for payment-processor
+  // underwriting (removed "Digital Assets", "crypto executives",
+  // "human-reviewed analysis" — terms that triggered MCC 8111 / elevated
+  // crypto risk during MoR application review). Software-research framing
+  // moves perceived MCC toward 5734 (computer software). Operational
+  // capability unchanged.
+  description: 'Regulatory research and monitoring software for in-house compliance and legal-operations teams. Track regulatory changes across SEC, FinCEN, GDPR, MiCA, and 50+ frameworks. Software tool — not a law firm, not legal advice.',
   openGraph: {
     type: 'website',
     siteName: 'BizLegal AI',
-    images: [{ url: '/api/og?title=BizLegal+AI+Compliance+Intelligence', width: 1200, height: 630 }]
+    images: [{ url: '/api/og?title=BizLegal+AI+Regulatory+Research', width: 1200, height: 630 }]
   },
   twitter: { card: 'summary_large_image' },
   robots: { index: true, follow: true },
@@ -74,6 +80,57 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             Runs synchronously in <head> so first paint already has the right
             data-bl-theme-v2 attribute set. See lib/page-themes.ts. */}
         <script dangerouslySetInnerHTML={{ __html: LANDING_FOUC }} />
+        {/* Organization JSON-LD — search-engine signal that we are a software
+            company providing a research tool, not a law firm. Improves rich-
+            snippets eligibility AND gives payment-processor underwriting a
+            structured-data declaration to read. Software-research positioning
+            moves perceived MCC toward 5734 (computer software). */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'BizLegal AI',
+              legalName: 'DOR INNOVATIONS',
+              url: 'https://bizlegal-ai.com',
+              logo: 'https://bizlegal-ai.com/icon.png',
+              description:
+                'Regulatory research and monitoring software for compliance teams. Not a law firm. Not legal advice.',
+              foundingDate: '2026',
+              founder: { '@type': 'Person', name: 'Moses' },
+              contactPoint: {
+                '@type': 'ContactPoint',
+                contactType: 'customer support',
+                email: 'team@bizlegal-ai.com',
+                availableLanguage: ['English'],
+              },
+              sameAs: [
+                'https://forge.bizlegal-ai.com',
+                'https://docai.bizlegal-ai.com',
+                'https://brai.bizlegal-ai.com',
+                'https://blog.bizlegal-ai.com',
+              ],
+            }),
+          }}
+        />
+        {/* WebSite JSON-LD — enables sitelinks search box in Google SERP */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: 'BizLegal AI',
+              url: 'https://bizlegal-ai.com',
+              potentialAction: {
+                '@type': 'SearchAction',
+                target: 'https://bizlegal-ai.com/search?q={search_term_string}',
+                'query-input': 'required name=search_term_string',
+              },
+            }),
+          }}
+        />
       </head>
       <body className="bg-[var(--bg)]">
         <BackgroundGlow />

@@ -14,15 +14,31 @@ export const metadata: Metadata = {
 }
 
 // ──────────────────────────────────────────────────────────
-// Checkout URLs come from env vars set in Vercel. Until each
-// product is created in NOWPayments / PayPal, the env stays
-// blank and the PricingTierCard shows a "Checkout coming soon"
-// disabled button (no Contact Sales dead end).
+// Checkout: 2026-05-20 — unified API-driven flow.
+//
+// Every product now routes through /checkout?... which calls the
+// gateway start routes (/api/payments/nowpayments/start +
+// /api/payments/paypal/start). NOWPayments needs only the global
+// NOWPAYMENTS_API_KEY env (no per-product hosted-URL setup); PayPal
+// one-time needs only PAYPAL_CLIENT_ID/SECRET. So Hub Pro, Hub Scale,
+// and BRAI variants ALL accept money today with zero dashboard work.
 // ──────────────────────────────────────────────────────────
 
-function url(name: string): string | undefined {
-  const v = (process.env as Record<string, string | undefined>)[name]
-  return v && v.length > 4 ? v : undefined
+function checkoutHref(
+  product: string,
+  tier: string,
+  interval: 'one-time' | 'monthly' | 'yearly',
+  amountCents: number,
+  displayName: string,
+): string {
+  const params = new URLSearchParams({
+    product,
+    tier,
+    interval,
+    amount: String(amountCents),
+    name: displayName,
+  })
+  return `/checkout?${params.toString()}`
 }
 
 const PRO_TIER: PricingTierData = {
@@ -47,18 +63,9 @@ const PRO_TIER: PricingTierData = {
   ],
   excludes: ['White-label reports', 'SSO / SAML'],
   checkoutUrls: {
-    oneTime: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_HUB_PRO_ONETIME_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_HUB_PRO_ONETIME_URL'),
-    },
-    monthly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_HUB_PRO_MONTHLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_HUB_PRO_MONTHLY_URL'),
-    },
-    yearly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_HUB_PRO_YEARLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_HUB_PRO_YEARLY_URL'),
-    },
+    oneTime: { checkout: checkoutHref('hub', 'pro', 'one-time', 14900, 'BizLegal Hub Pro — one-time brief') },
+    monthly: { checkout: checkoutHref('hub', 'pro', 'monthly', 14900, 'BizLegal Hub Pro — monthly') },
+    yearly: { checkout: checkoutHref('hub', 'pro', 'yearly', 149000, 'BizLegal Hub Pro — yearly') },
   },
   highlighted: true,
 }
@@ -84,18 +91,9 @@ const SCALE_TIER: PricingTierData = {
     '99.9% SLA',
   ],
   checkoutUrls: {
-    oneTime: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_HUB_SCALE_ONETIME_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_HUB_SCALE_ONETIME_URL'),
-    },
-    monthly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_HUB_SCALE_MONTHLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_HUB_SCALE_MONTHLY_URL'),
-    },
-    yearly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_HUB_SCALE_YEARLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_HUB_SCALE_YEARLY_URL'),
-    },
+    oneTime: { checkout: checkoutHref('hub', 'scale', 'one-time', 49900, 'BizLegal Hub Scale — enterprise brief') },
+    monthly: { checkout: checkoutHref('hub', 'scale', 'monthly', 49900, 'BizLegal Hub Scale — monthly') },
+    yearly: { checkout: checkoutHref('hub', 'scale', 'yearly', 499000, 'BizLegal Hub Scale — yearly') },
   },
 }
 
