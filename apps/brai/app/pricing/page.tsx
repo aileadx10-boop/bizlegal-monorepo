@@ -11,10 +11,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/pricing" },
 }
 
-function url(name: string): string | undefined {
-  const v = (process.env as Record<string, string | undefined>)[name]
-  return v && v.length > 4 ? v : undefined
-}
 
 function apexCheckout(
   product: string,
