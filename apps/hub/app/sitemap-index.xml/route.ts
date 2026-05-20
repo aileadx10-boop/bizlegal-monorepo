@@ -6,17 +6,22 @@ import { NextResponse } from 'next/server'
  * Google Search Console once and GSC discovers all child sitemaps from
  * a single submission.
  *
- * Children:
- *   - hub:    https://bizlegal-ai.com/sitemap.xml (apps/hub/app/sitemap.ts)
- *   - forge:  https://forge.bizlegal-ai.com/sitemap.xml (gap_pages dynamic)
- *   - blog:   https://blog.bizlegal-ai.com/sitemap.xml (Cloudflare Pages,
- *             generated from MDX frontmatter at build time — coming via
- *             bizlegal-ea/projects/bizlegal-seo-site)
+ * Children (verified 2026-05-20 — every URL below returns 200):
+ *   - hub:       https://bizlegal-ai.com/sitemap.xml (apps/hub/app/sitemap.ts)
+ *   - forge:     https://forge.bizlegal-ai.com/sitemap.xml (gap_pages dynamic)
+ *   - blog:      https://blog.bizlegal-ai.com/sitemap.xml (Cloudflare Pages,
+ *                generated from MDX frontmatter at build time via
+ *                bizlegal-ea/projects/bizlegal-seo-site)
+ *   - docai:     https://docai.bizlegal-ai.com/sitemap.xml
+ *   - brai:      https://brai.bizlegal-ai.com/sitemap.xml
+ *   - tracr:     https://tracr.bizlegal-ai.com/sitemap.xml
+ *   - lexaudit:  https://lexaudit.bizlegal-ai.com/sitemap.xml
+ *   - leadforge: https://leadforge.bizlegal-ai.com/sitemap.xml
  *
  * `lastmod` here is the index file's own freshness signal — Google uses
  * this to decide when to re-fetch the index. Per-URL freshness lives in
  * the child sitemaps. Re-rendered on every request (force-dynamic) so
- * Date.now() is always current; the cost is trivial (3 strings, no DB).
+ * Date.now() is always current; the cost is trivial.
  *
  * Note: keep this in sync with apps/hub/app/robots.ts — that file
  * advertises this index URL to crawlers via the Sitemap: directive.
@@ -28,6 +33,11 @@ const CHILDREN = [
   'https://bizlegal-ai.com/sitemap.xml',
   'https://forge.bizlegal-ai.com/sitemap.xml',
   'https://blog.bizlegal-ai.com/sitemap.xml',
+  'https://docai.bizlegal-ai.com/sitemap.xml',
+  'https://brai.bizlegal-ai.com/sitemap.xml',
+  'https://tracr.bizlegal-ai.com/sitemap.xml',
+  'https://lexaudit.bizlegal-ai.com/sitemap.xml',
+  'https://leadforge.bizlegal-ai.com/sitemap.xml',
 ] as const
 
 function escapeXml(s: string): string {

@@ -22,14 +22,27 @@ export interface PricingTierData {
   /** What's NOT included (greyed out) */
   excludes?: ReadonlyArray<string>
   /**
-   * CTA targets per interval. When clicked, the user is sent to the
-   * interval-specific checkout URL (NOWPayments invoice, PayPal subscription
-   * approval, or LemonSqueezy checkout once MoR approved).
+   * CTA targets per interval. Three forms supported (any combination):
+   *
+   *   `checkout` — Unified /checkout URL (preferred since 2026-05-20).
+   *                Points to the apex checkout page which handles all
+   *                gateways via API — no per-product dashboard URL setup.
+   *                When present, renders a single primary "Continue to
+   *                checkout" button.
+   *
+   *   `crypto`   — Direct NOWPayments hosted invoice URL (legacy).
+   *   `card`     — Direct PayPal hosted approve URL (legacy).
+   *                When `checkout` is absent and these are set, falls back
+   *                to the dual-button "Pay with crypto / Pay with card"
+   *                presentation. Kept for backwards compat with subdomains
+   *                still using static env URLs.
+   *
+   * If none are set → "Checkout coming soon" disabled button.
    */
   checkoutUrls: {
-    oneTime?: { crypto?: string; card?: string }
-    monthly?: { crypto?: string; card?: string }
-    yearly?: { crypto?: string; card?: string }
+    oneTime?: { checkout?: string; crypto?: string; card?: string }
+    monthly?: { checkout?: string; crypto?: string; card?: string }
+    yearly?: { checkout?: string; crypto?: string; card?: string }
   }
   /** Highlighted = scaled up + accent border */
   highlighted?: boolean
@@ -310,26 +323,52 @@ export function PricingTierCard({
 
       {/* CTAs */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {currentCheckout?.crypto && (
-          <a href={currentCheckout.crypto} className="bl-btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-            Pay with crypto
-            <span aria-hidden="true">→</span>
-          </a>
-        )}
-        {currentCheckout?.card && (
-          <a href={currentCheckout.card} className="bl-btn-ghost" style={{ width: '100%', justifyContent: 'center' }}>
-            Pay with card
-          </a>
-        )}
-        {!currentCheckout?.crypto && !currentCheckout?.card && (
-          <button
-            type="button"
-            disabled
-            className="bl-btn-ghost"
-            style={{ width: '100%', justifyContent: 'center', opacity: 0.5, cursor: 'not-allowed' }}
-          >
-            Checkout coming soon
-          </button>
+        {currentCheckout?.checkout ? (
+          <>
+            <a
+              href={currentCheckout.checkout}
+              className="bl-btn-primary"
+              style={{ width: '100%', justifyContent: 'center' }}
+            >
+              Continue to checkout
+              <span aria-hidden="true">→</span>
+            </a>
+            <p
+              style={{
+                fontSize: 11,
+                color: 'var(--bl-text-subtle)',
+                textAlign: 'center',
+                margin: 0,
+                marginTop: 2,
+              }}
+            >
+              Crypto or PayPal/card — choose on next page.
+            </p>
+          </>
+        ) : (
+          <>
+            {currentCheckout?.crypto && (
+              <a href={currentCheckout.crypto} className="bl-btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
+                Pay with crypto
+                <span aria-hidden="true">→</span>
+              </a>
+            )}
+            {currentCheckout?.card && (
+              <a href={currentCheckout.card} className="bl-btn-ghost" style={{ width: '100%', justifyContent: 'center' }}>
+                Pay with card
+              </a>
+            )}
+            {!currentCheckout?.crypto && !currentCheckout?.card && (
+              <button
+                type="button"
+                disabled
+                className="bl-btn-ghost"
+                style={{ width: '100%', justifyContent: 'center', opacity: 0.5, cursor: 'not-allowed' }}
+              >
+                Checkout coming soon
+              </button>
+            )}
+          </>
         )}
       </div>
     </div>
