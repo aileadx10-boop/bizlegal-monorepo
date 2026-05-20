@@ -16,6 +16,23 @@ function url(name: string): string | undefined {
   return v && v.length > 4 ? v : undefined
 }
 
+function apexCheckout(
+  product: string,
+  tier: string,
+  interval: 'one-time' | 'monthly' | 'yearly',
+  amountCents: number,
+  name: string,
+): string {
+  const params = new URLSearchParams({
+    product,
+    tier,
+    interval,
+    amount: String(amountCents),
+    name,
+  })
+  return `https://bizlegal-ai.com/checkout?${params.toString()}`
+}
+
 const SOLO_TIER: PricingTierData = {
   name: 'Solo',
   description:
@@ -35,18 +52,9 @@ const SOLO_TIER: PricingTierData = {
   ],
   excludes: ['Partner review workflow', 'API access'],
   checkoutUrls: {
-    oneTime: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_LEXAUDIT_SOLO_ONETIME_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_LEXAUDIT_SOLO_ONETIME_URL'),
-    },
-    monthly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_LEXAUDIT_SOLO_MONTHLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_LEXAUDIT_SOLO_MONTHLY_URL'),
-    },
-    yearly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_LEXAUDIT_SOLO_YEARLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_LEXAUDIT_SOLO_YEARLY_URL'),
-    },
+    oneTime: { checkout: apexCheckout('lexaudit', 'solo', 'one-time', 4900, 'LEXAUDIT solo one-time') },
+    monthly: { checkout: apexCheckout('lexaudit', 'solo', 'monthly', 4900, 'LEXAUDIT solo monthly') },
+    yearly: { checkout: apexCheckout('lexaudit', 'solo', 'yearly', 49000, 'LEXAUDIT solo yearly') },
   },
 }
 
@@ -70,18 +78,9 @@ const BOUTIQUE_TIER: PricingTierData = {
   ],
   excludes: ['API access'],
   checkoutUrls: {
-    oneTime: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_LEXAUDIT_BOUTIQUE_ONETIME_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_LEXAUDIT_BOUTIQUE_ONETIME_URL'),
-    },
-    monthly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_LEXAUDIT_BOUTIQUE_MONTHLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_LEXAUDIT_BOUTIQUE_MONTHLY_URL'),
-    },
-    yearly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_LEXAUDIT_BOUTIQUE_YEARLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_LEXAUDIT_BOUTIQUE_YEARLY_URL'),
-    },
+    oneTime: { checkout: apexCheckout('lexaudit', 'boutique', 'one-time', 19900, 'LEXAUDIT boutique one-time') },
+    monthly: { checkout: apexCheckout('lexaudit', 'boutique', 'monthly', 19900, 'LEXAUDIT boutique monthly') },
+    yearly: { checkout: apexCheckout('lexaudit', 'boutique', 'yearly', 199000, 'LEXAUDIT boutique yearly') },
   },
   highlighted: true,
 }
@@ -104,18 +103,9 @@ const MIDMARKET_TIER: PricingTierData = {
     'Defined service-level commitment',
   ],
   checkoutUrls: {
-    oneTime: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_LEXAUDIT_MIDMARKET_ONETIME_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_LEXAUDIT_MIDMARKET_ONETIME_URL'),
-    },
-    monthly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_LEXAUDIT_MIDMARKET_MONTHLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_LEXAUDIT_MIDMARKET_MONTHLY_URL'),
-    },
-    yearly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_LEXAUDIT_MIDMARKET_YEARLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_LEXAUDIT_MIDMARKET_YEARLY_URL'),
-    },
+    oneTime: { checkout: apexCheckout('lexaudit', 'midmarket', 'one-time', 59900, 'LEXAUDIT midmarket one-time') },
+    monthly: { checkout: apexCheckout('lexaudit', 'midmarket', 'monthly', 59900, 'LEXAUDIT midmarket monthly') },
+    yearly: { checkout: apexCheckout('lexaudit', 'midmarket', 'yearly', 599000, 'LEXAUDIT midmarket yearly') },
   },
 }
 

@@ -72,12 +72,17 @@ function parseParams(sp: URLSearchParams): CheckoutParams | { error: string } {
   }
 }
 
+// Minimum amount (cents) before bank-wire is offered. Below this, the
+// per-order reconciliation overhead is worth more than the fee savings.
+const WIRE_MIN_CENTS = 500_00
+
 function CheckoutInner() {
   const sp = useSearchParams()
   const parsed = sp ? parseParams(new URLSearchParams(sp.toString())) : { error: 'No params' }
   const [email, setEmail] = useState('')
-  const [busy, setBusy] = useState<null | 'crypto' | 'paypal'>(null)
+  const [busy, setBusy] = useState<null | 'crypto' | 'paypal' | 'wire_eur' | 'wire_usd'>(null)
   const [err, setErr] = useState<string | null>(null)
+  const [wireSuccess, setWireSuccess] = useState<{ ref: string; bank: string; email: string } | null>(null)
 
   // Reset error when user starts typing
   useEffect(() => {
@@ -148,6 +153,49 @@ function CheckoutInner() {
       window.location.href = redirect
     } catch (e) {
       setErr(e instanceof Error ? e.message : 'Network error. Please try again.')
+      setBusy(null)
+    }
+  }
+
+  async function payByWire(currency: 'EUR' | 'USD') {
+    if (!email || !email.includes('@')) {
+      setErr('Please enter a valid email — wire instructions are sent there.')
+      return
+    }
+    setBusy(currency === 'EUR' ? 'wire_eur' : 'wire_usd')
+    setErr(null)
+    try {
+      const res = await fetch('/api/payments/wire/start', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          product,
+          tier,
+          interval,
+          amount_cents: amountCents,
+          email,
+          currency,
+          source: 'checkout_page',
+        }),
+      })
+      const data = (await res.json()) as {
+        reference?: string
+        bank_label?: string
+        error?: string
+      }
+      if (!res.ok) {
+        setErr(data.error || `Bank wire setup failed (${res.status}). Please use crypto or PayPal.`)
+        setBusy(null)
+        return
+      }
+      setWireSuccess({
+        ref: data.reference || '—',
+        bank: data.bank_label || (currency === 'EUR' ? 'EUR / SEPA' : 'USD / SWIFT'),
+        email,
+      })
+      setBusy(null)
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : 'Network error.')
       setBusy(null)
     }
   }
@@ -265,6 +313,56 @@ function CheckoutInner() {
         </div>
       )}
 
+      {/* Wire success state — shown after wire/start succeeds */}
+      {wireSuccess && (
+        <div
+          style={{
+            padding: '20px 22px',
+            background: 'var(--bl-surface-soft)',
+            border: '2px solid var(--bl-accent)',
+            borderRadius: 'var(--bl-radius-lg)',
+            marginBottom: '1.5rem',
+          }}
+        >
+          <h2
+            style={{
+              fontSize: '1.1rem',
+              fontWeight: 700,
+              margin: 0,
+              marginBottom: '0.5rem',
+              color: 'var(--bl-text)',
+            }}
+          >
+            Wire instructions sent
+          </h2>
+          <p
+            style={{
+              fontSize: '0.95rem',
+              color: 'var(--bl-text-muted)',
+              lineHeight: 1.55,
+              margin: 0,
+              marginBottom: '0.75rem',
+            }}
+          >
+            Check <strong style={{ color: 'var(--bl-text)' }}>{wireSuccess.email}</strong> — full
+            wire instructions for the {wireSuccess.bank} account are in your inbox. Put reference{' '}
+            <code
+              style={{
+                fontFamily: 'var(--bl-font-mono)',
+                color: 'var(--bl-accent)',
+                fontWeight: 700,
+              }}
+            >
+              {wireSuccess.ref}
+            </code>{' '}
+            in the wire memo. Your order is held as pending until the wire lands.
+          </p>
+          <p style={{ fontSize: '0.85rem', color: 'var(--bl-text-subtle)', margin: 0 }}>
+            Didn&rsquo;t arrive? Email <a href="mailto:team@bizlegal-ai.com">team@bizlegal-ai.com</a> with the reference above.
+          </p>
+        </div>
+      )}
+
       {/* Pay buttons */}
       <div style={{ display: 'grid', gap: 12 }}>
         <button
@@ -305,6 +403,54 @@ function CheckoutInner() {
           <p style={{ fontSize: 13, color: 'var(--bl-text-subtle)', margin: 0 }}>
             {paypalDisabledNote}
           </p>
+        )}
+
+        {/* Bank wire — only for high-ticket orders */}
+        {amountCents >= WIRE_MIN_CENTS && (
+          <>
+            <div
+              style={{
+                marginTop: 8,
+                paddingTop: 16,
+                borderTop: '1px dashed var(--bl-divider)',
+                fontSize: 13,
+                color: 'var(--bl-text-subtle)',
+                textAlign: 'center',
+              }}
+            >
+              Or — bank wire (preferred for orders ${(WIRE_MIN_CENTS / 100).toLocaleString('en-US')}+)
+            </div>
+            <button
+              onClick={() => payByWire('USD')}
+              disabled={busy !== null || wireSuccess !== null}
+              className="bl-btn-ghost"
+              style={{
+                width: '100%',
+                padding: '12px 18px',
+                fontSize: '0.95rem',
+                fontWeight: 600,
+                justifyContent: 'center',
+                cursor: busy ? 'wait' : 'pointer',
+              }}
+            >
+              {busy === 'wire_usd' ? 'Setting up USD wire…' : 'Pay by Bank Wire — USD (Citibank, SWIFT/ACH)'}
+            </button>
+            <button
+              onClick={() => payByWire('EUR')}
+              disabled={busy !== null || wireSuccess !== null}
+              className="bl-btn-ghost"
+              style={{
+                width: '100%',
+                padding: '12px 18px',
+                fontSize: '0.95rem',
+                fontWeight: 600,
+                justifyContent: 'center',
+                cursor: busy ? 'wait' : 'pointer',
+              }}
+            >
+              {busy === 'wire_eur' ? 'Setting up EUR wire…' : 'Pay by Bank Wire — EUR (Banking Circle, SEPA)'}
+            </button>
+          </>
         )}
       </div>
 

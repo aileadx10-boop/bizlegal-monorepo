@@ -16,6 +16,23 @@ function url(name: string): string | undefined {
   return v && v.length > 4 ? v : undefined
 }
 
+function apexCheckout(
+  product: string,
+  tier: string,
+  interval: 'one-time' | 'monthly' | 'yearly',
+  amountCents: number,
+  name: string,
+): string {
+  const params = new URLSearchParams({
+    product,
+    tier,
+    interval,
+    amount: String(amountCents),
+    name,
+  })
+  return `https://bizlegal-ai.com/checkout?${params.toString()}`
+}
+
 const STANDARD_TIER: PricingTierData = {
   name: "Standard",
   description:
@@ -35,18 +52,9 @@ const STANDARD_TIER: PricingTierData = {
   ],
   excludes: ["Priority 12h delivery", "Extended sanctions deep-dive"],
   checkoutUrls: {
-    oneTime: {
-      crypto: url("NEXT_PUBLIC_NOWPAYMENTS_BRAI_STANDARD_ONETIME_URL"),
-      card: url("NEXT_PUBLIC_PAYPAL_BRAI_STANDARD_ONETIME_URL"),
-    },
-    monthly: {
-      crypto: url("NEXT_PUBLIC_NOWPAYMENTS_BRAI_STANDARD_MONTHLY_URL"),
-      card: url("NEXT_PUBLIC_PAYPAL_BRAI_STANDARD_MONTHLY_URL"),
-    },
-    yearly: {
-      crypto: url("NEXT_PUBLIC_NOWPAYMENTS_BRAI_STANDARD_YEARLY_URL"),
-      card: url("NEXT_PUBLIC_PAYPAL_BRAI_STANDARD_YEARLY_URL"),
-    },
+    oneTime: { checkout: apexCheckout('brai', 'standard', 'one-time', 14900, 'BRAI standard one-time') },
+    monthly: { checkout: apexCheckout('brai', 'standard', 'monthly', 59900, 'BRAI standard monthly') },
+    yearly: { checkout: apexCheckout('brai', 'standard', 'yearly', 599000, 'BRAI standard yearly') },
   },
 }
 
@@ -69,18 +77,9 @@ const PRIORITY_TIER: PricingTierData = {
   ],
   excludes: ["Extended sanctions deep-dive"],
   checkoutUrls: {
-    oneTime: {
-      crypto: url("NEXT_PUBLIC_NOWPAYMENTS_BRAI_PRIORITY_ONETIME_URL"),
-      card: url("NEXT_PUBLIC_PAYPAL_BRAI_PRIORITY_ONETIME_URL"),
-    },
-    monthly: {
-      crypto: url("NEXT_PUBLIC_NOWPAYMENTS_BRAI_PRIORITY_MONTHLY_URL"),
-      card: url("NEXT_PUBLIC_PAYPAL_BRAI_PRIORITY_MONTHLY_URL"),
-    },
-    yearly: {
-      crypto: url("NEXT_PUBLIC_NOWPAYMENTS_BRAI_PRIORITY_YEARLY_URL"),
-      card: url("NEXT_PUBLIC_PAYPAL_BRAI_PRIORITY_YEARLY_URL"),
-    },
+    oneTime: { checkout: apexCheckout('brai', 'priority', 'one-time', 24900, 'BRAI priority one-time') },
+    monthly: { checkout: apexCheckout('brai', 'priority', 'monthly', 99900, 'BRAI priority monthly') },
+    yearly: { checkout: apexCheckout('brai', 'priority', 'yearly', 999000, 'BRAI priority yearly') },
   },
   highlighted: true,
 }
@@ -104,18 +103,9 @@ const EXTENDED_TIER: PricingTierData = {
     "Notarised PDF for audit committees",
   ],
   checkoutUrls: {
-    oneTime: {
-      crypto: url("NEXT_PUBLIC_NOWPAYMENTS_BRAI_EXTENDED_ONETIME_URL"),
-      card: url("NEXT_PUBLIC_PAYPAL_BRAI_EXTENDED_ONETIME_URL"),
-    },
-    monthly: {
-      crypto: url("NEXT_PUBLIC_NOWPAYMENTS_BRAI_EXTENDED_MONTHLY_URL"),
-      card: url("NEXT_PUBLIC_PAYPAL_BRAI_EXTENDED_MONTHLY_URL"),
-    },
-    yearly: {
-      crypto: url("NEXT_PUBLIC_NOWPAYMENTS_BRAI_EXTENDED_YEARLY_URL"),
-      card: url("NEXT_PUBLIC_PAYPAL_BRAI_EXTENDED_YEARLY_URL"),
-    },
+    oneTime: { checkout: apexCheckout('brai', 'extended', 'one-time', 50000, 'BRAI extended one-time') },
+    monthly: { checkout: apexCheckout('brai', 'extended', 'monthly', 199900, 'BRAI extended monthly') },
+    yearly: { checkout: apexCheckout('brai', 'extended', 'yearly', 1999000, 'BRAI extended yearly') },
   },
 }
 

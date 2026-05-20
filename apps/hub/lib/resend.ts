@@ -55,6 +55,91 @@ p { color: #c3c6d7; font-size: 14px; line-height: 1.65; margin-bottom: 16px; }
   })
 }
 
+export async function sendBankWireInstructions(args: {
+  email: string
+  orderId: string
+  reference: string
+  amountCents: number
+  currency: 'USD' | 'EUR'
+  productLabel: string
+  wire: {
+    bankName: string
+    bankAddress: string
+    beneficiary: string
+    iban?: string
+    bic?: string
+    routing?: string
+    swift?: string
+    accountNumber?: string
+    accountType?: string
+  }
+}) {
+  const { email, orderId, reference, amountCents, currency, productLabel, wire } = args
+  const amount = `${currency === 'USD' ? '$' : '€'}${(amountCents / 100).toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`
+  const detailRows: Array<[string, string | undefined]> = currency === 'EUR'
+    ? [
+        ['Bank name', wire.bankName],
+        ['Bank address', wire.bankAddress],
+        ['IBAN', wire.iban],
+        ['BIC / SWIFT', wire.bic],
+        ['Beneficiary name', wire.beneficiary],
+      ]
+    : [
+        ['Bank name', wire.bankName],
+        ['Bank address', wire.bankAddress],
+        ['Routing (ABA)', wire.routing],
+        ['Account number', wire.accountNumber],
+        ['Account type', wire.accountType],
+        ['SWIFT (intl. wires)', wire.swift],
+        ['Beneficiary name', wire.beneficiary],
+      ]
+  const rowsHtml = detailRows
+    .filter(([, v]) => v && v.length > 0)
+    .map(
+      ([k, v]) => `<tr>
+  <td style="padding:8px 14px;border-bottom:1px solid #2a3148;font-size:12px;color:#8d90a0;letter-spacing:0.05em;text-transform:uppercase;width:42%;">${k}</td>
+  <td style="padding:8px 14px;border-bottom:1px solid #2a3148;font-size:14px;color:#dee1f7;font-family:'Courier New',monospace;font-weight:600;">${v}</td>
+</tr>`,
+    )
+    .join('\n')
+
+  return resend.emails.send({
+    from: 'BizLegal AI <orders@intelligence.bizlegal-ai.com>',
+    to: email,
+    subject: `Wire instructions — ${productLabel} — ref ${reference}`,
+    html: `<!DOCTYPE html>
+<html><head><meta charset="utf-8"></head>
+<body style="background:#0e1322;color:#dee1f7;font-family:'Manrope',sans-serif;margin:0;padding:0;">
+<div style="max-width:580px;margin:0 auto;padding:40px 24px;">
+  <div style="font-family:Georgia,serif;font-size:22px;color:#dee1f7;margin-bottom:32px;">BizLegal <span style="color:#e9c349;">•</span> AI</div>
+  <h1 style="font-family:Georgia,serif;font-size:24px;color:#dee1f7;line-height:1.25;margin:0 0 8px;">Wire instructions for your order</h1>
+  <p style="font-size:13px;color:#8d90a0;margin:0 0 24px;letter-spacing:0.04em;text-transform:uppercase;">Order ${reference} · ${productLabel}</p>
+  <p style="color:#c3c6d7;font-size:14px;line-height:1.65;margin:0 0 16px;">Wire <strong style="color:#e9c349;">${amount} ${currency}</strong> using the details below. The reference code is what we use to match your wire to your order, so please put it in the bank&rsquo;s memo / reference field exactly as written.</p>
+  <table style="width:100%;border-collapse:collapse;background:#161b2b;border:1px solid #2a3148;margin:16px 0 24px;">
+${rowsHtml}
+  <tr>
+    <td style="padding:8px 14px;border-bottom:1px solid #2a3148;font-size:12px;color:#e9c349;letter-spacing:0.05em;text-transform:uppercase;font-weight:700;">Reference (REQUIRED)</td>
+    <td style="padding:8px 14px;border-bottom:1px solid #2a3148;font-size:16px;color:#e9c349;font-family:'Courier New',monospace;font-weight:700;">${reference}</td>
+  </tr>
+  </table>
+  <p style="color:#c3c6d7;font-size:13px;line-height:1.6;margin:0 0 16px;"><strong style="color:#dee1f7;">Next steps:</strong></p>
+  <ol style="color:#c3c6d7;font-size:13px;line-height:1.7;padding-left:20px;margin:0 0 24px;">
+    <li>Wire ${amount} ${currency} from your bank using the details above.</li>
+    <li>Put the reference <strong style="color:#e9c349;">${reference}</strong> in the wire memo.</li>
+    <li>Reply to this email with proof of transfer (screenshot or PDF) to speed up confirmation.</li>
+    <li>We mark your order paid within 1 business day of the wire landing in our account.</li>
+  </ol>
+  <p style="color:#c3c6d7;font-size:13px;line-height:1.6;margin:0 0 16px;">Wires from outside the bank&rsquo;s home jurisdiction may take 1&ndash;3 business days. SEPA / domestic wires usually land same-day or next-day.</p>
+  <hr style="border:none;border-top:1px solid #2a3148;margin:24px 0;"/>
+  <p style="font-size:11px;color:#8d90a0;line-height:1.6;margin:0;">BizLegal AI is software operated by DOR INNOVATIONS. Not a law firm; outputs are research, not legal advice. Order non-refundable once delivered. Questions: <a href="mailto:team@bizlegal-ai.com" style="color:#b4c5ff;">team@bizlegal-ai.com</a>. Order ID: <code style="font-family:'Courier New',monospace;">${orderId}</code></p>
+</div>
+</body></html>`,
+  })
+}
+
 export async function sendRiskReportEmail(
   email: string,
   reportId: string,

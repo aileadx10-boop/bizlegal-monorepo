@@ -27,9 +27,9 @@ export interface PricingTierData {
    * approval, or LemonSqueezy checkout once MoR approved).
    */
   checkoutUrls: {
-    oneTime?: { crypto?: string; card?: string }
-    monthly?: { crypto?: string; card?: string }
-    yearly?: { crypto?: string; card?: string }
+    oneTime?: { checkout?: string; crypto?: string; card?: string }
+    monthly?: { checkout?: string; crypto?: string; card?: string }
+    yearly?: { checkout?: string; crypto?: string; card?: string }
   }
   /** Highlighted = scaled up + accent border */
   highlighted?: boolean
@@ -310,26 +310,52 @@ export function PricingTierCard({
 
       {/* CTAs */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {currentCheckout?.crypto && (
-          <a href={currentCheckout.crypto} className="bl-btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-            Pay with crypto
-            <span aria-hidden="true">→</span>
-          </a>
-        )}
-        {currentCheckout?.card && (
-          <a href={currentCheckout.card} className="bl-btn-ghost" style={{ width: '100%', justifyContent: 'center' }}>
-            Pay with card
-          </a>
-        )}
-        {!currentCheckout?.crypto && !currentCheckout?.card && (
-          <button
-            type="button"
-            disabled
-            className="bl-btn-ghost"
-            style={{ width: '100%', justifyContent: 'center', opacity: 0.5, cursor: 'not-allowed' }}
-          >
-            Checkout coming soon
-          </button>
+        {currentCheckout?.checkout ? (
+          <>
+            <a
+              href={currentCheckout.checkout}
+              className="bl-btn-primary"
+              style={{ width: '100%', justifyContent: 'center' }}
+            >
+              Continue to checkout
+              <span aria-hidden="true">→</span>
+            </a>
+            <p
+              style={{
+                fontSize: 11,
+                color: 'var(--bl-text-subtle)',
+                textAlign: 'center',
+                margin: 0,
+                marginTop: 2,
+              }}
+            >
+              Crypto, PayPal/card, or bank wire — choose on next page.
+            </p>
+          </>
+        ) : (
+          <>
+            {currentCheckout?.crypto && (
+              <a href={currentCheckout.crypto} className="bl-btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
+                Pay with crypto
+                <span aria-hidden="true">→</span>
+              </a>
+            )}
+            {currentCheckout?.card && (
+              <a href={currentCheckout.card} className="bl-btn-ghost" style={{ width: '100%', justifyContent: 'center' }}>
+                Pay with card
+              </a>
+            )}
+            {!currentCheckout?.crypto && !currentCheckout?.card && (
+              <button
+                type="button"
+                disabled
+                className="bl-btn-ghost"
+                style={{ width: '100%', justifyContent: 'center', opacity: 0.5, cursor: 'not-allowed' }}
+              >
+                Checkout coming soon
+              </button>
+            )}
+          </>
         )}
       </div>
     </div>
