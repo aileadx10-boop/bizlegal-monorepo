@@ -99,6 +99,7 @@ interface FeedResponse {
 
 interface ProbeResult {
   name: string
+  url: string
   ok: boolean
   status: number | null
   duration_ms: number
