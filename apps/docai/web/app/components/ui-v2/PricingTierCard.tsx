@@ -3,6 +3,7 @@
 import { useState } from 'react'
 
 export type BillingInterval = 'one-time' | 'monthly' | 'yearly'
+const PAYPAL_CHECKOUT_ENABLED = process.env.NEXT_PUBLIC_PAYPAL_SCAN_ENABLED === 'true'
 
 export interface PricingTierData {
   /** Tier name (e.g. "Pro") */
@@ -27,9 +28,9 @@ export interface PricingTierData {
    * approval, or LemonSqueezy checkout once MoR approved).
    */
   checkoutUrls: {
-    oneTime?: { crypto?: string; card?: string }
-    monthly?: { crypto?: string; card?: string }
-    yearly?: { crypto?: string; card?: string }
+    oneTime?: { checkout?: string; crypto?: string; card?: string }
+    monthly?: { checkout?: string; crypto?: string; card?: string }
+    yearly?: { checkout?: string; crypto?: string; card?: string }
   }
   /** Highlighted = scaled up + accent border */
   highlighted?: boolean
@@ -80,6 +81,10 @@ export function PricingTierCard({
 
   const initial: BillingInterval = defaultInterval ?? availableIntervals[0] ?? 'one-time'
   const [interval, setInterval] = useState<BillingInterval>(initial)
+  const [email, setEmail] = useState('')
+  const [checkoutError, setCheckoutError] = useState<string | null>(null)
+  const [checkoutState, setCheckoutState] = useState<'idle' | 'submitting' | 'redirecting'>('idle')
+  const [gateway, setGateway] = useState<'nowpayments' | 'paypal' | null>(null)
 
   const currentPrice =
     interval === 'one-time'
@@ -96,6 +101,48 @@ export function PricingTierCard({
 
   if (!currentPrice) {
     return null
+  }
+
+  async function startDynamicCheckout(nextGateway: 'nowpayments' | 'paypal') {
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      setCheckoutError('Enter a valid email for receipt + access delivery.')
+      return
+    }
+    if (!currentPrice) return
+    setGateway(nextGateway)
+    setCheckoutState('submitting')
+    setCheckoutError(null)
+    try {
+      const res = await fetch(`/api/payments/${nextGateway}/start`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          product: 'docai',
+          tier: name.toLowerCase(),
+          interval,
+          amount_cents: Math.round(currentPrice.amount * 100),
+          email,
+          source: 'docai_pricing',
+        }),
+      })
+      const data = (await res.json().catch(() => ({}))) as { invoice_url?: string; approve_url?: string; error?: string }
+      if (!res.ok) {
+        setCheckoutError(data.error || `Checkout failed (${res.status}). Try the other payment method.`)
+        setCheckoutState('idle')
+        return
+      }
+      const redirectUrl = data.invoice_url || data.approve_url
+      if (!redirectUrl) {
+        setCheckoutError('Checkout URL missing. Try again or contact support.')
+        setCheckoutState('idle')
+        return
+      }
+      setCheckoutState('redirecting')
+      window.location.assign(redirectUrl)
+    } catch (error) {
+      setCheckoutError(error instanceof Error ? error.message : 'Network error. Try again.')
+      setCheckoutState('idle')
+    }
   }
 
   const yearlySave = prices.yearly?.saveLabel
@@ -310,26 +357,84 @@ export function PricingTierCard({
 
       {/* CTAs */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {currentCheckout?.crypto && (
+        {currentCheckout?.checkout && (
+          <>
+            <a
+              href={currentCheckout.checkout}
+              className="bl-btn-primary"
+              style={{ width: '100%', justifyContent: 'center' }}
+            >
+              Continue to checkout
+              <span aria-hidden="true">→</span>
+            </a>
+            <p
+              style={{
+                fontSize: 11,
+                color: 'var(--bl-text-subtle)',
+                textAlign: 'center',
+                margin: 0,
+                marginTop: 2,
+              }}
+            >
+              Crypto, PayPal/card, or bank wire — choose on next page.
+            </p>
+          </>
+        )}
+        {!currentCheckout?.checkout && currentCheckout?.crypto && (
           <a href={currentCheckout.crypto} className="bl-btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
             Pay with crypto
             <span aria-hidden="true">→</span>
           </a>
         )}
-        {currentCheckout?.card && (
+        {!currentCheckout?.checkout && currentCheckout?.card && (
           <a href={currentCheckout.card} className="bl-btn-ghost" style={{ width: '100%', justifyContent: 'center' }}>
             Pay with card
           </a>
         )}
-        {!currentCheckout?.crypto && !currentCheckout?.card && (
-          <button
-            type="button"
-            disabled
-            className="bl-btn-ghost"
-            style={{ width: '100%', justifyContent: 'center', opacity: 0.5, cursor: 'not-allowed' }}
-          >
-            Checkout coming soon
-          </button>
+        {!currentCheckout?.checkout && !currentCheckout?.crypto && !currentCheckout?.card && (
+          <div style={{ display: 'grid', gap: 8 }}>
+            <input
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder="you@company.com"
+              disabled={checkoutState !== 'idle'}
+              style={{
+                width: '100%',
+                padding: '10px 12px',
+                border: '1px solid var(--bl-border)',
+                borderRadius: 'var(--bl-radius-sm)',
+                background: 'var(--bl-bg)',
+                color: 'var(--bl-text)',
+                fontFamily: 'var(--bl-font-body)',
+                fontSize: 13,
+              }}
+            />
+            <div style={{ display: 'grid', gridTemplateColumns: PAYPAL_CHECKOUT_ENABLED ? '1fr 1fr' : '1fr', gap: 8 }}>
+              <button
+                type="button"
+                onClick={() => startDynamicCheckout('nowpayments')}
+                disabled={checkoutState !== 'idle'}
+                className="bl-btn-primary"
+                style={{ width: '100%', justifyContent: 'center' }}
+              >
+                {checkoutState === 'submitting' && gateway === 'nowpayments' ? 'Opening…' : 'Pay crypto'}
+              </button>
+              {PAYPAL_CHECKOUT_ENABLED ? (
+                <button
+                  type="button"
+                  onClick={() => startDynamicCheckout('paypal')}
+                  disabled={checkoutState !== 'idle'}
+                  className="bl-btn-ghost"
+                  style={{ width: '100%', justifyContent: 'center' }}
+                >
+                  {checkoutState === 'submitting' && gateway === 'paypal' ? 'Opening…' : 'Pay card'}
+                </button>
+              ) : null}
+            </div>
+            {checkoutError ? <p style={{ margin: 0, color: 'var(--bl-danger)', fontSize: 12 }}>{checkoutError}</p> : null}
+            {checkoutState === 'redirecting' ? <p style={{ margin: 0, color: 'var(--bl-text-muted)', fontSize: 12 }}>Redirecting…</p> : null}
+          </div>
         )}
       </div>
     </div>
@@ -337,3 +442,7 @@ export function PricingTierCard({
 }
 
 export default PricingTierCard
+
+
+
+

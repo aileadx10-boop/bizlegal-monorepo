@@ -5,9 +5,22 @@ import { PricingTierCard, type PricingTierData } from '../components/ui-v2/Prici
 
 export const dynamic = 'force-dynamic'
 
-function url(name: string): string | undefined {
-  const v = (process.env as Record<string, string | undefined>)[name]
-  return v && v.length > 4 ? v : undefined
+
+function apexCheckout(
+  product: string,
+  tier: string,
+  interval: 'one-time' | 'monthly' | 'yearly',
+  amountCents: number,
+  name: string,
+): string {
+  const params = new URLSearchParams({
+    product,
+    tier,
+    interval,
+    amount: String(amountCents),
+    name,
+  })
+  return `https://bizlegal-ai.com/checkout?${params.toString()}`
 }
 
 const BOI_TIER: PricingTierData = {
@@ -28,14 +41,8 @@ const BOI_TIER: PricingTierData = {
     '14-day money back',
   ],
   checkoutUrls: {
-    oneTime: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_FORGE_BOI_ONETIME_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_FORGE_BOI_ONETIME_URL'),
-    },
-    yearly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_FORGE_BOI_YEARLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_FORGE_BOI_YEARLY_URL'),
-    },
+    oneTime: { checkout: apexCheckout('forge', 'boi', 'one-time', 14900, 'FORGE boi one-time') },
+    yearly: { checkout: apexCheckout('forge', 'boi', 'yearly', 14900, 'FORGE boi yearly') },
   },
   highlighted: true,
 }
@@ -58,18 +65,9 @@ const PASSPORT_TIER: PricingTierData = {
     'Practitioner-reviewed',
   ],
   checkoutUrls: {
-    oneTime: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_FORGE_PASSPORT_ONETIME_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_FORGE_PASSPORT_ONETIME_URL'),
-    },
-    monthly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_FORGE_PASSPORT_MONTHLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_FORGE_PASSPORT_MONTHLY_URL'),
-    },
-    yearly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_FORGE_PASSPORT_YEARLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_FORGE_PASSPORT_YEARLY_URL'),
-    },
+    oneTime: { checkout: apexCheckout('forge', 'passport', 'one-time', 150000, 'FORGE passport one-time') },
+    monthly: { checkout: apexCheckout('forge', 'passport', 'monthly', 9900, 'FORGE passport monthly') },
+    yearly: { checkout: apexCheckout('forge', 'passport', 'yearly', 99000, 'FORGE passport yearly') },
   },
 }
 
@@ -91,18 +89,9 @@ const AUDIT_TIER: PricingTierData = {
     'PDF export',
   ],
   checkoutUrls: {
-    oneTime: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_FORGE_AUDIT_ONETIME_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_FORGE_AUDIT_ONETIME_URL'),
-    },
-    monthly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_FORGE_AUDIT_MONTHLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_FORGE_AUDIT_MONTHLY_URL'),
-    },
-    yearly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_FORGE_AUDIT_YEARLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_FORGE_AUDIT_YEARLY_URL'),
-    },
+    oneTime: { checkout: apexCheckout('forge', 'audit', 'one-time', 9900, 'FORGE audit one-time') },
+    monthly: { checkout: apexCheckout('forge', 'audit', 'monthly', 4900, 'FORGE audit monthly') },
+    yearly: { checkout: apexCheckout('forge', 'audit', 'yearly', 49000, 'FORGE audit yearly') },
   },
 }
 

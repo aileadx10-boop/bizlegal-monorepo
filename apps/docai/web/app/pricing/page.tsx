@@ -11,9 +11,21 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://docai.bizlegal-ai.com/pricing" },
 };
 
-function url(name: string): string | undefined {
-  const v = (process.env as Record<string, string | undefined>)[name];
-  return v && v.length > 4 ? v : undefined;
+function apexCheckout(
+  product: string,
+  tier: string,
+  interval: 'one-time' | 'monthly' | 'yearly',
+  amountCents: number,
+  name: string,
+): string {
+  const params = new URLSearchParams({
+    product,
+    tier,
+    interval,
+    amount: String(amountCents),
+    name,
+  })
+  return `https://bizlegal-ai.com/checkout?${params.toString()}`
 }
 
 const STARTER_TIER: PricingTierData = {
@@ -34,18 +46,9 @@ const STARTER_TIER: PricingTierData = {
   ],
   excludes: ["KB uploads", "API access"],
   checkoutUrls: {
-    oneTime: {
-      crypto: url("NEXT_PUBLIC_NOWPAYMENTS_DOCAI_STARTER_ONETIME_URL"),
-      card: url("NEXT_PUBLIC_PAYPAL_DOCAI_STARTER_ONETIME_URL"),
-    },
-    monthly: {
-      crypto: url("NEXT_PUBLIC_NOWPAYMENTS_DOCAI_STARTER_MONTHLY_URL"),
-      card: url("NEXT_PUBLIC_PAYPAL_DOCAI_STARTER_MONTHLY_URL"),
-    },
-    yearly: {
-      crypto: url("NEXT_PUBLIC_NOWPAYMENTS_DOCAI_STARTER_YEARLY_URL"),
-      card: url("NEXT_PUBLIC_PAYPAL_DOCAI_STARTER_YEARLY_URL"),
-    },
+    oneTime: { checkout: apexCheckout('docai', 'starter', 'one-time', 2900, 'DOCAI starter one-time') },
+    monthly: { checkout: apexCheckout('docai', 'starter', 'monthly', 2900, 'DOCAI starter monthly') },
+    yearly: { checkout: apexCheckout('docai', 'starter', 'yearly', 29000, 'DOCAI starter yearly') },
   },
 };
 
@@ -70,18 +73,9 @@ const TEAM_TIER: PricingTierData = {
   ],
   excludes: ["KB uploads", "Dedicated onboarding"],
   checkoutUrls: {
-    oneTime: {
-      crypto: url("NEXT_PUBLIC_NOWPAYMENTS_DOCAI_TEAM_ONETIME_URL"),
-      card: url("NEXT_PUBLIC_PAYPAL_DOCAI_TEAM_ONETIME_URL"),
-    },
-    monthly: {
-      crypto: url("NEXT_PUBLIC_NOWPAYMENTS_DOCAI_TEAM_MONTHLY_URL"),
-      card: url("NEXT_PUBLIC_PAYPAL_DOCAI_TEAM_MONTHLY_URL"),
-    },
-    yearly: {
-      crypto: url("NEXT_PUBLIC_NOWPAYMENTS_DOCAI_TEAM_YEARLY_URL"),
-      card: url("NEXT_PUBLIC_PAYPAL_DOCAI_TEAM_YEARLY_URL"),
-    },
+    oneTime: { checkout: apexCheckout('docai', 'team', 'one-time', 6900, 'DOCAI team one-time') },
+    monthly: { checkout: apexCheckout('docai', 'team', 'monthly', 6900, 'DOCAI team monthly') },
+    yearly: { checkout: apexCheckout('docai', 'team', 'yearly', 69000, 'DOCAI team yearly') },
   },
   highlighted: true,
 };
@@ -106,18 +100,9 @@ const FIRM_TIER: PricingTierData = {
     "99.9% SLA",
   ],
   checkoutUrls: {
-    oneTime: {
-      crypto: url("NEXT_PUBLIC_NOWPAYMENTS_DOCAI_FIRM_ONETIME_URL"),
-      card: url("NEXT_PUBLIC_PAYPAL_DOCAI_FIRM_ONETIME_URL"),
-    },
-    monthly: {
-      crypto: url("NEXT_PUBLIC_NOWPAYMENTS_DOCAI_FIRM_MONTHLY_URL"),
-      card: url("NEXT_PUBLIC_PAYPAL_DOCAI_FIRM_MONTHLY_URL"),
-    },
-    yearly: {
-      crypto: url("NEXT_PUBLIC_NOWPAYMENTS_DOCAI_FIRM_YEARLY_URL"),
-      card: url("NEXT_PUBLIC_PAYPAL_DOCAI_FIRM_YEARLY_URL"),
-    },
+    oneTime: { checkout: apexCheckout('docai', 'firm', 'one-time', 9900, 'DOCAI firm one-time') },
+    monthly: { checkout: apexCheckout('docai', 'firm', 'monthly', 9900, 'DOCAI firm monthly') },
+    yearly: { checkout: apexCheckout('docai', 'firm', 'yearly', 99000, 'DOCAI firm yearly') },
   },
 };
 
@@ -317,3 +302,4 @@ export default function DocAIPricingPage() {
     </>
   );
 }
+

@@ -11,9 +11,22 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://tracr.bizlegal-ai.com/pricing' },
 }
 
-function url(name: string): string | undefined {
-  const v = (process.env as Record<string, string | undefined>)[name]
-  return v && v.length > 4 ? v : undefined
+
+function apexCheckout(
+  product: string,
+  tier: string,
+  interval: 'one-time' | 'monthly' | 'yearly',
+  amountCents: number,
+  name: string,
+): string {
+  const params = new URLSearchParams({
+    product,
+    tier,
+    interval,
+    amount: String(amountCents),
+    name,
+  })
+  return `https://bizlegal-ai.com/checkout?${params.toString()}`
 }
 
 const REGULATORY_TIER: PricingTierData = {
@@ -35,18 +48,9 @@ const REGULATORY_TIER: PricingTierData = {
   ],
   excludes: ['Counterparty graph traversal', 'Practitioner review'],
   checkoutUrls: {
-    oneTime: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_TRACR_REGULATORY_ONETIME_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_TRACR_REGULATORY_ONETIME_URL'),
-    },
-    monthly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_TRACR_REGULATORY_MONTHLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_TRACR_REGULATORY_MONTHLY_URL'),
-    },
-    yearly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_TRACR_REGULATORY_YEARLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_TRACR_REGULATORY_YEARLY_URL'),
-    },
+    oneTime: { checkout: apexCheckout('tracr', 'regulatory', 'one-time', 2900, 'TRACR regulatory one-time') },
+    monthly: { checkout: apexCheckout('tracr', 'regulatory', 'monthly', 2900, 'TRACR regulatory monthly') },
+    yearly: { checkout: apexCheckout('tracr', 'regulatory', 'yearly', 29000, 'TRACR regulatory yearly') },
   },
 }
 
@@ -70,18 +74,9 @@ const STANDARD_TIER: PricingTierData = {
     '7-day refresh',
   ],
   checkoutUrls: {
-    oneTime: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_TRACR_STANDARD_ONETIME_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_TRACR_STANDARD_ONETIME_URL'),
-    },
-    monthly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_TRACR_STANDARD_MONTHLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_TRACR_STANDARD_MONTHLY_URL'),
-    },
-    yearly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_TRACR_STANDARD_YEARLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_TRACR_STANDARD_YEARLY_URL'),
-    },
+    oneTime: { checkout: apexCheckout('tracr', 'standard', 'one-time', 14900, 'TRACR standard one-time') },
+    monthly: { checkout: apexCheckout('tracr', 'standard', 'monthly', 14900, 'TRACR standard monthly') },
+    yearly: { checkout: apexCheckout('tracr', 'standard', 'yearly', 149000, 'TRACR standard yearly') },
   },
   highlighted: true,
 }
@@ -105,18 +100,9 @@ const PROFESSIONAL_TIER: PricingTierData = {
     'API access',
   ],
   checkoutUrls: {
-    oneTime: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_TRACR_PROFESSIONAL_ONETIME_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_TRACR_PROFESSIONAL_ONETIME_URL'),
-    },
-    monthly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_TRACR_PROFESSIONAL_MONTHLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_TRACR_PROFESSIONAL_MONTHLY_URL'),
-    },
-    yearly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_TRACR_PROFESSIONAL_YEARLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_TRACR_PROFESSIONAL_YEARLY_URL'),
-    },
+    oneTime: { checkout: apexCheckout('tracr', 'professional', 'one-time', 34900, 'TRACR professional one-time') },
+    monthly: { checkout: apexCheckout('tracr', 'professional', 'monthly', 34900, 'TRACR professional monthly') },
+    yearly: { checkout: apexCheckout('tracr', 'professional', 'yearly', 349000, 'TRACR professional yearly') },
   },
 }
 
@@ -140,18 +126,9 @@ const ENTERPRISE_TIER: PricingTierData = {
     '99.9% SLA',
   ],
   checkoutUrls: {
-    oneTime: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_TRACR_ENTERPRISE_ONETIME_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_TRACR_ENTERPRISE_ONETIME_URL'),
-    },
-    monthly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_TRACR_ENTERPRISE_MONTHLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_TRACR_ENTERPRISE_MONTHLY_URL'),
-    },
-    yearly: {
-      crypto: url('NEXT_PUBLIC_NOWPAYMENTS_TRACR_ENTERPRISE_YEARLY_URL'),
-      card: url('NEXT_PUBLIC_PAYPAL_TRACR_ENTERPRISE_YEARLY_URL'),
-    },
+    oneTime: { checkout: apexCheckout('tracr', 'enterprise', 'one-time', 79900, 'TRACR enterprise one-time') },
+    monthly: { checkout: apexCheckout('tracr', 'enterprise', 'monthly', 79900, 'TRACR enterprise monthly') },
+    yearly: { checkout: apexCheckout('tracr', 'enterprise', 'yearly', 799000, 'TRACR enterprise yearly') },
   },
 }
 
