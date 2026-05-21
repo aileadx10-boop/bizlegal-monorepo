@@ -12,9 +12,10 @@ Env contract:
   - BIZLEGAL_INBOUND_SECRET: shared HMAC secret (matches hub side)
   - OPS_LOG_URL: defaults to https://bizlegal-ai.com/api/ops/log
 
-Source label is hardcoded to "worker" so events show up under the
-"worker" pill on /ops alongside the Cloudflare lead-intake worker
-and OCI deal-router (per ALLOWED_SOURCES on the hub side).
+Source label is hardcoded to "curator" so curator pipeline events
+(scout / brain / publisher / bot) route to the /ops/hetzner dashboard
+filter. Hub ALLOWED_SOURCES on the receive side accepts "curator" as
+of Phase RR (2026-05-21).
 """
 from __future__ import annotations
 
@@ -43,6 +44,8 @@ ALLOWED_TYPES = {
     # V0.2 — bot callbacks + service heartbeats
     "curation.action",
     "heartbeat",
+    # Phase RR — content engine events (2026-05-21)
+    "content.published",
 }
 
 
@@ -70,7 +73,7 @@ def log_event(
 
     payload: dict[str, Any] = {
         "type": event_type,
-        "source": "worker",
+        "source": "curator",
     }
     if ref_id is not None:
         payload["ref_id"] = ref_id

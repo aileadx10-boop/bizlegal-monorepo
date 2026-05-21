@@ -70,10 +70,35 @@ export type OpsEventType =
   | 'agent.checkout'           // /agents AgentCheckoutButton clicked → start
   | 'webhook.received'         // any inbound webhook
   | 'error'                    // any unexpected error worth tracking
+  // Phase RR — autonomous ops + revenue infrastructure (2026-05-21)
+  | 'agent.run.completed'      // EA cron-triggered Claude task succeeded
+  | 'agent.run.error'          // EA cron-triggered Claude task failed
+  | 'gsc.submit.cron'          // services/gsc-bot weekly run summary
+  | 'gsc.submit.manual'        // services/gsc-bot /run trigger summary
+  | 'gsc.submit.error'         // services/gsc-bot runtime failure
+  | 'content.published'        // Hetzner publisher.py committed an article
+  | 'affiliate.signup'         // new affiliate code minted
+  | 'affiliate.click'          // first-touch attribution cookie set
+  | 'referral.attributed'      // payment.confirmed traced back to an affiliate
+  | 'social.draft'             // social post draft staged for approval
+  | 'social.posted'            // social post fanned out to a channel
 
 export interface LogEventInput {
   type: OpsEventType
-  source: 'hub' | 'docai' | 'lexaudit' | 'tracr' | 'brai' | 'forge' | 'leadforge' | 'oci' | 'worker'
+  source:
+    | 'hub'
+    | 'docai'
+    | 'lexaudit'
+    | 'tracr'
+    | 'brai'
+    | 'forge'
+    | 'leadforge'
+    | 'blog'
+    | 'oci'
+    | 'worker'
+    | 'curator'
+    | 'ea'
+    | 'gsc-bot'
   ref_id?: string
   email?: string
   amount_cents?: number

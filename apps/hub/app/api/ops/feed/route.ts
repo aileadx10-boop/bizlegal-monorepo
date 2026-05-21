@@ -66,21 +66,29 @@ export async function GET(req: NextRequest) {
     const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
     const since30d = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
 
-    // Optional source filter (drilldown). Validated against allowed sources
-    // so a malicious value can't smuggle SQL — Supabase already param-escapes.
-    const sourceFilter = url.searchParams.get('source') ?? ''
+    // Optional source filter (drilldown). Accepts a single source or a
+    // comma-separated list (e.g. `?source=brai,forge,docai` for the
+    // /ops/subdomains dashboard). Validated against allowed sources so a
+    // malicious value can't smuggle SQL — Supabase already param-escapes.
     const ALLOWED_SOURCE_FILTERS = new Set([
-      'hub', 'docai', 'lexaudit', 'tracr', 'brai', 'forge', 'leadforge', 'oci', 'worker',
+      'hub', 'docai', 'lexaudit', 'tracr', 'brai', 'forge', 'leadforge', 'blog',
+      'oci', 'worker', 'curator', 'ea', 'gsc-bot',
     ])
-    const safeSourceFilter = ALLOWED_SOURCE_FILTERS.has(sourceFilter) ? sourceFilter : ''
+    const sourceParam = url.searchParams.get('source') ?? ''
+    const requestedSources = sourceParam
+      .split(',')
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0 && ALLOWED_SOURCE_FILTERS.has(s))
 
     let eventsQuery = supabase
       .from('ops_events')
       .select('id, event_type, source, ref_id, ref_email, amount_cents, status, metadata, created_at')
       .order('created_at', { ascending: false })
       .limit(100)
-    if (safeSourceFilter) {
-      eventsQuery = eventsQuery.eq('source', safeSourceFilter)
+    if (requestedSources.length === 1) {
+      eventsQuery = eventsQuery.eq('source', requestedSources[0]!)
+    } else if (requestedSources.length > 1) {
+      eventsQuery = eventsQuery.in('source', requestedSources)
     }
 
     const [
@@ -239,7 +247,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       generated_at: new Date().toISOString(),
       window: '24h',
-      source_filter: safeSourceFilter || null,
+      source_filter: requestedSources.length === 0 ? null : requestedSources.length === 1 ? requestedSources[0]! : requestedSources,
       summary: {
         events_24h: eventsRecent.length,
         confirmed_revenue_cents_24h: confirmedAmount,

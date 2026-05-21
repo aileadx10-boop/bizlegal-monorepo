@@ -34,7 +34,16 @@ const TARGETS: ReadonlyArray<SubProbe> = [
   { name: 'docai',     url: 'https://docai.bizlegal-ai.com/api/digest',     source: 'docai' },
   { name: 'leadforge', url: 'https://leadforge.bizlegal-ai.com/api/digest', source: 'leadforge' },
   { name: 'forge',     url: 'https://forge.bizlegal-ai.com/api/digest',     source: 'forge' },
+  { name: 'blog',      url: 'https://blog.bizlegal-ai.com/sitemap.xml',     source: 'blog' },
   { name: 'oci',       url: 'https://router.bizlegal-ai.com/health',        source: 'oci' },
+  // Hetzner curator publisher — FastAPI on :8082 fronted by Caddy + Cloudflare Tunnel.
+  // Default URL is the public publisher.bizlegal-ai.com hostname; can be overridden via env
+  // if the tunnel hostname changes.
+  {
+    name: 'hetzner-publisher',
+    url: process.env.HETZNER_PUBLISHER_HEALTH_URL ?? 'https://publisher.bizlegal-ai.com/healthz',
+    source: 'curator',
+  },
 ]
 
 const ENV_KEYS: ReadonlyArray<{ name: string; critical: boolean; reason: string }> = [
@@ -55,21 +64,9 @@ const ENV_KEYS: ReadonlyArray<{ name: string; critical: boolean; reason: string 
   { name: 'LEXAUDIT_MONITOR_URL',         critical: false, reason: 'compliance monitor cross-call' },
   { name: 'FIRECRAWL_API_KEY',            critical: false, reason: 'Q1/Q2 — rotated key required after leak' },
   { name: 'OCI_ROUTER_URL',               critical: false, reason: 'realestate-intake forwards here (defaults to router.bizlegal-ai.com/lead)' },
-  // Per-product checkout URLs — non-critical (page falls back to "Checkout coming soon" if unset)
-  { name: 'NEXT_PUBLIC_NOWPAYMENTS_BOI_SOLO_MONTHLY_URL',  critical: false, reason: 'BOI Tracker Solo monthly crypto checkout' },
-  { name: 'NEXT_PUBLIC_NOWPAYMENTS_BOI_SOLO_YEARLY_URL',   critical: false, reason: 'BOI Tracker Solo yearly crypto checkout' },
-  { name: 'NEXT_PUBLIC_NOWPAYMENTS_BOI_FIRM_MONTHLY_URL',  critical: false, reason: 'BOI Tracker Firm monthly crypto checkout' },
-  { name: 'NEXT_PUBLIC_NOWPAYMENTS_BOI_FIRM_YEARLY_URL',   critical: false, reason: 'BOI Tracker Firm yearly crypto checkout' },
-  { name: 'NEXT_PUBLIC_PAYPAL_BOI_SOLO_MONTHLY_URL',       critical: false, reason: 'BOI Tracker Solo monthly card checkout' },
-  { name: 'NEXT_PUBLIC_PAYPAL_BOI_SOLO_YEARLY_URL',        critical: false, reason: 'BOI Tracker Solo yearly card checkout' },
-  { name: 'NEXT_PUBLIC_PAYPAL_BOI_FIRM_MONTHLY_URL',       critical: false, reason: 'BOI Tracker Firm monthly card checkout' },
-  { name: 'NEXT_PUBLIC_PAYPAL_BOI_FIRM_YEARLY_URL',        critical: false, reason: 'BOI Tracker Firm yearly card checkout' },
-  { name: 'NEXT_PUBLIC_NOWPAYMENTS_AI_ACT_ONETIME_URL',    critical: false, reason: 'AI-Act Risk Classifier $99 one-time crypto checkout (V1)' },
-  { name: 'NEXT_PUBLIC_NOWPAYMENTS_AI_ACT_MONTHLY_URL',    critical: false, reason: 'AI-Act monitoring $49/mo crypto checkout (V1)' },
-  { name: 'NEXT_PUBLIC_PAYPAL_AI_ACT_ONETIME_URL',         critical: false, reason: 'AI-Act $99 one-time card checkout (V1)' },
-  { name: 'NEXT_PUBLIC_PAYPAL_AI_ACT_MONTHLY_URL',         critical: false, reason: 'AI-Act $49/mo card checkout (V1)' },
-  { name: 'NEXT_PUBLIC_NOWPAYMENTS_POLICY_REFRESH_URL',    critical: false, reason: 'Privacy Auto-Refresh $29/mo crypto checkout (V2)' },
-  { name: 'NEXT_PUBLIC_PAYPAL_POLICY_REFRESH_URL',         critical: false, reason: 'Privacy Auto-Refresh $29/mo card checkout (V2)' },
+  // Per-product NEXT_PUBLIC_*_URL constants were deprecated in Z3 (PR #42, 2026-05-20).
+  // /checkout now generates invoices on the fly via @bizlegal/payment. The 14 entries
+  // previously audited here only added cosmetic RED noise to /ops/health; removed.
 ]
 
 // V0.3 — fan-out subdomain env probe. Each subdomain ships a clone of

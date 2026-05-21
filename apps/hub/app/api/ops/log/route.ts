@@ -57,9 +57,18 @@ const ALLOWED_TYPES = new Set([
   'aiact.classified', 'policy.refreshed', 'legal.cite_audit', 'connect.threshold_crossed',
   'mica.audit.generated', 'sdn.match_detected', 'dao.recommendation',
   'download.report', 'report.generated', 'agent.checkout', 'webhook.received', 'error',
+  // Phase RR — autonomous ops + revenue infrastructure (2026-05-21)
+  'agent.run.completed', 'agent.run.error',
+  'gsc.submit.cron', 'gsc.submit.manual', 'gsc.submit.error',
+  'content.published',
+  'affiliate.signup', 'affiliate.click', 'referral.attributed',
+  'social.draft', 'social.posted',
 ])
 
-const ALLOWED_SOURCES = new Set(['hub', 'docai', 'lexaudit', 'tracr', 'brai', 'forge', 'leadforge', 'oci', 'worker'])
+const ALLOWED_SOURCES = new Set([
+  'hub', 'docai', 'lexaudit', 'tracr', 'brai', 'forge', 'leadforge', 'blog',
+  'oci', 'worker', 'curator', 'ea', 'gsc-bot',
+])
 
 export async function POST(req: NextRequest) {
   try {

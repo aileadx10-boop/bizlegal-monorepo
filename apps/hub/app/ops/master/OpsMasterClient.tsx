@@ -587,6 +587,10 @@ export function OpsMasterClient({ token }: { token: string }) {
           {/* Quick actions */}
           <Card title="Quick Actions" icon={<Terminal size={14} />}>
             <div style={{ display: 'grid', gap: 6 }}>
+              <QuickAction href={`/ops/main?t=${encodeURIComponent(token)}`} label="Main ops" desc="Hub-only events + crons + payments" />
+              <QuickAction href={`/ops/subdomains?t=${encodeURIComponent(token)}`} label="Subdomains ops" desc="7 product subs + blog" />
+              <QuickAction href={`/ops/oci?t=${encodeURIComponent(token)}`} label="OCI ops" desc="Deal-router + referral pipeline" />
+              <QuickAction href={`/ops/hetzner?t=${encodeURIComponent(token)}`} label="Hetzner ops" desc="Curator pipeline + content engine" />
               <QuickAction href={`/ops?t=${encodeURIComponent(token)}`} label="Event tape" desc="Live ops events, filters" />
               <QuickAction href={`/ops/health?t=${encodeURIComponent(token)}`} label="Health audit" desc="Subdomain probes, env matrix" />
               <QuickAction href={`https://bizlegal-ai.com/checkout?product=hub&tier=pro&interval=monthly&amount=14900&name=BizLegal%20Hub%20Pro`} label="Hub Pro checkout" desc="Send to a prospect" />
