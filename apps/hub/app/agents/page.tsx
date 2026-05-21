@@ -5,7 +5,7 @@ import { AgentCheckoutButton } from '@/app/components/ui-v2/AgentCheckoutButton'
 export const metadata: Metadata = {
   title: 'AI Compliance Agents | BizLegal AI',
   description:
-    'Specialized AI compliance agents — Compliance Researcher, Cross-Jurisdiction Analyst, Contracts Expert, Risk Assessor, Due Diligence Scanner, Regulatory Monitor. Subscribe individually with crypto or card.',
+    'Twelve specialized AI compliance agents — research, contracts, risk, diligence, monitoring. $19 one-time or $49/mo. Pay with crypto or card.',
   alternates: { canonical: 'https://bizlegal-ai.com/agents' },
 }
 
@@ -15,6 +15,7 @@ interface Agent {
   readonly description: string
   readonly priceCents: number
   readonly priceLabel: string
+  readonly interval: 'one-time' | 'monthly'
   readonly addon: 'BRAI' | 'TRACR' | 'DocAI' | 'LexAudit' | 'Forge' | 'Hub'
   readonly accent: string
   readonly features: ReadonlyArray<string>
@@ -30,8 +31,9 @@ const AGENTS: ReadonlyArray<Agent> = [
     name: 'Compliance Researcher',
     description:
       'Deep regulatory research across 50+ jurisdictions. Finds relevant frameworks, enforcement actions, and compliance gaps before they become structural liability.',
-    priceCents: 2900,
-    priceLabel: '$29/mo',
+    priceCents: 4900,
+    priceLabel: '$49/mo',
+    interval: 'monthly',
     addon: 'BRAI',
     accent: '#5b21b6',
     features: ['50+ jurisdiction coverage', 'Framework gap identification', 'Enforcement action tracking', 'Weekly research digest'],
@@ -43,6 +45,7 @@ const AGENTS: ReadonlyArray<Agent> = [
       'Compare regulatory requirements across jurisdictions. Identify optimal paths, flag conflicts, and surface arbitrage opportunities with structured analysis.',
     priceCents: 4900,
     priceLabel: '$49/mo',
+    interval: 'monthly',
     addon: 'BRAI',
     accent: '#7c3aed',
     features: ['Side-by-side jurisdiction comparison', 'Regulatory conflict detection', 'Optimal path recommendations', 'Expansion risk scoring'],
@@ -52,8 +55,9 @@ const AGENTS: ReadonlyArray<Agent> = [
     name: 'Contracts Expert',
     description:
       'AI-powered contract review and generation. SAFTs, NDAs, terms of service, privacy policies — drafted with jurisdiction awareness and clause risk scoring.',
-    priceCents: 3900,
-    priceLabel: '$39/mo',
+    priceCents: 1900,
+    priceLabel: '$19 one-time',
+    interval: 'one-time',
     addon: 'DocAI',
     accent: '#ec4899',
     features: ['Jurisdiction-aware drafting', 'Clause risk scoring', 'Template library access', 'Multi-format export'],
@@ -65,6 +69,7 @@ const AGENTS: ReadonlyArray<Agent> = [
       'Quantify regulatory risk by jurisdiction and framework. Score exposure probability, estimate financial impact, and produce risk heat maps.',
     priceCents: 4900,
     priceLabel: '$49/mo',
+    interval: 'monthly',
     addon: 'BRAI',
     accent: '#f59e0b',
     features: ['Risk heat mapping', 'Exposure probability scoring', 'Financial impact estimation', 'Mitigation priority ranking'],
@@ -74,8 +79,9 @@ const AGENTS: ReadonlyArray<Agent> = [
     name: 'Due Diligence Scanner',
     description:
       'Scan counterparties, wallets, and entities for AML, KYC, and sanctions risk. Produce diligence reports suitable for investor and regulator review.',
-    priceCents: 3900,
-    priceLabel: '$39/mo',
+    priceCents: 1900,
+    priceLabel: '$19 one-time',
+    interval: 'one-time',
     addon: 'TRACR',
     accent: '#dc2626',
     features: ['Counterparty risk screening', 'Wallet provenance analysis', 'Sanctions list matching', 'Diligence report export'],
@@ -85,8 +91,9 @@ const AGENTS: ReadonlyArray<Agent> = [
     name: 'Regulatory Monitor',
     description:
       'Real-time monitoring of regulatory changes across your tracked jurisdictions. Alerts for relevant updates, deadline tracking, and compliance impact summaries.',
-    priceCents: 2900,
-    priceLabel: '$29/mo',
+    priceCents: 4900,
+    priceLabel: '$49/mo',
+    interval: 'monthly',
     addon: 'BRAI',
     accent: '#16a34a',
     features: ['Real-time change alerts', 'Deadline tracking', 'Impact summary per change', 'Custom jurisdiction watchlist'],
@@ -98,8 +105,9 @@ const AGENTS: ReadonlyArray<Agent> = [
     name: 'Compliance Monitor Pro',
     description:
       'Daily SHA-256 monitoring of canonical source URLs for SOC 2, ISO 27001, GDPR, HIPAA, DPDP, and NIST 800-53. We hash, you decide. Decision-support, not a compliance attestation.',
-    priceCents: 9900,
-    priceLabel: '$99/mo',
+    priceCents: 4900,
+    priceLabel: '$49/mo',
+    interval: 'monthly',
     addon: 'LexAudit',
     accent: '#d4a843',
     features: [
@@ -116,8 +124,9 @@ const AGENTS: ReadonlyArray<Agent> = [
     name: 'DPA Negotiator',
     description:
       'Paste the customer redline + your standard DPA. Get a 3-column comparison classifying every material delta (procedural/liability/sub-processor/residency) with citations to GDPR Art 28, EU SCCs, CCPA, or HIPAA.',
-    priceCents: 6900,
-    priceLabel: '$69/mo',
+    priceCents: 1900,
+    priceLabel: '$19 one-time',
+    interval: 'one-time',
     addon: 'DocAI',
     accent: '#5b21b6',
     features: [
@@ -134,8 +143,9 @@ const AGENTS: ReadonlyArray<Agent> = [
     name: 'PSP & MoR Risk Manager',
     description:
       'Pre-flight audit before applying to Stripe / PayPal / Square / Mercury / Wise / Revolut — or recovery support after a freeze. Pattern recognition against public AUP texts. Outcome of any application not guaranteed.',
-    priceCents: 9900,
-    priceLabel: '$99/mo',
+    priceCents: 4900,
+    priceLabel: '$49/mo',
+    interval: 'monthly',
     addon: 'Hub',
     accent: '#dc2626',
     features: [
@@ -152,8 +162,9 @@ const AGENTS: ReadonlyArray<Agent> = [
     name: 'CTA-2024 BOI Tracker',
     description:
       'Daily monitoring of FinCEN BOI guidance + 30-day refile deadline alerts for your US LLC, Corp, or LP. Penalty for missed filings is up to $500/day capped at $10K — we email before that bites.',
-    priceCents: 2900,
-    priceLabel: '$29/mo',
+    priceCents: 4900,
+    priceLabel: '$49/mo',
+    interval: 'monthly',
     addon: 'Forge',
     accent: '#16a34a',
     features: [
@@ -169,17 +180,17 @@ const AGENTS: ReadonlyArray<Agent> = [
     id: 'ai_act_classifier',
     name: 'EU AI Act Risk Classifier',
     description:
-      'Classify your AI system into Article 6 risk tiers + Annex III references before the 2026-08-02 deadline. Free preview classification; $99 one-time full report; $49/mo monitoring with daily semantic-diff on EU sources.',
-    priceCents: 9900,
-    priceLabel: '$99 + $49/mo',
+      'Classify your AI system into Article 6 risk tiers + Annex III references before the 2026-08-02 deadline. Free preview classification, $19 one-time full report with citation map and documentation checklist.',
+    priceCents: 1900,
+    priceLabel: '$19 one-time',
+    interval: 'one-time',
     addon: 'Hub',
     accent: '#5b21b6',
     features: [
       'Free preview classification (no card)',
       'Article 6 + Annex III citation map',
       'Documentation checklist (15+ items)',
-      'Daily Sonnet semantic-diff monitoring',
-      'Quarterly re-classification',
+      'Full PDF report delivered to inbox',
     ],
     deepLink: '/agents/ai-act',
     badge: 'EU deadline',
@@ -189,8 +200,9 @@ const AGENTS: ReadonlyArray<Agent> = [
     name: 'Privacy Policy Auto-Refresh',
     description:
       'Daily 7-framework redline of your privacy policy (GDPR / CCPA / CPRA / Quebec Law 25 / Colorado / Connecticut / Texas DPSA). Material-change alerts only — no cosmetic-edit noise. Free first audit.',
-    priceCents: 2900,
-    priceLabel: '$29/mo',
+    priceCents: 4900,
+    priceLabel: '$49/mo',
+    interval: 'monthly',
     addon: 'LexAudit',
     accent: '#7c3aed',
     features: [
@@ -239,9 +251,9 @@ export default function AgentsPage() {
               maxWidth: 720,
             }}
           >
-            Six specialised agents — research, comparison, contracts, risk,
-            diligence, monitoring. Subscribe individually with crypto or card,
-            no parent product subscription required. $29–49/mo.
+            Twelve specialised agents — research, comparison, contracts, risk,
+            diligence, monitoring. Pay individually with crypto or card,
+            no parent product subscription required. $19 one-time or $49/mo.
           </p>
           {/* D12: visible-from-the-hero free triage CTA. Drives unsure
               visitors to /triage which routes to one of 6 decision trees. */}
@@ -294,10 +306,10 @@ export default function AgentsPage() {
           }}
         >
           {[
-            { label: 'BRAI Add-ons', count: 4, color: '#5b21b6' },
-            { label: 'DocAI Add-ons', count: 1, color: '#ec4899' },
-            { label: 'TRACR Add-ons', count: 1, color: '#dc2626' },
-            { label: 'Pay-as-you-go', count: 6, color: 'var(--bl-accent)' },
+            { label: 'Agents Total', count: 12, color: '#5b21b6' },
+            { label: 'One-time ($19)', count: 4, color: 'var(--bl-accent)' },
+            { label: 'Monthly ($49)', count: 8, color: '#16a34a' },
+            { label: 'Add-on Surfaces', count: 6, color: '#7c3aed' },
           ].map((g) => (
             <div key={g.label}>
               <div
@@ -452,7 +464,7 @@ export default function AgentsPage() {
                   product={`agent_${agent.id}`}
                   tier={agent.name}
                   amountCents={agent.priceCents}
-                  interval="monthly"
+                  interval={agent.interval}
                   priceLabel={agent.priceLabel}
                   accent={agent.accent}
                 />

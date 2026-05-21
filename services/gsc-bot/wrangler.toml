@@ -1,0 +1,30 @@
+name = "bizlegal-gsc-bot"
+main = "src/index.ts"
+compatibility_date = "2026-05-21"
+compatibility_flags = ["nodejs_compat"]
+
+# Weekly sitemap submission to Google Search Console for all 8 BizLegal
+# surfaces. Re-submits every Monday 02:00 UTC so GSC always has a fresh
+# lastmod signal on the index and each child sitemap.
+#
+# Manual triggers:
+#   POST https://bizlegal-gsc-bot.bizlegal-ai.workers.dev/run?token=<ADMIN_TOKEN>
+#   GET  https://bizlegal-gsc-bot.bizlegal-ai.workers.dev/health
+[triggers]
+crons = ["0 2 * * 1"]
+
+[observability]
+enabled = true
+head_sampling_rate = 1.0
+
+[vars]
+# Sites + sitemap URLs the bot keeps fresh. Each `site` must be added as
+# a verified property in GSC, AND the service account email below must
+# be added as a User (Restricted role) on that property.
+SITES = "https://bizlegal-ai.com/|https://bizlegal-ai.com/sitemap-index.xml,https://brai.bizlegal-ai.com/|https://brai.bizlegal-ai.com/sitemap.xml,https://forge.bizlegal-ai.com/|https://forge.bizlegal-ai.com/sitemap.xml,https://docai.bizlegal-ai.com/|https://docai.bizlegal-ai.com/sitemap.xml,https://lexaudit.bizlegal-ai.com/|https://lexaudit.bizlegal-ai.com/sitemap.xml,https://tracr.bizlegal-ai.com/|https://tracr.bizlegal-ai.com/sitemap.xml,https://leadforge.bizlegal-ai.com/|https://leadforge.bizlegal-ai.com/sitemap.xml,https://blog.bizlegal-ai.com/|https://blog.bizlegal-ai.com/sitemap.xml"
+
+# Required secrets (set via `wrangler secret put <NAME>`):
+# - GSC_SERVICE_ACCOUNT_JSON   full JSON from Google Cloud Console > IAM > Service Accounts > Keys
+# - BIZLEGAL_INBOUND_SECRET    same hex as every other BizLegal surface (HMAC chain)
+# - OPS_LOG_URL                e.g. https://bizlegal-ai.com/api/ops/log
+# - ADMIN_TOKEN                opaque token for the /run manual-trigger route

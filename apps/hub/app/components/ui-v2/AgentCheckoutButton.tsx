@@ -10,9 +10,9 @@ interface AgentCheckoutButtonProps {
   tier: string
   /** Amount in USD cents for this interval */
   amountCents: number
-  /** 'monthly' | 'yearly' */
-  interval: 'monthly' | 'yearly'
-  /** Display label, e.g. "$29/mo" */
+  /** 'one-time' | 'monthly' | 'yearly' */
+  interval: 'one-time' | 'monthly' | 'yearly'
+  /** Display label, e.g. "$49/mo" or "$19 one-time" */
   priceLabel: string
   /** Accent color for the agent (border + hover) */
   accent: string
@@ -113,7 +113,7 @@ export function AgentCheckoutButton({
           ;(e.currentTarget as HTMLElement).style.transform = 'none'
         }}
       >
-        Subscribe — {priceLabel}
+        {interval === 'one-time' ? 'Buy' : 'Subscribe'} — {priceLabel}
       </button>
     )
   }

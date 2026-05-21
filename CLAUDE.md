@@ -28,6 +28,7 @@ bizlegal-monorepo/
 │   ├── oci/          deal-router (FastAPI, Docker, Caddy + Cloudflare Tunnel) [Z1.C-pending]
 │   ├── worker/       Cloudflare Worker — bizlegal-lead-intake (TS, wrangler) [Z1.C-pending]
 │   ├── telegram-hub/ CF Worker — @BizlegalHubBot customer FAQ (Z4.2)
+│   ├── gsc-bot/      CF Worker — weekly GSC sitemap re-submission across 8 surfaces
 │   └── funnel-mvp/   Fastify legal-risk intelligence funnel (Z1.E — imported from SKOOL-NATE)
 ├── packages/         shared TS + Python siblings
 │   ├── ops-log/      @bizlegal/ops-log — HMAC-signed event POST to hub /api/ops/log
