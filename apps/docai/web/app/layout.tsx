@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { DM_Mono, DM_Sans, Playfair_Display } from "next/font/google";
-
 import "./globals.css";
 import "./styles/theme-v2.css";
 import CookieConsent from "@/components/CookieConsent";
@@ -32,23 +30,6 @@ const LANDING_FOUC = themeFOUCScript({
   storageKey: 'docai-theme',
 });
 
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
-
-const dmMono = DM_Mono({
-  subsets: ["latin"],
-  weight: ["300", "400", "500"],
-  variable: "--font-mono",
-});
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-  weight: ["400", "600", "700"],
-  variable: "--font-serif",
-});
 
 export const metadata: Metadata = {
   title: "DocAI | Institutional Legal Documents",
@@ -66,11 +47,18 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (
+          <script
+            defer
+            data-domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN}
+            src="https://plausible.io/js/script.outbound-links.js"
+          />
+        )}
         <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,0,400;9..144,1,300;9..144,1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
         {/* Daybreak FOUC — sync sets data-bl-theme-v2 before paint. */}
         <script dangerouslySetInnerHTML={{ __html: LANDING_FOUC }} />
       </head>
-      <body className={`${dmSans.variable} ${dmMono.variable} ${playfair.variable}`}>
+      <body>
         <ThemeProvider primary="daybreak" alternate={null} storageKey="docai-theme">
           <SiteShell
             brand="DocAI"
@@ -131,3 +119,4 @@ export default function RootLayout({
     </html>
   );
 }
+

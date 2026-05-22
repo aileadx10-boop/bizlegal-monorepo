@@ -5,7 +5,7 @@ import { AgentCheckoutButton } from '@/app/components/ui-v2/AgentCheckoutButton'
 export const metadata: Metadata = {
   title: 'AI Compliance Agents | BizLegal AI',
   description:
-    'Twelve specialized AI compliance agents — research, contracts, risk, diligence, monitoring. $19 one-time or $49/mo. Pay with crypto or card.',
+    'Fifteen specialized AI compliance agents — research, contracts, risk, diligence, monitoring, marketplace, AI governance, India DPDPA. $19 one-time or $49/mo. Pay with crypto or card.',
   alternates: { canonical: 'https://bizlegal-ai.com/agents' },
 }
 
@@ -23,6 +23,8 @@ interface Agent {
   readonly deepLink?: string
   /** Optional badge above the name (e.g. "New", "Most popular"). */
   readonly badge?: string
+  /** Optional vertical tag (Phase RR — three new $49/$19 agents filling the gap). */
+  readonly vertical?: 'fintech' | 'ai-governance' | 'apac-privacy'
 }
 
 const AGENTS: ReadonlyArray<Agent> = [
@@ -215,6 +217,66 @@ const AGENTS: ReadonlyArray<Agent> = [
     deepLink: '/agents/policy-refresh',
     badge: 'New',
   },
+
+  // ─── Phase RR wave (2026-05-22) — three new verticals filling the
+  //     fintech / AI-governance / APAC-privacy gaps in the BizLegal fleet.
+  {
+    id: 'marketplace_shield',
+    name: 'Marketplace Compliance Shield',
+    description:
+      'Monitoring layer for Stripe Connect platforms, gig marketplaces, and creator-economy tools. Track 1099-K threshold crossings (the $600 cliff), state NEXUS exposure, and KYB drift on connected accounts. Decision-support, not tax advice.',
+    priceCents: 4900,
+    priceLabel: '$49/mo',
+    interval: 'monthly',
+    addon: 'Hub',
+    accent: '#0ea5e9',
+    features: [
+      '1099-K threshold monitor per connected account',
+      'State NEXUS exposure scorecard',
+      'KYB drift alerts (sanctions / PEP refresh)',
+      'Stripe Connect webhook ingest (configurable)',
+    ],
+    badge: 'New · Fintech',
+    vertical: 'fintech',
+  },
+  {
+    id: 'ai_governance_product',
+    name: 'AI Governance for Product Teams',
+    description:
+      'For product orgs (not lawyers) deploying LLM features. Per-feature Article 6 classification against the EU AI Act, California SB-942, and Colorado AI Act. Monthly delta reports map your repo changes to compliance posture changes.',
+    priceCents: 4900,
+    priceLabel: '$49/mo',
+    interval: 'monthly',
+    addon: 'Hub',
+    accent: '#22c55e',
+    features: [
+      'Per-feature Article 6 risk classification',
+      'EU AI Act + CA SB-942 + CO AI Act coverage',
+      'Monthly delta report (repo changes → posture changes)',
+      'Documentation checklist per high-risk feature',
+    ],
+    badge: 'New · 2026 deadlines',
+    vertical: 'ai-governance',
+  },
+  {
+    id: 'india_dpdpa',
+    name: 'India DPDPA Readiness Kit',
+    description:
+      'One-time gap audit for B2B SaaS handling Indian users. Maps your current posture to DPDPA notice + consent + DPO requirements. First-mover positioning before late-2026 fines kick in for Significant Data Fiduciaries.',
+    priceCents: 1900,
+    priceLabel: '$19 one-time',
+    interval: 'one-time',
+    addon: 'LexAudit',
+    accent: '#f97316',
+    features: [
+      'Notice + consent gap audit',
+      'DPO appointment recommendation',
+      'Data principal rights checklist (access / correct / erase / nominate)',
+      'Significant Data Fiduciary tripwire analysis',
+    ],
+    badge: 'New · APAC wedge',
+    vertical: 'apac-privacy',
+  },
 ]
 
 export default function AgentsPage() {
@@ -251,9 +313,10 @@ export default function AgentsPage() {
               maxWidth: 720,
             }}
           >
-            Twelve specialised agents — research, comparison, contracts, risk,
-            diligence, monitoring. Pay individually with crypto or card,
-            no parent product subscription required. $19 one-time or $49/mo.
+            Fifteen specialised agents — research, comparison, contracts,
+            risk, diligence, monitoring, plus three new wedges: marketplace
+            compliance, AI governance, and India DPDPA. Pay individually
+            with crypto or card. $19 one-time or $49/mo.
           </p>
           {/* D12: visible-from-the-hero free triage CTA. Drives unsure
               visitors to /triage which routes to one of 6 decision trees. */}
@@ -306,10 +369,10 @@ export default function AgentsPage() {
           }}
         >
           {[
-            { label: 'Agents Total', count: 12, color: '#5b21b6' },
-            { label: 'One-time ($19)', count: 4, color: 'var(--bl-accent)' },
-            { label: 'Monthly ($49)', count: 8, color: '#16a34a' },
-            { label: 'Add-on Surfaces', count: 6, color: '#7c3aed' },
+            { label: 'Agents Total', count: 15, color: '#5b21b6' },
+            { label: 'One-time ($19)', count: 5, color: 'var(--bl-accent)' },
+            { label: 'Monthly ($49)', count: 10, color: '#16a34a' },
+            { label: 'New Wedges (Phase RR)', count: 3, color: '#f97316' },
           ].map((g) => (
             <div key={g.label}>
               <div

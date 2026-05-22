@@ -27,7 +27,11 @@
     "app/api/cron/policy-refresh/route.ts": { "maxDuration": 60 },
     "app/api/policy-refresh/audit/route.ts": { "maxDuration": 60 },
     "app/api/ops/health/route.ts": { "maxDuration": 30 },
-    "app/api/boi/subscribe/route.ts": { "maxDuration": 30 }
+    "app/api/boi/subscribe/route.ts": { "maxDuration": 30 },
+    "app/api/agents/run/route.ts": { "maxDuration": 60 },
+    "app/api/cron/affiliate-reconcile/route.ts": { "maxDuration": 30 },
+    "app/api/cron/social-queue/route.ts": { "maxDuration": 60 },
+    "app/api/content/syndicate/route.ts": { "maxDuration": 60 }
   },
   "crons": [
     {
@@ -53,7 +57,17 @@
     {
       "path": "/api/cron/policy-refresh",
       "schedule": "0 12 * * *"
-    }
+    },
+    { "path": "/api/agents/run?task=daily-revenue-digest",            "schedule": "0 8 * * *" },
+    { "path": "/api/agents/run?task=daily-vertical-classifier-audit", "schedule": "30 8 * * *" },
+    { "path": "/api/agents/run?task=daily-content-pick-suggestion",   "schedule": "30 9 * * *" },
+    { "path": "/api/agents/run?task=daily-affiliate-followup",        "schedule": "0 10 * * *" },
+    { "path": "/api/agents/run?task=daily-cold-pitch-suggestion",     "schedule": "0 11 * * *" },
+    { "path": "/api/agents/run?task=weekly-mrr-review",               "schedule": "0 9 * * 1" },
+    { "path": "/api/agents/run?task=friday-retrospective",            "schedule": "0 17 * * 5" },
+    { "path": "/api/agents/run?task=monthly-vertical-scorecard",      "schedule": "0 9 1 * *" },
+    { "path": "/api/cron/affiliate-reconcile",                        "schedule": "30 10 * * 5" },
+    { "path": "/api/cron/social-queue",                               "schedule": "*/30 * * * *" }
   ],
   "headers": [
     {

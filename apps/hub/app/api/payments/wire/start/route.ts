@@ -29,6 +29,7 @@ import {
   type WireCurrency,
 } from '@/lib/payments/wire'
 import { sendBankWireInstructions } from '@/lib/resend'
+import { readAffiliateCode } from '@/lib/affiliate'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
@@ -93,6 +94,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
 
     const supabase = getSupabase()
+    const affiliateCode = readAffiliateCode(req.headers.get('cookie'))
 
     const { data: order, error: insertErr } = await supabase
       .from('payment_orders')
@@ -107,6 +109,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         status: 'pending_wire',
         source: body.source ?? 'checkout_wire',
         metadata: { currency },
+        affiliate_code: affiliateCode,
       })
       .select('id')
       .single()

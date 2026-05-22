@@ -67,6 +67,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Plausible Analytics — GDPR-friendly, single shared property across all 8 surfaces.
+            Renders only when NEXT_PUBLIC_PLAUSIBLE_DOMAIN is set (so dev/preview don't pollute prod). */}
+        {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (
+          <script
+            defer
+            data-domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN}
+            src="https://plausible.io/js/script.outbound-links.js"
+          />
+        )}
         {/* Theme V2 — set data-theme synchronously to avoid flash on dark users.
             Reads localStorage[bl-theme] -> falls back to prefers-color-scheme -> light. */}
         <script

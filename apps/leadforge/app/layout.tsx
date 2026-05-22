@@ -1,23 +1,6 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Sora, Syne } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider, themeFOUCScript, SiteShell } from '@bizlegal/themes';
-
-const sora = Sora({
-  subsets: ["latin"],
-  variable: "--font-sora",
-});
-
-const syne = Syne({
-  subsets: ["latin"],
-  variable: "--font-syne",
-  weight: ["700", "800"],
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
-});
 
 export const metadata: Metadata = {
   title: {
@@ -43,15 +26,17 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,0,400;9..144,1,300;9..144,1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
         {/* Subdomain Design Pass FOUC — applies the Daybreak theme CSS vars before paint. */}
         <script dangerouslySetInnerHTML={{ __html: LANDING_FOUC }} />
+        {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (
+          <script
+            defer
+            data-domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN}
+            src="https://plausible.io/js/script.outbound-links.js"
+          />
+        )}
       </head>
-      <body
-        className={`${sora.variable} ${syne.variable} ${jetbrainsMono.variable} font-sans antialiased`}
-      >
+      <body className="font-sans antialiased">
         <ThemeProvider primary="daybreak" alternate={null} storageKey="leadforge-theme">
           <SiteShell
             brand="LeadForge"

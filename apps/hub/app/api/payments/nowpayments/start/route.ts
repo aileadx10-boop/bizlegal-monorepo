@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { logEventAsync } from '@/lib/ops/log'
+import { readAffiliateCode } from '@/lib/affiliate'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
@@ -49,6 +50,9 @@ export async function POST(req: NextRequest) {
 
     const supabase = getSupabase()
 
+    // First-touch affiliate attribution — cookie set by /api/affiliates/track/<code>
+    const affiliateCode = readAffiliateCode(req.headers.get('cookie'))
+
     // Insert pending order so we can track regardless of webhook race.
     const { data: order, error: insertErr } = await supabase
       .from('payment_orders')
@@ -62,6 +66,7 @@ export async function POST(req: NextRequest) {
         gateway: 'nowpayments',
         status: 'pending',
         source: body.source ?? 'hub_pricing',
+        affiliate_code: affiliateCode,
       })
       .select('id')
       .single()
@@ -124,6 +129,7 @@ export async function POST(req: NextRequest) {
         interval: body.interval,
         invoice_id: invoice.id,
         order_source: body.source,
+        affiliate_code: affiliateCode,
       },
     })
 
