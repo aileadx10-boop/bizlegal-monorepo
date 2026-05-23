@@ -11,9 +11,6 @@ importers:
       lefthook:
         specifier: ^1.7.22
         version: 1.13.6
-      next:
-        specifier: 14.2.35
-        version: 14.2.35(@opentelemetry/api@1.9.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       turbo:
         specifier: ^2.2.3
         version: 2.9.8
@@ -97,8 +94,8 @@ importers:
         specifier: ^1.10.0
         version: 1.12.0
       next:
-        specifier: 14.2.35
-        version: 14.2.35(@opentelemetry/api@1.9.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 14.2.29
+        version: 14.2.29(@opentelemetry/api@1.9.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       pdf-parse:
         specifier: ^1.1.1
         version: 1.1.4
@@ -240,58 +237,6 @@ importers:
         version: 3.4.19(tsx@4.21.0)
       typescript:
         specifier: ^5.4.0
-        version: 5.9.3
-
-  apps/funnel-mvp:
-    dependencies:
-      '@anthropic-ai/sdk':
-        specifier: ^0.27.0
-        version: 0.27.3
-      '@bizlegal/ops-log':
-        specifier: workspace:*
-        version: link:../../packages/ops-log
-      '@supabase/supabase-js':
-        specifier: ^2.45.0
-        version: 2.105.1
-      mammoth:
-        specifier: ^1.9.0
-        version: 1.12.0
-      next:
-        specifier: ^15.5.14
-        version: 15.5.15(@opentelemetry/api@1.9.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      pdf-parse:
-        specifier: ^1.1.1
-        version: 1.1.4
-      pdfkit:
-        specifier: ^0.16.0
-        version: 0.16.0
-      react:
-        specifier: ^18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: ^18.3.1
-        version: 18.3.1(react@18.3.1)
-      zod:
-        specifier: ^3.24.2
-        version: 3.25.76
-    devDependencies:
-      '@types/node':
-        specifier: ^20.14.0
-        version: 20.19.39
-      '@types/pdf-parse':
-        specifier: ^1.1.5
-        version: 1.1.5
-      '@types/pdfkit':
-        specifier: ^0.17.6
-        version: 0.17.6
-      '@types/react':
-        specifier: ^18.3.0
-        version: 18.3.28
-      '@types/react-dom':
-        specifier: ^18.3.0
-        version: 18.3.7(@types/react@18.3.28)
-      typescript:
-        specifier: ^5.5.0
         version: 5.9.3
 
   apps/hub:
@@ -760,18 +705,6 @@ importers:
       vitest:
         specifier: ^3.0.8
         version: 3.2.4(@types/node@22.19.17)(jiti@1.21.7)(tsx@4.21.0)
-
-  services/gsc-bot:
-    devDependencies:
-      '@cloudflare/workers-types':
-        specifier: ^4.20260201.0
-        version: 4.20260503.1
-      typescript:
-        specifier: ^5.4.5
-        version: 5.9.3
-      wrangler:
-        specifier: ^4.0.0
-        version: 4.87.0(@cloudflare/workers-types@4.20260503.1)
 
   services/telegram-hub:
     devDependencies:
