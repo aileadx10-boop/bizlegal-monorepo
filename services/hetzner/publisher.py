@@ -24,6 +24,8 @@ from __future__ import annotations
 
 import asyncio
 import base64
+import hmac
+import hashlib
 import json
 import os
 import re
@@ -375,6 +377,26 @@ def deploy(req: SlugReq) -> dict:
             "hero_pushed": hero_path.exists(),
         },
     )
+    # Phase RR — fan out to social syndication (HMAC-signed POST, best-effort)
+    try:
+        syndicate_body = json.dumps({
+            "source_url": blog_url,
+            "source_title": slug,
+            "source_summary": mdx[:1200],
+        }, separators=(",", ":"))
+        sig = hmac.new(
+            os.environ["BIZLEGAL_INBOUND_SECRET"].encode(),
+            syndicate_body.encode(),
+            hashlib.sha256,
+        ).hexdigest()
+        httpx.post(
+            "https://bizlegal-ai.com/api/content/syndicate",
+            content=syndicate_body.encode(),
+            headers={"content-type": "application/json", "x-bizlegal-signature": sig},
+            timeout=30,
+        )
+    except Exception:
+        pass  # best-effort; content already published
     return {
         "ok": True,
         "blog_url": blog_url,
