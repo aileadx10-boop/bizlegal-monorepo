@@ -1,0 +1,22 @@
+{
+  "framework": "nextjs",
+  "installCommand": "corepack enable && cd ../.. && corepack pnpm install --frozen-lockfile=false --ignore-scripts",
+  "buildCommand": "cd ../.. && corepack pnpm turbo build --filter=@bizlegal/funnel-mvp...",
+  "functions": {
+    "app/api/upload/route.ts": { "maxDuration": 60 },
+    "app/api/jobs/[id]/route.ts": { "maxDuration": 15 },
+    "app/api/payments/paypal/start/route.ts": { "maxDuration": 30 },
+    "app/api/payments/paypal/webhook/route.ts": { "maxDuration": 60 },
+    "app/api/ops/health/route.ts": { "maxDuration": 15 }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    }
+  ]
+}

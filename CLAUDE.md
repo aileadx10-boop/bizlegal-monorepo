@@ -22,6 +22,7 @@ bizlegal-monorepo/
 │   ├── docai/        docai.bizlegal-ai.com (SQA + DPA Negotiator, $69-199/mo)
 │   ├── leadforge/    leadforge.bizlegal-ai.com (lead-gen surface)
 │   ├── forge/        forge.bizlegal-ai.com (BOI Kit $149, Passport $297, scan $97)
+│   ├── funnel-mvp/   funnel.bizlegal-ai.com (contract-risk report $97 one-time; Next.js + Supabase + PayPal — Phase RR-2 migration)
 │   └── blog/         blog.bizlegal-ai.com (curator-fed MDX content; CF Pages)
 ├── services/         non-Vercel runtimes
 │   ├── hetzner/      curator pipeline: scout/brain/publisher/bot (Python, systemd) [Z1.C-pending]
@@ -29,7 +30,7 @@ bizlegal-monorepo/
 │   ├── worker/       Cloudflare Worker — bizlegal-lead-intake (TS, wrangler) [Z1.C-pending]
 │   ├── telegram-hub/ CF Worker — @BizlegalHubBot customer FAQ (Z4.2)
 │   ├── gsc-bot/      CF Worker — weekly GSC sitemap re-submission across 8 surfaces
-│   └── funnel-mvp/   Fastify legal-risk intelligence funnel (Z1.E — imported from SKOOL-NATE)
+│   └── funnel-mvp/   [DEPRECATED 2026-05-24] Fastify version — superseded by apps/funnel-mvp/
 ├── packages/         shared TS + Python siblings
 │   ├── ops-log/      @bizlegal/ops-log — HMAC-signed event POST to hub /api/ops/log
 │   ├── firecrawl/    @bizlegal/firecrawl — scrape + Sonnet semantic-diff
