@@ -1,61 +1,51 @@
-# services/funnel-mvp — Fastify legal-risk intelligence funnel
+# services/funnel-mvp — OBSOLETE (functionally replaced by apps/docai/web/)
 
-> First read the monorepo root [`CLAUDE.md`](../../CLAUDE.md). This file documents only what's specific to funnel-mvp.
+> **Stop. The contract-risk funnel lives at [`apps/docai/web/`](../../apps/docai/web/).** This Fastify service never deployed and its function was absorbed into DocAI months ago. Do not deploy this. Do not extend it.
 
-Imported into the monorepo on 2026-05-01 from `C:/Users/Moshe Dor/Downloads/SKOOL-NATE/funnel-mvp/`. Pre-existing Fastify service that handles document upload + LLM extraction + payment gating + report delivery for the AI legal risk intelligence flow.
+## What this directory is
 
-## What it does
+The original Fastify service imported from `C:/Users/Moshe Dor/Downloads/SKOOL-NATE/funnel-mvp/` on 2026-05-01 (Z1.E). It implemented document upload → Ollama+Minimax extraction → LemonSqueezy/PayPal payment gate → pdfkit PDF, all backed by Firebase Firestore + Storage.
 
-End-to-end pipeline (per `src/services/job-runner.ts`):
+It never deployed because:
+1. LemonSqueezy credentials were never issued (4 rejected applications, last on 2026-05-20)
+2. Firebase service account JSON was never added to the canonical vault
+3. A deploy target (Hetzner / Fly / Railway / OCI) was never picked
 
-1. User uploads a contract / policy doc → `POST /upload` (Fastify route)
-2. PDF/DOCX parsed (`pdf-parse` + `mammoth`)
-3. Local Ollama extraction with cloud fallback to Minimax (`src/ai/`)
-4. Output validated against Zod schema (`src/ai/output-validator-service.ts`)
-5. Payment gate: free preview → paid full report. Two gateways:
-   - LemonSqueezy (`src/payments/lemon-service.ts`)
-   - PayPal (`src/payments/paypal-service.ts`)
-6. PDF report generated (`pdfkit`) + delivered via Notion link or direct download
-7. Webhook (`src/routes/webhook-routes.ts`) confirms payment + unlocks full report
-8. State persisted to Firestore (`src/firebase/firestore-funnel-repository.ts`)
+## What replaced it
 
-## Critical envs (must be in canonical vault)
+`apps/docai/web/` already implements the entire $97 contract-risk funnel and has been live on Vercel since 2026-05-23. See [`decisions/DOCAI_FUNNEL_COMPLETION_REPORT_2026-05-16.md`](../../decisions/DOCAI_FUNNEL_COMPLETION_REPORT_2026-05-16.md) for the completion report and [`decisions/FUNNEL-CANONICAL-IS-DOCAI-2026-05-24.md`](../../decisions/FUNNEL-CANONICAL-IS-DOCAI-2026-05-24.md) for the canonical-surface decision.
 
-Inherited from prior `funnelriskanalysis.env` (NOT imported — file scrubbed during Z1.E import). Names lifted into the canonical vault by Moses or the audit-vault hook.
+| Stage | DocAI route |
+|---|---|
+| Upload | `apps/docai/web/app/api/documents/upload/route.ts` |
+| Extract + scan | `apps/docai/web/app/api/documents/scan/route.ts` → returns `scan_id` |
+| Preview + paywall | `apps/docai/web/pages/report/index.tsx` (`/report?scan_id=…`) |
+| Crypto payment | `apps/docai/web/app/api/payment/checkout/route.ts` + `webhook` ✅ NOWPayments LIVE |
+| PayPal payment | `apps/docai/web/app/api/payment/paypal/checkout/route.ts` + `return` (gated off — 401 OAuth issue) |
+| Unlock | `contract_scans.paid=true` in Supabase |
 
-| Var | Required | Purpose |
-|---|---|---|
-| `MINIMAX_API_KEY` | yes | Cloud-fallback extraction |
-| `OLLAMA_URL` | yes | Local extraction (default `http://localhost:11434`) |
-| `LEMONSQUEEZY_API_KEY` + `LEMONSQUEEZY_STORE_ID` + `LEMONSQUEEZY_WEBHOOK_SECRET` | yes | Card-checkout gateway |
-| `PAYPAL_CLIENT_ID` + `PAYPAL_CLIENT_SECRET` (+ optional `PAYPAL_API_URL`) | yes | Card-checkout fallback |
-| Firebase service-account JSON | yes | Firestore + Storage adapter (loaded via `FIREBASE_SERVICE_ACCOUNT_JSON` env or file path) |
-| `NOTION_API_KEY` (if Notion delivery) | optional | Report-link delivery |
+Trust controls (anti-hallucination): `evidence_refs` required for red flags · unsupported claims moved to "Needs Human Review" · refund promise on cited issues without supporting evidence · "This is not legal advice" on every render.
 
-## Build + run
+## What NOT to do
 
-```bash
-pnpm -F @bizlegal/funnel-mvp install   # workspace install
-pnpm -F @bizlegal/funnel-mvp dev       # tsx watch src/server.ts
-pnpm -F @bizlegal/funnel-mvp build     # tsc -p tsconfig.json
-pnpm -F @bizlegal/funnel-mvp start     # node dist/server.js
-pnpm -F @bizlegal/funnel-mvp test      # vitest
-```
+- **Do not** deploy this Fastify service. The DocAI Vercel app already serves the live funnel at the production alias.
+- **Do not** build a third parallel Next.js funnel app. (One attempt on 2026-05-24 — commit `ae6d6fe`, `apps/funnel-mvp/` — was reverted same-day for exactly this reason.)
+- **Do not** add LemonSqueezy back. Stripe upstream rejected it 4×; DocAI uses NOWPayments (live) + PayPal (gated until OAuth fix).
+- **Do not** delete the source files here yet. The git history is useful reference for the original Ollama extraction prompt + Notion delivery pattern.
 
-Deploy target: TBD by Moses. Possible options:
-- Hetzner systemd service (alongside curator)
-- Fly.io / Railway / Render dedicated container
-- Docker on OCI (alongside deal-router)
+## Eventual cleanup path
 
-## Phase Z context — what NOT to change
+After Moses confirms DocAI sustained 30 days of real revenue:
 
-- **DO NOT modify `src/payments/lemon-service.ts` or `src/payments/paypal-service.ts`.** Per Z3 (`packages/payment/CLAUDE.md`), payment-gateway code stays as-is during Phase Z. After Z7 verifies green for 24h, a separate phase consolidates funnel-mvp's payments into the shared `@bizlegal/payment` package.
-- **DO NOT swap Ollama / Minimax clients to use OpenClaw.** Per `decisions/OPENCLAW_ROLE.md`, OpenClaw installs are local dev tools, NOT for production. funnel-mvp's direct Ollama call is the right pattern.
-- The Firebase adapter coexists with the hub's Supabase pattern — don't try to "unify". Funnel-mvp owns its job state in Firestore; hub owns ops_events in Supabase. Two storage layers, one each per service, intentional.
+1. Delete `services/funnel-mvp/` entirely
+2. Update root `CLAUDE.md` to remove the line
+3. No other refactoring needed (`pnpm-workspace.yaml` uses `services/*` glob; nothing to remove explicitly)
 
-## Outstanding integration tasks (post-Z7)
+Until then, leave this directory in place as a tombstone + reference.
 
-1. **ops_log integration:** funnel-mvp does NOT currently fire ops_events. Add `@bizlegal/ops-log` import + fire `report.generated` on successful report + `payment.intent` / `payment.confirmed` from webhook routes.
-2. **Payment consolidation:** migrate from `src/payments/lemon-service.ts` + `src/payments/paypal-service.ts` to `@bizlegal/payment.startCheckout()`. Keeps LS + PayPal but removes the per-service gateway client duplication.
-3. **HMAC inbound:** funnel-mvp's `/webhook` route should verify `x-bizlegal-signature` for any internal call from hub → funnel (currently webhooks are LS/PayPal-signature-only, which is correct for those gateways but not for inter-service hub→funnel calls).
-4. **Deploy target decision:** Moses picks Hetzner / Fly / OCI; document in `infrastructure/`.
+## Reference (read-only)
+
+- `src/ai/ollama-document-extraction-service.ts` — original extraction prompt
+- `src/payments/paypal-service.ts` — original PayPal client
+- `src/services/report-service.ts` — pdfkit PDF builder (DocAI returns evidence-cited HTML/JSON; PDF generation lives elsewhere)
+- `src/services/notion-service.ts` — Notion delivery (DocAI sends reports via email through Resend instead)
