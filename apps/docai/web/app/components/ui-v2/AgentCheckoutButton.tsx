@@ -19,6 +19,7 @@ interface AgentCheckoutButtonProps {
 }
 
 type State = 'idle' | 'collecting' | 'submitting' | 'redirecting' | 'error'
+const PAYPAL_CHECKOUT_ENABLED = process.env.NEXT_PUBLIC_PAYPAL_SCAN_ENABLED === 'true'
 
 /**
  * AgentCheckoutButton — collects email inline + posts to the existing
@@ -148,7 +149,7 @@ export function AgentCheckoutButton({
           outline: 'none',
         }}
       />
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: PAYPAL_CHECKOUT_ENABLED ? '1fr 1fr' : '1fr', gap: 6 }}>
         <button
           type="button"
           onClick={() => startCheckout('nowpayments')}
@@ -175,32 +176,34 @@ export function AgentCheckoutButton({
           {state === 'submitting' && gateway === 'nowpayments' ? <Loader2 size={12} className="spin" /> : <Bitcoin size={12} />}
           Pay crypto
         </button>
-        <button
-          type="button"
-          onClick={() => startCheckout('paypal')}
-          disabled={state === 'submitting' || state === 'redirecting' || !email}
-          style={{
-            padding: '10px 12px',
-            background: 'transparent',
-            color: accent,
-            border: `1px solid ${accent}80`,
-            borderRadius: 'var(--bl-radius-sm)',
-            fontFamily: 'var(--bl-font-mono)',
-            fontSize: 10,
-            fontWeight: 700,
-            letterSpacing: '0.08em',
-            textTransform: 'uppercase',
-            cursor: state === 'submitting' || state === 'redirecting' || !email ? 'not-allowed' : 'pointer',
-            opacity: state === 'submitting' || state === 'redirecting' || !email ? 0.6 : 1,
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 6,
-          }}
-        >
-          {state === 'submitting' && gateway === 'paypal' ? <Loader2 size={12} className="spin" /> : <CreditCard size={12} />}
-          Pay card
-        </button>
+        {PAYPAL_CHECKOUT_ENABLED ? (
+          <button
+            type="button"
+            onClick={() => startCheckout('paypal')}
+            disabled={state === 'submitting' || state === 'redirecting' || !email}
+            style={{
+              padding: '10px 12px',
+              background: 'transparent',
+              color: accent,
+              border: `1px solid ${accent}80`,
+              borderRadius: 'var(--bl-radius-sm)',
+              fontFamily: 'var(--bl-font-mono)',
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              cursor: state === 'submitting' || state === 'redirecting' || !email ? 'not-allowed' : 'pointer',
+              opacity: state === 'submitting' || state === 'redirecting' || !email ? 0.6 : 1,
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 6,
+            }}
+          >
+            {state === 'submitting' && gateway === 'paypal' ? <Loader2 size={12} className="spin" /> : <CreditCard size={12} />}
+            Pay card
+          </button>
+        ) : null}
       </div>
       {error && (
         <p

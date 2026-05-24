@@ -2,7 +2,7 @@
 
 **Read this file first.** Every Claude Code session, every subagent, every new agent (Codex, Cursor, manual hire) starts here.
 
-**Last consolidated:** 2026-05-01 (Phase Z — Stabilization Sprint)
+**Last consolidated:** 2026-05-24 (Phase RR-2 — Canonical funnel is DocAI)
 **Owner:** Moses (founder, BizLegal AI / DOR INNOVATIONS)
 **Mission:** compliance-as-a-service for B2B SaaS / fintech / DAOs / real-estate cross-border deals.
 
@@ -19,7 +19,7 @@ bizlegal-monorepo/
 │   ├── tracr/        tracr.bizlegal-ai.com (forensic wallet reports, $149-299)
 │   ├── brai/         brai.bizlegal-ai.com (regulatory risk preview + reports)
 │   ├── lexaudit/     lexaudit.bizlegal-ai.com (compliance health score, $99/mo monitor)
-│   ├── docai/        docai.bizlegal-ai.com (SQA + DPA Negotiator, $69-199/mo)
+│   ├── docai/        docai.bizlegal-ai.com — CANONICAL CONTRACT-RISK FUNNEL (SQA + DPA + $97 scan, live since 2026-05-23)
 │   ├── leadforge/    leadforge.bizlegal-ai.com (lead-gen surface)
 │   ├── forge/        forge.bizlegal-ai.com (BOI Kit $149, Passport $297, scan $97)
 │   └── blog/         blog.bizlegal-ai.com (curator-fed MDX content; CF Pages)
@@ -29,7 +29,7 @@ bizlegal-monorepo/
 │   ├── worker/       Cloudflare Worker — bizlegal-lead-intake (TS, wrangler) [Z1.C-pending]
 │   ├── telegram-hub/ CF Worker — @BizlegalHubBot customer FAQ (Z4.2)
 │   ├── gsc-bot/      CF Worker — weekly GSC sitemap re-submission across 8 surfaces
-│   └── funnel-mvp/   Fastify legal-risk intelligence funnel (Z1.E — imported from SKOOL-NATE)
+│   └── funnel-mvp/   TOMBSTONED 2026-05-24 — canonical is apps/docai/web/ (Fastify, never deployed; git-history reference only)
 ├── packages/         shared TS + Python siblings
 │   ├── ops-log/      @bizlegal/ops-log — HMAC-signed event POST to hub /api/ops/log
 │   ├── firecrawl/    @bizlegal/firecrawl — scrape + Sonnet semantic-diff
@@ -170,7 +170,9 @@ Every planning + ops doc lives in `decisions/`:
 - `decisions/WEEKLY_ROUTINES_AND_SEO.md` — full UTC schedule of crons / timers / event-driven services (every cron mapped Sun-Sat by surface) + programmatic SEO audit (3 gap pages currently, 6 P0/P1 improvements scoped at ~11h total work)
 - `decisions/PHASE_AA_NEXT_STEPS.md` — Post-Phase-Z roadmap: workspace map + daily runbook + 6-gate article quality system + Paddle/LS application criteria + 3-week SEO 95+ plan. Read this when planning the next sprint.
 - `decisions/LOW_RISK_DOCAI_FUNNEL.md` — consent-based DocAI acquisition wrapper: bot safety gate, classifier precision gate, Z7 definition, 14-day revenue review.
-- decisions/DOCAI_FUNNEL_COMPLETION_REPORT_2026-05-16.md — DocAI funnel completion, payment env blockers, and go-live test order.
+- `decisions/DOCAI_FUNNEL_COMPLETION_REPORT_2026-05-16.md` — DocAI funnel completion, payment env blockers, and go-live test order.
+- `decisions/FUNNEL-MVP-MIGRATION-2026-05-24.md` — [DELETED by revert 2026-05-24] see FUNNEL-CANONICAL-IS-DOCAI instead
+- `decisions/FUNNEL-CANONICAL-IS-DOCAI-2026-05-24.md` — Decision: single canonical contract-risk funnel is apps/docai/web/; funnel-mvp was a parallel duplicate, reverted same-day.
 - *current plan is at `~/.claude/plans/concurrent-bouncing-kitten.md` (lives outside the repo since plans are per-session ephemera)*
 
 When you write a new decision, add it here.

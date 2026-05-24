@@ -11,7 +11,6 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const router = useRouter()
-  const supabase = createClient()
 
   const input = {
     width: '100%', background: '#0f172a', border: '1px solid #1e293b',
@@ -20,6 +19,7 @@ export default function LoginPage() {
   }
 
   async function handleAuth() {
+    const supabase = createClient()
     setLoading(true)
     setMessage('')
     if (mode === 'login') {

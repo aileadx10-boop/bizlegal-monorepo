@@ -22,10 +22,13 @@
     "typecheck": "turbo run typecheck",
     "audit:vault": "node scripts/audit-vault.mjs",
     "audit:operating-book": "node scripts/audit-operating-book.mjs",
-    "prepare": "lefthook install || true"
+    "prepare": "lefthook install || true",
+    "check:docai": "node scripts/docai-launch-check.mjs",
+    "check:docai:db": "node scripts/docai-launch-check.mjs --db"
   },
   "devDependencies": {
     "lefthook": "^1.7.22",
+    "next": "14.2.35",
     "turbo": "^2.2.3",
     "typescript": "^5.7.2"
   }

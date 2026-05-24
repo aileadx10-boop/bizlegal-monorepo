@@ -6,24 +6,30 @@ export const maxDuration = 15
 /**
  * GET /api/ops/health?token=...
  *
- * Subdomain env-presence audit (V0.3). Token-gated. Returns env-name +
- * presence boolean per critical secret on DocAI. Names + presence only —
- * never values. Returns 404 on token mismatch.
- *
- * Aggregated by hub /api/ops/health into the /ops/health Fleet env matrix.
+ * Subdomain env-presence audit. Token-gated. Returns env-name + presence
+ * boolean per DocAI launch/payment secret. Names + presence only — never values.
+ * Returns 404 on token mismatch.
  */
 
-const ENV_KEYS: ReadonlyArray<{ name: string; critical: boolean; reason: string }> = [
-  { name: 'NEXT_PUBLIC_SUPABASE_URL',     critical: true,  reason: 'sqa_drafts + dpa_negotiations + firm KB reads' },
-  { name: 'SUPABASE_SERVICE_KEY',         critical: true,  reason: 'service-role inserts (drafts, KB items)' },
-  { name: 'BIZLEGAL_INBOUND_SECRET',      critical: true,  reason: 'inbound HMAC + outbound ops events' },
-  { name: 'OPS_DASHBOARD_TOKEN',          critical: true,  reason: '/api/ops/health page guard' },
-  { name: 'ANTHROPIC_API_KEY',            critical: true,  reason: 'SQA + DPA Sonnet drafter + KB-aware retrieval' },
-  { name: 'RESEND_API_KEY',               critical: true,  reason: 'subscription + draft delivery email' },
-  { name: 'NOWPAYMENTS_API_KEY',          critical: true,  reason: 'crypto checkout (Team $69/mo, Firm $199/mo)' },
-  { name: 'PAYPAL_CLIENT_ID',             critical: true,  reason: 'card checkout (subscription billing)' },
-  { name: 'PAYPAL_CLIENT_SECRET',         critical: true,  reason: 'card checkout' },
-  { name: 'OPENAI_EMBEDDING_KEY',         critical: false, reason: 'Firm-tier KB embeddings' },
+type EnvCheck = { name: string; aliases?: string[]; critical: boolean; reason: string }
+
+const ENV_KEYS: ReadonlyArray<EnvCheck> = [
+  { name: 'NEXT_PUBLIC_SITE_URL', critical: true, reason: 'canonical DocAI redirects + payment return URLs' },
+  { name: 'NEXT_PUBLIC_SUPABASE_URL', critical: true, reason: 'contract_scans + report unlock reads/writes' },
+  { name: 'NEXT_PUBLIC_SUPABASE_ANON_KEY', critical: true, reason: 'client-safe Supabase surfaces' },
+  { name: 'SUPABASE_SERVICE_ROLE_KEY', aliases: ['SUPABASE_SERVICE_KEY'], critical: true, reason: 'service-role inserts and payment unlock updates' },
+  { name: 'BIZLEGAL_INBOUND_SECRET', critical: true, reason: 'outbound ops event HMAC' },
+  { name: 'OPS_DASHBOARD_TOKEN', critical: true, reason: '/api/ops/health page guard' },
+  { name: 'ANTHROPIC_API_KEY', critical: true, reason: 'DocAI contract analysis and drafting' },
+  { name: 'RESEND_API_KEY', critical: false, reason: 'email delivery for paid/support flows' },
+  { name: 'NOWPAYMENTS_API_KEY', critical: true, reason: '$97 crypto checkout invoice creation' },
+  { name: 'NOWPAYMENTS_IPN_SECRET', critical: true, reason: 'NOWPayments webhook verification and paid unlock' },
+  { name: 'PAYPAL_CLIENT_ID', critical: true, reason: '$97 card/PayPal fallback checkout' },
+  { name: 'PAYPAL_CLIENT_SECRET', critical: true, reason: '$97 card/PayPal fallback capture' },
+  { name: 'PAYPAL_ENV', critical: true, reason: 'selects PayPal live vs sandbox API' },
+  { name: 'PAYPAL_WEBHOOK_ID', critical: false, reason: 'subscription webhook verification for non-scan DocAI tiers' },
+  { name: 'PAYONEER_DOCAI_LINK', critical: false, reason: 'manual hosted-card backup if PayPal is down' },
+  { name: 'OPENAI_EMBEDDING_KEY', critical: false, reason: 'Firm-tier KB embeddings' },
 ]
 
 function timingSafeEq(a: string, b: string): boolean {
@@ -33,6 +39,10 @@ function timingSafeEq(a: string, b: string): boolean {
     diff |= a.charCodeAt(i) ^ b.charCodeAt(i)
   }
   return diff === 0
+}
+
+function isSet(check: EnvCheck) {
+  return Boolean(process.env[check.name] || check.aliases?.some((alias) => Boolean(process.env[alias])))
 }
 
 export async function GET(req: NextRequest) {
@@ -45,7 +55,8 @@ export async function GET(req: NextRequest) {
 
   const envs = ENV_KEYS.map((k) => ({
     name: k.name,
-    set: Boolean(process.env[k.name]),
+    aliases: k.aliases ?? [],
+    set: isSet(k),
     critical: k.critical,
     reason: k.reason,
   }))

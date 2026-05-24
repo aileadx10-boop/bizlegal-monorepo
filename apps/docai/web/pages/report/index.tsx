@@ -26,12 +26,14 @@ export const getServerSideProps: GetServerSideProps<ReportPageProps> = async (co
   const scanId = typeof context.query.scan_id === "string" ? context.query.scan_id : "";
   const requestedEmail = typeof context.query.email === "string" ? context.query.email : "";
   const invoiceError = typeof context.query.invoice_error === "string" ? context.query.invoice_error : null;
+  const paypalError = typeof context.query.paypal_error === "string" ? context.query.paypal_error : null;
+  const paymentError = invoiceError || paypalError;
 
   if (!scanId) {
     return {
       props: {
         report: null,
-        invoiceError,
+        invoiceError: paymentError,
         message: "We could not find a scan ID for this report.",
         payoneerLink: process.env.PAYONEER_DOCAI_LINK || null,
       },
@@ -44,7 +46,7 @@ export const getServerSideProps: GetServerSideProps<ReportPageProps> = async (co
     return {
       props: {
         report: null,
-        invoiceError,
+        invoiceError: paymentError,
         message: "We could not load that scan.",
         payoneerLink: process.env.PAYONEER_DOCAI_LINK || null,
       },
@@ -63,7 +65,7 @@ export const getServerSideProps: GetServerSideProps<ReportPageProps> = async (co
         riskScore: report.scan.score ?? report.analysis.risk_score,
         analysis: report.analysis,
       },
-      invoiceError,
+      invoiceError: paymentError,
       message: null,
       payoneerLink: process.env.PAYONEER_DOCAI_LINK || null,
     },
@@ -103,3 +105,5 @@ export default function ReportPage({
     />
   );
 }
+
+

@@ -14,6 +14,7 @@ type ReportViewProps = {
 };
 
 const SEVERITY_ORDER: Record<string, number> = { critical: 0, high: 1, medium: 2, low: 3 };
+const PAYPAL_SCAN_ENABLED = process.env.NEXT_PUBLIC_PAYPAL_SCAN_ENABLED === "true";
 
 function normalizeScore(score: number) {
   return Math.max(0, Math.min(100, score));
@@ -87,6 +88,31 @@ function evidenceRefs(analysis: AnalyzeResult) {
   }
 
   return [...refs.values()];
+}
+
+function paymentErrorMessage(code?: string | null) {
+  switch (code) {
+    case "missing_input":
+      return "Add your delivery email and try checkout again.";
+    case "scan_not_found":
+      return "We could not match this checkout to a scan. Please upload the document again.";
+    case "invoice_creation_failed":
+    case "invoice_origin_invalid":
+      return PAYPAL_SCAN_ENABLED
+        ? "Crypto checkout is temporarily unavailable. Use the card / PayPal option instead."
+        : "Crypto checkout is temporarily unavailable. Contact support with this scan ID.";
+    case "checkout_failed":
+      return "Card checkout is temporarily unavailable. Try crypto checkout or contact support.";
+    case "capture_failed":
+    case "not_completed":
+      return "PayPal did not confirm payment. If you were charged, contact support with this scan ID.";
+    case "scan_mismatch":
+      return "Payment confirmation did not match this scan. Contact support with this scan ID.";
+    case "cancelled":
+      return "Checkout was cancelled. Your free preview is still saved.";
+    default:
+      return code ? "Checkout could not be completed. Try the fallback payment option or contact support." : null;
+  }
 }
 
 function EvidenceList({ issue }: { issue: RedFlag }) {
@@ -189,21 +215,23 @@ export function ReportView({
                   <input type="email" name="email" defaultValue={email} placeholder="you@company.com" required />
                 </label>
 
-                {invoiceError ? <p className="error-line">{invoiceError}</p> : null}
+                {paymentErrorMessage(invoiceError) ? <p className="error-line">{paymentErrorMessage(invoiceError)}</p> : null}
 
                 <div className="paywall-actions">
                   <button className="button-primary" type="submit">
                     Pay $97 Crypto
                   </button>
-                  <a
-                    className={`button-secondary ${payoneerLink ? "" : "button-disabled"}`}
-                    href={payoneerLink || "#"}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Pay $97 By Card
-                  </a>
+                  {PAYPAL_SCAN_ENABLED ? (
+                    <button className="button-secondary" type="submit" formAction="/api/payment/paypal/checkout">
+                      Pay $97 Card / PayPal
+                    </button>
+                  ) : null}
                 </div>
+                {payoneerLink ? (
+                  <p className="section-subtitle">
+                    Backup hosted card link: <a href={payoneerLink} target="_blank" rel="noreferrer">open Payoneer checkout</a>. Manual unlock may be required.
+                  </p>
+                ) : null}
               </form>
             </div>
           </>
@@ -291,3 +319,5 @@ export function ReportView({
     </div>
   );
 }
+
+

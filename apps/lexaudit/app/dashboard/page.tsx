@@ -13,9 +13,9 @@ export default function Dashboard() {
   const [form, setForm] = useState({ title: '', client_ref: '', ai_tool: '' })
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const supabase = createClient()
 
   useEffect(() => {
+    const supabase = createClient()
     supabase.auth.getUser().then(({ data }) => {
       if (!data.user) router.push('/login')
       else {
@@ -26,6 +26,7 @@ export default function Dashboard() {
   }, [])
 
   async function loadMatters(userId: string) {
+    const supabase = createClient()
     const { data } = await supabase
       .from('matters')
       .select('*')
@@ -37,6 +38,7 @@ export default function Dashboard() {
   async function createMatter() {
     if (!form.title || !user) return
     setLoading(true)
+    const supabase = createClient()
     const { data, error } = await supabase.from('matters').insert({
       title: form.title,
       client_ref: form.client_ref,
@@ -53,6 +55,7 @@ export default function Dashboard() {
   }
 
   async function signOut() {
+    const supabase = createClient()
     await supabase.auth.signOut()
     router.push('/')
   }

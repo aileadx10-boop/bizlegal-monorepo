@@ -33,3 +33,14 @@ The current unified app expects these existing BizLegal tables:
 
 - Do not use the old `SUPABASE_URL`, `SUPABASE_ANON_KEY`, or `SUPABASE_SERVICE_KEY` names in this repo.
 - Do not point the app at any Supabase project other than `ydghhcuuopqzgqcicubg`.
+
+## Launch Schema Guardrails
+
+Before production traffic, run pps/docai/web/SUPABASE_DOCAI_FUNNEL_SCHEMA.sql in the Supabase SQL editor if the launch checker reports missing DocAI tables or columns.
+
+Validate with:
+
+`ash
+node scripts/docai-launch-check.mjs --db
+` 
+
