@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import { logEventAsync } from '@/lib/ops/log'
 import { markNurturePaid } from '@/lib/nurture-state'
 import { claimWebhookEvent } from '@/lib/payments/webhook-idempotency'
+import { grantConductorTier } from '@/lib/payments/conductor-grant'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
@@ -246,6 +247,8 @@ export async function POST(req: NextRequest) {
           void markNurturePaid(orderRow.user_email).catch((err) =>
             console.warn('[paypal/webhook] mark-paid failed:', err),
           )
+          // Conductor entitlement write-through (no-op for other products).
+          await grantConductorTier(supabase, orderRow)
         }
       }
     }

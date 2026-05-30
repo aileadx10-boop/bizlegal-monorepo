@@ -2,7 +2,7 @@ import { getSession, getUserProfile } from '../../../lib/auth'
 
 export const dynamic = 'force-dynamic'
 
-const HUB_CHECKOUT = 'https://bizlegal-ai.com/checkout'
+const CONDUCTOR_START = 'https://bizlegal-ai.com/api/payments/conductor/start'
 
 interface PlanCard {
   tier: 'solo' | 'team' | 'firm'
@@ -44,35 +44,50 @@ const PLANS: PlanCard[] = [
   },
 ]
 
-function checkoutUrl(plan: PlanCard, email: string): string {
+// Routes through the dedicated hub endpoint, which derives the price
+// server-side from the product registry (the client can't tamper the amount)
+// and 303-redirects to the gateway checkout.
+function checkoutUrl(plan: PlanCard, email: string, gateway: 'crypto' | 'card'): string {
   const params = new URLSearchParams({
-    product: 'conductor',
     tier: plan.tier,
     interval: 'monthly',
-    amount: String(plan.amountCents),
-    name: `AI Conductor ${plan.name} (monthly)`,
+    gateway,
     email,
-    source: 'docai_dashboard_upgrade',
   })
-  return `${HUB_CHECKOUT}?${params.toString()}`
+  return `${CONDUCTOR_START}?${params.toString()}`
 }
 
-export default async function UpgradePage() {
+export default async function UpgradePage({
+  searchParams,
+}: {
+  searchParams: { error?: string }
+}) {
   const session = await getSession()
   if (!session) return null
 
   const profile = await getUserProfile(session.user.id)
   const currentTier = profile?.tier ?? 'solo'
+  const checkoutError = searchParams?.error
 
   return (
     <div style={{ maxWidth: 1080 }}>
       <h1 style={{ fontFamily: 'var(--bl-font-display, Fraunces, serif)', fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>
         Upgrade your plan
       </h1>
-      <p style={{ color: 'var(--bl-text-muted, #888)', marginBottom: '2rem', fontSize: '0.9rem' }}>
-        You are currently on the <strong style={{ textTransform: 'uppercase' }}>{currentTier}</strong> tier. Your tier updates automatically
-        the next time you sign in after payment clears. Pay by card or crypto on the next screen.
+      <p style={{ color: 'var(--bl-text-muted, #888)', marginBottom: '1.25rem', fontSize: '0.9rem' }}>
+        You are currently on the <strong style={{ textTransform: 'uppercase' }}>{currentTier}</strong> tier. Your tier upgrades the
+        moment payment confirms (and again at next sign-in as a fallback). Crypto activates instantly.
       </p>
+
+      {checkoutError && (
+        <div style={{
+          marginBottom: '1.5rem', padding: '0.75rem 1rem', borderRadius: 8,
+          background: '#fef2f2', border: '1px solid #fecaca', color: '#991b1b', fontSize: '0.85rem',
+        }}>
+          Checkout couldn&rsquo;t start ({checkoutError}). If you chose card and recurring billing isn&rsquo;t enabled yet,
+          try crypto or contact support.
+        </div>
+      )}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
         {PLANS.map((plan) => {
@@ -122,15 +137,27 @@ export default async function UpgradePage() {
                   Current plan
                 </span>
               ) : (
-                <a
-                  href={checkoutUrl(plan, session.user.email)}
-                  style={{
-                    textAlign: 'center', padding: '0.65rem', borderRadius: 8, fontSize: '0.9rem', fontWeight: 600,
-                    background: plan.accent, color: '#fff', textDecoration: 'none',
-                  }}
-                >
-                  Choose {plan.name}
-                </a>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  <a
+                    href={checkoutUrl(plan, session.user.email, 'crypto')}
+                    style={{
+                      textAlign: 'center', padding: '0.65rem', borderRadius: 8, fontSize: '0.9rem', fontWeight: 600,
+                      background: plan.accent, color: '#fff', textDecoration: 'none',
+                    }}
+                  >
+                    Pay with crypto
+                  </a>
+                  <a
+                    href={checkoutUrl(plan, session.user.email, 'card')}
+                    style={{
+                      textAlign: 'center', padding: '0.55rem', borderRadius: 8, fontSize: '0.85rem', fontWeight: 600,
+                      background: 'transparent', color: plan.accent, textDecoration: 'none',
+                      border: `1px solid ${plan.accent}`,
+                    }}
+                  >
+                    Pay with card
+                  </a>
+                </div>
               )}
             </div>
           )
