@@ -57,3 +57,6 @@ drafts/
 .dev.vars
 
 .vercel
+
+# Session scratch files (vault dumps, health probes — never commit)
+scripts/_*

@@ -17,6 +17,7 @@
     "@bizlegal/themes": "workspace:*",
     "@bizlegal/turnstile-verify": "workspace:*",
     "@bizlegal/turnstile-widget": "workspace:*",
+    "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.57.4",
     "lucide-react": "^0.468.0",
     "mammoth": "^1.10.0",

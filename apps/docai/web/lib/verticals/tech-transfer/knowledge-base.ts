@@ -1,0 +1,68 @@
+import type { KbItem } from '../ai-act/knowledge-base'
+
+export const TECH_TRANSFER_KB: KbItem[] = [
+  {
+    id: 'dgcl-102',
+    source_name: 'Delaware GCL § 102 — Contents of Certificate of Incorporation',
+    source_url: 'https://delcode.delaware.gov/title8/c001/sc01/index.html',
+    jurisdiction: 'US-DE',
+    topics: ['delaware', 'incorporation', 'certificate', 'c-corp'],
+    text: 'Certificate of Incorporation must include: (1) name of corporation, (2) address of registered office and agent in DE, (3) nature of business/purposes, (4) total authorized shares and par value, (5) name and address of incorporator. May include provisions eliminating director personal liability (§ 102(b)(7)), which is standard for VC-backed startups.',
+  },
+  {
+    id: 'dgcl-141',
+    source_name: 'Delaware GCL § 141 — Board of Directors',
+    source_url: 'https://delcode.delaware.gov/title8/c001/sc04/index.html',
+    jurisdiction: 'US-DE',
+    topics: ['delaware', 'board', 'governance', 'directors'],
+    text: 'Business managed by or under direction of the board. Board may delegate authority to committees. Number of directors fixed by bylaws or certificate. Directors elected at annual stockholder meeting. Board may act by unanimous written consent without meeting. Preferred stock directors typically appointed per certificate designations.',
+  },
+  {
+    id: 'dgcl-251',
+    source_name: 'Delaware GCL § 251 — Merger or Consolidation',
+    source_url: 'https://delcode.delaware.gov/title8/c001/sc09/index.html',
+    jurisdiction: 'US-DE',
+    topics: ['delaware', 'merger', 'flip', 'restructuring'],
+    text: 'Merger requires: (1) agreement of merger between the parties, (2) approval by board of each constituent corporation, (3) approval by stockholders of each corporation. Short-form merger (§ 253): parent owning 90%+ can merge subsidiary without subsidiary stockholder vote. Used in "Delaware flip" restructurings where Israeli company becomes subsidiary.',
+  },
+  {
+    id: 'israel-companies-law',
+    source_name: 'Israeli Companies Law 5759-1999 — Subsidiary Formation',
+    source_url: 'https://www.gov.il/en/departments/legalInfo/company_law',
+    jurisdiction: 'IL',
+    topics: ['israel', 'subsidiary', 'incorporation', 'r-and-d'],
+    text: 'Israeli private company (Ltd.) formation: (1) File articles of association with Registrar of Companies, (2) minimum 1 director (Israeli resident), (3) no minimum share capital, (4) company secretary not required for private. For wholly-owned subsidiary of foreign parent: standard share subscription agreement + board resolutions of parent authorizing investment. Registration fee ~₪2,600.',
+  },
+  {
+    id: 'ita-circular-8-2025',
+    source_name: 'ITA Circular 8/2025 — IP Transfer Tax Rate',
+    source_url: 'https://www.gov.il/en/departments/israel_tax_authority',
+    jurisdiction: 'IL',
+    topics: ['israel', 'tax', 'ip-transfer', 'special-preferred'],
+    text: 'Under Capital Investment Encouragement Law + ITA Circular 8/2025, a Special Preferred Technological Enterprise transferring core IP to foreign parent within 180 days of strategic investment or cross-border flip may elect 6% capital gains rate on the IP transfer (vs. standard 23% corporate rate). Requires advance ruling from ITA. Transfer pricing for ongoing R&D services: cost-plus model capped at 14%.',
+  },
+  {
+    id: 'oecd-transfer-pricing',
+    source_name: 'OECD Transfer Pricing Guidelines — Arm\'s Length Principle',
+    source_url: 'https://www.oecd.org/tax/transfer-pricing/',
+    jurisdiction: 'International',
+    topics: ['transfer-pricing', 'oecd', 'intercompany', 'arm-length'],
+    text: 'Chapter I: Arm\'s length principle requires that conditions between associated enterprises be comparable to those between independent enterprises. Chapter II: Methods — CUP (Comparable Uncontrolled Price), Resale Price, Cost Plus, TNMM, Profit Split. For R&D service arrangements: cost-plus is typical, with markup reflecting functions/assets/risks. Documentation requirements: Master File + Local File + CbCR.',
+  },
+  {
+    id: 'ip-assignment-standard',
+    source_name: 'Standard IP Assignment Agreement Terms',
+    source_url: 'https://www.wipo.int/patents/en/',
+    jurisdiction: 'International',
+    topics: ['ip-transfer', 'assignment', 'license', 'template'],
+    text: 'Standard IP assignment: (1) Definitions (IP, Know-How, Improvements), (2) Assignment clause (irrevocable, worldwide, all rights), (3) Consideration (lump sum or ongoing royalty), (4) Representations & warranties (ownership, no encumbrances, no infringement), (5) Further assurances (execute additional documents), (6) Governing law. For cross-border: specify registration in each jurisdiction.',
+  },
+  {
+    id: 'board-resolution-template',
+    source_name: 'Board Resolution — Cross-Border Transaction Authorization',
+    source_url: 'https://www.sec.gov/education/forms',
+    jurisdiction: 'US-DE',
+    topics: ['board-resolution', 'governance', 'authorization', 'template'],
+    text: 'Standard board resolution for cross-border transactions includes: WHEREAS clauses (recitals of business purpose), RESOLVED clauses authorizing: (1) execution of merger/acquisition agreement, (2) filing of certificate of merger, (3) appointment of officers to sign, (4) authorization of ancillary agreements (IP assignment, employment, intercompany license). Must reference specific consideration and material terms.',
+  },
+]

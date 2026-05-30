@@ -1,0 +1,6 @@
+{
+  "framework": "nextjs",
+  "installCommand": "corepack enable && corepack pnpm install --frozen-lockfile=false --ignore-scripts",
+  "buildCommand": "corepack pnpm turbo build --filter=@bizlegal/docai...",
+  "outputDirectory": "apps/docai/web/.next"
+}
