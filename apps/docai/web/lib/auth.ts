@@ -65,13 +65,45 @@ export async function getUserProfile(userId: string): Promise<ConductorProfile |
   return data as ConductorProfile
 }
 
+type TierName = 'solo' | 'team' | 'firm'
+
+const SEATS_MAX_BY_TIER: Record<TierName, number> = { solo: 1, team: 5, firm: 999 }
+
+/**
+ * Derive the entitled tier from the shared payment_orders ledger that the
+ * hub checkout writes (product='conductor'). This is a read-through grant:
+ * a paid Conductor subscription lifts the tier at next login. We deliberately
+ * do NOT mutate the hub payment webhook — entitlement is derived, not pushed,
+ * so the live payment flow stays untouched. Falls back to 'solo' on any error.
+ */
+async function resolveEntitledTier(email: string): Promise<TierName> {
+  try {
+    const admin = getSupabaseAdmin()
+    const { data } = await admin
+      .from('payment_orders')
+      .select('tier')
+      .ilike('user_email', email)
+      .eq('product', 'conductor')
+      .eq('status', 'active')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle<{ tier: string | null }>()
+    const tier = data?.tier
+    return tier === 'team' || tier === 'firm' ? tier : 'solo'
+  } catch {
+    return 'solo'
+  }
+}
+
 export async function ensureProfile(user: { id: string; email: string }): Promise<ConductorProfile> {
   const admin = getSupabaseAdmin()
+  const tier = await resolveEntitledTier(user.email)
+
   const { data, error } = await admin
     .from('conductor_profiles')
     .upsert(
-      { id: user.id, email: user.email, tier: 'solo', seats_used: 1, seats_max: 1 },
-      { onConflict: 'id', ignoreDuplicates: true }
+      { id: user.id, email: user.email, tier, seats_max: SEATS_MAX_BY_TIER[tier], updated_at: new Date().toISOString() },
+      { onConflict: 'id' }
     )
     .select('*')
     .single()

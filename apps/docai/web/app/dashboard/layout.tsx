@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { label: 'Tech-Transfer', href: '/dashboard/tech-transfer', icon: '🏢' },
   { label: 'Reports', href: '/dashboard/reports', icon: '📊' },
   { label: 'Review Queue', href: '/dashboard/review-queue', icon: '⚖️' },
+  { label: 'Upgrade', href: '/dashboard/upgrade', icon: '⭐' },
   { label: 'Settings', href: '/dashboard/settings', icon: '⚙️' },
 ]
 
