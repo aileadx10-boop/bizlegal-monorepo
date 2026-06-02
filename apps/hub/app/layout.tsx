@@ -51,7 +51,14 @@ export const metadata: Metadata = {
   },
   twitter: { card: 'summary_large_image' },
   robots: { index: true, follow: true },
-  alternates: { canonical: 'https://bizlegal-ai.com' },
+  // NOTE: do NOT set `alternates.canonical` here. In the App Router, a
+  // canonical on the ROOT layout is inherited verbatim by every child page
+  // that doesn't override it — which made /regulations/*, /tools/*,
+  // /calculators, /risk-engine, etc. all declare the HOMEPAGE as their
+  // canonical. Google then excluded them as "Alternate page with proper
+  // canonical tag" (GSC, 2026-06). Each page now self-references: pages with
+  // their own `alternates.canonical` keep it; the rest self-canonicalize to
+  // their crawled URL (correct). The homepage self-canonicalizes to apex.
   // W3.4 — Google Search Console site verification. Set
   // NEXT_PUBLIC_GSC_VERIFICATION in Vercel env (a 43-char token GSC
   // issues at "Add property → HTML tag" flow). Renders only when

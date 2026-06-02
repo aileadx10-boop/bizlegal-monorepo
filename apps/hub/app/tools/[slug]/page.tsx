@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 
 const PAGES = [
@@ -9,6 +10,17 @@ const PAGES = [
 
 export function generateStaticParams() {
   return PAGES.map(p => ({ slug: p.slug }))
+}
+
+// Self-referencing canonical so these are NOT excluded as "Alternate page
+// with proper canonical tag" (they previously inherited the root layout's
+// homepage canonical).
+export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
+  const tool = PAGES.find(p => p.slug === params.slug)
+  return {
+    title: tool ? `${tool.title} | BizLegal AI` : 'Tool | BizLegal AI',
+    alternates: { canonical: `/tools/${params.slug}` },
+  }
 }
 
 export default function ToolPage({ params }: { params: { slug: string } }) {
