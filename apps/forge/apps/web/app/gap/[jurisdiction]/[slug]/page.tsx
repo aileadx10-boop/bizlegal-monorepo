@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import AuthorBio from '@/components/AuthorBio'
+import MermaidDiagram from '@/components/MermaidDiagram'
 import { isFaqEntry, type GapPage } from '@/lib/types/gap-page'
 
 export const dynamic = 'force-dynamic'
@@ -200,7 +201,11 @@ export default async function GapPage({ params }: GapPageParams) {
     '@type': 'Article',
     headline: gap.title,
     description: gap.meta_description || gap.summary?.slice(0, 160),
-    image: 'https://forge.bizlegal-ai.com/og-default.png',
+    // Prefer the generated editorial hero (visual enrichment, migration
+    // 20260607). Falls back to the site OG default for rows without a
+    // generated image yet. A real, content-specific image strengthens the
+    // Article rich-snippet eligibility.
+    image: gap.hero_image_url || 'https://forge.bizlegal-ai.com/og-default.png',
     datePublished: publishedAt,
     dateModified: gap.updated_at
       ? new Date(gap.updated_at).toISOString()
@@ -311,12 +316,43 @@ export default async function GapPage({ params }: GapPageParams) {
           {gap.title}
         </h1>
 
+        {/* Hero image — editorial infographic generated per-page (visual
+            enrichment, migration 20260607). Eager + high priority since
+            it's above the fold; explicit dimensions reserve layout space
+            to avoid CLS. alt = title for accessibility + SEO. Only renders
+            once a row has a generated hero. */}
+        {gap.hero_image_url && (
+          <figure className="mb-12 -mx-2 md:mx-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={gap.hero_image_url}
+              alt={gap.title}
+              width={1536}
+              height={1024}
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+              className="w-full h-auto rounded-2xl border border-forge-border bg-forge-card/50"
+            />
+          </figure>
+        )}
+
         {/* Summary */}
         <div className="border-l-2 border-forge-accent pl-6 mb-12">
           <p className="text-lg text-forge-text-secondary leading-relaxed">
             {gap.summary}
           </p>
         </div>
+
+        {/* Compliance-flow diagram — Mermaid source generated per-page,
+            rendered client-side over a server-safe <pre> fallback. Only
+            renders when a row has a diagram. */}
+        {gap.diagram_mermaid && (
+          <MermaidDiagram
+            source={gap.diagram_mermaid}
+            caption={gap.diagram_caption}
+          />
+        )}
 
         {/* Value Props */}
         {valueProps.length > 0 && (
