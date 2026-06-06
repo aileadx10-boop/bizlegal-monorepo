@@ -15,7 +15,10 @@ import { gapPageUrl, type GapPageSitemapRow } from '@/lib/types/gap-page'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  // Accept both env names — forge Vercel has SUPABASE_SERVICE_KEY, not
+  // SUPABASE_SERVICE_ROLE_KEY, so gap pages were silently dropped from
+  // the sitemap (0 gap URLs) and never submitted to GSC.
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_KEY
   let gapPages: GapPageSitemapRow[] = []
   if (url && key) {
     try {
