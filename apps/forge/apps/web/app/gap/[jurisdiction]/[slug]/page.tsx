@@ -8,7 +8,11 @@ export const dynamic = 'force-dynamic'
 
 function getSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  // Forge Vercel is provisioned with SUPABASE_SERVICE_KEY (see forge
+  // CLAUDE.md), but this file read SUPABASE_SERVICE_ROLE_KEY — so the
+  // client was null and EVERY gap page 404'd (notFound) in prod. Accept
+  // both names, matching the hub webhook pattern.
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_KEY
   if (!url || !key) return null
   return createClient(url, key)
 }
