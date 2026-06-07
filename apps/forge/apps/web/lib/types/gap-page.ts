@@ -71,6 +71,14 @@ export type GapPage = {
   readonly tags?: ReadonlyArray<string> | null
   readonly faqs?: ReadonlyArray<GapFaqEntry> | null
 
+  // Visual enrichment columns (migration 20260607_gap_page_visuals.sql).
+  // hero_image_url → editorial hero PNG in the gap-visuals Storage bucket.
+  // diagram_mermaid → raw Mermaid source rendered client-side as a flow.
+  // diagram_caption → figure caption / accessible description.
+  readonly hero_image_url?: string | null
+  readonly diagram_mermaid?: string | null
+  readonly diagram_caption?: string | null
+
   // E-E-A-T fields surfaced by the page renderer's ATTRIBUTION block.
   readonly author_name?: string | null
   readonly author_role?: string | null
