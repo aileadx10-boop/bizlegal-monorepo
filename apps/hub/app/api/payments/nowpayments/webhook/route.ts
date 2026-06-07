@@ -4,6 +4,7 @@ import crypto from 'node:crypto'
 import { logEventAsync } from '@/lib/ops/log'
 import { markNurturePaid } from '@/lib/nurture-state'
 import { claimWebhookEvent } from '@/lib/payments/webhook-idempotency'
+import { grantConductorTier } from '@/lib/payments/conductor-grant'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
@@ -196,6 +197,8 @@ export async function POST(req: NextRequest) {
         void markNurturePaid(order.user_email).catch((err) =>
           console.warn('[nowpayments/webhook] mark-paid failed:', err),
         )
+        // Conductor entitlement write-through (no-op for other products).
+        await grantConductorTier(supabase, order)
       }
     }
 

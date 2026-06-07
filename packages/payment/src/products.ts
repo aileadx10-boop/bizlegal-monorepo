@@ -46,6 +46,15 @@ export type ProductId =
   | 'lexaudit_monitor_monthly'
   | 'lexaudit_boutique_monthly'
   | 'lexaudit_midmarket_monthly'
+  // AI Conductor
+  | 'conductor_solo_monthly'
+  | 'conductor_solo_yearly'
+  | 'conductor_team_monthly'
+  | 'conductor_team_yearly'
+  | 'conductor_firm_monthly'
+  | 'conductor_firm_yearly'
+  // CLE
+  | 'cle_standalone_monthly'
 
 export type BillingInterval = 'one-time' | 'monthly' | 'yearly'
 
@@ -53,7 +62,7 @@ export interface ProductSpec {
   readonly id: ProductId
   readonly name: string
   readonly description: string
-  readonly product_family: 'boi' | 'ai_act' | 'policy_refresh' | 'psp' | 'tracr' | 'brai' | 'forge' | 'docai' | 'lexaudit'
+  readonly product_family: 'boi' | 'ai_act' | 'policy_refresh' | 'psp' | 'tracr' | 'brai' | 'forge' | 'docai' | 'lexaudit' | 'conductor' | 'cle'
   readonly billing_interval: BillingInterval
   readonly amount_cents: number
   readonly currency: 'USD'
@@ -332,6 +341,94 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 59900,
     currency: 'USD',
     checkout_origin: 'https://lexaudit.bizlegal-ai.com/pricing',
+    webhook_path: '/api/payments/webhook',
+    cancellable: true,
+  },
+
+  // ───── AI Conductor ─────
+  conductor_solo_monthly: {
+    id: 'conductor_solo_monthly',
+    name: 'AI Conductor Solo (monthly)',
+    description: '10 scans/mo, 5 AI drafts, all 4 verticals, 1 CLE course.',
+    product_family: 'conductor',
+    billing_interval: 'monthly',
+    amount_cents: 9900,
+    currency: 'USD',
+    checkout_origin: 'https://docai.bizlegal-ai.com/pricing',
+    webhook_path: '/api/payments/webhook',
+    cancellable: true,
+  },
+  conductor_solo_yearly: {
+    id: 'conductor_solo_yearly',
+    name: 'AI Conductor Solo (yearly)',
+    description: '10 scans/mo, 5 AI drafts, all 4 verticals, 1 CLE course. Save 2 months.',
+    product_family: 'conductor',
+    billing_interval: 'yearly',
+    amount_cents: 99000,
+    currency: 'USD',
+    checkout_origin: 'https://docai.bizlegal-ai.com/pricing',
+    webhook_path: '/api/payments/webhook',
+    cancellable: true,
+  },
+  conductor_team_monthly: {
+    id: 'conductor_team_monthly',
+    name: 'AI Conductor Team (monthly, per seat)',
+    description: '50 scans/seat/mo, 50 drafts, attorney review queue, 3 CLE courses.',
+    product_family: 'conductor',
+    billing_interval: 'monthly',
+    amount_cents: 25000,
+    currency: 'USD',
+    checkout_origin: 'https://docai.bizlegal-ai.com/pricing',
+    webhook_path: '/api/payments/webhook',
+    cancellable: true,
+  },
+  conductor_team_yearly: {
+    id: 'conductor_team_yearly',
+    name: 'AI Conductor Team (yearly, per seat)',
+    description: '50 scans/seat/mo, 50 drafts, attorney review queue, 3 CLE courses. Save 2 months.',
+    product_family: 'conductor',
+    billing_interval: 'yearly',
+    amount_cents: 250000,
+    currency: 'USD',
+    checkout_origin: 'https://docai.bizlegal-ai.com/pricing',
+    webhook_path: '/api/payments/webhook',
+    cancellable: true,
+  },
+  conductor_firm_monthly: {
+    id: 'conductor_firm_monthly',
+    name: 'AI Conductor Firm (monthly)',
+    description: 'Unlimited scans + drafts, custom KB, API access, unlimited CLE, attorney review.',
+    product_family: 'conductor',
+    billing_interval: 'monthly',
+    amount_cents: 99900,
+    currency: 'USD',
+    checkout_origin: 'https://docai.bizlegal-ai.com/pricing',
+    webhook_path: '/api/payments/webhook',
+    cancellable: true,
+  },
+  conductor_firm_yearly: {
+    id: 'conductor_firm_yearly',
+    name: 'AI Conductor Firm (yearly)',
+    description: 'Unlimited everything. Save 2 months.',
+    product_family: 'conductor',
+    billing_interval: 'yearly',
+    amount_cents: 999000,
+    currency: 'USD',
+    checkout_origin: 'https://docai.bizlegal-ai.com/pricing',
+    webhook_path: '/api/payments/webhook',
+    cancellable: true,
+  },
+
+  // ───── CLE ─────
+  cle_standalone_monthly: {
+    id: 'cle_standalone_monthly',
+    name: 'CLE Subscription (monthly)',
+    description: 'Access to all CLE courses + certificates. No AI Conductor features.',
+    product_family: 'cle',
+    billing_interval: 'monthly',
+    amount_cents: 9900,
+    currency: 'USD',
+    checkout_origin: 'https://docai.bizlegal-ai.com/cle',
     webhook_path: '/api/payments/webhook',
     cancellable: true,
   },

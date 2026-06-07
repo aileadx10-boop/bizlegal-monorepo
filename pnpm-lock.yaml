@@ -11,6 +11,9 @@ importers:
       lefthook:
         specifier: ^1.7.22
         version: 1.13.6
+      next:
+        specifier: 14.2.35
+        version: 14.2.35(@opentelemetry/api@1.9.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       turbo:
         specifier: ^2.2.3
         version: 2.9.8
@@ -84,6 +87,9 @@ importers:
       '@bizlegal/turnstile-widget':
         specifier: workspace:*
         version: link:../../../packages/turnstile-widget
+      '@supabase/ssr':
+        specifier: ^0.5.2
+        version: 0.5.2(@supabase/supabase-js@2.105.1)
       '@supabase/supabase-js':
         specifier: ^2.57.4
         version: 2.105.1
@@ -94,8 +100,8 @@ importers:
         specifier: ^1.10.0
         version: 1.12.0
       next:
-        specifier: 14.2.29
-        version: 14.2.29(@opentelemetry/api@1.9.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 14.2.35
+        version: 14.2.35(@opentelemetry/api@1.9.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       pdf-parse:
         specifier: ^1.1.1
         version: 1.1.4
@@ -705,6 +711,18 @@ importers:
       vitest:
         specifier: ^3.0.8
         version: 3.2.4(@types/node@22.19.17)(jiti@1.21.7)(tsx@4.21.0)
+
+  services/gsc-bot:
+    devDependencies:
+      '@cloudflare/workers-types':
+        specifier: ^4.20260201.0
+        version: 4.20260503.1
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+      wrangler:
+        specifier: ^4.0.0
+        version: 4.87.0(@cloudflare/workers-types@4.20260503.1)
 
   services/telegram-hub:
     devDependencies:

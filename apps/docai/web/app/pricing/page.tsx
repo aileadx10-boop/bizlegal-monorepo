@@ -106,6 +106,43 @@ const FIRM_TIER: PricingTierData = {
   },
 };
 
+interface ConductorPlan {
+  tier: 'solo' | 'team' | 'firm'
+  name: string
+  price: string
+  blurb: string
+  features: string[]
+  badge?: string
+}
+
+// AI Conductor — the 4-vertical platform (Contract + AI Act + Immigration +
+// Tech-Transfer). Checkout is account-gated (tier binds to the signed-in
+// user), so these route through /dashboard/upgrade rather than a raw checkout.
+const CONDUCTOR_PLANS: ConductorPlan[] = [
+  {
+    tier: 'solo',
+    name: 'Conductor Solo',
+    price: '$99/mo',
+    blurb: 'Solo founders + small ops teams. All four compliance verticals in one workspace.',
+    features: ['10 scans / mo', '5 AI drafts', 'AI Act · Immigration · Tech-Transfer · Contract', '1 CLE course'],
+  },
+  {
+    tier: 'team',
+    name: 'Conductor Team',
+    price: '$250/mo · seat',
+    blurb: 'B2B SaaS + revops teams running compliance daily, with attorney review.',
+    features: ['50 scans / seat / mo', '50 AI drafts', 'Attorney review queue', '3 CLE courses'],
+    badge: 'Most popular',
+  },
+  {
+    tier: 'firm',
+    name: 'Conductor Firm',
+    price: '$999/mo',
+    blurb: 'Compliance teams + general counsel. Unlimited, with a custom knowledge base.',
+    features: ['Unlimited scans + drafts', 'Custom firm knowledge base', 'API access', 'Unlimited CLE + attorney review'],
+  },
+]
+
 export default function DocAIPricingPage() {
   return (
     <>
@@ -261,6 +298,86 @@ export default function DocAIPricingPage() {
             <PricingTierCard {...TEAM_TIER} defaultInterval="monthly" />
             <PricingTierCard {...FIRM_TIER} defaultInterval="yearly" />
           </div>
+        </div>
+      </section>
+
+      {/* AI Conductor — the 4-vertical platform */}
+      <section className="bl-section" style={{ borderTop: "1px solid var(--bl-divider)" }}>
+        <div className="bl-container">
+          <div style={{ textAlign: "center", maxWidth: 720, margin: "0 auto 2.5rem" }}>
+            <span className="bl-tag" style={{ marginBottom: "1rem" }}>New · AI Conductor</span>
+            <h2
+              style={{
+                fontFamily: "var(--bl-font-display)",
+                fontSize: "var(--bl-text-h2)",
+                fontWeight: 800,
+                letterSpacing: "-0.025em",
+                color: "var(--bl-text)",
+                margin: "1rem 0 0.75rem",
+              }}
+            >
+              One workspace for <span className="bl-grad-text">every compliance vertical.</span>
+            </h2>
+            <p style={{ fontSize: "var(--bl-text-body)", color: "var(--bl-text-muted)", lineHeight: 1.6, margin: 0 }}>
+              Contract risk, EU AI Act, immigration petitions, and tech-transfer — drafted, classified, and
+              tracked by AI with an attorney review queue. Pay by crypto (instant) or card.
+            </p>
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gap: "clamp(1rem, 0.75rem + 1vw, 1.5rem)",
+              alignItems: "stretch",
+            }}
+          >
+            {CONDUCTOR_PLANS.map((plan) => (
+              <div
+                key={plan.tier}
+                className="bl-card"
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1rem",
+                  ...(plan.badge ? { borderColor: "var(--bl-accent)", boxShadow: "0 0 0 1px var(--bl-accent)" } : {}),
+                }}
+              >
+                <div>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+                    <h3 style={{ fontFamily: "var(--bl-font-display)", fontSize: "1.5rem", fontWeight: 800, color: "var(--bl-text)", margin: 0 }}>
+                      {plan.name}
+                    </h3>
+                    {plan.badge && <span className="bl-tag" style={{ fontSize: "0.7rem" }}>{plan.badge}</span>}
+                  </div>
+                  <p style={{ fontFamily: "var(--bl-font-body)", fontSize: "var(--bl-text-small)", color: "var(--bl-text-muted)", margin: "0.5rem 0 0", lineHeight: 1.5 }}>
+                    {plan.blurb}
+                  </p>
+                </div>
+                <div style={{ fontFamily: "var(--bl-font-display)", fontSize: "clamp(1.75rem, 1.4rem + 1vw, 2.25rem)", fontWeight: 800, color: "var(--bl-text)", letterSpacing: "-0.02em", lineHeight: 1 }}>
+                  {plan.price}
+                </div>
+                <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 8, flex: 1 }}>
+                  {plan.features.map((f) => (
+                    <li key={f} style={{ display: "flex", alignItems: "flex-start", gap: 10, fontFamily: "var(--bl-font-body)", fontSize: "var(--bl-text-small)", color: "var(--bl-text)", lineHeight: 1.5 }}>
+                      <span aria-hidden="true" style={{ color: "var(--bl-accent)", fontWeight: 700, flexShrink: 0 }}>✓</span>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href="/dashboard/upgrade"
+                  className={plan.badge ? "bl-btn-primary" : "bl-btn-ghost"}
+                  style={{ width: "100%", justifyContent: "center" }}
+                >
+                  Start {plan.name.replace("Conductor ", "")} →
+                </Link>
+              </div>
+            ))}
+          </div>
+          <p style={{ textAlign: "center", fontSize: "var(--bl-text-small)", color: "var(--bl-text-muted)", marginTop: "1.5rem" }}>
+            Sign in to start — your plan binds to your account. Recurring card billing rolls out per region; crypto is available everywhere today.
+          </p>
         </div>
       </section>
 
