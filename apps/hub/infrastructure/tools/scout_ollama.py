@@ -1,15 +1,24 @@
 #!/usr/bin/env python3
 """
 scout_ollama.py — Daily Regulatory Scout
-Uses Ollama gemma2:9b to classify, score, and enrich raw regulatory items.
+Uses Ollama (Gemma 4 12B preferred) to classify, score, and enrich raw regulatory items.
 Called by n8n daily_pipeline.json after fetching source data.
 
 Usage:
   python3 scout_ollama.py --input gaps/raw-YYYY-MM-DD.json --output gaps/scored-YYYY-MM-DD.json
   echo '{"title":"...","text":"..."}' | python3 scout_ollama.py --stdin
+
+Model priority (set SCOUT_OLLAMA_MODEL to override):
+  gemma4:12b  → best local reasoning, 16GB RAM, Google DeepMind Gemma 4 (preferred)
+  gemma3:12b  → fallback if gemma4 unavailable
+  gemma2:9b   → legacy fallback
+  mistral-nemo → minimum viable (always installed on Hetzner box)
+
+To pull Gemma 4 on Hetzner: ollama pull gemma4:12b
 """
 
 import json
+import os
 import sys
 import argparse
 import logging
@@ -19,9 +28,14 @@ import requests
 import re
 
 # ── Config ──────────────────────────────────────────────────
-OLLAMA_URL = "http://localhost:11434/api/generate"
-MODEL = "gemma2:9b"
-TIMEOUT = 45
+# Ollama runs LOCALLY on the Hetzner curator box (not a laptop tunnel —
+# see decisions/OLLAMA_PLAN_CORRECTED_2026-06-07.md). The model MUST be one
+# that is actually `ollama pull`-ed on the box. Previously hardcoded to
+# "gemma2:9b" which was not installed → every classify failed silently and
+# zeroed the gap pipeline. Driven by env now; default to Gemma 4 12B.
+OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
+MODEL = os.environ.get("SCOUT_OLLAMA_MODEL", "gemma4:12b")
+TIMEOUT = 90  # Gemma 4 12B needs more inference time than mistral-nemo
 LOG_PATH = Path("/opt/bizlegal/logs/scout.log")
 
 logging.basicConfig(
