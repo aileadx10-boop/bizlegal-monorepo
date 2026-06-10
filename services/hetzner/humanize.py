@@ -85,9 +85,9 @@ HUMANIZE_PROMPT = textwrap.dedent("""
       - Em-dash density: max 3 per 1000 words.
 
     OUTPUT — STRICT JSON, single object, no code fences, no prose wrapper:
-    {
+    {{
       "mdx_body": "<the rewritten body, fully preserved structure>"
-    }
+    }}
 
     === SOURCE DRAFT ===
     Title: {title}
