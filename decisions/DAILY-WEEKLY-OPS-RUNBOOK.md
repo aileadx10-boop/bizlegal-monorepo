@@ -200,3 +200,12 @@ sudo journalctl -u curator-bot --since "1h ago" -n 50
 1. Check `/ops/health` — which services show red?
 2. Compare `BIZLEGAL_INBOUND_SECRET` on failing service vs vault
 3. Fix script: `scripts/fix-hetzner-inbound-secret.sh`
+
+### A subdomain returns HTTP 500 on every smoke check (failed Vercel build)
+Symptom: `ops_events` shows repeated `error` rows with `smoke_check: digest, status: 500` for one surface.
+1. Vercel → that project → Deployments. If latest production deploy state = **ERROR**, the build failed — every request hits the failed build.
+2. Read the build log. The classic monorepo cause: `[ERR_PNPM_NO_PKG_MANIFEST] No package.json found in /` — the install command's `cd ../..` overshot to `/` because **Root Directory is unset**.
+3. Fix: Vercel → project → Settings → Build & Deployment → **Root Directory = `apps/<surface>`** (e.g. `apps/leadforge`). This makes the `cd ../..` in `vercel.json` land on the monorepo root. Save → Redeploy.
+4. Verify: `curl -s -o /dev/null -w "%{http_code}" https://<surface>.bizlegal-ai.com/api/digest` → 200.
+
+> Known instance (2026-06-11): **leadforge** had Root Directory unset since the Z1 migration; its only prod deploy was state=ERROR, returning 500 since 2026-05-25. Every other app already has Root Directory set.
