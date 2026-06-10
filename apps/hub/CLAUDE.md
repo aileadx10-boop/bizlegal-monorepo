@@ -10,6 +10,7 @@ The brain. Hosts /agents, /ops, /api/pay/start, every cron, the realestate-intak
 - `/agents` — fleet metadata + 12 agent cards
 - `/agents/{boi-tracker, ai-act, policy-refresh, …}` — per-agent landings
 - `/ops?t=$OPS_DASHBOARD_TOKEN` — live dashboard
+- `/ops/snapshot?t=$OPS_DASHBOARD_TOKEN` — flat server-rendered business snapshot (real revenue / real customers / human-vs-machine traffic / errors). The "am I blind?" page.
 - `/ops/health?t=$OPS_DASHBOARD_TOKEN` — chain audit (HMAC self-loop + subdomain probes + env matrix)
 - `/api/ops/log` — HMAC-verified ingress for events from Worker/Curator/OCI/subdomains
 - `/api/ops/feed` — events tape, summary aggregates, referrals pipeline
