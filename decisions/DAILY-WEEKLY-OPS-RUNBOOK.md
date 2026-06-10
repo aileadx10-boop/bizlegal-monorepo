@@ -31,7 +31,7 @@ https://bizlegal-ai.com/ops/health?t=$OPS_DASHBOARD_TOKEN
 SELECT status, count(*) FROM payment_orders GROUP BY status;
 ```
 - Any new `active` rows → fire thank-you-agent prompt manually (until chain/thank-you cron is live)
-- Any `failed` rows from today → Stripe/NOWPayments dashboard to investigate
+- Any `failed` rows from today → NOWPayments/PayPal dashboard to investigate
 
 ### E — Telegram bot inbox (3 min)
 - @BizlegalHubBot: respond to any unhandled customer questions
@@ -161,11 +161,11 @@ sudo systemctl status curator-bot curator-publisher curator-scout-timer
 sudo journalctl -u curator-bot --since "1h ago" -n 50
 ```
 
-### X — On Stripe webhook failure
-1. Check `ops_events` for `stripe/webhook` errors
-2. Verify `STRIPE_WEBHOOK_SECRET` in Vercel matches Stripe dashboard endpoint
-3. Check `processed_webhook_events` for duplicate claims
-4. Re-trigger from Stripe dashboard if needed
+### X — On PayPal 401 / payment auth failure
+1. SSH into Vercel docai project env → confirm `PAYPAL_ENV=live`, `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET` are all set and match live PayPal app credentials
+2. If sandbox keys are set but `PAYPAL_ENV=live`: swap to live credentials in Vercel, redeploy
+3. Check `processed_webhook_events` for duplicate claims on `paypal` gateway
+4. If PayPal stays broken: ensure `PAYONEER_DOCAI_LINK` is set in Vercel docai env so the Payoneer backup link shows on the report page
 
 ---
 
@@ -175,7 +175,7 @@ sudo journalctl -u curator-bot --since "1h ago" -n 50
 |------|-----------|-------|
 | Week 1 | First active payment | `SELECT * FROM payment_orders WHERE status='active' LIMIT 1` |
 | Month 1 | 7+ paying subs | MRR review query above |
-| Month 2 | Stripe subscriptions live | `STRIPE_TEAM_PRICE_ID` mapped + 1 active subscription order |
+| Month 2 | PayPal subscriptions live | PayPal Plan IDs configured + 1 active subscription order |
 | Month 2 | LemonSqueezy applied | All 4 Lighthouse gates + 5 articles + /ops/health |
 | Month 3 | 1 OCI close | `oci_leads` with status='closed' and finder_fee_paid=true |
 | Month 6 | $30K MRR | Monthly MRR query ≥ 30000 |
