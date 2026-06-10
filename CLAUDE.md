@@ -173,6 +173,8 @@ Every planning + ops doc lives in `decisions/`:
 - `decisions/DOCAI_FUNNEL_COMPLETION_REPORT_2026-05-16.md` — DocAI funnel completion, payment env blockers, and go-live test order.
 - `decisions/FUNNEL-MVP-MIGRATION-2026-05-24.md` — [DELETED by revert 2026-05-24] see FUNNEL-CANONICAL-IS-DOCAI instead
 - `decisions/FUNNEL-CANONICAL-IS-DOCAI-2026-05-24.md` — Decision: single canonical contract-risk funnel is apps/docai/web/; funnel-mvp was a parallel duplicate, reverted same-day.
+- `decisions/DAILY-WEEKLY-OPS-RUNBOOK.md` — A–Z daily/weekly ops actions, phase gates, emergency runbooks (incl. failed-Vercel-build / HTTP 500 fix).
+- `decisions/PASSIVE-INCOME-5K-PLAYBOOK.md` — Blog/forge/hub monetization toward $5K/mo: honest traffic math, what shipped (bizlegal-ea PR #11 — AdSense/schema/CTA/IndexNow), Moses action list (GSC + AdSense + CF env), growth levers. Note: blog.bizlegal-ai.com is a separate CF-Pages engine (209 posts, 5/wk) in the bizlegal-ea repo, not this monorepo.
 - *current plan is at `~/.claude/plans/concurrent-bouncing-kitten.md` (lives outside the repo since plans are per-session ephemera)*
 
 When you write a new decision, add it here.
