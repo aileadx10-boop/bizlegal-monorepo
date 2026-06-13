@@ -3,6 +3,7 @@ import "./globals.css";
 import { ThemeProvider, themeFOUCScript, SiteShell } from '@bizlegal/themes';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://leadforge.bizlegal-ai.com'),
   title: {
     default: "LeadForge",
     template: "%s | LeadForge",
