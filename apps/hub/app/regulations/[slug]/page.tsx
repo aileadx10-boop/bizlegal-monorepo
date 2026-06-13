@@ -303,7 +303,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${hub.title} 2026 | BizLegal AI`,
     description: `Comprehensive ${hub.title} guide for 2026 — penalties, enforcement history, compliance checklist, and risk assessment tools. ${hub.tag}.`,
-    alternates: { canonical: `/regulations/${params.slug}` },
+    // Absolute self-referencing canonical. A relative path here resolved
+    // against metadataBase only fragilely and produced the GSC "duplicate
+    // without user-selected canonical" cluster — make it explicit.
+    alternates: { canonical: `https://bizlegal-ai.com/regulations/${params.slug}` },
     openGraph: {
       title: `${hub.title} 2026`,
       images: [{ url: `/api/og?title=${encodeURIComponent(hub.title)}&tag=${encodeURIComponent(hub.tag)}`, width: 1200, height: 630 }],
