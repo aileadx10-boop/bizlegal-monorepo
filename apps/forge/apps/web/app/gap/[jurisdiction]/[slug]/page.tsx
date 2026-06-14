@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import AuthorBio from '@/components/AuthorBio'
 import MermaidDiagram from '@/components/MermaidDiagram'
-import { isFaqEntry, type GapPage } from '@/lib/types/gap-page'
+import { isFaqEntry, gapPageUrl, type GapPage } from '@/lib/types/gap-page'
 
 export const dynamic = 'force-dynamic'
 
@@ -164,13 +164,18 @@ async function getGapPage(slug: string): Promise<GapPage | null> {
 export async function generateMetadata({ params }: GapPageParams): Promise<Metadata> {
   const gap = await getGapPage(params.slug)
   if (!gap) return { title: 'Not Found' }
+  // Absolute self-referencing canonical (was missing entirely → Google
+  // clustered these as "duplicate without user-selected canonical").
+  // gapPageUrl normalizes the jurisdiction segment so canonical and OG agree.
+  const canonical = gapPageUrl(gap)
   return {
     title: gap.title,
     description: gap.meta_description || gap.summary?.slice(0, 160),
+    alternates: { canonical },
     openGraph: {
       title: gap.title,
       description: gap.meta_description || gap.summary?.slice(0, 160),
-      url: `https://forge.bizlegal-ai.com/gap/${gap.jurisdiction}/${gap.slug}`,
+      url: canonical,
     },
   }
 }

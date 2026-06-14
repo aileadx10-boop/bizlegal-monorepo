@@ -8,6 +8,7 @@ import { ThemeProvider, themeFOUCScript, SiteShell, AppRouteOnly } from '@bizleg
 import { LEXAUDIT_CONTENT } from './landing-content'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://lexaudit.bizlegal-ai.com'),
   title: 'LexAudit — Compliance Health Scores for Lawyers',
   description: 'Regulatory intelligence — not legal advice. LexAudit turns your AI-assisted matter workflow into a versioned, source-cited Compliance Health Score reviewed by a named analyst.',
   keywords: 'compliance health score, regulatory intelligence, AI audit trail, lawyer governance, attestation',

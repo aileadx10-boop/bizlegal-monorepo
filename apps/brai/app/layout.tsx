@@ -6,6 +6,7 @@ import { ThemeProvider, themeFOUCScript, SiteShell } from '@bizlegal/themes'
 import { BRAI_CONTENT } from './landing-content'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://brai.bizlegal-ai.com'),
   title: "BRAI — Blockchain Regulatory Intelligence",
   description:
     "BRAI produces compliance posture reports for digital-asset ventures. Human-reviewed. Not legal advice.",

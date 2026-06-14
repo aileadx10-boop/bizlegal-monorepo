@@ -32,6 +32,7 @@ const LANDING_FOUC = themeFOUCScript({
 
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://docai.bizlegal-ai.com'),
   title: "DocAI | Institutional Legal Documents",
   description:
     "Unified DocAI by BizLegal AI: generate attorney-grade contracts, review agreements, and unlock gated risk reports in one Next.js app.",

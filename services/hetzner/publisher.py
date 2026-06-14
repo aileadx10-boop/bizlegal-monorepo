@@ -41,6 +41,9 @@ from pydantic import BaseModel
 from supabase import create_client, Client  # type: ignore
 
 from ops_log import log_event
+from quality_gate import validate
+from humanize import humanize as humanize_draft, HumanizeError
+from factual_review import review
 
 load_dotenv()
 
@@ -263,6 +266,46 @@ def deploy(req: SlugReq) -> dict:
 
     mdx = mdx_path.read_text(encoding="utf-8")
     sources = re.findall(r"https?://[^\s)\"']+", mdx)
+
+    # ── Quality gate (structural + banned phrases) ───────────────
+    draft_dict: dict = {"slug": slug, "mdx_body": mdx, "sources": sources, "faqs": []}
+    gate_errors = validate(draft_dict)
+    if gate_errors:
+        sb().table("daily_gaps").update({
+            "status": "rejected_quality",
+            "actioned_at": datetime.now(timezone.utc).isoformat(),
+        }).eq("draft_slug", slug).execute()
+        log_event(
+            "cron.completed",
+            ref_id=f"curator/publisher/{slug}",
+            status="failed",
+            metadata={"step": "quality_gate", "errors": gate_errors[:5], "slug": slug},
+        )
+        return {"ok": False, "quality_errors": gate_errors}
+
+    # ── Humanize pass (strip AI-tells) ───────────────────────────
+    try:
+        humanized = humanize_draft(draft_dict)
+        mdx = humanized.get("mdx_body", mdx)
+        draft_dict = {**draft_dict, "mdx_body": mdx}
+    except HumanizeError as exc:
+        print(f"[publisher] humanize failed (proceeding with original): {exc}")
+
+    # ── Factual review (claims vs primary sources) ────────────────
+    review_result = review(draft_dict)
+    if not review_result.all_claims_cited:
+        sb().table("daily_gaps").update({
+            "status": "drafted",
+            "verification_failed": True,
+        }).eq("draft_slug", slug).execute()
+        log_event(
+            "cron.completed",
+            ref_id=f"curator/publisher/{slug}",
+            status="failed",
+            metadata={"step": "factual_review", "issues": review_result.issues[:5], "slug": slug},
+        )
+        return {"ok": False, "factual_issues": review_result.issues}
+
     ok, unverified = verify_numerics(mdx, sources)
     if not ok:
         sb().table("daily_gaps").update({

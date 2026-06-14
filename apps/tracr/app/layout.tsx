@@ -13,6 +13,7 @@ const LANDING_FOUC = themeFOUCScript({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://tracr.bizlegal-ai.com'),
   title: 'TRACR — AI Regulatory Risk Scanner',
   description: 'AI-powered compliance scan across EU (MiCA), GDPR, SEC, VARA frameworks. Know your regulatory exposure in 60 seconds. Powered by BizLegal AI.',
   keywords: 'blockchain forensics, regulatory compliance, crypto AML, risk scanner, GDPR, MiCA',

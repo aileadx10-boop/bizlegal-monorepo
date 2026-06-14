@@ -65,12 +65,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/newsletter`, lastModified: now, changeFrequency: 'weekly', priority: 0.6 },
 
     // Tools (hub-owned, deterministic calculators)
+    // Slugs mirror the PAGES array in app/tools/[slug]/page.tsx.
     { url: `${BASE}/tools`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE}/tools/gdpr-fine-estimator`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${BASE}/tools/token-classifier`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${BASE}/tools/gdpr-breach-timer`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE}/tools/sanction-screener`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${BASE}/tools/mica-asset-classifier`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${BASE}/tools/vara-licence-finder`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE}/tools/contract-fixer`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
 
     // Regulations (hub-owned reference pages)
     { url: `${BASE}/regulations`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },

@@ -17,6 +17,7 @@ const LANDING_FOUC = themeFOUCScript({
 
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://forge.bizlegal-ai.com'),
   title: {
     default: 'Forge Compliance Engine — Continuous Regulatory Intelligence',
     template: '%s | Forge Compliance',
