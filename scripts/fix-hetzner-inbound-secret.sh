@@ -37,32 +37,33 @@ fi
 cp "$ENV_FILE" "${ENV_FILE}.bak.$(date +%Y%m%d%H%M%S)"
 echo "Backed up to ${ENV_FILE}.bak.*"
 
-# ── Update secret ───────────────────────────────────────────────────────────
+# ── Update HMAC secret ───────────────────────────────────────────────────────
 if grep -q "^BIZLEGAL_INBOUND_SECRET=" "$ENV_FILE"; then
   sed -i "s|^BIZLEGAL_INBOUND_SECRET=.*|BIZLEGAL_INBOUND_SECRET=${CANONICAL_SECRET}|" "$ENV_FILE"
-  echo "Updated BIZLEGAL_INBOUND_SECRET in $ENV_FILE"
+  echo "Updated BIZLEGAL_INBOUND_SECRET"
 else
   echo "BIZLEGAL_INBOUND_SECRET=${CANONICAL_SECRET}" >> "$ENV_FILE"
-  echo "Added BIZLEGAL_INBOUND_SECRET to $ENV_FILE"
+  echo "Added BIZLEGAL_INBOUND_SECRET"
 fi
 
-# ── Update Ollama model ──────────────────────────────────────────────────────
-if grep -q "^SCOUT_OLLAMA_MODEL=" "$ENV_FILE"; then
-  sed -i "s|^SCOUT_OLLAMA_MODEL=.*|SCOUT_OLLAMA_MODEL=gemma4:12b|" "$ENV_FILE"
-else
-  echo "SCOUT_OLLAMA_MODEL=gemma4:12b" >> "$ENV_FILE"
-fi
-echo "Set SCOUT_OLLAMA_MODEL=gemma4:12b"
-
-# ── Pull Gemma 4 12B ────────────────────────────────────────────────────────
-echo "Pulling Gemma 4 12B (this may take 5-10 minutes, ~8GB download)..."
-ollama pull gemma4:12b 2>&1 | tail -5 || {
-  echo "gemma4:12b not available yet, trying gemma3:12b..."
-  ollama pull gemma3:12b 2>&1 | tail -5 || {
-    echo "gemma3:12b not available, keeping mistral-nemo fallback"
-    sed -i "s|^SCOUT_OLLAMA_MODEL=gemma4:12b|SCOUT_OLLAMA_MODEL=mistral-nemo|" "$ENV_FILE"
-  }
+# ── Fast-path Ollama model: set to mistral-nemo (confirmed installed) ────────
+# Actual env vars read by scout.py: OLLAMA_FILTER_MODEL + OLLAMA_RANK_MODEL
+# (NOT the old SCOUT_OLLAMA_MODEL which no longer exists)
+set_ollama_var() {
+  local KEY="$1" VAL="$2"
+  if grep -q "^${KEY}=" "$ENV_FILE"; then
+    sed -i "s|^${KEY}=.*|${KEY}=${VAL}|" "$ENV_FILE"
+  else
+    echo "${KEY}=${VAL}" >> "$ENV_FILE"
+  fi
+  echo "Set ${KEY}=${VAL}"
 }
+
+# Remove stale SCOUT_OLLAMA_MODEL if it exists
+sed -i '/^SCOUT_OLLAMA_MODEL=/d' "$ENV_FILE" 2>/dev/null || true
+
+set_ollama_var OLLAMA_FILTER_MODEL "mistral-nemo"
+set_ollama_var OLLAMA_RANK_MODEL "mistral-nemo"
 
 # ── Git pull monorepo ────────────────────────────────────────────────────────
 MONOREPO_PATHS=("/opt/bizlegal-monorepo" "/opt/bizlegal")
@@ -74,18 +75,29 @@ for p in "${MONOREPO_PATHS[@]}"; do
   fi
 done
 
-# ── Restart services ─────────────────────────────────────────────────────────
+# ── Restart services (brain + publisher + bot) ────────────────────────────────
 echo "Restarting curator services..."
-systemctl restart curator-bot 2>/dev/null && echo "curator-bot restarted" || echo "curator-bot restart failed (check name)"
-systemctl restart curator-publisher 2>/dev/null && echo "curator-publisher restarted" || echo "curator-publisher restart failed"
+for svc in curator-brain curator-publisher curator-bot; do
+  systemctl restart "$svc" 2>/dev/null \
+    && echo "$svc restarted" \
+    || echo "$svc restart failed (check: systemctl status $svc)"
+done
 
+# ── Verification ─────────────────────────────────────────────────────────────
 echo ""
 echo "=== Verification ==="
 echo "Ollama models:"
 ollama list
 echo ""
-echo "Curator status:"
-systemctl is-active curator-bot curator-publisher 2>/dev/null
+echo "Curator service status:"
+for svc in curator-brain curator-publisher curator-bot; do
+  printf "%s: %s\n" "$svc" "$(systemctl is-active $svc 2>/dev/null || echo 'not found')"
+done
 echo ""
 echo "DONE. Test HMAC chain with:"
 echo "  curl -X POST https://bizlegal-ai.com/api/ops/log -H 'Content-Type: application/json' ..."
+echo ""
+echo "-- Optional: pull Gemma 4 12B in background for future use (8GB, ~10 min) --"
+echo "  nohup ollama pull gemma4:12b &> /tmp/ollama-pull.log &"
+echo "  Then update: OLLAMA_FILTER_MODEL=gemma4:12b + OLLAMA_RANK_MODEL=gemma4:12b"
+echo "  Then: systemctl restart curator-brain curator-publisher curator-bot"
