@@ -132,7 +132,7 @@ export async function GET(req: NextRequest) {
     const totalScans = scans.length
     const paidScans = scans.filter((s) => s.paid).length
     const errorCount24h = errors24h.length
-    const errorSources = [...new Set(errors24h.map((e) => e.source))].join(', ')
+    const errorSources = Array.from(new Set(errors24h.map((e) => e.source))).join(', ')
 
     const curatorAvgPicked =
       curatorDays.length > 0
