@@ -47,7 +47,7 @@ from typing import Iterable
 
 # ── Tunables (mirror prompt rules) ────────────────────────────────
 MIN_WORDS = 800
-MAX_WORDS = 1500
+MAX_WORDS = 1700
 MIN_H2 = 3
 MIN_CITATIONS = 3
 MIN_FAQ_ENTRIES = 3

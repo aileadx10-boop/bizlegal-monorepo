@@ -211,23 +211,39 @@ function digestCorsHeaders(): Record<string, string> {
   };
 }
 
+// Rotate smoke test inputs so the daily snapshot isn't always UAE vs SG stablecoin.
+// Each entry is [code_a, code_b, activity] — varied by day-of-week (0=Sun, 6=Sat).
+const SMOKE_ROTATION: readonly [string, string, string][] = [
+  ["UAE", "SG", "stablecoin issuance under MiCA and MAS DPT frameworks"],
+  ["EU", "UK", "GDPR vs UK GDPR cross-border data transfer compliance"],
+  ["US", "CA", "SEC broker-dealer registration vs OSC exempt-market dealer requirements"],
+  ["SG", "HK", "digital payment token service licensing (MAS DPT vs HKMA SVF)"],
+  ["EU", "UAE", "AI Act Article 6 high-risk classification vs UAE AI governance framework"],
+  ["US", "EU", "FinCEN BOI / CTA-2024 vs EU UBO register enforcement posture"],
+  ["CH", "SG", "DeFi protocol licensing: FINMA vs MAS sandbox pathway comparison"],
+];
+
 async function runSmokeTest(env: Env, event: ScheduledEvent): Promise<void> {
   const tag = `smoketest-${new Date(event.scheduledTime).toISOString().slice(0, 10)}`;
   console.log(`[cron] running ${tag}`);
   try {
+    const dow = new Date(event.scheduledTime).getUTCDay(); // 0-6
+    // Non-null: modulo always produces a valid index.
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const [codeA, codeB, activity] = SMOKE_ROTATION[dow % SMOKE_ROTATION.length]!;
     const submission = {
       full_name: "Daily Smoke Test",
       email: "smoketest@bizlegal-ai.com",
       company: null,
-      jurisdiction_codes: ["UAE", "SG"] as [string, string],
-      activity:
-        "Daily automated smoke test of the BizLegal-AI snapshot pipeline. Generates a synthetic stablecoin issuance comparison.",
+      jurisdiction_codes: [codeA, codeB] as [string, string],
+      activity,
       urgency_window: null
     };
     const result = await runSnapshotPipeline(env, submission, new Headers(), {
       snapshotId: crypto.randomUUID(),
       requestedAt: new Date(event.scheduledTime).toISOString(),
-      deliverEmail: false
+      deliverEmail: false,
+      skipTelegramNotify: true   // smoke tests don't need daily Telegram spam
     });
     if (!result.ok) {
       await alertSmokeTestFailure(env, tag, result.error ?? "unknown");

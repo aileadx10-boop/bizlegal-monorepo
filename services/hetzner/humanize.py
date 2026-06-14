@@ -116,12 +116,17 @@ def humanize(draft: dict) -> dict:
     if not body:
         raise HumanizeError("draft has no mdx_body to humanize")
 
+    # Escape any literal { } in the article body before calling .format() so
+    # Python doesn't try to parse MDX content / JSON examples as format keys.
+    # The HUMANIZE_PROMPT already uses {{ }} for its JSON output example,
+    # which .format() converts back to { } after substitution.
+    safe_body = body.replace("{", "{{").replace("}", "}}")
     prompt = HUMANIZE_PROMPT.format(
         title=draft.get("title", ""),
         slug=draft.get("slug", ""),
         vertical=draft.get("vertical", "") or draft.get("category", ""),
         regulation_tag=draft.get("regulation_tag", ""),
-        mdx_body=body,
+        mdx_body=safe_body,
     )
 
     try:

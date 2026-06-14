@@ -28,7 +28,7 @@ export async function runSnapshotPipeline(
   env: Env,
   request: SnapshotRequest,
   requestHeaders: Headers,
-  seed: { snapshotId: string; requestedAt: string; deliverEmail?: boolean }
+  seed: { snapshotId: string; requestedAt: string; deliverEmail?: boolean; skipTelegramNotify?: boolean }
 ): Promise<SnapshotPipelineResult> {
   const start = Date.now();
   const snapshotId = seed.snapshotId;
@@ -114,8 +114,11 @@ export async function runSnapshotPipeline(
       console.warn("[snapshot] image stage failed (non-fatal):", err);
     }
 
-    // Stage 4: Telegram notify (internal — Moses sees every snapshot in his bot)
-    await notifySnapshot(env, snap);
+    // Stage 4: Telegram notify (internal — Moses sees every snapshot in his bot).
+    // Smoke-test runs pass skipTelegramNotify=true to avoid daily synthetic spam.
+    if (!seed.skipTelegramNotify) {
+      await notifySnapshot(env, snap);
+    }
 
     // Stage 5: Email delivery to requester (only if caller opted in — public endpoint).
     // Includes a branded 1-2 page PDF attachment generated from the snapshot.

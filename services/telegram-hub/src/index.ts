@@ -24,13 +24,13 @@ interface TelegramUpdate {
   update_id: number
   message?: {
     message_id: number
-    from?: { id: number; first_name?: string; username?: string }
+    from?: { id: number; first_name?: string; username?: string; is_bot?: boolean }
     chat: { id: number }
     text?: string
   }
   callback_query?: {
     id: string
-    from?: { id: number }
+    from?: { id: number; is_bot?: boolean }
     data?: string
     message?: { chat: { id: number } }
   }
@@ -222,8 +222,10 @@ export default {
     const message = update.message
     const chatId = message?.chat.id
     const text = (message?.text ?? '').trim()
-    if (!chatId || !text) {
-      // Always return 200 to Telegram so it doesn't retry; we just don't act.
+    // Ignore empty messages, non-text updates, and messages from other bots.
+    // This prevents the FAQ bot from responding to curator / ops-alert bot messages
+    // when all bots share the same Telegram group.
+    if (!chatId || !text || message?.from?.is_bot) {
       return Response.json({ ok: true })
     }
 
