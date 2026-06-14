@@ -108,7 +108,22 @@ export async function fetchOpsContext(): Promise<OpsContext> {
   }
 }
 
-/** Renders the context as JSON for embedding in a user message to Claude. */
+/** Renders the context as JSON for embedding in a user message to Claude.
+ * Converts amount_cents → amount_usd so the AI never mistakes cents for dollars. */
 export function contextToJson(ctx: OpsContext): string {
-  return JSON.stringify(ctx, null, 2)
+  const centsToUsd = (c: number | null): number | null => (c === null ? null : Math.round(c) / 100)
+  const serializable = {
+    ...ctx,
+    events_24h: ctx.events_24h.map((e) => ({
+      ...e,
+      amount_cents: undefined,
+      amount_usd: centsToUsd(e.amount_cents),
+    })),
+    payment_orders_recent: ctx.payment_orders_recent.map((o) => ({
+      ...o,
+      amount_cents: undefined,
+      amount_usd: centsToUsd(o.amount_cents),
+    })),
+  }
+  return JSON.stringify(serializable, null, 2)
 }
