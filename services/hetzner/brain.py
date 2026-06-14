@@ -25,7 +25,9 @@ Anti-hallucination contract:
 from __future__ import annotations
 
 import argparse
+import atexit
 import base64
+import fcntl
 import json
 import os
 import re
@@ -33,6 +35,8 @@ import sys
 import textwrap
 from datetime import datetime, timezone
 from pathlib import Path
+
+_LOCK_FD = None  # module-level so atexit can close it
 
 import httpx
 from dotenv import load_dotenv
@@ -557,7 +561,23 @@ def _render_prompt(row: dict) -> str:
     return base + "\n" + "\n".join(fc_block_lines)
 
 
+def _acquire_lock() -> None:
+    """Prevent multiple brain.py instances from running simultaneously.
+    Uses fcntl.flock() which auto-releases on process exit (even on kill).
+    """
+    global _LOCK_FD
+    lock_path = "/tmp/brain_curator.lock"
+    _LOCK_FD = open(lock_path, "w")  # noqa: WPS515 (open is fine here; atexit closes it)
+    try:
+        fcntl.flock(_LOCK_FD.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except IOError:
+        print("[brain] Another brain.py instance is already running — exiting to avoid race.")
+        sys.exit(0)
+    atexit.register(_LOCK_FD.close)
+
+
 def main() -> int:
+    _acquire_lock()
     # V0.2 — heartbeat at start of each invocation.
     log_event(
         "heartbeat",
