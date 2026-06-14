@@ -312,12 +312,35 @@ def enrich_top_picks(ranked: list[RankedItem]) -> int:
 
 
 def persist(ranked: list[RankedItem]) -> list[dict]:
-    """Upsert into daily_gaps. Dedupe on URL."""
+    """Upsert into daily_gaps. Dedupe on URL.
+
+    Never resets status for URLs that have already been picked, rejected,
+    published, or otherwise processed — prevents the same article from
+    cycling back into the auto-pick queue when it reappears in an RSS feed.
+    """
     sb = supabase_client()
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    # Identify which of these URLs were already processed (non-pending).
+    urls = [r.item.url for r in ranked]
+    existing = (
+        sb.table("daily_gaps")
+        .select("url, status")
+        .in_("url", urls)
+        .neq("status", "pending_pick")
+        .execute()
+        .data
+        or []
+    )
+    already_processed: set[str] = {row["url"] for row in existing}
+    if already_processed:
+        print(f"[scout] skipping {len(already_processed)} already-processed URL(s)")
+
     rows: list[dict] = []
     for r in ranked:
-        row = {
+        if r.item.url in already_processed:
+            continue
+        rows.append({
             "url": r.item.url,
             "feed_id": r.item.feed_id,
             "title": r.item.title,
@@ -333,9 +356,9 @@ def persist(ranked: list[RankedItem]) -> list[dict]:
             "status": "pending_pick",
             "scouted_at": datetime.now(timezone.utc).isoformat(),
             "firecrawl": r.firecrawl,
-        }
-        rows.append(row)
+        })
     if not rows:
+        print("[scout] all candidates already processed; nothing to persist")
         return []
     res = sb.table("daily_gaps").upsert(rows, on_conflict="url").execute()
     return res.data or rows
