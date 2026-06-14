@@ -81,14 +81,27 @@ DRAFT_PROMPT = textwrap.dedent("""
       "primary_keyword": "<from the source>",
       "secondary_keywords": ["<3-6 keywords>"],
       "target": "<blog | hub | both>",
-      "mdx_body": "<the full article body, 1500-2500 words, MDX formatting>",
+      "mdx_body": "<the full article body, 900-1400 words, MDX formatting>",
       "mermaid": ["<one to three Mermaid syntax diagrams>"],
       "faqs": [
         { "q": "<exact question>", "a": "<2-4 sentence answer>" }
       ],
       "hero_prompt": "<editorial hero image prompt, navy/indigo/gold palette, no robots>",
-      "sources": ["<every URL we gave you>"]
+      "sources": [
+        "<the source article URL>",
+        "<primary-source URL #2 — official regulator page, statute, or official guidance>",
+        "<primary-source URL #3 — different official regulator/government page>",
+        "<add more if needed>"
+      ]
     }
+
+    CRITICAL sources rule: `sources` MUST contain ≥3 distinct https:// URLs.
+    Always include the source article URL PLUS at least 2 additional primary
+    official sources (regulator pages, government statutes, official guidance
+    documents — NOT news sites or law firm blogs). Search your training data
+    for the relevant regulator's official URL (e.g. sec.gov, cftc.gov,
+    fca.org.uk, eur-lex.europa.eu). If you can only find 2 real primary URLs,
+    add a third from the same regulator's main press-release index.
 
     faqs requirements (W3.2 — drives FAQPage JSON-LD on gap-pages):
       - 3-5 entries, no fewer, no more.
@@ -122,7 +135,7 @@ DRAFT_PROMPT = textwrap.dedent("""
       - Never invent: company names in enforcement, dollar penalties, case
         outcomes, URLs
       - Include at least 1 specific recent case, action, or deadline
-      - 1200 words of substance > 2500 words of filler
+      - Target 900-1400 words. Quality over length; stay under 1400.
       - Every numeric claim (date, fine, deadline) must be in the sources
         list; we will verify before publish
 
