@@ -239,7 +239,7 @@ def main() -> int:
     force = "--force" in sys.argv
     n = auto_pick(force=force)
     print(f"[auto_pick] picked {n} row(s)")
-    return n
+    return 0  # exit code; n is a count, not a status
 
 
 if __name__ == "__main__":

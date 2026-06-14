@@ -188,7 +188,7 @@ async function loadSnapshot(sb: SupabaseClient): Promise<Snapshot> {
     pendingOrders,
     pendingValueUsd,
     realCustomers: realCustomerSet.size,
-    realCustomerEmails: [...realCustomerSet],
+    realCustomerEmails: Array.from(realCustomerSet),
     humanEvents7d,
     machineEvents7d,
     errors7d,
