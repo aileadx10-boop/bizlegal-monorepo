@@ -18,6 +18,10 @@ python-telegram-bot>=21.6
 # Image gen via OpenAI (no SDK; we use raw httpx). httpx already a sub-dep.
 httpx>=0.27.0
 
+# URL content extraction (replaces Firecrawl /v1/extract, 2026-06-14).
+# Extracts main text from regulatory press-release pages without an API key.
+trafilatura>=1.12.0
+
 # Mermaid diagram validator. Not strictly required if mermaid-cli installed
 # at the OS level, but we ship a Python fallback that just shells out to npx.
 # (Drop this line if mermaid-cli is already in PATH from the setup.sh step.)

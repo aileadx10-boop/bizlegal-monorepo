@@ -177,6 +177,8 @@ Every planning + ops doc lives in `decisions/`:
 - `decisions/PASSIVE-INCOME-5K-PLAYBOOK.md` — Blog/forge/hub monetization toward $5K/mo: honest traffic math, what shipped (bizlegal-ea PR #11 — AdSense/schema/CTA/IndexNow), Moses action list (GSC + AdSense + CF env), growth levers. Note: blog.bizlegal-ai.com is a separate CF-Pages engine (209 posts, 5/wk) in the bizlegal-ea repo, not this monorepo.
 - *current plan is at `~/.claude/plans/concurrent-bouncing-kitten.md` (lives outside the repo since plans are per-session ephemera)*
 
+- `decisions/DEPLOYMENT_MAP.md` — authoritative Hetzner box map: CX33, real paths, docker containers (:5678 n8n, :8080 marimo), curator systemd units, openclaw user-unit, Ollama (mistral-nemo), deploy runbook. Updated 2026-06-14.
+
 When you write a new decision, add it here.
 
 ---
@@ -186,7 +188,7 @@ When you write a new decision, add it here.
 | Surface | Deploy mechanism |
 |---|---|
 | `apps/<x>/` | Vercel auto-deploys on push to `main`. Each Vercel project's "Root Directory" points at `apps/<x>` (Moses sets per project after first monorepo build verifies). |
-| `services/hetzner/` | `ssh hetzner; cd /opt/bizlegal-monorepo; git pull; sudo systemctl restart curator-bot curator-publisher` |
+| `services/hetzner/` | **No git repo on box.** SCP changed files: `scp -i ~/.ssh/id_ed25519 services/hetzner/<file>.py root@204.168.209.235:/opt/bizlegal/curator/` → then `ssh root@204.168.209.235 "systemctl restart curator-bot curator-publisher"`. See `decisions/DEPLOYMENT_MAP.md`. |
 | `services/oci/` | `ssh oci; cd /opt/bizlegal-monorepo; git pull; docker compose -f services/oci/docker-compose.yml up -d --build` |
 | `services/worker/` | `cd services/worker; pnpm wrangler deploy` |
 | `services/telegram-hub/` | `cd services/telegram-hub; pnpm wrangler deploy` (after Z4.2) |

@@ -1,166 +1,125 @@
 """
-Hetzner curator — Firecrawl enrichment helper.
+Hetzner curator — URL content enrichment via httpx + trafilatura.
 
-For each top-N picked regulatory news item, scrape the source URL via
-Firecrawl's structured-extraction endpoint to capture:
+Replaces the old Firecrawl /v1/extract integration (removed 2026-06-14).
+Same public interface: is_configured(), enrich_url().
+Same return-dict shape: scout.py and brain.py need no changes.
 
-  - party (regulator + counterparty/respondent)
-  - penalty_usd (numeric, if applicable)
-  - effective_date (ISO 8601)
-  - deadline_date (ISO 8601, if cited)
-  - regulation_cites (list of article numbers, statute references)
-  - key_quote (a single 1-2 sentence verbatim quote with the regulatory
-    bite)
-  - executive_summary (3-5 bullet summary)
-
-Output is attached to each ranked item before persistence so brain.py
-gets richer source context for the long-form draft. Anti-hallucination
-contract holds: the structured fields produced here are added to the
-`sources` list for downstream numeric-claim verification, never invented.
-
-Failure mode: if Firecrawl times out, errors, or the API key is unset,
-this module returns the original ranked items unchanged. Curator
-pipeline keeps running. Logs a warning so /ops sees the gap.
-
-Concurrency: Firecrawl rate-limits the free/starter tiers heavily, so
-each enrichment is run sequentially with a 30s per-call timeout. With
-TOP_N=3 the worst case is ~90s added to the scout run, acceptable for
-a Mon/Wed/Fri 06:00 cron.
+Trade-off: LLM-structured fields (party, penalty_usd, dates, cites) come
+back as empty/zero — brain.py's Anthropic pass handles semantic extraction.
+executive_summary (list of text chunks) and key_quote (first sentence) are
+populated from raw page text.  No API key, no credit cost, no vendor limits.
 """
 from __future__ import annotations
 
-import json
 import logging
-import os
-from typing import Any
 
 import httpx
+import trafilatura
 
 logger = logging.getLogger(__name__)
 
-FIRECRAWL_API_KEY = os.getenv("FIRECRAWL_API_KEY", "")
-FIRECRAWL_BASE_URL = os.getenv("FIRECRAWL_BASE_URL", "https://api.firecrawl.dev").rstrip("/")
-FIRECRAWL_TIMEOUT_S = 30
-FIRECRAWL_EXTRACT_PATH = "/v1/extract"
-
-EXTRACTION_SCHEMA: dict[str, Any] = {
-    "type": "object",
-    "properties": {
-        "party": {
-            "type": "object",
-            "description": "The regulator that issued the action and the respondent / counterparty.",
-            "properties": {
-                "regulator": {"type": "string"},
-                "respondent": {"type": "string"},
-            },
-        },
-        "penalty_usd": {
-            "type": "number",
-            "description": "Monetary penalty in US dollars. 0 if none disclosed.",
-        },
-        "effective_date": {
-            "type": "string",
-            "description": "Action effective date in ISO 8601 (YYYY-MM-DD). Empty if not stated.",
-        },
-        "deadline_date": {
-            "type": "string",
-            "description": "Compliance deadline, application deadline, or future trigger date. Empty if not stated.",
-        },
-        "regulation_cites": {
-            "type": "array",
-            "description": "Specific statute, rule, or article references (e.g. 'Section 5(a)', 'Article 32(2)', '17 CFR 240.10b-5').",
-            "items": {"type": "string"},
-        },
-        "key_quote": {
-            "type": "string",
-            "description": "1-2 sentence verbatim quote from the source that captures the regulatory bite.",
-        },
-        "executive_summary": {
-            "type": "array",
-            "description": "3-5 short bullets summarising what happened and why a compliance officer cares.",
-            "items": {"type": "string"},
-        },
-    },
+_TIMEOUT = 15  # seconds; regulatory press-release pages load fast
+_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (compatible; BizLegalBot/1.0; "
+        "+https://bizlegal-ai.com)"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.5",
 }
+
+_MAX_BULLETS = 6
+_BULLET_LEN = 300
+_QUOTE_LEN = 500
 
 
 def is_configured() -> bool:
-    return bool(FIRECRAWL_API_KEY)
+    """Always True — no API key required for local extraction."""
+    return True
 
 
-def _headers() -> dict[str, str]:
-    return {
-        "Authorization": f"Bearer {FIRECRAWL_API_KEY}",
-        "Content-Type": "application/json",
-    }
+def enrich_url(url: str) -> dict | None:
+    """Fetch *url* and extract main content using trafilatura.
 
-
-def enrich_url(url: str) -> dict[str, Any] | None:
-    """Scrape + structured-extract one URL via Firecrawl. Returns None on failure."""
-    if not is_configured():
+    Returns a dict with the same keys as the old Firecrawl schema so
+    downstream consumers (brain.py) require no changes.  LLM-structured
+    fields are zeroed/empty; text content fills executive_summary + key_quote.
+    Returns None on any fetch error, non-2xx response, or empty extraction.
+    """
+    html = _fetch(url)
+    if html is None:
         return None
-    payload = {
-        "urls": [url],
-        "schema": EXTRACTION_SCHEMA,
-        "prompt": (
-            "Extract structured regulatory-action data from the source page. "
-            "Use empty strings or 0 for unknowns; never invent. The respondent "
-            "is the entity being penalised (often a company name); the regulator "
-            "is the agency that issued the action."
-        ),
+
+    text = _extract(html, url)
+    if not text:
+        logger.debug("[enrich] trafilatura returned empty text for %s", url)
+        return None
+
+    bullets = _to_bullets(text)
+    key_quote = text[:_QUOTE_LEN].strip()
+
+    return {
+        # Text-derived fields — the data brain.py cares about most.
+        "executive_summary": bullets,
+        "key_quote": key_quote,
+        # Structured fields previously populated by Firecrawl's LLM extraction.
+        # Zeroed here; brain.py's Anthropic call handles semantic parsing.
+        "party": {"regulator": "", "respondent": ""},
+        "penalty_usd": 0.0,
+        "effective_date": "",
+        "deadline_date": "",
+        "regulation_cites": [],
     }
+
+
+# ── Private helpers ──────────────────────────────────────────────────────────
+
+def _fetch(url: str) -> str | None:
+    """GET *url*, return response text or None on any error / non-2xx."""
     try:
-        res = httpx.post(
-            f"{FIRECRAWL_BASE_URL}{FIRECRAWL_EXTRACT_PATH}",
-            headers=_headers(),
-            json=payload,
-            timeout=FIRECRAWL_TIMEOUT_S,
+        resp = httpx.get(
+            url,
+            follow_redirects=True,
+            timeout=_TIMEOUT,
+            headers=_HEADERS,
         )
-        if res.status_code >= 400:
-            logger.warning("[firecrawl] %s -> HTTP %s: %s", url, res.status_code, res.text[:200])
-            return None
-        body = res.json()
     except Exception as err:
-        logger.warning("[firecrawl] post failed for %s: %s", url, err)
+        logger.warning("[enrich] fetch error for %s: %s", url, err)
         return None
 
-    # Firecrawl returns either {data: {...}} (sync) or {success: bool, data: ...}.
-    # Defensive normalisation — different API revisions vary in shape.
-    if isinstance(body, dict):
-        data = body.get("data") or body.get("result") or body
-        if isinstance(data, list) and data:
-            data = data[0]
-        if isinstance(data, dict):
-            extracted = data.get("extract") or data.get("structured") or data.get("metadata") or data
-            if isinstance(extracted, dict):
-                return _normalise(extracted)
-    logger.warning("[firecrawl] unexpected response shape for %s: %s", url, json.dumps(body)[:200])
-    return None
+    if resp.status_code >= 400:
+        logger.warning(
+            "[enrich] HTTP %s for %s — skipping enrichment",
+            resp.status_code,
+            url,
+        )
+        return None
+
+    return resp.text
 
 
-def _normalise(raw: dict[str, Any]) -> dict[str, Any]:
-    """Defensive coercion so brain.py always sees the same keys."""
-    party = raw.get("party") if isinstance(raw.get("party"), dict) else {}
-    return {
-        "party": {
-            "regulator": str(party.get("regulator") or "")[:200],
-            "respondent": str(party.get("respondent") or "")[:200],
-        },
-        "penalty_usd": _coerce_number(raw.get("penalty_usd")),
-        "effective_date": str(raw.get("effective_date") or "")[:32],
-        "deadline_date": str(raw.get("deadline_date") or "")[:32],
-        "regulation_cites": [str(c)[:200] for c in (raw.get("regulation_cites") or []) if c][:10],
-        "key_quote": str(raw.get("key_quote") or "")[:500],
-        "executive_summary": [str(b)[:300] for b in (raw.get("executive_summary") or []) if b][:6],
-    }
+def _extract(html: str, url: str) -> str | None:
+    """Run trafilatura on raw HTML; return plain text or None."""
+    try:
+        return trafilatura.extract(
+            html,
+            url=url,
+            include_comments=False,
+            include_tables=False,
+            no_fallback=False,
+            output_format="txt",
+        )
+    except Exception as err:
+        logger.warning("[enrich] trafilatura error for %s: %s", url, err)
+        return None
 
 
-def _coerce_number(v: Any) -> float:
-    if isinstance(v, (int, float)):
-        return float(v)
-    if isinstance(v, str):
-        try:
-            return float(v.replace(",", "").replace("$", "").strip())
-        except Exception:
-            return 0.0
-    return 0.0
+def _to_bullets(text: str) -> list[str]:
+    """Split text into short bullet-like chunks matching old Firecrawl shape.
+
+    Splits on double-newlines (paragraphs), trims each, keeps the first
+    _MAX_BULLETS non-empty chunks up to _BULLET_LEN chars each.
+    """
+    parts = [p.strip()[:_BULLET_LEN] for p in text.split("\n\n") if p.strip()]
+    return parts[:_MAX_BULLETS] or [text[:_BULLET_LEN].strip()]
