@@ -88,11 +88,15 @@ async def handle_pick(query, payload: str) -> None:
 
     await query.edit_message_text("✅ Pick noted. Brain step starting now — preview will arrive when ready.")
     # Trigger brain.py asynchronously so the bot stays responsive.
+    # -u = unbuffered so log lines appear in real-time (not batched at exit).
+    ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+    log_path = f"{CURATOR_DIR}/brain_{ts}.log"
+    log_fh = open(log_path, "w", buffering=1)  # line-buffered
     subprocess.Popen(
-        [PYTHON_BIN, f"{CURATOR_DIR}/brain.py"],
+        [PYTHON_BIN, "-u", f"{CURATOR_DIR}/brain.py"],
         cwd=CURATOR_DIR,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
+        stdout=log_fh,
+        stderr=log_fh,
     )
     log_event(
         "curation.action",
