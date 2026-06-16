@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Loader2, Bitcoin, CreditCard } from 'lucide-react'
+import { Loader2, Bitcoin } from 'lucide-react'
 
 interface AgentCheckoutButtonProps {
   /** Stable id used in payment_orders.product (e.g. "agent_compliance_researcher") */
@@ -37,9 +37,9 @@ export function AgentCheckoutButton({
   const [state, setState] = useState<State>('idle')
   const [email, setEmail] = useState('')
   const [error, setError] = useState<string | null>(null)
-  const [gateway, setGateway] = useState<'nowpayments' | 'paypal' | null>(null)
+  const [gateway, setGateway] = useState<'nowpayments' | null>(null)
 
-  async function startCheckout(g: 'nowpayments' | 'paypal') {
+  async function startCheckout(g: 'nowpayments') {
     if (!/^\S+@\S+\.\S+$/.test(email)) {
       setError('Enter a valid email so we can email you the receipt + access link.')
       return
@@ -70,7 +70,7 @@ export function AgentCheckoutButton({
         setState('error')
         return
       }
-      const url = data.invoice_url ?? data.approve_url
+      const url = data.invoice_url
       if (!url) {
         setError('Checkout URL missing from response. Please try again.')
         setState('error')
@@ -148,7 +148,7 @@ export function AgentCheckoutButton({
           outline: 'none',
         }}
       />
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+      <div style={{ display: 'grid', gap: 6 }}>
         <button
           type="button"
           onClick={() => startCheckout('nowpayments')}
@@ -173,34 +173,20 @@ export function AgentCheckoutButton({
           }}
         >
           {state === 'submitting' && gateway === 'nowpayments' ? <Loader2 size={12} className="spin" /> : <Bitcoin size={12} />}
-          Pay crypto
+          Pay crypto (BTC / ETH / USDC)
         </button>
-        <button
-          type="button"
-          onClick={() => startCheckout('paypal')}
-          disabled={state === 'submitting' || state === 'redirecting' || !email}
+        <p
           style={{
-            padding: '10px 12px',
-            background: 'transparent',
-            color: accent,
-            border: `1px solid ${accent}80`,
-            borderRadius: 'var(--bl-radius-sm)',
-            fontFamily: 'var(--bl-font-mono)',
+            margin: 0,
             fontSize: 10,
-            fontWeight: 700,
-            letterSpacing: '0.08em',
-            textTransform: 'uppercase',
-            cursor: state === 'submitting' || state === 'redirecting' || !email ? 'not-allowed' : 'pointer',
-            opacity: state === 'submitting' || state === 'redirecting' || !email ? 0.6 : 1,
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 6,
+            color: 'var(--bl-text-subtle)',
+            fontFamily: 'var(--bl-font-mono)',
+            letterSpacing: '0.06em',
+            textAlign: 'center',
           }}
         >
-          {state === 'submitting' && gateway === 'paypal' ? <Loader2 size={12} className="spin" /> : <CreditCard size={12} />}
-          Pay card
-        </button>
+          Card payments temporarily unavailable — crypto only
+        </p>
       </div>
       {error && (
         <p
@@ -217,7 +203,7 @@ export function AgentCheckoutButton({
       )}
       {state === 'redirecting' && (
         <p style={{ margin: 0, fontSize: 11, color: 'var(--bl-text-muted)' }}>
-          Redirecting to {gateway === 'nowpayments' ? 'NOWPayments' : 'PayPal'}…
+          Redirecting to NOWPayments…
         </p>
       )}
       <button

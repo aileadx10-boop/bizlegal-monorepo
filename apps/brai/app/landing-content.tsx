@@ -74,7 +74,7 @@ export const BRAI_CONTENT: LandingV2Content = {
         '12 months stored evidence trail',
       ],
       cta: 'Run a report',
-      href: '/network',
+      href: '/pricing',
       featured: true,
     },
     {

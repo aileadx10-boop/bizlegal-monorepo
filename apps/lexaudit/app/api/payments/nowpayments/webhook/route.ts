@@ -138,6 +138,34 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'update failed' }, { status: 500 })
     }
 
+    // Provision compliance_subs row when payment activates so the daily
+    // monitor cron has someone to notify.
+    if (newStatus === 'active' && order.user_email) {
+      const { data: existingSub } = await supabase
+        .from('compliance_subs')
+        .select('id')
+        .eq('user_email', order.user_email)
+        .eq('status', 'active')
+        .maybeSingle()
+
+      if (existingSub) {
+        // Already has an active sub — update payment_order_id linkage only
+        await supabase
+          .from('compliance_subs')
+          .update({ payment_order_id: order.id, updated_at: new Date().toISOString() })
+          .eq('id', existingSub.id)
+      } else {
+        await supabase.from('compliance_subs').insert({
+          user_email: order.user_email,
+          frameworks: ['soc2', 'iso27001', 'gdpr', 'hipaa', 'dpdp', 'nist-800-53'],
+          status: 'active',
+          subscribed_signals: [],
+          notification_channel: 'email',
+          payment_order_id: order.id,
+        })
+      }
+    }
+
     if (newStatus === 'active' || newStatus === 'failed' || newStatus === 'refunded') {
       logEventAsync({
         type:

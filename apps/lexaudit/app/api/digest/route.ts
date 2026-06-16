@@ -1,4 +1,12 @@
 import { NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
+
+function getSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !key) return null
+  return createClient(url, key)
+}
 
 /**
  * LexAudit /api/digest — daily product activity feed for the hub.
@@ -36,17 +44,54 @@ interface ProductDigest {
 
 export async function GET(): Promise<NextResponse> {
   const date = new Date().toISOString().slice(0, 10)
+  const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
 
-  // TODO replace with real query against the LexAudit score-update store.
+  let activeSubscribers = 0
+  let recentChanges = 0
+  let changedFrameworks: string[] = []
+
+  const supabase = getSupabase()
+  if (supabase) {
+    const [subsResult, changesResult] = await Promise.all([
+      supabase
+        .from('compliance_subs')
+        .select('id', { count: 'exact', head: true })
+        .eq('status', 'active'),
+      supabase
+        .from('compliance_framework_index')
+        .select('framework_id')
+        .eq('is_change', true)
+        .gte('fetched_at', since),
+    ])
+
+    activeSubscribers = subsResult.count ?? 0
+    if (changesResult.data) {
+      changedFrameworks = Array.from(new Set(changesResult.data.map((r) => r.framework_id as string)))
+      recentChanges = changedFrameworks.length
+    }
+  }
+
+  const hasChanges = recentChanges > 0
+  const headline = hasChanges
+    ? `${recentChanges} framework${recentChanges > 1 ? 's' : ''} updated in the last 24h: ${changedFrameworks.join(', ')}.`
+    : 'Compliance Health Score — quiet day.'
+
+  const bullets = hasChanges
+    ? [
+        `${recentChanges} regulatory framework${recentChanges > 1 ? 's' : ''} changed: ${changedFrameworks.join(', ')}.`,
+        `${activeSubscribers} active monitor${activeSubscribers !== 1 ? 's' : ''} will receive email alerts.`,
+      ]
+    : [
+        'No new framework updates in the past 24 hours.',
+        `${activeSubscribers} active monitor${activeSubscribers !== 1 ? 's' : ''} — background sync continues.`,
+      ]
+
   const body: ProductDigest = {
     product: 'lexaudit',
     date,
-    headline: 'Compliance Health Score — quiet day.',
-    bullets: [
-      'No new score updates in the past 24 hours.',
-      'Background framework rules sync continues (60-signal composite).',
-    ],
-    score: 0,
+    headline,
+    bullets,
+    score: activeSubscribers,
     links: [
       { label: 'Open LexAudit', href: 'https://lexaudit.bizlegal-ai.com/' },
       { label: 'Methodology', href: 'https://lexaudit.bizlegal-ai.com/methodology' },

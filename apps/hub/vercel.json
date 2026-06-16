@@ -1,6 +1,6 @@
 {
   "framework": "nextjs",
-  "installCommand": "corepack enable && cd ../.. && corepack pnpm install --frozen-lockfile=false --ignore-scripts",
+  "installCommand": "corepack enable && corepack pnpm install --frozen-lockfile=false --ignore-scripts",
   "buildCommand": "cd ../.. && corepack pnpm turbo build --filter=@bizlegal/hub...",
   "functions": {
     "app/api/risk-assessment/route.ts": { "maxDuration": 30 },

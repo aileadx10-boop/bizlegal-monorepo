@@ -49,7 +49,6 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         price_amount: price.crypto,
         price_currency: 'usd',
-        pay_currency: 'usdtbsc',
         order_id: report_id,
         order_description: tier === 'regulatory' ? 'TRACR Regulatory Risk Report' : `TRCR ${tier} forensic report`,
         ipn_callback_url: `${siteUrl}/api/payment/webhook`,

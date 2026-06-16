@@ -383,15 +383,15 @@ export default function ReportPage() {
               }}>
                 {payLoading ? 'Creating link…' : 'Pay with Crypto →'}
               </button>
-              <a href="/scan" style={{
+              <a href="mailto:info@bizlegal-ai.com?subject=Card%20payment%20for%20TRACR%20report" style={{
                 display: 'inline-flex', alignItems: 'center',
                 padding: '13px 30px', background: C.amberBg, border: `1px solid rgba(212,168,67,0.3)`,
                 borderRadius: 8, color: C.amber, fontSize: 14, fontWeight: 700, textDecoration: 'none',
               }}>
-                Pay with PayPal →
+                Pay by Card — Email Us →
               </a>
             </div>
-            <p style={{ fontSize: 11, color: C.dim, fontFamily: C.mono }}>Crypto via NOWPayments · Card via PayPal</p>
+            <p style={{ fontSize: 11, color: C.dim, fontFamily: C.mono }}>Crypto via NOWPayments · Card via email arrangement</p>
           </div>
         )}
 

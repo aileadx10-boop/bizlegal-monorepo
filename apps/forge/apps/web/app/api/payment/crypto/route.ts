@@ -98,6 +98,43 @@ export async function POST(req: NextRequest) {
       })
     }
 
+    if (reference_type === 'boi') {
+      const { data: record } = await supabase
+        .from('scans')
+        .select('id, payment_status')
+        .eq('id', reference_id)
+        .single()
+
+      if (!record) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+      if (record.payment_status === 'paid') return NextResponse.json({ error: 'Already paid' }, { status: 409 })
+
+      const invoice = await createNowPaymentsInvoiceRaw({
+        amount_usd: PRICES.boi.crypto,
+        order_id: `boi_${reference_id}`,
+        description: 'Forge BOI Report Kit',
+        success_url: `${appUrl}/boi/success?id=${reference_id}`,
+        cancel_url: `${appUrl}/boi`,
+        ipn_url: ipnUrl,
+      })
+      if (!invoice.ok || !invoice.checkout_url) {
+        console.error('[forge/payment/crypto] boi invoice failed:', invoice.error)
+        return NextResponse.json(
+          { error: invoice.error ?? 'invoice_create_failed' },
+          { status: invoice.status_code },
+        )
+      }
+
+      await supabase
+        .from('scans')
+        .update({ stripe_session_id: invoice.provider_invoice_id })
+        .eq('id', reference_id)
+
+      return NextResponse.json({
+        invoiceUrl: invoice.checkout_url,
+        invoiceId: invoice.provider_invoice_id,
+      })
+    }
+
     return NextResponse.json({ error: 'Invalid reference_type' }, { status: 400 })
   } catch (err) {
     console.error('[forge/payment/crypto]', err)

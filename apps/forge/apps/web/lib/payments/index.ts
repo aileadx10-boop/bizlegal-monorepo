@@ -10,6 +10,7 @@
 export const PRICES = {
   scan: { crypto: 97, fiat: 119 },
   passport: { crypto: 297, fiat: 347 },
+  boi: { crypto: 149, fiat: 169 },
 }
 
 // ── Payoneer Links (static, from env) ────────────────────────────────────────

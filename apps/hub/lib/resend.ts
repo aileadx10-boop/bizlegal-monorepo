@@ -140,6 +140,74 @@ ${rowsHtml}
   })
 }
 
+export async function sendPaymentConfirmationEmail(
+  email: string,
+  product: string,
+  amountCents: number,
+  billingInterval: string | null,
+) {
+  const amount = `$${(amountCents / 100).toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`
+
+  const intervalLabel =
+    billingInterval === 'monthly'
+      ? '/month'
+      : billingInterval === 'yearly'
+        ? '/year'
+        : ''
+
+  // Map product families to their access URLs for the 'next steps' CTA
+  const accessUrlMap: Record<string, string> = {
+    docai: 'https://docai.bizlegal-ai.com',
+    lexaudit: 'https://lexaudit.bizlegal-ai.com',
+    conductor: 'https://docai.bizlegal-ai.com',
+    tracr: 'https://tracr.bizlegal-ai.com',
+    brai: 'https://brai.bizlegal-ai.com',
+    forge: 'https://forge.bizlegal-ai.com',
+  }
+  const family = Object.keys(accessUrlMap).find((k) => product.startsWith(k))
+  const accessUrl = family ? accessUrlMap[family] : 'https://bizlegal-ai.com'
+
+  return resend.emails.send({
+    from: 'BizLegal AI <orders@intelligence.bizlegal-ai.com>',
+    to: email,
+    subject: 'Your BizLegal AI order is confirmed',
+    html: `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><style>
+body { background: #0e1322; color: #dee1f7; font-family: 'Manrope', sans-serif; margin: 0; padding: 0; }
+.container { max-width: 580px; margin: 0 auto; padding: 40px 24px; }
+.logo { font-family: Georgia, serif; font-size: 22px; color: #dee1f7; margin-bottom: 32px; }
+.logo span { color: #e9c349; }
+h1 { font-family: Georgia, serif; font-size: 26px; color: #dee1f7; margin-bottom: 16px; line-height: 1.2; }
+p { color: #c3c6d7; font-size: 14px; line-height: 1.65; margin-bottom: 16px; }
+.amount { color: #e9c349; font-size: 28px; font-family: Georgia, serif; font-weight: 700; }
+.btn { display: inline-block; background: #2563eb; color: #eeefff; padding: 12px 24px; text-decoration: none; font-weight: 700; font-size: 13px; margin: 8px 0; }
+.divider { border: none; border-top: 0.5px solid #434655; margin: 24px 0; }
+.footer { font-size: 11px; color: #8d90a0; }
+.tag { font-size: 9px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #e9c349; }
+</style></head>
+<body>
+<div class="container">
+  <div class="logo">BizLegal <span>•</span> AI</div>
+  <span class="tag">Order Confirmed</span>
+  <h1>Your payment was received.</h1>
+  <p>Thank you for your purchase. Your order is now active.</p>
+  <p><strong style="color:#dee1f7;">Product:</strong> ${product.replace(/_/g, ' ')}</p>
+  <p><strong style="color:#dee1f7;">Amount paid:</strong> <span class="amount">${amount}${intervalLabel}</span></p>
+  <p>You can access your product using the link below. If you have any questions, reply to this email or contact us at <a href="mailto:team@bizlegal-ai.com" style="color:#b4c5ff;">team@bizlegal-ai.com</a>.</p>
+  <a href="${accessUrl}" class="btn">Access Your Product →</a>
+  <hr class="divider"/>
+  <p class="footer">BizLegal AI is software operated by DOR INNOVATIONS. Not a law firm; outputs are research, not legal advice.<br/>
+  This email was sent to ${email}. <a href="${process.env.NEXT_PUBLIC_SITE_URL}/contact?subject=unsubscribe" style="color:#8d90a0;">Unsubscribe</a></p>
+</div>
+</body>
+</html>`,
+  })
+}
+
 export async function sendRiskReportEmail(
   email: string,
   reportId: string,

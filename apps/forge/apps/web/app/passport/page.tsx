@@ -138,7 +138,7 @@ export default function PassportPage() {
           UK · EU · US · Singapore · Australia · Canada · Germany · Netherlands · UAE · Japan · Hong Kong · Switzerland
         </p>
         <div className="mt-4 flex items-center gap-4 text-sm text-forge-muted">
-          <span className="flex items-center gap-1"><span className="text-green-400">✓</span> $1,500 flat fee</span>
+          <span className="flex items-center gap-1"><span className="text-green-400">✓</span> From $297 (crypto) / $347 (card)</span>
           <span className="flex items-center gap-1"><span className="text-green-400">✓</span> Practitioner-reviewed</span>
           <span className="flex items-center gap-1"><span className="text-green-400">✓</span> 12 markets covered</span>
         </div>

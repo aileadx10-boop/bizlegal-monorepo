@@ -78,7 +78,7 @@ export const LEXAUDIT_CONTENT: LandingV2Content = {
         'One human-reviewed brief per quarter',
       ],
       cta: 'Start monitoring',
-      href: '/pricing',
+      href: 'https://bizlegal-ai.com/checkout?product=lexaudit&tier=monitor&interval=monthly&amount=9900&name=LexAudit+Compliance+Monitor',
       featured: true,
     },
     {

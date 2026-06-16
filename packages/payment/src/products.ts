@@ -40,6 +40,7 @@ export type ProductId =
   | 'forge_passport'
   | 'forge_wallet_scan'
   // DocAI
+  | 'docai_scan_report'
   | 'docai_team_monthly'
   | 'docai_firm_monthly'
   // LexAudit Compliance Monitor
@@ -85,7 +86,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 2900,
     currency: 'USD',
     checkout_origin: '/agents/boi-tracker',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
   boi_solo_yearly: {
@@ -97,7 +98,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 29000,
     currency: 'USD',
     checkout_origin: '/agents/boi-tracker',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
   boi_firm_monthly: {
@@ -109,7 +110,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 9900,
     currency: 'USD',
     checkout_origin: '/agents/boi-tracker',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
   boi_firm_yearly: {
@@ -121,7 +122,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 99000,
     currency: 'USD',
     checkout_origin: '/agents/boi-tracker',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
 
@@ -135,7 +136,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 9900,
     currency: 'USD',
     checkout_origin: '/agents/ai-act',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: false,
   },
   ai_act_monthly: {
@@ -147,7 +148,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 4900,
     currency: 'USD',
     checkout_origin: '/agents/ai-act',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
 
@@ -161,7 +162,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 2900,
     currency: 'USD',
     checkout_origin: '/agents/policy-refresh',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
   policy_refresh_yearly: {
@@ -173,7 +174,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 29000,
     currency: 'USD',
     checkout_origin: '/agents/policy-refresh',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
 
@@ -187,7 +188,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 29900,
     currency: 'USD',
     checkout_origin: '/psp-risk',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: false,
   },
   psp_retainer_monthly: {
@@ -199,7 +200,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 9900,
     currency: 'USD',
     checkout_origin: '/psp-risk',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
 
@@ -253,7 +254,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 14900,
     currency: 'USD',
     checkout_origin: 'https://forge.bizlegal-ai.com/boi',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: false,
   },
   forge_passport: {
@@ -265,7 +266,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 29700,
     currency: 'USD',
     checkout_origin: 'https://forge.bizlegal-ai.com/passport',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: false,
   },
   forge_wallet_scan: {
@@ -277,11 +278,23 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 9700,
     currency: 'USD',
     checkout_origin: 'https://forge.bizlegal-ai.com/scan',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: false,
   },
 
   // ───── DocAI ─────
+  docai_scan_report: {
+    id: 'docai_scan_report',
+    name: 'DocAI Contract Risk Report',
+    description: 'Evidence-cited contract risk report with all red flags, missing clauses, and fix recommendations.',
+    product_family: 'docai',
+    billing_interval: 'one-time',
+    amount_cents: 9700,
+    currency: 'USD',
+    checkout_origin: 'https://docai.bizlegal-ai.com',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: false,
+  },
   docai_team_monthly: {
     id: 'docai_team_monthly',
     name: 'DocAI Team (monthly)',
@@ -291,7 +304,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 6900,
     currency: 'USD',
     checkout_origin: 'https://docai.bizlegal-ai.com/pricing',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
   docai_firm_monthly: {
@@ -303,7 +316,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 19900,
     currency: 'USD',
     checkout_origin: 'https://docai.bizlegal-ai.com/pricing',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
 
@@ -317,7 +330,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 9900,
     currency: 'USD',
     checkout_origin: '/compliance-monitor',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
   lexaudit_boutique_monthly: {
@@ -329,7 +342,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 19900,
     currency: 'USD',
     checkout_origin: 'https://lexaudit.bizlegal-ai.com/pricing',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
   lexaudit_midmarket_monthly: {
@@ -341,7 +354,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 59900,
     currency: 'USD',
     checkout_origin: 'https://lexaudit.bizlegal-ai.com/pricing',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
 
@@ -355,7 +368,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 9900,
     currency: 'USD',
     checkout_origin: 'https://docai.bizlegal-ai.com/pricing',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
   conductor_solo_yearly: {
@@ -367,7 +380,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 99000,
     currency: 'USD',
     checkout_origin: 'https://docai.bizlegal-ai.com/pricing',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
   conductor_team_monthly: {
@@ -379,7 +392,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 25000,
     currency: 'USD',
     checkout_origin: 'https://docai.bizlegal-ai.com/pricing',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
   conductor_team_yearly: {
@@ -391,7 +404,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 250000,
     currency: 'USD',
     checkout_origin: 'https://docai.bizlegal-ai.com/pricing',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
   conductor_firm_monthly: {
@@ -403,7 +416,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 99900,
     currency: 'USD',
     checkout_origin: 'https://docai.bizlegal-ai.com/pricing',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
   conductor_firm_yearly: {
@@ -415,7 +428,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 999000,
     currency: 'USD',
     checkout_origin: 'https://docai.bizlegal-ai.com/pricing',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
 
@@ -429,7 +442,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 9900,
     currency: 'USD',
     checkout_origin: 'https://docai.bizlegal-ai.com/cle',
-    webhook_path: '/api/payments/webhook',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
 }

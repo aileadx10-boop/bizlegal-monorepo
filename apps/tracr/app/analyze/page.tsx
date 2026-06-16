@@ -257,7 +257,7 @@ export default function AnalyzePage() {
                 Order Full Report — from $149 →
               </a>
               <p style={{ marginTop: 12, fontFamily: C.mono, fontSize: 11, color: C.dim }}>
-                Court-ready PDF · 48hr delivery · PayPal or crypto
+                Court-ready PDF · 48hr delivery · Crypto payment
               </p>
             </div>
 

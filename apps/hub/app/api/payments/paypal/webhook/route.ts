@@ -4,6 +4,7 @@ import { logEventAsync } from '@/lib/ops/log'
 import { markNurturePaid } from '@/lib/nurture-state'
 import { claimWebhookEvent } from '@/lib/payments/webhook-idempotency'
 import { grantConductorTier } from '@/lib/payments/conductor-grant'
+import { sendPaymentConfirmationEmail } from '@/lib/resend'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
@@ -249,6 +250,15 @@ export async function POST(req: NextRequest) {
           )
           // Conductor entitlement write-through (no-op for other products).
           await grantConductorTier(supabase, orderRow)
+          // Send payment confirmation email to customer (non-blocking).
+          void sendPaymentConfirmationEmail(
+            orderRow.user_email,
+            orderRow.product ?? 'your product',
+            orderRow.amount_cents ?? 0,
+            orderRow.billing_interval ?? null,
+          ).catch((err) =>
+            console.warn('[paypal/webhook] confirmation email failed:', err),
+          )
         }
       }
     }

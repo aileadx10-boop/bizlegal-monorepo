@@ -1,5 +1,19 @@
 import crypto from "crypto";
 
+// Assert at module load that NEXT_PUBLIC_SITE_URL points at the canonical
+// DocAI domain in production. A mis-set value (e.g. a Vercel preview URL)
+// causes the NOWPayments IPN callback to fire at the wrong host, so
+// paid=true is never written and users who pay never unlock their report.
+if (
+  process.env.NODE_ENV === "production" &&
+  !process.env.NEXT_PUBLIC_SITE_URL?.includes("docai.bizlegal-ai.com")
+) {
+  console.error(
+    "[docai/payments] CRITICAL: NEXT_PUBLIC_SITE_URL is not set to the canonical docai domain — IPN webhook will be misdirected. " +
+      "Set NEXT_PUBLIC_SITE_URL=https://docai.bizlegal-ai.com in the Vercel project environment settings.",
+  );
+}
+
 type InvoiceParams = {
   scanId: string;
   email: string;

@@ -106,7 +106,7 @@ export default function BOIPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           reference_id: (result as { scan_id?: string }).scan_id ?? '',
-          reference_type: 'scan',
+          reference_type: 'boi',
         }),
       })
       const data = await res.json()
@@ -301,25 +301,29 @@ export default function BOIPage() {
               <div className="flex items-center gap-3 mb-3">
                 <div className="text-2xl">₿</div>
                 <div>
-                  <h4 className="font-bold text-white">Crypto — $97</h4>
+                  <h4 className="font-bold text-white">Crypto — $149</h4>
                   <p className="text-sm text-forge-muted">BTC, ETH, USDT and 100+ coins via NOWPayments</p>
                 </div>
               </div>
               <button onClick={handleCrypto} disabled={loading} className="btn-primary w-full">
-                {loading ? 'Processing...' : 'Pay $97 with Crypto →'}
+                {loading ? 'Processing...' : 'Pay $149 with Crypto →'}
               </button>
             </div>
             <div className="border border-forge-border rounded-xl p-4 hover:border-forge-accent transition-colors">
               <div className="flex items-center gap-3 mb-3">
                 <div className="text-2xl">💳</div>
                 <div>
-                  <h4 className="font-bold text-white">Card / Bank — $119</h4>
-                  <p className="text-sm text-forge-muted">Credit card, debit, or bank transfer via Payoneer</p>
+                  <h4 className="font-bold text-white">Card / Bank — $169</h4>
+                  <p className="text-sm text-forge-muted">Pay by card via secure checkout</p>
                 </div>
               </div>
-              <a href={process.env.NEXT_PUBLIC_PAYONEER_SCAN_LINK ?? '#'} target="_blank" rel="noopener noreferrer"
-                className="btn-primary w-full block text-center">
-                Pay $119 by Card →
+              <a
+                href={`https://bizlegal-ai.com/checkout?product=forge&tier=boi&interval=one-time&amount=16900&name=Forge+BOI+Report+Kit`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary w-full block text-center"
+              >
+                Pay $169 by Card →
               </a>
             </div>
           </div>

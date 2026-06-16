@@ -63,14 +63,41 @@ export async function GET(req: NextRequest) {
 
   const criticalMissing = envs.filter((e) => e.critical && !e.set).map((e) => e.name)
 
+  // Extra domain-correctness checks — presence alone is not enough for these.
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? ''
+  const siteUrlPointsAtCanonical = siteUrl.includes('docai.bizlegal-ai.com')
+  const nowpaymentsKeySet = Boolean(process.env.NOWPAYMENTS_API_KEY)
+  const nowpaymentsIpnSecretSet = Boolean(process.env.NOWPAYMENTS_IPN_SECRET)
+
+  const paymentWarnings: string[] = []
+  if (!siteUrlPointsAtCanonical) {
+    paymentWarnings.push(
+      `NEXT_PUBLIC_SITE_URL ("${siteUrl || '(empty)'}") does not contain docai.bizlegal-ai.com — NOWPayments IPN will be misdirected`,
+    )
+  }
+  if (!nowpaymentsKeySet) {
+    paymentWarnings.push('NOWPAYMENTS_API_KEY is not set — crypto checkout will fail')
+  }
+  if (!nowpaymentsIpnSecretSet) {
+    paymentWarnings.push('NOWPAYMENTS_IPN_SECRET is not set — webhook verification will fail, no report unlocks')
+  }
+
   return NextResponse.json({
     generated_at: new Date().toISOString(),
     source: 'docai',
     envs,
+    payment_config: {
+      site_url_set: Boolean(siteUrl),
+      site_url_canonical: siteUrlPointsAtCanonical,
+      nowpayments_key_set: nowpaymentsKeySet,
+      nowpayments_ipn_secret_set: nowpaymentsIpnSecretSet,
+      warnings: paymentWarnings,
+    },
     summary: {
       envs_total: envs.length,
       critical_missing: criticalMissing,
-      healthy: criticalMissing.length === 0,
+      payment_warnings: paymentWarnings.length,
+      healthy: criticalMissing.length === 0 && paymentWarnings.length === 0,
     },
   })
 }
