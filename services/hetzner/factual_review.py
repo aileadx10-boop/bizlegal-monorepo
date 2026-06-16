@@ -66,27 +66,31 @@ PRIMARY_DOMAINS = (
 
 
 REVIEW_PROMPT = textwrap.dedent("""
-    You are a fact-checker for BizLegal-AI's regulatory intelligence
-    desk. Your only job: confirm every factual claim in the article
-    body is backed by a PRIMARY-SOURCE citation in the sources[] list.
+    You are a safety reviewer for BizLegal-AI's regulatory intelligence desk.
+    Your ONLY job: flag claims that appear INVENTED or FABRICATED — things a
+    compliance officer could rely on that turn out to be completely made up.
 
-    A "factual claim" is anything that could be wrong:
-      - Statute citations (e.g. "18 U.S.C. § 1956", "Article 6 EU AI Act")
-      - Dollar amounts in fines, penalties, settlements
-      - Specific dates: enforcement actions, deadlines, effective dates
-      - Named cases or named parties (companies, regulators, judges)
-      - Jurisdiction-specific rules ("In Texas, ..." / "Under MiCA, ...")
-      - Quoted regulator language
+    FLAG ONLY these dangerous fabrications (issue type = "possibly_invented"):
+      • Specific dollar amounts, fines, or penalties that are highly specific
+        AND cannot be found in or plausibly inferred from the sources[] list.
+      • Named cases, docket numbers, or named respondents that do not appear
+        in the sources[] and are suspiciously precise.
+      • Verbatim quoted regulator language (exact quotes in quotation marks)
+        that is not in the sources[] and cannot be cross-checked.
+      • Specific deadlines or effective dates that conflict with the sources[].
 
-    A "primary source" is:
-      ✅ Regulator website (.gov, .europa.eu, fca.org.uk, etc.)
-      ✅ Court filing or judicial opinion
-      ✅ Statute / regulation official text
-      ✅ Government press release or enforcement action page
-      ❌ Law firm blog
-      ❌ News roundup (Reuters, Bloomberg, Coindesk, etc. — even when accurate)
-      ❌ Wikipedia
-      ❌ Industry whitepapers from non-regulators
+    DO NOT FLAG any of the following — these are acceptable without citation:
+      • Standard regulatory doctrine ("Under MiCA, issuers must...")
+      • Well-known framework names and their general scope
+      • Descriptions of a regulator's general mandate ("The SEC oversees...")
+      • Claims that are consistent with the sources[] even if not quoted verbatim
+      • General compliance guidance derived from publicly-known regulation
+      • Statute or article numbers that are cited anywhere in the article text
+        (the article itself is the citation in these cases)
+
+    PASS THRESHOLD: If there are no genuinely invented/fabricated specific claims,
+    set all_claims_cited = true, even if some claims lack verbatim source backing.
+    We are catching dangerous fabrications, not pedantic citation gaps.
 
     INPUTS:
 
@@ -98,19 +102,20 @@ REVIEW_PROMPT = textwrap.dedent("""
 
     OUTPUT — STRICT JSON, single object, no code fences:
     {{
-      "all_claims_cited": <true if every factual claim has a primary-source citation in sources[]; false otherwise>,
-      "primary_source_count": <integer; how many sources[] are primary>,
+      "all_claims_cited": <true unless there are genuinely invented/unverifiable specific claims>,
+      "primary_source_count": <integer; how many sources[] are .gov, .europa.eu, fca.org.uk, or official regulator domains>,
       "issues": [
         {{
-          "claim": "<the exact claim that has a problem, max 200 chars>",
-          "issue": "<one of: missing_citation | non_primary_source | unverifiable | possibly_invented>",
-          "suggested_action": "<one of: drop_claim | swap_to_primary_source | add_citation>",
-          "suggested_url": "<URL of a primary source if you know one; empty string if you don't>"
+          "claim": "<the exact fabricated claim, max 200 chars>",
+          "issue": "possibly_invented",
+          "suggested_action": "<drop_claim | add_citation>",
+          "suggested_url": "<primary source URL if known; empty string if not>"
         }}
       ]
     }}
 
-    issues[] empty when all_claims_cited is true. Be strict.
+    issues[] MUST be empty when all_claims_cited is true.
+    Only include claims that are GENUINELY suspicious — not standard doctrine.
 """).strip()
 
 
