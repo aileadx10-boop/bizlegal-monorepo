@@ -87,6 +87,12 @@ REVIEW_PROMPT = textwrap.dedent("""
       • General compliance guidance derived from publicly-known regulation
       • Statute or article numbers that are cited anywhere in the article text
         (the article itself is the citation in these cases)
+      • Named enforcement cases cited in standard legal citation format — Volume,
+        Reporter, Page, Court, Year (e.g., "United States v. Coscia, 824 F.3d 582
+        (7th Cir. 2016)") or shorthand with court and year (e.g., "CFTC v. Hayes
+        (N.D. Ill. 2022)"). Standard legal citations in proper Bluebook format are
+        presumed documented. Only flag case names that are entirely fictional or
+        lack any recognisable citation format.
 
     PASS THRESHOLD: If there are no genuinely invented/fabricated specific claims,
     set all_claims_cited = true, even if some claims lack verbatim source backing.

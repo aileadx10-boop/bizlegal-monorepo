@@ -138,6 +138,10 @@ DRAFT_PROMPT = textwrap.dedent("""
       - Stay laser-focused on the topic spec's jurisdiction + regulation
       - Never invent: company names in enforcement, dollar penalties, case
         outcomes, URLs
+      - Never include editorial cost estimates ("$X in legal defense costs",
+        "estimated $X in compliance costs", "cost of non-compliance is $X")
+        unless that exact figure appears verbatim in a source URL. These are
+        opinion, not verifiable fact, and will be rejected by the factual gate.
       - Include at least 1 specific recent case, action, or deadline
       - Target 900-1400 words. Quality over length; stay under 1400.
       - Every numeric claim (date, fine, deadline) must be in the sources
