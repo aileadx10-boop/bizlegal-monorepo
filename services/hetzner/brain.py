@@ -336,16 +336,21 @@ def _yaml_lines(fm: dict) -> list[str]:
     return out
 
 
+def _html_escape(s: str) -> str:
+    return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
 # ── Telegram ─────────────────────────────────────────────────────
 def notify_draft_ready(slug: str, title: str, target: str) -> None:
     if not TG_TOKEN or not TG_CHAT:
         return
+    # HTML mode — more forgiving than Markdown; only &, <, > need escaping.
     text = (
-        "*✍️ Draft ready for approval*\n\n"
-        f"_{title}_\n\n"
-        f"target: `{target}`\n"
-        f"slug: `{slug}`\n\n"
-        "Tap to act. Numeric claims will be verified against sources before commit."
+        "<b>✍️ Draft ready for approval</b>\n\n"
+        f"<i>{_html_escape(title)}</i>\n\n"
+        f"target: <code>{_html_escape(target)}</code>\n"
+        f"slug: <code>{_html_escape(slug)}</code>\n\n"
+        "Tap to act. Numeric claims verified against sources before commit."
     )
     keyboard = {
         "inline_keyboard": [
@@ -362,7 +367,7 @@ def notify_draft_ready(slug: str, title: str, target: str) -> None:
             json={
                 "chat_id": TG_CHAT,
                 "text": text,
-                "parse_mode": "Markdown",
+                "parse_mode": "HTML",
                 "reply_markup": keyboard,
             },
             timeout=15,
