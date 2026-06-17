@@ -27,7 +27,7 @@ import httpx
 from dotenv import load_dotenv
 from supabase import create_client, Client  # type: ignore
 from telegram import Update
-from telegram.ext import Application, CallbackQueryHandler, ContextTypes
+from telegram.ext import Application, CallbackQueryHandler, CommandHandler, ContextTypes
 
 from ops_log import log_event
 
@@ -55,7 +55,8 @@ def is_authorized(update: Update) -> bool:
     if not TG_CHAT:
         return False
     user_id = (update.effective_user.id if update.effective_user else None)
-    return str(user_id) == TG_CHAT
+    chat_id = str(update.effective_chat.id) if update.effective_chat else None
+    return str(user_id) == TG_CHAT or chat_id == TG_CHAT
 
 
 # ── Gate 1: topic pick ─────────────────────────────────────────
@@ -144,12 +145,64 @@ async def handle_page_action(query, action: str, slug: str) -> None:
     )
 
 
+# ── /publish /reject /regen commands ──────────────────────────
+async def command_handler(update: Update, _ctx: ContextTypes.DEFAULT_TYPE) -> None:
+    """Handle /publish <slug>, /reject <slug>, /regen <slug> text commands.
+
+    Bypasses inline buttons entirely — useful when callback queries have
+    expired or buttons aren't visible. Moses types e.g.:
+        /publish sec-nfa-mou-2026-harmonized-oversight-crypto-firms
+    """
+    if not update.message:
+        return
+    if not is_authorized(update):
+        await update.message.reply_text("Unauthorized.")
+        return
+    text = (update.message.text or "").strip()
+    parts = text.split(None, 1)
+    if len(parts) < 2:
+        await update.message.reply_text(
+            "Usage: /publish <slug>  •  /reject <slug>  •  /regen <slug>"
+        )
+        return
+    cmd = parts[0].lstrip("/").lower()
+    slug = parts[1].strip()
+    action = "deploy" if cmd == "publish" else cmd
+    if action not in ("deploy", "reject", "regen"):
+        await update.message.reply_text(f"Unknown: {cmd}. Use /publish, /reject, /regen.")
+        return
+    try:
+        async with httpx.AsyncClient(timeout=30) as cx:
+            res = await cx.post(f"{PUBLISHER_URL}/{action}", json={"slug": slug})
+            res.raise_for_status()
+            data = res.json()
+        msg = {
+            "deploy": f"✅ Published: {data.get('blog_url') or slug}",
+            "regen":  f"🔁 Regenerating {slug}. Fresh draft incoming.",
+            "reject": f"🗑 Rejected and archived: {slug}.",
+        }.get(action, f"OK: {slug}")
+        await update.message.reply_text(msg)
+    except Exception as err:
+        await update.message.reply_text(f"❌ {action} failed: {err}")
+    log_event(
+        "curation.action",
+        ref_id=f"curator/bot/{slug}",
+        status="ok",
+        metadata={"action": action, "slug": slug, "via": "command"},
+    )
+
+
 # ── Router ──────────────────────────────────────────────────────
 async def callback_handler(update: Update, _ctx: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     if not query or not query.data:
         return
-    await query.answer()
+    try:
+        await query.answer()
+    except Exception:
+        # Stale callback queries raise BadRequest ("Query is too old").
+        # Log and continue — the action below still works.
+        pass
     if not is_authorized(update):
         await query.edit_message_text("Unauthorized.")
         return
@@ -202,6 +255,7 @@ def main() -> None:
         raise RuntimeError("TELEGRAM_CURATOR_BOT_TOKEN not configured")
     app = Application.builder().token(TG_TOKEN).post_init(_post_init).build()
     app.add_handler(CallbackQueryHandler(callback_handler))
+    app.add_handler(CommandHandler(["publish", "reject", "regen"], command_handler))
     print("[bot] BIZLEGALFORGEBOT listener up. Polling for callbacks…")
     app.run_polling()
 
