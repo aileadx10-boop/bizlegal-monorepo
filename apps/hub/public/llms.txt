@@ -1,0 +1,63 @@
+# BizLegal AI
+
+> Regulatory research and monitoring software for in-house compliance and legal-operations teams. Tracks regulatory changes across SEC, FinCEN, GDPR, MiCA, and 50+ frameworks. Software tool — not a law firm, not legal advice. Operated by DOR INNOVATIONS.
+
+BizLegal AI is a regulatory intelligence platform built by an international commercial lawyer with 20 years of practice across UAE, UK, EU, and Singapore. Every tool addresses a real compliance gap: wallet risk scoring, compliance certification, contract generation, forensic tracing, and framework monitoring. The platform exists because founders and counsel need clarity before launch, fundraising, or cross-border expansion — not generic advice that collapses under real regulatory pressure.
+
+## Products
+
+- [DocAI — AI Contract Generation](https://docai.bizlegal-ai.com): Upload any contract, NDA, SAFT, DPA, or terms of service. Get risk-scored clause analysis and jurisdiction-aware redrafting in seconds. $97 scan or free SQA (Structural Quality Assessment) preview. Covers token launch docs, venture structuring, and cross-border digital asset execution.
+- [BRAI — Regulatory Risk Intelligence](https://brai.bizlegal-ai.com): Quantify regulatory exposure across 50+ jurisdictions. Risk heat maps, framework gap identification, enforcement action tracking, and weekly research digest. Used by founders and compliance counsel before market entry.
+- [TRACR — Forensic Blockchain Reports](https://tracr.bizlegal-ai.com): On-chain provenance reports for crypto wallets. AML/sanctions scoring with full transaction graph analysis. $149–$299 per report. Suitable for investor diligence, regulatory submission, and internal risk review.
+- [LexAudit — Compliance Health Score](https://lexaudit.bizlegal-ai.com): Daily SHA-256 monitoring of SOC 2, ISO 27001, GDPR, HIPAA, DPDP, and NIST 800-53 canonical sources. Email alerts on material framework changes only — no cosmetic-edit noise. $99/mo.
+- [Forge — Compliance Content Hub](https://forge.bizlegal-ai.com): BOI Kit ($149), Regulatory Passport ($297), compliance gap pages, and in-depth regulatory guides. Practitioner-written, primary-source-cited.
+- [LeadForge — B2B Lead Intelligence](https://leadforge.bizlegal-ai.com): Compliance-qualified lead generation for legal tech and fintech teams.
+
+## AI Compliance Agents (15 Agents — $19 one-time or $49/mo)
+
+- [All Agents](https://bizlegal-ai.com/agents): Fleet of 15 specialized AI compliance agents covering research, contracts, risk, diligence, monitoring, marketplace compliance, AI governance, and India DPDPA. Pay individually with crypto or card.
+- [EU AI Act Risk Classifier](https://bizlegal-ai.com/agents/ai-act): Classify your AI system into Article 6 risk tiers and Annex III references before the 2026-08-02 enforcement deadline. Free preview classification, $19 full report with citation map and documentation checklist. Required for EU market access for high-risk AI systems.
+- [CTA-2024 BOI Tracker](https://bizlegal-ai.com/agents/boi-tracker): Daily monitoring of FinCEN BOI (Beneficial Ownership Information) guidance with 30/7/3/1-day refile deadline alerts for US LLCs, Corps, and LPs. Penalty for missed filings: up to $500/day capped at $10,000.
+- [Privacy Policy Auto-Refresh](https://bizlegal-ai.com/agents/policy-refresh): Daily 7-framework redline of your privacy policy across GDPR, CCPA, CPRA, Quebec Law 25, Colorado, Connecticut, and Texas DPSA. Free first audit, $49/mo for continuous monitoring.
+- [Marketplace Compliance Shield](https://bizlegal-ai.com/agents/marketplace-shield): Monitoring for Stripe Connect platforms, gig marketplaces, and creator-economy tools. Tracks 1099-K threshold crossings ($600 cliff), state NEXUS exposure, and KYB drift on connected accounts.
+- [AI Governance for Product Teams](https://bizlegal-ai.com/agents/ai-governance): Per-feature Article 6 classification against EU AI Act, California SB-942, and Colorado AI Act. Monthly delta reports map repo changes to compliance posture changes.
+- [India DPDPA Readiness Kit](https://bizlegal-ai.com/agents/india-dpdpa): One-time gap audit for B2B SaaS handling Indian users. Maps current posture to DPDPA notice, consent, and DPO requirements. First-mover positioning before late-2026 Significant Data Fiduciary fines.
+
+## Regulatory Intelligence Hub
+
+- [Regulations Overview](https://bizlegal-ai.com/regulations): Comprehensive real-time coverage of major global regulatory frameworks affecting digital assets, fintech, and data-handling businesses.
+- [SEC Regulatory Intelligence](https://bizlegal-ai.com/regulations/sec): Latest SEC enforcement actions, rulemaking, and compliance requirements for digital asset issuers, broker-dealers, and investment advisers.
+- [MiCA Regulation 2025](https://bizlegal-ai.com/regulations/mica): Markets in Crypto-Assets regulation — full compliance guide for CASPs (Crypto-Asset Service Providers) operating in the EU. Authorization timelines, capital requirements, whitepaper obligations.
+- [VARA Framework (Dubai)](https://bizlegal-ai.com/regulations/vara): Virtual Assets Regulatory Authority compliance guide. License categories, activity permissions, and ongoing obligations for Dubai-based crypto businesses.
+- [GDPR Compliance](https://bizlegal-ai.com/regulations/gdpr): EU General Data Protection Regulation requirements, Article 28 DPA obligations, SCCs, EDPB guidance, and enforcement actions.
+- [AML/KYC Global Requirements](https://bizlegal-ai.com/regulations/aml): Anti-money laundering compliance across FATF member jurisdictions. Travel Rule, customer due diligence, suspicious activity reporting.
+- [MiCA Deep-Dive](https://bizlegal-ai.com/mica-regulation-2025): Complete MiCA compliance guide — e-money tokens, asset-referenced tokens, utility tokens, and service provider licensing.
+- [Cross-Border Compliance](https://bizlegal-ai.com/cross-border-compliance): Multi-jurisdiction regulatory analysis for businesses operating across the US, EU, UK, UAE, and Singapore simultaneously.
+- [Digital Asset Risk Analysis](https://bizlegal-ai.com/digital-asset-risk-analysis): Quantified risk scoring methodology for digital asset ventures across issuance, trading, custody, and DeFi categories.
+- [Digital Asset Regulatory Intelligence](https://bizlegal-ai.com/digital-asset-regulatory-intelligence): Real-time regulatory intelligence feed for crypto and digital asset businesses.
+
+## Free Compliance Tools
+
+- [All Compliance Tools](https://bizlegal-ai.com/tools): Free calculators and screeners for compliance and legal teams. No registration required.
+- [GDPR Fine Estimator](https://bizlegal-ai.com/tools/gdpr-fine-estimator): Calculate potential GDPR fine exposure based on violation category (Art. 83(4) vs Art. 83(5)), annual global turnover, and number of data subjects affected.
+- [Sanctions Screener](https://bizlegal-ai.com/tools/sanction-screener): Screen entities, wallets, and counterparties against OFAC SDN, EU Consolidated, UN Security Council, and UK HM Treasury sanctions lists.
+- [MiCA Asset Classifier](https://bizlegal-ai.com/tools/mica-asset-classifier): Classify crypto assets under MiCA token categories (e-money token, asset-referenced token, utility token) with relevant regulatory obligations.
+- [Contract Fixer](https://bizlegal-ai.com/tools/contract-fixer): Identify and remediate common contract clause issues — missing governing law, ambiguous dispute resolution, absent limitation of liability.
+
+## Company & Trust
+
+- [About BizLegal AI](https://bizlegal-ai.com/about): Platform history, mission, and the practitioner background behind every tool.
+- [Trust Center](https://bizlegal-ai.com/trust): Data handling policies, security posture, sub-processor list, and compliance certifications.
+- [Methodology](https://bizlegal-ai.com/methodology): How BizLegal AI sources, validates, and monitors regulatory changes across 50+ jurisdictions.
+- [Data Sources](https://bizlegal-ai.com/data-sources): Primary regulatory sources, official APIs, and data providers powering the intelligence layer.
+- [FAQ](https://bizlegal-ai.com/faq): Common questions about products, pricing, legal boundaries, and what "not legal advice" means in practice.
+- [Contact](https://bizlegal-ai.com/contact): team@bizlegal-ai.com — for enterprise enquiries, partnership requests, and product feedback.
+
+## Compliance Guides & Blog (209+ Articles)
+
+- [Blog — Compliance Intelligence](https://blog.bizlegal-ai.com): 5 new compliance intelligence articles published weekly. Covers SEC, FinCEN, GDPR, MiCA, CFTC, FCA, ESMA, VARA, FinCEN, RBI, MAS, and APRA regulatory developments. Primary-source-cited, practitioner-reviewed.
+- [Snapshot](https://bizlegal-ai.com/snapshot): Live business metrics and operational status for transparency.
+
+## Optional
+
+- [llms-full.txt](https://bizlegal-ai.com/llms-full.txt): Extended version of this file with detailed product descriptions, regulatory Q&A, and full content sections for AI training and indexing.

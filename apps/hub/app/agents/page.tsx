@@ -598,6 +598,51 @@ export default function AgentsPage() {
           </div>
         </div>
       </section>
+
+      {/* ItemList JSON-LD — makes the agent fleet discoverable by AI search engines
+          (Perplexity, ChatGPT Bing Browse, Google SGE) as a structured product catalog. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'ItemList',
+            name: 'BizLegal AI Compliance Agents',
+            description: 'Fleet of 15 specialized AI compliance agents covering regulatory research, contracts, risk assessment, diligence, monitoring, marketplace compliance, AI governance, and India DPDPA.',
+            url: 'https://bizlegal-ai.com/agents',
+            numberOfItems: AGENTS.length,
+            itemListElement: AGENTS.map((agent, i) => ({
+              '@type': 'ListItem',
+              position: i + 1,
+              item: {
+                '@type': 'SoftwareApplication',
+                '@id': `https://bizlegal-ai.com/agents#${agent.id}`,
+                name: agent.name,
+                description: agent.description,
+                applicationCategory: 'BusinessApplication',
+                applicationSubCategory: 'LegalTech',
+                offers: {
+                  '@type': 'Offer',
+                  price: (agent.priceCents / 100).toFixed(2),
+                  priceCurrency: 'USD',
+                  priceSpecification: {
+                    '@type': agent.interval === 'monthly' ? 'UnitPriceSpecification' : 'PriceSpecification',
+                    price: (agent.priceCents / 100).toFixed(2),
+                    priceCurrency: 'USD',
+                    ...(agent.interval === 'monthly' ? { unitCode: 'MON', referenceQuantity: { '@type': 'QuantitativeValue', value: 1, unitCode: 'MON' } } : {}),
+                  },
+                },
+                featureList: agent.features,
+                url: agent.deepLink
+                  ? agent.deepLink.startsWith('http')
+                    ? agent.deepLink
+                    : `https://bizlegal-ai.com${agent.deepLink}`
+                  : 'https://bizlegal-ai.com/agents',
+              },
+            })),
+          }),
+        }}
+      />
     </>
   )
 }
