@@ -221,12 +221,15 @@ def call_claude(prompt: str) -> dict:
     try:
         return json.loads(cleaned)
     except json.JSONDecodeError:
-        # Fallback: escape literal newlines/tabs embedded in JSON string values.
-        # Claude sometimes outputs actual \n inside mdx_body instead of \\n,
-        # especially for long (~1000 word) articles. The state machine below
-        # handles nested escapes correctly without corrupting non-string tokens.
+        # Fallback 1: escape literal newlines/tabs embedded in JSON string values.
         fixed = _fix_json_newlines(cleaned)
-        return json.loads(fixed)
+        try:
+            return json.loads(fixed)
+        except json.JSONDecodeError:
+            # Fallback 2: also escape unescaped double-quotes inside string values.
+            # Happens when mdx_body contains quoted text like "the "Big Four" firms".
+            fixed2 = _fix_json_embedded_quotes(fixed)
+            return json.loads(fixed2)
 
 
 def _fix_json_newlines(text: str) -> str:
@@ -252,6 +255,62 @@ def _fix_json_newlines(text: str) -> str:
             result.append("\\t")
         else:
             result.append(ch)
+    return "".join(result)
+
+
+def _fix_json_embedded_quotes(text: str) -> str:
+    """Escape unescaped double-quotes that appear inside JSON string values.
+
+    Detects them by peeking ahead: a quote that is NOT followed (ignoring
+    whitespace) by a JSON structural character (',', '}', ']', ':') is
+    assumed to be a literal quote embedded in the value, not the closing
+    delimiter.
+    """
+    chars = list(text)
+    result: list[str] = []
+    in_string = False
+    escape_next = False
+    i = 0
+    while i < len(chars):
+        ch = chars[i]
+        if escape_next:
+            result.append(ch)
+            escape_next = False
+            i += 1
+            continue
+        if ch == "\\" and in_string:
+            result.append(ch)
+            escape_next = True
+            i += 1
+            continue
+        if ch == '"':
+            if in_string:
+                # Peek past whitespace to find the next structural character.
+                j = i + 1
+                while j < len(chars) and chars[j] in ' \t\r\n':
+                    j += 1
+                next_ch = chars[j] if j < len(chars) else ''
+                if next_ch in (',', '}', ']', ':'):
+                    # Closing quote — end of string value.
+                    result.append(ch)
+                    in_string = False
+                else:
+                    # Embedded unescaped quote — escape it.
+                    result.append('\\"')
+            else:
+                result.append(ch)
+                in_string = True
+            i += 1
+            continue
+        elif in_string and ch == "\n":
+            result.append("\\n")
+        elif in_string and ch == "\r":
+            result.append("\\r")
+        elif in_string and ch == "\t":
+            result.append("\\t")
+        else:
+            result.append(ch)
+        i += 1
     return "".join(result)
 
 
