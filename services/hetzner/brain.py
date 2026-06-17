@@ -341,35 +341,55 @@ def _html_escape(s: str) -> str:
 
 
 # ── Telegram ─────────────────────────────────────────────────────
+# Telegram callback_data limit is 64 bytes. "deploy:" prefix = 7 chars,
+# leaving 57 chars for the slug. Slugs longer than that get a text-only
+# notice (no buttons) with manual deploy instructions.
+_CB_MAX_SLUG = 57
+
+
 def notify_draft_ready(slug: str, title: str, target: str) -> None:
     if not TG_TOKEN or not TG_CHAT:
         return
-    # HTML mode — more forgiving than Markdown; only &, <, > need escaping.
-    text = (
-        "<b>✍️ Draft ready for approval</b>\n\n"
-        f"<i>{_html_escape(title)}</i>\n\n"
-        f"target: <code>{_html_escape(target)}</code>\n"
-        f"slug: <code>{_html_escape(slug)}</code>\n\n"
-        "Tap to act. Numeric claims verified against sources before commit."
-    )
-    keyboard = {
-        "inline_keyboard": [
-            [
-                {"text": "✅ Deploy", "callback_data": f"deploy:{slug}"},
-                {"text": "🔁 Regen", "callback_data": f"regen:{slug}"},
-                {"text": "🗑 Reject", "callback_data": f"reject:{slug}"},
-            ],
-        ],
-    }
+    slug_ok = _html_escape(slug)
+    title_ok = _html_escape(title)
+    target_ok = _html_escape(target)
+
+    if len(slug) <= _CB_MAX_SLUG:
+        text = (
+            "<b>✍️ Draft ready for approval</b>\n\n"
+            f"<i>{title_ok}</i>\n\n"
+            f"target: <code>{target_ok}</code>\n"
+            f"slug: <code>{slug_ok}</code>\n\n"
+            "Tap to act. Numeric claims verified against sources before commit."
+        )
+        payload: dict = {
+            "chat_id": TG_CHAT,
+            "text": text,
+            "parse_mode": "HTML",
+            "reply_markup": {
+                "inline_keyboard": [
+                    [
+                        {"text": "✅ Deploy", "callback_data": f"deploy:{slug}"},
+                        {"text": "🔁 Regen", "callback_data": f"regen:{slug}"},
+                        {"text": "🗑 Reject", "callback_data": f"reject:{slug}"},
+                    ]
+                ]
+            },
+        }
+    else:
+        # Slug too long for callback_data — send notice-only, no buttons.
+        text = (
+            "<b>✍️ Draft ready (manual deploy — slug too long for buttons)</b>\n\n"
+            f"<i>{title_ok}</i>\n\n"
+            f"slug: <code>{slug_ok}</code>\n\n"
+            "Deploy via: <code>POST http://127.0.0.1:8082/deploy</code>"
+        )
+        payload = {"chat_id": TG_CHAT, "text": text, "parse_mode": "HTML"}
+
     try:
         httpx.post(
             f"https://api.telegram.org/bot{TG_TOKEN}/sendMessage",
-            json={
-                "chat_id": TG_CHAT,
-                "text": text,
-                "parse_mode": "HTML",
-                "reply_markup": keyboard,
-            },
+            json=payload,
             timeout=15,
         ).raise_for_status()
     except Exception as err:
