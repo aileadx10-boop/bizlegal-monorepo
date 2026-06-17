@@ -486,6 +486,7 @@ def process_picked(force: bool = False) -> int:
             invented_issues = [
                 i for i in review_result.issues
                 if i.get("issue") == "possibly_invented"
+                and i.get("suggested_action") == "drop_claim"
             ]
             if not review_result.all_claims_cited and invented_issues:
                 _reject_draft(sb, row, slug, "factual_review",
