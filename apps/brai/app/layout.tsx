@@ -10,6 +10,12 @@ export const metadata: Metadata = {
   title: "BRAI — Blockchain Regulatory Intelligence",
   description:
     "BRAI produces compliance posture reports for digital-asset ventures. Human-reviewed. Not legal advice.",
+  // W3.4 — GSC verification. Set NEXT_PUBLIC_GSC_VERIFICATION in Vercel env
+  // (a 43-char token GSC issues at "Add property → HTML tag" flow). Renders
+  // only when present, mirroring the hub pattern.
+  ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION
+    ? { verification: { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION } }
+    : {}),
 }
 
 const LANDING_FOUC = themeFOUCScript({
