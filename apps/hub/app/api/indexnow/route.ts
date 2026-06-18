@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const key = process.env.INDEXNOW_KEY
+  const key = process.env.INDEXNOW_KEY?.trim()
   if (!key) {
     return NextResponse.json({ error: 'INDEXNOW_KEY not set' }, { status: 503 })
   }
