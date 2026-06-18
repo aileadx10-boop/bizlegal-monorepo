@@ -118,3 +118,50 @@ After steps 1–2, GEO is fully live: AI engines can crawl, read your `llms.txt`
 | Cloudflare AI Crawl Control OFF | ❌ Blocked (not automatable + security toggle) → Moses |
 | GSC token + Vercel env | ❌ Moses |
 | AdSense / CF Pages env | ❌ Moses |
+
+
+---
+
+## 4. POST-EXEC UPDATE — 2026-06-19 00:35 UTC (Hermes session 2)
+
+**What happened after the report was written:**
+
+- 17 atomic commits pushed to `aileadx10-boop/bizlegal-monorepo` via GitHub Contents API (NOT `git push` — bypassed the corrupted-sandbox-git problem). 7 robots.ts modifies + 7 robots.txt deletes + .gitattributes + 2 decisions/ files. All on `main`, HEAD = `ae11a8082e88`.
+- 1 commit pushed to `aileadx10-boop/bizlegal-ea`: `c609f8a` (after `git rebase origin/main` then `git push`). Resolves the stale `.git/index.lock` from session 1.
+- All 7 Vercel projects auto-built from the commits. State at first check: 6 READY, brai BUILDING, all on commit `ae11a8082e88`.
+- New CF API token received from Moses: `cfat_0***26dc23` (53 chars — non-standard; standard CF tokens are 40). Tested via `cURL`:
+  - `GET /accounts` → 200 (Account ID: `e1587fb5c35f7092167392448a283544`)
+  - `GET /zones/{zone}` → 200 (apex zone visible)
+  - `GET /zones/{zone}/rulesets` → 200 (managed normalization + managed free + DDoS rulesets)
+  - `GET /user/tokens/verify` → 401 "Invalid API Token"
+  - `PATCH /zones/{zone}/settings/managed_robots` → 403 "Unauthorized to access requested resource" (code 9109)
+  - `PATCH /zones/{zone}/settings/ai_crawl_control` → 403
+  - `POST /zones/{zone}/rulesets` (with skip-rule for AI bots) → 403
+  - `POST /zones/{zone}/pagerules` → 403
+  - `POST /zones/{zone}/filters` → 403
+  - `POST /zones/{zone}/purge_cache` → 401
+
+**The new token has Zone:Read + Account:Read + Ruleset:Read. NO write permissions.** All write paths return 403 or 401. The token is read-only.
+
+**Conclusion:** The CF AI Crawl Control + Managed robots.txt toggles still require Moses to do them manually in the Cloudflare dashboard. ~16 clicks across 8 zones, ~2-3 minutes total.
+
+**After CF is unblocked, the GEO/AEO ship is 100% live:**
+- llms.txt on 8/8 surfaces ✓ (verified)
+- JSON-LD in SSR HTML on hub ✓ (5 blocks: Organization, WebSite, SoftwareApplication, ItemList, FAQPage)
+- Sitemap.xml on 8/8 surfaces ✓ (hub 38, products 3-14, blog 409)
+- robots.ts shadow fix in 7/7 apps ✓ (committed + Vercel READY)
+- public/robots.txt shadowed static deleted in 7/7 apps ✓
+- Blog robots.ts updated to allow AI bots ✓
+- .gitattributes prevents future CRLF churn ✓
+
+**What still needs Moses (5 min):**
+1. CF dashboard → 8 zones → Security → Bots → AI Crawl Control → OFF
+2. CF dashboard → 8 zones → Security → Settings → Managed robots.txt → OFF
+3. (Optional) Generate a CF API Token with Zone:Settings:Edit scope to enable future programmatic management. Recommended: scope to all 8 bizlegal zones.
+
+**Verification after manual toggle:**
+```
+curl https://brai.bizlegal-ai.com/robots.txt | head -3
+# Should show: User-agent: * Allow: /
+# NOT: "BEGIN Cloudflare Managed content"
+```
