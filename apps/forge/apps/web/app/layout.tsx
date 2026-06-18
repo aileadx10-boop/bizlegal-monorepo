@@ -41,9 +41,12 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-    verification: {
-          google: 'WpGQcDSI9oB9_aT4PWWOH6MazCT19BE-ab3UUjB_PKk',
-    },
+  // W3.4 — GSC verification. Set NEXT_PUBLIC_GSC_VERIFICATION in Vercel env
+  // (a 43-char token GSC issues at "Add property → HTML tag" flow). Renders
+  // only when present so the slot is invisible until Moses adds the env var.
+  ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION
+    ? { verification: { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION } }
+    : {}),
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
