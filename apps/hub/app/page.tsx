@@ -219,6 +219,38 @@ const METHODOLOGY = [
 export default function HomePage() {
   return (
     <>
+      {/* JSON-LD ─────────────────────────────────────────── */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org', '@type': 'SoftwareApplication',
+        name: 'BizLegal AI Platform', applicationCategory: 'BusinessApplication',
+        applicationSubCategory: 'Regulatory Compliance Software', operatingSystem: 'Web',
+        url: 'https://bizlegal-ai.com',
+        description: 'Six intelligence surfaces for compliance teams: Tracr (wallet forensics), BRAI (counterparty risk), LexAudit (compliance health), DocAI (contract analysis), Forge (BOI/CTA), LeadForge (buyer intent).',
+        offers: { '@type': 'AggregateOffer', priceCurrency: 'USD', lowPrice: '0', highPrice: '997', offerCount: '6' },
+      }) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org', '@type': 'ItemList', name: 'BizLegal AI Product Suite',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, item: { '@type': 'Product', name: 'Tracr — Wallet & Transaction Intelligence', url: 'https://tracr.bizlegal-ai.com', offers: { '@type': 'Offer', price: '149', priceCurrency: 'USD' } } },
+          { '@type': 'ListItem', position: 2, item: { '@type': 'Product', name: 'BRAI — Counterparty Risk Intelligence', url: 'https://brai.bizlegal-ai.com', offers: { '@type': 'Offer', price: '49', priceCurrency: 'USD' } } },
+          { '@type': 'ListItem', position: 3, item: { '@type': 'Product', name: 'LexAudit — Compliance Health Score', url: 'https://lexaudit.bizlegal-ai.com', offers: { '@type': 'Offer', price: '99', priceCurrency: 'USD' } } },
+          { '@type': 'ListItem', position: 4, item: { '@type': 'Product', name: 'DocAI — Contract & Security-Questionnaire Intelligence', url: 'https://docai.bizlegal-ai.com', offers: { '@type': 'Offer', price: '69', priceCurrency: 'USD' } } },
+          { '@type': 'ListItem', position: 5, item: { '@type': 'Product', name: 'Forge — BOI / CTA Compliance Intelligence', url: 'https://forge.bizlegal-ai.com', offers: { '@type': 'Offer', price: '149', priceCurrency: 'USD' } } },
+          { '@type': 'ListItem', position: 6, item: { '@type': 'Product', name: 'LeadForge — Buyer-Intent Intelligence', url: 'https://leadforge.bizlegal-ai.com', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } } },
+        ],
+      }) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org', '@type': 'FAQPage',
+        mainEntity: [
+          { '@type': 'Question', name: 'What does BizLegal AI do?', acceptedAnswer: { '@type': 'Answer', text: 'BizLegal AI is a regulatory research and monitoring software platform for in-house compliance and legal-operations teams. We track 50+ regulators across the US, UK, EU, UAE, Singapore, Hong Kong, Japan, Australia, Canada, and Switzerland. We are a software tool — not a law firm, and not legal advice.' } },
+          { '@type': 'Question', name: 'How fresh is your regulatory data?', acceptedAnswer: { '@type': 'Answer', text: 'Our intelligence desk refreshes daily. We ingest 50+ regulator RSS feeds, enforcement press releases, court filings, and consultation papers. Every published brief is timestamped and source-cited inline.' } },
+          { '@type': 'Question', name: 'How do you score risk in Tracr?', acceptedAnswer: { '@type': 'Answer', text: 'Tracr combines five signals into a 0-100 composite: sanctions-list match (OFAC, UN, EU, UK HMT), counterparty exposure, mixer/tumbler exposure, exchange-risk grade, and jurisdiction clustering. The score is deterministic and reproducible. Tracr is an intelligence indicator, not a legal verdict.' } },
+          { '@type': 'Question', name: 'Is LexAudit a SOC 2 certification?', acceptedAnswer: { '@type': 'Answer', text: 'No. LexAudit is a continuous Compliance Health Score, not a certification. It is a deterministic 60-signal check. For an actual SOC 2 attestation you need a licensed CPA firm — but LexAudit is excellent for the other 364 days of the year.' } },
+          { '@type': 'Question', name: 'How is DocAI different from generic AI contract review?', acceptedAnswer: { '@type': 'Answer', text: 'DocAI is policy-aware. You upload your existing contracts and your standard policy library, and DocAI redlines new contracts against YOUR standards — not generic best-practice. The clause library is version-controlled and audit-ready.' } },
+          { '@type': 'Question', name: 'Can I cancel anytime?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. All subscription products are month-to-month with no contract. Cancel from your dashboard or by emailing support@bizlegal-ai.com.' } },
+          { '@type': 'Question', name: 'Is your platform GDPR compliant?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. We are a data processor (DPA available on request) operating under GDPR Art. 28 terms. We do not sell personal data and do not train AI models on customer-uploaded documents.' } },
+        ],
+      }) }} />
       {/* HERO ─────────────────────────────────────────────── */}
       <Hero
         eyebrow="Intelligence Desk · Live · 50+ jurisdictions monitored"
