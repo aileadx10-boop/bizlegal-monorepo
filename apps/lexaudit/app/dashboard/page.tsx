@@ -12,16 +12,29 @@ export default function Dashboard() {
   const [showNew, setShowNew] = useState(false)
   const [form, setForm] = useState({ title: '', client_ref: '', ai_tool: '' })
   const [loading, setLoading] = useState(false)
+  const [hasActiveSub, setHasActiveSub] = useState<boolean | null>(null)
   const router = useRouter()
 
   useEffect(() => {
     const supabase = createClient()
-    supabase.auth.getUser().then(({ data }) => {
-      if (!data.user) router.push('/login')
-      else {
-        setUser(data.user)
-        loadMatters(data.user.id)
+    supabase.auth.getUser().then(async ({ data }) => {
+      if (!data.user) {
+        router.push('/login')
+        return
       }
+      setUser(data.user)
+      loadMatters(data.user.id)
+
+      // Check for an active subscription (beta users have trial_ends_at set)
+      const { data: subs } = await supabase
+        .from('subscriptions')
+        .select('id, status, trial_ends_at, ends_at')
+        .eq('user_email', data.user.email)
+        .in('status', ['active', 'trialing'])
+        .limit(1)
+
+      const activeSub = (subs ?? []).length > 0
+      setHasActiveSub(activeSub)
     })
   }, [])
 
@@ -83,6 +96,21 @@ export default function Dashboard() {
           <button onClick={signOut} style={{ background: 'none', border: '1px solid #1e293b', color: '#64748b', borderRadius: '6px', padding: '6px 14px', cursor: 'pointer', fontSize: '12px' }}>Sign Out</button>
         </div>
       </nav>
+
+      {/* Subscription banner — shown when no active sub detected */}
+      {hasActiveSub === false && (
+        <div style={{ background: 'linear-gradient(90deg,#1a0e00,#0f0900)', borderBottom: '1px solid #3d2800', padding: '12px 40px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ color: '#c9a84c', fontSize: '16px' }}>★</span>
+            <span style={{ color: '#94a3b8', fontSize: '13px' }}>
+              You&apos;re on the free beta — <strong style={{ color: '#e2e8f0' }}>3 months free</strong> on any paid plan.
+            </span>
+          </div>
+          <Link href="/pricing" style={{ background: 'linear-gradient(135deg,#c9a84c,#a07830)', color: '#0a0a0f', borderRadius: '6px', padding: '8px 18px', fontWeight: 700, fontSize: '12px', textDecoration: 'none', whiteSpace: 'nowrap' }}>
+            Choose a Plan →
+          </Link>
+        </div>
+      )}
 
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '40px' }}>
         {/* Header */}

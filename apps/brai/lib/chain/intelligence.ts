@@ -22,6 +22,7 @@ import {
 } from "./composite-score"
 import { fetchGoldRushHit } from "./goldrush"
 import { screenAddress } from "./sanctions"
+// screenAddress is now async (Supabase-backed). buildSnapshot awaits it.
 import type {
   ChainHit,
   ChainId,
@@ -76,7 +77,7 @@ export async function buildSnapshot(
   }
 
   const direct_sanctions: SanctionsHit[] =
-    inputs.pre?.sanctions_hits ?? screenAddress(inputs.address)
+    inputs.pre?.sanctions_hits ?? (await screenAddress(inputs.address))
   const mixer_hits: MixerExposureHit[] = inputs.pre?.mixer_hits ?? []
   const counterparty_hits: CounterpartyExposureHit[] = inputs.pre?.counterparty_hits ?? []
   const jurisdiction_hits: JurisdictionHit[] = inputs.pre?.jurisdiction_hits ?? []

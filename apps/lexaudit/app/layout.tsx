@@ -12,6 +12,10 @@ export const metadata: Metadata = {
   title: 'LexAudit — Compliance Health Scores for Lawyers',
   description: 'Regulatory intelligence — not legal advice. LexAudit turns your AI-assisted matter workflow into a versioned, source-cited Compliance Health Score reviewed by a named analyst.',
   keywords: 'compliance health score, regulatory intelligence, AI audit trail, lawyer governance, attestation',
+  // W3.4 — GSC verification. Set NEXT_PUBLIC_GSC_VERIFICATION in Vercel env.
+  ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION
+    ? { verification: { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION } }
+    : {}),
 }
 
 const LANDING_FOUC = themeFOUCScript({

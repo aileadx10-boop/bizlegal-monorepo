@@ -26,9 +26,10 @@ export type { CovalentFetchOptions } from "./covalent"
 
 export {
   __seedSanctionsCacheForTest,
-  getCachedLists,
+  getCachedListsFromSupabase,
   refreshSanctions,
   screenAddress,
+  screenAddressSync,
 } from "./sanctions"
 export type { RefreshOptions } from "./sanctions"
 

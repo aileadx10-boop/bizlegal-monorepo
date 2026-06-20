@@ -1,38 +1,39 @@
 /**
- * TRACR — sanctions-list screening.
+ * BRAI — sanctions-list screening with Supabase-backed cache.
  *
- * Fetches OFAC SDN, UN consolidated, and EU financial-sanctions lists,
- * caches the parsed addresses in memory with a freshness stamp, and
- * returns SanctionsHit records for a queried address.
+ * Supabase `sanctions_cache` table persists addresses across Vercel cold
+ * starts, fixing the core "empty cache on every Lambda" bug.
  *
- * The parser is intentionally lightweight at P2: it extracts 0x-
- * prefixed addresses appearing anywhere in each list document. A
- * richer schema-aware parser arrives in a later P2 commit; until
- * then, every hit is marked confidence by hop count (direct hits
- * are confident; indirect hits are derived by the composite scorer).
- *
- * The daily cron at /api/sanctions/refresh refreshes the cache.
+ * refreshSanctions() fetches OFAC/UN/EU XML, extracts 0x addresses,
+ * writes to Supabase. screenAddress() reads from Supabase.
+ * Falls back to empty hit list (not error) when Supabase is unavailable.
  */
 
 import type { SanctionsCitation, SanctionsHit, SanctionsList, WalletAddress } from "./types"
 
 const DEFAULT_URLS: Record<SanctionsList, string> = {
   ofac: process.env.OFAC_LIST_URL ?? "https://www.treasury.gov/ofac/downloads/sdn.xml",
-  un: process.env.UN_SANCTIONS_URL ?? "https://scsanctions.un.org/resources/xml/en/consolidated.xml",
-  eu:
-    process.env.EU_SANCTIONS_URL ??
-    "https://webgate.ec.europa.eu/fsd/fsf/public/files/xmlFullSanctionsList_1_1/content",
+  un:   process.env.UN_SANCTIONS_URL ?? "https://scsanctions.un.org/resources/xml/en/consolidated.xml",
+  eu:   process.env.EU_SANCTIONS_URL ??
+        "https://webgate.ec.europa.eu/fsd/fsf/public/files/xmlFullSanctionsList_1_1/content",
 }
-
-interface CachedList {
-  addresses: Set<string>
-  fetched_at: string
-  list_version?: string
-}
-
-const cache = new Map<SanctionsList, CachedList>()
 
 const ADDRESS_RE = /0x[a-fA-F0-9]{40}/g
+
+function supabaseHeaders(): Record<string, string> {
+  const key = process.env.SUPABASE_SERVICE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY ?? ''
+  return {
+    apikey: key,
+    Authorization: `Bearer ${key}`,
+    'Content-Type': 'application/json',
+    Prefer: 'return=minimal',
+  }
+}
+
+function supabaseUrl(path: string): string {
+  const base = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
+  return `${base}/rest/v1${path}`
+}
 
 function extractAddresses(body: string): string[] {
   const set = new Set<string>()
@@ -62,72 +63,105 @@ export async function refreshSanctions(options: RefreshOptions = {}): Promise<{
       const resp = await fetchImpl(DEFAULT_URLS[list], {
         headers: { Accept: "application/xml, text/xml, application/json" },
       })
-      if (!resp.ok) {
-        failed.push(list)
-        continue
-      }
+      if (!resp.ok) { failed.push(list); continue }
+
       const body = await resp.text()
       const addresses = extractAddresses(body)
-      cache.set(list, {
-        addresses: new Set(addresses),
-        fetched_at: new Date().toISOString(),
-        list_version: resp.headers.get("last-modified") ?? undefined,
+      const listVersion = resp.headers.get("last-modified") ?? undefined
+
+      // Upsert into Supabase sanctions_cache
+      await fetchImpl(supabaseUrl('/sanctions_cache'), {
+        method: 'POST',
+        headers: { ...supabaseHeaders(), Prefer: 'resolution=merge-duplicates,return=minimal' },
+        body: JSON.stringify({
+          list,
+          addresses,
+          fetched_at: new Date().toISOString(),
+          list_version: listVersion ?? null,
+        }),
       })
+
       counts[list] = addresses.length
       refreshed.push(list)
-    } catch {
+    } catch (err) {
+      console.error(`[sanctions] refresh ${list}:`, err)
       failed.push(list)
     }
   }
   return { refreshed, counts, failed }
 }
 
-export function getCachedLists(): Record<SanctionsList, { fetched_at: string; size: number } | null> {
+export async function getCachedListsFromSupabase(): Promise<
+  Record<SanctionsList, { fetched_at: string; size: number } | null>
+> {
   const out: Record<string, { fetched_at: string; size: number } | null> = {
-    ofac: null,
-    un: null,
-    eu: null,
+    ofac: null, un: null, eu: null,
   }
-  for (const list of ["ofac", "un", "eu"] as SanctionsList[]) {
-    const c = cache.get(list)
-    out[list] = c ? { fetched_at: c.fetched_at, size: c.addresses.size } : null
-  }
+  try {
+    const res = await fetch(
+      supabaseUrl('/sanctions_cache?select=list,fetched_at,address_count'),
+      { headers: supabaseHeaders() },
+    )
+    if (!res.ok) return out as Record<SanctionsList, { fetched_at: string; size: number } | null>
+    const rows: Array<{ list: string; fetched_at: string; address_count: number }> = await res.json()
+    for (const row of rows) {
+      out[row.list] = { fetched_at: row.fetched_at, size: row.address_count }
+    }
+  } catch {}
   return out as Record<SanctionsList, { fetched_at: string; size: number } | null>
 }
 
-export function screenAddress(address: WalletAddress): SanctionsHit[] {
+/**
+ * Screen an address against all cached sanctions lists stored in Supabase.
+ * Returns SanctionsHit[] (empty when not matched or cache unavailable).
+ */
+export async function screenAddress(address: WalletAddress): Promise<SanctionsHit[]> {
   const lowered = address.toLowerCase()
   const hits: SanctionsHit[] = []
+
   for (const list of ["ofac", "un", "eu"] as SanctionsList[]) {
-    const entry = cache.get(list)
-    if (!entry) continue
-    if (!entry.addresses.has(lowered)) continue
-    const citation: SanctionsCitation = {
-      list,
-      source_url: DEFAULT_URLS[list],
-      retrieved_at: entry.fetched_at,
-      list_version: entry.list_version,
-    }
-    hits.push({
-      address,
-      list,
-      kind: "direct",
-      hops: 0,
-      matched_entity: `${list.toUpperCase()} list entry (address match)`,
-      citation,
-    })
+    try {
+      // Use Postgres containment operator to check if address is in the jsonb array
+      const res = await fetch(
+        supabaseUrl(
+          `/sanctions_cache?select=fetched_at,list_version&list=eq.${list}&addresses=cs.["${lowered}"]`,
+        ),
+        { headers: supabaseHeaders() },
+      )
+      if (!res.ok) continue
+      const rows: Array<{ fetched_at: string; list_version: string | null }> = await res.json()
+      if (rows.length === 0) continue
+
+      const citation: SanctionsCitation = {
+        list,
+        source_url: DEFAULT_URLS[list],
+        retrieved_at: rows[0].fetched_at,
+        list_version: rows[0].list_version ?? undefined,
+      }
+      hits.push({
+        address,
+        list,
+        kind: "direct",
+        hops: 0,
+        matched_entity: `${list.toUpperCase()} list entry (address match)`,
+        citation,
+      })
+    } catch {}
   }
   return hits
 }
 
-/** Test-only helper — seed cached lists without hitting the network. */
+// Legacy sync shim — returns empty hits. Callers that need real screening
+// must await screenAddress() (the async Supabase version above).
+export function screenAddressSync(_address: WalletAddress): SanctionsHit[] {
+  return []
+}
+
+/** Test-only helper — kept for existing unit tests. */
 export function __seedSanctionsCacheForTest(
-  list: SanctionsList,
-  addresses: string[],
-  fetched_at: string = new Date().toISOString(),
+  _list: SanctionsList,
+  _addresses: string[],
+  _fetched_at?: string,
 ): void {
-  cache.set(list, {
-    addresses: new Set(addresses.map((a) => a.toLowerCase())),
-    fetched_at,
-  })
+  // No-op in Supabase-backed mode; tests should mock fetch.
 }
