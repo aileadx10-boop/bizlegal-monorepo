@@ -1,0 +1,43 @@
+# BizLegal AI — full daily crontab
+# All times UTC. Moses IDT (UTC+3) so 19:00 UTC = 22:00 IDT.
+DIR=/opt/bizlegal/curator
+PY=python3
+S=$DIR/services/seo-agents
+C=$DIR/services/seo-agents/crawlers
+
+# 00:00 - brain.py (existing systemd)
+# 01:00 - quality gates (existing)
+# 02:00 Mon - gsc-bot Worker (CF cron)
+# 04:00 - Content Enricher
+0 4 * * *  cd $DIR && set -a && . ./.env && set +a && $PY $S/daily_orchestrator.py --task=04 >> /var/log/seo-agents.log 2>&1
+# 05:00 - Visual Assets
+0 5 * * *  cd $DIR && set -a && . ./.env && set +a && $PY $S/daily_orchestrator.py --task=05 >> /var/log/seo-agents.log 2>&1
+# 06:00 - Affiliate Funnel
+0 6 * * *  cd $DIR && set -a && . ./.env && set +a && $PY $S/daily_orchestrator.py --task=06 >> /var/log/seo-agents.log 2>&1
+# 07:00 - GEO Citation
+0 7 * * *  cd $DIR && set -a && . ./.env && set +a && $PY $S/geo_citation.py >> /var/log/seo-agents.log 2>&1
+# 08:00 - Site Health
+0 8 * * *  cd $DIR && set -a && . ./.env && set +a && $PY $C/site_health.py >> /var/log/seo-agents.log 2>&1
+# 09:00 - Backlinks
+0 9 * * *  cd $DIR && set -a && . ./.env && set +a && $PY $C/backlinks.py >> /var/log/seo-agents.log 2>&1
+# 10:00 - Competitors
+0 10 * * * cd $DIR && set -a && . ./.env && set +a && $PY $C/competitors.py >> /var/log/seo-agents.log 2>&1
+# 11:00 - AI Citation Checks
+0 11 * * * cd $DIR && set -a && . ./.env && set +a && $PY $C/ai_checks.py >> /var/log/seo-agents.log 2>&1
+# 12:00 - GSC Index Status
+0 12 * * * cd $DIR && set -a && . ./.env && set +a && $PY $C/index_status.py >> /var/log/seo-agents.log 2>&1
+# 13:00 - SEO Watchdog
+0 13 * * * cd $DIR && set -a && . ./.env && set +a && $PY $S/seo_watchdog.py >> /var/log/seo-agents.log 2>&1
+# 14:00 - Brain v2 (placeholder, run from existing curator)
+# 15:00 - Sales
+0 15 * * * cd $DIR && set -a && . ./.env && set +a && $PY $C/sales.py >> /var/log/seo-agents.log 2>&1
+# 16:00 - Leads
+0 16 * * * cd $DIR && set -a && . ./.env && set +a && $PY $C/leads.py >> /var/log/seo-agents.log 2>&1
+# 17:00 - Customer Quality
+0 17 * * * cd $DIR && set -a && . ./.env && set +a && $PY $C/customer_q.py >> /var/log/seo-agents.log 2>&1
+# 19:00 - CONSOLIDATED DAILY REPORT
+0 19 * * * cd $DIR && set -a && . ./.env && set +a && $PY $S/daily_orchestrator.py --task=19 >> /var/log/seo-agents.log 2>&1
+# 20:00 - Newsletter
+0 20 * * * cd $DIR && set -a && . ./.env && set +a && $PY $S/newsletter.py >> /var/log/seo-agents.log 2>&1
+# 21:00 - Cleanup
+0 21 * * * cd $DIR && set -a && . ./.env && set +a && $PY -c "from pathlib import Path; import shutil, datetime; d=datetime.datetime.now(datetime.timezone.utc); src=Path('/opt/bizlegal/decisions'); dst=src/'archive'/d.strftime('%Y-%m'); dst.mkdir(parents=True, exist_ok=True); [shutil.move(str(f), str(dst/f.name)) for f in src.glob('*') if f.is_file() and f.name.endswith('.json') and (d - datetime.datetime.fromtimestamp(f.stat().st_mtime, datetime.timezone.utc)).days > 7]" >> /var/log/seo-agents.log 2>&1
