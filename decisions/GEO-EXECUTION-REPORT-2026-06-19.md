@@ -83,14 +83,9 @@ Scoped `git add <paths>` only stages those files, so the CRLF churn stays out of
 - **You do it:** CF dash → **each of 8 zones** (bizlegal-ai.com, brai, tracr, lexaudit, docai, forge, leadforge, blog) → **Security → Bots → AI Crawl Control → OFF**, and **Security → Settings → Managed robots.txt → OFF**.
 - **Verify after:** `curl https://brai.bizlegal-ai.com/robots.txt` should no longer contain the "Cloudflare Managed content" block.
 
-### 3.3 GSC — **MOSTLY ALREADY DONE** (verified live in Search Console, 2026-06-19)
-Logged into Search Console and inspected the account directly. Key finding: **the per-app 8-property / 8-token / 8-redeploy plan is unnecessary.**
-- A **Domain property** `sc-domain:bizlegal-ai.com` is already verified (via DNS TXT) and **covers all subdomains** (brai, tracr, lexaudit, docai, forge, leadforge, blog) automatically.
-- **All 9 sitemaps are already submitted and succeeding** under that one property — status הצלחה/Success, all read by Google within the last week:
-  hub `sitemap-index.xml` (389 pages) + hub `sitemap.xml` (39) + blog (342) + brai (13) + lexaudit (13) + docai (14) + tracr (10) + forge (8) + leadforge (3).
-- The GSC meta-tag wiring (commits 3bc4bd4…34b9b51) is **correct in all 8 surfaces** (`verification.google` in each `layout.tsx`) but is now **belt-and-suspenders, not required** — the Domain property + DNS TXT already prove ownership.
-- **What you can skip:** adding 8 URL-prefix properties, generating 8 tokens, setting 8 Vercel envs, 8 redeploys, 8 Verify clicks. (Only add per-subdomain URL-prefix properties if you want separate per-subdomain dashboards — optional; you can already filter the Domain property by page/subdomain.)
-- **What actually remains (optional, low value):** the `services/gsc-bot` Worker's automated weekly sitemap re-submission needs a GCP **service account** + JSON key (`wrangler secret put GSC_SERVICE_ACCOUNT_JSON`) added as Owner on the Domain property. But Google is already auto-re-reading the sitemaps (last-read dates current), so the bot is non-urgent. Service-account creation + key download is Moses/GCP only (I can't create accounts or handle credential keys). **IndexNow is separate** — it uses `INDEXNOW_KEY` for Bing/Yandex and does NOT need the GSC service account.
+### 3.3 GSC verification token — **Moses-only**
+- Same dashboard-automation limit, and the token then goes into the env vault + Vercel env (an account change).
+- **You do it:** Search Console → copy the HTML-tag `content` value → add to env vault + Vercel env (e.g. `NEXT_PUBLIC_GSC_VERIFICATION`) → redeploy.
 
 ### 3.4 Other (unchanged, Moses-only)
 - **AdSense application** — PR #11 merged; apply at adsense.google.com once blog is serving.

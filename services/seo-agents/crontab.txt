@@ -40,4 +40,4 @@ C=$DIR/services/seo-agents/crawlers
 # 20:00 - Newsletter
 0 20 * * * cd $DIR && set -a && . ./.env && set +a && $PY $S/newsletter.py >> /var/log/seo-agents.log 2>&1
 # 21:00 - Cleanup
-0 21 * * * cd $DIR && set -a && . ./.env && set +a && $PY -c "from pathlib import Path; import shutil, datetime; d=datetime.datetime.now(datetime.timezone.utc); src=Path('/opt/bizlegal/decisions'); dst=src/'archive'/d.strftime('%Y-%m'); dst.mkdir(parents=True, exist_ok=True); [shutil.move(str(f), str(dst/f.name)) for f in src.glob('*') if f.is_file() and f.name.endswith('.json') and (d - datetime.datetime.fromtimestamp(f.stat().st_mtime, datetime.timezone.utc)).days > 7]" >> /var/log/seo-agents.log 2>&1
+0 21 * * * cd $DIR && set -a && . ./.env && set +a && $PY $S/cleanup.py

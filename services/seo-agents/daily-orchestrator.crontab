@@ -31,34 +31,33 @@
 # Editable wrapper: cd into the project and source .env first
 DIR=/opt/bizlegal/curator
 PYTHON=python3
-SCRIPT=$DIR/services/seo-agents/daily_orchestrator.py
 
 # 04:00 - Content Enricher
-0 4 * * *  cd $DIR && set -a && . ./.env && set +a && $PYTHON $SCRIPT --task=04 >> /var/log/daily-orchestrator.log 2>&1
+0 4 * * *  cd $DIR && set -a && . ./.env && set +a && $PYTHON services/daily_orchestrator.py --task=04 >> /var/log/daily-orchestrator.log 2>&1
 
 # 05:00 - Visual Assets
-0 5 * * *  cd $DIR && set -a && . ./.env && set +a && $PYTHON $SCRIPT --task=05 >> /var/log/daily-orchestrator.log 2>&1
+0 5 * * *  cd $DIR && set -a && . ./.env && set +a && $PYTHON services/daily_orchestrator.py --task=05 >> /var/log/daily-orchestrator.log 2>&1
 
 # 06:00 - Affiliate Funnel
-0 6 * * *  cd $DIR && set -a && . ./.env && set +a && $PYTHON $SCRIPT --task=06 >> /var/log/daily-orchestrator.log 2>&1
+0 6 * * *  cd $DIR && set -a && . ./.env && set +a && $PYTHON services/daily_orchestrator.py --task=06 >> /var/log/daily-orchestrator.log 2>&1
 
 # 07:00 - GEO Citation (Perplexity)
-0 7 * * *  cd $DIR && set -a && . ./.env && set +a && $PYTHON $SCRIPT --task=07 >> /var/log/daily-orchestrator.log 2>&1
+0 7 * * *  cd $DIR && set -a && . ./.env && set +a && $PYTHON services/daily_orchestrator.py --task=07 >> /var/log/daily-orchestrator.log 2>&1
 
 # 08:00 - Site Health Crawler
-0 8 * * *  cd $DIR && set -a && . ./.env && set +a && $PYTHON $SCRIPT --task=08 >> /var/log/daily-orchestrator.log 2>&1
+0 8 * * *  cd $DIR && set -a && . ./.env && set +a && $PYTHON services/daily_orchestrator.py --task=08 >> /var/log/daily-orchestrator.log 2>&1
 
 # 13:00 - SEO Watchdog (consolidate morning crawlers)
-0 13 * * * cd $DIR && set -a && . ./.env && set +a && $PYTHON $SCRIPT --task=13 >> /var/log/daily-orchestrator.log 2>&1
+0 13 * * * cd $DIR && set -a && . ./.env && set +a && $PYTHON services/daily_orchestrator.py --task=13 >> /var/log/daily-orchestrator.log 2>&1
 
-# 15:00 - Sales Attribution (NOWPayments + PayPal - both live)
-0 15 * * * cd $DIR && set -a && . ./.env && set +a && $PYTHON $SCRIPT --task=15 >> /var/log/daily-orchestrator.log 2>&1
+# 15:00 - Sales Attribution (NOWPayments + Stripe + PayPal)
+0 15 * * * cd $DIR && set -a && . ./.env && set +a && $PYTHON services/daily_orchestrator.py --task=15 >> /var/log/daily-orchestrator.log 2>&1
 
 # 16:00 - Leads Pipeline (Supabase inbound_leads)
-0 16 * * * cd $DIR && set -a && . ./.env && set +a && $PYTHON $SCRIPT --task=16 >> /var/log/daily-orchestrator.log 2>&1
+0 16 * * * cd $DIR && set -a && . ./.env && set +a && $PYTHON services/daily_orchestrator.py --task=16 >> /var/log/daily-orchestrator.log 2>&1
 
 # 19:00 - Consolidated Daily Report (THE MAIN EVENT)
-0 19 * * * cd $DIR && set -a && . ./.env && set +a && $PYTHON $SCRIPT --task=19 >> /var/log/daily-orchestrator.log 2>&1
+0 19 * * * cd $DIR && set -a && . ./.env && set +a && $PYTHON services/daily_orchestrator.py --task=19 >> /var/log/daily-orchestrator.log 2>&1
 
 # Hourly heartbeat (just logs liveness)
 0 * * * *  cd $DIR && set -a && . ./.env && set +a && $PYTHON -c "from datetime import datetime, timezone; print(datetime.now(timezone.utc).isoformat(), 'heartbeat')" >> /var/log/daily-orchestrator.log 2>&1

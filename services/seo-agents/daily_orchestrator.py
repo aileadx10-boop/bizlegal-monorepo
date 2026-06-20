@@ -403,7 +403,6 @@ def task_15_sales_attribution() -> dict:
         try:
             import base64
             auth = base64.b64encode(f'{paypal_id}:{paypal_secret}'.encode()).decode()
-            # Get access token
             token_req = urllib.request.Request(
                 'https://api-m.paypal.com/v1/oauth2/token',
                 data=b'grant_type=client_credentials',
@@ -414,7 +413,6 @@ def task_15_sales_attribution() -> dict:
             token_data = json.loads(token_res.read())
             access_token = token_data.get('access_token', '')
             if access_token:
-                # List transactions for last 24h
                 start = (datetime.now(timezone.utc) - timedelta(hours=24)).strftime('%Y-%m-%dT%H:%M:%S-0000')
                 end = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S-0000')
                 tx_url = f'https://api-m.paypal.com/v1/reporting/transactions?start_date={start}&end_date={end}&fields=all'
@@ -429,13 +427,13 @@ def task_15_sales_attribution() -> dict:
                     info = t.get('transaction_info', {})
                     amount = float(info.get('transaction_amount', {}).get('value', 0) or 0)
                     status = info.get('transaction_status', '')
-                    if status == 'S' and amount > 0:  # 'S' = Success
+                    if status == 'S' and amount > 0:
                         pp_count += 1
                         pp_total += amount
         except Exception as e:
             print(f'  [sales] PayPal: {e}')
 
-    # Pull from Supabase payment_orders as the authoritative ledger
+    # Supabase payment_orders as authoritative ledger
     cutoff = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()
     recent_orders = supabase_query('payment_orders', f'select=gateway,amount_cents,status&created_at=gte.{cutoff}&status=eq.paid')
     db_total = sum(o.get('amount_cents', 0) for o in recent_orders) / 100
