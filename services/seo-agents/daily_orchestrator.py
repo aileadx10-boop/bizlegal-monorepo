@@ -466,7 +466,7 @@ def task_16_leads_pipeline() -> dict:
     return summary
 
 
-def task_19_consolidated_report(runs: list) -> dict:
+def task_19_consolidated_report(runs=None) -> dict:
     """19:00 UTC: Build the DAILY-REPORT-YYYY-MM-DD.md and send to Telegram."""
     today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
     # Aggregate all agent_runs from last 24h
@@ -593,7 +593,7 @@ def main():
 
     if task_id and task_id in TASKS:
         print(f'[{now_iso()}] running task {task_id}')
-        result = TASKS[task_id]()
+        result = TASKS[task_id]([])
         print(f'  result: {result}')
     elif task_id == 'all':
         # Run all tasks in order (for testing)
