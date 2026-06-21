@@ -355,7 +355,7 @@ def task_08_site_health() -> dict:
 def task_13_seo_watchdog() -> dict:
     """13:00 UTC: Consolidate morning crawlers, fire IndexNow for new content."""
     # Get last 24h of agent_runs
-    cutoff = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()
+    cutoff = (datetime.now(timezone.utc) - timedelta(hours=24)).strftime('%Y-%m-%dT%H:%M:%S+00:00')
     runs = supabase_query('agent_runs', f'select=agent_name,action,status,created_at&created_at=gte.{cutoff}')
     by_status = {}
     for r in runs:
@@ -434,7 +434,7 @@ def task_15_sales_attribution() -> dict:
             print(f'  [sales] PayPal: {e}')
 
     # Supabase payment_orders as authoritative ledger
-    cutoff = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()
+    cutoff = (datetime.now(timezone.utc) - timedelta(hours=24)).strftime('%Y-%m-%dT%H:%M:%S+00:00')
     recent_orders = supabase_query('payment_orders', f'select=gateway,amount_cents,status&created_at=gte.{cutoff}&status=eq.paid')
     db_total = sum(o.get('amount_cents', 0) for o in recent_orders) / 100
 
@@ -452,9 +452,11 @@ def task_15_sales_attribution() -> dict:
 
 def task_16_leads_pipeline() -> dict:
     """16:00 UTC: Pull Supabase inbound_leads + newsletter subscribers for last 24h."""
-    cutoff = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()
+    cutoff = (datetime.now(timezone.utc) - timedelta(hours=24)).strftime('%Y-%m-%dT%H:%M:%S+00:00')
     new_leads = supabase_query('inbound_leads', f'select=email,product,created_at&created_at=gte.{cutoff}&order=created_at.desc&limit=100')
-    new_subs = supabase_query('newsletter_subscribers', f'select=email,created_at&created_at=gte.{cutoff}&order=created_at.desc&limit=100')
+    new_subs = supabase_query('newsletter_subscribers', f'select=email,subscribed_at&subscribed_at=gte.{cutoff}&order=subscribed_at.desc&limit=100')
+    if not new_subs:
+        new_subs = supabase_query('newsletter_subscribers', 'select=email&limit=100')
     summary = {
         'new_inbound_leads': len(new_leads),
         'new_newsletter_subs': len(new_subs),
@@ -468,7 +470,7 @@ def task_19_consolidated_report(runs: list) -> dict:
     """19:00 UTC: Build the DAILY-REPORT-YYYY-MM-DD.md and send to Telegram."""
     today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
     # Aggregate all agent_runs from last 24h
-    cutoff = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()
+    cutoff = (datetime.now(timezone.utc) - timedelta(hours=24)).strftime('%Y-%m-%dT%H:%M:%S+00:00')
     agent_runs = supabase_query('agent_runs', f'select=agent_name,action,status,details&created_at=gte.{cutoff}&order=created_at.desc&limit=200')
     # Get sales
     np_summary = [r for r in agent_runs if r.get('agent_name') == 'sales_attribution']
