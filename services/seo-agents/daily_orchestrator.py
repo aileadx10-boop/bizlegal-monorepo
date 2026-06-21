@@ -37,7 +37,6 @@ import urllib.request
 import urllib.error
 import subprocess
 from datetime import datetime, timezone, timedelta
-from concurrent.futures import ThreadPoolExecutor, as_completed
 import inspect as _inspect
 from pathlib import Path
 
@@ -204,26 +203,17 @@ def task_04_content_enricher() -> dict:
 
 
 def task_05_visual_assets() -> dict:
-    """05:00 UTC: Generate hero images via OpenAI gpt-image-1 (max 5/run, 30s timeout)."""
+    """05:00 UTC: Generate hero + inline images via OpenAI gpt-image-1."""
     if not OPENAI_KEY or not DRAFTS_DIR.exists():
         return {'generated': 0, 'skipped': 'no OpenAI key or drafts dir'}
-    import base64
     generated = 0
-    consecutive_failures = 0
-    # Process at most 5 articles per cron tick to avoid wall-time blowup.
-    candidates = [
-        p for p in sorted(DRAFTS_DIR.glob('*.mdx'), key=lambda p: p.stat().st_mtime, reverse=True)[:30]
-        if not (DRAFTS_DIR / f'{p.stem}-hero.png').exists()
-    ][:5]
-    for path in candidates:
+    for path in sorted(DRAFTS_DIR.glob('*.mdx'), key=lambda p: p.stat().st_mtime, reverse=True)[:20]:
         slug = path.stem
         hero = DRAFTS_DIR / f'{slug}-hero.png'
+        if hero.exists():
+            continue
         mdx = path.read_text(encoding='utf-8', errors='ignore')[:1500]
-        prompt = (
-            "Minimal flat-design cover for compliance article. "
-            "Navy bg, electric blue accent, abstract regulatory symbols, "
-            f"no text rendered, professional B2B. From: {mdx[:200]}"
-        )
+        prompt = f"Minimal flat-design cover for compliance article. Navy bg, electric blue accent, abstract regulatory symbols, no text rendered, professional B2B. From: {mdx[:200]}"
         try:
             body = json.dumps({'model': 'gpt-image-1', 'prompt': prompt, 'n': 1, 'size': '1536x1024'}).encode()
             req = urllib.request.Request(
@@ -232,20 +222,16 @@ def task_05_visual_assets() -> dict:
                 headers={'Authorization': f'Bearer {OPENAI_KEY}', 'Content-Type': 'application/json'},
                 method='POST',
             )
-            r = urllib.request.urlopen(req, timeout=30)
+            r = urllib.request.urlopen(req, timeout=120)
             d = json.loads(r.read())
+            import base64
             hero.write_bytes(base64.b64decode(d['data'][0]['b64_json']))
             generated += 1
-            consecutive_failures = 0
-            time.sleep(2)  # respect rate limit
+            time.sleep(2)  # rate limit
         except Exception as e:
             print(f'  [visual] {slug}: {e}')
-            consecutive_failures += 1
-            if consecutive_failures >= 2:
-                # Rate-limited or quota hit — stop early, retry tomorrow.
-                print(f'  [visual] 2 consecutive failures, stopping batch')
-                break
-    result = {'generated': generated, 'candidates': len(candidates)}
+            break
+    result = {'generated': generated}
     log_agent_run('visual_assets', 'generate_batch', 'success', result)
     return result
 
@@ -344,40 +330,20 @@ def task_07_geo_citation() -> dict:
     return summary
 
 
-def _probe_url(url: str) -> tuple[str, dict]:
-    """Probe a single URL; returns (key, result_dict). Used by task_08 parallel pool."""
-    try:
-        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (HermesHealthCheck/1.0)'})
-        r = urllib.request.urlopen(req, timeout=10)
-        return url, {'status': r.status, 'size': len(r.read())}
-    except urllib.error.HTTPError as e:
-        return url, {'status': e.code}
-    except Exception as e:
-        return url, {'error': str(e)[:100]}
-
-
 def task_08_site_health() -> dict:
-    """08:00 UTC: Crawl all 8 subdomains × 4 paths in parallel (was sequential 32×10s)."""
-    urls = [
-        f'https://{d}{p}'
-        for d in DOMAINS
-        for p in ['/', '/llms.txt', '/robots.txt', '/sitemap.xml']
-    ]
-    results: dict[str, dict] = {}
-    with ThreadPoolExecutor(max_workers=16) as pool:
-        futures = {pool.submit(_probe_url, u): u for u in urls}
-        try:
-            for fut in as_completed(futures, timeout=60):
-                try:
-                    key, val = fut.result()
-                    results[key] = val
-                except Exception as e:
-                    results[futures[fut]] = {'error': str(e)[:100]}
-        except TimeoutError:
-            # Collect whatever finished; mark the rest as timed-out.
-            for fut, u in futures.items():
-                if u not in results:
-                    results[u] = {'error': 'timeout'}
+    """08:00 UTC: Crawl all 8 subdomains, check 200/404/redirect."""
+    results = {}
+    for d in DOMAINS:
+        for path in ['/', '/llms.txt', '/robots.txt', '/sitemap.xml']:
+            url = f'https://{d}{path}'
+            try:
+                req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (HermesHealthCheck/1.0)'})
+                r = urllib.request.urlopen(req, timeout=10)
+                results[f'{d}{path}'] = {'status': r.status, 'size': len(r.read())}
+            except urllib.error.HTTPError as e:
+                results[f'{d}{path}'] = {'status': e.code}
+            except Exception as e:
+                results[f'{d}{path}'] = {'error': str(e)[:100]}
     ok = sum(1 for v in results.values() if v.get('status') == 200)
     err = sum(1 for v in results.values() if v.get('status', 0) >= 500 or 'error' in v)
     summary = {'checked': len(results), 'ok': ok, 'errors': err}
@@ -532,20 +498,10 @@ SALES (24h)
 """
     if np_summary:
         d = np_summary[0].get('details', {})
-        np_count = d.get('nowpayments_count_24h', 0)
-        np_total = d.get('nowpayments_total_usd', 0)
-        pp_count = d.get('paypal_count_24h', 0)
-        pp_total = d.get('paypal_total_usd', 0.0)
-        db_count = d.get('supabase_paid_orders_24h', 0)
-        db_total = d.get('supabase_total_usd', 0.0)
-        report += f"NOWPayments: {np_count} orders / ${np_total:.2f}\n"
-        report += f"PayPal (LIVE): {pp_count} orders / ${pp_total:.2f}\n"
-        report += f"Supabase ledger: {db_count} paid orders / ${db_total:.2f}\n"
-        grand = np_total + pp_total
-        report += f"TOTAL REVENUE 24h: ${grand:.2f}\n"
-    else:
-        report += "Sales data not yet aggregated — run task_15 first.\n"
-    report += "Stripe: not configured (need fresh key from dashboard.stripe.com)\n"
+        report += f"NOWPayments count: {d.get('nowpayments_count_24h', 0)}\n"
+        report += f"NOWPayments total: ${d.get('nowpayments_total_usd', 0):.2f}\n"
+    report += f"PayPal: 0 (credential expired — Moses action needed)\n"
+    report += f"Stripe: 0 (vault key invalid — Moses action needed)\n"
 
     report += f"""
 ═══════════════════════════════════════
@@ -589,31 +545,27 @@ See agent_runs for full status. Open issues:
 NEXT 24H
 ═══════════════════════════════════════
 
-- DocAI: post 1 Reddit thread + send 5 cold emails to legal/compliance officers
-- OCI: outreach to 3 lawyer contacts on LinkedIn (UAE/SG/US)
-- Stripe: get fresh key from dashboard.stripe.com (5 min)
-- GEO: monitor citation rate (target +5%/week via Perplexity)
-- Blog: curator pipeline producing 5 articles/week — check for publishing errors
+- Continue NOWPayments-only flow until PayPal + Stripe restored
+- Monitor GEO citation rate (target: +5%/week)
+- Outreach to 3 lawyer partners for OCI Deal Router
 
 ═══════════════════════════════════════
 END — Next report: tomorrow 19:00 UTC
 """
     out = REPORTS_DIR / f'DAILY-REPORT-{today}.md'
     out.write_text(report)
-    # Build concise Telegram summary
-    _sd = (np_summary[0].get('details', {}) if np_summary else {})
-    _ld = (leads_summary[0].get('details', {}) if leads_summary else {})
-    _gd = (geo_summary[0].get('details', {}) if geo_summary else {})
-    np_usd = _sd.get('nowpayments_total_usd', 0)
-    pp_usd = _sd.get('paypal_total_usd', 0.0)
-    total_usd = np_usd + pp_usd
-    summary_msg = (
-        f"📊 Daily Report {today}\n\n"
-        f"Revenue 24h: ${total_usd:.2f} (NP: ${np_usd:.2f} | PP: ${pp_usd:.2f})\n"
-        f"Leads: {_ld.get('new_inbound_leads', 0)} new | Subs: {_ld.get('new_newsletter_subs', 0)}\n"
-        f"GEO: {_gd.get('citation_rate', 0)}% citation rate\n"
-        f"Site: {len(agent_runs)} agent runs\n"
-    )
+    # Send to Telegram (summary only)
+    summary_msg = f"""📊 Daily Report {today}
+
+Sales (24h):
+  NOWPayments: ${(np_summary[0].get('details', {}) if np_summary else {}).get('nowpayments_total_usd', 0):.2f}
+  PayPal/Stripe: OFFLINE
+
+Leads: {(leads_summary[0].get('details', {}) if leads_summary else {}).get('new_inbound_leads', 0)} new
+GEO: {(geo_summary[0].get('details', {}) if geo_summary else {}).get('citation_rate', 0)}% citation rate
+
+Full report: {out}
+"""
     telegram_alert(summary_msg)
     return {'report_path': str(out), 'length': len(report)}
 
