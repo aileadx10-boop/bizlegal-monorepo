@@ -37,6 +37,7 @@ import urllib.request
 import urllib.error
 import subprocess
 from datetime import datetime, timezone, timedelta
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import inspect as _inspect
 from pathlib import Path
 
@@ -203,17 +204,25 @@ def task_04_content_enricher() -> dict:
 
 
 def task_05_visual_assets() -> dict:
-    """05:00 UTC: Generate hero + inline images via OpenAI gpt-image-1."""
+    """05:00 UTC: Generate hero images via OpenAI gpt-image-1 (max 5/run, 30s timeout)."""
     if not OPENAI_KEY or not DRAFTS_DIR.exists():
         return {'generated': 0, 'skipped': 'no OpenAI key or drafts dir'}
+    import base64
     generated = 0
-    for path in sorted(DRAFTS_DIR.glob('*.mdx'), key=lambda p: p.stat().st_mtime, reverse=True)[:20]:
+    consecutive_failures = 0
+    candidates = [
+        p for p in sorted(DRAFTS_DIR.glob('*.mdx'), key=lambda p: p.stat().st_mtime, reverse=True)[:30]
+        if not (DRAFTS_DIR / f'{p.stem}-hero.png').exists()
+    ][:5]
+    for path in candidates:
         slug = path.stem
         hero = DRAFTS_DIR / f'{slug}-hero.png'
-        if hero.exists():
-            continue
         mdx = path.read_text(encoding='utf-8', errors='ignore')[:1500]
-        prompt = f"Minimal flat-design cover for compliance article. Navy bg, electric blue accent, abstract regulatory symbols, no text rendered, professional B2B. From: {mdx[:200]}"
+        prompt = (
+            "Minimal flat-design cover for compliance article. "
+            "Navy bg, electric blue accent, abstract regulatory symbols, "
+            f"no text rendered, professional B2B. From: {mdx[:200]}"
+        )
         try:
             body = json.dumps({'model': 'gpt-image-1', 'prompt': prompt, 'n': 1, 'size': '1536x1024'}).encode()
             req = urllib.request.Request(
@@ -222,16 +231,19 @@ def task_05_visual_assets() -> dict:
                 headers={'Authorization': f'Bearer {OPENAI_KEY}', 'Content-Type': 'application/json'},
                 method='POST',
             )
-            r = urllib.request.urlopen(req, timeout=120)
+            r = urllib.request.urlopen(req, timeout=30)
             d = json.loads(r.read())
-            import base64
             hero.write_bytes(base64.b64decode(d['data'][0]['b64_json']))
             generated += 1
-            time.sleep(2)  # rate limit
+            consecutive_failures = 0
+            time.sleep(2)
         except Exception as e:
             print(f'  [visual] {slug}: {e}')
-            break
-    result = {'generated': generated}
+            consecutive_failures += 1
+            if consecutive_failures >= 2:
+                print('  [visual] 2 consecutive failures, stopping batch')
+                break
+    result = {'generated': generated, 'candidates': len(candidates)}
     log_agent_run('visual_assets', 'generate_batch', 'success', result)
     return result
 
@@ -330,26 +342,40 @@ def task_07_geo_citation() -> dict:
     return summary
 
 
+def _probe_url(url: str) -> tuple[str, dict]:
+    try:
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (HermesHealthCheck/1.0)'})
+        r = urllib.request.urlopen(req, timeout=10)
+        return url, {'status': r.status, 'size': len(r.read())}
+    except urllib.error.HTTPError as e:
+        return url, {'status': e.code}
+    except Exception as e:
+        return url, {'error': str(e)[:100]}
+
+
 def task_08_site_health() -> dict:
-    """08:00 UTC: Crawl all 8 subdomains, check 200/404/redirect."""
-    results = {}
-    for d in DOMAINS:
-        for path in ['/', '/llms.txt', '/robots.txt', '/sitemap.xml']:
-            url = f'https://{d}{path}'
-            try:
-                req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (HermesHealthCheck/1.0)'})
-                r = urllib.request.urlopen(req, timeout=10)
-                results[f'{d}{path}'] = {'status': r.status, 'size': len(r.read())}
-            except urllib.error.HTTPError as e:
-                results[f'{d}{path}'] = {'status': e.code}
-            except Exception as e:
-                results[f'{d}{path}'] = {'error': str(e)[:100]}
+    """08:00 UTC: Crawl all 8 subdomains × 4 paths in parallel (~15s vs 320s sequential)."""
+    urls = [f'https://{d}{p}' for d in DOMAINS for p in ['/', '/llms.txt', '/robots.txt', '/sitemap.xml']]
+    results: dict[str, dict] = {}
+    with ThreadPoolExecutor(max_workers=16) as pool:
+        futures = {pool.submit(_probe_url, u): u for u in urls}
+        try:
+            for fut in as_completed(futures, timeout=60):
+                try:
+                    key, val = fut.result()
+                    results[key] = val
+                except Exception as e:
+                    results[futures[fut]] = {'error': str(e)[:100]}
+        except TimeoutError:
+            for fut, u in futures.items():
+                if u not in results:
+                    results[u] = {'error': 'timeout'}
     ok = sum(1 for v in results.values() if v.get('status') == 200)
     err = sum(1 for v in results.values() if v.get('status', 0) >= 500 or 'error' in v)
     summary = {'checked': len(results), 'ok': ok, 'errors': err}
     log_agent_run('site_health', 'crawl_8_subdomains', 'success', summary)
     if err > 0:
-        telegram_alert(f'⚠ Site health: {err}/{len(results)} endpoints have errors. Check decisions/.')
+        telegram_alert(f'⚠ Site health: {err}/{len(results)} endpoints have errors.')
     return summary
 
 
@@ -496,12 +522,16 @@ Tasks failed:    {sum(1 for r in agent_runs if r.get('status') not in ('success'
 SALES (24h)
 ═══════════════════════════════════════
 """
-    if np_summary:
-        d = np_summary[0].get('details', {})
-        report += f"NOWPayments count: {d.get('nowpayments_count_24h', 0)}\n"
-        report += f"NOWPayments total: ${d.get('nowpayments_total_usd', 0):.2f}\n"
-    report += f"PayPal: 0 (credential expired — Moses action needed)\n"
-    report += f"Stripe: 0 (vault key invalid — Moses action needed)\n"
+    np_details = np_summary[0].get('details', {}) if np_summary else {}
+    np_count = np_details.get('nowpayments_count_24h', 0)
+    np_total = np_details.get('nowpayments_total_usd', 0.0)
+    pp_count = np_details.get('paypal_count_24h', 0)
+    pp_total = np_details.get('paypal_total_usd', 0.0)
+    grand = np_total + pp_total
+    report += f"NOWPayments: {np_count} orders / ${np_total:.2f}\n"
+    report += f"PayPal (LIVE): {pp_count} orders / ${pp_total:.2f}\n"
+    report += f"TOTAL REVENUE 24h: ${grand:.2f}\n"
+    report += "Stripe: not configured (need fresh key from dashboard.stripe.com)\n"
 
     report += f"""
 ═══════════════════════════════════════
@@ -545,9 +575,10 @@ See agent_runs for full status. Open issues:
 NEXT 24H
 ═══════════════════════════════════════
 
-- Continue NOWPayments-only flow until PayPal + Stripe restored
-- Monitor GEO citation rate (target: +5%/week)
-- Outreach to 3 lawyer partners for OCI Deal Router
+- DocAI: post 1 Reddit thread + 5 cold emails to compliance-heavy SaaS founders
+- OCI: outreach to 3 LinkedIn lawyer contacts for deal-router partnership
+- Monitor GEO citation rate (target: +5%/week via Perplexity polling)
+- Stripe: get fresh sk_live_* from dashboard.stripe.com → add to Hetzner .env
 
 ═══════════════════════════════════════
 END — Next report: tomorrow 19:00 UTC
@@ -555,17 +586,15 @@ END — Next report: tomorrow 19:00 UTC
     out = REPORTS_DIR / f'DAILY-REPORT-{today}.md'
     out.write_text(report)
     # Send to Telegram (summary only)
-    summary_msg = f"""📊 Daily Report {today}
-
-Sales (24h):
-  NOWPayments: ${(np_summary[0].get('details', {}) if np_summary else {}).get('nowpayments_total_usd', 0):.2f}
-  PayPal/Stripe: OFFLINE
-
-Leads: {(leads_summary[0].get('details', {}) if leads_summary else {}).get('new_inbound_leads', 0)} new
-GEO: {(geo_summary[0].get('details', {}) if geo_summary else {}).get('citation_rate', 0)}% citation rate
-
-Full report: {out}
-"""
+    leads_count = (leads_summary[0].get('details', {}) if leads_summary else {}).get('new_inbound_leads', 0)
+    geo_rate = (geo_summary[0].get('details', {}) if geo_summary else {}).get('citation_rate', 0)
+    summary_msg = (
+        f"📊 Daily Report {today}\n\n"
+        f"Revenue 24h: ${grand:.2f} (NP: ${np_total:.2f} | PP: ${pp_total:.2f})\n"
+        f"Leads: {leads_count} new\n"
+        f"GEO: {geo_rate}% citation rate\n\n"
+        f"Full report: {out}"
+    )
     telegram_alert(summary_msg)
     return {'report_path': str(out), 'length': len(report)}
 
