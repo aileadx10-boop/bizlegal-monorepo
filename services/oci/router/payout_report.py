@@ -66,7 +66,10 @@ def main() -> int:
 
     token = os.environ.get("TELEGRAM_BOT_TOKEN")
     chat_id = os.environ.get("TELEGRAM_CHAT_ID")
-    if token and chat_id:
+    # Only ping Telegram when there is real activity (leads > 0) or pending payouts.
+    # When the router is idle, daily 0/0/0 messages provide no signal — suppress them.
+    has_activity = summary["leads_yesterday"] > 0 or summary["open_payouts"] > 1
+    if token and chat_id and has_activity:
         text = (
             "*Deal Router — daily*\n"
             f"Leads (yesterday): {summary['leads_yesterday']}\n"
