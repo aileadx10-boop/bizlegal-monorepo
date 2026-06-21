@@ -37,6 +37,7 @@ import urllib.request
 import urllib.error
 import subprocess
 from datetime import datetime, timezone, timedelta
+import inspect as _inspect
 from pathlib import Path
 
 # === CONFIG (sourced from Hetzner /opt/bizlegal/curator/.env) ===
@@ -593,7 +594,11 @@ def main():
 
     if task_id and task_id in TASKS:
         print(f'[{now_iso()}] running task {task_id}')
-        result = TASKS[task_id]([])
+        _sig = _inspect.signature(TASKS[task_id])
+        if len(_sig.parameters) == 0:
+            result = TASKS[task_id]()
+        else:
+            result = TASKS[task_id]([])
         print(f'  result: {result}')
     elif task_id == 'all':
         # Run all tasks in order (for testing)
