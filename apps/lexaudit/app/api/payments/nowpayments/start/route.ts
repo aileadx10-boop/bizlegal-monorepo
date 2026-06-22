@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
     }
 
     // NOWPayments invoice
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://bizlegal-ai.com'
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://lexaudit.bizlegal-ai.com'
     const invoiceRes = await fetch('https://api.nowpayments.io/v1/invoice', {
       method: 'POST',
       headers: {

@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'order creation failed' }, { status: 500 })
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://bizlegal-ai.com'
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://brai.bizlegal-ai.com'
 
     // ─────────────────────────────────────────────────────────
     // ONE-TIME: PayPal Orders API
