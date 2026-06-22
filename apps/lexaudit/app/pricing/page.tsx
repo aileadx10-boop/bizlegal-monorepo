@@ -106,8 +106,102 @@ const MIDMARKET_TIER: PricingTierData = {
 }
 
 export default function LexAuditPricingPage() {
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is a Compliance Health Score?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A Compliance Health Score is a source-cited rating (typically 0–100) that summarizes a matter's regulatory posture across 50+ jurisdictions. LexAudit scores are produced by a named analyst and reviewed by a partner.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "How is LexAudit different from a general compliance SaaS?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "LexAudit is purpose-built for law firms. Matter content is processed in-memory only (never persisted), all prompts are PII-redacted via Microsoft Presidio before they reach any LLM, and every certificate includes partner sign-off.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "Does LexAudit store my client documents?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Matter content is processed in memory only. Metadata + redacted prompts are retained for audit; source documents are never persisted server-side.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "Can I cancel anytime?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Subscriptions cancel any time. Certificates already produced are non-refundable unless damaged or defective.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "What payment methods are supported?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Crypto via NOWPayments (BTC, ETH, USDT), card via PayPal. Wire transfer available on request for Mid-Market plans.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "Is there a free trial?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Beta mode: 3 months free on any plan. No credit card required to start.",
+        },
+      },
+    ],
+  }
+
+  const productLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "LexAudit",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "description":
+      "Source-cited Compliance Health Scores for solo, boutique and mid-market law firms. PII-redacted, RLS-isolated, partner-reviewed.",
+    "url": "https://lexaudit.bizlegal-ai.com/pricing",
+    "image": "https://lexaudit.bizlegal-ai.com/og.png",
+    "offers": [
+      { "@type": "Offer", "name": "Solo", "price": "49", "priceCurrency": "USD",
+        "category": "subscription", "url": "https://lexaudit.bizlegal-ai.com/pricing" },
+      { "@type": "Offer", "name": "Boutique", "price": "199", "priceCurrency": "USD",
+        "category": "subscription", "url": "https://lexaudit.bizlegal-ai.com/pricing" },
+      { "@type": "Offer", "name": "Mid-Market", "price": "599", "priceCurrency": "USD",
+        "category": "subscription", "url": "https://lexaudit.bizlegal-ai.com/pricing" },
+    ],
+    "brand": { "@type": "Brand", "name": "LexAudit" },
+    "provider": {
+      "@type": "Organization",
+      "name": "BizLegal AI",
+      "url": "https://bizlegal-ai.com",
+    },
+  }
+
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bizlegal-ai.com" },
+      { "@type": "ListItem", "position": 2, "name": "LexAudit", "item": "https://lexaudit.bizlegal-ai.com" },
+      { "@type": "ListItem", "position": 3, "name": "Pricing", "item": "https://lexaudit.bizlegal-ai.com/pricing" },
+    ],
+  }
+
   return (
     <div style={{ minHeight: '100vh', background: '#050509', color: '#e2e8f0', fontFamily: "'DM Sans', sans-serif" }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <nav style={{ borderBottom: '1px solid #0f172a', padding: '0 40px', height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
           <div style={{ width: '26px', height: '26px', background: 'linear-gradient(135deg,#c9a84c,#7a5c20)', borderRadius: '5px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px' }}>⚖</div>

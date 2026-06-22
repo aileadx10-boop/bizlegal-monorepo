@@ -96,8 +96,92 @@ const AUDIT_TIER: PricingTierData = {
 }
 
 export default function ForgePricingPage() {
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the BOI Kit?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The BOI Kit is a downloadable package with the FinCEN Beneficial Ownership Information report template, a state-by-state checklist, a sample ownership structure diagram, and a 60-minute video walkthrough. Price: $149 one-time.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "What is the BizLegal Passport?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Passport is our flagship compliance binder — a 200-page document covering your entity, BOI filing, beneficial ownership structure, license status, and a year of monitoring. Reviewed by a named analyst. Price: $297 one-time.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need a lawyer to use these products?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "For most standard entities (LLC, C-Corp, Ltd), the templates are designed to be DIY. For complex ownership structures, trusts, foreign entities, or regulated industries, we recommend a 30-minute consult with one of our partner firms.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "What payment methods are supported?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Crypto via NOWPayments (BTC, ETH, USDT), card via PayPal. Wire transfer on request.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "Is the Passport refundable?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, within 14 days of purchase if the document has not been finalized for your entity. Once the analyst begins the review, the sale is final.",
+        },
+      },
+    ],
+  }
+
+  const productLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "BizLegal Forge",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "description":
+      "Compliance templates and binders for small businesses — BOI Kit, BizLegal Passport, and entity-specific packages.",
+    "url": "https://forge.bizlegal-ai.com/pricing",
+    "image": "https://forge.bizlegal-ai.com/og.png",
+    "offers": [
+      { "@type": "Offer", "name": "BOI Kit", "price": "149", "priceCurrency": "USD",
+        "category": "one-time", "url": "https://forge.bizlegal-ai.com/boi" },
+      { "@type": "Offer", "name": "BizLegal Passport", "price": "297", "priceCurrency": "USD",
+        "category": "one-time", "url": "https://forge.bizlegal-ai.com/passport" },
+    ],
+    "brand": { "@type": "Brand", "name": "BizLegal Forge" },
+    "provider": {
+      "@type": "Organization",
+      "name": "BizLegal AI",
+      "url": "https://bizlegal-ai.com",
+    },
+  }
+
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bizlegal-ai.com" },
+      { "@type": "ListItem", "position": 2, "name": "Forge", "item": "https://forge.bizlegal-ai.com" },
+      { "@type": "ListItem", "position": 3, "name": "Pricing", "item": "https://forge.bizlegal-ai.com/pricing" },
+    ],
+  }
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <section
         className="bl-hero-bg"
         style={{

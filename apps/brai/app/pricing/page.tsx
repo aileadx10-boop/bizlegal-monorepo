@@ -106,11 +106,105 @@ const EXTENDED_TIER: PricingTierData = {
 }
 
 export default function PricingPage() {
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What does a BRAI regulatory risk report include?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Each report covers the regulatory status of a named entity or wallet across 50+ jurisdictions, with a risk score, a source-cited evidence ledger, a list of pending enforcement actions, and a forward-looking outlook from a named human analyst.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "Who is BRAI for?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Compliance teams at crypto exchanges, neobanks, PSPs, and law firms who need defensible, source-cited risk assessments on counterparties before onboarding or periodically during the relationship.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "How is BRAI different from Chainalysis or TRM Labs?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "BRAI focuses on regulatory and legal risk (sanctions, enforcement actions, license status) with a human analyst reviewing every report. Chainalysis and TRM are transaction-graph-first. BRAI complements them; most clients use both.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "What payment methods are supported?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Crypto via NOWPayments (BTC, ETH, USDT), card via PayPal. Wire transfer for retainer clients.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "How fast is a single report delivered?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Standard reports deliver in 24-48 hours. Expedited (4-hour) delivery available for an additional fee. Retainer clients get same-day turnaround.",
+        },
+      },
+      {
+        "@type": "Question",
+        "name": "Can I cancel my monthly retainer?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Retainers cancel any time. Already-produced reports are non-refundable once delivered.",
+        },
+      },
+    ],
+  }
+
+  const productLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "BRAI",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "description":
+      "Source-cited regulatory risk reports on crypto entities, exchanges, PSPs and wallets. Reviewed by a named human analyst before delivery.",
+    "url": "https://brai.bizlegal-ai.com/pricing",
+    "image": "https://brai.bizlegal-ai.com/og.png",
+    "offers": [
+      { "@type": "Offer", "name": "Single Report", "price": "249", "priceCurrency": "USD",
+        "category": "one-time", "url": "https://brai.bizlegal-ai.com/pricing" },
+      { "@type": "Offer", "name": "Monthly Retainer (10 reports)", "price": "1990", "priceCurrency": "USD",
+        "category": "subscription", "url": "https://brai.bizlegal-ai.com/pricing" },
+      { "@type": "Offer", "name": "Monitor (unlimited alerts)", "price": "99", "priceCurrency": "USD",
+        "category": "subscription", "url": "https://brai.bizlegal-ai.com/pricing" },
+    ],
+    "brand": { "@type": "Brand", "name": "BRAI" },
+    "provider": {
+      "@type": "Organization",
+      "name": "BizLegal AI",
+      "url": "https://bizlegal-ai.com",
+    },
+  }
+
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bizlegal-ai.com" },
+      { "@type": "ListItem", "position": 2, "name": "BRAI", "item": "https://brai.bizlegal-ai.com" },
+      { "@type": "ListItem", "position": 3, "name": "Pricing", "item": "https://brai.bizlegal-ai.com/pricing" },
+    ],
+  }
+
   return (
     <LegalPage
       title="Pricing."
       intro="Per-report pricing or a monthly retainer for high-volume desks. Every report is reviewed by a named human analyst before delivery. Crypto via NOWPayments, card via PayPal. Cancel retainers anytime; one-time reports non-refundable once produced unless damaged or defective."
     >
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <section
         style={{
           display: "grid",
