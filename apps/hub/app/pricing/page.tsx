@@ -137,8 +137,86 @@ const FAQ = [
 
 // ══════════════════════════════════════════════════════════
 export default function PricingPage() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'FAQPage',
+        mainEntity: FAQ.map(({ q, a }) => ({
+          '@type': 'Question',
+          name: q,
+          acceptedAnswer: { '@type': 'Answer', text: a },
+        })),
+      },
+      {
+        '@type': 'SoftwareApplication',
+        '@id': 'https://bizlegal-ai.com/#app',
+        name: 'BizLegal AI',
+        applicationCategory: 'BusinessApplication',
+        operatingSystem: 'Web',
+        url: 'https://bizlegal-ai.com',
+        description:
+          'AI-powered regulatory compliance intelligence for B2B SaaS, fintech, DAOs, and cross-border deals. Real-time enforcement alerts, multi-jurisdiction risk analysis, and AI-assisted compliance workflows.',
+        offers: [
+          {
+            '@type': 'Offer',
+            name: 'Pro — monthly',
+            price: '149.00',
+            priceCurrency: 'USD',
+            priceValidUntil: '2027-12-31',
+            availability: 'https://schema.org/InStock',
+            url: 'https://bizlegal-ai.com/pricing',
+          },
+          {
+            '@type': 'Offer',
+            name: 'Pro — yearly',
+            price: '1490.00',
+            priceCurrency: 'USD',
+            priceValidUntil: '2027-12-31',
+            availability: 'https://schema.org/InStock',
+            url: 'https://bizlegal-ai.com/pricing',
+          },
+          {
+            '@type': 'Offer',
+            name: 'Scale — monthly',
+            price: '499.00',
+            priceCurrency: 'USD',
+            priceValidUntil: '2027-12-31',
+            availability: 'https://schema.org/InStock',
+            url: 'https://bizlegal-ai.com/pricing',
+          },
+          {
+            '@type': 'Offer',
+            name: 'Scale — yearly',
+            price: '4990.00',
+            priceCurrency: 'USD',
+            priceValidUntil: '2027-12-31',
+            availability: 'https://schema.org/InStock',
+            url: 'https://bizlegal-ai.com/pricing',
+          },
+          {
+            '@type': 'Offer',
+            name: 'Free snapshot',
+            price: '0',
+            priceCurrency: 'USD',
+            availability: 'https://schema.org/InStock',
+            url: 'https://bizlegal-ai.com/snapshot',
+          },
+        ],
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bizlegal-ai.com' },
+          { '@type': 'ListItem', position: 2, name: 'Pricing', item: 'https://bizlegal-ai.com/pricing' },
+        ],
+      },
+    ],
+  }
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       {/* Header */}
       <section
         className="bl-hero-bg"

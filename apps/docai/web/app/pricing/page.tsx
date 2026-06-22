@@ -143,9 +143,92 @@ const CONDUCTOR_PLANS: ConductorPlan[] = [
   },
 ]
 
+const DOCAI_JSON_LD = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is the SOC 2 Questionnaire Auto-fill (SQA)?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'SQA reads a vendor security questionnaire (SOC 2, CAIQ, SIG-Lite, SIG, NIST) and auto-drafts answers using your firm's uploaded policy library. A compliance-aware AI fills in responses in seconds; you review and export. Reduces questionnaire turnaround from days to minutes.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the DPA Negotiator?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'The DPA Negotiator helps B2B SaaS vendors draft and redline Data Processing Agreements under GDPR Article 28, CCPA, and HIPAA. It identifies missing clauses, suggests standard contractual clauses, and flags sub-processor obligations automatically.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How many questionnaires can I complete per month?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Starter: 5 SQA drafts/mo. Team: 50 SQA drafts/mo. Firm: 150 SQA drafts/mo. A "draft" is one full questionnaire auto-filled. Contract analyses are separate from SQA drafts.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Can I upload my own policy documents?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes — on the Firm plan. You can upload your firm's security policies, SOC 2 report summary, privacy policy, and other documents to the knowledge base. SQA then grounds its answers in YOUR actual policies, not generic templates.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is DocAI a substitute for a SOC 2 audit?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No. DocAI auto-drafts questionnaire responses and contract redlines — it is a productivity tool, not a certification body. SOC 2 attestation still requires a licensed CPA firm. DocAI is for the 364 other days of the year.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Can I cancel anytime?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. All monthly and yearly plans can be cancelled at any time. Access continues until the end of the billing period. No cancellation fees.',
+          },
+        },
+      ],
+    },
+    {
+      '@type': 'SoftwareApplication',
+      '@id': 'https://docai.bizlegal-ai.com/#app',
+      name: 'DocAI — Contract & Security Questionnaire Intelligence',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web',
+      url: 'https://docai.bizlegal-ai.com',
+      description:
+        'AI-powered SOC 2 questionnaire auto-fill, DPA negotiation, and contract review for B2B SaaS companies. Reduce questionnaire turnaround from days to minutes.',
+      offers: [
+        { '@type': 'Offer', name: 'Starter — monthly', price: '29.00', priceCurrency: 'USD', availability: 'https://schema.org/InStock', url: 'https://docai.bizlegal-ai.com/pricing' },
+        { '@type': 'Offer', name: 'Team — monthly', price: '69.00', priceCurrency: 'USD', availability: 'https://schema.org/InStock', url: 'https://docai.bizlegal-ai.com/pricing' },
+        { '@type': 'Offer', name: 'Firm — monthly', price: '99.00', priceCurrency: 'USD', availability: 'https://schema.org/InStock', url: 'https://docai.bizlegal-ai.com/pricing' },
+        { '@type': 'Offer', name: 'Free — one-time scan', price: '0', priceCurrency: 'USD', availability: 'https://schema.org/InStock', url: 'https://docai.bizlegal-ai.com' },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://docai.bizlegal-ai.com' },
+        { '@type': 'ListItem', position: 2, name: 'Pricing', item: 'https://docai.bizlegal-ai.com/pricing' },
+      ],
+    },
+  ],
+}
+
 export default function DocAIPricingPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(DOCAI_JSON_LD) }} />
       <section
         className="bl-hero-bg"
         style={{
