@@ -283,9 +283,55 @@ const AGENTS: ReadonlyArray<Agent> = [
 ]
 
 export default function AgentsPage() {
+  const itemListLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "BizLegal AI Compliance Agents",
+    "description":
+      "12 AI compliance agents covering 50+ jurisdictions. From BOI tracking to AI Act classification to cross-jurisdiction analysis.",
+    "url": "https://bizlegal-ai.com/agents",
+    "numberOfItems": AGENTS.length,
+    "itemListElement": AGENTS.map((a, i) => ({
+      "@type": "ListItem",
+      "position": i + 1,
+      "item": {
+        "@type": "SoftwareApplication",
+        "name": a.name,
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "description": a.description,
+        "url": `https://bizlegal-ai.com/agents/${a.id.replace(/_/g, '-')}`,
+        "brand": { "@type": "Brand", name: "BizLegal AI" },
+        "provider": {
+          "@type": "Organization",
+          "name": "BizLegal AI",
+          "url": "https://bizlegal-ai.com",
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": (a.priceCents / 100).toFixed(2),
+          "priceCurrency": "USD",
+          "category": a.interval,
+          "url": `https://bizlegal-ai.com/agents/${a.id.replace(/_/g, '-')}`,
+        },
+      },
+    })),
+  }
+
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bizlegal-ai.com" },
+      { "@type": "ListItem", "position": 2, "name": "Agents", "item": "https://bizlegal-ai.com/agents" },
+    ],
+  }
+
   return (
     <>
-      {/* Hero */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+
       <section
         className="bl-hero-bg"
         style={{ paddingTop: 'clamp(4rem, 2rem + 4vw, 6rem)', paddingBottom: 'clamp(2rem, 1.5rem + 2vw, 3rem)' }}

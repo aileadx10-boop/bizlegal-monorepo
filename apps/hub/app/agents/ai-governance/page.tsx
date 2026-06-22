@@ -48,8 +48,36 @@ const CHECKOUT_URL =
   'https://bizlegal-ai.com/checkout?product=agent_ai_governance_product&tier=AI+Governance+for+Product+Teams&interval=monthly&amount=4900&name=AI+Governance+for+Product+Teams'
 
 export default function AiGovernancePage() {
+  const appLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "AI Governance Product",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "description":
+      "Governance toolkit for AI products — model cards, risk assessments, NIST AI RMF mapping.",
+    "url": "https://bizlegal-ai.com/agents/ai-governance",
+    "image": "https://bizlegal-ai.com/og/ai-governance.png",
+    "offers": { "@type": "Offer", "price": "99", "priceCurrency": "USD",
+      "category": "monthly", "url": "https://bizlegal-ai.com/agents/ai-governance" },
+    "brand": { "@type": "Brand", "name": "BizLegal AI" },
+    "provider": {
+      "@type": "Organization", "name": "BizLegal AI", "url": "https://bizlegal-ai.com",
+    },
+  }
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bizlegal-ai.com" },
+      { "@type": "ListItem", "position": 2, "name": "Agents", "item": "https://bizlegal-ai.com/agents" },
+      { "@type": "ListItem", "position": 3, "name": "AI Governance", "item": "https://bizlegal-ai.com/agents/ai-governance" },
+    ],
+  }
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <section className="bl-hero-bg" style={{ paddingTop: 'clamp(4rem, 2rem + 4vw, 6rem)', paddingBottom: 'clamp(2rem, 1.5rem + 2vw, 3rem)' }}>
         <div className="bl-container" style={{ maxWidth: 880 }}>
           <span className="bl-tag" style={{ marginBottom: '1rem' }}>

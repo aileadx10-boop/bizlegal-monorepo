@@ -42,8 +42,36 @@ const CHECKOUT_URL =
   'https://bizlegal-ai.com/checkout?product=agent_india_dpdpa&tier=India+DPDPA+Readiness+Kit&interval=one-time&amount=1900&name=India+DPDPA+Readiness+Kit'
 
 export default function IndiaDpdpaPage() {
+  const appLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "India DPDPA Agent",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "description":
+      "India Digital Personal Data Protection Act compliance agent — section-by-section mapping, sector-specific guidance.",
+    "url": "https://bizlegal-ai.com/agents/india-dpdpa",
+    "image": "https://bizlegal-ai.com/og/india-dpdpa.png",
+    "offers": { "@type": "Offer", "price": "49", "priceCurrency": "USD",
+      "category": "monthly", "url": "https://bizlegal-ai.com/agents/india-dpdpa" },
+    "brand": { "@type": "Brand", "name": "BizLegal AI" },
+    "provider": {
+      "@type": "Organization", "name": "BizLegal AI", "url": "https://bizlegal-ai.com",
+    },
+  }
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bizlegal-ai.com" },
+      { "@type": "ListItem", "position": 2, "name": "Agents", "item": "https://bizlegal-ai.com/agents" },
+      { "@type": "ListItem", "position": 3, "name": "India DPDPA", "item": "https://bizlegal-ai.com/agents/india-dpdpa" },
+    ],
+  }
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <section className="bl-hero-bg" style={{ paddingTop: 'clamp(4rem, 2rem + 4vw, 6rem)', paddingBottom: 'clamp(2rem, 1.5rem + 2vw, 3rem)' }}>
         <div className="bl-container" style={{ maxWidth: 880 }}>
           <span className="bl-tag" style={{ marginBottom: '1rem' }}>

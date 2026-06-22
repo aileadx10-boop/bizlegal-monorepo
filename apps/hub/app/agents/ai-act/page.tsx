@@ -66,8 +66,36 @@ const MONITORING_TIER: PricingTierData = {
 }
 
 export default function AiActPage() {
+  const appLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "AI Act Classifier",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "description":
+      "EU AI Act risk classification + compliance roadmap for AI systems and high-risk use cases.",
+    "url": "https://bizlegal-ai.com/agents/ai-act",
+    "image": "https://bizlegal-ai.com/og/ai-act.png",
+    "offers": { "@type": "Offer", "price": "49", "priceCurrency": "USD",
+      "category": "monthly", "url": "https://bizlegal-ai.com/agents/ai-act" },
+    "brand": { "@type": "Brand", "name": "BizLegal AI" },
+    "provider": {
+      "@type": "Organization", "name": "BizLegal AI", "url": "https://bizlegal-ai.com",
+    },
+  }
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bizlegal-ai.com" },
+      { "@type": "ListItem", "position": 2, "name": "Agents", "item": "https://bizlegal-ai.com/agents" },
+      { "@type": "ListItem", "position": 3, "name": "AI Act Classifier", "item": "https://bizlegal-ai.com/agents/ai-act" },
+    ],
+  }
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <section
         className="bl-hero-bg"
         style={{

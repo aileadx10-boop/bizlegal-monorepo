@@ -43,8 +43,36 @@ const MONITORING_TIER: PricingTierData = {
 }
 
 export default function PolicyRefreshPage() {
+  const appLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Policy Auto-Refresh",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "description":
+      "Auto-refresh your privacy policy + terms when regulations change. Tracks 50+ jurisdictions.",
+    "url": "https://bizlegal-ai.com/agents/policy-refresh",
+    "image": "https://bizlegal-ai.com/og/policy-refresh.png",
+    "offers": { "@type": "Offer", "price": "49", "priceCurrency": "USD",
+      "category": "monthly", "url": "https://bizlegal-ai.com/agents/policy-refresh" },
+    "brand": { "@type": "Brand", "name": "BizLegal AI" },
+    "provider": {
+      "@type": "Organization", "name": "BizLegal AI", "url": "https://bizlegal-ai.com",
+    },
+  }
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bizlegal-ai.com" },
+      { "@type": "ListItem", "position": 2, "name": "Agents", "item": "https://bizlegal-ai.com/agents" },
+      { "@type": "ListItem", "position": 3, "name": "Policy Auto-Refresh", "item": "https://bizlegal-ai.com/agents/policy-refresh" },
+    ],
+  }
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <section
         className="bl-hero-bg"
         style={{

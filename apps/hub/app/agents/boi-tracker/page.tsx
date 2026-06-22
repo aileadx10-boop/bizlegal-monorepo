@@ -74,8 +74,44 @@ const FIRM_TIER: PricingTierData = {
 }
 
 export default function BoiTrackerPage() {
+  const appLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "CTA-2024 BOI Tracker",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "description":
+      "Daily monitoring of FinCEN BOI rule changes + 30-day refile deadline alerts for your US LLC.",
+    "url": "https://bizlegal-ai.com/agents/boi-tracker",
+    "image": "https://bizlegal-ai.com/og/boi-tracker.png",
+    "offers": [
+      { "@type": "Offer", "name": "Solo", "price": "29", "priceCurrency": "USD",
+        "category": "subscription", "url": "https://bizlegal-ai.com/agents/boi-tracker" },
+      { "@type": "Offer", "name": "Firm", "price": "99", "priceCurrency": "USD",
+        "category": "subscription", "url": "https://bizlegal-ai.com/agents/boi-tracker" },
+    ],
+    "brand": { "@type": "Brand", "name": "BizLegal AI" },
+    "provider": {
+      "@type": "Organization",
+      "name": "BizLegal AI",
+      "url": "https://bizlegal-ai.com",
+    },
+  }
+
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bizlegal-ai.com" },
+      { "@type": "ListItem", "position": 2, "name": "Agents", "item": "https://bizlegal-ai.com/agents" },
+      { "@type": "ListItem", "position": 3, "name": "BOI Tracker", "item": "https://bizlegal-ai.com/agents/boi-tracker" },
+    ],
+  }
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <section
         className="bl-hero-bg"
         style={{

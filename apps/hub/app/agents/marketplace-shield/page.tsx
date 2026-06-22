@@ -42,8 +42,36 @@ const CHECKOUT_URL =
   'https://bizlegal-ai.com/checkout?product=agent_marketplace_shield&tier=Marketplace+Compliance+Shield&interval=monthly&amount=4900&name=Marketplace+Compliance+Shield'
 
 export default function MarketplaceShieldPage() {
+  const appLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Marketplace Shield",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "description":
+      "Onboarding + ongoing compliance monitoring for marketplace sellers, gig workers, and 1099 contractors.",
+    "url": "https://bizlegal-ai.com/agents/marketplace-shield",
+    "image": "https://bizlegal-ai.com/og/marketplace-shield.png",
+    "offers": { "@type": "Offer", "price": "99", "priceCurrency": "USD",
+      "category": "monthly", "url": "https://bizlegal-ai.com/agents/marketplace-shield" },
+    "brand": { "@type": "Brand", "name": "BizLegal AI" },
+    "provider": {
+      "@type": "Organization", "name": "BizLegal AI", "url": "https://bizlegal-ai.com",
+    },
+  }
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bizlegal-ai.com" },
+      { "@type": "ListItem", "position": 2, "name": "Agents", "item": "https://bizlegal-ai.com/agents" },
+      { "@type": "ListItem", "position": 3, "name": "Marketplace Shield", "item": "https://bizlegal-ai.com/agents/marketplace-shield" },
+    ],
+  }
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <section className="bl-hero-bg" style={{ paddingTop: 'clamp(4rem, 2rem + 4vw, 6rem)', paddingBottom: 'clamp(2rem, 1.5rem + 2vw, 3rem)' }}>
         <div className="bl-container" style={{ maxWidth: 880 }}>
           <span className="bl-tag" style={{ marginBottom: '1rem' }}>
