@@ -113,7 +113,7 @@ export async function POST(req: NextRequest) {
     // Find the order
     const { data: order } = await supabase
       .from('payment_orders')
-      .select('id, billing_interval, status, user_email, amount_cents, product, tier, source')
+      .select('id, billing_interval, status, user_email, user_name, amount_cents, product, tier, source')
       .eq('id', ipn.order_id)
       .single()
 
@@ -188,6 +188,23 @@ export async function POST(req: NextRequest) {
           order_source: order.source,
         },
       })
+
+      // On payment failure/refund, queue for dunning recovery (3-stage email cadence).
+      if ((newStatus === 'failed' || newStatus === 'refunded') && order.user_email) {
+        void supabase
+          .from('dunning_queue')
+          .insert({
+            email: order.user_email,
+            name: order.user_name ?? null,
+            product: order.product ?? 'hub',
+            amount_usd: (order.amount_cents ?? 0) / 100,
+            payment_initiated_at: new Date().toISOString(),
+            last_stage_sent: 0,
+          })
+          .catch((err: unknown) =>
+            console.warn('[nowpayments/webhook] dunning insert failed:', err),
+          )
+      }
 
       // Phase AA V3 — stop the nurture sequence the moment a customer
       // pays. One user can have multiple nurture rows across verticals;
