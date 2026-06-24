@@ -23,6 +23,7 @@ import time
 import urllib.request
 import urllib.error
 import base64
+import pathlib
 from datetime import datetime, timezone
 
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
@@ -473,10 +474,45 @@ def main():
         if not pillar:
             pillar = 3
 
+    # Parse --outdir early (used by the picker below + the writer below)
+    outdir_arg = None
+    for i, a in enumerate(sys.argv):
+        if a == "--outdir" and i + 1 < len(sys.argv):
+            outdir_arg = sys.argv[i + 1]
+            break
+
+    # New (2026-06-22): if --pillar N was given without a keyword,
+    # pick the first un-written keyword in that pillar.
+    # (Idempotency: skip if a .mdx with that slug already exists in outdir.)
+    if pillar and not keyword:
+        for kw in KEYWORD_CALENDAR.get(pillar, []):
+            slug = slugify(kw)
+            if outdir_arg:
+                cand = pathlib.Path(outdir_arg) / f"{slug}.mdx"
+                if cand.exists():
+                    continue
+            keyword = kw
+            break
+        if not keyword:
+            print(f"  [skip] pillar {pillar}: all keywords already written", file=sys.stderr)
+            return
+
     product = PILLAR_PRODUCTS.get(pillar, "hub")
     fm, art, faq, bc, body = render_post(keyword, pillar, product)
     slug = slugify(keyword)
     mdx = fm + body + art + faq + bc
+
+    # --outdir option writes to local filesystem
+    # so downstream agents (og_image_generator, internal_linker) can
+    # process the post before it's committed to bizlegal-ea.
+
+    if outdir_arg:
+        outdir = pathlib.Path(outdir_arg)
+        outdir.mkdir(parents=True, exist_ok=True)
+        out = outdir / f"{slug}.mdx"
+        out.write_text(mdx, encoding="utf-8")
+        print(f"OK {out}")
+        return
 
     r = commit_file(
         f"{BLOG_DIR}/{slug}.mdx",

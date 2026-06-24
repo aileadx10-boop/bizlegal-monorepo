@@ -285,10 +285,9 @@ Respond ONLY in JSON, no prose, no markdown fence:
                 "User-Agent": "Mozilla/5.0",
             },
         )
-        with urllib.request.urlopen(req, timeout=30) as r:
+        with urllib.request.urlopen(req, timeout=60) as r:
             data = json.loads(r.read())
         text = data["content"][0]["text"].strip()
-        # Strip code fence if present
         if text.startswith("```"):
             text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text, flags=re.M)
         result = json.loads(text)
@@ -349,7 +348,7 @@ Respond ONLY in JSON, no prose, no markdown fence:
                 "User-Agent": "Mozilla/5.0",
             },
         )
-        with urllib.request.urlopen(req, timeout=30) as r:
+        with urllib.request.urlopen(req, timeout=60) as r:
             data = json.loads(r.read())
         text = data["content"][0]["text"].strip()
         if text.startswith("```"):
