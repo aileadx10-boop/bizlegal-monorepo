@@ -48,12 +48,28 @@ Priority order (highest MRR contribution first):
 
 ---
 
-## Section 3 — Structured Data Shipped (already done, 2026-06-23)
+## Section 3 — Structured Data Shipped
 
-- [x] `apps/hub/app/pricing/page.tsx` — FAQPage + SoftwareApplication + BreadcrumbList JSON-LD  
-- [ ] `apps/docai/web/app/pricing/page.tsx` — FAQPage + Product schema (TODO)
-- [ ] `apps/lexaudit/web/app/pricing/page.tsx` — FAQPage + Product schema (TODO)
-- [ ] Per-agent pages on hub — SoftwareApplication schema (TODO)
+- [x] `apps/hub/app/pricing/page.tsx` — FAQPage + SoftwareApplication + BreadcrumbList JSON-LD (2026-06-23)
+- [x] `apps/docai/web/app/pricing/page.tsx` — FAQPage + SoftwareApplication + BreadcrumbList (verified 2026-06-24)
+- [x] `apps/lexaudit/app/pricing/page.tsx` — FAQPage + SoftwareApplication + BreadcrumbList (verified 2026-06-24)
+- [x] `apps/brai/app/pricing/page.tsx` — FAQPage + SoftwareApplication + BreadcrumbList (verified 2026-06-24)
+- [x] `apps/forge/apps/web/app/pricing/page.tsx` — FAQPage + SoftwareApplication + BreadcrumbList (verified 2026-06-24)
+- [x] All 6 hub agent pages (`boi-tracker`, `marketplace-shield`, `india-dpdpa`, `ai-governance`, `policy-refresh`, `ai-act`) — SoftwareApplication + BreadcrumbList (verified 2026-06-24)
+
+## Section 3b — Monetization Pipeline Shipped (2026-06-25)
+
+- [x] `apps/hub/app/api/payments/nowpayments/webhook/route.ts` — dunning_queue inserts on failed/refunded payments
+- [x] `apps/hub/app/api/payments/nowpayments/start/route.ts` — env var standardized to NEXT_PUBLIC_SITE_URL
+- [x] `apps/hub/app/api/subscribers/route.ts` — POST subscriber capture + Resend audience sync + GET count
+- [x] `supabase/migrations/20260625_subscribers_source_columns.sql` — applied to live DB (ydghhcuuopqzgqcicubg)
+- [x] Hetzner crontab: dunning.py at 09:00 UTC daily (3-stage Resend recovery cadence)
+- [x] Hetzner crontab: headhunter.py --send at 09:30 UTC daily (all ICPs, curated list, score≥70)
+
+**Remaining Moses-only blockers (G8-G10):**
+- [ ] G8: Create 15 PayPal subscription plan IDs (see Section 2 priority table) + add to Vercel env
+- [ ] G9: Stripe live key (sk_live_...) → vault + 5 Vercel projects
+- [ ] G10: Resend audience ID → RESEND_AUDIENCE_ID env on hub + Hetzner; GSC/Bing 8-surface verification
 
 ---
 
