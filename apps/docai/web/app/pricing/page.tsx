@@ -154,7 +154,7 @@ const DOCAI_JSON_LD = {
           name: 'What is the SOC 2 Questionnaire Auto-fill (SQA)?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'SQA reads a vendor security questionnaire (SOC 2, CAIQ, SIG-Lite, SIG, NIST) and auto-drafts answers using your firm's uploaded policy library. A compliance-aware AI fills in responses in seconds; you review and export. Reduces questionnaire turnaround from days to minutes.',
+            text: `SQA reads a vendor security questionnaire (SOC 2, CAIQ, SIG-Lite, SIG, NIST) and auto-drafts answers using your firm's uploaded policy library. A compliance-aware AI fills in responses in seconds; you review and export. Reduces questionnaire turnaround from days to minutes.`,
           },
         },
         {
@@ -178,7 +178,7 @@ const DOCAI_JSON_LD = {
           name: 'Can I upload my own policy documents?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Yes — on the Firm plan. You can upload your firm's security policies, SOC 2 report summary, privacy policy, and other documents to the knowledge base. SQA then grounds its answers in YOUR actual policies, not generic templates.',
+            text: `Yes — on the Firm plan. You can upload your firm's security policies, SOC 2 report summary, privacy policy, and other documents to the knowledge base. SQA then grounds its answers in YOUR actual policies, not generic templates.`,
           },
         },
         {
