@@ -212,6 +212,21 @@ export async function POST(req: NextRequest) {
       // for refunded/failed because the cadence might still convert
       // them on a future visit.
       if (newStatus === 'active' && order.user_email) {
+        // Auto-subscribe paying customers so they receive product emails.
+        void supabase
+          .from('subscribers')
+          .upsert(
+            {
+              email: order.user_email,
+              source: 'checkout_success',
+              updated_at: new Date().toISOString(),
+            },
+            { onConflict: 'email', ignoreDuplicates: false },
+          )
+          .catch((err: unknown) =>
+            console.warn('[nowpayments/webhook] subscriber upsert failed:', err),
+          )
+
         void markNurturePaid(order.user_email).catch((err) =>
           console.warn('[nowpayments/webhook] mark-paid failed:', err),
         )

@@ -3,6 +3,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { PricingTierCard, type PricingTierData } from '@/app/components/ui-v2/PricingTierCard'
+import { SubscribeBar } from '@/app/components/SubscribeBar'
 
 export const dynamic = 'force-dynamic'
 
@@ -654,6 +655,28 @@ export default function PricingPage() {
             <span aria-hidden="true">→</span>
           </Link>
         </div>
+      </section>
+
+      {/* Email capture — compliance updates newsletter */}
+      <section
+        style={{
+          padding: '40px 24px',
+          textAlign: 'center',
+          borderTop: '1px solid rgba(255,255,255,0.07)',
+        }}
+      >
+        <p
+          style={{
+            fontSize: 13,
+            color: 'var(--bl-text-muted)',
+            marginBottom: 16,
+            letterSpacing: '0.04em',
+            textTransform: 'uppercase',
+          }}
+        >
+          Regulatory changes land fast — get the digest
+        </p>
+        <SubscribeBar />
       </section>
     </>
   )
