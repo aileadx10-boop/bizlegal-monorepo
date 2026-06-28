@@ -30,6 +30,7 @@ import urllib.request
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
 SUPABASE_SECRET = os.getenv("SUPABASE_SECRET", "")
 ANTHROPIC_KEY = os.getenv("ANTHROPIC_API_KEY", "")
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "")
 
 # Vertical patterns for scoring
 VERTICALS = {
@@ -154,10 +155,16 @@ GITHUB_QUERIES = [
 def scrape_github() -> list[dict]:
     """Search GitHub for compliance-related orgs, extract domains from descriptions."""
     out = []
+    gh_headers = {
+        "Accept": "application/vnd.github.v3+json",
+        "User-Agent": "bizlegal-discovery-scraper",  # GitHub API rejects requests with no UA (403)
+    }
+    if GITHUB_TOKEN:
+        gh_headers["Authorization"] = f"Bearer {GITHUB_TOKEN}"
     for query, vertical in GITHUB_QUERIES:
         status, body = http_get(
             f"https://api.github.com/search/repositories?q={urllib.parse.quote(query)}&sort=stars&per_page=10",
-            headers={"Accept": "application/vnd.github.v3+json"},
+            headers=gh_headers,
         )
         if status != 200:
             print(f"  [github] {query}: HTTP {status}", file=sys.stderr)

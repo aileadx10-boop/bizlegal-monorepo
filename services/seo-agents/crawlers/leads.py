@@ -89,8 +89,8 @@ def main():
     today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
     yesterday_iso = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()
     print('[' + today + '] leads: fetching last 24h')
-    new_leads = supabase_query('inbound_leads', 'select=email,product,source,utm_source,created_at&created_at=gte.' + yesterday_iso + '&order=created_at.desc&limit=200')
-    new_subs = supabase_query('newsletter_subscribers', 'select=email,created_at&created_at=gte.' + yesterday_iso + '&order=created_at.desc&limit=200')
+    new_leads = supabase_query('inbound_leads', 'select=email,product,source,created_at&created_at=gte.' + yesterday_iso + '&order=created_at.desc&limit=200')
+    new_subs = supabase_query('newsletter_subscribers', 'select=email,subscribed_at&subscribed_at=gte.' + yesterday_iso + '&order=subscribed_at.desc&limit=200')
     by_product = {}
     for l in new_leads:
         p = l.get('product', 'unknown')

@@ -88,7 +88,7 @@ def anthropic_draft(text: str, max_tokens: int = 600) -> str:
         return ""
     try:
         body = json.dumps({
-            "model": "claude-3-5-haiku-20241022",
+            "model": "claude-haiku-4-5-20251001",
             "max_tokens": max_tokens,
             "messages": [{"role": "user", "content": text}],
         }).encode()
@@ -164,7 +164,7 @@ def main():
 
     # Pull discovered/qualified leads (score >= 70)
     leads = supabase_select("leadforge_leads",
-                            "select=id,email,company_name,industry,score,status,enriched_data&score=gte.70&status=in.(discovered,qualified)&order=created_at.desc&limit=20")
+                            "select=id,email,company_name,industry,score,status,enriched_data&score=gte.70&status=in.(new,qualified)&order=created_at.desc&limit=20")
     print(f"[{args.date}] oci_funnel: {len(leads)} qualified leads", file=sys.stderr)
 
     out = pathlib.Path(args.output) / f"oci-routing-{args.date}.md"
@@ -209,27 +209,18 @@ Respond ONLY with the email body, no subject line, no JSON."""
             if msg_id:
                 sent += 1
 
-        # Record in deal_router_leads
-        supabase_insert("deal_router_leads", {
-            "source": "oci_funnel",
-            "source_url": "",
-            "contact_email": lead["email"],
-            "contact_name": lead["company_name"],
-            "classification": lead["industry"],
-            "buyer_type": "b2b_saas",
-            "priority": "high" if lead["score"] >= 85 else "medium",
-            "action": "partner_routed",
-            "recommended_partner": partner["name"],
-            "confidence": score,
-            "agent_run_id": None,
-            "created_at": _dt.datetime.now(_dt.timezone.utc).isoformat(),
-        })
+        # Routing decision is recorded in the daily markdown audit file below.
+        # NOTE: deal_router_leads is owned by the OCI FastAPI real-estate router
+        # (strict source/classification/action enums for inbound RE leads) — it is
+        # NOT the right table for B2B compliance partner placements, so we do not
+        # write to it here.
 
-        # Update lead status
+        # Mark lead as acted-upon so it is not re-routed on the next run.
+        # leadforge_leads.status check constraint allows: new/contacted/qualified/converted/archived
         try:
             req = urllib.request.Request(
                 f"{SUPABASE_URL}/rest/v1/leadforge_leads?id=eq.{lead['id']}",
-                data=json.dumps({"status": "routed_to_oci"}).encode(),
+                data=json.dumps({"status": "contacted"}).encode(),
                 method="PATCH",
                 headers={
                     "apikey": SUPABASE_SECRET, "Authorization": f"Bearer {SUPABASE_SECRET}",
