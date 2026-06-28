@@ -262,7 +262,7 @@ def supabase_insert_lead(lead: dict) -> bool:
             "company_name": lead["company"],
             "industry": lead["vertical"],
             "score": lead["score"],
-            "status": "discovered",
+            "status": "new",
             "enriched_data": {
                 "domain": lead.get("domain", ""),
                 "role": lead.get("role", ""),
