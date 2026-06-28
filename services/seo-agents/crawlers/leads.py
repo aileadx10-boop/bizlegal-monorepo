@@ -87,7 +87,9 @@ def log_run(agent, action, status, details=None):
 def main():
     load_env()
     today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
-    yesterday_iso = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()
+    # NOTE: use 'Z' suffix, not .isoformat() — isoformat emits '+00:00' and the '+'
+    # decodes to a space in the URL query string, corrupting the filter (HTTP 400).
+    yesterday_iso = (datetime.now(timezone.utc) - timedelta(hours=24)).strftime('%Y-%m-%dT%H:%M:%SZ')
     print('[' + today + '] leads: fetching last 24h')
     new_leads = supabase_query('inbound_leads', 'select=email,product,source,created_at&created_at=gte.' + yesterday_iso + '&order=created_at.desc&limit=200')
     new_subs = supabase_query('newsletter_subscribers', 'select=email,subscribed_at&subscribed_at=gte.' + yesterday_iso + '&order=subscribed_at.desc&limit=200')
