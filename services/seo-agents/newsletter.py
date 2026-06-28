@@ -121,13 +121,15 @@ def main():
         log_run('newsletter', 'send', 'skipped', {'reason': 'no subscribers (audience empty)'})
         return
     # Get top 3 articles from last 24h
-    articles = supabase_query('daily_gaps', 'select=slug,total_score&status=eq.published&order=total_score.desc&limit=3') or []
+    articles = supabase_query('daily_gaps', 'select=draft_slug,blog_url,title,total_score&status=eq.published&order=total_score.desc&limit=3') or []
     # Compose newsletter
     body = '# BizLegal AI Daily\n\nTop articles today:\n\n'
     for a in articles:
-        slug = a.get('slug', '')
-        if slug:
-            body += '- ' + slug + ' - https://blog.bizlegal-ai.com/' + slug + '\n'
+        slug = a.get('draft_slug', '')
+        link = a.get('blog_url') or ('https://blog.bizlegal-ai.com/' + slug if slug else '')
+        label = a.get('title') or slug
+        if link:
+            body += '- ' + label + ' - ' + link + '\n'
     body += '\n## Featured: Tracr - free wallet scan\nhttps://tracr.bizlegal-ai.com/analyze\n'
     # Send via Resend (use broadcast to audience if set, else individual)
     sent = 0

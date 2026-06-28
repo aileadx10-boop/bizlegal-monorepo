@@ -154,7 +154,7 @@ def task_00_brain_followup() -> dict:
         if d.stat().st_mtime > cutoff:
             new_drafts.append(d.stem)
     # Supabase daily_gaps status check
-    rows = supabase_query('daily_gaps', 'select=url,draft_slug,status&order=created_at.desc&limit=20')
+    rows = supabase_query('daily_gaps', 'select=url,draft_slug,status&order=scouted_at.desc&limit=20')
     drafted = [r for r in rows if r.get('status') == 'drafted']
     rejected = [r for r in rows if r.get('status') == 'rejected_quality']
     result = {
