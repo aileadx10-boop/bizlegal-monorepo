@@ -210,7 +210,8 @@ def scrape_sec_edgar() -> list[dict]:
     headers = {"User-Agent": "BizLegal-Research research@bizlegal-ai.com"}
     for q in SEC_QUERIES:
         url = f"https://efts.sec.gov/LATEST/search-index?q={urllib.parse.quote(q)}&dateRange=custom&startdt=2024-01-01&forms=10-K,10-Q,8-K"
-        status, body = http_get(url, headers=headers)
+        # SEC full-text search is slow (~40s/query); 30s default times out → 0 results
+        status, body = http_get(url, headers=headers, timeout=70)
         if status != 200:
             print(f"  [sec] {q[:30]}: HTTP {status}", file=sys.stderr)
             continue
