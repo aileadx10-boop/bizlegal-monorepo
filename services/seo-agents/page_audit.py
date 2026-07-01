@@ -40,7 +40,7 @@ SUPABASE_URL = os.getenv("SUPABASE_URL", "")
 SUPABASE_SECRET = os.getenv("SUPABASE_SECRET", "")
 
 SURFACES = {
-    "hub":       ("bizlegal-ai.com", ["/", "/agents", "/pricing", "/ops", "/about", "/contact", "/blog"]),
+    "hub":       ("bizlegal-ai.com", ["/", "/agents", "/pricing", "/ops", "/about", "/contact", "/blog", "/use-cases", "/use-cases/soc2-questionnaire", "/use-cases/dpa-review", "/use-cases/mica-compliance", "/use-cases/boi-filing"]),
     "tracr":     ("tracr.bizlegal-ai.com", ["/", "/pricing", "/scan", "/wallet-risk", "/report-sample", "/about", "/contact"]),
     "brai":      ("brai.bizlegal-ai.com",  ["/", "/pricing", "/report-sample", "/jurisdictions", "/about", "/contact"]),
     "lexaudit":  ("lexaudit.bizlegal-ai.com", ["/", "/pricing", "/frameworks", "/monitoring", "/report-sample", "/about", "/contact"]),
