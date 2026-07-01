@@ -138,10 +138,10 @@ def main():
         if s not in ('success', 'ok'):
             failures.append(r)
     # Find new articles to push to IndexNow
-    new_articles = supabase_query('daily_gaps', 'select=url,draft_slug,status&status=eq.published&published_at=gte.' + yesterday_iso + '&limit=50')
+    new_articles = supabase_query('daily_gaps', 'select=blog_url,draft_slug,status&status=eq.published&published_at=gte.' + yesterday_iso + '&limit=50')
     new_urls = []
     for a in new_articles:
-        blog_url = a.get('url', '')
+        blog_url = a.get('blog_url', '')
         slug = a.get('draft_slug', '')
         if blog_url:
             new_urls.append(blog_url)

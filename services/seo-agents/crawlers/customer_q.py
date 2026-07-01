@@ -46,6 +46,9 @@ def supabase_query(table, params=''):
     try:
         r = urllib.request.urlopen(req, timeout=15)
         return json.loads(r.read())
+    except urllib.error.HTTPError as e:
+        if e.code != 404:
+            print('  [supabase] ' + table + ': HTTP Error ' + str(e.code))
     except Exception as e:
         print('  [supabase] ' + table + ': ' + str(e)[:100])
         return []
