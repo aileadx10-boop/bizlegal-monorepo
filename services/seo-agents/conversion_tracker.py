@@ -179,7 +179,7 @@ def main():
 
     md.append(f"\n## Pipeline health (last 24h)\n\n")
     # Get last 24h agent_runs
-    cutoff = (_dt.datetime.now(_dt.timezone.utc) - _dt.timedelta(hours=24)).isoformat()
+    cutoff = (_dt.datetime.now(_dt.timezone.utc) - _dt.timedelta(hours=24)).strftime('%Y-%m-%dT%H:%M:%SZ')
     runs = sb_query("agent_runs", f"select=agent_name,action,status&created_at=gte.{cutoff}&order=created_at.desc&limit=50")
     by_status = defaultdict(int)
     for r in runs:

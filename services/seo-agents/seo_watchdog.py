@@ -127,7 +127,7 @@ def telegram_alert(message):
 def main():
     load_env()
     today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
-    yesterday_iso = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()
+    yesterday_iso = (datetime.now(timezone.utc) - timedelta(hours=24)).strftime('%Y-%m-%dT%H:%M:%SZ')
     print('[' + today + '] watchdog: consolidating last 24h of crawlers')
     runs = supabase_query('agent_runs', 'select=agent_name,action,status,created_at,details&created_at=gte.' + yesterday_iso + '&order=created_at.desc&limit=100')
     by_status = {}
@@ -138,10 +138,10 @@ def main():
         if s not in ('success', 'ok'):
             failures.append(r)
     # Find new articles to push to IndexNow
-    new_articles = supabase_query('daily_gaps', 'select=draft_slug,blog_url,status&status=eq.published&published_at=gte.' + yesterday_iso + '&limit=50')
+    new_articles = supabase_query('daily_gaps', 'select=url,draft_slug,status&status=eq.published&published_at=gte.' + yesterday_iso + '&limit=50')
     new_urls = []
     for a in new_articles:
-        blog_url = a.get('blog_url', '')
+        blog_url = a.get('url', '')
         slug = a.get('draft_slug', '')
         if blog_url:
             new_urls.append(blog_url)
