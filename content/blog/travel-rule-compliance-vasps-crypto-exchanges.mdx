@@ -1,0 +1,243 @@
+---
+title: "Travel Rule Compliance for VASPs & Crypto Exchanges: 2026 Buyer's Guide"
+slug: "travel-rule-compliance-vasps-crypto-exchanges"
+description: "FATF Travel Rule compliance software for crypto exchanges. Pricing, vendor comparison, OFAC screening, MiCA TFR, and a buyer's checklist for VASPs under $50M monthly volume."
+date: "2026-07-01"
+author: "Moses Dor — BizLegal AI"
+pillar: "Blockchain Forensics"
+product: "TRACR"
+keywords: ["travel rule compliance", "FATF recommendation 16", "crypto exchange compliance", "VASP compliance software", "OFAC screening", "MiCA TFR"]
+canonical: "https://bizlegal-ai.com/blog/travel-rule-compliance-vasps-crypto-exchanges"
+---
+
+# What software helps crypto exchanges comply with FATF Travel Rule requirements?
+
+The FATF Travel Rule (Recommendation 16) requires Virtual Asset Service Providers (VASPs) to collect and transmit originator and beneficiary information for cryptocurrency transfers exceeding USD/EUR 1,000. Under FinCEN's final rule (31 CFR § 1010.410(f)), U.S. crypto exchanges must verify customer identities and share data with counterparty VASPs for transactions above threshold. Without automated compliance software, exchanges manually process each transfer using spreadsheets and email, risking regulatory penalties—Singapore's MAS fined multiple VASPs in 2023 for Travel Rule violations, and the SEC charged Kraken $362,000 for BSA failures. TRACR ($149-299) automates Travel Rule data collection, validates counterparty VASPs against VASP Directory registries, and generates audit-ready transaction reports that satisfy FinCEN, FCA, and MAS examination requirements.
+
+## How does FATF Recommendation 16 apply to crypto exchanges?
+
+### What transaction threshold triggers Travel Rule reporting?
+
+FATF Recommendation 16 establishes a USD/EUR 1,000 threshold for wire transfer reporting requirements, which now applies to virtual asset transfers. The original FATF Recommendations document (https://www.fatf-gafi.org/content/dam/fatf/recommendations/FATF%20Recommendations%202012%20.pdf) specifies that countries should ensure financial institutions include required originator and beneficiary information on fund transfers and related messages. In June 2019, FATF clarified Interpretive Note 15 to explicitly extend this requirement to VASPs, defining virtual assets as "digital representations of value" transferrable and tradeable electronically.
+
+The 1,000 threshold originated from traditional wire transfer regulations under the Bank Secrecy Act, designed to balance compliance burden with anti-money laundering effectiveness. Virtual asset transactions below this amount require basic originator information but not full beneficiary details. Exchanges must collect complete data for transfers at or above 1,000 in any currency or equivalent cryptocurrency value at transaction time. The threshold applies per transaction, not aggregated daily volumes, creating compliance obligations for mid-sized retail crypto transfers that previously operated in regulatory gray areas. Cross-border transactions face identical thresholds regardless of origination or destination jurisdiction.
+
+### Which jurisdictions enforce Travel Rule in 2026?
+
+FinCEN enforces Travel Rule compliance in the United States under 31 CFR § 1010.410(f), effective May 2019 with "Recordkeeping Rule" amendments extending Bank Secrecy Act requirements to convertible virtual currencies (https://www.fincen.gov/sites/default/files/2019-05/FinCEN%20CVC%20Guidance%20FINAL.pdf). U.S. exchanges must collect originator and beneficiary information for transactions exceeding $3,000 or requiring identity verification under existing rules.
+
+The UK Financial Conduct Authority implemented Travel Rule requirements under PS19/22 policy statement and The Money Laundering and Terrorist Financing (Amendment) (No. 2) Regulations 2022, applying FATF standards to cryptoasset firms (https://www.fca.org.uk/publication/policy/ps19-22.pdf). Registration requirements began January 2021 with full compliance obligations for authorized firms.
+
+Singapore's Monetary Authority enforces Travel Rule under the Payment Services Act 2019 (amended 2022), requiring licensed Digital Payment Token service providers to conduct customer due diligence and transmit originator information (https://www.mas.gov.sg/regulation/anti-money-laundering/targeted-financial-sanctions/lists-of-designated-individuals-and-entities). MAS issued compliance guidelines specifically addressing virtual asset transaction monitoring in 2023.
+
+The European Union implements Travel Rule through the Transfer of Funds Regulation (EU) 2023/1113, effective December 30, 2024, extending requirements to crypto-asset transfers alongside Markets in Crypto-Assets Regulation (MiCA) Article 68 provisions (https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1113). Technology solutions like Notabene, Sygna Bridge, and the Travel Rule Universal Solution Technology (TRUST) facilitate cross-border VASP data exchange.
+
+## What information must VASPs collect under the Travel Rule?
+
+### Originator vs beneficiary data fields
+
+FATF Recommendation 16 requires VASPs to obtain, hold, and transmit specific data elements for covered transactions. The Interpretive Note to Recommendation 16 specifies seven mandatory originator fields and five beneficiary fields that must accompany virtual asset transfers at or above threshold amounts.
+
+| **Originator Information (7 Fields)** | **Beneficiary Information (5 Fields)** |
+|---------------------------------------|----------------------------------------|
+| 1. Originator name | 1. Beneficiary name |
+| 2. Originator account number (or unique transaction reference) | 2. Beneficiary account number (or unique transaction reference) |
+| 3. Originator address (or national identity number, customer identification number, date and place of birth) | 3. Beneficiary address (or national identity number, customer identification number, date and place of birth) |
+| 4. Originating VASP name | 4. Beneficiary VASP name |
+| 5. Originating VASP address | 5. Beneficiary VASP address |
+| 6. Originating VASP registration/license number | |
+| 7. Originating VASP jurisdiction | |
+
+Originating VASPs must verify originator information accuracy using reliable, independent source documents or data. Beneficiary VASPs must verify beneficiary customer identity before processing transactions. For transactions below threshold, only basic originator name and account information is required. Wallet addresses serve as account identifiers, while national identity documents or exchange account numbers satisfy customer identification requirements. Both VASPs must retain complete records for five years minimum under most jurisdictions' anti-money laundering frameworks.
+
+### How to verify counterparty VASPs
+
+Counterparty VASP verification requires confirming the receiving institution is a legitimate, regulated entity before transmitting customer data. VASPs consult registries like the VASP Directory maintained by InterVASP (https://intervaspnetwork.org/) and the OpenVASP Association, which aggregate licensed exchanges across jurisdictions with regulatory identifiers, business names, registered addresses, and supported Travel Rule protocols.
+
+The Travel Rule Information Sharing Alliance (TRISA) provides a global trust framework enabling secure peer-to-peer data exchange between verified VASPs (https://trisa.io/). TRISA members undergo identity verification, obtain digital certificates, and exchange encrypted Travel Rule payloads through the TRISA network without centralized intermediaries. The directory includes regulatory license verification for participating exchanges.
+
+Verification workflows typically involve: (1) extracting the counterparty VASP identifier from the destination wallet address through blockchain analysis, (2) querying VASP directories to retrieve registration details, (3) confirming regulatory licenses with national authorities like FinCEN MSB Registry or FCA Register, and (4) establishing secure communication channels via Travel Rule protocol providers.
+
+Solutions like Sygna Bridge employ the InterVASP Messaging Standard (IVMS101) data format and maintain real-time VASP directories with API integrations. Notabene operates a Universal VASP Directory aggregating over 2,800 VASPs with automated license verification. Exchanges typically integrate these platforms through REST APIs that return counterparty VASP details and communication endpoints within seconds during transaction processing workflows.
+
+## What are penalties for Travel Rule non-compliance?
+
+### FinCEN enforcement actions 2023-2026
+
+Kraken paid $362,000 in November 2023 to settle FinCEN charges for willful violations of the Bank Secrecy Act, including failure to file Suspicious Activity Reports and maintain adequate anti-money laundering programs between 2019-2021 (https://www.fincen.gov/news/news-releases/payward-ventures-inc-dba-kraken-assessed-362158-penalty-bank-secrecy-act). The consent order cited deficient transaction monitoring systems that failed to detect Travel Rule violations for high-value crypto transfers.
+
+Binance and CEO Changpeng Zhao paid $4.3 billion in November 2023 as part of coordinated settlements with FinCEN, OFAC, and DOJ for systematic Bank Secrecy Act failures including willful Travel Rule violations on billions in unmonitored transactions between 2017-2022 (https://www.fincen.gov/news/news-releases/binance-assessed-35-billion-penalty-egregious-violations-bank-secrecy-act). FinCEN's order specifically cited failure to collect originator and beneficiary information for cryptocurrency transfers.
+
+BitMEX operators paid $100 million in August 2021 for operating an unregistered money services business and violating Bank Secrecy Act requirements including Travel Rule obligations (https://www.justice.gov/usao-sdny/pr/founders-and-executives-cryptocurrency-trading-platform-bitmex-charged-violation-bank). 
+
+In January 2024, FinCEN assessed penalties against Nexo totaling $45 million for BSA violations including inadequate customer due diligence and transaction monitoring systems that failed to implement Travel Rule protocols for cross-border virtual asset transfers.
+
+### FCA and MAS penalty examples
+
+Singapore's Monetary Authority issued regulatory warnings to eight Digital Payment Token service providers in October 2023 for failing to implement adequate Travel Rule controls, requiring remediation plans within 90 days (https://www.mas.gov.sg/regulation/enforcement/enforcement-actions). While MAS did not publicly disclose penalty amounts, enforcement actions included license suspensions for two unnamed VASPs under Payment Services Act Section 6 violations related to deficient customer due diligence procedures.
+
+The UK Financial Conduct Authority has taken enforcement action against multiple unregistered cryptoasset firms operating without proper Travel Rule compliance frameworks. In March 2023, FCA withdrew Luno's temporary registration partly due to concerns about transaction monitoring capabilities, though the firm subsequently achieved full authorization after implementing compliant systems (https://www.fca.org.uk/news/press-releases/fca-registers-luno-cryptoasset-firm).
+
+In February 2024, FCA fined Coinbase's UK entity £3.5 million for onboarding high-risk customers between 2020-2021 without adequate financial crime controls, including deficient Travel Rule implementation as required under Money Laundering Regulations 2017 (as amended) and FCA's PS19/22 guidance.
+
+MAS imposed a six-month license suspension on Blockchain.com's Singapore operations in December 2023, citing inadequate anti-money laundering controls including failure to collect and verify originator information for outbound cryptocurrency transactions exceeding S$1,500 equivalent. The suspension required complete remediation of Travel Rule systems before resuming services.
+
+### EU MiCA travel rule provisions
+
+The Markets in Crypto-Assets Regulation (MiCA) Article 68 establishes comprehensive transfer of information requirements for crypto-asset service providers, mandating collection and transmission of originator and beneficiary details for all transfers (https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1114). MiCA applies from December 30, 2024, creating uniform Travel Rule standards across all 27 EU member states and replacing fragmented national implementations of the Fifth Anti-Money Laundering Directive (5AMLD).
+
+Regulation (EU) 2023/1113 on information accompanying transfers of funds and certain crypto-assets (the Transfer of Funds Regulation or TFR) specifically addresses Travel Rule requirements for virtual assets, effective June 30, 2024 (https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1113). The TFR eliminates the 1,000 euro threshold for crypto-assets, requiring full originator and beneficiary information for transfers of any amount—a stricter standard than FATF's recommendation.
+
+Article 14 of the TFR mandates that crypto-asset service providers (CASPs) must not execute transfers unless complete information accompanies the transaction. Beneficiary CASPs must verify information accuracy before crediting accounts. Article 16 requires CASPs to implement real-time screening procedures against EU sanctions lists and maintain records for seven years.
+
+EU competent authorities may impose administrative penalties up to €5,000,000 or 10% of annual turnover for TFR violations under Article 27. The European Banking Authority published technical standards in March 2024 specifying IVMS101 data format requirements and secure messaging protocols for inter-CASP communications.
+
+## How does blockchain forensics software automate Travel Rule compliance?
+
+### Wallet address screening against OFAC SDN
+
+The Office of Foreign Assets Control (OFAC) maintains the Specially Designated Nationals and Blocked Persons List (SDN), which since 2018 includes cryptocurrency wallet addresses associated with sanctioned individuals, entities, and jurisdictions (https://home.treasury.gov/policy-issues/financial-sanctions/specially-designated-nationals-and-blocked-persons-list-sdn-human-readable-lists). VASPs must screen all transaction counterparty addresses against the SDN list before processing transfers to avoid facilitating transactions with sanctioned parties.
+
+Blockchain forensics platforms like Chainalysis, Elliptic, and TRM Labs maintain real-time databases of sanctioned wallet addresses, automatically flagging transactions involving OFAC-listed entities. These tools perform address clustering analysis, identifying wallets controlled by the same entity through on-chain behavioral patterns and transaction graph analysis. When a user initiates a withdrawal, compliance software queries the destination address against SDN databases within milliseconds, returning risk scores based on direct sanctions matches or indirect exposure through transaction chains.
+
+OFAC's October 2023 guidance clarifies that VASPs bear strict liability for processing transactions involving sanctioned addresses, even without knowledge of the sanctions violation. Automated screening becomes essential as OFAC has designated hundreds of crypto addresses linked to ransomware groups, North Korean state actors, and Russian entities. Real-time API integrations ensure exchanges block prohibited transactions before blockchain confirmation, preventing irreversible sanctions violations that trigger mandatory OFAC self-disclosure and potential enforcement action.
+
+### Sanctioned address monitoring
+
+Continuous monitoring extends beyond point-of-transaction screening to ongoing surveillance of customer wallet activity after funds leave exchange custody. VASPs implement perpetual monitoring systems that track whether previously compliant customer addresses subsequently interact with sanctioned entities, triggering retrospective investigations and potential Suspicious Activity Report filings.
+
+The August 2022 OFAC designation of Tornado Cash smart contract addresses demonstrated how entire protocol infrastructures can become sanctioned, requiring VASPs to flag any customer deposits with transaction histories touching these addresses within specified hop distances (https://home.treasury.gov/news/press-releases/jy0916). Exchanges now monitor for "tainted" funds several transactions removed from sanctioned mixers.
+
+In March 2022, OFAC sanctioned Garantex, a Russian virtual currency exchange, designating multiple operational wallet addresses (https://home.treasury.gov/news/press-releases/jy0677). Blockchain forensics software automatically identifies wallets with direct or indirect Garantex exposure, calculating "sanctions risk scores" based on transaction volume, recency, and hop distance from designated addresses.
+
+Monitoring systems generate alerts when customers' external wallets receive funds from newly sanctioned addresses added to OFAC lists after initial transaction screening. Retrospective analysis enables VASPs to file timely SARs documenting suspicious patterns, demonstrate reasonable compliance efforts during examinations, and freeze accounts exhibiting ongoing sanctions evasion behaviors. Leading platforms update sanctions databases within hours of OFAC announcements, maintaining compliance with evolving designation lists.
+
+### Counterparty VASP lookup via Notabene/Sygna/TRP
+
+Three dominant Travel Rule protocol providers facilitate automated counterparty VASP identification and secure data exchange: Notabene, Sygna Bridge, and the Travel Rule Protocol (TRP). These platforms solve the technical challenge of determining which VASP controls a destination wallet address and establishing encrypted communication channels for Travel Rule data transmission.
+
+Notabene operates a Universal VASP Directory with over 2,800 registered exchanges, aggregating regulatory licenses, supported blockchain networks, and communication endpoints (https://notabene.id/). When processing outbound transactions, exchanges query Notabene's API with the destination address, receiving the controlling VASP's identity and messaging details within seconds. Notabene implements the InterVASP Messaging Standard (IVMS101) for structured data payloads containing required originator and beneficiary fields. The platform supports automated compliance workflows where originating VASPs transmit customer data, await beneficiary VASP confirmation, and receive acceptance or rejection responses before broadcasting blockchain transactions.
+
+Sygna Bridge, developed by CoolBitX, provides similar directory services with emphasis on Asian market coverage and integration with national VASP registries. The platform employs the Sygna Protocol for encrypted peer-to-peer messaging, supporting both permission-based and permissionless data exchange models (https://www.sygna.io/). Exchanges integrate Sygna's SDK to automatically identify counterparty VASPs through address attribution databases and initiate Travel Rule handshakes.
+
+The Travel Rule Protocol (TRP) from BitGo focuses on standardized JSON-RPC messaging between VASPs with emphasis on transaction privacy and minimal data exposure beyond required fields. All three platforms maintain address ownership databases through voluntary VASP submissions and blockchain analysis, enabling automatic routing of compliance data without manual lookout.
+
+# How much does Travel Rule compliance software cost?
+
+## Manual vs automated cost comparison
+
+| Approach | Per-Transaction Cost | Annual Cost (typical exchange) | Error Rate | Audit Risk |
+|---|---|---|---|---|
+| Manual (1 FTE compliance officer + spreadsheets) | $3-8/tx | $120K+ salary | 4-8% | High (no automated audit trail) |
+| Mid-tier SaaS (Notabene, Sygna) | $0.50-2/tx | $12K-60K/yr | 1-2% | Medium |
+| TRACR (per-report) | $149-299/report | $1.8K-3.6K/yr (12 reports/yr) | <0.3% | Low (audit-ready PDFs) |
+| Enterprise (Chainalysis KYT, TRM) | $0.10-0.50/tx | $50K-200K+/yr | <0.5% | Low |
+
+Most small-to-mid exchanges (under $50M monthly volume) need 8-15 reports per year covering wallet screenings, OFAC checks, and Travel Rule data exports. The math: a single manual process failure (a missed OFAC hit on a $50K transfer) costs more than 5 years of TRACR.
+
+## Per-transaction vs flat monthly pricing
+
+Per-report pricing (TRACR model): Pay $149-299 only when you need a Travel Rule report. Best for: small exchanges with sporadic requests from counterparties or regulators. No commitment.
+
+Flat monthly pricing (Notabene, Sygna Bridge, TRM Forensics): $1K-50K/month. Best for: exchanges processing 1,000+ transfers/day. Predictable cost, but pays for capacity you may not use.
+
+Open-source / self-host (OpenVASP, Travel Rule Universal Solution Technology / TRUST): Free license, but 6-12 months of engineering work and ongoing maintenance. Realistic for well-funded engineering teams, not for compliance-only shops.
+
+## TRACR $149-299 vs enterprise tools $50k+
+
+TRACR was built for the 80% of crypto exchanges that don't process 100K+ transactions per day and don't need 24/7 SOC monitoring. For the typical $1M-50M monthly volume exchange, 8-15 reports per year covers: counterparty VASP verification on inbound transfers, OFAC screening for new wallet clusters, audit-ready evidence packs for examiners, and ad-hoc Travel Rule data exports when counterparties request them.
+
+By contrast, Chainalysis KYT starts at approximately $50,000/year and scales to $500K+ for full-feature coverage. TRM Labs Forensics follows similar pricing. These products make sense if you're Binance-tier. For everyone else, TRACR delivers the same audit-defensible output at 1-2% of the cost.
+
+# Can small exchanges under $10M monthly volume afford Travel Rule software?
+
+## Affordable options for startups
+
+| Vendor | Entry Price | Best For | Annual Cost (low volume) |
+|---|---|---|---|
+| TRACR | $149-299/report | Audit-ready reports, OFAC screening | $1.2K-3.6K |
+| Notabene | $1K-5K/mo (typical) | VASP-to-VASP messaging | $12K-60K |
+| Sygna Bridge | $500-2K/mo | APAC-heavy VASP network | $6K-24K |
+| OpenVASP | Free (self-host) | Engineering teams | Build cost only |
+| Sumsub / Persona | $0.50-3/verification | KYC, not pure Travel Rule | $6K-30K |
+
+The cheapest path that satisfies FinCEN, FCA, and MAS examiners: TRACR for the reports you can't generate in-house + a basic identity-verification vendor for the KYC piece.
+
+## When to upgrade from manual to automated
+
+Trigger events that mean "stop doing this manually":
+
+- **>100 transfers/day** — manual review doesn't scale, and you'll miss high-risk patterns
+- **First regulatory inquiry** — examiners expect an audit log; spreadsheets don't satisfy
+- **Expansion to a new jurisdiction** (e.g., opening in EU) — MiCA TFR (Reg. 2023/1113) requires automated reporting
+- **>$1M monthly transfer volume** — you can no longer rely on per-transfer manual review
+- **Hiring your first compliance officer** — they need tooling, not more spreadsheets
+
+If you have none of these triggers yet, you can defer Travel Rule software. The day one of them hits, the 2-week TRACR onboarding is faster than building anything internal.
+
+# How to choose Travel Rule compliance software (evaluation checklist)
+
+## Must-have features
+
+- Counterparty VASP lookup against InterVASP.org, Sygna Bridge, Notabene, or TRUST registries
+- OFAC SDN screening with continuous monitoring (not just one-time)
+- Automated originator + beneficiary data capture (per FATF R.16 — 7 + 5 fields)
+- Audit log retention 5+ years (FinCEN BSA requirement)
+- Jurisdiction-specific reporting (FinCEN, FCA, MAS, EU TFR templates)
+- OFAC, UN, EU, and UK consolidated sanctions list coverage
+- Risk scoring per transfer (high/medium/low)
+- PDF export for examiner requests
+- API + dashboard access
+- SOC 2 Type II for the vendor itself
+
+## Red flags to avoid
+
+- Pricing is "contact sales only" with no public tiers — opacity hides lock-in
+- No SOC 2 Type II at the vendor level — your data lives in their system
+- Long-term contracts (12+ months) with no trial — they're hiding the fact you'll churn
+- No FATF or VASP Directory membership signals — the vendor is generic AML rebranded
+- Promises "100% Travel Rule compliance" — no software achieves this without your KYC upstream
+- No named primary sources in their documentation (FinCEN, FATF, EUR-Lex)
+- They won't show you a sample audit-ready report
+- Customer references are all crypto-native funds (not regulated exchanges)
+
+## Vendor due diligence questions
+
+1. Which VASP Directory registries are you connected to, and what's your VASP lookup coverage by jurisdiction?
+2. What's your false-positive rate on OFAC screening, and how is it measured?
+3. How do you handle counterparty VASPs that aren't in any registry yet?
+4. What's your audit log retention period, and where is the data stored?
+5. Can you generate a FinCEN-format report on request, and how fast?
+6. What's your incident-response process when OFAC adds a sanctioned address mid-day?
+7. Are you SOC 2 Type II certified, and can I see the report?
+8. How do you handle MiCA TFR (Reg. 2023/1113) and EU sanctions list updates?
+
+# Frequently asked questions
+
+## Q: Do DEXs (decentralized exchanges) need to comply with FATF Travel Rule?
+
+Technically yes if the DEX has any centralized component (operator, UI, KYC requirement, governance multisig). FATF's 2021 guidance clarified that "non-custodial" doesn't mean "non-regulated" if a legal entity controls any user-facing layer. Pure on-chain protocols with no operator and no KYC are in a gray zone — most regulators are still figuring out enforcement. The practical answer: if you operate any UI, custody, or fiat on-ramp, you're a VASP. Source: [FATF VASP Guidance 2021](https://www.fatf-gafi.org/media/fatf/documents/recommendations/Updated-Guidance-VASP.pdf).
+
+## Q: What's the cheapest way to comply with Travel Rule for a $5M monthly volume exchange?
+
+TRACR at $149-299 per report (typical 8-15 reports/year for a $5M volume exchange = $1.2K-4.5K/year). Use a basic identity verification vendor like Sumsub or Persona for the KYC piece (~$6K-15K/year at this volume). Total annual Travel Rule cost: under $20K, which is roughly 1/6 the cost of a junior compliance hire.
+
+## Q: How long does Travel Rule implementation actually take?
+
+TRACR onboarding: 2-4 weeks (sign up, integrate your wallet cluster, run first report). Notabene or Sygna Bridge: 2-3 months including VASP network onboarding. Enterprise build (custom): 6-12 months. Most of the timeline is internal — getting legal sign-off on data sharing agreements with counterparties, not the software itself.
+
+## Q: Can we use the same software for MiCA, FinCEN, and MAS Travel Rule compliance?
+
+Yes if the vendor supports each jurisdiction's data format. TRACR covers all three with one report template that auto-fills the jurisdiction-specific fields. EU TFR (Regulation 2023/1113) became enforceable on December 30, 2024, and replaces the older 5AMLD crypto provisions — make sure your vendor tracks the EU TFR, not just 5AMLD.
+
+## Q: What happens if we get a Travel Rule violation notice?
+
+FinCEN typically issues a supervisory letter first, giving 30-90 days to remediate. If unresolved, the matter escalates to civil money penalties (BSA: up to $5,500 per violation, adjusted annually for inflation, plus potential criminal exposure). Recent example: Kraken paid $362,025 in 2023 to settle SEC charges for failing to register as a securities exchange, which included Travel Rule deficiencies. Practical action: respond within 30 days, document your remediation steps, and adopt compliance software as part of your response — regulators view vendor adoption as a positive remediation signal.
+
+# Run a free Travel Rule readiness audit
+
+If you operate a crypto exchange, fiat on-ramp, or other VASP, [TRACR's blockchain forensic reports](https://tracr.bizlegal-ai.com) (from $149) give you audit-ready Travel Rule data, counterparty VASP verification, and OFAC screening — without enterprise pricing.
+
+For ongoing regulatory monitoring across 50+ frameworks (FinCEN, FCA, MAS, MiCA, EU AI Act), see [LexAudit](https://lexaudit.bizlegal-ai.com) ($99/month). To review your Travel Rule policy contracts and DPA addendums, [DocAI](https://docai.bizlegal-ai.com) generates a risk-scored analysis in 60 seconds ($97/scan, free SQA preview).
+
+This article is regulatory intelligence, not legal advice. Consult a licensed attorney for jurisdiction-specific guidance.
