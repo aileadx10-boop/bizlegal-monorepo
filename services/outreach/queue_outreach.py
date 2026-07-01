@@ -44,17 +44,26 @@ def already_queued(emails):
     return {r["lead_email"] for r in json.loads(body)}
 
 
+INDUSTRY_LABELS = {
+    "fintech_crypto_exchange": "crypto exchange",
+    "corporate_legal_ops": "corporate legal",
+    "real_estate_crossborder": "cross-border real estate",
+    "dao_defi": "DeFi / DAO",
+    "b2b_saas": "B2B SaaS",
+    "fintech": "fintech",
+}
+
+
 def generate_email_body(lead):
     company = lead.get("company_name", "your firm")
-    source = lead.get("source", "")
-    score = lead.get("score", 0)
     ed = lead.get("enriched_data") or {}
     title = ed.get("title", "Compliance Team")
-    industry = lead.get("industry", "fintech")
+    industry_slug = lead.get("industry", "fintech")
+    industry = INDUSTRY_LABELS.get(industry_slug, industry_slug.replace("_", " "))
 
     subject = f"Regulatory intelligence for {company} — 50+ frameworks, 1 dashboard"
 
-    body = f"""Hi {title} team at {company},
+    body = f"""Hi {title},
 
 I'm Moses Dor, founder of BizLegal AI. We build regulatory intelligence software for in-house compliance teams at {industry} firms — covering SEC, FinCEN, MiCA, GDPR, MAS, and 47 other frameworks in one dashboard.
 
