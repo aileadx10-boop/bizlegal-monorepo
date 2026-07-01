@@ -16,41 +16,80 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import json
 import os
-import sys
+import urllib.error
+import urllib.request
 from datetime import datetime, timezone
-from typing import Any
 
-import httpx
-from dotenv import load_dotenv
-from supabase import create_client, Client
-
-load_dotenv()
-
-RESEND_API_KEY = os.environ["RESEND_API_KEY"]
-RESEND_URL = "https://api.resend.com/emails"
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
+SUPABASE_KEY = (os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
+                or os.environ.get("SUPABASE_SERVICE_KEY", "")
+                or os.environ.get("SUPABASE_SECRET", "")
+                or os.environ.get("SUPABASE_KEY", ""))
+RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
 FROM_EMAIL = "intelligence@bizlegal-ai.com"  # only intelligence.bizlegal-ai.com is Resend-verified
 
-PRODUCT_URLS: dict[str, str] = {
+PRODUCT_URLS = {
     "docai": "https://docai.bizlegal-ai.com",
     "lexaudit": "https://lexaudit.bizlegal-ai.com",
     "forge": "https://forge.bizlegal-ai.com",
     "hub": "https://bizlegal-ai.com",
 }
 
+
+def _http(url, headers=None, data=None, method="GET", timeout=20):
+    h = {"Accept": "application/json"}
+    if headers:
+        h.update(headers)
+    body = None
+    if data is not None:
+        body = json.dumps(data).encode() if not isinstance(data, bytes) else data
+        h.setdefault("Content-Type", "application/json")
+    req = urllib.request.Request(url, data=body, method=method, headers=h)
+    try:
+        r = urllib.request.urlopen(req, timeout=timeout)
+        return r.status, json.loads(r.read().decode())
+    except urllib.error.HTTPError as e:
+        return e.code, {}
+
+
+def _sb_get(table, query=""):
+    if not (SUPABASE_URL and SUPABASE_KEY):
+        return []
+    code, body = _http(
+        f"{SUPABASE_URL}/rest/v1/{table}?{query}",
+        {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"},
+    )
+    return body if code == 200 and isinstance(body, list) else []
+
+
+def _sb_patch(table, row_id, updates):
+    if not (SUPABASE_URL and SUPABASE_KEY):
+        return False
+    code, _ = _http(
+        f"{SUPABASE_URL}/rest/v1/{table}?id=eq.{row_id}",
+        {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}",
+         "Prefer": "return=minimal"},
+        data=updates,
+        method="PATCH",
+    )
+    return code in (200, 204)
+
+
 # ── Email templates ───────────────────────────────────────────────
 
-def _subject_day3(product: str) -> str:
+def _subject_day3(product):
     names = {"docai": "DocAI", "lexaudit": "LexAudit", "forge": "Forge", "hub": "BizLegal AI"}
     return f"Quick setup reminder — your {names.get(product, 'BizLegal AI')} access is waiting"
 
 
-def _body_day3(name: str, product: str) -> str:
+def _body_day3(name, product):
     first = (name or "").split()[0] or "there"
     url = PRODUCT_URLS.get(product, "https://bizlegal-ai.com")
     return f"""Hi {first},
 
-We noticed you started setting up your {product.upper() if product in ('docai',) else product.title()} account a few days ago but didn't finish. Your access is still waiting.
+We noticed you started setting up your {product.upper() if product == 'docai' else product.title()} account a few days ago but didn't finish. Your access is still waiting.
 
 Getting started takes under 5 minutes. You can pick up right where you left off: {url}
 
@@ -61,11 +100,11 @@ BizLegal AI
 """
 
 
-def _subject_day7(product: str) -> str:
-    return f"What you're missing in BizLegal AI this week"
+def _subject_day7(_product):
+    return "What you're missing in BizLegal AI this week"
 
 
-def _body_day7(name: str, product: str, amount_usd: float | None) -> str:
+def _body_day7(name, product, _amount):
     first = (name or "").split()[0] or "there"
     url = PRODUCT_URLS.get(product, "https://bizlegal-ai.com")
     return f"""Hi {first},
@@ -85,12 +124,12 @@ BizLegal AI
 """
 
 
-def _subject_day14(product: str) -> str:
+def _subject_day14(product):
     names = {"docai": "DocAI", "lexaudit": "LexAudit", "forge": "Forge", "hub": "BizLegal AI"}
     return f"Last reminder: {names.get(product, 'BizLegal AI')} access"
 
 
-def _body_day14(name: str, product: str) -> str:
+def _body_day14(name, product):
     first = (name or "").split()[0] or "there"
     url = PRODUCT_URLS.get(product, "https://bizlegal-ai.com")
     return f"""Hi {first},
@@ -108,62 +147,49 @@ BizLegal AI
 
 # ── Sending ───────────────────────────────────────────────────────
 
-def _send_email(to: str, subject: str, body: str, dry_run: bool) -> bool:
+def _send_email(to, subject, body, dry_run):
     if dry_run:
         print(f"  [DRY RUN] → {to} | {subject}")
         return True
-    try:
-        res = httpx.post(
-            RESEND_URL,
-            headers={
-                "Authorization": f"Bearer {RESEND_API_KEY}",
-                "Content-Type": "application/json",
-            },
-            json={
-                "from": FROM_EMAIL,
-                "to": [to],
-                "subject": subject,
-                "text": body,
-            },
-            timeout=30,
-        )
-        res.raise_for_status()
-        return True
-    except Exception as err:
-        print(f"  [dunning] send failed to {to}: {err}")
+    if not RESEND_API_KEY:
+        print(f"  [dunning] RESEND_API_KEY missing — skipping {to}")
         return False
+    code, resp = _http(
+        "https://api.resend.com/emails",
+        {"Authorization": f"Bearer {RESEND_API_KEY}"},
+        data={"from": FROM_EMAIL, "to": [to], "subject": subject, "text": body},
+        method="POST",
+    )
+    if code == 200:
+        return True
+    print(f"  [dunning] send failed to {to}: HTTP {code} {str(resp)[:100]}")
+    return False
 
 
-def _days_since(dt_str: str) -> int:
+def _days_since(dt_str):
     dt = datetime.fromisoformat(dt_str.replace("Z", "+00:00"))
     return (datetime.now(timezone.utc) - dt).days
 
 
-def process_queue(sb: Client, dry_run: bool) -> None:
-    rows = (
-        sb.table("dunning_queue")
-        .select("*")
-        .is_("converted_at", "null")
-        .is_("opted_out_at", "null")
-        .execute()
-    )
-
-    if not rows.data:
+def process_queue(dry_run=False):
+    rows = _sb_get("dunning_queue",
+                   "converted_at=is.null&opted_out_at=is.null&select=*")
+    if not rows:
         print("[dunning] queue empty")
         return
 
-    print(f"[dunning] {len(rows.data)} entries in queue")
+    print(f"[dunning] {len(rows)} entries in queue")
     sent = skipped = failed = 0
 
-    for row in rows.data:
-        email = row["email"]
+    for row in rows:
+        email = row.get("email", "")
         name = row.get("name") or ""
         product = row.get("product") or "hub"
         amount = row.get("amount_usd")
         initiated = row.get("payment_initiated_at") or row.get("created_at", "")
         last_stage = int(row.get("last_stage_sent") or 0)
 
-        if not initiated:
+        if not initiated or not email:
             skipped += 1
             continue
 
@@ -185,14 +211,14 @@ def process_queue(sb: Client, dry_run: bool) -> None:
             skipped += 1
             continue
 
-        print(f"[dunning] {email} — day-{stage} email ({days} days elapsed)")
+        print(f"[dunning] {email} — day-{stage} ({days} days elapsed)")
         ok = _send_email(email, subject, body, dry_run)
         if ok:
             if not dry_run:
-                sb.table("dunning_queue").update({
+                _sb_patch("dunning_queue", row["id"], {
                     "last_stage_sent": stage,
                     "last_sent_at": datetime.now(timezone.utc).isoformat(),
-                }).eq("id", row["id"]).execute()
+                })
             sent += 1
         else:
             failed += 1
@@ -204,6 +230,4 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true", help="Log without sending")
     args = parser.parse_args()
-
-    sb = create_client(os.environ["SUPABASE_URL"], os.environ["SUPABASE_SECRET"])
-    process_queue(sb, dry_run=args.dry_run)
+    process_queue(dry_run=args.dry_run)
