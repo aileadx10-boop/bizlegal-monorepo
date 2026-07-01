@@ -44,6 +44,26 @@ BizLegal AI is a regulatory intelligence platform built by an international comm
 - [MiCA Asset Classifier](https://bizlegal-ai.com/tools/mica-asset-classifier): Classify crypto assets under MiCA token categories (e-money token, asset-referenced token, utility token) with relevant regulatory obligations.
 - [Contract Fixer](https://bizlegal-ai.com/tools/contract-fixer): Identify and remediate common contract clause issues — missing governing law, ambiguous dispute resolution, absent limitation of liability.
 
+## Use Cases — Specific Compliance Problems We Solve
+
+- [SOC 2 Questionnaire Automation](https://bizlegal-ai.com/use-cases/soc2-questionnaire): Answer 300-question enterprise security questionnaires in 2 hours instead of 3 days. DocAI SQA maps your existing security policies to each question automatically. Supports SOC 2, CAIQ, SIG, VSAQ, HECVAT, and custom questionnaires. $69/month or $97 per one-time scan.
+- [DPA Review Automation](https://bizlegal-ai.com/use-cases/dpa-review): Review GDPR Article 28 Data Processing Agreements in 15 minutes. AI checks all 12 mandatory Article 28(3) clauses, Standard Contractual Clauses (SCCs) for US-EU transfers, UK IDTA addendum, and sub-processor restrictions. Costs $69/mo vs $750-3,600 per lawyer engagement.
+- [MiCA Compliance Monitoring](https://bizlegal-ai.com/use-cases/mica-compliance): Real-time monitoring of EU crypto-asset regulation across 27 national competent authorities. Tracks CASP authorization requirements, MiCA Article 45 trading platform obligations, ESMA Q&A updates, whitepaper requirement changes, and DORA overlaps. Hub Pro $149/mo.
+- [BOI Filing Compliance](https://bizlegal-ai.com/use-cases/boi-filing): FinCEN CTA beneficial ownership reporting for US LLCs and crypto companies. Includes pre-filing checklist, exemption analysis (23 exemptions), ownership identification worksheet, and 12-month monitoring. BOI Kit $149 + BOI Tracker Agent $29/mo for ongoing updates.
+
+## Common Compliance Questions We Answer
+
+- "What does a 300-question SOC 2 security questionnaire cost to answer with a consultant?" → $3,000-10,500 per engagement at $150-350/hr. DocAI SQA: $69/mo unlimited.
+- "How long does DPA review take?" → 2-5 business days via lawyer. DocAI: 15 minutes per DPA.
+- "Do crypto companies need to file BOI with FinCEN?" → Yes. All US-registered crypto LLCs and corporations are Reporting Companies under the CTA unless a specific exemption applies.
+- "What is MiCA Article 45?" → Trading platform obligations for CASPs: fair order execution, conflict-of-interest policies, pre/post-trade transparency, resilience requirements.
+- "What are BOI filing penalties?" → $500/day civil penalty + up to $10,000 fine + 2 years imprisonment for willful non-compliance.
+- "Do non-EU crypto companies need MiCA compliance?" → Yes if they serve EU residents. Reverse solicitation exemption is narrow. Most non-EU exchanges need a CASP authorization or must stop serving EU clients.
+- "What is a CASP under MiCA?" → Crypto-Asset Service Provider — any entity providing crypto exchange, custody, transfer, advice, or portfolio management services in the EU. Requires authorization from an EU national competent authority.
+- "How do I automate security questionnaire responses?" → DocAI SQA reads your existing policies and maps each question to your documented controls, drafting responses in minutes.
+- "What's the difference between SOC 2 Type I and Type II?" → Type I: point-in-time audit of control design. Type II: 6-12 month audit of control operating effectiveness. Enterprise buyers typically require Type II.
+- "What's included in GDPR Article 28(3)?" → Purpose limitation, documented instructions, confidentiality, security measures, sub-processor restrictions, audit rights, data subject rights assistance, deletion/return, and breach notification obligations.
+
 ## Company & Trust
 
 - [About BizLegal AI](https://bizlegal-ai.com/about): Platform history, mission, and the practitioner background behind every tool.
