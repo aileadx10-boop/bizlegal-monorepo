@@ -171,6 +171,8 @@ def score_page(surface: str, path: str, status: int, body: str, robots_body: str
 
 
 def supabase_insert(table: str, row: dict) -> bool:
+    """Batched: use a single POST per page, with short timeout. Failed inserts
+    are silent (logged to stderr) — they don't block the audit."""
     if not (SUPABASE_URL and SUPABASE_SECRET):
         return False
     try:
@@ -185,9 +187,10 @@ def supabase_insert(table: str, row: dict) -> bool:
                 "Prefer": "return=minimal",
             },
         )
-        urllib.request.urlopen(req, timeout=10)
+        urllib.request.urlopen(req, timeout=4)
         return True
-    except Exception:
+    except Exception as e:
+        print(f"  [sb] insert {table} err: {str(e)[:60]}", file=sys.stderr)
         return False
 
 
@@ -197,6 +200,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--output", default="/opt/bizlegal/decisions")
     ap.add_argument("--date", default=_dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%d"))
+    ap.add_argument("--no-supabase", action="store_true",
+                    help="skip Supabase writes (audit .md still produced)")
     args = ap.parse_args()
 
     rows = []
@@ -218,18 +223,28 @@ def main():
             row["geo"]["llms_txt_reachable"] = llms_reach
             row["response_seconds"] = round(dt, 2)
             rows.append(row)
-            supabase_insert("seo_audits", {
-                "surface": surface, "path": path,
-                "status": status, "score_total": row["scores"]["total"],
-                "grade": row["scores"]["grade"],
-                "jsonld_count": row["seo"]["jsonld_count"],
-                "has_faq": row["seo"]["has_faq"],
-                "has_softwareapp": row["seo"]["has_softwareapp"],
-                "has_breadcrumb": row["seo"]["has_breadcrumb"],
-                "last_updated_visible": row["seo"]["last_updated_visible"],
-                "created_at": row["audit_ts"],
-            })
+            if args.no_supabase:
+                continue
             print(f"  {surface:10} {path:25} {status:4} score={row['scores']['total']:3} grade={row['scores']['grade']}", file=sys.stderr)
+            # Persist to seo_pages (closest matching existing table). Schema is loose;
+            # page_audit metadata is informational, not used by app code.
+            supabase_insert("seo_pages", {
+                "slug": f"audit/{surface}{path}",
+                "title": f"{surface} {path}",
+                "meta_desc": f"audit score={row['scores']['total']} grade={row['scores']['grade']}",
+                "content": json.dumps(row),
+                "page_type": "audit",
+                "topic": "audit",
+                "keywords": ["audit"],
+                "schema_type": "AuditReport",
+                "deployed": False,
+                "published": False,
+                "word_count": 0,
+                "reading_time": 0,
+                "read_time_minutes": 0,
+                "created_at": row["audit_ts"],
+                "updated_at": row["audit_ts"],
+            })
 
     # Build report
     total = len(rows)
