@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider, themeFOUCScript, SiteShell } from '@bizlegal/themes';
+import StructuredData from "./structured-data"
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://leadforge.bizlegal-ai.com'),
@@ -11,6 +12,21 @@ export const metadata: Metadata = {
   description:
     "LeadForge powers the main deals funnel while Pipeforge handles the unclaimed funds upsell inside one unified Next.js deployment.",
   // W3.4 — GSC verification. Set NEXT_PUBLIC_GSC_VERIFICATION in Vercel env.
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://leadforge.bizlegal-ai.com",
+    siteName: "BizLegal AI",
+    title: "LeadForge",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "LeadForge",
+    creator: "@bizlegalhubbot",
+  },
+  alternates: {
+    canonical: "https://leadforge.bizlegal-ai.com",
+  },
   ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION
     ? { verification: { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION } }
     : {}),
@@ -31,6 +47,8 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
+        <StructuredData />
+
         {/* Subdomain Design Pass FOUC — applies the Daybreak theme CSS vars before paint. */}
         <script dangerouslySetInnerHTML={{ __html: LANDING_FOUC }} />
         {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (

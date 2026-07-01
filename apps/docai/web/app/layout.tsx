@@ -3,6 +3,7 @@ import "./globals.css";
 import "./styles/theme-v2.css";
 import CookieConsent from "@/components/CookieConsent";
 import { ThemeProvider, themeFOUCScript, SiteShell } from '@bizlegal/themes';
+import StructuredData from "./structured-data"
 
 /**
  * DocAI layout.
@@ -37,6 +38,21 @@ export const metadata: Metadata = {
   description:
     "Unified DocAI by BizLegal AI: generate attorney-grade contracts, review agreements, and unlock gated risk reports in one Next.js app.",
   // W3.4 — GSC verification. Set NEXT_PUBLIC_GSC_VERIFICATION in Vercel env.
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://docai.bizlegal-ai.com",
+    siteName: "BizLegal AI",
+    title: "DocAI | Institutional Legal Documents",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "DocAI | Institutional Legal Documents",
+    creator: "@bizlegalhubbot",
+  },
+  alternates: {
+    canonical: "https://docai.bizlegal-ai.com",
+  },
   ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION
     ? { verification: { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION } }
     : {}),
@@ -50,6 +66,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <StructuredData />
+
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (

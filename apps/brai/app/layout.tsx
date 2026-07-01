@@ -4,6 +4,7 @@ import "./globals.css"
 import "./styles/theme-v2.css"
 import { ThemeProvider, themeFOUCScript, SiteShell } from '@bizlegal/themes'
 import { BRAI_CONTENT } from './landing-content'
+import StructuredData from "./structured-data"
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://brai.bizlegal-ai.com'),
@@ -13,6 +14,21 @@ export const metadata: Metadata = {
   // W3.4 — GSC verification. Set NEXT_PUBLIC_GSC_VERIFICATION in Vercel env
   // (a 43-char token GSC issues at "Add property → HTML tag" flow). Renders
   // only when present, mirroring the hub pattern.
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://brai.bizlegal-ai.com",
+    siteName: "BizLegal AI",
+    title: "BRAI — Blockchain Regulatory Intelligence",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "BRAI — Blockchain Regulatory Intelligence",
+    creator: "@bizlegalhubbot",
+  },
+  alternates: {
+    canonical: "https://brai.bizlegal-ai.com",
+  },
   ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION
     ? { verification: { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION } }
     : {}),
@@ -28,6 +44,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
+        <StructuredData />
+
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (

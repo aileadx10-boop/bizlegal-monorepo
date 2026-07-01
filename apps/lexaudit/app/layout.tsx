@@ -6,6 +6,7 @@ import LegalShield from '@/components/layout/LegalShield'
 import { ThemeToggle } from './components/ui-v2/ThemeToggle'
 import { ThemeProvider, themeFOUCScript, SiteShell, AppRouteOnly } from '@bizlegal/themes'
 import { LEXAUDIT_CONTENT } from './landing-content'
+import StructuredData from "./structured-data"
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://lexaudit.bizlegal-ai.com'),
@@ -13,6 +14,21 @@ export const metadata: Metadata = {
   description: 'Regulatory intelligence — not legal advice. LexAudit turns your AI-assisted matter workflow into a versioned, source-cited Compliance Health Score reviewed by a named analyst.',
   keywords: 'compliance health score, regulatory intelligence, AI audit trail, lawyer governance, attestation',
   // W3.4 — GSC verification. Set NEXT_PUBLIC_GSC_VERIFICATION in Vercel env.
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://lexaudit.bizlegal-ai.com",
+    siteName: "BizLegal AI",
+    title: "LexAudit — Compliance Health Scores",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "LexAudit — Compliance Health Scores",
+    creator: "@bizlegalhubbot",
+  },
+  alternates: {
+    canonical: "https://lexaudit.bizlegal-ai.com",
+  },
   ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION
     ? { verification: { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION } }
     : {}),
@@ -28,6 +44,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
+        <StructuredData />
+
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (
