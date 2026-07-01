@@ -36,7 +36,10 @@ import urllib.parse
 import urllib.request
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY", "")
+SUPABASE_KEY = (os.getenv("SUPABASE_SERVICE_ROLE_KEY", "")
+                 or os.getenv("SUPABASE_SERVICE_KEY", "")
+                 or os.getenv("SUPABASE_SECRET", "")
+                 or os.getenv("SUPABASE_KEY", ""))
 TG_BOT = os.environ.get("BIZLEGAL_HERMES_BOT_TOKEN_X", "")
 ANTHROPIC_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 RESEND_KEY = os.environ.get("RESEND_API_KEY", "")
@@ -50,7 +53,7 @@ def http_json(url, headers=None, data=None, method="GET", timeout=30):
     if headers: h.update(headers)
     body = data.encode() if isinstance(data, str) else data
     try:
-        req = urllib.request.Request(url, data=data, method=method, headers=h) if data else \
+        req = urllib.request.Request(url, data=body, method=method, headers=h) if data else \
               urllib.request.Request(url, method=method, headers=h)
         r = urllib.request.urlopen(req, timeout=timeout)
         return r.status, json.loads(r.read().decode())
@@ -177,11 +180,11 @@ def telegram_send(text):
 def get_uncontacted_leads(limit: int = 5, score_min: int = 75) -> list:
     """Get leads that haven't been emailed in the last 14 days."""
     leads = supabase_query("leadforge_leads",
-                           f"select=id,email,company_name,industry,score,vertical&status=in.(new,qualified)&score=gte.{score_min}&order=score.desc&limit={limit*2}")
+                           f"select=id,email,company_name,industry,score,enriched_data&status=in.(new,qualified)&score=gte.{score_min}&order=score.desc&limit={limit*2}")
     if not leads:
         return []
     # Filter out ones emailed in last 14d
-    cutoff = (_dt.datetime.now(_dt.timezone.utc) - _dt.timedelta(days=14)).isoformat()
+    cutoff = (_dt.datetime.now(_dt.timezone.utc) - _dt.timedelta(days=14)).strftime('%Y-%m-%dT%H:%M:%SZ')
     outreach = supabase_query("lead_outreach",
                                f"select=lead_email&sent_at=gte.{cutoff}&order=sent_at.desc&limit=500")
     emailed = {r.get("lead_email", "").lower() for r in outreach}

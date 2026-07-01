@@ -22,7 +22,7 @@ Computes per-pillar + per-article:
 Cron: 22:30 UTC daily
 """
 from __future__ import annotations
-import argparse, datetime as _dt, json, os, sys, urllib.error, urllib.request, urllib.parse
+import argparse, datetime as _dt, json, os, pathlib, sys, urllib.error, urllib.request, urllib.parse
 from collections import defaultdict
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
