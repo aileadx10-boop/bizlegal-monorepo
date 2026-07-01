@@ -29,7 +29,7 @@ load_dotenv()
 
 RESEND_API_KEY = os.environ["RESEND_API_KEY"]
 RESEND_URL = "https://api.resend.com/emails"
-FROM_EMAIL = "hello@bizlegal-ai.com"
+FROM_EMAIL = "intelligence@bizlegal-ai.com"  # only intelligence.bizlegal-ai.com is Resend-verified
 
 PRODUCT_URLS: dict[str, str] = {
     "docai": "https://docai.bizlegal-ai.com",
