@@ -28,6 +28,12 @@ import pathlib
 import sys
 import time
 import urllib.error
+
+sys.path.insert(0, os.path.dirname(__file__))
+try:
+    from ops_heartbeat import ping_once as _hb_ping
+except ImportError:
+    def _hb_ping(*a, **kw): return True
 import urllib.request
 from typing import Optional
 
@@ -224,6 +230,7 @@ def run(input_dir: pathlib.Path, prefix: str, host: str,
 
 
 def main() -> int:
+    _hb_ping('hetzner/gsc-indexnow', parent='cron:gsc-indexnow', status='alive', last_action='pinging IndexNow')
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--input", required=True, help="Directory of .mdx files")

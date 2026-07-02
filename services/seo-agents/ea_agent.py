@@ -10,9 +10,15 @@ This is the "brain of the brain" - it connects everything together.
 Schedule: daily 19:00 UTC (replaces/supplements daily_orchestrator task 19)
 """
 
-import os, json, urllib.request, urllib.error
+import os, json, sys, urllib.request, urllib.error
 from datetime import datetime, timezone
 from pathlib import Path
+
+sys.path.insert(0, os.path.dirname(__file__))
+try:
+    from ops_heartbeat import ping_once as _hb_ping
+except ImportError:
+    def _hb_ping(*a, **kw): return True
 
 VAULT_PATH = Path('/opt/bizlegal/curator/.env')
 SUPABASE_URL = os.getenv('SUPABASE_URL', 'https://ydghhcuuopqzgqcicubg.supabase.co')
@@ -233,6 +239,7 @@ def fetch_gsc_index_status():
 
 def main():
     load_env()
+    _hb_ping('hetzner/ea-agent', parent='cron:ea-agent', status='alive', last_action='generating daily report')
     today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
 
     revenue = fetch_supabase_revenue()

@@ -29,6 +29,11 @@ bizlegal-monorepo/
 │   ├── worker/       Cloudflare Worker — bizlegal-lead-intake (TS, wrangler) [Z1.C-pending]
 │   ├── telegram-hub/ CF Worker — @BizlegalHubBot customer FAQ (Z4.2)
 │   ├── gsc-bot/      CF Worker — weekly GSC sitemap re-submission across 8 surfaces
+│   ├── browser-extension/ Manifest V3 Chrome/Firefox compliance capture extension (P3)
+│   ├── spy/          competitor intelligence crawlers: pricing/content/backlinks/social (P5)
+│   ├── seo-agents/   SEO pipeline scripts (headhunter, daily_orchestrator, publisher, etc.)
+│   ├── outreach/     outbound email scripts (cold_email_sender, headhunter, lead_nurture)
+│   ├── hunt/         outbound enrichment: apollo_enrich/intent_signals/warm_intro (P5)
 │   └── funnel-mvp/   TOMBSTONED 2026-05-24 — canonical is apps/docai/web/ (Fastify, never deployed; git-history reference only)
 ├── packages/         shared TS + Python siblings
 │   ├── ops-log/      @bizlegal/ops-log — HMAC-signed event POST to hub /api/ops/log
@@ -42,7 +47,10 @@ bizlegal-monorepo/
 │   ├── policy-refresh/ @bizlegal/policy-refresh — 7-framework registry (V2)
 │   ├── payment/      @bizlegal/payment — NOWPayments + PayPal + LemonSqueezy + Paddle clients (Z3)
 │   ├── turnstile-verify/ @bizlegal/turnstile-verify — server-side Turnstile verification helper
-│   └── turnstile-widget/ @bizlegal/turnstile-widget — client-side Turnstile widget wrapper
+│   ├── turnstile-widget/ @bizlegal/turnstile-widget — client-side Turnstile widget wrapper
+│   ├── ops-heartbeat/ @bizlegal/ops-heartbeat — TS + Python heartbeat client (PLATFORM-BUILD P1)
+│   ├── api-client/   @bizlegal/api-client — typed hub API client + OpenAPI spec (P2)
+│   └── bizlegal-debug/ @bizlegal/debug — Python debug shim: trace replay + breakpoints (P4)
 ├── agents/           AGENTS.md + agent prompt seeds + WAT specs
 │   ├── ea/           Executive Assistant brain — prompts, schemas, templates, context (Z1.F)
 │   └── socials/      Consent-based social acquisition plans, skills, and prompt seeds

@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "BizLegal AI Compliance Capture",
+  "version": "1.0.0",
+  "description": "Capture regulatory content and send it to BizLegal AI agents for compliance analysis",
+  "permissions": ["activeTab", "storage", "contextMenus", "notifications"],
+  "host_permissions": ["https://bizlegal-ai.com/*", "https://*.bizlegal-ai.com/*"],
+  "background": { "service_worker": "background.js", "type": "module" },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "BizLegal AI Capture"
+  },
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["content-script.js"],
+    "run_at": "document_idle"
+  }]
+}

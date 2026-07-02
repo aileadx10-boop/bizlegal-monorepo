@@ -1,0 +1,6 @@
+{
+  "name": "@bizlegal/debug",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Debug shim for BizLegal Python services — trace replay and breakpoints"
+}

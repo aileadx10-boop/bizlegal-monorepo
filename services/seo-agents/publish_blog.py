@@ -29,6 +29,12 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 
+sys.path.insert(0, os.path.dirname(__file__))
+try:
+    from ops_heartbeat import ping_once as _hb_ping
+except ImportError:
+    def _hb_ping(*a, **kw): return True
+
 REPO = "aileadx10-boop/bizlegal-ea"
 BRANCH = "main"
 BLOG_DIR = "projects/bizlegal-seo-site/content/blog"
@@ -169,6 +175,7 @@ def main() -> int:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
+    _hb_ping('hetzner/publish-blog', parent='cron:publish-blog', status='alive', last_action='publishing blog posts')
     return run(dry_run=args.dry_run)
 
 

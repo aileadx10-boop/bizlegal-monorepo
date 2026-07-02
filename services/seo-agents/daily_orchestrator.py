@@ -41,6 +41,12 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import inspect as _inspect
 from pathlib import Path
 
+sys.path.insert(0, os.path.dirname(__file__))
+try:
+    from ops_heartbeat import ping_once as _hb_ping
+except ImportError:
+    def _hb_ping(*a, **kw): return True  # no-op if not installed
+
 # === CONFIG (sourced from Hetzner /opt/bizlegal/curator/.env) ===
 SUPABASE_URL = os.environ.get('SUPABASE_URL', 'https://ydghhcuuopqzgqcicubg.supabase.co')
 SUPABASE_SECRET = os.environ.get('SUPABASE_SECRET', '')
@@ -620,6 +626,9 @@ def main():
     for arg in sys.argv:
         if arg.startswith('--task='):
             task_id = arg.split('=', 1)[1]
+
+    _hb_ping('hetzner/daily-orchestrator', parent='cron:daily-orchestrator',
+             status='alive', last_action=f'task:{task_id or "unknown"}')
 
     if task_id and task_id in TASKS:
         print(f'[{now_iso()}] running task {task_id}')

@@ -38,6 +38,12 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'seo-agents'))
+try:
+    from ops_heartbeat import ping_once as _hb_ping
+except ImportError:
+    def _hb_ping(*a, **kw): return True
 from collections import defaultdict
 from typing import Optional
 
@@ -819,6 +825,7 @@ def run_pipeline(args, env: dict) -> int:
 
 
 def main() -> int:
+    _hb_ping('hetzner/headhunter', parent='cron:headhunter', status='alive', last_action='starting lead hunt')
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--icp", default="fintech_crypto_exchange",

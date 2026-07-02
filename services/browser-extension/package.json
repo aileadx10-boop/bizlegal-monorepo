@@ -1,0 +1,10 @@
+{
+  "name": "@bizlegal/browser-extension",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BizLegal AI compliance capture browser extension (Manifest V3)",
+  "scripts": {
+    "build": "echo 'Copy manifest.json + *.js to dist/'",
+    "pack": "zip -r bizlegal-extension.zip manifest.json popup.html popup.js content-script.js background.js"
+  }
+}
