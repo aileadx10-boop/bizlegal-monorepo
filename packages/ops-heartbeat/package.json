@@ -1,0 +1,16 @@
+{
+  "name": "@bizlegal/ops-heartbeat",
+  "version": "1.0.0",
+  "description": "Drop-in heartbeat client for any BizLegal service. Posts to /api/ops/heartbeat every 60s.",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "test": "echo 'no tests yet'"
+  },
+  "keywords": ["ops", "heartbeat", "monitoring", "bizlegal"],
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@types/node": "^20.11.0"
+  }
+}
