@@ -20,7 +20,9 @@
     "@supabase/ssr": "^0.3.0",
     "@anthropic-ai/sdk": "^0.24.0",
     "crypto": "^1.0.1",
-    "lucide-react": "^0.468.0"
+    "lucide-react": "^0.468.0",
+    "@bizlegal/ops-log": "workspace:*",
+    "@bizlegal/payment": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5",

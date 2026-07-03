@@ -33,7 +33,8 @@
     "resend": "^3.2.0",
     "stripe": "^16.0.0",
     "tailwind-merge": "^2.3.0",
-    "zod": "^3.23.0"
+    "zod": "^3.23.0",
+    "@bizlegal/ops-log": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
