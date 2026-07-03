@@ -3,10 +3,12 @@ Headhunter Agent — Signal-based outbound.
 
 Job: Find buying signals -> match to enriched leads -> queue personalized outreach.
 
-Signals:
-  T1 (highest intent): RevOps / Operations Manager / Marketing Ops job (last 30d),
-    3+ hires in 60d, funding $500K-$5M, founder LinkedIn "drowning in leads"
-  T2: case study $50K+ win, lost big client, attended SaaStr/Agency Growth Summit
+Signals (ROAST-RESHAPE 2026-07-03 — compliance hiring = $40K ICP trigger):
+  T1 (highest intent): Company posting Head of Compliance / CCO / MLRO role (score 80),
+    SOC 2 / GDPR / AML compliance role (score 70), Compliance Manager (score 60).
+    These companies have a compliance gap and are our $40K custom build ICP.
+  T2 (adjacent): CISO / Trust & Safety / Security Compliance hire (score 50),
+    Legal Operations / Deputy GC hire (score 40).
 
 Output: Inserts into lead_outreach with status='drafted'.
 
