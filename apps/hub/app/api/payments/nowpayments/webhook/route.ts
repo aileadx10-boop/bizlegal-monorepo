@@ -201,9 +201,9 @@ export async function POST(req: NextRequest) {
             payment_initiated_at: new Date().toISOString(),
             last_stage_sent: 0,
           })
-          .catch((err: unknown) =>
-            console.warn('[nowpayments/webhook] dunning insert failed:', err),
-          )
+          .then(({ error }) => {
+            if (error) console.warn('[nowpayments/webhook] dunning insert failed:', error)
+          })
       }
 
       // Phase AA V3 — stop the nurture sequence the moment a customer
