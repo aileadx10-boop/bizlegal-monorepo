@@ -223,9 +223,9 @@ export async function POST(req: NextRequest) {
             },
             { onConflict: 'email', ignoreDuplicates: false },
           )
-          .catch((err: unknown) =>
-            console.warn('[nowpayments/webhook] subscriber upsert failed:', err),
-          )
+          .then(({ error }) => {
+            if (error) console.warn('[nowpayments/webhook] subscriber upsert failed:', error)
+          })
 
         void markNurturePaid(order.user_email).catch((err) =>
           console.warn('[nowpayments/webhook] mark-paid failed:', err),
