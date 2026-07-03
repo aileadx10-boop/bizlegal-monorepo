@@ -47,6 +47,7 @@ interface LiveSnapshot {
     newest_ping_seconds: number | null
   }
   cron_alerts: Array<{ service: string; last_ping: string; age_seconds: number; last_action: string | null }>
+  _close?: string
 }
 
 function fmtAge(sec: number): string {
