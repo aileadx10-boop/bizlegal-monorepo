@@ -145,6 +145,39 @@ ICPS = {
             "https://www.ycombinator.com/companies?industry=Crypto",
         ],
     },
+    "enterprise_cfo_coo": {
+        # ROAST-RESHAPE 2026-07-03: target CFO/COO, not VP Compliance.
+        # These are the buyers who have the cost-cut mandate and own
+        # the "enterprise deals blocked by compliance" pain.
+        # Pitch: $40K custom compliance AI build + $30K/yr SaaS.
+        "name": "Series B+ fintech CFO/COO (enterprise deal blocker ICP)",
+        "pitch_product": "Custom Compliance AI Build ($40K + $30K/yr)",
+        "pitch_url": "https://bizlegal-ai.com/agents/custom-compliance",
+        "title_keywords": [
+            "chief financial officer", "cfo", "chief operating officer", "coo",
+            "vp finance", "vp operations", "head of finance", "head of operations",
+            "chief revenue officer", "cro", "vp revenue", "head of revenue",
+            "vp of growth", "general manager", "gm", "chief of staff",
+        ],
+        "sources": [
+            # Companies actively hiring compliance roles = they have compliance gaps
+            # These are LinkedIn search pages and public fintech directories
+            "https://www.ycombinator.com/companies?industry=Fintech&batch=S23",
+            "https://www.ycombinator.com/companies?industry=Fintech&batch=W24",
+            "https://www.ycombinator.com/companies?industry=Fintech&batch=S24",
+            "https://www.ycombinator.com/companies?industry=Crypto&batch=S23",
+            "https://www.crunchbase.com/hub/series-b-fintech-companies",
+        ],
+        # Qualification: company has 50-500 employees, Series B+,
+        # AND has posted a compliance-related job in last 90 days
+        "qualify_prompt_extra": (
+            "This ICP is ONLY valid for companies that: "
+            "(1) raised Series B+ funding, "
+            "(2) have 50-500 employees, "
+            "(3) have active compliance/SOC2/GDPR job postings OR lost enterprise deals. "
+            "Score 0 if none of these apply."
+        ),
+    },
 }
 
 

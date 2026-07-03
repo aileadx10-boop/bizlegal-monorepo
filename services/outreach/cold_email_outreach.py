@@ -144,6 +144,29 @@ VERTICALS = [
         ],
     },
     {
+        # ROAST-RESHAPE 2026-07-03: CFO/COO is the buyer, not VP Compliance.
+        # Pitch: unblock enterprise deals blocked by missing compliance evidence.
+        # Price: $40K build + $30K/yr (no rev share — fails procurement).
+        "id": "enterprise_cfo_coo",
+        "name": "CFO/COO at Series B+ Fintech (enterprise deal blocker)",
+        "personas": [
+            ("CFO", "the enterprise deals you're losing to compliance gaps"),
+            ("COO", "the compliance bottleneck slowing your enterprise sales cycle"),
+            ("VP of Revenue", "the SOC 2 / GDPR gaps blocking your top-10 deals"),
+        ],
+        "pain_points": [
+            "losing enterprise contracts because your CISO review takes 12 weeks and the deal goes cold",
+            "spending $150K+/yr on compliance consultants to generate evidence that enterprise buyers ask for at every deal",
+            "having a VP Compliance but no system that produces audit-ready compliance artifacts on demand",
+        ],
+        "products": [
+            ("Custom Compliance AI Build", "$40K to build + $30K/yr to maintain — white-labeled compliance AI for your stack, security packet pre-built",
+             "https://bizlegal-ai.com/agents/"),
+            ("DocAI + LexAudit private instance", "your contracts + your frameworks + your dashboard, first enterprise close in 6 weeks",
+             "https://docai.bizlegal-ai.com/pricing"),
+        ],
+    },
+    {
         "id": "in_house_counsel",
         "name": "In-house Counsel (Fintech/Crypto)",
         "personas": [

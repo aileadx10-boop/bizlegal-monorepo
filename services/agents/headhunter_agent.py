@@ -92,16 +92,27 @@ def _apify_linkedin_jobs(queries: list, limit: int = 50) -> list:
 
 
 def _score_signal(job: dict) -> int:
-    """Score 0-100 for job posting signal strength."""
+    """Score 0-100 for job posting signal strength.
+    ROAST-RESHAPE 2026-07-03: compliance hiring signals are our $40K ICP trigger.
+    A company posting Head of Compliance / SOC 2 roles = they have a compliance gap
+    = they are a candidate for a $40K custom compliance AI build.
+    """
     title = (job.get("title") or job.get("position") or "").lower()
     score = 0
-    if any(k in title for k in ["revops", "revenue operations", "ops manager", "operations manager"]):
+    # Tier 1 — direct compliance gap signals (highest value)
+    if any(k in title for k in ["chief compliance", "head of compliance", "vp compliance", "cco", "mlro"]):
+        score += 80
+    if any(k in title for k in ["soc 2", "gdpr", "aml compliance", "regulatory affairs", "compliance operations"]):
+        score += 70
+    if any(k in title for k in ["compliance manager", "compliance officer", "regulatory compliance"]):
         score += 60
-    if any(k in title for k in ["marketing operations", "marketing ops"]):
+    # Tier 2 — adjacent signals (medium value)
+    if any(k in title for k in ["ciso", "trust and safety", "information security", "security compliance"]):
+        score += 50
+    if any(k in title for k in ["legal operations", "general counsel", "deputy general counsel"]):
         score += 40
-    if any(k in title for k in ["automation specialist", "ai engineer", "workflow"]):
-        score += 30
-    if "senior" in title or "lead" in title or "head" in title:
+    # Seniority modifier
+    if "senior" in title or "lead" in title or "head" in title or "chief" in title or "vp" in title:
         score += 10
     return min(score, 100)
 
@@ -202,7 +213,13 @@ def run(ctx: dict | None = None) -> dict:
     drafted = []
 
     # 1. Get signals (job postings)
-    queries = ["RevOps", "Revenue Operations", "Operations Manager", "Marketing Operations"]
+    # ROAST-RESHAPE 2026-07-03: compliance hiring = company has compliance gap = buying signal.
+    # Companies posting "Head of Compliance", "SOC 2", "GDPR" jobs are our $40K ICP.
+    queries = [
+        "Head of Compliance", "VP Compliance", "Chief Compliance Officer",
+        "SOC 2 compliance", "GDPR compliance manager", "AML compliance",
+        "compliance operations", "regulatory affairs manager",
+    ]
     jobs = _apify_linkedin_jobs(queries, limit=limit * 3)
     hot_jobs = [j for j in jobs if _score_signal(j) >= 50]
     signals_found = len(hot_jobs)
