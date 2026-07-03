@@ -11,8 +11,8 @@ import type { ReactElement } from "react";
  * Server-rendered into <head>; crawlers index it without JS execution.
  * Idempotent: same output on every render.
  */
-export default function StructuredData(): ReactElement {{
-  const org = {{
+export default function StructuredData(): ReactElement {
+  const org = {
     "@context": "https://schema.org",
     "@type": "Organization",
     "@id": "https://lexaudit.bizlegal-ai.com#organization",
@@ -22,23 +22,23 @@ export default function StructuredData(): ReactElement {{
     "logo": "https://bizlegal-ai.com/icon.png",
     "description": "Compliance-as-a-service for B2B SaaS, fintech, and DAOs. Operated by DOR INNOVATIONS.",
     "foundingDate": "2024",
-    "founder": {{
+    "founder": {
       "@type": "Person",
       "name": "Moses Dor",
       "jobTitle": "Founder & CEO",
-    }},
-    "address": {{
+    },
+    "address": {
       "@type": "PostalAddress",
       "addressCountry": "IL",
-    }},
+    },
     "contactPoint": [
-      {{
+      {
         "@type": "ContactPoint",
         "contactType": "customer support",
         "email": "intelligence@bizlegal-ai.com",
         "url": "https://bizlegal-ai.com/contact",
         "availableLanguage": ["English"],
-      }},
+      },
     ],
     "sameAs": [
       "https://bizlegal-ai.com",
@@ -49,43 +49,43 @@ export default function StructuredData(): ReactElement {{
       "https://lexaudit.bizlegal-ai.com",
       "https://leadforge.bizlegal-ai.com",
     ],
-    "subOrganization": {{
+    "subOrganization": {
       "@type": "WebSite",
       "@id": "https://lexaudit.bizlegal-ai.com#website",
       "name": "LexAudit — Compliance Health Scores",
       "url": "https://lexaudit.bizlegal-ai.com",
-    }},
-  }};
+    },
+  };
 
-  const website = {{
+  const website = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "@id": "https://lexaudit.bizlegal-ai.com#site",
     "url": "https://lexaudit.bizlegal-ai.com",
     "name": "LexAudit — Compliance Health Scores",
-    "description": "Regulatory intelligence \u2014 not legal advice. LexAudit turns your AI-assisted matter workflow into a versioned, source-cited Compliance Health Score reviewed by a named analyst.",
+    "description": "Regulatory intelligence — not legal advice. LexAudit turns your AI-assisted matter workflow into a versioned, source-cited Compliance Health Score reviewed by a named analyst.",
     "inLanguage": "en-US",
-    "publisher": {{ "@id": "https://lexaudit.bizlegal-ai.com#organization" }},
-  }};
+    "publisher": { "@id": "https://lexaudit.bizlegal-ai.com#organization" },
+  };
 
-  const software = {{
+  const software = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "LexAudit — Compliance Health Scores",
     "url": "https://lexaudit.bizlegal-ai.com",
-    "description": "Regulatory intelligence \u2014 not legal advice. LexAudit turns your AI-assisted matter workflow into a versioned, source-cited Compliance Health Score reviewed by a named analyst.",
+    "description": "Regulatory intelligence — not legal advice. LexAudit turns your AI-assisted matter workflow into a versioned, source-cited Compliance Health Score reviewed by a named analyst.",
     "applicationCategory": "BusinessApplication",
     "operatingSystem": "Web",
-    "offers": {{
+    "offers": {
       "@type": "Offer",
       "price": "99",
       "priceCurrency": "USD",
       "description": "$99/month monitor for SOC 2, ISO 27001, GDPR, HIPAA, DPDP, NIST 800-53",
       "url": "https://lexaudit.bizlegal-ai.com/pricing",
       "availability": "https://schema.org/InStock",
-    }},
-    "provider": {{ "@id": "https://lexaudit.bizlegal-ai.com#organization" }},
-  }};
+    },
+    "provider": { "@id": "https://lexaudit.bizlegal-ai.com#organization" },
+  };
 
   return (
     <>
@@ -103,4 +103,4 @@ export default function StructuredData(): ReactElement {{
       />
     </>
   );
-}}
+}

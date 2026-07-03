@@ -11,8 +11,8 @@ import type { ReactElement } from "react";
  * Server-rendered into <head>; crawlers index it without JS execution.
  * Idempotent: same output on every render.
  */
-export default function StructuredData(): ReactElement {{
-  const org = {{
+export default function StructuredData(): ReactElement {
+  const org = {
     "@context": "https://schema.org",
     "@type": "Organization",
     "@id": "https://brai.bizlegal-ai.com#organization",
@@ -22,23 +22,23 @@ export default function StructuredData(): ReactElement {{
     "logo": "https://bizlegal-ai.com/icon.png",
     "description": "Compliance-as-a-service for B2B SaaS, fintech, and DAOs. Operated by DOR INNOVATIONS.",
     "foundingDate": "2024",
-    "founder": {{
+    "founder": {
       "@type": "Person",
       "name": "Moses Dor",
       "jobTitle": "Founder & CEO",
-    }},
-    "address": {{
+    },
+    "address": {
       "@type": "PostalAddress",
       "addressCountry": "IL",
-    }},
+    },
     "contactPoint": [
-      {{
+      {
         "@type": "ContactPoint",
         "contactType": "customer support",
         "email": "intelligence@bizlegal-ai.com",
         "url": "https://bizlegal-ai.com/contact",
         "availableLanguage": ["English"],
-      }},
+      },
     ],
     "sameAs": [
       "https://bizlegal-ai.com",
@@ -49,15 +49,15 @@ export default function StructuredData(): ReactElement {{
       "https://lexaudit.bizlegal-ai.com",
       "https://leadforge.bizlegal-ai.com",
     ],
-    "subOrganization": {{
+    "subOrganization": {
       "@type": "WebSite",
       "@id": "https://brai.bizlegal-ai.com#website",
       "name": "BRAI — Blockchain Regulatory Intelligence",
       "url": "https://brai.bizlegal-ai.com",
-    }},
-  }};
+    },
+  };
 
-  const website = {{
+  const website = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "@id": "https://brai.bizlegal-ai.com#site",
@@ -65,10 +65,10 @@ export default function StructuredData(): ReactElement {{
     "name": "BRAI — Blockchain Regulatory Intelligence",
     "description": "BRAI produces compliance posture reports for digital-asset ventures. Human-reviewed regulatory intelligence, not legal advice.",
     "inLanguage": "en-US",
-    "publisher": {{ "@id": "https://brai.bizlegal-ai.com#organization" }},
-  }};
+    "publisher": { "@id": "https://brai.bizlegal-ai.com#organization" },
+  };
 
-  const software = {{
+  const software = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "BRAI — Blockchain Regulatory Intelligence",
@@ -76,16 +76,16 @@ export default function StructuredData(): ReactElement {{
     "description": "BRAI produces compliance posture reports for digital-asset ventures. Human-reviewed regulatory intelligence, not legal advice.",
     "applicationCategory": "BusinessApplication",
     "operatingSystem": "Web",
-    "offers": {{
+    "offers": {
       "@type": "Offer",
       "price": "0",
       "priceCurrency": "USD",
       "description": "Free preview, paid reports from $199",
       "url": "https://brai.bizlegal-ai.com/pricing",
       "availability": "https://schema.org/InStock",
-    }},
-    "provider": {{ "@id": "https://brai.bizlegal-ai.com#organization" }},
-  }};
+    },
+    "provider": { "@id": "https://brai.bizlegal-ai.com#organization" },
+  };
 
   return (
     <>
@@ -103,4 +103,4 @@ export default function StructuredData(): ReactElement {{
       />
     </>
   );
-}}
+}
