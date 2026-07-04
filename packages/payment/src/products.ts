@@ -56,6 +56,8 @@ export type ProductId =
   | 'conductor_firm_yearly'
   // CLE
   | 'cle_standalone_monthly'
+  // AIA — Compliance Ops Retainer (managed service)
+  | 'compliance_ops_retainer'
 
 export type BillingInterval = 'one-time' | 'monthly' | 'yearly'
 
@@ -442,6 +444,21 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     amount_cents: 9900,
     currency: 'USD',
     checkout_origin: 'https://docai.bizlegal-ai.com/cle',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: true,
+  },
+  // ───── AIA: Compliance Ops Retainer (managed service) ─────
+  // The flagship AIA offer. 8 clients × this = $20K MRR.
+  // Setup fee is a separate one-time (handled via the custom-build deal room).
+  compliance_ops_retainer: {
+    id: 'compliance_ops_retainer',
+    name: 'Compliance Ops Retainer (monthly)',
+    description: '8-agent managed compliance ops: 24/7 monitoring, regulatory update scan, risk flag, draft response, daily Telegram digest, monthly 1-page status PDF. $5K-$15K one-time setup. First 2 weeks free. Month-to-month after that.',
+    product_family: 'conductor',
+    billing_interval: 'monthly',
+    amount_cents: 250000,  // $2,500/mo
+    currency: 'USD',
+    checkout_origin: '/services/compliance-ops',
     webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
