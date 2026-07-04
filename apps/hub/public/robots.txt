@@ -1,0 +1,44 @@
+# BizLegal AI — robots.txt
+# Per Nate Herk (Skool AI Automation Society):
+#   Explicitly allow AI crawlers. We WANT to be cited.
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /ops/
+Disallow: /_next/
+Disallow: /admin/
+
+# AI crawlers — explicitly allowed (we want to be cited)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+Sitemap: https://hub.bizlegal-ai.com/sitemap.xml
+Sitemap: https://hub.bizlegal-ai.com/llms.txt
