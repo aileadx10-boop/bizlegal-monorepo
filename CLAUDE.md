@@ -190,6 +190,7 @@ Every planning + ops doc lives in `decisions/`:
 - *current plan is at `~/.claude/plans/concurrent-bouncing-kitten.md` (lives outside the repo since plans are per-session ephemera)*
 
 - `decisions/DEPLOYMENT_MAP.md` — authoritative Hetzner box map: CX33, real paths, docker containers (:5678 n8n, :8080 marimo), curator systemd units, openclaw user-unit, Ollama (mistral-nemo), deploy runbook. Updated 2026-06-14.
+- `decisions/JULY10-FIRST-REVENUE.md` — Moses-only 33-minute checklist for first revenue by July 10: rotate NOWPAYMENTS_API_KEY + IPN_SECRET (most urgent), top up Anthropic credits, rotate Resend key, fix PayPal credentials, do $97 test purchase. All code is deployed and correct as of commit f551154.
 
 When you write a new decision, add it here.
 
