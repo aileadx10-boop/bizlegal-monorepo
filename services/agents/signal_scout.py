@@ -1,21 +1,23 @@
 """
-Signal Scout Agent — Broad buying-signal scan.
+Signal Scout Agent — Broader buying-signal scan.
 
-Job: Broader signal detection than headhunter_agent.
-     Scans Apollo for companies matching compliance ICP triggers (SOC 2 in-progress,
-     GDPR compliance hire, Series B+ fintech). Matches against enriched leads.
-     Queues drafts in lead_outreach.
-
-Complements headhunter_agent (LinkedIn job postings) with Apollo company data.
+Job: Daily scan for compliance buying signals across public web sources.
+     Uses Firecrawl + Anthropic (NOT Apollo — Apollo skipped per plan).
+     Queues drafts in lead_outreach for the headhunter to pick up.
 
 Schedule: 01:00 UTC daily.
 
+Signals tracked:
+  1. Hiring   - public job listings for compliance/AML/legal roles
+  2. Funding  - TechCrunch/Finsmes fintech/crypto funding news
+  3. Pain     - Reddit/forum posts mentioning compliance pain points
+
 Usage:
-  from services.agents.signal_scout import run
-  result = run({"limit": 20})
+  python3 services/agents/signal_scout.py --limit 20
+  python3 services/agents/signal_scout.py --dry-run --limit 5
 """
 from __future__ import annotations
-import json, os, time
+import json, os, time, re
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
@@ -34,14 +36,14 @@ try:
 except Exception:
     pass
 
-SUPABASE_URL = os.getenv("SUPABASE_URL") or os.getenv("NEXT_PUBLIC_SUPABASE_URL", "")
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
 SUPABASE_KEY = (
-    os.getenv("SUPABASE_SERVICE_ROLE_KEY")
-    or os.getenv("SUPABASE_SERVICE_KEY")
-    or os.getenv("SUPABASE_SECRET", "")
+    os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+    or os.environ.get("SUPABASE_SERVICE_KEY")
+    or os.environ.get("SUPABASE_SECRET", "")
 )
-ANTHROPIC_API_KEY = _env.get_anthropic_key()
-APOLLO_API_KEY = os.getenv("APOLLO_API_KEY", "")
+ANTHROPIC_API_KEY = _env.get_anthropic_key() if _env else os.environ.get("ANTHROPIC_API_KEY", "")
+FIRECRAWL_API_KEY = os.environ.get("FIRECRAWL_API_KEY", "")
 
 
 def _headers() -> dict:
@@ -52,124 +54,144 @@ def _headers() -> dict:
     }
 
 
-def _post_json(url: str, headers: dict, body: dict, timeout: int = 30) -> list | dict:
-    import urllib.request
-    raw = json.dumps(body).encode()
-    req = urllib.request.Request(url, data=raw, headers=headers, method="POST")
-    r = urllib.request.urlopen(req, timeout=timeout)
-    return json.loads(r.read())
-
-
-def _get_json(url: str, headers: dict, timeout: int = 10) -> list | dict:
-    import urllib.request
-    req = urllib.request.Request(url, headers=headers)
-    r = urllib.request.urlopen(req, timeout=timeout)
-    return json.loads(r.read())
-
-
-def _apollo_people_search(limit: int = 20) -> list:
-    """Search Apollo for compliance-role decision makers at Series B+ fintechs."""
-    if not APOLLO_API_KEY:
+def _firecrawl_search(query: str, limit: int = 5) -> list:
+    """Search the public web for a signal query. Free Firecrawl /search endpoint."""
+    if not FIRECRAWL_API_KEY:
         return []
     try:
-        results = _post_json(
-            "https://api.apollo.io/v1/mixed_people/search",
-            {"Content-Type": "application/json", "x-api-key": APOLLO_API_KEY},
-            {
-                "q_organization_num_employees_ranges": ["51,500"],
-                "funding_stages": ["series_b", "series_c", "series_d"],
-                "q_person_title": [
-                    "CFO", "COO", "Chief Financial Officer", "Chief Operating Officer",
-                    "VP Finance", "VP Operations", "Chief Compliance Officer",
-                    "Head of Compliance", "CISO", "General Counsel",
-                ],
-                "industry_tag_names": ["Financial Services", "Fintech", "Cryptocurrency"],
-                "page": 1,
-                "per_page": limit,
-            },
-            timeout=30,
-        )
-        return results.get("people", []) if isinstance(results, dict) else []
-    except Exception:
-        return []
-
-
-def _already_drafted(email: str, days: int = 14) -> bool:
-    """Check if we've already sent outreach to this email in the last N days."""
-    if not email or not SUPABASE_KEY:
-        return False
-    cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
-    import urllib.parse
-    url = (
-        f"{SUPABASE_URL}/rest/v1/lead_outreach"
-        f"?select=id&lead_email=eq.{urllib.parse.quote(email)}"
-        f"&created_at=gte.{cutoff}&limit=1"
-    )
-    try:
-        rows = _get_json(url, _headers(), timeout=5)
-        return bool(rows)
-    except Exception:
-        return False
-
-
-def _generate_pitch(person: dict, anthropic_key: str) -> dict:
-    name = person.get("name", "")
-    company = (person.get("organization") or {}).get("name", "")
-    title = person.get("title", "")
-    if not anthropic_key:
-        return {
-            "subject": f"Compliance AI for {company or 'your team'}",
-            "body_preview": f"Hi {name},\n\nI noticed {company} is scaling compliance. BizLegal AI builds custom compliance AI ($40K build, $30K/yr SaaS) — pre-built security packet so CISO reviews move fast.",
-        }
-    try:
-        prompt = (
-            "Write a 3-sentence cold email from Moses (BizLegal AI) to a CFO/COO/compliance decision maker. "
-            "No fluff. Reference their role + company specifically. "
-            "Mention $40K custom compliance AI build, 6-week delivery, security packet pre-built. "
-            "Output JSON with 'subject' (max 60 chars) and 'body_preview' (3 sentences max).\n\n"
-            f"Recipient: {name}, {title} at {company}\n"
-        )
-        resp = _post_json(
-            "https://api.anthropic.com/v1/messages",
-            {
-                "x-api-key": anthropic_key,
-                "anthropic-version": "2023-06-01",
-                "content-type": "application/json",
-            },
-            {
-                "model": "claude-haiku-4-5",
-                "max_tokens": 256,
-                "messages": [{"role": "user", "content": prompt}],
-            },
-            timeout=20,
-        )
-        text = resp["content"][0]["text"].strip()
-        if text.startswith("```"):
-            text = text.split("```")[1]
-            if text.startswith("json"):
-                text = text[4:]
-        return json.loads(text)
-    except Exception:
-        return {
-            "subject": f"Compliance AI for {company}",
-            "body_preview": f"Hi {name}, building compliance evidence for enterprise sales at {company} takes too long. BizLegal AI builds it in 6 weeks — $40K, security packet included.",
-        }
-
-
-def _insert_draft(draft: dict) -> bool:
-    import urllib.request
-    body = json.dumps(draft).encode()
-    try:
+        import urllib.request
+        body = json.dumps({"query": query, "limit": limit, "scrapeOptions": {"formats": ["markdown"]}}).encode()
         req = urllib.request.Request(
-            f"{SUPABASE_URL}/rest/v1/lead_outreach",
+            "https://api.firecrawl.dev/v1/search",
             data=body,
-            headers={**_headers(), "Prefer": "return=minimal"},
+            headers={"Authorization": f"Bearer {FIRECRAWL_API_KEY}", "Content-Type": "application/json"},
             method="POST",
         )
+        r = urllib.request.urlopen(req, timeout=20)
+        d = json.loads(r.read())
+        return d.get("data", []) or []
+    except Exception as e:
+        print(f"[signal_scout] firecrawl err: {e}")
+        return []
+
+
+def _classify_with_claude(query: str, results: list) -> list:
+    """Use Claude Haiku to score each result as a buying signal (0-100)."""
+    if not results or not ANTHROPIC_API_KEY:
+        return []
+    try:
+        import urllib.request
+        # Compress results to fit in context
+        compact = []
+        for r in results[:8]:
+            compact.append({
+                "title": (r.get("title") or "")[:120],
+                "url": r.get("url", "")[:200],
+                "snippet": (r.get("markdown") or r.get("description") or "")[:300],
+            })
+        prompt = (
+            "You are a buying-signal classifier for a B2B compliance AI product. "
+            "Score each result 0-100 for whether it represents a REAL buying signal "
+            "for a custom compliance AI build ($2.5K-$40K). "
+            "High score (70+) = real company with real pain. "
+            "Low score (<40) = generic content, news, or listicles. "
+            "Output STRICT JSON: {"results": [{"idx": <int>, "score": <int>, "company": "<name or ''>", "reason": "<one short sentence>"}]}\n\n"
+            f"Query: {query}\n\nResults:\n{json.dumps(compact, indent=1)}"
+        )
+        req = urllib.request.Request(
+            "https://api.anthropic.com/v1/messages",
+            data=json.dumps({
+                "model": "claude-haiku-4-5",
+                "max_tokens": 1500,
+                "messages": [{"role": "user", "content": prompt}],
+            }).encode(),
+            headers={
+                "x-api-key": ANTHROPIC_API_KEY,
+                "anthropic-version": "2023-06-05",
+                "content-type": "application/json",
+            },
+            method="POST",
+        )
+        r = urllib.request.urlopen(req, timeout=30)
+        d = json.loads(r.read())
+        text = d["content"][0]["text"]
+        m = re.search(r"\{[\s\S]*\}", text)
+        if not m: return []
+        scored = json.loads(m.group(0)).get("results", [])
+        return scored
+    except Exception as e:
+        print(f"[signal_scout] claude err: {e}")
+        return []
+
+
+def _upsert_lead(email: str, name: str, company: str, source: str, score: int) -> str:
+    """Insert or update a row in leadforge_leads. Returns lead id."""
+    import urllib.request
+    # Check for existing
+    q = f"{SUPABASE_URL}/rest/v1/leadforge_leads?select=id&email=eq.{urllib.parse.quote(email)}&limit=1"
+    try:
+        req = urllib.request.Request(q, headers=_headers())
+        existing = json.loads(urllib.request.urlopen(req, timeout=10).read())
+    except Exception:
+        existing = []
+    if existing:
+        return existing[0]["id"]
+    body = json.dumps({
+        "email": email, "full_name": name, "company_name": company,
+        "source": source, "score": score, "status": "qualified",
+        "industry": "fintech/crypto", "jurisdiction": "US",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }).encode()
+    req = urllib.request.Request(
+        f"{SUPABASE_URL}/rest/v1/leadforge_leads",
+        data=body, headers={**_headers(), "Prefer": "return=representation"},
+        method="POST",
+    )
+    try:
+        r = urllib.request.urlopen(req, timeout=10)
+        rows = json.loads(r.read())
+        return rows[0]["id"] if rows else ""
+    except Exception as e:
+        print(f"[signal_scout] lead insert err: {e}")
+        return ""
+
+
+def _enqueue_outreach(lead_id: str, lead_email: str, company: str, signal_text: str, score: int) -> bool:
+    """Insert a draft into lead_outreach for headhunter to send."""
+    import urllib.request
+    body = json.dumps({
+        "lead_email": lead_email,
+        "lead_name": company,
+        "company": company,
+        "subject": f"Quick thought for {company}",
+        "body_preview": signal_text[:1500],
+        "pitch_variant": f"signal-scout-{int(time.time())}",
+        "status": "drafted",
+        "agent_run_id": f"signal_scout-{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}-{lead_id[:8]}",
+        "score": score,
+    }).encode()
+    req = urllib.request.Request(
+        f"{SUPABASE_URL}/rest/v1/lead_outreach",
+        data=body, headers={**_headers(), "Prefer": "return=minimal"}, method="POST",
+    )
+    try:
         urllib.request.urlopen(req, timeout=10)
         return True
-    except Exception:
+    except Exception as e:
+        print(f"[signal_scout] outreach insert err: {e}")
         return False
+
+
+# 3 daily monitors
+QUERIES = [
+    ("hiring",   'site:linkedin.com "head of compliance" OR "AML officer" startup Series B'),
+    ("hiring",   '"compliance officer" hiring fintech 2026'),
+    ("funding",  'fintech Series B "compliance" 2026 announcement'),
+    ("funding",  'crypto exchange "compliance hire" OR "CCO" 2026'),
+    ("pain",     'site:reddit.com "compliance" fintech "wasting time" OR "manually" 2026'),
+    ("pain",     'site:reddit.com "GDPR" "overwhelmed" OR "struggling" SaaS'),
+    ("pain",     '"SOC 2" "drowning" OR "bottleneck" startup 2026'),
+]
 
 
 def run(ctx: dict | None = None) -> dict:
@@ -178,62 +200,55 @@ def run(ctx: dict | None = None) -> dict:
     dry_run = bool(ctx.get("dry_run", False))
     started = time.time()
     queued = 0
-    skipped = 0
     errors = 0
-    drafted: list[str] = []
+    scanned = 0
+    drafted_leads = []
 
-    people = _apollo_people_search(limit=limit * 2)
-    if not people:
-        return {
-            "ok": True,
-            "agent": "signal_scout",
-            "queued": 0,
-            "skipped": 0,
-            "note": "Apollo returned 0 people (check APOLLO_API_KEY)",
-            "duration_ms": int((time.time() - started) * 1000),
-        }
+    if not FIRECRAWL_API_KEY:
+        return {"ok": False, "error": "FIRECRAWL_API_KEY missing", "duration_ms": 0}
+    if not ANTHROPIC_API_KEY:
+        return {"ok": False, "error": "ANTHROPIC_API_KEY missing", "duration_ms": 0}
 
-    for person in people[:limit]:
-        email = person.get("email", "")
-        name = person.get("name", "")
-        company = (person.get("organization") or {}).get("name", "")
-        title = person.get("title", "")
+    for signal_type, query in QUERIES:
+        try:
+            results = _firecrawl_search(query, limit=5)
+            scanned += len(results)
+            if not results: continue
+            scored = _classify_with_claude(query, results)
+            for s in scored:
+                if not isinstance(s, dict): continue
+                score = int(s.get("score", 0))
+                if score < 50: continue
+                company = (s.get("company") or "").strip() or f"signal-{s.get('idx', 0)}"
+                # Derive email placeholder (real email comes from enrichment)
+                placeholder = f"lead-{int(time.time()*1000)}-{s.get('idx', 0)}@signal-scout.placeholder"
+                reason = s.get("reason", "")
+                if dry_run:
+                    queued += 1
+                    drafted_leads.append({"company": company, "score": score, "reason": reason})
+                    continue
+                lead_id = _upsert_lead(placeholder, company, company, f"signal:{signal_type}", score)
+                if not lead_id: errors += 1; continue
+                if _enqueue_outreach(lead_id, placeholder, company, reason, score):
+                    queued += 1
+                    drafted_leads.append({"company": company, "score": score})
+                else:
+                    errors += 1
+        except Exception as e:
+            errors += 1
+            print(f"[signal_scout] {signal_type} err: {e}")
 
-        if not email or "@" not in email:
-            skipped += 1
-            continue
-        if _already_drafted(email):
-            skipped += 1
-            continue
-
-        pitch = _generate_pitch(person, ANTHROPIC_API_KEY)
-        draft = {
-            "lead_email": email,
-            "lead_name": name,
-            "company": company,
-            "pitch_variant": "signal-scout-apollo",
-            "subject": pitch.get("subject", "")[:200],
-            "body_preview": (pitch.get("body_preview") or "")[:2000],
-            "status": "drafted",
-            "agent_run_id": f"signal-scout-{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}-{queued}",
-        }
-        if not dry_run:
-            if _insert_draft(draft):
-                queued += 1
-                drafted.append(email)
-            else:
-                errors += 1
-        else:
-            queued += 1
-            drafted.append(email)
+    if _heartbeat:
+        try: _heartbeat("signal_scout", "ok" if errors == 0 else "partial")
+        except Exception: pass
 
     return {
         "ok": errors == 0,
         "agent": "signal_scout",
+        "scanned": scanned,
         "queued": queued,
-        "skipped": skipped,
         "errors": errors,
-        "drafted": drafted[:10],
+        "drafted": drafted_leads[:20],
         "duration_ms": int((time.time() - started) * 1000),
         "dry_run": dry_run,
     }
@@ -241,14 +256,15 @@ def run(ctx: dict | None = None) -> dict:
 
 if __name__ == "__main__":
     import sys
-    args: dict = {}
+    args = {}
     i = 1
     while i < len(sys.argv):
         a = sys.argv[i]
         if a.startswith("--"):
             k, _, v = a[2:].partition("=")
-            args[k] = v if v else (sys.argv[i + 1] if i + 1 < len(sys.argv) and not sys.argv[i + 1].startswith("--") else True)
-            if v == "" and i + 1 < len(sys.argv) and not sys.argv[i + 1].startswith("--"):
-                i += 1
+            if v: args[k] = v
+            elif i + 1 < len(sys.argv) and not sys.argv[i+1].startswith("--"):
+                args[k] = sys.argv[i+1]; i += 1
+            else: args[k] = True
         i += 1
     print(json.dumps(run(args), indent=2))
