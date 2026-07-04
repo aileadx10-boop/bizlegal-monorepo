@@ -19,6 +19,7 @@ from pathlib import Path
 try:
     import sys as _sys
     _sys.path.insert(0, str(Path(__file__).resolve().parent))
+    _sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repo root → enables services.agents.* imports
     import _env
     from dotenv import load_dotenv
     load_dotenv(dotenv_path=Path(__file__).resolve().parents[2] / ".env")
