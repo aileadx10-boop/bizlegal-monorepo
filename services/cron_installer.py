@@ -21,11 +21,14 @@ CRON_JOBS_YAML = """# BizLegal cron jobs (auto-installed by cron_installer.py)
 # DO NOT EDIT BY HAND — run cron_installer.py to update
 0 1 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/signal_scout.py >> /var/log/signal-scout.log 2>&1
 30 6 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/aeo_loop.py >> /var/log/aeo-loop.log 2>&1
+0 7 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/marketing_copy.py >> /var/log/marketing-copy.log 2>&1
 0 8 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/daily_digest.py >> /var/log/daily-digest.log 2>&1
 0 9 * * 1 cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/weekly_health.py >> /var/log/weekly-health.log 2>&1
 */5 * * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/self_heal.py >> /var/log/self-heal.log 2>&1
 0 9 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/env_audit.py >> /var/log/env-audit.log 2>&1
+0 10 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/marketing_outreach.py >> /var/log/marketing-outreach.log 2>&1
 */30 * * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/code_fixer.py >> /var/log/code-fixer.log 2>&1
+30 18 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/marketing_revenue.py >> /var/log/marketing-revenue.log 2>&1
 """
 
 

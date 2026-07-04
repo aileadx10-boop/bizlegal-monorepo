@@ -72,7 +72,10 @@ export async function POST(req: NextRequest) {
     }
 
     // NOWPayments invoice
+    // baseUrl is used only for browser redirects (success/cancel); can follow NEXT_PUBLIC_SITE_URL.
+    // ipnBase MUST be the production URL — never a preview URL — or NOWPayments callbacks are lost.
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://docai.bizlegal-ai.com'
+    const ipnBase = 'https://docai.bizlegal-ai.com'
     const invoiceRes = await fetch('https://api.nowpayments.io/v1/invoice', {
       method: 'POST',
       headers: {
@@ -86,7 +89,7 @@ export async function POST(req: NextRequest) {
         order_description: `${body.product} ${body.tier} ${body.interval}`,
         success_url: `${baseUrl}/payment/success?order=${order.id}`,
         cancel_url: `${baseUrl}/payment/cancelled?order=${order.id}`,
-        ipn_callback_url: `${baseUrl}/api/payments/nowpayments/webhook`,
+        ipn_callback_url: `${ipnBase}/api/payments/nowpayments/webhook`,
       }),
     })
 

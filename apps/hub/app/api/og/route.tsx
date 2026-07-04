@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <span style={{ fontSize: 24, fontWeight: 700, color: '#dee1f7' }}>BizLegal</span>
-            <span style={{ width: 8, height: 8, background: '#e9c349', display: 'inline-block' }} />
+            <span style={{ width: 8, height: 8, background: '#e9c349', display: 'block' }} />
             <span style={{ fontSize: 24, fontWeight: 700, color: '#dee1f7' }}>AI</span>
           </div>
           {score && (

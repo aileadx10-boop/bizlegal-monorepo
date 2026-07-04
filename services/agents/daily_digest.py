@@ -70,8 +70,8 @@ def gather_events() -> dict:
         "as_of": datetime.now(timezone.utc).isoformat(),
         "leads_captured": _supabase_query(f"leadforge_leads?select=id,company_name,score,source&created_at=gte.{cutoff}&order=score.desc&limit=20"),
         "outreach_sent": _supabase_query(f"lead_outreach?select=id,lead_name,company,status,pitch_variant&created_at=gte.{cutoff}&order=created_at.desc&limit=30"),
-        "payments_completed": _supabase_query(f"payment_orders?select=id,amount,gateway,status&status=eq.completed&created_at=gte.{cutoff}&order=created_at.desc&limit=20"),
-        "payments_initiated": _supabase_query(f"payment_orders?select=id,amount,gateway,status&created_at=gte.{cutoff}&order=created_at.desc&limit=20"),
+        "payments_completed": _supabase_query(f"payment_orders?select=id,amount_cents,gateway,status&status=eq.completed&created_at=gte.{cutoff}&order=created_at.desc&limit=20"),
+        "payments_initiated": _supabase_query(f"payment_orders?select=id,amount_cents,gateway,status&created_at=gte.{cutoff}&order=created_at.desc&limit=20"),
         "new_signups": _supabase_query(f"subscribers?select=id,email,plan&created_at=gte.{cutoff}&limit=20"),
         "agent_runs_summary": _supabase_query(f"agent_runs?select=agent_name,status&created_at=gte.{cutoff}&limit=500"),
         "deal_rooms": _supabase_query(f"deal_rooms?select=id,score,status,product&created_at=gte.{cutoff}&limit=10"),
@@ -105,7 +105,7 @@ def render_html(events: dict) -> str:
         success_rate = 0
 
     # Revenue today
-    revenue_today = sum(float(p.get("amount") or 0) for p in (payments_done if isinstance(payments_done, list) else []))
+    revenue_today = sum(float(p.get("amount_cents") or 0) / 100 for p in (payments_done if isinstance(payments_done, list) else []))
 
     def render_rows(rows, fields, max_rows=10):
         if not isinstance(rows, list) or not rows or "error" in rows[0]:
@@ -152,7 +152,7 @@ def render_html(events: dict) -> str:
   {render_rows(outreach, ['lead_name', 'company', 'status', 'pitch_variant'])}
 
   <h2 style="font-size:15px;color:#0f172a;margin:24px 0 8px;">💰 Payments ({count(payments_done)} completed / {count(payments_init)} total)</h2>
-  {render_rows(payments_done, ['amount', 'gateway', 'status'])}
+  {render_rows(payments_done, ['amount_cents', 'gateway', 'status'])}
 
   <h2 style="font-size:15px;color:#0f172a;margin:24px 0 8px;">📝 New Signups ({count(signups)})</h2>
   {render_rows(signups, ['email', 'plan'])}
@@ -165,7 +165,7 @@ def render_html(events: dict) -> str:
 
   <div style="margin-top:32px;padding:16px;background:#f1f5f9;border-radius:8px;font-size:12px;color:#475569;">
     <strong>System Health:</strong> {total} agent runs in 24h, {ok} successful, {total-ok} failed.
-    Live ops dashboard: <a href="https://hub.bizlegal-ai.com/ops/command?t=YOUR_TOKEN" style="color:#0ea5e9;">hub.bizlegal-ai.com/ops/command</a>
+    Live ops dashboard: <a href="https://bizlegal-ai.com/ops/snapshot" style="color:#0ea5e9;">bizlegal-ai.com/ops/snapshot</a>
     <br><br>
     <strong>Daily revenue target:</strong> $68/day ($2,000/mo MRR). You're at ${revenue_today:,.2f} today.
     <br>
@@ -218,7 +218,7 @@ def send_gmail_smtp(html: str, subject: str) -> bool:
 def run(ctx=None) -> dict:
     started = datetime.now(timezone.utc)
     events = gather_events()
-    revenue = sum(float(p.get("amount") or 0) for p in (events.get("payments_completed") or []) if isinstance(p, dict))
+    revenue = sum(float(p.get("amount_cents") or 0) / 100 for p in (events.get("payments_completed") or []) if isinstance(p, dict))
     subject = f"📊 BizLegal Daily Digest — {datetime.now(timezone.utc).strftime('%Y-%m-%d')} — {revenue:,.0f} USD revenue"
     html = render_html(events)
     sent_via = "none"
