@@ -38,6 +38,10 @@ export default function OpsMainPage({ searchParams }: PageProps) {
   if (!expected || !provided || !timingSafeEq(expected, provided)) {
     return <main style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--bl-font-mono)', fontSize: 14 }}>404 — not found</main>
   }
+  const registry = [
+    { id: 'command', label: '/ops/command', note: 'Command — every move, one screen', url: `/ops/command?t=${encodeURIComponent(provided)}` },
+    ...REGISTRY,
+  ]
   return (
     <SurfaceDashboard
       token={provided}
@@ -46,7 +50,7 @@ export default function OpsMainPage({ searchParams }: PageProps) {
       subtitle="bizlegal-ai.com · the brain — payments, crons, agents, ops chain"
       sources={['hub', 'ea']}
       probeSources={['hub']}
-      registry={REGISTRY}
+      registry={registry}
     />
   )
 }

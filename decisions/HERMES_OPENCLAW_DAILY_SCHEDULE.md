@@ -1,4 +1,7 @@
 # Hermes / OpenClaw Daily & Weekly Agent Schedule
+
+> **NOTICE (added 2026-07-04):** Read `agents/HERMES-STANDING-ORDERS.md` first — on any conflict between this playbook and the standing orders, standing orders win.
+
 **Created:** 2026-06-18
 **Owner:** Moses
 **Purpose:** Exact prompts to paste into Hermes (OpenClaw assistant) each day to run the full client-acquisition and revenue pipeline. Copy-paste directly — no interpretation needed.

@@ -41,3 +41,18 @@ C=$DIR/services/seo-agents/crawlers
 0 20 * * * cd $DIR && set -a && . ./.env && set +a && $PY $S/newsletter.py >> /var/log/seo-agents.log 2>&1
 # 21:00 - Cleanup
 0 21 * * * cd $DIR && set -a && . ./.env && set +a && $PY $S/cleanup.py
+
+# ============================================================================
+# 24/7 REVENUE LOOP — gated: enable only after Week-1 payment gate + Moses
+# template approval; see agents/HERMES-STANDING-ORDERS.md
+# To enable: remove the single leading "#" from each cron line below.
+# ============================================================================
+O=$DIR/services/outreach
+# 05:00 - Signal Scout (hiring/funding/pain monitors — writes leads only, never emails)
+#0 5 * * *  cd $DIR && set -a && . ./.env && set +a && $PY $O/signal_scout.py >> /var/log/seo-agents.log 2>&1
+# 11:00 Mon-Fri - Headhunter (source + qualify + draft + send; 25 prospects/ICP, max 2 emails/domain/run)
+#0 11 * * 1-5  cd $DIR && set -a && . ./.env && set +a && $PY $O/headhunter.py --icp all --limit 25 --max-per-domain 2 --send >> /var/log/seo-agents.log 2>&1
+# 11:30 Mon-Fri - Cold email sender (sends by default; cap 15/run — ramp 15→30→50 weekly by editing --limit)
+#30 11 * * 1-5  cd $DIR && set -a && . ./.env && set +a && $PY $O/cold_email_sender.py --limit 15 >> /var/log/seo-agents.log 2>&1
+# 13:00 - Lead nurture (lead_nurture.py takes --stage 1-4, so run all four stages)
+#0 13 * * *  cd $DIR && set -a && . ./.env && set +a && for st in 1 2 3 4; do $PY $O/lead_nurture.py --stage $st; done >> /var/log/seo-agents.log 2>&1

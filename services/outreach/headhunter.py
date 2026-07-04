@@ -139,6 +139,41 @@ ICPS = {
             "https://www.ycombinator.com/companies?industry=Crypto",
         ],
     },
+    "custom_build": {
+        "name": "Custom Compliance AI Pilot buyers (Series-A+ fintech/crypto/regtech, "
+                "law firms 10-50 attorneys, compliance consultancies)",
+        "pitch_product": "Compliance AI Pilot — $2,500 fixed-price two-week custom build",
+        "pitch_url": "https://bizlegal-ai.com/services/custom-build",
+        "title_keywords": [
+            "general counsel", "chief compliance", "cco", "mlro",
+            "managing partner", "senior partner", "cto",
+            "chief technology", "head of compliance",
+            "compliance operations", "principal consultant",
+        ],
+        "sources": [
+            "https://www.ycombinator.com/companies?industry=Fintech",
+            "https://www.ycombinator.com/companies?industry=RegTech",
+            "https://www.crunchbase.com/hub/regtech-companies",
+            "https://www.lawsociety.org.uk/find-a-solicitor/",
+        ],
+        # Extra criteria injected into the Anthropic qualification prompt.
+        "qualification_notes": (
+            "Target: Series-A+ fintech / crypto / regtech companies, law firms with "
+            "10-50 attorneys, and compliance consultancies. Weight BUDGET SIGNALS "
+            "heavily (recent funding round, 11-200 headcount, already paying for "
+            "compliance tooling or outside counsel) and DECISION-MAKER TITLES "
+            "(GC, CCO, MLRO, managing partner, CTO). We are pitching a $2,500 "
+            "two-week Compliance AI Pilot — score below 70 unless this person "
+            "could plausibly sign off on a $2,500 pilot without a committee."
+        ),
+        # Extra angle injected into the Anthropic draft prompt.
+        "draft_angle": (
+            "Pitch the $2,500 two-week Compliance AI Pilot: we build a custom "
+            "compliance agent on their stack (policy monitoring, SOC 2 / AML / "
+            "licensing workflows) in two weeks, fixed price, scoped deliverable. "
+            "Link: https://bizlegal-ai.com/services/custom-build"
+        ),
+    },
 }
 
 
@@ -239,6 +274,8 @@ def firecrawl_scrape(url: str, api_key: str) -> Optional[dict]:
 
 def anthropic_qualify(prospect: dict, icp: dict, api_key: str) -> dict:
     """Score a prospect 0-100. Return {score, reasons, disqualifiers}."""
+    notes = icp.get("qualification_notes", "")
+    notes_block = f"\nADDITIONAL QUALIFICATION CRITERIA:\n  {notes}\n" if notes else ""
     prompt = f"""You are qualifying a sales prospect for BizLegal AI, a B2B compliance SaaS.
 
 PROSPECT:
@@ -251,7 +288,7 @@ ICP (Ideal Customer Profile):
   Vertical: {icp['name']}
   Target titles: {', '.join(icp['title_keywords'])}
   Pitch product: {icp['pitch_product']} at {icp['pitch_url']}
-
+{notes_block}
 SCORING CRITERIA (be strict):
   100 = Perfect: real person, correct title, correct industry, company is funded/active
    80 = Strong: person + title match, plausible company
@@ -299,6 +336,8 @@ Respond ONLY in JSON, no prose, no markdown fence:
 
 def anthropic_draft_email(prospect: dict, icp: dict, api_key: str) -> dict:
     """Generate a personalized cold email. Returns {subject, body, ps}."""
+    angle = icp.get("draft_angle", "")
+    angle_block = f"\n  Angle: {angle}" if angle else ""
     prompt = f"""Write a short, personalized B2B cold email to this prospect.
 
 PROSPECT:
@@ -309,7 +348,7 @@ PROSPECT:
 CONTEXT:
   Industry: {icp['name']}
   Our product: {icp['pitch_product']}
-  Our URL:   {icp['pitch_url']}
+  Our URL:   {icp['pitch_url']}{angle_block}
 
 RULES:
   - 60-90 words in the body (high reply rate)
@@ -478,8 +517,13 @@ def insert_lead(lead: dict, env: dict) -> bool:
 
 def log_outreach(lead_email: str, lead_name: str, company: str,
                   subject: str, body_preview: str, status: str,
-                  resend_id: str = "", env: dict = None) -> None:
-    """Log an outreach attempt to lead_outreach (for tracking open/reply)."""
+                  resend_id: str = "", source: str = "", env: dict = None) -> None:
+    """Log an outreach attempt to lead_outreach (for tracking open/reply).
+
+    `source` carries the lead's origin (e.g. 'curated', an ICP key, or a
+    signal_scout tag like 'signal:hiring') into pitch_variant so replies
+    can be attributed back to the sourcing channel.
+    """
     body = {
         "lead_email": lead_email,
         "lead_name": lead_name or "",
@@ -489,6 +533,8 @@ def log_outreach(lead_email: str, lead_name: str, company: str,
         "status": status,  # draft | sent | failed | replied
         "sent_at": _dt.datetime.now(_dt.timezone.utc).isoformat() if status == "sent" else None,
     }
+    if source:
+        body["pitch_variant"] = f"headhunter:{source}"
     supabase_request("lead_outreach", method="POST", body=body, env=env or load_vault())
 
 
@@ -656,10 +702,22 @@ def qualify_and_persist(prospects: list[dict], icp_key: str, icp: dict,
 
 def draft_and_send(qualified: list[dict], icp: dict, anthropic_key: str,
                    resend_key: str, from_email: str, dry_run: bool,
-                   env: dict) -> list[dict]:
-    """Draft personalized email for each qualified lead, then send (or queue)."""
+                   env: dict, max_per_domain: int = 2,
+                   domain_counts: dict | None = None) -> list[dict]:
+    """Draft personalized email for each qualified lead, then send (or queue).
+
+    max_per_domain caps how many emails we send to the same recipient domain
+    per run (spam safety). Pass a shared domain_counts dict from the caller
+    so the cap holds across ICPs within one run.
+    """
     sent = []
+    if domain_counts is None:
+        domain_counts = defaultdict(int)
     for i, p in enumerate(qualified):
+        domain = p["email"].partition("@")[2].lower()
+        if max_per_domain > 0 and domain_counts[domain] >= max_per_domain:
+            print(f"  [{i+1}/{len(qualified)}] {p['email'][:30]:30s}  skip (domain cap {max_per_domain} hit for {domain})")
+            continue
         print(f"  [{i+1}/{len(qualified)}] drafting {p['email'][:30]:30s}...", end=" ", flush=True)
         draft = anthropic_draft_email(p, icp, anthropic_key)
         subject = draft.get("subject", "Quick question")
@@ -667,13 +725,17 @@ def draft_and_send(qualified: list[dict], icp: dict, anthropic_key: str,
         ps = draft.get("ps", "")
         print(f"drafted ({len(body.split())} words)")
 
+        lead_source = p.get("source") or p.get("icp", "")
+
         if dry_run:
             print(f"    [dry-run] would send: subject={subject[:60]!r}")
             sent.append({"email": p["email"], "subject": subject, "dry_run": True})
+            domain_counts[domain] += 1
             continue
 
         status, msg = resend_send(p["email"], p.get("name", ""), subject, body, ps,
                                    resend_key, from_email)
+        domain_counts[domain] += 1
         if 200 <= status < 300:
             print(f"    [sent] HTTP {status}  id={msg[:20]}")
             sent.append({"email": p["email"], "subject": subject,
@@ -694,6 +756,7 @@ def draft_and_send(qualified: list[dict], icp: dict, anthropic_key: str,
                 body_preview=body,
                 status="sent",
                 resend_id=msg,
+                source=lead_source,
                 env=env,
             )
         else:
@@ -707,6 +770,7 @@ def draft_and_send(qualified: list[dict], icp: dict, anthropic_key: str,
                 subject=subject,
                 body_preview=body,
                 status="failed",
+                source=lead_source,
                 env=env,
             )
     return sent
@@ -773,6 +837,7 @@ def run_pipeline(args, env: dict) -> int:
 
     all_qualified = []
     all_sent = []
+    domain_counts = defaultdict(int)  # per-run cap shared across ICPs
 
     for icp_key in icp_keys:
         icp = ICPS[icp_key]
@@ -802,7 +867,9 @@ def run_pipeline(args, env: dict) -> int:
 
         if not args.no_send and qualified:
             sent = draft_and_send(qualified, icp, anthropic_key, resend_key,
-                                   from_email, args.dry_run, env)
+                                   from_email, args.dry_run, env,
+                                   max_per_domain=args.max_per_domain,
+                                   domain_counts=domain_counts)
             all_sent.extend(sent)
 
     # Final summary
@@ -832,6 +899,13 @@ def main() -> int:
                     help="Max prospects to consider per source URL")
     ap.add_argument("--score-min", type=int, default=70,
                     help="Minimum qualification score to proceed (0-100)")
+    ap.add_argument("--max-per-domain", type=int, default=2,
+                    help="Max emails to the same recipient domain per run "
+                         "(0 = unlimited, default: 2)")
+    ap.add_argument("--send", action="store_true",
+                    help="Explicitly confirm real sending (sending is already "
+                         "the default; --dry-run / --no-send override). Lets "
+                         "cron entries state intent literally.")
     ap.add_argument("--dry-run", action="store_true",
                     help="Draft emails but don't send")
     ap.add_argument("--no-send", action="store_true",

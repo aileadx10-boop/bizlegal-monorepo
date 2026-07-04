@@ -27,6 +27,7 @@ bizlegal-monorepo/
 │   ├── hetzner/      curator pipeline: scout/brain/publisher/bot (Python, systemd) [Z1.C-pending]
 │   ├── oci/          deal-router (FastAPI, Docker, Caddy + Cloudflare Tunnel) [Z1.C-pending]
 │   ├── worker/       Cloudflare Worker — bizlegal-lead-intake (TS, wrangler) [Z1.C-pending]
+│   ├── outreach/     B2B hunting + outreach fleet: headhunter, signal_scout, cold sender, nurture, OCI closers (see services/outreach/CLAUDE.md)
 │   ├── telegram-hub/ CF Worker — @BizlegalHubBot customer FAQ (Z4.2)
 │   ├── gsc-bot/      CF Worker — weekly GSC sitemap re-submission across 8 surfaces
 │   └── funnel-mvp/   TOMBSTONED 2026-05-24 — canonical is apps/docai/web/ (Fastify, never deployed; git-history reference only)
@@ -178,6 +179,7 @@ Every planning + ops doc lives in `decisions/`:
 - `decisions/SEO-SUBSCRIPTION-10K-MRR-PLAN.md` — Comprehensive SEO + subscription plan for $10K MRR: 15 PayPal plan IDs (priority order + Vercel env names), blog content pillars × 8 (BOI/VARA/SOC2/GDPR/crypto/PSP/SG/India), on-page schema todos, 16-post monthly content calendar, 30/60/90-day MRR milestones.
 - `decisions/AEO-AUSTIN-ARMSTRONG-2026-07-02.md` — Austin Armstrong 5-prompt AEO research synthesis: 40 buyer-intent phrases (19 OPEN), competitor citation gap map, 90-day content calendar (5 pillars/40 clusters), 25 weak-AI-answer opportunities, 10 generated MDX posts seeded to daily_gaps, 28 cold email drafts (4 verticals) seeded to lead_outreach.
 - `decisions/MRR-40K-90-DAY-PLAN-2026-07-02.md` — THE Q3 2026 execution plan: 4 revenue engines (self-serve funnel / high-ticket outbound / SEO-AEO compounding / deal fees), Week-1 first-dollar gate (8 Moses actions ~3.5h), month-by-month targets ($10K MRR base / $25-34K stretch by 09-30), ≤$500/mo paid-tools budget, kill criteria, KPI dashboard. Ratifies the AEO doc as the standing content queue; supersedes THE-MACHINE "park BizLegal" line.
+- `decisions/REVENUE-MACHINE-24-7-2026-07-04.md` — The 24/7 revenue machine build: Hermes standing orders (`agents/HERMES-STANDING-ORDERS.md`) + missing `agents/AGENTS.md` created, gated autonomous outreach (caps + kill-switch), signal_scout (free hiring/funding/pain signals), invoice cron, async funnel (qualifier chat → deal rooms → nudges), custom-build ladder ($2.5K/$15K/$40K+20%), $19 Risk Snapshot SKU, /ops/command dashboard. Total all-in cost ~$165-205/mo; income scenarios inside.
 - *current plan is at `~/.claude/plans/concurrent-bouncing-kitten.md` (lives outside the repo since plans are per-session ephemera)*
 
 - `decisions/DEPLOYMENT_MAP.md` — authoritative Hetzner box map: CX33, real paths, docker containers (:5678 n8n, :8080 marimo), curator systemd units, openclaw user-unit, Ollama (mistral-nemo), deploy runbook. Updated 2026-06-14.

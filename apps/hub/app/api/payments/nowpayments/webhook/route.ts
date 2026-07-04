@@ -201,7 +201,7 @@ export async function POST(req: NextRequest) {
             payment_initiated_at: new Date().toISOString(),
             last_stage_sent: 0,
           })
-          .catch((err: unknown) =>
+          .then(undefined, (err: unknown) =>
             console.warn('[nowpayments/webhook] dunning insert failed:', err),
           )
       }
@@ -223,7 +223,7 @@ export async function POST(req: NextRequest) {
             },
             { onConflict: 'email', ignoreDuplicates: false },
           )
-          .catch((err: unknown) =>
+          .then(undefined, (err: unknown) =>
             console.warn('[nowpayments/webhook] subscriber upsert failed:', err),
           )
 
@@ -232,6 +232,32 @@ export async function POST(req: NextRequest) {
         )
         // Conductor entitlement write-through (no-op for other products).
         await grantConductorTier(supabase, order)
+        // Risk Snapshot fulfillment (no-op for other products) — triggers
+        // /api/risk-snapshot/generate as its own invocation (Bearer
+        // CRON_SECRET auth). The generate route scrapes + drafts + emails
+        // the report and is idempotent per email, so webhook retries are
+        // safe. We only wait ~20s for the trigger to be accepted; the
+        // generate invocation keeps running server-side after we move on.
+        // TODO(payments): if more one-time SKUs grow post-payment
+        // fulfillment, extract a product-id → fulfillment dispatcher next
+        // to grantConductorTier instead of stacking blocks here.
+        if (order.product === 'risk_snapshot') {
+          const baseUrl =
+            process.env.NEXT_PUBLIC_SITE_URL ?? process.env.NEXT_PUBLIC_APP_URL ?? 'https://bizlegal-ai.com'
+          try {
+            await fetch(`${baseUrl}/api/risk-snapshot/generate`, {
+              method: 'POST',
+              headers: {
+                'content-type': 'application/json',
+                authorization: `Bearer ${process.env.CRON_SECRET ?? ''}`,
+              },
+              body: JSON.stringify({ order_id: String(order.id), email: order.user_email }),
+              signal: AbortSignal.timeout(20_000),
+            })
+          } catch (err) {
+            console.warn('[nowpayments/webhook] risk-snapshot fulfillment trigger failed:', err)
+          }
+        }
         // Send payment confirmation email to customer (non-blocking).
         void sendPaymentConfirmationEmail(
           order.user_email,

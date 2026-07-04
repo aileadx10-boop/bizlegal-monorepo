@@ -13,6 +13,7 @@ import {
   Activity,
 } from 'lucide-react'
 import TodaysBrief, { TodaysBriefHeader } from '@/components/home/TodaysBrief'
+import QualifierChat from '@/components/conversion/QualifierChat'
 import { Hero } from '@/app/components/ui-v2/Hero'
 import { IntelligenceCard } from '@/app/components/ui-v2/IntelligenceCard'
 import { NumberedStep } from '@/app/components/ui-v2/NumberedStep'
@@ -475,6 +476,35 @@ export default function HomePage() {
               Read full methodology
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* ASYNC QUALIFIER ──────────────────────────────────── */}
+      <section className="bl-section" id="qualifier">
+        <div className="bl-container" style={{ display: 'grid', gap: '1.5rem', justifyItems: 'center' }}>
+          <div style={{ textAlign: 'center', maxWidth: 640 }}>
+            <div className="bl-label" style={{ marginBottom: '1rem' }}>
+              — Not sure where to start?
+            </div>
+            <h2
+              style={{
+                fontFamily: 'var(--bl-font-display)',
+                fontSize: 'var(--bl-text-h2)',
+                fontWeight: 800,
+                letterSpacing: '-0.025em',
+                lineHeight: 1.1,
+                color: 'var(--bl-text)',
+                margin: '0 0 1rem',
+              }}
+            >
+              Talk to the <span className="bl-grad-text">async consultant.</span>
+            </h2>
+            <p style={{ fontSize: 'var(--bl-text-body)', color: 'var(--bl-text-muted)', lineHeight: 1.6, margin: 0 }}>
+              Describe your compliance bottleneck and get routed to the smallest thing that fixes
+              it — a $19 snapshot, a product, or a custom build. AI-run, human-reviewed, no calls.
+            </p>
+          </div>
+          <QualifierChat />
         </div>
       </section>
 

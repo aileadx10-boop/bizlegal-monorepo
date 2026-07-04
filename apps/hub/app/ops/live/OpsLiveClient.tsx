@@ -82,7 +82,7 @@ export default function OpsLiveClient({ token }: { token: string }) {
     }
     es.onmessage = (e) => {
       try {
-        const data: LiveSnapshot = JSON.parse(e.data)
+        const data: LiveSnapshot & { _close?: boolean } = JSON.parse(e.data)
         if (data._close) {
           es.close()
           return

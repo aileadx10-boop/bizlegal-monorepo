@@ -11,6 +11,12 @@ Branching logic per stage:
 
 Uses Resend for sending, lead_outreach table for state.
 
+Also carries the deal_room sequence (--sequence deal_room): day-1/3/7 nudges
+for open/viewed deal_rooms rows (qualifier chat -> private deal room funnel,
+decisions/REVENUE-MACHINE-24-7-2026-07-04.md). Send-tracking rides the same
+lead_outreach table (pitch_variant=deal_room_day{1,3,7}, stage=90+day so the
+stage-0..4 cold sequence queries never see these rows).
+
 Cron: 16:00 UTC daily (after Stage 0 at 10:30)
 """
 from __future__ import annotations
@@ -177,11 +183,126 @@ Respond ONLY in JSON: {{"subject": "{prior_subject} (final)", "body": "..."}}"""
                 "body": bm.group(1).encode().decode("unicode_escape") if bm else raw[:300]}
 
 
+# ──────────────────────────────────────────────────────────────────────────
+# deal_room sequence — day 1 / 3 / 7 nudges for open deal rooms
+# ──────────────────────────────────────────────────────────────────────────
+DEAL_ROOM_DAYS = (1, 3, 7)
+DEAL_ROOM_TIER_LABELS = {"pilot": "Pilot", "build": "Build", "flagship": "Flagship"}
+
+
+def get_due_deal_room_nudges(limit: int = 10) -> list:
+    """Rooms in open/viewed (never paid/expired) with the highest due, unsent nudge.
+
+    Dedupe rides lead_outreach exactly like the cold stages: one row per
+    send, keyed by pitch_variant=deal_room_day{d} + lead_email.
+    """
+    now = _dt.datetime.now(_dt.timezone.utc)
+    rooms = supabase_query("deal_rooms",
+        "select=token,email,offer_tier,price_usd,status,expires_at,created_at"
+        "&status=in.(open,viewed)&order=created_at.asc&limit=300")
+    sent_by_day = {}
+    for d in DEAL_ROOM_DAYS:
+        rows = supabase_query("lead_outreach",
+            f"select=lead_email&pitch_variant=eq.deal_room_day{d}&limit=1000")
+        sent_by_day[d] = {r.get("lead_email", "").lower() for r in rows}
+
+    due = []
+    for room in rooms:
+        email = (room.get("email") or "").lower()
+        if not email:
+            continue
+        try:
+            created = _dt.datetime.fromisoformat(str(room.get("created_at", "")).replace("Z", "+00:00"))
+            expires = _dt.datetime.fromisoformat(str(room.get("expires_at", "")).replace("Z", "+00:00"))
+        except Exception:
+            continue
+        if expires <= now:  # belt-and-braces; /api/deal flips these to expired lazily
+            continue
+        age_days = (now - created).days
+        pending = [d for d in DEAL_ROOM_DAYS if age_days >= d and email not in sent_by_day[d]]
+        if not pending:
+            continue
+        due.append((room, max(pending)))  # one email per room per run — the latest due step
+        if len(due) >= limit:
+            break
+    return due
+
+
+def render_deal_room_email(day: int, room: dict) -> dict:
+    """Static templates — the scope already lives in the room; nudges just point back."""
+    tier = DEAL_ROOM_TIER_LABELS.get(room.get("offer_tier", ""), "Custom")
+    price = f"${int(room.get('price_usd', 0)):,}"
+    link = f"https://bizlegal-ai.com/deal/{room.get('token', '')}"
+    try:
+        expires = _dt.datetime.fromisoformat(str(room.get("expires_at", "")).replace("Z", "+00:00"))
+        expires_label = expires.strftime("%B %d")
+    except Exception:
+        expires_label = "in 14 days"
+
+    if day == 1:
+        return {"subject": "I scoped this for you — your deal room",
+                "body": (f"Hi,\n\nFollowing up on your conversation with our async consultant — I reviewed the "
+                         f"transcript and put together a fixed-price scope for your build: Custom Build ({tier}), "
+                         f"{price} one-time.\n\nEverything is in your private deal room (scope, FAQ, payment):\n"
+                         f"{link}\n\nThe room is private to you and holds the price until {expires_label}. "
+                         f"If the scope is off anywhere, just reply — I adjust it before you pay anything.\n\n"
+                         f"— Moses, BizLegal AI")}
+    if day == 3:
+        return {"subject": f"Re: your {tier} scope — the two questions everyone asks",
+                "body": (f"Hi,\n\nTwo things people usually want to know before opening the room:\n\n"
+                         f"1) \"Why no call?\" We run fully async — scoping, delivery, and support all arrive in "
+                         f"text. That's how a scoped {tier} build stays at {price} instead of agency rates, and "
+                         f"you get a written record of every decision.\n\n"
+                         f"2) \"How do I know it pays off?\" The scope only contains workflows you told us are "
+                         f"eating hours today. Price the hours; if the math doesn't clear in a quarter, don't buy.\n\n"
+                         f"Your scope and pricing: {link}\n\nReply with anything that looks wrong and I'll rework "
+                         f"it.\n\n— Moses, BizLegal AI")}
+    return {"subject": f"Your deal room closes {expires_label}",
+            "body": (f"Hi,\n\nLast note on this. Your Custom Build ({tier}) room — scope and {price} fixed price — "
+                     f"expires on {expires_label}:\n{link}\n\nAfter that the scope goes stale and we'd re-qualify "
+                     f"from scratch. If the timing is simply wrong, reply and tell me — no hard feelings, and the "
+                     f"door stays open for next quarter.\n\n— Moses, BizLegal AI")}
+
+
+def run_deal_room_sequence(limit: int = 10):
+    due = get_due_deal_room_nudges(limit)
+    print(f"[deal_room] {len(due)} nudges due", file=sys.stderr)
+    sent = 0
+    failed = 0
+    for room, day in due:
+        email = room.get("email", "")
+        em = render_deal_room_email(day, room)
+        r = resend_send(email, em["subject"], em["body"])
+        if r.get("status") == 200:
+            sent += 1
+            supabase_insert("lead_outreach", {
+                "lead_email": email, "lead_name": "", "company": "",
+                "pitch_variant": f"deal_room_day{day}",
+                "subject": em["subject"], "body_preview": em["body"][:200],
+                "status": "sent", "stage": 90 + day,  # 91/93/97 — outside the 0-4 cold-stage space
+                "sent_at": _dt.datetime.now(_dt.timezone.utc).isoformat(),
+                "resend_id": r.get("id", "")})
+            print(f"  ✅ {email}: deal_room day {day}", file=sys.stderr)
+        else:
+            failed += 1
+            print(f"  ❌ {email}: {str(r.get('error', r.get('response', '')))[:80]}", file=sys.stderr)
+    telegram(f"💼 <b>Deal-room nudges</b>\nSent: {sent} · Failed: {failed}")
+    print(f"\n  DONE: {sent} sent, {failed} failed", file=sys.stderr)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--stage", type=int, required=True, help="1=Day3, 2=Day7, 3=Day14, 4=Day30")
+    ap.add_argument("--stage", type=int, help="1=Day3, 2=Day7, 3=Day14, 4=Day30 (cold sequence)")
+    ap.add_argument("--sequence", choices=["stages", "deal_room"], default="stages",
+                    help="stages = existing cold follow-ups (needs --stage); deal_room = day-1/3/7 deal-room nudges")
     ap.add_argument("--limit", type=int, default=10)
     args = ap.parse_args()
+
+    if args.sequence == "deal_room":
+        run_deal_room_sequence(args.limit)
+        return
+    if args.stage is None:
+        ap.error("--stage is required when --sequence=stages")
 
     leads = get_due_followups(args.stage, args.limit)
     print(f"[stage={args.stage}] {len(leads)} due for follow-up", file=sys.stderr)

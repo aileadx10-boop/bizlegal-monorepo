@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import type { Metadata } from 'next'
+import QualifierChat from '@/components/conversion/QualifierChat'
 
 export const metadata: Metadata = {
   title: 'Intelligence Reports | BizLegal AI',
@@ -127,6 +127,9 @@ export default function IntelligencePage() {
         <h2 style={{ marginBottom: 16 }}>Need a custom intelligence report?</h2>
         <p style={{ marginBottom: 28 }}>We produce bespoke compliance research for enterprise clients. Jurisdiction-specific. Regulation-current. Practitioner-vetted.</p>
         <a href="mailto:team@bizlegal-ai.com?subject=Custom Intelligence Report" className="btn-primary">Request Custom Report →</a>
+        <div style={{ marginTop: 40, textAlign: 'left', display: 'flex', justifyContent: 'center' }}>
+          <QualifierChat context="custom-build" />
+        </div>
       </section>
     </div>
   )

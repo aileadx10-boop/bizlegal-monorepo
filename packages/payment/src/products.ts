@@ -56,6 +56,12 @@ export type ProductId =
   | 'conductor_firm_yearly'
   // CLE
   | 'cle_standalone_monthly'
+  // Risk Snapshot — $19 automated report (hub surface)
+  | 'risk_snapshot'
+  // Custom-build services ladder (async, no sales calls — /services/custom-build)
+  | 'custom_build_pilot'
+  | 'custom_build_build'
+  | 'custom_build_flagship'
 
 export type BillingInterval = 'one-time' | 'monthly' | 'yearly'
 
@@ -63,7 +69,7 @@ export interface ProductSpec {
   readonly id: ProductId
   readonly name: string
   readonly description: string
-  readonly product_family: 'boi' | 'ai_act' | 'policy_refresh' | 'psp' | 'tracr' | 'brai' | 'forge' | 'docai' | 'lexaudit' | 'conductor' | 'cle'
+  readonly product_family: 'boi' | 'ai_act' | 'policy_refresh' | 'psp' | 'tracr' | 'brai' | 'forge' | 'docai' | 'lexaudit' | 'conductor' | 'cle' | 'risk_snapshot' | 'custom_build'
   readonly billing_interval: BillingInterval
   readonly amount_cents: number
   readonly currency: 'USD'
@@ -444,6 +450,58 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     checkout_origin: 'https://docai.bizlegal-ai.com/cle',
     webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
+  },
+
+  // ───── Risk Snapshot ($19 automated report) ─────
+  risk_snapshot: {
+    id: 'risk_snapshot',
+    name: 'AI Compliance Risk Snapshot',
+    description: 'Paste your website, get a 2-page AI risk report in ~10 minutes: jurisdiction exposure, framework gaps (GDPR/SOC 2/MiCA/BOI), and your 3 highest-priority fixes.',
+    product_family: 'risk_snapshot',
+    billing_interval: 'one-time',
+    amount_cents: 1900,
+    currency: 'USD',
+    checkout_origin: '/products/risk-snapshot',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: false,
+  },
+
+  // ───── Custom-build services ladder (async, no sales calls) ─────
+  custom_build_pilot: {
+    id: 'custom_build_pilot',
+    name: 'Compliance AI Pilot (2 weeks)',
+    description: '2-week single-workflow compliance agent built on your stack (e.g. security-questionnaire autoresponder trained on your docs).',
+    product_family: 'custom_build',
+    billing_interval: 'one-time',
+    amount_cents: 250000,
+    currency: 'USD',
+    checkout_origin: '/services/custom-build',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: false,
+  },
+  custom_build_build: {
+    id: 'custom_build_build',
+    name: 'Custom Compliance AI Build (6 weeks, 50% upfront wire)',
+    description: 'Full custom compliance AI system, 6-week delivery, 50% upfront by bank wire, scope agreed in writing in a private deal room.',
+    product_family: 'custom_build',
+    billing_interval: 'one-time',
+    amount_cents: 1500000,
+    currency: 'USD',
+    checkout_origin: '/services/custom-build',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: false,
+  },
+  custom_build_flagship: {
+    id: 'custom_build_flagship',
+    name: 'Flagship Custom AI System (+20% revenue share, contractual)',
+    description: 'Full revenue-generating custom AI system. 20% revenue share, contractual, agreed in the deal room before any payment.',
+    product_family: 'custom_build',
+    billing_interval: 'one-time',
+    amount_cents: 4000000,
+    currency: 'USD',
+    checkout_origin: '/services/custom-build',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: false,
   },
 }
 

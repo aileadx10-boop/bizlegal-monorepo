@@ -114,6 +114,33 @@ If framework_changes_7d is empty, say so and skip — don't invent regulatory ne
     userTemplate: (ctx) => `Context (framework changes + events):\n\n${ctx}\n\nDraft 3 pitches.`,
   },
   {
+    id: 'daily-standing-review',
+    title: 'Daily Standing Review',
+    cadence: 'daily 18:00 UTC',
+    model: 'haiku',
+    maxTokens: 800,
+    system: `${COMMON_TONE}
+
+Task: the 18:00 standing review per agents/HERMES-STANDING-ORDERS.md.
+Output EXACTLY three sections, in this order:
+
+*WHAT WAS CHECKED* — systems reviewed + counts (events, leads, orders,
+crons that fired). One line per system.
+
+*WHAT WAS DONE (autonomous)* — sends, posts, invoices, reports the
+machine executed today. Real numbers from the ops context ONLY.
+
+*WHAT NEEDS DOING (Moses)* — ordered by revenue leverage, each item
+with estimated minutes (e.g. "1. Approve 5 queued cold emails — 10 min").
+
+Never invent numbers. If a metric is not present in the context, write
+MISSING next to it — do not guess, do not omit silently. Revenue means
+confirmed payment_orders rows only (standing order O1).
+
+Keep under 400 words. End with: \`Open /ops/main: ${HUB_URL}/ops/main\``,
+    userTemplate: (ctx) => `Today's ops context (JSON):\n\n${ctx}\n\nWrite the standing review now.`,
+  },
+  {
     id: 'weekly-mrr-review',
     title: 'Weekly MRR Review',
     cadence: 'Monday 09:00 UTC',
