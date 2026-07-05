@@ -37,7 +37,7 @@ RESEND_KEY = os.environ.get(ENV_RESEND, "")
 GMAIL_USER = os.environ.get(ENV_GMAIL_USER, "ai.leadx10@gmail.com")
 GMAIL_PASS = os.environ.get(ENV_GMAIL_PASS, "")
 TO_EMAIL = "ai.leadx10@gmail.com"
-FROM_EMAIL = "BizLegal AI <noreply@bizlegal.ai>"
+FROM_EMAIL = "BizLegal AI <intelligence@intelligence.bizlegal-ai.com>"
 
 
 def _headers():
