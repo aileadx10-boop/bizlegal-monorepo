@@ -144,6 +144,9 @@ importers:
       '@bizlegal/nurture-enqueue':
         specifier: workspace:*
         version: link:../../../../packages/nurture-enqueue
+      '@bizlegal/ops-log':
+        specifier: workspace:*
+        version: link:../../../../packages/ops-log
       '@bizlegal/payment':
         specifier: workspace:*
         version: link:../../../../packages/payment
@@ -256,6 +259,9 @@ importers:
       '@bizlegal/payment':
         specifier: workspace:*
         version: link:../../packages/payment
+      '@bizlegal/rate-limit':
+        specifier: workspace:*
+        version: link:../../packages/rate-limit
       '@bizlegal/themes':
         specifier: workspace:*
         version: link:../../packages/themes
@@ -453,6 +459,12 @@ importers:
       '@bizlegal/nurture-enqueue':
         specifier: workspace:*
         version: link:../../packages/nurture-enqueue
+      '@bizlegal/ops-log':
+        specifier: workspace:*
+        version: link:../../packages/ops-log
+      '@bizlegal/payment':
+        specifier: workspace:*
+        version: link:../../packages/payment
       '@bizlegal/rate-limit':
         specifier: workspace:*
         version: link:../../packages/rate-limit
@@ -579,6 +591,17 @@ importers:
         specifier: ^5
         version: 5.9.3
 
+  packages/api-client:
+    devDependencies:
+      '@types/node':
+        specifier: ^20.16.0
+        version: 20.19.39
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
+  packages/bizlegal-debug: {}
+
   packages/nurture-enqueue:
     devDependencies:
       '@types/node':
@@ -587,6 +610,12 @@ importers:
       typescript:
         specifier: ^5.7.2
         version: 5.9.3
+
+  packages/ops-heartbeat:
+    dependencies:
+      '@types/node':
+        specifier: ^20.11.0
+        version: 20.19.39
 
   packages/ops-log:
     dependencies:
@@ -665,6 +694,8 @@ importers:
       typescript:
         specifier: ^5.7.2
         version: 5.9.3
+
+  services/browser-extension: {}
 
   services/funnel-mvp:
     dependencies:

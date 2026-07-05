@@ -89,7 +89,7 @@ async function generateSnapshot(
   const text: string = j?.content?.[0]?.text || ""
   const match = text.match(/\{[\s\S]*\}/)
   if (!match) throw new Error("Could not parse snapshot JSON")
-  const parsed = JSON.parse(match.group(0))
+  const parsed = JSON.parse(match[0])
   const score = Math.max(0, Math.min(100, Number(parsed.score) || 50))
   const grade = (["A","B","C","D","F"] as const).includes(parsed.grade)
     ? parsed.grade
