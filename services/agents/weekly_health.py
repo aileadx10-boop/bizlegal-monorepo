@@ -60,7 +60,11 @@ def run(ctx=None) -> dict:
         if not isinstance(r, dict): continue
         a = r.get("agent_name") or "?"
         s = r.get("status") or "?"
-        by_agent.setdefault(a, {"ok": 0, "fail": 0, "other": 0})[s if s == "ok" or s == "success" else ("fail" if s == "failed" else "other")] += 1
+        if s == "ok" or s == "success": bucket = "ok"
+        elif s == "failed": bucket = "fail"
+        else: bucket = "other"
+        bucket_row = by_agent.setdefault(a, {"ok": 0, "fail": 0, "other": 0})
+        bucket_row[bucket] = bucket_row.get(bucket, 0) + 1
     # 7-day revenue
     # status='active' is the real paid state; amounts are cents; skip smoke rows.
     payments = _q(f"payment_orders?select=amount_cents&status=eq.active&gateway=neq.simulated&created_at=gte.{week_ago}")
