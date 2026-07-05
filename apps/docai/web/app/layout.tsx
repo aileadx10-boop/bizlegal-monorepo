@@ -58,6 +58,24 @@ export const metadata: Metadata = {
     : {}),
 };
 
+function CrossLinkBanner() {
+  return (
+    <div style={{
+      position: 'sticky', top: 0, zIndex: 9999,
+      background: 'linear-gradient(90deg, #0ea5e9 0%, #8b5cf6 100%)',
+      color: 'white', padding: '8px 16px', fontSize: 14,
+      textAlign: 'center', fontFamily: 'system-ui, -apple-system, sans-serif',
+      boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+    }}>
+      <span style={{ marginRight: 12 }}>DocAI contract scan is part of BizLegal. 24/7 compliance ops, $2,500/mo managed.</span>
+      <a href="https://hub.bizlegal-ai.com/services/compliance-ops"
+         style={{ color: 'white', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 2 }}>
+        See the offer &rarr;
+      </a>
+    </div>
+  )
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -81,26 +99,8 @@ export default function RootLayout({
         {/* Daybreak FOUC — sync sets data-bl-theme-v2 before paint. */}
         <script dangerouslySetInnerHTML={{ __html: LANDING_FOUC }} />
       </head>
-      
-// CrossLinkBanner — drives traffic to the AIA retainer page on hub
-function CrossLinkBanner() {
-  return (
-    <div style={{
-      position: 'sticky', top: 0, zIndex: 9999,
-      background: 'linear-gradient(90deg, #0ea5e9 0%, #8b5cf6 100%)',
-      color: 'white', padding: '8px 16px', fontSize: 14,
-      textAlign: 'center', fontFamily: 'system-ui, -apple-system, sans-serif',
-      boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
-    }}>
-      <span style={{ marginRight: 12 }}>DocAI contract scan is part of BizLegal. 24/7 compliance ops, $2,500/mo managed.</span>
-      <a href="https://hub.bizlegal-ai.com/services/compliance-ops"
-         style={{ color: 'white', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 2 }}>
-        See the offer &rarr;
-      </a>
-    </div>
-  )
-}
-<body>
+      <body>
+        <CrossLinkBanner />
         <ThemeProvider primary="daybreak" alternate={null} storageKey="docai-theme">
           <SiteShell
             brand="DocAI"
