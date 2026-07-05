@@ -231,3 +231,39 @@ Moses-must-manual (last, per the standing rule)
 - Total system: 21 agents, 41 cron jobs, 30 products, $186/mo.
 - After the 30-min rotation: same system goes from
   $0 capturable to $20K MRR capturable.
+
+================================================================
+ADDENDUM 2026-07-05 evening — LIVE PROBE RESULTS (post-rotation)
+================================================================
+The key rotation reached the Windows vault + Hetzner .env but
+NOT the Vercel projects. Live probes from production:
+
+  SURFACE            CRYPTO (NOWPayments)      CARD (PayPal)
+  hub (apex)         ✅ WORKS (iid 4454325001)  ❌ paypal_token_401
+  docai-frontend     ✅ WORKS (iid 5344374118)  (untested)
+  lexaudit           ❌ 502 (stale/missing key) ❌ "not configured"
+
+  ✅ payment-zero: PASSES (ok:true, status='active') — no DNS
+     needed; hub is served at the APEX bizlegal-ai.com.
+  ✅ Resend: WORKS from any non-Hetzner IP. Test email sent to
+     ai.leadx10@gmail.com (id 5e7d396e) using the rotated key +
+     intelligence@intelligence.bizlegal-ai.com. The Hetzner 403
+     was purely the IP block, exactly as diagnosed.
+
+WHAT THIS MEANS — the remaining clicks are VERCEL ENV UPDATES,
+not key rotations (the keys themselves are already good):
+
+  1. vercel.com → bizlegal-ai project → Settings → Env Vars:
+     update PAYPAL_CLIENT_ID + PAYPAL_CLIENT_SECRET to the new
+     vault values → redeploy. (fixes paypal_token_401 on hub)
+  2. Same for lexaudit project: PAYPAL_CLIENT_ID/SECRET +
+     NOWPAYMENTS_API_KEY → redeploy. (fixes 502 + 503)
+  3. Optionally sweep docai/tracr/brai/forge PayPal envs while
+     you're in the dashboard — same two values everywhere.
+  4. RESEND_API_KEY on hub + docai Vercel (daily digest is
+     Hetzner-side, but hub routes send email too).
+  5. Stripe rotation (still the only truly dead credential).
+
+Cleanup note: the lexaudit smoke matter + intents were deleted;
+the payment-zero simulated row stays (excluded from revenue by
+gateway='simulated' — agents patched in 9ff201b).
