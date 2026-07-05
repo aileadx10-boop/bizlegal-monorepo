@@ -70,7 +70,7 @@ def gather_events() -> dict:
         "as_of": datetime.now(timezone.utc).isoformat(),
         "leads_captured": _supabase_query(f"leadforge_leads?select=id,company_name,score,source&created_at=gte.{cutoff}&order=score.desc&limit=20"),
         "outreach_sent": _supabase_query(f"lead_outreach?select=id,lead_name,company,status,pitch_variant&created_at=gte.{cutoff}&order=created_at.desc&limit=30"),
-        "payments_completed": _supabase_query(f"payment_orders?select=id,amount_cents,gateway,status&status=eq.completed&created_at=gte.{cutoff}&order=created_at.desc&limit=20"),
+        "payments_completed": _supabase_query(f"payment_orders?select=id,amount_cents,gateway,status&status=eq.active&gateway=neq.simulated&created_at=gte.{cutoff}&order=created_at.desc&limit=20"),
         "payments_initiated": _supabase_query(f"payment_orders?select=id,amount_cents,gateway,status&created_at=gte.{cutoff}&order=created_at.desc&limit=20"),
         "new_signups": _supabase_query(f"subscribers?select=id,email,plan&created_at=gte.{cutoff}&limit=20"),
         "agent_runs_summary": _supabase_query(f"agent_runs?select=agent_name,status&created_at=gte.{cutoff}&limit=500"),

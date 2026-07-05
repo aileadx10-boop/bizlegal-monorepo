@@ -52,9 +52,12 @@ def run(ctx=None) -> dict:
     cutoff_7d = (datetime.now(timezone.utc) - timedelta(days=7)).strftime('%Y-%m-%dT%H:%M:%SZ')
     cutoff_30d = (datetime.now(timezone.utc) - timedelta(days=30)).strftime('%Y-%m-%dT%H:%M:%SZ')
     today_start = datetime.now(timezone.utc).strftime('%Y-%m-%dT00:00:00Z')
-    rev_today = sum(float(p.get("amount") or 0) for p in _q(f"payment_orders?select=amount&status=eq.completed&created_at=gte.{today_start}") if isinstance(p, dict))
-    rev_7d = sum(float(p.get("amount") or 0) for p in _q(f"payment_orders?select=amount&status=eq.completed&created_at=gte.{cutoff_7d}") if isinstance(p, dict))
-    rev_30d = sum(float(p.get("amount") or 0) for p in _q(f"payment_orders?select=amount&status=eq.completed&created_at=gte.{cutoff_30d}") if isinstance(p, dict))
+    # Handlers set status='active' (never 'completed'); amounts are cents.
+    # gateway=neq.simulated excludes /api/test/payment-zero smoke rows.
+    _rev_filter = "select=amount_cents&status=eq.active&gateway=neq.simulated"
+    rev_today = sum(float(p.get("amount_cents") or 0) / 100 for p in _q(f"payment_orders?{_rev_filter}&created_at=gte.{today_start}") if isinstance(p, dict))
+    rev_7d = sum(float(p.get("amount_cents") or 0) / 100 for p in _q(f"payment_orders?{_rev_filter}&created_at=gte.{cutoff_7d}") if isinstance(p, dict))
+    rev_30d = sum(float(p.get("amount_cents") or 0) / 100 for p in _q(f"payment_orders?{_rev_filter}&created_at=gte.{cutoff_30d}") if isinstance(p, dict))
     avg_7d = rev_7d / 7
     gap_to_target = max(0, DAILY_TARGET_USD - avg_7d)
     msg = f"""💰 <b>Daily Revenue Forecast</b>

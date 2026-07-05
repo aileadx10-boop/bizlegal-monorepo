@@ -62,8 +62,9 @@ def run(ctx=None) -> dict:
         s = r.get("status") or "?"
         by_agent.setdefault(a, {"ok": 0, "fail": 0, "other": 0})[s if s == "ok" or s == "success" else ("fail" if s == "failed" else "other")] += 1
     # 7-day revenue
-    payments = _q(f"payment_orders?select=amount&status=eq.completed&created_at=gte.{week_ago}")
-    revenue_7d = sum(float(p.get("amount") or 0) for p in payments if isinstance(p, dict))
+    # status='active' is the real paid state; amounts are cents; skip smoke rows.
+    payments = _q(f"payment_orders?select=amount_cents&status=eq.active&gateway=neq.simulated&created_at=gte.{week_ago}")
+    revenue_7d = sum(float(p.get("amount_cents") or 0) / 100 for p in payments if isinstance(p, dict))
     # Lead pipeline
     leads = _q(f"leadforge_leads?select=id,score&created_at=gte.{week_ago}&limit=1000")
     high_score = sum(1 for l in leads if isinstance(l, dict) and (l.get("score") or 0) >= 70)

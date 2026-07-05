@@ -68,6 +68,7 @@ def _fetch_new_payment_orders(limit):
     url = (
         f"{SUPABASE_URL}/rest/v1/payment_orders"
         f"?select=*&created_at=gte.{day_ago}"
+        f"&gateway=neq.simulated"
         f"&order=created_at.desc&limit={limit}"
     )
     try:
