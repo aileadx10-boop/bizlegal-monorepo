@@ -77,25 +77,15 @@ def run(ctx=None) -> dict:
         "high_score_leads_7d": high_score,
     }
     # Format Telegram message
-    body = "📊 <b>WEEKLY HEALTH CHECK</b>
-
-"
-    body += f"Period: {week_ago} → now
-
-"
-    body += "<b>Agent runs (7d):</b>
-"
+    body = "📊 <b>WEEKLY HEALTH CHECK</b>\n\n"
+    body += f"Period: {week_ago} → now\n\n"
+    body += "<b>Agent runs (7d):</b>\n"
     for a, s in sorted(by_agent.items()):
         total = s["ok"] + s["fail"] + s["other"]
-        body += f"  • {a}: {s['ok']} ok / {s['fail']} fail / {s['other']} other ({total} total)
-"
-    body += f"
-<b>Revenue 7d:</b> ${revenue_7d:,.2f}
-"
-    body += f"<b>New leads 7d:</b> {len(leads)} ({high_score} with score >= 70)
-"
-    body += f"
-<i>Detailed report emailed to ai.leadx10@gmail.com</i>"
+        body += f"  • {a}: {s['ok']} ok / {s['fail']} fail / {s['other']} other ({total} total)\n"
+    body += f"\n<b>Revenue 7d:</b> ${revenue_7d:,.2f}\n"
+    body += f"<b>New leads 7d:</b> {len(leads)} ({high_score} with score >= 70)\n"
+    body += "\n<i>Detailed report emailed to ai.leadx10@gmail.com</i>"
     _telegram(body)
     return {"ok": True, "agent": "weekly_health", "summary": summary}
 
