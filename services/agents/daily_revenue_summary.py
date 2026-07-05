@@ -14,7 +14,8 @@ import sys as _sys
 _sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 import _env
 
-SUPABASE_URL, SUPABASE_KEY = os.environ.get("SUPABASE_URL", ""), _env.get_supabase_key()
+SUPABASE_URL, SUPABASE_KEY = _env.get_supabase()
+if not SUPABASE_URL: SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
 RESEND_KEY = _env.get_resend_key()
 FROM_EMAIL = "BizLegal AI <intelligence@intelligence.bizlegal-ai.com>"
 TO_EMAIL = "ai.leadx10@gmail.com"

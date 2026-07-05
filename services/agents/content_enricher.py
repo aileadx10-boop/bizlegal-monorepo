@@ -17,11 +17,16 @@ import sys as _sys
 _sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 import _env
 
-REPO = Path("/opt/bizlegal/curator/../..")  # /opt/bizlegal/monorepo
-REPO = Path(os.environ.get("REPO_PATH", str(Path(__file__).resolve().parents[2] / "..")))
-REPO = Path("C:/Users/Moshe Dor/bizlegal-monorepo") if Path("C:/Users/Moshe Dor/bizlegal-monorepo").exists() else Path("/opt/bizlegal/curator")
+# Auto-detect repo: Windows monorepo, Hetzner monorepo, or parent of /opt/bizlegal/curator
+if Path("C:/Users/Moshe Dor/bizlegal-monorepo").exists():
+    REPO = Path("C:/Users/Moshe Dor/bizlegal-monorepo")
+elif Path("/opt/bizlegal/monorepo").exists():
+    REPO = Path("/opt/bizlegal/monorepo")
+else:
+    REPO = Path(os.environ.get("REPO_PATH", str(Path(__file__).resolve().parents[3])))
 
-SUPABASE_URL, SUPABASE_KEY = os.environ.get("SUPABASE_URL", ""), _env.get_supabase_key()
+SUPABASE_URL, SUPABASE_KEY = _env.get_supabase()
+if not SUPABASE_URL: SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
 ANTHROPIC_KEY = _env.get_anthropic_key()
 
 SYSTEM = """You are a B2B SEO + AEO copywriter for BizLegal AI.
@@ -63,7 +68,7 @@ def _extract_text(path: str) -> str:
     except Exception:
         return ""
     # Find all string literals and template literals (skip imports/exports)
-    strings = re.findall(r"["']([^"\']{20,200})["']", c)
+    strings = re.findall(r"[\"']([^\"']{20,200})[\"']", c)
     text = " ".join(s for s in strings if not s.startswith("@") and not s.startswith("use "))
     # Pull h1/h2/h3 text
     headers = re.findall(r"<h[1-3][^>]*>([^<]+)</h[1-3]>", c)

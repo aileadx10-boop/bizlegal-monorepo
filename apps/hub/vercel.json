@@ -29,6 +29,7 @@
     "app/api/ops/health/route.ts": { "maxDuration": 30 },
     "app/api/boi/subscribe/route.ts": { "maxDuration": 30 },
     "app/api/agents/run/route.ts": { "maxDuration": 60 },
+    "app/api/agents/enrich-pages/route.ts": { "maxDuration": 300 },
     "app/api/cron/affiliate-reconcile/route.ts": { "maxDuration": 30 },
     "app/api/cron/social-queue/route.ts": { "maxDuration": 60 },
     "app/api/cron/daily-todo/route.ts": { "maxDuration": 60 },
@@ -72,7 +73,8 @@
     { "path": "/api/cron/social-queue",                               "schedule": "*/30 * * * *" },
     { "path": "/api/cron/daily-todo",                                 "schedule": "0 6 * * *" },
     { "path": "/api/cron/invoices",                                   "schedule": "0 10 * * *" },
-    { "path": "/api/agents/run?task=daily-standing-review",           "schedule": "0 18 * * *" }
+    { "path": "/api/agents/run?task=daily-standing-review",           "schedule": "0 18 * * *" },
+    { "path": "/api/agents/enrich-pages",                              "schedule": "0 4 * * 0" }
   ],
   "headers": [
     {

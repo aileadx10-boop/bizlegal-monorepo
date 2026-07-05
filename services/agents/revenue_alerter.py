@@ -16,8 +16,9 @@ import sys as _sys
 _sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 import _env
 
-SUPABASE_URL, SUPABASE_KEY = os.environ.get("SUPABASE_URL", ""), _env.get_supabase_key()
-TELEGRAM_TOKEN, TELEGRAM_CHAT = _env.get_telegram_token(), _env.get_telegram_chat()
+SUPABASE_URL, SUPABASE_KEY = _env.get_supabase()
+if not SUPABASE_URL: SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
+TELEGRAM_TOKEN, TELEGRAM_CHAT = os.environ.get("TELEGRAM_BOT_TOKEN", ""), os.environ.get("TELEGRAM_CHAT_ID", "")
 
 # In-memory dedup (replace with redis/SQL in prod)
 _ALERTED = set()
