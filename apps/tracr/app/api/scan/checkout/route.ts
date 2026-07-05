@@ -18,7 +18,8 @@ export async function POST(req: NextRequest) {
 
     const report_id = 'TR-' + new Date().getFullYear() + '-' + Math.floor(Math.random() * 90000 + 10000)
     const price = TIER_PRICES[tier]
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://tracr.bizlegal-ai.com'
+    const ipnBase = 'https://tracr.bizlegal-ai.com'
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? ipnBase
     const nowKey = process.env.NOWPAYMENTS_API_KEY
     if (!nowKey) return NextResponse.json({ error: 'Payment service unavailable' }, { status: 503 })
 
@@ -51,7 +52,7 @@ export async function POST(req: NextRequest) {
         price_currency: 'usd',
         order_id: report_id,
         order_description: tier === 'regulatory' ? 'TRACR Regulatory Risk Report' : `TRCR ${tier} forensic report`,
-        ipn_callback_url: `${siteUrl}/api/payment/webhook`,
+        ipn_callback_url: `${ipnBase}/api/payment/webhook`,
         success_url: `${siteUrl}/report/${report_id}`,
         cancel_url: `${siteUrl}/scan`,
       }),

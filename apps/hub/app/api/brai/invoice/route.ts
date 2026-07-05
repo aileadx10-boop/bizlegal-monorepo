@@ -24,6 +24,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Payment service unavailable' }, { status: 503 })
     }
 
+    // ipnBase MUST be hardcoded to production — never a preview URL —
+    // or NOWPayments callbacks are lost (paid → no status update → $0 captured).
+    const ipnBase = 'https://bizlegal-ai.com'
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://bizlegal-ai.com'
 
     const invoiceRes = await fetch('https://api.nowpayments.io/v1/invoice', {
@@ -38,7 +41,7 @@ export async function POST(req: NextRequest) {
         pay_currency: 'usdtbsc',
         order_id: `brai_${leadId}`,
         order_description: 'BRAI Full Blockchain Regulatory Report',
-        ipn_callback_url: `${appUrl}/api/brai/webhook`,
+        ipn_callback_url: `${ipnBase}/api/brai/webhook`,
         success_url: `${appUrl}/blockchain-report?payment=success&lead=${leadId}`,
         cancel_url: `${appUrl}/blockchain-report?payment=cancelled`,
       }),

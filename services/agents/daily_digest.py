@@ -165,7 +165,7 @@ def render_html(events: dict) -> str:
 
   <div style="margin-top:32px;padding:16px;background:#f1f5f9;border-radius:8px;font-size:12px;color:#475569;">
     <strong>System Health:</strong> {total} agent runs in 24h, {ok} successful, {total-ok} failed.
-    Live ops dashboard: <a href="https://bizlegal-ai.com/ops/snapshot" style="color:#0ea5e9;">bizlegal-ai.com/ops/snapshot</a>
+    Live ops dashboard: <a href="https://brai.bizlegal-ai.com/ops" style="color:#0ea5e9;">brai.bizlegal-ai.com/ops</a>
     <br><br>
     <strong>Daily revenue target:</strong> $68/day ($2,000/mo MRR). You're at ${revenue_today:,.2f} today.
     <br>

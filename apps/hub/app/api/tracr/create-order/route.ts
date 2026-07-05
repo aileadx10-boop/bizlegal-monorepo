@@ -44,6 +44,9 @@ export async function POST(req: NextRequest) {
       payment_method: 'crypto',
     })
 
+    // ipnBase hardcoded to production — never a preview URL
+    const ipnBase = 'https://tracr.bizlegal-ai.com'
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? ipnBase
     // Create NOWPayments invoice
     const nowRes = await fetch('https://api.nowpayments.io/v1/invoice', {
       method: 'POST',
@@ -56,7 +59,7 @@ export async function POST(req: NextRequest) {
         price_currency: 'usd',
         order_id: reportId,
         order_description: `TRACR ${tier} Forensic Report — ${wallet.slice(0, 10)}…`,
-        ipn_callback_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/tracr/webhook`,
+        ipn_callback_url: `${ipnBase}/api/tracr/webhook`,
         success_url: `${process.env.NEXT_PUBLIC_APP_URL}/tracr/success?report=${reportId}`,
         cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/tracr#order`,
       }),

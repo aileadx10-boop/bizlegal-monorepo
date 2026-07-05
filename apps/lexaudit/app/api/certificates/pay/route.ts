@@ -58,7 +58,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'invalid email' }, { status: 400 })
     }
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://lexaudit.bizlegal-ai.com'
+    // ipnBase hardcoded to production — never a preview URL
+    const ipnBase = 'https://lexaudit.bizlegal-ai.com'
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? ipnBase
     const certId  = randomCertId()
     const orderId = `${matter_id}-${Date.now()}`
     const priceUsd = gateway === 'paypal' ? CERT_PRICE_CARD : CERT_PRICE_CRYPTO
@@ -97,7 +99,7 @@ export async function POST(req: NextRequest) {
           pay_currency: 'usdtbsc',
           order_id: orderId,
           order_description: 'LexAudit Compliance Health Score snapshot',
-          ipn_callback_url: `${siteUrl}/api/certificates/webhook`,
+          ipn_callback_url: `${ipnBase}/api/certificates/webhook`,
           success_url: `${siteUrl}/certificate/${certId}`,
           cancel_url: siteUrl,
         }),

@@ -59,7 +59,26 @@ export default function RootLayout({
           />
         )}
       </head>
-      <body className="font-sans antialiased">
+      
+// CrossLinkBanner — drives traffic to the AIA retainer page on hub
+function CrossLinkBanner() {
+  return (
+    <div style={{
+      position: 'sticky', top: 0, zIndex: 9999,
+      background: 'linear-gradient(90deg, #0ea5e9 0%, #8b5cf6 100%)',
+      color: 'white', padding: '8px 16px', fontSize: 14,
+      textAlign: 'center', fontFamily: 'system-ui, -apple-system, sans-serif',
+      boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+    }}>
+      <span style={{ marginRight: 12 }}>LeadForge buyer-intent is part of BizLegal. 24/7 ops, $2,500/mo.</span>
+      <a href="https://hub.bizlegal-ai.com/services/compliance-ops"
+         style={{ color: 'white', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 2 }}>
+        See the offer &rarr;
+      </a>
+    </div>
+  )
+}
+<body className="font-sans antialiased">
         <ThemeProvider primary="daybreak" alternate={null} storageKey="leadforge-theme">
           <SiteShell
             brand="LeadForge"

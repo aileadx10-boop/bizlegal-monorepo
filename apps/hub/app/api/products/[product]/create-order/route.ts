@@ -39,7 +39,9 @@ export async function POST(
       return NextResponse.json({ success: true, order })
     }
 
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL!
+    // ipnBase hardcoded to production — never a preview URL
+    const ipnBase = 'https://hub.bizlegal-ai.com'
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? ipnBase
 
     // NOWPayments (crypto)
     if (paymentMethod === 'nowpayments') {
@@ -50,7 +52,7 @@ export async function POST(
           price_amount: amount,
           price_currency: 'usd',
           order_id: order.id.toString(),
-          ipn_callback_url: `${appUrl}/api/products/${product}/webhook`,
+          ipn_callback_url: `${ipnBase}/api/products/${product}/webhook`,
           success_url: `${appUrl}/success?order=${order.id}`,
           cancel_url: `${appUrl}/${product}`,
         }),

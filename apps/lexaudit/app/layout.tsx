@@ -69,7 +69,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             Uses parallel data-bl-theme-v2 attribute so it doesn't clobber bl-theme above. */}
         <script dangerouslySetInnerHTML={{ __html: LANDING_FOUC }} />
       </head>
-      <body>
+      
+// CrossLinkBanner — drives traffic to the AIA retainer page on hub
+function CrossLinkBanner() {
+  return (
+    <div style={{
+      position: 'sticky', top: 0, zIndex: 9999,
+      background: 'linear-gradient(90deg, #0ea5e9 0%, #8b5cf6 100%)',
+      color: 'white', padding: '8px 16px', fontSize: 14,
+      textAlign: 'center', fontFamily: 'system-ui, -apple-system, sans-serif',
+      boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+    }}>
+      <span style={{ marginRight: 12 }}>LexAudit compliance monitor is part of BizLegal. 24/7 ops, $2,500/mo.</span>
+      <a href="https://hub.bizlegal-ai.com/services/compliance-ops"
+         style={{ color: 'white', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 2 }}>
+        See the offer &rarr;
+      </a>
+    </div>
+  )
+}
+<body>
         {/* a11y A11Y-034 — legacy bl-theme bar (light/dark for /login, /dashboard,
             /certificate) hidden on marketing routes since SiteShell already
             provides nav + theme toggle there. Eliminates the duplicate-toggle
