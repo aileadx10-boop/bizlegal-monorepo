@@ -36,7 +36,8 @@ export async function POST(req: NextRequest) {
         gateway: 'simulated',
         status: 'active',
         source: 'payment_zero_smoke',
-        paid_at: new Date().toISOString(),
+        activated_at: new Date().toISOString(),
+        last_charge_at: new Date().toISOString(),
       })
       .select('id, status, amount_cents, created_at')
       .single()
