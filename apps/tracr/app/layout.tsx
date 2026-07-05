@@ -30,6 +30,25 @@ export const metadata: Metadata = {
     : {}),
 }
 
+// CrossLinkBanner — drives traffic to the AIA retainer page on hub
+function CrossLinkBanner() {
+  return (
+    <div style={{
+      position: 'sticky', top: 0, zIndex: 9999,
+      background: 'linear-gradient(90deg, #0ea5e9 0%, #8b5cf6 100%)',
+      color: 'white', padding: '8px 16px', fontSize: 14,
+      textAlign: 'center', fontFamily: 'system-ui, -apple-system, sans-serif',
+      boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+    }}>
+      <span style={{ marginRight: 12 }}>TRACR forensic reports are part of BizLegal. 24/7 ops, $2,500/mo.</span>
+      <a href="https://hub.bizlegal-ai.com/services/compliance-ops"
+         style={{ color: 'white', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 2 }}>
+        See the offer &rarr;
+      </a>
+    </div>
+  )
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -54,32 +73,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Theme V2 — set data-theme synchronously to avoid flash. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('bl-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`,
+            __html: `(function(){try{var t=localStorage.getItem('bl-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);if(t=='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`,
           }}
         />
         {/* Subdomain Design Pass FOUC — sets CSS vars for the LandingV2 themes (royal-dark/royal-light). */}
         <script dangerouslySetInnerHTML={{ __html: LANDING_FOUC }} />
       </head>
-      
-// CrossLinkBanner — drives traffic to the AIA retainer page on hub
-function CrossLinkBanner() {
-  return (
-    <div style={{
-      position: 'sticky', top: 0, zIndex: 9999,
-      background: 'linear-gradient(90deg, #0ea5e9 0%, #8b5cf6 100%)',
-      color: 'white', padding: '8px 16px', fontSize: 14,
-      textAlign: 'center', fontFamily: 'system-ui, -apple-system, sans-serif',
-      boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
-    }}>
-      <span style={{ marginRight: 12 }}>TRACR forensic reports are part of BizLegal. 24/7 ops, $2,500/mo.</span>
-      <a href="https://hub.bizlegal-ai.com/services/compliance-ops"
-         style={{ color: 'white', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 2 }}>
-        See the offer &rarr;
-      </a>
-    </div>
-  )
-}
-<body>
+      <body>
+        <CrossLinkBanner />
         {/* a11y A11Y-034 — legacy bl-theme bar hidden on marketing routes. */}
         <AppRouteOnly>
           <>

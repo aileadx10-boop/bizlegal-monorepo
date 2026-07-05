@@ -40,6 +40,25 @@ const LANDING_FOUC = themeFOUCScript({
   storageKey: 'brai-theme',
 })
 
+// CrossLinkBanner — drives traffic to the AIA retainer page on hub
+function CrossLinkBanner() {
+  return (
+    <div style={{
+      position: 'sticky', top: 0, zIndex: 9999,
+      background: 'linear-gradient(90deg, #0ea5e9 0%, #8b5cf6 100%)',
+      color: 'white', padding: '8px 16px', fontSize: 14,
+      textAlign: 'center', fontFamily: 'system-ui, -apple-system, sans-serif',
+      boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+    }}>
+      <span style={{ marginRight: 12 }}>brai.bizlegal.ai is part of BizLegal. 24/7 compliance ops, $2,500/mo managed.</span>
+      <a href="https://hub.bizlegal-ai.com/services/compliance-ops"
+         style={{ color: 'white', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 2 }}>
+        See the offer &rarr;
+      </a>
+    </div>
+  )
+}
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
@@ -60,32 +79,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {/* Existing bl-theme FOUC (light/dark) — kept for /pricing, /methodology, /trust. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('bl-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`,
+            __html: `(function(){try{var t=localStorage.getItem('bl-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);if(t=='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`,
           }}
         />
         {/* Subdomain Design Pass FOUC — sets CSS vars for the LandingV2 themes (royal-dark/royal-light). */}
         <script dangerouslySetInnerHTML={{ __html: LANDING_FOUC }} />
       </head>
-      
-// CrossLinkBanner — drives traffic to the AIA retainer page on hub
-function CrossLinkBanner() {
-  return (
-    <div style={{
-      position: 'sticky', top: 0, zIndex: 9999,
-      background: 'linear-gradient(90deg, #0ea5e9 0%, #8b5cf6 100%)',
-      color: 'white', padding: '8px 16px', fontSize: 14,
-      textAlign: 'center', fontFamily: 'system-ui, -apple-system, sans-serif',
-      boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
-    }}>
-      <span style={{ marginRight: 12 }}>brai.bizlegal.ai is part of BizLegal. 24/7 compliance ops, $2,500/mo managed.</span>
-      <a href="https://hub.bizlegal-ai.com/services/compliance-ops"
-         style={{ color: 'white', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 2 }}>
-        See the offer &rarr;
-      </a>
-    </div>
-  )
-}
-<body>
+      <body>
+        <CrossLinkBanner />
         <ThemeProvider primary="royal-dark" alternate="royal-light" storageKey="brai-theme">
           <SiteShell
             brand={BRAI_CONTENT.brand}
