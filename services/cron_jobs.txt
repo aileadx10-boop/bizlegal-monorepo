@@ -10,3 +10,9 @@
 30 18 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/marketing_revenue.py >> /var/log/marketing-revenue.log 2>&1
 */5 * * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/self_heal.py >> /var/log/self-heal.log 2>&1
 */30 * * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/code_fixer.py >> /var/log/code-fixer.log 2>&1
+# Content enricher (every 6h)
+0 */6 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/content_enricher.py >> /var/log/seo-agents.log 2>&1
+# Revenue alerter (every minute — needs Python script support, use */1)
+*/1 * * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/revenue_alerter.py >> /var/log/seo-agents.log 2>&1
+# Daily revenue summary (18:00 UTC)
+0 18 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/daily_revenue_summary.py >> /var/log/seo-agents.log 2>&1

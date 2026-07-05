@@ -68,6 +68,11 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'NOWPAYMENTS_API_KEY missing' }, { status: 500 })
     }
 
+    // ipnBase MUST be hardcoded to the production canonical host —
+    // NEXT_PUBLIC_APP_URL on a Vercel preview build would silently
+    // send the IPN to a dead URL and renewal payments would never
+    // flip status='active'. Hardcode it.
+    const ipnBase = 'https://hub.bizlegal-ai.com'
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://bizlegal-ai.com'
     const resendKey = process.env.RESEND_API_KEY
     const fromEmail = process.env.RESEND_FROM ?? 'intelligence@intelligence.bizlegal-ai.com'
@@ -88,7 +93,7 @@ export async function GET(req: NextRequest) {
             order_description: `${order.product} ${order.tier} ${order.billing_interval} renewal`,
             success_url: `${baseUrl}/payment/success?order=${order.id}`,
             cancel_url: `${baseUrl}/payment/cancelled?order=${order.id}`,
-            ipn_callback_url: `${baseUrl}/api/payments/nowpayments/webhook`,
+            ipn_callback_url: `${ipnBase}/api/payments/nowpayments/webhook`,
           }),
         })
 

@@ -33,9 +33,13 @@ export async function createNOWPaymentsInvoice({
   successUrl,
 }: InvoiceParams) {
   const apiKey = process.env.NOWPAYMENTS_API_KEY;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  // ipnBase MUST be hardcoded to the production canonical host. Any
+  // fallback to NEXT_PUBLIC_SITE_URL risks sending the IPN to a
+  // Vercel preview URL where the webhook handler does not exist.
+  const ipnBase = "https://docai.bizlegal-ai.com";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? ipnBase;
 
-  if (!apiKey || !siteUrl) {
+  if (!apiKey) {
     throw new Error("Missing NOWPayments configuration.");
   }
 
@@ -51,7 +55,7 @@ export async function createNOWPaymentsInvoice({
       pay_currency: "usdtbsc",
       order_id: scanId,
       order_description: description,
-      ipn_callback_url: `${siteUrl}/api/payment/webhook`,
+      ipn_callback_url: `${ipnBase}/api/payment/webhook`,
       success_url: successUrl ?? `${siteUrl}/report?scan_id=${scanId}`,
       cancel_url: siteUrl,
       is_fee_paid_by_user: false,
