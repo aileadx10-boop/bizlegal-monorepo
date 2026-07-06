@@ -32,6 +32,7 @@ KEYS = [
 
 def _read_local_env() -> dict:
     vals = {}
+    # 1) Try Hetzner .env (production source of truth)
     try:
         with open("/opt/bizlegal/curator/.env", encoding="utf-8") as f:
             for line in f:
@@ -41,6 +42,11 @@ def _read_local_env() -> dict:
                 k, v = line.split("=", 1)
                 vals[k.strip()] = v.strip()
     except Exception: pass
+    # 2) Fall back to process env (so you can pass the 4 keys inline
+    #    from a Windows vault without rewriting the .env file)
+    for k in KEYS:
+        if k in os.environ and os.environ[k] and k not in vals:
+            vals[k] = os.environ[k]
     return vals
 
 
