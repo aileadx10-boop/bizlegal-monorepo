@@ -55,7 +55,27 @@ def get_resend_key() -> str:
 
 
 def get_anthropic_key() -> str:
-    return _get("ANTHROPIC_API_KEY")
+    return _get("ANTHROPIC_API_KEY", "ANTHROPIC_API_KEY_ENRICH")
+
+
+def get_apify_token() -> str:
+    return _get("APIFY_API_TOKEN")
+
+
+def get_firecrawl_key() -> str:
+    return _get("FIRECRAWL_API_KEY")
+
+
+def get_apollo_key() -> str:
+    return _get("APOLLO_API_KEY")
+
+
+def get_tavily_key() -> str:
+    return _get("TAVILY_API_KEY")
+
+
+def get_blotato_key() -> str:
+    return _get("BLOTATO_API_KEY")
 
 
 def get_telegram() -> tuple[str, str]:
