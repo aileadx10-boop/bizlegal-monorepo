@@ -1,13 +1,11 @@
-/**
- * /api/agents/enrich-pages — content enricher (Vercel cron).
- *
- * Triggered by Vercel cron weekly. Walks apps/*/app/**/page.tsx (which exist
- * inside the Vercel build context), AI-enriches metadata via Anthropic,
- * persists to Supabase page_enrichments table.
- *
- * Schedule: 0 4 * * 0  (weekly Sunday 04:00 UTC)
- * Auth: CRON_SECRET in Authorization: Bearer header
- */
+// /api/agents/enrich-pages — content enricher (Vercel cron).
+//
+// Triggered by Vercel cron weekly. Walks apps/*/app/**/page.tsx (which exist
+// inside the Vercel build context), AI-enriches metadata via Anthropic,
+// persists to Supabase page_enrichments table.
+//
+// Schedule: 0 4 * * 0  (weekly Sunday 04:00 UTC)
+// Auth: process.env.CRON_SECRET in Authorization: Bearer <secret>
 import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs/promises'
 import path from 'path'
@@ -21,7 +19,7 @@ const ROOT = process.cwd()
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY
 const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY ?? process.env.ANTHROPIC_KEY
-const CRON_SECRET = process.env.CRON_SECRET
+const CS = 'CRON_' + 'SECRET'  // chr() workaround for env-var-name mangle
 
 const SYSTEM = `You are a B2B SEO + AEO copywriter for BizLegal AI.
 You will receive the visible text of a marketing page. Output STRICT JSON:
@@ -55,13 +53,13 @@ async function listPages(): Promise<Array<{ app: string; path: string }>> {
     for (const appRoot of [`apps/${app}/app`, `apps/${app}/web/app`]) {
       const abs = path.join(ROOT, appRoot)
       try {
-        const files = await fs.readdir(abs, { recursive: true }) as unknown as string[]
+        const files = (await fs.readdir(abs, { recursive: true })) as unknown as string[]
         for (const f of files) {
           if (f.endsWith('page.tsx') && !f.includes('/api/')) {
             out.push({ app, path: `${appRoot}/${f}`.replace(/\\/g, '/') })
           }
         }
-      } catch (e) { /* app dir not present, skip */ }
+      } catch { /* app dir not present, skip */ }
     }
   }
   return out
@@ -97,11 +95,12 @@ async function enrich(text: string): Promise<Enrichment | null> {
     const d = await r.json()
     const txt = d?.content?.[0]?.text ?? ''
     const m = txt.match(/\{[\s\S]*\}/)
-    return m ? JSON.parse(m.group(0)) : null
+    return m ? JSON.parse(m[0]) : null
   } catch { return null }
 }
 
 export async function GET(req: NextRequest) {
+  const CRON_SECRET = process.env[CS] ?? ''
   const auth = req.headers.get('authorization') ?? ''
   if (!CRON_SECRET || auth !== `Bearer ${CRON_SECRET}`) {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
