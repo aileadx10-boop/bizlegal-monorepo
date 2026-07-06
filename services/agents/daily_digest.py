@@ -196,6 +196,32 @@ def send_resend(html: str, subject: str) -> bool:
         return False
 
 
+def send_via_hub_relay(html: str, subject: str) -> bool:
+    """Relay through hub /api/internal/send-email (HMAC-signed).
+
+    Cloudflare permanently blocks Hetzner IPs on api.resend.com
+    (403 error 1010) — Vercel's egress is not blocked, so the hub
+    sends on our behalf. Signature scheme matches /api/ops/log.
+    """
+    import hashlib, hmac as _hmac
+    secret = os.environ.get("BIZLEGAL_INBOUND_SECRET", "")
+    if not secret: return False
+    try:
+        payload = json.dumps({"to": TO_EMAIL, "subject": subject, "html": html, "from": FROM_EMAIL}).encode()
+        sig = _hmac.new(secret.encode(), payload, hashlib.sha256).hexdigest()
+        req = urllib.request.Request(
+            "https://bizlegal-ai.com/api/internal/send-email",
+            data=payload,
+            headers={"Content-Type": "application/json", "x-bizlegal-signature": sig},
+            method="POST",
+        )
+        urllib.request.urlopen(req, timeout=20)
+        return True
+    except Exception as e:
+        print(f"[daily_digest] hub relay err: {e}")
+        return False
+
+
 def send_gmail_smtp(html: str, subject: str) -> bool:
     """SMTP fallback if Resend is down. Uses Gmail app password."""
     if not GMAIL_USER or not GMAIL_PASS: return False
@@ -224,6 +250,8 @@ def run(ctx=None) -> dict:
     sent_via = "none"
     if send_resend(html, subject):
         sent_via = "resend"
+    elif send_via_hub_relay(html, subject):
+        sent_via = "hub_relay"
     elif send_gmail_smtp(html, subject):
         sent_via = "gmail_smtp"
     duration = int((datetime.now(timezone.utc) - started).total_seconds() * 1000)
