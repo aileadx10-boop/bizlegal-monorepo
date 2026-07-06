@@ -18,7 +18,8 @@ Action for each project:
 from __future__ import annotations
 import os, json, sys, urllib.request, urllib.error
 
-PROJECTS = ["hub", "docai", "tracr", "lexaudit", "brai", "leadforge", "forge"]
+# Real Vercel project names (verified via /v9/projects on 2026-07-05)
+PROJECTS = ["bizlegal-ai", "docai-frontend", "lexaudit", "brai", "leadforge-ai", "trcr", "forge"]
 TEAM_ID = "team_MIY0V66DInbXE2vxoZd6ay3D"
 KEYS = [
     "STRIPE_SECRET_KEY",
