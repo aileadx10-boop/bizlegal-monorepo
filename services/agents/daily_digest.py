@@ -186,7 +186,8 @@ def send_resend(html: str, subject: str) -> bool:
                 "subject": subject,
                 "html": html,
             }).encode(),
-            headers={"Authorization": f"Bearer {RESEND_KEY}", "Content-Type": "application/json"},
+            headers={"Authorization": f"Bearer {RESEND_KEY}", "Content-Type": "application/json",
+                     "User-Agent": "bizlegal-agent/1.0"},
             method="POST",
         )
         urllib.request.urlopen(req, timeout=15)
@@ -212,7 +213,8 @@ def send_via_hub_relay(html: str, subject: str) -> bool:
         req = urllib.request.Request(
             "https://bizlegal-ai.com/api/internal/send-email",
             data=payload,
-            headers={"Content-Type": "application/json", "x-bizlegal-signature": sig},
+            headers={"Content-Type": "application/json", "x-bizlegal-signature": sig,
+                     "User-Agent": "bizlegal-agent/1.0"},
             method="POST",
         )
         urllib.request.urlopen(req, timeout=20)
