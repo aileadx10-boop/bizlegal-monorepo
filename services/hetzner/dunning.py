@@ -156,7 +156,7 @@ def _send_email(to, subject, body, dry_run):
         return False
     code, resp = _http(
         "https://api.resend.com/emails",
-        {"Authorization": f"Bearer {RESEND_API_KEY}"},
+        {"Authorization": f"Bearer {RESEND_API_KEY}", "User-Agent": "bizlegal-agent/1.0"},
         data={"from": FROM_EMAIL, "to": [to], "subject": subject, "text": body},
         method="POST",
     )

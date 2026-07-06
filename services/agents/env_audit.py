@@ -28,7 +28,7 @@ PROBES = [
     ("APIFY_API_TOKEN", "Apify", "https://api.apify.com/v2/users/me",
      lambda v: {"Authorization": f"Bearer {v}"}, None),
     ("RESEND_API_KEY", "Resend", "https://api.resend.com/domains",
-     lambda v: {"Authorization": f"Bearer {v}"}, None),
+     lambda v: {"Authorization": f"Bearer {v}", "User-Agent": "bizlegal-agent/1.0"}, None),
     ("NOWPAYMENTS_API_KEY", "NOWPayments", "https://api.nowpayments.io/v1/currencies",
      lambda v: {"x-api-key": v}, None),
     ("STRIPE_SECRET_KEY", "Stripe", "https://api.stripe.com/v1/balance",

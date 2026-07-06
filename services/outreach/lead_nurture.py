@@ -79,7 +79,7 @@ def supabase_update(table, match, updates):
 def resend_send(to, subject, body):
     if not RESEND_KEY: return {"status": 0, "error": "no key"}
     s, r = http_json("https://api.resend.com/emails",
-        headers={"Authorization": f"Bearer {RESEND_KEY}", "Content-Type": "application/json"},
+        headers={"Authorization": f"Bearer {RESEND_KEY}", "Content-Type": "application/json", "User-Agent": "bizlegal-agent/1.0"},
         data=json.dumps({"from": f"Moses @ BizLegal AI <{RESEND_FROM}>", "to": [to],
                           "subject": subject, "text": body, "reply_to": "moses@bizlegal-ai.com"}),
         method="POST")

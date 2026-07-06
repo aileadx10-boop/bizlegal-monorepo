@@ -187,7 +187,7 @@ def _send_resend(to, subject, html):
                 "subject": subject,
                 "html": html,
             }).encode(),
-            headers={"Authorization": f"Bearer {RESEND}", "Content-Type": "application/json"},
+            headers={"Authorization": f"Bearer {RESEND}", "Content-Type": "application/json", "User-Agent": "bizlegal-agent/1.0"},
             method="POST",
         )
         r = urllib.request.urlopen(req, timeout=30)

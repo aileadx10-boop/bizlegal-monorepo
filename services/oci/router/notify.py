@@ -134,6 +134,7 @@ def resend_partner_email(
         headers={
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
+            "User-Agent": "bizlegal-agent/1.0",
         },
         json=payload,
     )

@@ -153,7 +153,7 @@ def resend_send(to: str, subject: str, body: str, reply_to: str = None) -> dict:
     }
     status, resp = http_json(
         "https://api.resend.com/emails",
-        headers={"Authorization": f"Bearer {RESEND_KEY}", "Content-Type": "application/json"},
+        headers={"Authorization": f"Bearer {RESEND_KEY}", "Content-Type": "application/json", "User-Agent": "bizlegal-agent/1.0"},
         data=json.dumps(payload), method="POST",
     )
     return {"status": status, "id": resp.get("id", "") if isinstance(resp, dict) else "",

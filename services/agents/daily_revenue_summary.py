@@ -41,7 +41,7 @@ def _send(html: str, subject: str) -> str:
     try:
         body = json.dumps({"from": FROM_EMAIL, "to": [TO_EMAIL], "subject": subject, "html": html}).encode()
         req = urllib.request.Request("https://api.resend.com/emails", data=body,
-            headers={"Authorization": "Bearer " + RESEND_KEY, "Content-Type": "application/json"})
+            headers={"User-Agent": "bizlegal-agent/1.0", "Authorization": "Bearer " + RESEND_KEY, "Content-Type": "application/json"})
         r = urllib.request.urlopen(req, timeout=10)
         return r.read().decode()[:200]
     except urllib.error.HTTPError as e:

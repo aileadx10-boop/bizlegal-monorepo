@@ -433,6 +433,7 @@ def resend_send(to_email: str, to_name: str, subject: str, body: str, ps: str,
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {api_key}",
+                "User-Agent": "bizlegal-agent/1.0",
             },
         )
         with urllib.request.urlopen(req, timeout=20) as r:
