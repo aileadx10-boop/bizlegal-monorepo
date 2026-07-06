@@ -95,7 +95,7 @@ def _classify_with_claude(query: str, results: list) -> list:
             "for a custom compliance AI build ($2.5K-$40K). "
             "High score (70+) = real company with real pain. "
             "Low score (<40) = generic content, news, or listicles. "
-            "Output STRICT JSON: {"results": [{"idx": <int>, "score": <int>, "company": "<name or ''>", "reason": "<one short sentence>"}]}\n\n"
+            'Output STRICT JSON: {"results": [{"idx": <int>, "score": <int>, "company": "<name>", "reason": "<one short sentence>"}]}\n\n'
             f"Query: {query}\n\nResults:\n{json.dumps(compact, indent=1)}"
         )
         req = urllib.request.Request(

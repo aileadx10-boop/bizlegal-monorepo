@@ -71,9 +71,7 @@ def _gen_email(lead: dict) -> dict:
             data=json.dumps({
                 "model": "claude-haiku-4-5", "max_tokens": 600,
                 "system": EMAIL_SYSTEM,
-                "messages": [{"role": "user", "content": f"Company: {company}
-Signal source: {source}
-Write the cold email."}],
+                "messages": [{"role": "user", "content": f"Company: {company}\nSignal source: {source}\nWrite the cold email."}],
             }).encode(),
             headers={"x-api-key": ANTHROPIC_KEY, "anthropic-version": "2023-06-01", "content-type": "application/json"},
             method="POST",
