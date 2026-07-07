@@ -171,7 +171,7 @@ def send_email(to: str | list, subject: str, html: str, tags: list = None) -> bo
     try:
         r = requests.post(
             f"{RESEND_API}/emails",
-            headers={"Authorization": f"Bearer {RESEND_KEY}", "Content-Type": "application/json"},
+            headers={"Authorization": f"Bearer {RESEND_KEY}", "Content-Type": "application/json", "User-Agent": "bizlegal-agent/1.0"},
             json=payload,
             timeout=20,
         )
@@ -196,7 +196,7 @@ def get_subscriber_list() -> list[str]:
     try:
         r = requests.get(
             f"{RESEND_API}/audiences/{audience_id}/contacts",
-            headers={"Authorization": f"Bearer {RESEND_KEY}"},
+            headers={"Authorization": f"Bearer {RESEND_KEY}", "User-Agent": "bizlegal-agent/1.0"},
             timeout=15,
         )
         r.raise_for_status()
