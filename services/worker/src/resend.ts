@@ -53,6 +53,7 @@ export async function sendEmail(env: Env, args: GenericEmailArgs): Promise<SendE
   const fetchHeaders: Record<string, string> = {
     Authorization: `Bearer ${env.RESEND_API_KEY}`,
     "content-type": "application/json",
+    "user-agent": "bizlegal-agent/1.0",
   };
   if (args.idempotencyKey) {
     fetchHeaders["Idempotency-Key"] = args.idempotencyKey;
@@ -111,7 +112,8 @@ export async function sendSnapshotEmail(
     method: "POST",
     headers: {
       Authorization: `Bearer ${env.RESEND_API_KEY}`,
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "user-agent": "bizlegal-agent/1.0"
     },
     body: JSON.stringify(body)
   });

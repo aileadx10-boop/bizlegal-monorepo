@@ -118,7 +118,8 @@ def resend_send(to: str, subject: str, body: str) -> str:
                               "to": [to], "subject": subject, "text": body}).encode(),
             method="POST",
             headers={"Authorization": f"Bearer {RESEND_KEY}",
-                     "Content-Type": "application/json"},
+                     "Content-Type": "application/json",
+                     "User-Agent": "bizlegal-agent/1.0"},
         )
         r = json.loads(urllib.request.urlopen(req, timeout=15).read())
         return r.get("id", "")

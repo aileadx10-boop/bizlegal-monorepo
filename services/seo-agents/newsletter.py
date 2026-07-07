@@ -101,7 +101,7 @@ def main():
         try:
             req = urllib.request.Request(
                 f'https://api.resend.com/audiences/{audience_id}/contacts?limit=2000',
-                headers={'Authorization': 'Bearer ' + resend},
+                headers={'Authorization': 'Bearer ' + resend, 'User-Agent': 'bizlegal-agent/1.0'},
             )
             r = json.loads(urllib.request.urlopen(req, timeout=10).read())
             subs = [{'email': c['email']} for c in r.get('data', []) if c.get('email') and not c.get('unsubscribed')]
@@ -147,7 +147,7 @@ def main():
             req = urllib.request.Request(
                 'https://api.resend.com/emails',
                 data=req_body,
-                headers={'Authorization': 'Bearer ' + resend, 'Content-Type': 'application/json'},
+                headers={'Authorization': 'Bearer ' + resend, 'Content-Type': 'application/json', 'User-Agent': 'bizlegal-agent/1.0'},
                 method='POST',
             )
             r = urllib.request.urlopen(req, timeout=15)
@@ -172,7 +172,7 @@ def main():
                 req = urllib.request.Request(
                     'https://api.resend.com/emails',
                     data=req_body,
-                    headers={'Authorization': 'Bearer ' + resend, 'Content-Type': 'application/json'},
+                    headers={'Authorization': 'Bearer ' + resend, 'Content-Type': 'application/json', 'User-Agent': 'bizlegal-agent/1.0'},
                     method='POST',
                 )
                 r = urllib.request.urlopen(req, timeout=10)

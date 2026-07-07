@@ -98,6 +98,7 @@ def log_event(
             headers={
                 "x-bizlegal-signature": sig,
                 "Content-Type": "application/json",
+                "User-Agent": "bizlegal-agent/1.0",
             },
             timeout=timeout,
         )

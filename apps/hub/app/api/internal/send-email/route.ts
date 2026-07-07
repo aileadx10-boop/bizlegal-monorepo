@@ -77,6 +77,7 @@ export async function POST(req: NextRequest) {
     headers: {
       Authorization: `Bearer ${resendKey}`,
       'Content-Type': 'application/json',
+      'User-Agent': 'bizlegal-agent/1.0',
     },
     body: JSON.stringify({
       from: body.from && String(body.from).includes(ALLOWED_DOMAIN) ? body.from : DEFAULT_FROM,
