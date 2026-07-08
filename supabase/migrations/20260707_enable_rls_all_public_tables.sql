@@ -137,3 +137,42 @@ BEGIN
     RAISE NOTICE 'SUMMARY: % tables had RLS enabled, % were already protected', rls_off_count, rls_already_on_count;
 END
 $$;
+
+-- ────────────────────────────────────────────────────────────────
+-- SECTION 2 (added 2026-07-08): policies for tables the browsers
+-- actually read/write with the ANON/authenticated key. Without these,
+-- enabling RLS blanks the DocAI Conductor dashboard, the LexAudit
+-- dashboard + matter flows, and the PUBLIC certificate share pages.
+-- Traced from source:
+--   apps/docai/web/app/dashboard/**      → conductor_reports, conductor_reviews (read, logged-in)
+--   apps/lexaudit/app/certificate/[id]   → certificates (read, ANON — public share page by design)
+--   apps/lexaudit/app/dashboard          → subscriptions (read), matters (read/insert)
+--   apps/lexaudit/app/matter/[id]        → matters (read/update), ai_logs (read/insert)
+-- These preserve the exact status-quo access (which was fully public)
+-- for only these flows — a strict security improvement on the other
+-- 80+ tables. Tighten per-user scoping as a follow-up.
+-- ────────────────────────────────────────────────────────────────
+
+-- Public certificate share pages (cert id in URL is the access token)
+DROP POLICY IF EXISTS "public read certificates" ON public.certificates;
+CREATE POLICY "public read certificates" ON public.certificates
+  FOR SELECT TO anon, authenticated USING (true);
+
+-- Logged-in DocAI Conductor dashboard
+DROP POLICY IF EXISTS "authenticated read conductor_reports" ON public.conductor_reports;
+CREATE POLICY "authenticated read conductor_reports" ON public.conductor_reports
+  FOR SELECT TO authenticated USING (true);
+DROP POLICY IF EXISTS "authenticated read conductor_reviews" ON public.conductor_reviews;
+CREATE POLICY "authenticated read conductor_reviews" ON public.conductor_reviews
+  FOR SELECT TO authenticated USING (true);
+
+-- Logged-in LexAudit dashboard + matter workflow
+DROP POLICY IF EXISTS "authenticated read subscriptions" ON public.subscriptions;
+CREATE POLICY "authenticated read subscriptions" ON public.subscriptions
+  FOR SELECT TO authenticated USING (true);
+DROP POLICY IF EXISTS "authenticated all matters" ON public.matters;
+CREATE POLICY "authenticated all matters" ON public.matters
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
+DROP POLICY IF EXISTS "authenticated all ai_logs" ON public.ai_logs;
+CREATE POLICY "authenticated all ai_logs" ON public.ai_logs
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
