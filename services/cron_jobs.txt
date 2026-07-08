@@ -12,6 +12,14 @@
 */30 * * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/code_fixer.py >> /var/log/code-fixer.log 2>&1
 # Content enricher (every 6h)
 0 */6 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/content_enricher.py >> /var/log/seo-agents.log 2>&1
+# Content enricher v2 (backfill regulation_tag, fix jurisdiction, deploy flag) — daily 02:00 UTC
+0 2 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/content_enricher_v2.py >> /var/log/seo-agents.log 2>&1
+# AEO loop v2 (FAQ + JSON-LD for top 5 published pages) — daily 03:00 UTC
+0 3 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/aeo_loop_v2.py >> /var/log/seo-agents.log 2>&1
+# Index watchdog (IndexNow ping + GSC sitemap + drop alerts) — daily 04:00 UTC
+0 4 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/index_watchdog.py >> /var/log/seo-agents.log 2>&1
+# SEO dispatcher (write + publish + ping, every 12h: 00:00 and 12:00 UTC)
+0 0,12 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/seo_dispatcher.py >> /var/log/seo-agents.log 2>&1
 # Revenue alerter (every minute — needs Python script support, use */1)
 */1 * * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/revenue_alerter.py >> /var/log/seo-agents.log 2>&1
 # Daily revenue summary (18:00 UTC)
