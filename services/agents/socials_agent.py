@@ -18,7 +18,11 @@ import json, os, time
 from datetime import datetime, timezone
 from pathlib import Path
 import sys as _sys
+# Insert the file's own dir FIRST for sibling imports (orchestrator, etc.),
+# but also insert the repo root so we get the canonical _env.py that has
+# get_blotato_key + _load_dotenv_once.
 _sys.path.insert(0, str(Path(__file__).resolve().parent))
+_sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 import _env
 try:
     from orchestrator import heartbeat as _heartbeat

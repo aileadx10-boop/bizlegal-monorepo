@@ -2,6 +2,8 @@
 services/agents — THE MACHINE: 8 specialist agents + 1 orchestrator.
 
 Built 2026-07-03. See decisions/THE-MACHINE-2026-07-03.md for the plan.
+Updated 2026-07-08: real package marker (was docstring-only) so the
+orchestrator's `from services.agents.code_agent import run` works.
 
 Agents (8):
   - enrichment    (Firecrawl + Apify + Apollo -> 360 lead profiles)
