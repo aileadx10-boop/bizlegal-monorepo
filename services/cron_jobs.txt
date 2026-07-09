@@ -24,3 +24,6 @@
 */1 * * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/revenue_alerter.py >> /var/log/seo-agents.log 2>&1
 # Daily revenue summary (18:00 UTC)
 0 18 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/daily_revenue_summary.py >> /var/log/seo-agents.log 2>&1
+# Opt-in outreach (consent-only, 5 sends/day, post-incident 2026-07-10) — daily 14:00 UTC
+# DISABLED until Moses approves re-enable per ef3d90e incident doc
+# 0 14 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/opt_in_outreach.py >> /var/log/opt-in-outreach.log 2>&1
