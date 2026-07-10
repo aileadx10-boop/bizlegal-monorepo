@@ -62,7 +62,8 @@ function verifySvixSignature(rawBody: string, headers: Headers): boolean {
   })
 }
 
-async function handleEvent(sb: ReturnType<typeof createClient>, event: any) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- webhook handler writes dynamic computed-key columns; the generated client generics reject them
+async function handleEvent(sb: any, event: any) {
   const etype: string = event?.type || ''
   const data = event?.data || {}
   // Resend payload: data.to = [emails], data.email_id = message id
