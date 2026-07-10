@@ -140,6 +140,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Please use a real, personal email address (no role inboxes)' }, { status: 400 })
   }
   const cleaned = email.trim().toLowerCase()
+  // Normalize vertical_interest: accept string OR array, store as text[] (Postgres array)
+  let verticalForDb: string[] | null = null
+  if (Array.isArray(vertical_interest)) {
+    verticalForDb = vertical_interest.filter((v: any) => typeof v === 'string').map((v: string) => v.slice(0, 64))
+    if (verticalForDb.length === 0) verticalForDb = null
+  } else if (typeof vertical_interest === 'string' && vertical_interest.trim().length > 0) {
+    // Single string -> array of 1
+    verticalForDb = [vertical_interest.trim().slice(0, 64)]
+  }
   const sb = getClient()
 
   // Reject if already on suppression list
@@ -160,13 +169,12 @@ export async function POST(req: NextRequest) {
     .upsert({
       email: cleaned,
       source,
-      vertical_interest,
+      vertical_interest: verticalForDb,
       subscribed_at: new Date().toISOString(),
       active: true,
       double_optin_confirmed: false,
       double_optin_at: null,
       unsubscribed_at: null,
-      // double_optin_token + double_optin_token_expires columns are new
       double_optin_token: fullToken,
       double_optin_token_expires: expiresAt,
     }, { onConflict: 'email' })

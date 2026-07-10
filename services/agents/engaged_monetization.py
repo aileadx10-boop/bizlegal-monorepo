@@ -130,19 +130,21 @@ def fetch_engaged_leads(limit: int = MAX_LINKS_PER_RUN * 2) -> list:
             })
     except Exception as e:
         print(f"  [outreach-fetch-err] {type(e).__name__}: {e}")
-    # 2. inbound-lead with pricing/quote/invoice/demo in subject
+    # 2. inbound_leads with score >= 60 OR summary containing 'pricing'|'quote'|'invoice'|'demo'|'buy'
+    # PostgREST or= syntax: each comma-separated value is AND'd unless wrapped in or()
+    # Format: or=(cond1,cond2,...) for OR, and=(cond1,cond2) for AND
     try:
-        q = ("/rest/v1/inbound-lead?select=id,email,name,subject,product"
-             "&or=(subject.ilike.*pricing*,subject.ilike.*quote*,subject.ilike.*invoice*,subject.ilike.*demo*)"
+        q = ("/rest/v1/inbound_leads?select=id,email,product,source,score,summary,metadata,created_at"
+             "&or=(score.gte.60,summary.ilike.*pricing*,summary.ilike.*quote*,summary.ilike.*invoice*,summary.ilike.*demo*,summary.ilike.*buy*)"
              "&order=created_at.desc&limit=20")
         r = urllib.request.urlopen(urllib.request.Request(SUPABASE_URL + q, headers=_headers()), timeout=10)
         for row in json.loads(r.read()):
             engaged.append({
                 "email": row.get("email"),
-                "name": row.get("name") or "",
+                "name": "",
                 "company": "",
                 "trigger": "inbound_pricing_request",
-                "context": row.get("product") or "general",
+                "context": row.get("product") or row.get("summary") or "general",
                 "source_id": row["id"],
             })
     except Exception as e:
