@@ -139,6 +139,9 @@ ON CONFLICT (email) DO NOTHING;
 ALTER TABLE public.newsletter_subscribers
     ADD COLUMN IF NOT EXISTS double_optin_confirmed boolean NOT NULL DEFAULT false,
     ADD COLUMN IF NOT EXISTS double_optin_at timestamptz,
-    ADD COLUMN IF NOT EXISTS consent_log_id uuid REFERENCES public.email_consent_log(id);
+    ADD COLUMN IF NOT EXISTS consent_log_id uuid REFERENCES public.email_consent_log(id),
+    ADD COLUMN IF NOT EXISTS double_optin_token text,
+    ADD COLUMN IF NOT EXISTS double_optin_token_expires timestamptz;
 
 CREATE INDEX IF NOT EXISTS idx_newsletter_active ON public.newsletter_subscribers (active, double_optin_confirmed);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_newsletter_token ON public.newsletter_subscribers (double_optin_token) WHERE double_optin_token IS NOT NULL;
