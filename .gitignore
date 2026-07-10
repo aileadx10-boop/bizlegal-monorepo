@@ -60,3 +60,5 @@ drafts/
 
 # Session scratch files (vault dumps, health probes — never commit)
 scripts/_*
+tmp_probes/
+tmp_*.py
