@@ -153,6 +153,22 @@ def run(ctx=None):
     posted = 0
     errors = 0
     results = []
+    # Loud failure guard (2026-07-10 fix): if Blotato key is empty, every post
+    # will silently fail with ok=false. Surface the error ONCE at the top of
+    # the run so the digest + agent_runs.details shows the actual cause.
+    if not BLOTATO and not dry_run:
+        err_msg = "no BLOTATO_API_KEY — socials_agent cannot post until BLOTATO_API_KEY is set in /opt/bizlegal/curator/.env"
+        return {
+            "ok": False,
+            "agent": "socials",
+            "posted": 0,
+            "errors": len(platforms) * max(1, len(queued)),
+            "results": [{"platform": p, "ok": False, "url": None, "error": err_msg} for p in platforms],
+            "error": err_msg,  # top-level for digest visibility
+            "blotato_configured": False,
+            "duration_ms": int((time.time() - started) * 1000),
+            "dry_run": dry_run,
+        }
     for post in queued:
         body = post.get("body", "")
         if not body:
@@ -165,13 +181,19 @@ def run(ctx=None):
                 posted += 1
             else:
                 errors += 1
-            results.append({"platform": platform, "ok": result.get("ok", False), "url": result.get("url")})
+            results.append({
+                "platform": platform,
+                "ok": result.get("ok", False),
+                "url": result.get("url"),
+                "error": result.get("error", ""),  # 2026-07-10 fix: include error in result
+            })
     return {
         "ok": errors == 0,
         "agent": "socials",
         "posted": posted,
         "errors": errors,
         "results": results[:20],
+        "blotato_configured": bool(BLOTATO),
         "duration_ms": int((time.time() - started) * 1000),
         "dry_run": dry_run,
     }
