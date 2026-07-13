@@ -3,7 +3,7 @@
  * POST /api/sales/drafts — (internal) create a new draft from the agent
  * PATCH /api/sales/drafts/[id] — approve / reject / edit a draft
  *
- * Built 2026-07-13. Auth via OPS_DASHBOARD_TOKEN (the founder's session token).
+ * Built 2026-07-13. Auth via OPS_DASHBOARD_TOKEN.
  */
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
@@ -42,13 +42,11 @@ export async function PATCH(req: NextRequest) {
   const { id, action, edited_body, edited_subject } = await req.json()
   if (!id || !action) return NextResponse.json({ error: "id and action required" }, { status: 400 })
 
-  // Pre-flight: 6 consent primitives enforced
+  // Pre-flight: 6 consent primitives
   const { data: draft, error: e1 } = await sb().from("sales_outreach").select("*, sales_lead(email, source)").eq("id", id).single()
   if (e1 || !draft) return NextResponse.json({ error: "draft not found" }, { status: 404 })
 
   if (action === "approve") {
-    // Primitive 1: DRAFT-ONLY (we are explicitly approving this one)
-    // Primitive 2: OPT-IN-ONLY (only inbound, double_optin, or pre-approved sources)
     const source = (draft.sales_lead as any)?.source || ""
     const optInAllowed = source.startsWith("inbound_") || source === "double_optin" || source === "manual"
     if (!optInAllowed) {
@@ -67,7 +65,7 @@ export async function PATCH(req: NextRequest) {
       consent_type: source.startsWith("inbound_") ? "implied" : "cold_approved",
       evidence_url: source,
     })
-    // Primitive 5: cap check (read from sales_cap table)
+    // Primitive 5: cap check
     const todayStart = new Date(); todayStart.setUTCHours(0, 0, 0, 0)
     const { count: todayCount } = await sb().from("sales_outreach").select("id", { count: "exact" }).gte("sent_at", todayStart.toISOString())
     const { data: capRow } = await sb().from("sales_cap").select("value_int").eq("name", "max_outreach_per_day").single()
@@ -75,7 +73,6 @@ export async function PATCH(req: NextRequest) {
     if ((todayCount || 0) >= cap) {
       return NextResponse.json({ error: `daily cap ${cap} reached`, sent_today: todayCount }, { status: 429 })
     }
-    // All 6 primitives passed. Mark approved.
     const update: any = {
       status: "approved",
       approved_at: new Date().toISOString(),

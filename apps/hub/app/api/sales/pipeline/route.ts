@@ -23,7 +23,6 @@ function authed(req: NextRequest) {
 export async function GET(req: NextRequest) {
   if (!authed(req)) return NextResponse.json({ error: "unauthorized" }, { status: 401 })
 
-  // Pipeline counts
   const { data: leads } = await sb().from("sales_lead").select("id, status, icp_score, email, full_name, company, source, created_at, updated_at")
   const byStatus: Record<string, any[]> = {}
   for (const l of leads || []) {
@@ -32,24 +31,19 @@ export async function GET(req: NextRequest) {
     byStatus[s].push(l)
   }
 
-  // Counters
   const counts: Record<string, number> = {}
   for (const s of Object.keys(byStatus)) counts[s] = byStatus[s].length
   counts.total = leads?.length || 0
 
-  // Drafts awaiting approval
   const { data: drafts } = await sb().from("sales_outreach").select("id").eq("status", "drafted")
   counts.drafts_pending = drafts?.length || 0
 
-  // Hot replies (last 24h, escalated)
   const yesterday = new Date(Date.now() - 86400000).toISOString()
   const { data: hotReplies } = await sb().from("sales_reply").select("id, body, received_at, lead_id").eq("escalated_to_moses", true).gte("received_at", yesterday)
   counts.hot_replies_24h = hotReplies?.length || 0
 
-  // Last 5 closed-won
   const { data: recentWins } = await sb().from("sales_event").select("*").eq("event_type", "closed_won").order("created_at", { ascending: false }).limit(5)
 
-  // Today's outreach cap usage
   const todayStart = new Date(); todayStart.setUTCHours(0, 0, 0, 0)
   const { count: sentToday } = await sb().from("sales_outreach").select("id", { count: "exact" }).gte("sent_at", todayStart.toISOString())
   const { data: capRow } = await sb().from("sales_cap").select("value_int").eq("name", "max_outreach_per_day").single()
