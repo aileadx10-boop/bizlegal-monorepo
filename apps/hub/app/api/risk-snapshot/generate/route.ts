@@ -126,7 +126,29 @@ export async function POST(req: Request) {
     }
 
     const siteText = await scrapeSite(url)
-    const snapshot = await generateSnapshot(siteText, url, jurisdiction, email)
+
+    let snapshot: Snapshot
+    try {
+      snapshot = await generateSnapshot(siteText, url, jurisdiction, email)
+    } catch (aiErr: any) {
+      // The analysis engine is down (e.g. LLM credit/quota). NEVER leak the
+      // raw provider error to a prospect — capture the lead and degrade
+      // gracefully so the frontend can offer a "we'll follow up" path.
+      const sbFail = getSupabase()
+      if (sbFail) {
+        sbFail.from("risk_snapshots").insert({
+          email, url, jurisdiction,
+          order_id: orderId || null,
+          recommended_fix: "PENDING — analysis queued (engine temporarily unavailable)",
+          created_at: new Date().toISOString(),
+        }).then(() => null, () => null)
+      }
+      console.error("[risk-snapshot] engine unavailable:", aiErr?.message)
+      return NextResponse.json(
+        { error: "analysis_unavailable", message: "Your snapshot is queued — our analysis engine is briefly at capacity. We've saved your request and you can retry in a few minutes." },
+        { status: 503 },
+      )
+    }
 
     // Persist (fire-and-forget; never break the user flow)
     const sb = getSupabase()
@@ -143,7 +165,9 @@ export async function POST(req: Request) {
 
     return NextResponse.json(snapshot)
   } catch (e: any) {
-    return NextResponse.json({ error: e?.message || "Snapshot failed" }, { status: 500 })
+    // Never leak internal error detail to the client.
+    console.error("[risk-snapshot] unexpected:", e?.message)
+    return NextResponse.json({ error: "snapshot_failed", message: "Something went wrong generating your snapshot. Please try again." }, { status: 500 })
   }
 }
 
