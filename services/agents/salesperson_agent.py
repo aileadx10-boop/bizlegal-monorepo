@@ -511,11 +511,13 @@ def classify_intent(body: str) -> tuple[str, float]:
 # ============================================================================
 
 def stage_close():
-    """For replied leads with 'interested' status and consent:
-    send the appropriate payment link (DocAI $97, Tracr $149, LexAudit $99)."""
-    print("\n[STAGE 4] CLOSE — sending payment links to qualified leads\n")
-    # Find leads with status=replied and recent interested reply
-    leads = sb_query("sales_lead?status=eq.replied&limit=10") or []
+    """Send payment links ONLY to leads Moses has explicitly approved in the
+    /sales UI (status='approved'). Post-incident rule: the agent never
+    auto-sends to score/reply-qualified leads — a human approves each first.
+    send_email() additionally suppression-checks every address."""
+    print("\n[STAGE 4] CLOSE — sending payment links to MOSES-APPROVED leads\n")
+    # status='approved' is set by Moses tapping Approve in /sales — never by the agent.
+    leads = sb_query("sales_lead?status=eq.approved&limit=10") or []
     if not isinstance(leads, list):
         return 0
     closed = 0
@@ -563,14 +565,27 @@ def _payment_link(product: dict, email: str) -> str:
 
 
 def send_email(to: str, subject: str, body: str) -> bool:
-    """Send via Resend. Returns True on success."""
+    """Send via Resend. Returns True on success.
+
+    Central send chokepoint. Post-incident rule (2026-07-10): EVERY send
+    path checks the suppression list first and never emails a suppressed
+    address. UA header required to clear Cloudflare (error 1010)."""
     if not RESEND_API_KEY or not to:
         return False
+    addr = to.strip().lower()
+    try:
+        supp = sb_query(f"email_suppression_list?email=eq.{urllib.parse.quote(addr)}&limit=1")
+        if isinstance(supp, list) and supp:
+            _log_event(event_type="send_blocked_suppressed", details={"to": addr})
+            return False
+    except Exception:
+        pass  # table missing = agent inert anyway; do not block on lookup error
     try:
         req = urllib.request.Request(
             "https://api.resend.com/emails",
             method="POST",
-            headers={"Authorization": f"Bearer {RESEND_API_KEY}", "Content-Type": "application/json"},
+            headers={"Authorization": f"Bearer {RESEND_API_KEY}", "Content-Type": "application/json",
+                     "User-Agent": "bizlegal-agent/1.0"},
             data=json.dumps({"from": RESEND_FROM, "to": [to], "subject": subject, "text": body}).encode(),
         )
         with urllib.request.urlopen(req, timeout=15) as r:
@@ -616,15 +631,19 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--stage", type=int, choices=[1, 2, 3, 4], help="Run a specific stage")
     p.add_argument("--all", action="store_true", help="Run all 4 stages in sequence")
+    p.add_argument("--draft-only", action="store_true",
+                   help="Safe cron mode: intake + draft only (stages 1-2). NEVER triage/close (no sends). Default for automation.")
     p.add_argument("--dry-run", action="store_true", help="Preview without writing")
     args = p.parse_args()
     if args.dry_run:
         print("[DRY-RUN] No writes")
         return
     started = time.time()
-    if args.all or args.stage == 1:
+    # --draft-only is the cron-safe mode: stages 3 (triage-send) and 4 (close-send)
+    # are human-approval gated and MUST NOT run unattended (post-incident rule).
+    if args.draft_only or args.all or args.stage == 1:
         stage_intake()
-    if args.all or args.stage == 2:
+    if args.draft_only or args.all or args.stage == 2:
         stage_draft()
     if args.all or args.stage == 3:
         stage_triage()
