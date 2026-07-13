@@ -62,24 +62,50 @@ funnel. If you skip 0.1, everything below is moot.
 
 ---
 
-### PHASE 1 — Founder-led validation (WEEKS 1–8) — THE WHOLE BALLGAME
+### PHASE 1 — Introvert-friendly validation (WEEKS 1–10) — THE WHOLE BALLGAME
 
-This is the phase the old plan didn't have. No code. This is you.
+This is the phase the old plan didn't have. **Founder-AUTHORED, not
+founder-performing.** Moses is an introvert who dislikes live "human touch"
+— so this phase is deliberately built around a lawyer's real strengths:
+writing, depth, credibility, and async. NO cold calls. NO live demos.
 
-- **Pick ONE product + ONE ICP.** Recommendation: the **$2,500/mo Compliance
-  Ops Retainer** (matches your lawyer credibility; one sale ≈ half the $5K
-  target) OR **DocAI $97 scan** (low-friction volume play). Shelve the other 6.
-- **Reach 30–50 ICP prospects by hand** — warm network, real LinkedIn
-  presence, relevant communities. HUMAN outreach, never scraped lists
-  (that road is permanently closed — see the spam incident).
-- **Book 10 discovery calls. Do manual demos** of the (now-working) product.
-- **Target: 3–5 paying customers closed by hand.**
-- **HARD GATE:** if you cannot close 3–5 with direct founder effort, the
-  product or positioning is wrong and NO SEO engine fixes that. Stop and
-  fix positioning first. (This gate is the single most valuable thing in
-  this plan — it fails fast in 8 weeks instead of 12 months.)
-- The first customers become your **real testimonials/case studies** — the
-  only legitimate E-E-A-T fuel for Phase 2.
+- **Pick the SELF-SERVE product, not the high-touch one.** Recommendation
+  changed to **DocAI $97 contract/privacy scan** — it can sell with ZERO
+  conversations if the funnel + trust signals are right. (The $2,500/mo
+  retainer needs live consultative selling, which is the exact wrong fit
+  for an introvert — defer it until inbound produces warm, self-qualifying
+  leads.) Shelve the other 6 products.
+- **Inbound-first (plays to your strength).** Publish genuinely expert
+  compliance writing **under your real name + bar credentials** — 1–2 pieces/
+  week answering specific regulatory questions. This is writing (your job
+  already), it builds authority passively, and it generates INBOUND so
+  people come to you. For an introvert, inbound > outbound. Optimise every
+  piece for **AI citation (GEO)** — Perplexity/ChatGPT answer compliance
+  questions and can cite you without you ever talking to anyone.
+- **Async, written, tiny-volume outreach (never calls).** 10–20 genuinely
+  personalised written notes/week to REAL warm targets (your network, 2nd-
+  degree LinkedIn, relevant community members). The AI drafts (kills the
+  blank-page burden — your strength is editing, not cold-initiating), YOU
+  curate the list and approve each send. Every note offers an ASYNC next
+  step (the free tool link, a short Loom, a written audit) so the prospect
+  self-serves the "demo." Small volume + real people + genuine 1:1 = normal
+  professional outreach, the opposite of the scraped-blast incident.
+- **Optional: one partnership beats fifty conversations.** An introvert can
+  build ONE deep relationship (a compliance consultant, an accountant
+  network, a niche newsletter) that distributes to hundreds. Depth over
+  breadth.
+- **Target: 3–5 paying self-serve customers** from inbound + light written
+  outreach.
+- **HARD GATE:** if content + GEO + light written outreach can't produce a
+  single sale in ~10 weeks, the product or positioning is wrong — stop and
+  fix that before scaling. (Fails fast in 10 weeks instead of 12 months.)
+- **Honest tradeoff:** the introvert-friendly path is SLOWER and lower-
+  volume than aggressive founder sales, so the ramp stretches (~2 extra
+  weeks in Phase 1, and $5K MRR trends toward month 12–15 rather than 10).
+  That's a fair trade for a motion you'll actually execute. The one thing
+  that would speed it up without live selling is the single partnership.
+- First customers become your **real testimonials** — the only legitimate
+  E-E-A-T fuel for Phase 2.
 
 ---
 
