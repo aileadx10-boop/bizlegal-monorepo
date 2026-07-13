@@ -36,6 +36,13 @@ try:
 except Exception:
     pass
 
+# 2026-07-10 A8: refuse fabricated emails (compliance@<github-user>.github.io)
+try:
+    from email_guard import is_valid_lead_email
+except Exception:
+    def is_valid_lead_email(e):  # permissive fallback if module missing
+        return bool(e and "@" in e and "." in e)
+
 SUPABASE_URL = os.getenv("SUPABASE_URL") or os.getenv("NEXT_PUBLIC_SUPABASE_URL", "")
 SUPABASE_KEY = (
     os.getenv("SUPABASE_SERVICE_ROLE_KEY")
@@ -213,6 +220,7 @@ def run(ctx: dict | None = None) -> dict:
     errors = 0
     signals_found = 0
     drafted = []
+    skipped = 0  # 2026-07-10 A8: count of leads skipped due to invalid email
 
     # 1. Get signals (job postings)
     # ROAST-RESHAPE 2026-07-03: compliance hiring = company has compliance gap = buying signal.
@@ -244,6 +252,11 @@ def run(ctx: dict | None = None) -> dict:
     for i, lead in enumerate(leads[:limit]):
         if i >= len(hot_jobs):
             break
+        # 2026-07-10 A8: skip leads with fabricated emails
+        # (compliance@<github-username>.github.io etc.)
+        if not is_valid_lead_email(lead.get("email", "")):
+            skipped += 1
+            continue
         job = hot_jobs[i]
         company = (job.get("companyName") or job.get("company") or "").strip()
         # Skip if lead company != job company

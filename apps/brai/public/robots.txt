@@ -1,0 +1,67 @@
+# BRAI — robots.txt
+# Per Nate Herk (Skool AI Automation Society): explicitly allow AI crawlers.
+# We WANT to be cited by ChatGPT, Perplexity, Claude, Gemini.
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /clients
+Disallow: /reports
+Disallow: /orders
+Crawl-delay: 1
+
+# AI crawlers — explicitly allowed (we want to be cited)
+User-agent: Googlebot
+User-agent: Bingbot
+User-agent: DuckDuckBot
+User-agent: Slurp
+User-agent: Baiduspider
+User-agent: YandexBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: Claude-Web
+User-agent: anthropic-ai
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: GoogleOther
+User-agent: Gemini
+User-agent: Applebot-Extended
+User-agent: Applebot
+User-agent: meta-externalagent
+User-agent: meta-webindexer
+User-agent: xAI
+User-agent: grok
+User-agent: cohere-ai
+User-agent: cohere-training-data-crawler
+User-agent: YouBot
+User-agent: MistralAI-User
+User-agent: DeepSeekBot
+User-agent: DuckAssistBot
+User-agent: Amazonbot
+User-agent: facebookexternalhit
+User-agent: Twitterbot
+User-agent: LinkedInBot
+User-agent: Slackbot
+User-agent: TelegramBot
+User-agent: WhatsApp
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+
+User-agent: Bytespider
+User-agent: CCBot
+User-agent: Diffbot
+User-agent: ImagesiftBot
+User-agent: PetalBot
+User-agent: SemrushBot
+User-agent: AhrefsBot
+User-agent: MJ12bot
+User-agent: DotBot
+User-agent: BLEXBot
+Disallow: /
+
+Sitemap: https://brai.bizlegal-ai.com/sitemap.xml

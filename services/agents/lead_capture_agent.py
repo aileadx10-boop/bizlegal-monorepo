@@ -130,6 +130,13 @@ Each bullet: 1 sentence, max 25 words, specific (name regulation, jurisdiction, 
 def _upsert_lead(profile: dict, qualification: dict, summary: dict) -> str:
     """Insert or update the lead in leadforge_leads. Returns the lead id."""
     import urllib.request
+    # 2026-07-10 A8: refuse fabricated emails at insert time
+    try:
+        from email_guard import is_valid_lead_email as _is_valid
+    except Exception:
+        def _is_valid(e): return bool(e and "@" in e and "." in e)
+    if not _is_valid(profile.get("contact", {}).get("email")):
+        return None  # skip
     row = {
         "email": profile.get("contact", {}).get("email"),
         "full_name": profile.get("contact", {}).get("full_name"),
