@@ -87,7 +87,6 @@ export default function SalesPage() {
         <p className="text-sm text-gray-600 mt-1">Moses-approved only. Async-only. {c.sent_today}/{c.cap_per_day} sent today. {c.drafts_pending} draft(s) awaiting your review.</p>
       </header>
 
-      {/* Pipeline counters */}
       <section className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         {Object.entries({ new: "New leads", qualifying: "Qualifying", replied: "Replied", meeting: "Meeting", won: "Won", lost: "Lost", unsubscribed: "Unsub" }).map(([k, label]) => (
           <div key={k} className="bg-white rounded-xl p-3 shadow-sm">
@@ -97,7 +96,6 @@ export default function SalesPage() {
         ))}
       </section>
 
-      {/* Hot replies (escalated) */}
       {pipeline && pipeline.hot_replies.length > 0 && (
         <section className="bg-orange-50 border border-orange-200 rounded-xl p-4 mb-6">
           <h2 className="text-lg font-semibold text-orange-900 mb-2">🔥 Hot replies (last 24h)</h2>
@@ -110,7 +108,6 @@ export default function SalesPage() {
         </section>
       )}
 
-      {/* Drafts queue */}
       <section>
         <h2 className="text-lg font-semibold text-gray-900 mb-3">Drafts awaiting your review ({drafts.length})</h2>
         {drafts.length === 0 ? (
@@ -165,7 +162,6 @@ export default function SalesPage() {
         )}
       </section>
 
-      {/* Recent wins */}
       {pipeline && pipeline.recent_wins.length > 0 && (
         <section className="mt-8">
           <h2 className="text-lg font-semibold text-gray-900 mb-3">Recent wins</h2>
