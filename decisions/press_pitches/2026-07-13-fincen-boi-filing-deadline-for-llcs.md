@@ -1,7 +1,7 @@
 # Press pitch: FinCEN BOI filing deadline for LLCs
 
 **Category:** US FinCEN BOI
-**Generated:** 2026-07-13T15:29:55.031824+00:00
+**Generated:** 2026-07-13T21:25:13.775162+00:00
 
 ## Subject
 [Pitch] FinCEN BOI filing deadline for LLCs — available for 15-min interview + data

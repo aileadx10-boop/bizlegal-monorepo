@@ -1,7 +1,7 @@
 # Press pitch: OFAC SDN list update — Tornado Cash reversal
 
 **Category:** US OFAC sanctions
-**Generated:** 2026-07-13T15:29:55.031824+00:00
+**Generated:** 2026-07-13T21:25:13.776176+00:00
 
 ## Subject
 [Pitch] OFAC SDN list update — Tornado Cash reversal — available for 15-min interview + data

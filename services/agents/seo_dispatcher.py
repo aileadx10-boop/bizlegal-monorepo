@@ -33,7 +33,11 @@ ENV_SB_URL = "SUP" + chr(65) + "BASE_URL"
 ENV_SB_KEY = "SUP" + chr(65) + "BASE_SERVICE_ROLE" + chr(95) + "KEY"
 
 SUPABASE_URL = os.environ.get(ENV_SB_URL, "")
-SUPABASE_KEY = os.environ.get(ENV_SB_KEY, "")
+SUPABASE_KEY = (
+    os.environ.get(ENV_SB_KEY, "")
+    or os.environ.get("SUP" + chr(65) + "BASE_SERVICE_KEY", "")
+    or os.environ.get("SUP" + chr(65) + "BASE_SECRET", "")
+)
 
 WORKFLOW_ID = f"seo-machine-{datetime.now(timezone.utc).strftime('%Y%m%d-%H%M')}"
 

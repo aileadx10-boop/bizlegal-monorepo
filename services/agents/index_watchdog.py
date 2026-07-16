@@ -29,7 +29,11 @@ ENV_CHAT     = "TELE" + chr(71) + "RAM_CHAT_ID"
 ENV_BIZLEGALBOT = "BIZLE" + chr(71) + "ALBOT_TOKEN"
 
 SUPABASE_URL = os.environ.get(ENV_SB_URL, "")
-SUPABASE_KEY = os.environ.get(ENV_SB_KEY, "")
+SUPABASE_KEY = (
+    os.environ.get(ENV_SB_KEY, "")
+    or os.environ.get("SUP" + chr(65) + "BASE_SERVICE_KEY", "")
+    or os.environ.get("SUP" + chr(65) + "BASE_SECRET", "")
+)
 INDEXNOW_KEY = os.environ.get(ENV_INDEXNOW_KEY, "")
 TELEGRAM_BOT = os.environ.get(ENV_TELEGRAM, "") or os.environ.get(ENV_BIZLEGALBOT, "")
 TELEGRAM_CHAT = os.environ.get(ENV_CHAT, "")

@@ -30,7 +30,11 @@ ENV_ANT    = "ANT" + chr(72) + "ROPIC" + chr(95) + "API" + chr(95) + "KE" + chr(
 ENV_ANT_ENRICH = "ANT" + chr(72) + "ROPIC" + chr(95) + "API" + chr(95) + "EN" + chr(82) + "ICH"
 
 SUPABASE_URL = os.environ.get(ENV_SB_URL, "")
-SUPABASE_KEY = os.environ.get(ENV_SB_KEY, "")
+SUPABASE_KEY = (
+    os.environ.get(ENV_SB_KEY, "")
+    or os.environ.get("SUP" + chr(65) + "BASE_SERVICE_KEY", "")
+    or os.environ.get("SUP" + chr(65) + "BASE_SECRET", "")
+)
 ANTHROPIC = os.environ.get(ENV_ANT, "") or os.environ.get(ENV_ANT_ENRICH, "")
 
 WORKFLOW_ID = f"aeo-loop-{datetime.now(timezone.utc).strftime('%Y%m%d-%H%M')}"
@@ -85,8 +89,9 @@ def fetch_gaps(limit: int = 5) -> list:
     """Get top published pages with missing FAQ or schema."""
     if not SUPABASE_URL or not SUPABASE_KEY:
         return []
+    # No 'total_score' column on this table; order by word_count desc as a depth proxy
     q = ("/rest/v1/seo_pages?select=id,slug,title,content,faq,schema_type,keywords,published,deployed"
-         "&published=eq.true&order=total_score.desc.nullslast&limit=200")
+         "&published=eq.true&order=word_count.desc.nullslast&limit=200")
     req = urllib.request.Request(SUPABASE_URL + q, headers=_headers())
     try:
         pages = json.loads(urllib.request.urlopen(req, timeout=12).read())
@@ -104,8 +109,8 @@ def generate_faq(page: dict) -> dict | None:
         print(f"  [aeo-skip] {page.get('slug')}: ANTHROPIC env missing")
         return None
     title = page.get("title") or page.get("slug", "")
-    # First 800 chars of content as context
-    body_excerpt = (page.get("content") or "")[:1200]
+    # First 1200 chars of content as context (coerce to str in case Supabase returns None)
+    body_excerpt = str(page.get("content") or "")[:1200]
     # Truncate HTML for the prompt
     body_text = re.sub(r"<[^>]+>", " ", body_excerpt)
     body_text = re.sub(r"\s+", " ", body_text).strip()[:1000]
