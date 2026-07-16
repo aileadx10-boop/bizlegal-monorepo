@@ -2,7 +2,7 @@
 
 **Read this file first.** Every Claude Code session, every subagent, every new agent (Codex, Cursor, manual hire) starts here.
 
-**Last consolidated:** 2026-05-24 (Phase RR-2 — Canonical funnel is DocAI)
+**Last consolidated:** 2026-07-17 (Phase AA — Revenue Machine live, cohort-2 agents deployed)
 **Owner:** Moses (founder, BizLegal AI / DOR INNOVATIONS)
 **Mission:** compliance-as-a-service for B2B SaaS / fintech / DAOs / real-estate cross-border deals.
 
@@ -141,20 +141,35 @@ When in doubt, ask: "does this advance Z0-Z7 verification or does it add scope?"
 
 ---
 
-## 7 — Where we are right now
+## 7 — Where we are right now (2026-07-17)
 
-Read `decisions/concurrent-bouncing-kitten.md` — the current Phase Z plan. Z0-Z7 progress:
+Phase Z complete. Current phase: **Phase AA — first revenue & traffic growth.**
 
-- **Z0 — Env triage:** Moses-owned, Vercel UI clicks. Status: pending.
-- **Z1 — Monorepo migration:** in progress. This file is part of Z1.A.
-- **Z2 — Operating book + enforcement:** in progress. This file IS Z2.1.
-- **Z3 — Payment gateways in code:** queued.
-- **Z4 — Telegram fleet:** queued. Ops alerts already wired (`apps/hub/app/api/cron/ops-alerts`); needs `BIZLEGALBOT_TOKEN` set on hub Vercel.
-- **Z5 — Datadog-feel /ops:** doc-only this session.
-- **Z6 — OpenClaw + Ollama tunnel:** queued.
-- **Z7 — End-to-end verification:** decision day.
+**Revenue engine status (2026-07-17):**
+- DocAI $97 scan: crypto + card checkout live; IPN hardcoded to production (commit f551154). Awaiting first test buy (Moses-only).
+- Salesperson agent: live, `--draft-only` mode. Sales dashboard at `/sales` for Moses approval.
+- Cohort-2 revenue agents deployed 2026-07-16: `aeo_revenue_agent` (07:00 UTC), `conversion_funnel_agent` (08:00 UTC), `enterprise_closer_agent` (09:00 UTC). All draft to `sales_outreach`; Moses approves at `/sales`.
+- `/api/sales/drafts` approve flow now sends via Resend (fixed 2026-07-16, was silently dead before).
+- `sales_cap` hard limits in DB: `max_outreach_per_day=3`, `require_approval_for_drafts=1`, `auto_approve_after_hours=0`.
 
-Live status: `https://bizlegal-ai.com/ops/health?t=$OPS_DASHBOARD_TOKEN` (after Z0 sets the token).
+**Phase Z retrospective:**
+- Z0 ✅ Env triage: Vercel envs set, all 5 subdomain builds READY
+- Z1 ✅ Monorepo migration: complete
+- Z2 ✅ Operating book + enforcement: pre-commit hooks, vault audit live
+- Z3 ✅ Payment gateways: `@bizlegal/payment` pkg, NOWPayments + PayPal + IPN hardened
+- Z4 ✅ Telegram: `TELEGRAM_HUB_TOKEN` + `TELEGRAM_MOSES_CHAT_ID` wired, ops alerts live
+- Z5 ✅ /ops: `/ops/snapshot`, `/ops/health`, `/api/ops/feed` all live
+- Z6 ✅ Hetzner content engine: 47 agents, curator pipeline, orchestrator live
+- Z7 ⏳ End-to-end verification: awaiting first real crypto buy (Moses action — see `decisions/JULY10-FIRST-REVENUE.md`)
+
+**Moses-only remaining actions to unlock revenue:**
+1. Rotate `NOWPAYMENTS_API_KEY` + `IPN_SECRET` (most urgent)
+2. Do $0.50 test crypto buy at `docai.bizlegal-ai.com`
+3. Top up Anthropic API credits (kills all LLM agents when $0)
+4. Create 7 Plausible domain properties (traffic is invisible until this is done)
+5. Replace `[Moses's Full Name]` / `[J.D.]` placeholders in 3 byline articles, then publish
+
+Live status: `https://bizlegal-ai.com/ops/health?t=$OPS_DASHBOARD_TOKEN`
 
 ---
 

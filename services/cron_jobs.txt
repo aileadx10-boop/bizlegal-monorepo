@@ -24,9 +24,17 @@
 */1 * * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/revenue_alerter.py >> /var/log/seo-agents.log 2>&1
 # Daily revenue summary (18:00 UTC)
 0 18 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/daily_revenue_summary.py >> /var/log/seo-agents.log 2>&1
-# Opt-in outreach (consent-only, 5 sends/day, post-incident 2026-07-10) — daily 14:00 UTC
-# DISABLED until Moses approves re-enable per ef3d90e incident doc
+# Cohort-2 revenue agents (added 2026-07-17) — all draft to sales_outreach, Moses approves at /sales
+# AEO revenue agent (AEO Q&A → daily_gaps → citation tracking → revenue attribution) — 07:00 UTC
+0 7 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/aeo_revenue_agent.py >> /var/log/aeo-revenue.log 2>&1
+# Conversion funnel agent (4-track drip: risk_snapshot/newsletter/free-scan/cart-recovery) — 08:00 UTC
+0 8 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/conversion_funnel_agent.py >> /var/log/conversion-funnel.log 2>&1
+# Enterprise closer agent (ICP≥75 proposals, ICP≥90 enterprise briefs, deal room progression) — 09:00 UTC
+0 9 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/enterprise_closer_agent.py >> /var/log/enterprise-closer.log 2>&1
+# PERMANENTLY DISABLED — DO NOT RE-ENABLE without Moses's explicit written approval
+# Opt-in outreach: disabled 2026-07-10 (ef3d90e spam incident — sent to unverified/fabricated inboxes)
+# Re-enable requires: (a) opt-in lead source, (b) suppression list, (c) verified addresses, (d) Moses written approval
 # 0 14 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/opt_in_outreach.py >> /var/log/opt-in-outreach.log 2>&1
-# Engaged monetization (post-engagement only, replies/quote-requests, never pre-emptive) — every 30 min
-# DISABLED until Moses approves re-enable per ef3d90e incident doc
+# PERMANENTLY DISABLED — DO NOT RE-ENABLE without Moses's explicit written approval
+# Engaged monetization: disabled 2026-07-10 (ef3d90e spam incident — same conditions apply)
 # */30 * * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/engaged_monetization.py >> /var/log/engaged-monetization.log 2>&1

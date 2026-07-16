@@ -83,6 +83,24 @@ AGENT_REGISTRY = {
         "schedule": "every 15 min",
         "purpose": "Hot lead -> build deal room -> Stripe checkout link in 5 min",
     },
+    "aeo_revenue": {
+        "module": "services.agents.aeo_revenue_agent",
+        "function": "main",
+        "schedule": "07:00 UTC daily",
+        "purpose": "AEO Q&A content → daily_gaps; seo_citation_log citation tracking; payment attribution",
+    },
+    "conversion_funnel": {
+        "module": "services.agents.conversion_funnel_agent",
+        "function": "main",
+        "schedule": "08:00 UTC daily",
+        "purpose": "4-track drip (risk_snapshot/newsletter/free-scan/cart-recovery) → sales_outreach DRAFT",
+    },
+    "enterprise_closer": {
+        "module": "services.agents.enterprise_closer_agent",
+        "function": "main",
+        "schedule": "09:00 UTC daily",
+        "purpose": "ICP≥75 → proposal DRAFT; ICP≥90 → enterprise brief + deal_rooms entry; partner pipeline",
+    },
 }
 
 
