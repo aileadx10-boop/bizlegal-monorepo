@@ -40,5 +40,17 @@ Allow: /
 User-agent: cohere-ai
 Allow: /
 
-Sitemap: https://hub.bizlegal-ai.com/sitemap.xml
-Sitemap: https://hub.bizlegal-ai.com/llms.txt
+User-agent: Bytespider
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Diffbot
+Allow: /
+
+Sitemap: https://bizlegal-ai.com/sitemap.xml
+Sitemap: https://bizlegal-ai.com/llms.txt

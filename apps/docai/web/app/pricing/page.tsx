@@ -464,6 +464,30 @@ export default function DocAIPricingPage() {
         </div>
       </section>
 
+      {/* Retainer cross-sell */}
+      <section
+        className="bl-section"
+        style={{ borderTop: "1px solid var(--bl-divider)" }}
+      >
+        <div className="bl-container-narrow" style={{ display: "flex", gap: "2rem", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between" }}>
+          <div>
+            <p style={{ fontSize: "var(--bl-text-small)", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--bl-text-muted)", marginBottom: "0.4rem" }}>
+              Need more than a tool?
+            </p>
+            <h2 style={{ fontFamily: "var(--bl-font-display)", fontSize: "var(--bl-text-h3)", fontWeight: 700, color: "var(--bl-text)", margin: "0 0 0.5rem" }}>
+              Managed Compliance Ops Retainer
+            </h2>
+            <p style={{ color: "var(--bl-text-muted)", fontSize: "var(--bl-text-body)", margin: 0, maxWidth: "480px", lineHeight: 1.6 }}>
+              Weekly regulatory briefs, SQA scans on every contract, DPA drafts, BOI/MiCA/GDPR deadline tracking, and on-call attorney Q&amp;A — all on a flat $2,500/mo fee. No clock-watching.
+            </p>
+          </div>
+          <Link href="/services/compliance-ops-retainer" className="bl-btn-secondary" style={{ whiteSpace: "nowrap" }}>
+            View retainer details
+            <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+      </section>
+
       <section
         className="bl-section"
         style={{ background: "var(--bl-accent-soft)", borderTop: "1px solid var(--bl-divider)" }}
