@@ -587,6 +587,67 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* MANAGED RETAINER CROSS-SELL ──────────────────────── */}
+      <section
+        className="bl-section"
+        style={{ borderTop: '1px solid var(--bl-divider)' }}
+      >
+        <div
+          className="bl-container-narrow"
+          style={{
+            display: 'flex',
+            gap: '2.5rem',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div style={{ flex: '1 1 340px' }}>
+            <div className="bl-label" style={{ marginBottom: '0.75rem' }}>
+              Managed Compliance Ops · $2,500/mo
+            </div>
+            <h2
+              style={{
+                fontFamily: 'var(--bl-font-display)',
+                fontSize: 'var(--bl-text-h3)',
+                fontWeight: 800,
+                letterSpacing: '-0.02em',
+                lineHeight: 1.15,
+                color: 'var(--bl-text)',
+                margin: 0,
+                marginBottom: '0.75rem',
+              }}
+            >
+              Skip the CCO hire. Get attorney-run compliance ops on a flat fee.
+            </h2>
+            <p
+              style={{
+                fontSize: 'var(--bl-text-body)',
+                color: 'var(--bl-text-muted)',
+                lineHeight: 1.65,
+                margin: 0,
+              }}
+            >
+              Weekly regulatory briefs, standing contract review, BOI / MiCA / GDPR deadline
+              tracking, and on-call attorney Q&amp;A. Everything a $200K CCO does for early-stage
+              fintechs — at a fraction of the cost.
+            </p>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', alignItems: 'flex-start' }}>
+            <Link
+              href="https://docai.bizlegal-ai.com/services/compliance-ops-retainer"
+              className="bl-btn-primary"
+              style={{ whiteSpace: 'nowrap' }}
+            >
+              View retainer details <span aria-hidden="true">→</span>
+            </Link>
+            <span style={{ fontSize: 'var(--bl-text-small)', color: 'var(--bl-text-muted)' }}>
+              $5,000 setup · $2,500/mo · flat fee
+            </span>
+          </div>
+        </div>
+      </section>
+
       {/* FINAL CTA ────────────────────────────────────────── */}
       <section
         className="bl-section"
