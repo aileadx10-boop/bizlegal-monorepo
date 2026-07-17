@@ -62,3 +62,4 @@ drafts/
 scripts/_*
 tmp_probes/
 tmp_*.py
+tmp_*/
