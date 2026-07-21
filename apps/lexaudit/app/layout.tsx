@@ -116,7 +116,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 tagline: LEXAUDIT_CONTENT.footerTagline,
                 disclaimer: LEXAUDIT_CONTENT.disclaimer,
               }}
-              stickyLead={{ label: 'Run free compliance screen →', href: '/decision-tree' }}
+              stickyLead={{ label: 'Get your free Compliance Health Score →', href: '/compliance-health-score' }}
             >
               {children}
             </SiteShell>

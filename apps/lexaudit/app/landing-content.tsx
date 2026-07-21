@@ -7,9 +7,9 @@ import type { LandingV2Content } from '@bizlegal/themes'
 export const LEXAUDIT_CONTENT: LandingV2Content = {
   brand: 'LexAudit',
   nav: [
-    { label: 'Audits', href: '#audits' },
-    { label: 'Spotlight', href: '#spotlight' },
-    { label: 'Pricing', href: '#pricing' },
+    { label: 'Health Score', href: '/compliance-health-score' },
+    { label: 'Decision Tree', href: '/decision-tree' },
+    { label: 'Pricing', href: '/pricing' },
     { label: 'Contact', href: '#contact' },
   ],
   heroEyebrow: 'Compliance drift, watched in real time',
