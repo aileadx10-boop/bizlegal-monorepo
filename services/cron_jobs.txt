@@ -31,6 +31,11 @@
 0 8 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/conversion_funnel_agent.py >> /var/log/conversion-funnel.log 2>&1
 # Enterprise closer agent (ICP≥75 proposals, ICP≥90 enterprise briefs, deal room progression) — 09:00 UTC
 0 9 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/enterprise_closer_agent.py >> /var/log/enterprise-closer.log 2>&1
+# Growth Agent — multi-channel Loop Engineering (LinkedIn + X + Reddit)
+# Plan → Draft → Score → Store → [Moses approves via Telegram] → Vercel cron posts → Measure → Learn → Repeat
+30 5 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/growth_agent.py >> /var/log/bizlegal/growth-agent.log 2>&1
+# Growth Measure — 24h engagement poll (LinkedIn/X/Reddit APIs → social_experiments → feedback loop)
+0 9 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/growth_measure.py >> /var/log/bizlegal/growth-measure.log 2>&1
 # PERMANENTLY DISABLED — DO NOT RE-ENABLE without Moses's explicit written approval
 # Opt-in outreach: disabled 2026-07-10 (ef3d90e spam incident — sent to unverified/fabricated inboxes)
 # Re-enable requires: (a) opt-in lead source, (b) suppression list, (c) verified addresses, (d) Moses written approval
