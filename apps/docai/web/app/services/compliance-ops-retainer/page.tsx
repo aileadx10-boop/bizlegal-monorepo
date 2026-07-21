@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: "Managed Compliance Ops Retainer — DocAI",
   description:
     "A practiced commercial attorney and AI compliance engine working as your outsourced compliance team. $2,500/mo. EU/US/APAC coverage.",
-  alternates: { canonical: "/services/compliance-ops-retainer" },
+  alternates: { canonical: "https://docai.bizlegal-ai.com/services/compliance-ops-retainer" },
   openGraph: {
     title: "Managed Compliance Ops Retainer — DocAI",
     description:
