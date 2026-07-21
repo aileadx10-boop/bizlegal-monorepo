@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Pricing — DocAI by BizLegal AI",
   description:
-    "Contract intelligence + Security Questionnaire Auto-fill (SQA). Free tier for one-off review; Starter $29/mo for solo founders; Team $69/mo for B2B SaaS sales; Firm $99/mo for compliance + GC teams.",
+    "Contract intelligence + Security Questionnaire Auto-fill (SQA). Free tier for one-off review; Starter $29/mo for solo founders; Team $69/mo for B2B SaaS sales; Firm $199/mo for compliance + GC teams.",
   alternates: { canonical: "https://docai.bizlegal-ai.com/pricing" },
 };
 
@@ -85,9 +85,9 @@ const FIRM_TIER: PricingTierData = {
   description:
     "For compliance teams + general counsel. 150 SQAs/mo, KB upload of your firm's playbook, API access, dedicated onboarding.",
   prices: {
-    oneTime: { amount: 99, currency: "USD", label: "one firm pack" },
-    monthly: { amount: 99, currency: "USD" },
-    yearly: { amount: 990, currency: "USD", saveLabel: "save 2 mo" },
+    oneTime: { amount: 199, currency: "USD", label: "one firm pack" },
+    monthly: { amount: 199, currency: "USD" },
+    yearly: { amount: 1990, currency: "USD", saveLabel: "save 2 mo" },
   },
   features: [
     "150 contract analyses / mo",
@@ -100,9 +100,9 @@ const FIRM_TIER: PricingTierData = {
     "99.9% SLA",
   ],
   checkoutUrls: {
-    oneTime: { checkout: apexCheckout('docai', 'firm', 'one-time', 9900, 'DOCAI firm one-time') },
-    monthly: { checkout: apexCheckout('docai', 'firm', 'monthly', 9900, 'DOCAI firm monthly') },
-    yearly: { checkout: apexCheckout('docai', 'firm', 'yearly', 99000, 'DOCAI firm yearly') },
+    oneTime: { checkout: apexCheckout('docai', 'firm', 'one-time', 19900, 'DOCAI firm one-time') },
+    monthly: { checkout: apexCheckout('docai', 'firm', 'monthly', 19900, 'DOCAI firm monthly') },
+    yearly: { checkout: apexCheckout('docai', 'firm', 'yearly', 199000, 'DOCAI firm yearly') },
   },
 };
 
@@ -211,7 +211,7 @@ const DOCAI_JSON_LD = {
       offers: [
         { '@type': 'Offer', name: 'Starter — monthly', price: '29.00', priceCurrency: 'USD', availability: 'https://schema.org/InStock', url: 'https://docai.bizlegal-ai.com/pricing' },
         { '@type': 'Offer', name: 'Team — monthly', price: '69.00', priceCurrency: 'USD', availability: 'https://schema.org/InStock', url: 'https://docai.bizlegal-ai.com/pricing' },
-        { '@type': 'Offer', name: 'Firm — monthly', price: '99.00', priceCurrency: 'USD', availability: 'https://schema.org/InStock', url: 'https://docai.bizlegal-ai.com/pricing' },
+        { '@type': 'Offer', name: 'Firm — monthly', price: '199.00', priceCurrency: 'USD', availability: 'https://schema.org/InStock', url: 'https://docai.bizlegal-ai.com/pricing' },
         { '@type': 'Offer', name: 'Free — one-time scan', price: '0', priceCurrency: 'USD', availability: 'https://schema.org/InStock', url: 'https://docai.bizlegal-ai.com' },
       ],
     },

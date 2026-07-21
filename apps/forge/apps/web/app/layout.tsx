@@ -125,7 +125,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-3">Products</h3>
                 <ul className="space-y-2 text-sm">
                   <li><a href="/boi" className="text-forge-muted hover:text-forge-accent transition-colors">BOI/CTA Report — $149</a></li>
-                  <li><a href="/passport" className="text-forge-muted hover:text-forge-accent transition-colors">Regulatory Passport — $1,500</a></li>
+                  <li><a href="/passport" className="text-forge-muted hover:text-forge-accent transition-colors">Regulatory Passport — $297</a></li>
                   <li><a href="/audit" className="text-forge-muted hover:text-forge-accent transition-colors">Web Compliance Scanner — from $99</a></li>
                   <li><a href="/pricing" className="text-forge-muted hover:text-forge-accent transition-colors">Compare Plans</a></li>
                 </ul>

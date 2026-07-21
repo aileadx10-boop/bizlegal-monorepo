@@ -52,7 +52,7 @@ const PASSPORT_TIER: PricingTierData = {
   description:
     'Multi-framework operating brief for cross-border founders. 8 frameworks, scored against your business model. Quarterly refresh keeps you ahead of regulator changes.',
   prices: {
-    oneTime: { amount: 1500, currency: 'USD', label: 'one-time brief' },
+    oneTime: { amount: 297, currency: 'USD', label: 'one-time brief' },
     monthly: { amount: 99, currency: 'USD' },
     yearly: { amount: 990, currency: 'USD', saveLabel: 'save 2 mo' },
   },
@@ -65,7 +65,7 @@ const PASSPORT_TIER: PricingTierData = {
     'Practitioner-reviewed',
   ],
   checkoutUrls: {
-    oneTime: { checkout: apexCheckout('forge', 'passport', 'one-time', 150000, 'FORGE passport one-time') },
+    oneTime: { checkout: apexCheckout('forge', 'passport', 'one-time', 29700, 'FORGE passport one-time') },
     monthly: { checkout: apexCheckout('forge', 'passport', 'monthly', 9900, 'FORGE passport monthly') },
     yearly: { checkout: apexCheckout('forge', 'passport', 'yearly', 99000, 'FORGE passport yearly') },
   },
