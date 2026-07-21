@@ -36,6 +36,12 @@
 30 5 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/growth_agent.py >> /var/log/bizlegal/growth-agent.log 2>&1
 # Growth Measure — 24h engagement poll (LinkedIn/X/Reddit APIs → social_experiments → feedback loop)
 0 9 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/growth_measure.py >> /var/log/bizlegal/growth-measure.log 2>&1
+# Distributor — social copy (LinkedIn/X/Substack) for newly published articles; runs after publisher at 14:30
+30 15 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/distributor.py >> /var/log/bizlegal/distributor.log 2>&1
+# Dunning — checkout-abandonment follow-ups (day 3/7/14 staged reminders via Resend)
+30 9 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/dunning.py >> /var/log/bizlegal/dunning.log 2>&1
+# Lead Nurture — cold outreach day-3/7 follow-up drafts → sales_outreach → Moses approves at /sales
+0 10 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/lead_nurture.py >> /var/log/bizlegal/lead-nurture.log 2>&1
 # PERMANENTLY DISABLED — DO NOT RE-ENABLE without Moses's explicit written approval
 # Opt-in outreach: disabled 2026-07-10 (ef3d90e spam incident — sent to unverified/fabricated inboxes)
 # Re-enable requires: (a) opt-in lead source, (b) suppression list, (c) verified addresses, (d) Moses written approval
