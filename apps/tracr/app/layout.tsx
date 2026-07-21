@@ -5,6 +5,7 @@ import CookieConsent from './components/CookieConsent'
 import { ThemeToggle } from './components/ui-v2/ThemeToggle'
 import { ThemeProvider, themeFOUCScript, SiteShell, AppRouteOnly } from '@bizlegal/themes'
 import { TRACR_CONTENT } from './landing-content'
+import StructuredData from './structured-data'
 
 const LANDING_FOUC = themeFOUCScript({
   primary: 'royal-dark',
@@ -53,6 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
+        <StructuredData />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (

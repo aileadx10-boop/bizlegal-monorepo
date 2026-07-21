@@ -7,6 +7,7 @@ import CookieConsent from './components/CookieConsent'
 import LegalShield from '@/components/layout/LegalShield'
 import { ThemeToggle } from './components/ui-v2/ThemeToggle'
 import { ThemeProvider, themeFOUCScript } from '@bizlegal/themes'
+import StructuredData from './structured-data'
 
 // Daybreak only — no toggle.
 const LANDING_FOUC = themeFOUCScript({
@@ -53,6 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
+        <StructuredData />
         {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (
           <script
             defer
