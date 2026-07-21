@@ -74,10 +74,20 @@ export default function AiGovernancePage() {
       { "@type": "ListItem", "position": 3, "name": "AI Governance", "item": "https://bizlegal-ai.com/agents/ai-governance" },
     ],
   }
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": FAQ.map((item) => ({
+      "@type": "Question",
+      "name": item.q,
+      "acceptedAnswer": { "@type": "Answer", "text": item.a },
+    })),
+  }
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <section className="bl-hero-bg" style={{ paddingTop: 'clamp(4rem, 2rem + 4vw, 6rem)', paddingBottom: 'clamp(2rem, 1.5rem + 2vw, 3rem)' }}>
         <div className="bl-container" style={{ maxWidth: 880 }}>
           <span className="bl-tag" style={{ marginBottom: '1rem' }}>

@@ -80,6 +80,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/regulations/gdpr`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE}/regulations/aml`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
 
+    // Individual agent landing pages (product-specific, revenue-driving)
+    { url: `${BASE}/agents/boi-tracker`, lastModified: now, changeFrequency: 'monthly', priority: 0.82 },
+    { url: `${BASE}/agents/ai-act`, lastModified: now, changeFrequency: 'monthly', priority: 0.82 },
+    { url: `${BASE}/agents/policy-refresh`, lastModified: now, changeFrequency: 'monthly', priority: 0.82 },
+    { url: `${BASE}/agents/ai-governance`, lastModified: now, changeFrequency: 'monthly', priority: 0.82 },
+    { url: `${BASE}/agents/india-dpdpa`, lastModified: now, changeFrequency: 'monthly', priority: 0.82 },
+    { url: `${BASE}/agents/marketplace-shield`, lastModified: now, changeFrequency: 'monthly', priority: 0.82 },
+
     // Buyer-intent guides (high-intent SEO, each linked to a product)
     { url: `${BASE}/guides`, lastModified: now, changeFrequency: 'weekly', priority: 0.75 },
     { url: `${BASE}/guides/beneficial-ownership-information-filing`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },

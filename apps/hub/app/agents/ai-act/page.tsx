@@ -65,6 +65,29 @@ const MONITORING_TIER: PricingTierData = {
   highlighted: true,
 }
 
+const FAQ = [
+  {
+    q: 'What is the EU AI Act?',
+    a: 'Regulation (EU) 2024/1689, in force since 2 August 2024, establishes a risk-based framework for AI systems in the EU. It classifies AI into four tiers (unacceptable / high-risk / limited / minimal), imposes pre-market conformity assessment for high-risk systems, bans certain practices outright, and creates the EU AI Office as the central regulator. Fines reach €35M or 7% of global annual turnover, whichever is higher.',
+  },
+  {
+    q: 'When do EU AI Act obligations actually apply?',
+    a: 'Prohibited AI practices: 2024-02-02 (already applicable). General-purpose AI (GPAI) model obligations: 2025-08-02. High-risk AI systems under Annex I (product safety legislation) and Annex III (biometrics, education, employment, essential services, law enforcement, etc.): 2026-08-02. If your system could fall under any Annex III category, you need to classify before 2 August 2026.',
+  },
+  {
+    q: 'What is Article 6 risk classification?',
+    a: 'Article 6 defines the two-step test for "high-risk AI." Step 1: is the system a safety component of a product covered by Annex I legislation (medical devices, machinery, civil aviation, etc.)? Step 2: is the system listed in Annex III categories — biometric categorization, critical infrastructure, education, employment decisions, access to essential services, law enforcement, migration, or administration of justice? A yes to either step means high-risk obligations apply.',
+  },
+  {
+    q: 'Does the EU AI Act apply to non-EU companies?',
+    a: 'Yes. The EU AI Act applies extraterritorially to AI systems placed on the EU market or whose output is used in the EU, regardless of where the provider is established. A US startup with EU users, an EU-facing SaaS product, or a model accessed via API from the EU is within scope. The territorial logic mirrors GDPR\'s extra-EU application.',
+  },
+  {
+    q: 'How is AI Act compliance different from GDPR compliance?',
+    a: 'GDPR governs personal data processing. The AI Act governs AI system design and deployment regardless of whether personal data is processed. A model trained on public data that makes decisions affecting EU individuals still triggers AI Act obligations even if GDPR is not engaged. For AI systems processing personal data, both regimes apply simultaneously.',
+  },
+] as const
+
 export default function AiActPage() {
   const appLd = {
     "@context": "https://schema.org",
@@ -92,10 +115,20 @@ export default function AiActPage() {
       { "@type": "ListItem", "position": 3, "name": "AI Act Classifier", "item": "https://bizlegal-ai.com/agents/ai-act" },
     ],
   }
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": FAQ.map((item) => ({
+      "@type": "Question",
+      "name": item.q,
+      "acceptedAnswer": { "@type": "Answer", "text": item.a },
+    })),
+  }
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <section
         className="bl-hero-bg"
         style={{
@@ -186,6 +219,20 @@ export default function AiActPage() {
           >
             <PricingTierCard {...ONETIME_TIER} defaultInterval="one-time" />
             <PricingTierCard {...MONITORING_TIER} defaultInterval="monthly" />
+          </div>
+        </div>
+      </section>
+
+      <section className="bl-section" style={{ background: 'var(--bl-bg-low)', borderTop: '1px solid var(--bl-divider)', borderBottom: '1px solid var(--bl-divider)' }}>
+        <div className="bl-container-narrow">
+          <h2 style={{ fontFamily: 'var(--bl-font-display)', fontSize: 'var(--bl-text-h2)', fontWeight: 800, marginTop: 0, marginBottom: '1.5rem', letterSpacing: '-0.025em' }}>FAQ</h2>
+          <div style={{ display: 'grid', gap: 16 }}>
+            {FAQ.map((item) => (
+              <div key={item.q} className="bl-card">
+                <h3 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 8px' }}>{item.q}</h3>
+                <p style={{ fontSize: 14, color: 'var(--bl-text-muted)', lineHeight: 1.6, margin: 0 }}>{item.a}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

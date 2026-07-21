@@ -42,6 +42,29 @@ const MONITORING_TIER: PricingTierData = {
   highlighted: true,
 }
 
+const FAQ = [
+  {
+    q: 'Which privacy frameworks does the daily redline cover?',
+    a: 'Seven: GDPR (EU), CCPA (California), CPRA (the 2023 California amendment), Quebec Law 25 (Canada), Colorado Privacy Act, Connecticut Data Privacy Act, and Texas Data Privacy and Security Act. We run your policy URL through a Sonnet-powered semantic diff against each framework\'s current authoritative text every day.',
+  },
+  {
+    q: 'What triggers a "material change" alert?',
+    a: 'An alert fires when a NEW HIGH-severity finding appears in your redline — a gap between your current policy language and the framework text that creates regulatory exposure. We suppress alerts for cosmetic edits (whitespace, punctuation, section renumbering) and LOW-severity gaps. You only get an email when there is something to act on.',
+  },
+  {
+    q: 'How does the free first audit work?',
+    a: 'Paste your policy URL and submit. We run the full 7-framework redline and show you the top 3 findings — severity, framework, and the clause the finding maps to. The full list of findings plus suggested replacement language requires the $29/mo subscription.',
+  },
+  {
+    q: 'Is this a legal opinion or a compliance guarantee?',
+    a: 'No. This is automated decision-support based on semantic comparison of your policy text against public regulatory text. It does not constitute a legal opinion, and we do not attest to your compliance status. For binding privacy law interpretations, retain licensed counsel in the relevant jurisdiction.',
+  },
+  {
+    q: 'How do I get the suggested replacement language?',
+    a: 'The $29/mo monitoring tier includes Sonnet-drafted replacement text for every HIGH and MEDIUM finding, grounded in the specific regulatory provision it addresses and formatted to drop into your existing policy document. Review by your counsel is required before publication.',
+  },
+] as const
+
 export default function PolicyRefreshPage() {
   const appLd = {
     "@context": "https://schema.org",
@@ -69,10 +92,20 @@ export default function PolicyRefreshPage() {
       { "@type": "ListItem", "position": 3, "name": "Policy Auto-Refresh", "item": "https://bizlegal-ai.com/agents/policy-refresh" },
     ],
   }
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": FAQ.map((item) => ({
+      "@type": "Question",
+      "name": item.q,
+      "acceptedAnswer": { "@type": "Answer", "text": item.a },
+    })),
+  }
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <section
         className="bl-hero-bg"
         style={{
@@ -152,6 +185,20 @@ export default function PolicyRefreshPage() {
             }}
           >
             <PricingTierCard {...MONITORING_TIER} defaultInterval="monthly" />
+          </div>
+        </div>
+      </section>
+
+      <section className="bl-section" style={{ background: 'var(--bl-bg-low)', borderTop: '1px solid var(--bl-divider)', borderBottom: '1px solid var(--bl-divider)' }}>
+        <div className="bl-container-narrow">
+          <h2 style={{ fontFamily: 'var(--bl-font-display)', fontSize: 'var(--bl-text-h2)', fontWeight: 800, marginTop: 0, marginBottom: '1.5rem', letterSpacing: '-0.025em' }}>FAQ</h2>
+          <div style={{ display: 'grid', gap: 16 }}>
+            {FAQ.map((item) => (
+              <div key={item.q} className="bl-card">
+                <h3 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 8px' }}>{item.q}</h3>
+                <p style={{ fontSize: 14, color: 'var(--bl-text-muted)', lineHeight: 1.6, margin: 0 }}>{item.a}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

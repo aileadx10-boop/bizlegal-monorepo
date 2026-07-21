@@ -73,6 +73,29 @@ const FIRM_TIER: PricingTierData = {
   highlighted: true,
 }
 
+const FAQ = [
+  {
+    q: 'What is BOI filing under the Corporate Transparency Act?',
+    a: 'The Corporate Transparency Act (CTA, 2021) requires most US LLCs, corporations, and LPs to disclose their beneficial owners to FinCEN. A beneficial owner is anyone who owns 25% or more of the company or exercises substantial control. Non-compliance carries fines of up to $500/day capped at $10,000 per violation.',
+  },
+  {
+    q: 'Which entities are exempt from BOI reporting?',
+    a: 'The CTA lists 23 exemption categories, including publicly traded companies, regulated financial institutions, SEC-reporting entities, tax-exempt organizations, large operating companies (20+ full-time employees, $5M+ US revenue, US physical presence), and dormant entities. If your entity does not qualify for an exemption, it must file.',
+  },
+  {
+    q: 'What changes trigger a BOI update filing?',
+    a: 'Any change to reported beneficial ownership information must be filed within 30 calendar days: ownership transfers crossing the 25% threshold, changes to a beneficial owner\'s legal name, address, or government-issued ID, or dissolution of the entity. The 30-day clock starts when the triggering event occurs, not when you learn of it.',
+  },
+  {
+    q: 'What does the BOI Tracker monitor?',
+    a: 'BOI Tracker watches FinCEN\'s daily Federal Register feed for guidance changes affecting your entity type (LLC, corp, LP), tracks your 30-day refile windows, and sends email alerts the moment a guidance update or deadline window opens. Decision-support only — the actual filing is the work of your attorney or registered agent.',
+  },
+  {
+    q: 'Can I track multiple entities with one subscription?',
+    a: 'The Solo plan covers 1 entity for $29/mo. The Firm plan covers up to 50 entities for $99/mo — one dashboard, one bill. Add entities by submitting the form on this page after your first entity is active.',
+  },
+] as const
+
 export default function BoiTrackerPage() {
   const appLd = {
     "@context": "https://schema.org",
@@ -108,10 +131,21 @@ export default function BoiTrackerPage() {
     ],
   }
 
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": FAQ.map((item) => ({
+      "@type": "Question",
+      "name": item.q,
+      "acceptedAnswer": { "@type": "Answer", "text": item.a },
+    })),
+  }
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <section
         className="bl-hero-bg"
         style={{
@@ -257,6 +291,20 @@ export default function BoiTrackerPage() {
             list.
           </p>
           <BoiSubscribeForm />
+        </div>
+      </section>
+
+      <section className="bl-section" style={{ background: 'var(--bl-bg-low)', borderTop: '1px solid var(--bl-divider)', borderBottom: '1px solid var(--bl-divider)' }}>
+        <div className="bl-container-narrow">
+          <h2 style={{ fontFamily: 'var(--bl-font-display)', fontSize: 'var(--bl-text-h2)', fontWeight: 800, marginTop: 0, marginBottom: '1.5rem', letterSpacing: '-0.025em' }}>FAQ</h2>
+          <div style={{ display: 'grid', gap: 16 }}>
+            {FAQ.map((item) => (
+              <div key={item.q} className="bl-card">
+                <h3 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 8px' }}>{item.q}</h3>
+                <p style={{ fontSize: 14, color: 'var(--bl-text-muted)', lineHeight: 1.6, margin: 0 }}>{item.a}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
