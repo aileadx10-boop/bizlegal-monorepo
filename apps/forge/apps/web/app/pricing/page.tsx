@@ -1,9 +1,21 @@
 // Forge /pricing — Phase D8 + B4 (3-tier matrix, no Contact Sales)
 
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { PricingTierCard, type PricingTierData } from '../components/ui-v2/PricingTierCard'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  title: 'Pricing — BizLegal Forge | BOI Kit, Regulatory Passport & Compliance Audit',
+  description: 'BOI Report Kit $149 one-time. Regulatory Passport $297 one-time or $99/mo. Web Compliance Scanner $99/scan or $49/mo. Crypto + card checkout. 14-day money-back.',
+  openGraph: {
+    title: 'BizLegal Forge Pricing — BOI Kit, Passport & Audit',
+    description: 'Transparent compliance tool pricing. BOI Kit $149, Passport $297, Web Audit $99. Crypto via NOWPayments, card via PayPal. 14-day money-back.',
+    url: 'https://forge.bizlegal-ai.com/pricing',
+  },
+  alternates: { canonical: 'https://forge.bizlegal-ai.com/pricing' },
+}
 
 
 function apexCheckout(

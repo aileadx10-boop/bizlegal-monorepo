@@ -15,7 +15,36 @@ const HUBS = [
 ]
 
 export default function RegulationsPage() {
+  const itemListLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'ItemList',
+        name: 'Regulatory Intelligence Hubs',
+        description: 'Institutional-grade compliance intelligence covering the world\'s primary digital asset and data protection regulatory frameworks.',
+        url: 'https://bizlegal-ai.com/regulations',
+        numberOfItems: HUBS.length,
+        itemListElement: HUBS.map((hub, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: hub.title,
+          description: hub.desc,
+          url: `https://bizlegal-ai.com/regulations/${hub.slug}`,
+        })),
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bizlegal-ai.com' },
+          { '@type': 'ListItem', position: 2, name: 'Regulations', item: 'https://bizlegal-ai.com/regulations' },
+        ],
+      },
+    ],
+  }
+
   return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
     <div style={{ padding: '64px 32px' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <span className="section-label">Regulatory Intelligence</span>
@@ -37,5 +66,6 @@ export default function RegulationsPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }

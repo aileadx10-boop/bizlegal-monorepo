@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "Pricing — BRAI",
   description:
     "Per-report pricing or a monthly retainer for high-volume desks. Standard $149, Priority 12h $249, Extended Sanctions $500. Crypto via NOWPayments, card via PayPal.",
-  alternates: { canonical: "/pricing" },
+  alternates: { canonical: "https://brai.bizlegal-ai.com/pricing" },
 }
 
 

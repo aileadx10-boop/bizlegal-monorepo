@@ -133,8 +133,71 @@ const ENTERPRISE_TIER: PricingTierData = {
 }
 
 export default function TracrPricingPage() {
+  const faqLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What is included in a TRACR forensic wallet report?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'A TRACR report includes on-chain data for the target wallet across 9 supported chains, a 0-100 composite risk signal, sanctions list screening (OFAC, UN, EU), a counterparty graph (1st or 3rd degree depending on tier), mixer and cross-chain bridge detection, and an exportable PDF and CSV. Higher tiers add AI narrative analysis, practitioner review, and court-ready formatting.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'What blockchains and chains does TRACR support?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'TRACR supports 9 major chains including Ethereum, Bitcoin, Polygon, BNB Chain, Avalanche, Arbitrum, Optimism, Solana, and Tron. Cross-chain bridge tracing is included in the Standard tier and above.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Is TRACR a replacement for Chainalysis or TRM Labs?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'TRACR is a per-investigation forensic tool suited for compliance teams, legal counsel, and asset recovery work that need a specific wallet analyzed with a court-ready or practitioner-reviewed output. Chainalysis and TRM are subscription platforms optimised for exchange-wide transaction monitoring. TRACR complements them — most enterprise clients use TRACR for deep-dive investigations and enterprise platforms for ongoing monitoring.',
+        },
+      },
+    ],
+  }
+
+  const productLd = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'TRACR Wallet Intelligence',
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Web',
+    description: 'On-chain forensic wallet reports for compliance, legal counsel, and asset recovery. Regulatory scan ($29), Standard forensic ($149), Professional with practitioner review ($349), and litigation-grade Enterprise ($799) per investigation. 9 chains supported.',
+    url: 'https://tracr.bizlegal-ai.com/pricing',
+    image: 'https://tracr.bizlegal-ai.com/og.png',
+    offers: [
+      { '@type': 'Offer', name: 'Regulatory Scan', price: '29', priceCurrency: 'USD', category: 'one-time', url: 'https://tracr.bizlegal-ai.com/pricing' },
+      { '@type': 'Offer', name: 'Standard Forensic Report', price: '149', priceCurrency: 'USD', category: 'one-time', url: 'https://tracr.bizlegal-ai.com/pricing' },
+      { '@type': 'Offer', name: 'Professional Investigation', price: '349', priceCurrency: 'USD', category: 'one-time', url: 'https://tracr.bizlegal-ai.com/pricing' },
+      { '@type': 'Offer', name: 'Enterprise Litigation Report', price: '799', priceCurrency: 'USD', category: 'one-time', url: 'https://tracr.bizlegal-ai.com/pricing' },
+    ],
+    brand: { '@type': 'Brand', name: 'TRACR' },
+    provider: { '@type': 'Organization', name: 'BizLegal AI', url: 'https://bizlegal-ai.com' },
+  }
+
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bizlegal-ai.com' },
+      { '@type': 'ListItem', position: 2, name: 'TRACR', item: 'https://tracr.bizlegal-ai.com' },
+      { '@type': 'ListItem', position: 3, name: 'Pricing', item: 'https://tracr.bizlegal-ai.com/pricing' },
+    ],
+  }
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <section
         className="bl-hero-bg"
         style={{
