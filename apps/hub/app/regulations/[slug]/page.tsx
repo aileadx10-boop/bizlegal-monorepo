@@ -502,7 +502,7 @@ export default function RegulationHubPage({ params }: Props) {
             </div>
           ))}
 
-          {(params.slug === 'mica' || params.slug === 'gdpr') && (
+          {(params.slug === 'mica' || params.slug === 'gdpr' || params.slug === 'vara' || params.slug === 'aml') && (
             <div style={{ marginTop: 24, padding: '16px 20px', background: 'var(--bg-mid)', border: '0.5px solid var(--outline-var)', borderRadius: 8 }}>
               <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--outline)' }}>Deep Dive Guide</span>
               {params.slug === 'mica' && (
@@ -515,6 +515,18 @@ export default function RegulationHubPage({ params }: Props) {
                 <p style={{ margin: '6px 0 0', fontSize: 13, lineHeight: 1.6 }}>
                   <Link href="/guides/gdpr-compliance-checklist-saas" style={{ color: 'var(--primary)', fontWeight: 600 }}>GDPR Checklist for SaaS →</Link>
                   {' '}7-phase compliance checklist covering legal bases, DPAs, data subject rights, breach notification, and international transfers.
+                </p>
+              )}
+              {params.slug === 'vara' && (
+                <p style={{ margin: '6px 0 0', fontSize: 13, lineHeight: 1.6 }}>
+                  <Link href="/guides/vara-licensing-guide" style={{ color: 'var(--primary)', fontWeight: 600 }}>VARA Licensing Guide →</Link>
+                  {' '}License categories, capital requirements, the three-stage application process, and how VARA compares to MiCA and ADGM.
+                </p>
+              )}
+              {params.slug === 'aml' && (
+                <p style={{ margin: '6px 0 0', fontSize: 13, lineHeight: 1.6 }}>
+                  <Link href="/guides/aml-kyc-compliance-crypto" style={{ color: 'var(--primary)', fontWeight: 600 }}>AML & KYC for Crypto →</Link>
+                  {' '}FATF Travel Rule implementation, transaction monitoring red flags, KYC program requirements, and AML penalties tracker.
                 </p>
               )}
             </div>
@@ -604,6 +616,7 @@ export default function RegulationHubPage({ params }: Props) {
             )}
             {params.slug === 'aml' && (
               <>
+                <Link href="/guides/aml-kyc-compliance-crypto" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>AML & KYC for Crypto →</Link>
                 <Link href="/guides/blockchain-wallet-investigation" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>Blockchain Wallet Investigation →</Link>
                 <Link href="/guides/compliance-health-score-saas" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Compliance Health Score →</Link>
               </>
@@ -611,13 +624,15 @@ export default function RegulationHubPage({ params }: Props) {
             {params.slug === 'sec' && (
               <>
                 <Link href="/guides/fractional-cco-vs-compliance-retainer" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>Fractional CCO vs Retainer →</Link>
+                <Link href="/guides/soc2-compliance-checklist-saas" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>SOC 2 Checklist →</Link>
                 <Link href="/guides/compliance-health-score-saas" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Compliance Health Score →</Link>
               </>
             )}
             {params.slug === 'vara' && (
               <>
+                <Link href="/guides/vara-licensing-guide" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>VARA Licensing Guide →</Link>
                 <Link href="/guides/mica-regulation-crypto-compliance" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>MiCA Regulation Guide →</Link>
-                <Link href="/guides/fractional-cco-vs-compliance-retainer" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>CCO vs Retainer →</Link>
+                <Link href="/guides/aml-kyc-compliance-crypto" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>AML & KYC for Crypto →</Link>
               </>
             )}
           </div>

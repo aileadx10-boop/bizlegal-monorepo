@@ -88,5 +88,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/guides/fractional-cco-vs-compliance-retainer`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
     { url: `${BASE}/guides/blockchain-wallet-investigation`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
     { url: `${BASE}/guides/compliance-health-score-saas`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
+    { url: `${BASE}/guides/soc2-compliance-checklist-saas`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
+    { url: `${BASE}/guides/aml-kyc-compliance-crypto`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
+    { url: `${BASE}/guides/vara-licensing-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
   ]
 }

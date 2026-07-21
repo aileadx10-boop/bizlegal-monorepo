@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Compliance Guides for SaaS, Fintech & Crypto Startups | BizLegal AI',
-  description: 'Practitioner-written compliance guides for founders. BOI filing, GDPR for SaaS, MiCA regulation, fractional CCO vs retainer, crypto wallet investigation, and compliance health scores.',
+  description: 'Practitioner-written compliance guides for founders. BOI filing, GDPR for SaaS, MiCA regulation, SOC 2, AML/KYC for crypto, VARA licensing, CCO vs retainer, wallet investigation, and compliance health scores.',
   alternates: { canonical: 'https://bizlegal-ai.com/guides' },
   openGraph: {
     title: 'Compliance Guides — BizLegal AI',
@@ -53,6 +53,27 @@ const GUIDES = [
     title: 'Compliance Health Score for SaaS Startups: What It Means',
     description: 'What a compliance health score measures, why enterprise customers ask for it, which frameworks it covers, and how to improve your score before an audit.',
     tag: 'Compliance Posture',
+    product: null,
+  },
+  {
+    href: '/guides/soc2-compliance-checklist-saas',
+    title: 'SOC 2 Compliance Checklist for SaaS Startups (2025)',
+    description: 'Type I vs Type II, the five Trust Service Criteria, what auditors collect as evidence, the timeline from zero to report, and the controls most SaaS companies are missing.',
+    tag: 'Security & Compliance',
+    product: null,
+  },
+  {
+    href: '/guides/aml-kyc-compliance-crypto',
+    title: 'AML & KYC Compliance Checklist for Crypto Companies (2025)',
+    description: 'FATF Travel Rule implementation, FinCEN MSB registration, EU AMLD obligations, transaction monitoring red flags, and the AML program components regulators require.',
+    tag: 'Crypto Compliance',
+    product: null,
+  },
+  {
+    href: '/guides/vara-licensing-guide',
+    title: 'VARA Licensing Guide: Getting Licensed in Dubai for Crypto (2025)',
+    description: 'VARA license categories, capital requirements, the three-stage application process, mandatory insurance, and how VARA compares to MiCA and ADGM for crypto businesses.',
+    tag: 'Crypto Licensing',
     product: null,
   },
 ]
