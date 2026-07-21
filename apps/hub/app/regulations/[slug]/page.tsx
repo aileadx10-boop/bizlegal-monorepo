@@ -323,8 +323,58 @@ export default function RegulationHubPage({ params }: Props) {
   const hub = HUB_DATA[params.slug]
   if (!hub) notFound()
 
+  const articleLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `${hub.title} 2026`,
+    description: `Comprehensive ${hub.title} guide — penalties, enforcement history, compliance checklist, and risk assessment tools. ${hub.tag}.`,
+    url: `https://bizlegal-ai.com/regulations/${params.slug}`,
+    datePublished: '2026-01-01',
+    dateModified: '2026-07-22',
+    author: {
+      '@type': 'Person',
+      name: 'BizLegal AI Senior Counsel',
+      url: 'https://bizlegal-ai.com/about',
+      jobTitle: 'International Commercial Lawyer',
+      description: 'LLB, LLM, 20 years active practice across UAE, EU, US, UK, Singapore',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'BizLegal AI',
+      url: 'https://bizlegal-ai.com',
+      logo: { '@type': 'ImageObject', url: 'https://bizlegal-ai.com/logo.png' },
+    },
+    about: { '@type': 'Thing', name: hub.tag },
+    keywords: hub.tag,
+    inLanguage: 'en-US',
+    isAccessibleForFree: true,
+  }
+
+  const faqLd = hub.faqs?.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: hub.faqs.map((faq: { q: string; a: string }) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: { '@type': 'Answer', text: faq.a },
+    })),
+  } : null
+
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bizlegal-ai.com' },
+      { '@type': 'ListItem', position: 2, name: 'Regulations', item: 'https://bizlegal-ai.com/regulations' },
+      { '@type': 'ListItem', position: 3, name: hub.title, item: `https://bizlegal-ai.com/regulations/${params.slug}` },
+    ],
+  }
+
   return (
     <div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
+      {faqLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       {/* Article Hero */}
       <div style={{ padding: '48px 32px', borderBottom: '0.5px solid var(--outline-var)', background: 'var(--bg-low)' }}>
         <div style={{ maxWidth: 860, margin: '0 auto' }}>
