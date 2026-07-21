@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import AuthorBio from '@/components/AuthorBio'
 
 type Props = { params: { slug: string } }
 
@@ -450,6 +451,8 @@ export default function RegulationHubPage({ params }: Props) {
               <p style={{ margin: 0, fontSize: 13, lineHeight: 1.7 }}>A: {faq.a}</p>
             </div>
           ))}
+
+          <AuthorBio topics={hub.authorTopics} />
         </div>
 
         {/* Sidebar */}
