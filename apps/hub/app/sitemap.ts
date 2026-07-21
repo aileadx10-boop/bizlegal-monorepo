@@ -99,5 +99,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/guides/soc2-compliance-checklist-saas`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
     { url: `${BASE}/guides/aml-kyc-compliance-crypto`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
     { url: `${BASE}/guides/vara-licensing-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
+    { url: `${BASE}/guides/eu-ai-act-compliance-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
+    { url: `${BASE}/guides/india-dpdpa-compliance-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
   ]
 }

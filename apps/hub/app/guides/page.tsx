@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Compliance Guides for SaaS, Fintech & Crypto Startups | BizLegal AI',
-  description: 'Practitioner-written compliance guides for founders. BOI filing, GDPR for SaaS, MiCA regulation, SOC 2, AML/KYC for crypto, VARA licensing, CCO vs retainer, wallet investigation, and compliance health scores.',
+  description: 'Practitioner-written compliance guides for founders. BOI filing, GDPR, MiCA, EU AI Act, India DPDPA, SOC 2, AML/KYC for crypto, VARA licensing, CCO vs retainer, wallet investigation, and compliance health scores.',
   alternates: { canonical: 'https://bizlegal-ai.com/guides' },
   openGraph: {
     title: 'Compliance Guides — BizLegal AI',
@@ -74,6 +74,20 @@ const GUIDES = [
     title: 'VARA Licensing Guide: Getting Licensed in Dubai for Crypto (2025)',
     description: 'VARA license categories, capital requirements, the three-stage application process, mandatory insurance, and how VARA compares to MiCA and ADGM for crypto businesses.',
     tag: 'Crypto Licensing',
+    product: null,
+  },
+  {
+    href: '/guides/eu-ai-act-compliance-guide',
+    title: 'EU AI Act Compliance Guide for SaaS & AI Companies (2025)',
+    description: 'Article 6 + Annex III risk classification, GPAI model obligations, the 10 high-risk system requirements, conformity assessment, and the 2026-08-02 deadline — for SaaS founders and AI product teams.',
+    tag: 'AI Regulation',
+    product: null,
+  },
+  {
+    href: '/guides/india-dpdpa-compliance-guide',
+    title: 'India DPDPA Compliance Guide for B2B SaaS (2025)',
+    description: 'Does DPDPA apply to you? Notice + consent requirements, data principal rights, Significant Data Fiduciary criteria, and the ₹250 crore fine schedule — for SaaS with India-resident users.',
+    tag: 'Privacy Law',
     product: null,
   },
 ]
