@@ -79,5 +79,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/regulations/vara`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE}/regulations/gdpr`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE}/regulations/aml`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+
+    // Buyer-intent guides (high-intent SEO, each linked to a product)
+    { url: `${BASE}/guides`, lastModified: now, changeFrequency: 'weekly', priority: 0.75 },
+    { url: `${BASE}/guides/beneficial-ownership-information-filing`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
+    { url: `${BASE}/guides/gdpr-compliance-checklist-saas`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
+    { url: `${BASE}/guides/mica-regulation-crypto-compliance`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
+    { url: `${BASE}/guides/fractional-cco-vs-compliance-retainer`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
+    { url: `${BASE}/guides/blockchain-wallet-investigation`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
+    { url: `${BASE}/guides/compliance-health-score-saas`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
   ]
 }

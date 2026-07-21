@@ -502,6 +502,24 @@ export default function RegulationHubPage({ params }: Props) {
             </div>
           ))}
 
+          {(params.slug === 'mica' || params.slug === 'gdpr') && (
+            <div style={{ marginTop: 24, padding: '16px 20px', background: 'var(--bg-mid)', border: '0.5px solid var(--outline-var)', borderRadius: 8 }}>
+              <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--outline)' }}>Deep Dive Guide</span>
+              {params.slug === 'mica' && (
+                <p style={{ margin: '6px 0 0', fontSize: 13, lineHeight: 1.6 }}>
+                  <Link href="/guides/mica-regulation-crypto-compliance" style={{ color: 'var(--primary)', fontWeight: 600 }}>MiCA Compliance Guide →</Link>
+                  {' '}Full CASP authorization walkthrough, whitepaper requirements, token categories, and AML obligations for crypto startups.
+                </p>
+              )}
+              {params.slug === 'gdpr' && (
+                <p style={{ margin: '6px 0 0', fontSize: 13, lineHeight: 1.6 }}>
+                  <Link href="/guides/gdpr-compliance-checklist-saas" style={{ color: 'var(--primary)', fontWeight: 600 }}>GDPR Checklist for SaaS →</Link>
+                  {' '}7-phase compliance checklist covering legal bases, DPAs, data subject rights, breach notification, and international transfers.
+                </p>
+              )}
+            </div>
+          )}
+
           <AuthorBio topics={hub.authorTopics} />
         </div>
 
@@ -565,6 +583,41 @@ export default function RegulationHubPage({ params }: Props) {
               <>
                 <Link href="/tools/kyc-gap-checker" style={{ display: 'block', padding: '8px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>KYC Gap Checker →</Link>
                 <Link href="/tools/aml-checklist" style={{ display: 'block', padding: '8px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>AML Checklist →</Link>
+              </>
+            )}
+          </div>
+
+          {/* Related guides */}
+          <div className="card" style={{ marginTop: 16 }}>
+            <span className="section-label" style={{ marginBottom: 12 }}>Related Guides</span>
+            {params.slug === 'mica' && (
+              <>
+                <Link href="/guides/mica-regulation-crypto-compliance" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>MiCA Compliance Guide →</Link>
+                <Link href="/guides/blockchain-wallet-investigation" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Crypto Wallet Investigation →</Link>
+              </>
+            )}
+            {params.slug === 'gdpr' && (
+              <>
+                <Link href="/guides/gdpr-compliance-checklist-saas" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>GDPR Checklist for SaaS →</Link>
+                <Link href="/guides/compliance-health-score-saas" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Compliance Health Score →</Link>
+              </>
+            )}
+            {params.slug === 'aml' && (
+              <>
+                <Link href="/guides/blockchain-wallet-investigation" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>Blockchain Wallet Investigation →</Link>
+                <Link href="/guides/compliance-health-score-saas" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Compliance Health Score →</Link>
+              </>
+            )}
+            {params.slug === 'sec' && (
+              <>
+                <Link href="/guides/fractional-cco-vs-compliance-retainer" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>Fractional CCO vs Retainer →</Link>
+                <Link href="/guides/compliance-health-score-saas" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Compliance Health Score →</Link>
+              </>
+            )}
+            {params.slug === 'vara' && (
+              <>
+                <Link href="/guides/mica-regulation-crypto-compliance" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>MiCA Regulation Guide →</Link>
+                <Link href="/guides/fractional-cco-vs-compliance-retainer" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>CCO vs Retainer →</Link>
               </>
             )}
           </div>
