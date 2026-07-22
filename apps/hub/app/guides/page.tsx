@@ -356,6 +356,13 @@ const GUIDES = [
     tag: 'Security Compliance',
     product: null,
   },
+  {
+    href: '/guides/software-development-agreement-guide',
+    title: 'Software Development Agreement Guide (2025): IP Ownership, Work-for-Hire, Source Code Escrow, Acceptance Testing',
+    description: 'Paying for software development does not transfer IP ownership — the developer owns the code by default under US copyright law. Work-for-hire doctrine does not cover standalone software created by contractors. IP assignment must use present-tense language ("hereby assigns"), cover all IP categories, and include a defined Background IP carve-out. Plus: acceptance testing frameworks, open source GPL/AGPL contamination risk, source code escrow triggers, and 5 dangerous red flags in developer agreements.',
+    tag: 'Contract Law',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
