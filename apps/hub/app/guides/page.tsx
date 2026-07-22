@@ -279,6 +279,13 @@ const GUIDES = [
     tag: 'Employment Law',
     product: null,
   },
+  {
+    href: '/guides/payment-processing-compliance-guide',
+    title: 'Payment Processing Compliance Guide (2025): Chargebacks, High-Risk Merchants, MSB, PCI DSS',
+    description: 'Visa (0.9% VDMP) and Mastercard (1.5% ECM) chargeback thresholds and MATCH-listing consequences, payment facilitator vs merchant of record legal liability, high-risk merchant category codes, FinCEN MSB registration triggers, PCI DSS SAQ scope for SaaS, and cross-border OFAC screening and VAT/GST obligations.',
+    tag: 'Fintech Compliance',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
