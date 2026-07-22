@@ -321,6 +321,13 @@ const GUIDES = [
     tag: 'Consumer Protection',
     product: null,
   },
+  {
+    href: '/guides/hipaa-business-associate-agreement-guide',
+    title: 'HIPAA Business Associate Agreement Guide (2025): 9 Required Provisions, SaaS Vendor Templates, Cloud Provider BAAs',
+    description: 'Who qualifies as a covered entity vs business associate, 9 required BAA provisions under 45 C.F.R. §164.504(e)(2), OCR enforcement actions for missing BAAs (OHSU $2.7M, North Memorial $1.55M, Anthem $16M), what a SaaS vendor BAA must include beyond the minimum, cloud provider BAA coverage (AWS, Azure, Google Cloud), and the 30-point BAA review checklist for covered entities.',
+    tag: 'HIPAA Compliance',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
