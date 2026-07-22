@@ -209,6 +209,13 @@ const GUIDES = [
     tag: 'Contract Risk',
     product: null,
   },
+  {
+    href: '/guides/ccpa-cpra-compliance-checklist',
+    title: 'CCPA / CPRA Compliance Checklist for SaaS Startups (2025)',
+    description: 'CCPA applicability thresholds ($25M revenue / 100K consumers), 6 consumer rights (including CPRA right to correct and sensitive PI limits), service provider DPA requirements, GPC signal compliance, and CPPA $7,500-per-violation enforcement powers.',
+    tag: 'Privacy Law',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {

@@ -982,8 +982,8 @@ export default function RegulationHubPage({ params }: Props) {
               )}
               {params.slug === 'ccpa' && (
                 <p style={{ margin: '6px 0 0', fontSize: 13, lineHeight: 1.6 }}>
-                  <Link href="/guides/privacy-policy-compliance-guide" style={{ color: 'var(--primary)', fontWeight: 600 }}>Privacy Policy Compliance Guide →</Link>
-                  {' '}How to build a CCPA/CPRA-compliant privacy policy, data map, and consumer request workflow — including GPC signal implementation.
+                  <Link href="/guides/ccpa-cpra-compliance-checklist" style={{ color: 'var(--primary)', fontWeight: 600 }}>CCPA / CPRA Compliance Checklist →</Link>
+                  {' '}Applicability thresholds, 6 consumer rights (including CPRA right to correct + SPI limits), service provider DPA requirements, GPC signal implementation, and CPPA enforcement powers — with $7,500-per-violation fine context.
                 </p>
               )}
               {params.slug === 'soc2' && (
@@ -1177,9 +1177,9 @@ export default function RegulationHubPage({ params }: Props) {
             )}
             {params.slug === 'ccpa' && (
               <>
+                <Link href="/guides/ccpa-cpra-compliance-checklist" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>CCPA / CPRA Compliance Checklist →</Link>
                 <Link href="/guides/privacy-policy-compliance-guide" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>Privacy Policy Compliance Guide →</Link>
-                <Link href="/guides/gdpr-compliance-checklist-saas" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>GDPR Checklist for SaaS →</Link>
-                <Link href="/guides/startup-compliance-program-guide" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Startup Compliance Program →</Link>
+                <Link href="/guides/gdpr-compliance-checklist-saas" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>GDPR Checklist for SaaS →</Link>
               </>
             )}
             {params.slug === 'soc2' && (
