@@ -286,6 +286,13 @@ const GUIDES = [
     tag: 'Fintech Compliance',
     product: null,
   },
+  {
+    href: '/guides/dao-legal-structure-guide',
+    title: 'DAO Legal Structure Guide (2025): Wyoming DAO LLC, Marshall Islands, Unincorporated DAO Risks',
+    description: 'Why an unincorporated DAO is a general partnership (bZx DAO, Ooki DAO precedents), Wyoming DAO LLC SF 0038 formation requirements, Marshall Islands DAO LLC comparison, SEC investment contract risk for governance tokens, DAO operating agreement required provisions, and the tax obligations of DAO members.',
+    tag: 'Crypto Regulation',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {

@@ -136,5 +136,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/guides/crypto-token-launch-compliance-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/startup-employment-agreement-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/payment-processing-compliance-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
+    { url: `${BASE}/guides/dao-legal-structure-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
   ]
 }
