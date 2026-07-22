@@ -167,6 +167,13 @@ const GUIDES = [
     tag: 'US Commodities Law',
     product: null,
   },
+  {
+    href: '/guides/gdpr-data-processing-agreement-guide',
+    title: 'GDPR Data Processing Agreement (DPA) Guide: Article 28 Requirements (2025)',
+    description: 'The 12 mandatory DPA terms under Article 28 GDPR, controller-processor role analysis, sub-processor chain management, SCC integration for international transfers, and enterprise DPA negotiation strategy.',
+    tag: 'Privacy & Data',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
