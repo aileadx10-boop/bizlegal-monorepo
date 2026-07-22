@@ -155,5 +155,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/guides/independent-contractor-vs-employee-classification-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/regulation-e-electronic-fund-transfer-fintech-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/regulation-d-private-placement-exemption-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
+    { url: `${BASE}/guides/soc2-trust-services-criteria-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
   ]
 }

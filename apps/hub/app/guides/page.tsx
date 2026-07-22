@@ -419,6 +419,13 @@ const GUIDES = [
     tag: 'Securities Law',
     product: null,
   },
+  {
+    href: '/guides/soc2-trust-services-criteria-guide',
+    title: 'SOC 2 Trust Services Criteria Deep Dive (2025): CC6 Logical Access, CC7 System Operations, CC8 Change Management, CC9 Vendor Risk, Auditor Evidence Requirements',
+    description: 'SOC 2 Trust Services Criteria technical guide: all 5 Trust Services Categories, CC6 logical access controls (MFA, access provisioning/deprovisioning, vendor access, privileged access management), CC7 system operations and incident management, CC8 change management PR review and emergency change controls, CC9 vendor management and business continuity, Type 1 vs Type 2 distinctions, and exact auditor evidence samples for each criterion.',
+    tag: 'Security / SOC 2',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
