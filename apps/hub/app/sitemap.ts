@@ -147,5 +147,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/guides/gdpr-legitimate-interests-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/soc2-type-1-vs-type-2-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/software-development-agreement-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
+    { url: `${BASE}/guides/wire-transfer-fraud-prevention-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
   ]
 }

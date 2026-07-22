@@ -363,6 +363,13 @@ const GUIDES = [
     tag: 'Contract Law',
     product: null,
   },
+  {
+    href: '/guides/wire-transfer-fraud-prevention-guide',
+    title: 'Wire Transfer Fraud Prevention Guide (2025): Business Email Compromise (BEC), Financial Fraud Kill Chain, Legal Liability',
+    description: 'BEC caused $2.9 billion in 2023 US losses — the highest-loss cybercrime category. Under UCC Article 4A, the business that sends the fraudulently-induced wire bears the loss, not the bank. The 5 BEC attack vectors (CEO impersonation, vendor payment change, real estate hijacking, attorney impersonation, payroll diversion), the 72-hour Financial Fraud Kill Chain response, cyber insurance BEC requirements, and vendor contract provisions that create BEC risk.',
+    tag: 'Financial Crime Prevention',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
