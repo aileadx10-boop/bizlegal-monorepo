@@ -440,6 +440,13 @@ const GUIDES = [
     tag: 'Privacy & Data',
     product: null,
   },
+  {
+    href: '/guides/cross-border-data-transfer-scc-bcr-uk-idta-guide',
+    title: 'Cross-Border Data Transfer Guide (2025): SCCs Module Selection, Transfer Impact Assessment, UK IDTA, EU-US DPF Adequacy Decision, BCRs for Multinational Groups',
+    description: 'GDPR Chapter V cross-border transfer mechanisms: 2021 EU SCCs Module 1/2/3/4 selection (Controller-Controller, Controller-Processor, Processor-Processor, Processor-Controller), Transfer Impact Assessment (TIA) 6-step EDPB methodology (FISA 702, supplementary technical measures), UK IDTA and ICO Addendum to EU SCCs post-Brexit, EU-US Data Privacy Framework (DPF) adequacy decision (July 2023) and Schrems III risk, BCR-Controller and BCR-Processor for intra-group transfers, and 2010 SCC expiration (December 27, 2024).',
+    tag: 'Privacy & Data',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {

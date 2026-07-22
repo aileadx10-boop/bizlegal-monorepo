@@ -158,5 +158,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/guides/soc2-trust-services-criteria-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/hipaa-security-rule-technical-safeguards-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/ccpa-cpra-data-subject-request-operations-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
+    { url: `${BASE}/guides/cross-border-data-transfer-scc-bcr-uk-idta-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
   ]
 }
