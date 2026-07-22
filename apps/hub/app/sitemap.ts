@@ -162,5 +162,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/guides/ftc-section-5-unfair-deceptive-practices-saas-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/aml-bsa-compliance-program-fintech-neobank-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/ofac-sanctions-compliance-crypto-fintech-saas-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
+    { url: `${BASE}/guides/saas-terms-of-service-limitation-liability-indemnification-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
   ]
 }

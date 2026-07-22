@@ -468,6 +468,13 @@ const GUIDES = [
     tag: 'OFAC / Sanctions',
     product: null,
   },
+  {
+    href: '/guides/saas-terms-of-service-limitation-liability-indemnification-guide',
+    title: 'SaaS Terms of Service Deep Dive (2025): Limitation of Liability Cap, Indemnification Carve-Outs, Warranty Disclaimers, AUP, Auto-Renewal Compliance, and Governing Law Strategy',
+    description: 'SaaS ToS clause-by-clause analysis: LoL cap (12-month fee formula, mutual vs asymmetric, floor for new contracts), indemnification (IP vendor obligations + carve-outs, customer data indemnification), UCC § 2-316 warranty disclaimers (merchantability/fitness magic words, AS IS conspicuousness), AUP CFAA (Van Buren 2021, post-termination access, data scraping), FTC click-to-cancel rule (Jan 2025), California ARL, Delaware vs New York vs California governing law.',
+    tag: 'SaaS / Contracts',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
