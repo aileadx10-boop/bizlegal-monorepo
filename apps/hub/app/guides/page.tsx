@@ -195,6 +195,13 @@ const GUIDES = [
     tag: 'Contract Risk',
     product: null,
   },
+  {
+    href: '/guides/contractor-agreement-guide',
+    title: 'Independent Contractor Agreement Guide: Avoiding Misclassification (2025)',
+    description: 'The ABC test (California AB5), IRS 20-factor test, UK IR35, and EU Platform Work Directive — misclassification penalties and the 5 contractor agreement clauses that most often trigger reclassification findings.',
+    tag: 'Employment Law',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
