@@ -174,6 +174,13 @@ const GUIDES = [
     tag: 'Privacy & Data',
     product: null,
   },
+  {
+    href: '/guides/fincen-msb-registration-guide',
+    title: 'FinCEN MSB Registration Guide for Crypto and Fintech Startups (2025)',
+    description: 'When your crypto exchange, wallet, or payments product qualifies as a Money Services Business, FinCEN Form 107 registration, state money transmitter licenses, VASP/Travel Rule obligations, and criminal penalties for unregistered operation.',
+    tag: 'US Financial Regulation',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {

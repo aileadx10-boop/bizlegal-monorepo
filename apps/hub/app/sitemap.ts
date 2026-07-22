@@ -120,5 +120,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/guides/pci-dss-compliance-guide-saas`, lastModified: now, changeFrequency: 'monthly', priority: 0.74 },
     { url: `${BASE}/guides/cftc-crypto-regulation-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.73 },
     { url: `${BASE}/guides/gdpr-data-processing-agreement-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.75 },
+    { url: `${BASE}/guides/fincen-msb-registration-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.74 },
   ]
 }
