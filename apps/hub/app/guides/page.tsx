@@ -461,6 +461,13 @@ const GUIDES = [
     tag: 'AML / FinCEN',
     product: null,
   },
+  {
+    href: '/guides/ofac-sanctions-compliance-crypto-fintech-saas-guide',
+    title: 'OFAC Sanctions Compliance Guide for Crypto, Fintech, and B2B SaaS (2025): SDN List, 50% Rule, Blocking vs Rejecting, Voluntary Self-Disclosure, Virtual Currency Enforcement',
+    description: 'OFAC SDN screening, the 50% Rule for indirectly blocked entities, blocking vs rejecting procedures (10-day reporting), voluntary self-disclosure (VSD) and 50% penalty mitigation, civil penalty calculation (egregious vs non-egregious), crypto enforcement (Bittrex $29M, Poloniex $7.6M, Tornado Cash SDN designation), 5-element compliance program, secondary sanctions, and NYDFS BitLicense sanctions requirements.',
+    tag: 'OFAC / Sanctions',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
