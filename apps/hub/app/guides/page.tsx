@@ -335,6 +335,13 @@ const GUIDES = [
     tag: 'Employment Law',
     product: null,
   },
+  {
+    href: '/guides/cryptocurrency-tax-compliance-guide',
+    title: 'Cryptocurrency Tax Compliance Guide (2025): IRS Virtual Currency Rules, Cost Basis, DeFi Staking Income, Form 1099-DA',
+    description: 'IRS treats crypto as property (Notice 2014-21) — every trade, swap, and payment is taxable. Cost basis methods (FIFO vs Specific Identification), staking rewards as ordinary income (Rev. Rul. 2023-14), DeFi and liquidity pool tax treatment, Form 1099-DA broker reporting starting 2025, FBAR obligations for offshore exchange accounts, and 7 common crypto tax errors that trigger IRS audits.',
+    tag: 'Crypto Tax',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
