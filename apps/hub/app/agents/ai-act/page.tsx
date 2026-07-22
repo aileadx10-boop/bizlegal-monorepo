@@ -241,8 +241,8 @@ export default function AiActPage() {
         <div className="bl-container-narrow" style={{ textAlign: 'center' }}>
           <p style={{ color: 'var(--bl-text-muted)', lineHeight: 1.6 }}>
             Curious about the rule itself?{' '}
-            <Link href="/regulations" style={{ color: 'var(--bl-accent)' }}>
-              Read our EU AI Act explainer
+            <Link href="/regulations/ai-act" style={{ color: 'var(--bl-accent)' }}>
+              Read the EU AI Act Compliance Hub
             </Link>{' '}
             or{' '}
             <Link href="/agents" style={{ color: 'var(--bl-accent)' }}>

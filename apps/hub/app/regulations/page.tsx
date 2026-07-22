@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Regulatory Intelligence Hubs — SEC, MiCA, VARA, GDPR, AML',
-  description: 'Comprehensive regulatory intelligence for SEC, MiCA, VARA, GDPR, and AML compliance. Enforcement analysis, penalty calculators, and compliance guides.',
+  title: 'Regulatory Intelligence Hubs — SEC, MiCA, VARA, GDPR, AML, EU AI Act, BOI',
+  description: 'Comprehensive regulatory intelligence for SEC, MiCA, VARA, GDPR, AML, EU AI Act, and BOI/CTA compliance. Enforcement analysis, penalty frameworks, and compliance guides.',
 }
 
 const HUBS = [
@@ -12,6 +12,8 @@ const HUBS = [
   { slug: 'vara', tag: 'UAE Virtual Assets', title: 'VARA Compliance Hub', desc: 'Dubai Virtual Assets Regulatory Authority licensing, VASP requirements, and UAE crypto regulatory framework.' },
   { slug: 'gdpr', tag: 'EU Data Privacy', title: 'GDPR Compliance Hub', desc: 'EU General Data Protection Regulation — data processing obligations, DPO requirements, and cross-border transfer mechanisms.' },
   { slug: 'aml', tag: 'Global Financial Crime', title: 'AML & KYC Hub', desc: 'Anti-money laundering and know-your-customer frameworks under FATF Recommendations and jurisdiction-specific AML regimes.' },
+  { slug: 'ai-act', tag: 'EU AI Act', title: 'EU AI Act Compliance Hub', desc: 'EU Artificial Intelligence Act — risk-based framework for high-risk AI systems, GPAI model obligations, and €35M penalty regime effective 2025–2026.' },
+  { slug: 'boi', tag: 'FinCEN CTA / BOI', title: 'BOI / CTA Compliance Hub', desc: 'FinCEN Beneficial Ownership Information reporting under the Corporate Transparency Act — who must file, 23 exemptions, and $591/day penalties.' },
 ]
 
 export default function RegulationsPage() {
@@ -48,9 +50,9 @@ export default function RegulationsPage() {
     <div style={{ padding: '64px 32px' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <span className="section-label">Regulatory Intelligence</span>
-        <h1 style={{ marginBottom: 8 }}>Five Regulatory Regimes</h1>
+        <h1 style={{ marginBottom: 8 }}>Seven Regulatory Regimes</h1>
         <p style={{ color: 'var(--on-surface-var)', marginBottom: 48, fontSize: 15 }}>
-          Institutional-grade compliance intelligence covering the world's primary digital asset and data protection regulatory frameworks.
+          Institutional-grade compliance intelligence covering the world's primary digital asset, AI, and data protection regulatory frameworks.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 1 }}>
           {HUBS.map(hub => (

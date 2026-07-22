@@ -312,8 +312,8 @@ export default function BoiTrackerPage() {
         <div className="bl-container-narrow" style={{ textAlign: 'center' }}>
           <p style={{ color: 'var(--bl-text-muted)', lineHeight: 1.6 }}>
             Curious about the rule itself?{' '}
-            <Link href="/regulations" style={{ color: 'var(--bl-accent)' }}>
-              Read our CTA-2024 explainer
+            <Link href="/regulations/boi" style={{ color: 'var(--bl-accent)' }}>
+              Read the BOI/CTA Compliance Hub
             </Link>{' '}
             or{' '}
             <Link href="/agents" style={{ color: 'var(--bl-accent)' }}>
