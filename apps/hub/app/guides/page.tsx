@@ -244,6 +244,13 @@ const GUIDES = [
     tag: 'Crypto Regulation',
     product: null,
   },
+  {
+    href: '/guides/eu-us-data-transfer-guide',
+    title: 'EU-US Data Transfer Guide (2025): SCCs, DPF, UK IDTA, and Schrems II Compliance',
+    description: 'EU-US Data Privacy Framework (DPF) 2023 — valid but under Schrems III challenge. Standard Contractual Clauses 2021 (Module 2 for SaaS), Transfer Impact Assessments, UK IDTA and UK Data Bridge, Binding Corporate Rules, and the practical fallback strategy if DPF is invalidated again.',
+    tag: 'Privacy & Data',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
