@@ -454,6 +454,13 @@ const GUIDES = [
     tag: 'Consumer Protection',
     product: null,
   },
+  {
+    href: '/guides/aml-bsa-compliance-program-fintech-neobank-guide',
+    title: 'AML/BSA Compliance Program Guide for Fintech and Neobanks (2025): 5 Pillars, CDD Rule, SAR Filing, CTR Requirements, Structuring Prohibition, FinCEN Enforcement',
+    description: 'Bank Secrecy Act 5-pillar program requirements (31 USC § 5318), FinCEN CDD Final Rule (31 CFR § 1010.230) beneficial ownership 4-element framework, SAR thresholds ($2K MSBs/$5K banks) and 30/60-day deadlines, CTR $10K threshold and aggregation rules, structuring prohibition (31 USC § 5324), FinCEN enforcement (Capital One $390M, BitMEX $100M, Coinbase $50M), and virtual asset VASP AML obligations.',
+    tag: 'AML / FinCEN',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {

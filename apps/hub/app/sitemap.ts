@@ -160,5 +160,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/guides/ccpa-cpra-data-subject-request-operations-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/cross-border-data-transfer-scc-bcr-uk-idta-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/ftc-section-5-unfair-deceptive-practices-saas-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
+    { url: `${BASE}/guides/aml-bsa-compliance-program-fintech-neobank-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
   ]
 }
