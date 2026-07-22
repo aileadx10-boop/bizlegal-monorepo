@@ -648,6 +648,17 @@ export default function PrivacyPolicyComplianceGuidePage() {
           </div>
         </section>
 
+        <div style={{ margin: '2.5rem 0', padding: '1.5rem', background: 'linear-gradient(135deg, #1a56db08, #1a56db14)', border: '1px solid #1a56db30', borderRadius: '10px' }}>
+          <p style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', opacity: 0.6, marginBottom: '0.5rem' }}>Contract Risk — $97</p>
+          <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 0.75rem' }}>Scan Your Privacy Policy for CCPA / GDPR Gaps in 60 Seconds</h3>
+          <p style={{ fontSize: '0.9rem', lineHeight: 1.7, opacity: 0.85, marginBottom: '1.25rem' }}>
+            Outdated privacy policies are a regulatory liability. BizLegal AI reviews your privacy policy against current CCPA/CPRA and GDPR requirements — flagging missing data category disclosures, deficient opt-out language, stale third-party sharing lists, and GPC signal gaps — with specific fix recommendations for each issue found.
+          </p>
+          <a href="https://docai.bizlegal-ai.com" style={{ display: 'inline-block', padding: '0.6rem 1.25rem', background: '#1a56db', color: '#fff', borderRadius: '6px', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none' }}>
+            Scan Your Privacy Policy →
+          </a>
+        </div>
+
         {/* ── Section 6: FAQ ── */}
         <section style={{ marginBottom: '3rem' }}>
           <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '1.5rem' }}>Frequently Asked Questions</h2>

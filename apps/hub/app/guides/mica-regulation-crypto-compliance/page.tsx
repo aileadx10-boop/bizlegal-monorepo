@@ -219,6 +219,17 @@ export default function MiCAGuidePage() {
           </a>
         </section>
 
+        <div style={{ margin: '2.5rem 0', padding: '1.5rem', background: 'linear-gradient(135deg, #1a56db08, #1a56db14)', border: '1px solid #1a56db30', borderRadius: '10px' }}>
+          <p style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', opacity: 0.6, marginBottom: '0.5rem' }}>Contract Risk — $97</p>
+          <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 0.75rem' }}>Review Your MiCA-Related Contracts in 60 Seconds</h3>
+          <p style={{ fontSize: '0.9rem', lineHeight: 1.7, opacity: 0.85, marginBottom: '1.25rem' }}>
+            CASP service agreements, token issuance contracts, AML/KYC vendor agreements, and custody arrangements all need MiCA-compliant language. BizLegal AI scans your contracts for missing MiCA-required provisions — liability caps, governance disclosures, data handling clauses — and flags every gap with a risk rating.
+          </p>
+          <a href="https://docai.bizlegal-ai.com" style={{ display: 'inline-block', padding: '0.6rem 1.25rem', background: '#1a56db', color: '#fff', borderRadius: '6px', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none' }}>
+            Scan Your MiCA Contracts →
+          </a>
+        </div>
+
         <section style={{ marginBottom: '3rem' }}>
           <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '1.5rem' }}>Frequently Asked Questions</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
