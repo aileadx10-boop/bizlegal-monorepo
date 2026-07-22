@@ -377,6 +377,13 @@ const GUIDES = [
     tag: 'M&A & Corporate',
     product: null,
   },
+  {
+    href: '/guides/gdpr-dsar-response-guide',
+    title: 'GDPR Data Subject Rights & DSAR Response Guide (2025): 30-Day Deadline, Exemptions, Identity Verification, and Operational Process',
+    description: '8 GDPR data subject rights taxonomy (which are absolute vs conditional), the 1-month response deadline (3-month extension conditions), proportionate identity verification without creating unnecessary barriers, Article 15 DSAR response content requirements (all 9 elements), 12 Article 23 exemption categories, and how to build an operational DSAR process (intake, data mapping, templates, records).',
+    tag: 'GDPR & Privacy',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
