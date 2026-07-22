@@ -258,6 +258,13 @@ const GUIDES = [
     tag: 'Startup Law',
     product: null,
   },
+  {
+    href: '/guides/saas-master-subscription-agreement-guide',
+    title: 'SaaS MSA Guide for Vendors (2025): Drafting Your Customer Agreement',
+    description: 'Limitation of liability caps as a % of ARR, IP indemnification carve-outs, SLA credit caps and exclusive remedy clauses, DPA/GDPR Article 28 requirements, auto-renewal price escalation rights, and how to respond to the 8 most common enterprise legal team redlines.',
+    tag: 'Contract Law',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
