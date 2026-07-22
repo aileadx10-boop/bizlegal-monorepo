@@ -117,5 +117,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/guides/hipaa-compliance-checklist-saas`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
     { url: `${BASE}/guides/dora-ict-compliance-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
     { url: `${BASE}/guides/sec-crypto-compliance-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.74 },
+    { url: `${BASE}/guides/pci-dss-compliance-guide-saas`, lastModified: now, changeFrequency: 'monthly', priority: 0.74 },
   ]
 }

@@ -153,6 +153,13 @@ const GUIDES = [
     tag: 'US Securities Law',
     product: null,
   },
+  {
+    href: '/guides/pci-dss-compliance-guide-saas',
+    title: 'PCI DSS Compliance Guide for SaaS Startups (2025)',
+    description: 'Merchant level tiers, SAQ A vs SAQ D scope, PCI DSS v4.0 changes (script integrity, MFA requirements), tokenization scope reduction, and what your merchant service agreement says about breach liability.',
+    tag: 'Payment Security',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
