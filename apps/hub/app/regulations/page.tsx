@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Regulatory Intelligence Hubs — SEC, MiCA, VARA, GDPR, AML, EU AI Act, BOI, DORA, CCPA, SOC 2',
-  description: 'Comprehensive regulatory intelligence for SEC, MiCA, VARA, GDPR, AML, EU AI Act, BOI/CTA, DORA, CCPA/CPRA, and SOC 2 compliance. Enforcement analysis, penalty frameworks, and compliance guides.',
+  title: 'Regulatory Intelligence Hubs — SEC, MiCA, VARA, GDPR, AML, EU AI Act, BOI, DORA, CCPA, SOC 2, HIPAA, India DPDPA',
+  description: 'Comprehensive regulatory intelligence for SEC, MiCA, VARA, GDPR, AML, EU AI Act, BOI/CTA, DORA, CCPA/CPRA, SOC 2, HIPAA, and India DPDPA. Enforcement analysis, penalty frameworks, and compliance guides.',
 }
 
 const HUBS = [
@@ -17,6 +17,8 @@ const HUBS = [
   { slug: 'dora', tag: 'EU Digital Operational Resilience', title: 'DORA Compliance Hub', desc: 'EU Digital Operational Resilience Act — ICT risk management, major incident reporting, and third-party oversight for EU financial entities and their SaaS vendors.' },
   { slug: 'ccpa', tag: 'California Privacy Law', title: 'CCPA / CPRA Compliance Hub', desc: 'California Consumer Privacy Act & Privacy Rights Act — US privacy compliance for businesses with California customers, including GPC signal requirements.' },
   { slug: 'soc2', tag: 'AICPA Trust Services', title: 'SOC 2 Compliance Hub', desc: 'System and Organization Controls 2 — the de facto enterprise SaaS security audit standard, covering Type I vs Type II, Trust Service Criteria, and auditor selection.' },
+  { slug: 'hipaa', tag: 'US Healthcare Data Privacy', title: 'HIPAA Compliance Hub', desc: 'Health Insurance Portability and Accountability Act — PHI privacy and security rules for covered entities and business associates, including health-tech, EHR vendors, and healthcare SaaS.' },
+  { slug: 'dpdpa', tag: 'India Data Privacy Law', title: 'India DPDPA Compliance Hub', desc: 'Digital Personal Data Protection Act 2023 — India\'s consent-first privacy framework for Data Fiduciaries, including cross-border transfer rules, Significant Data Fiduciary obligations, and Data Protection Board enforcement.' },
 ]
 
 export default function RegulationsPage() {
@@ -53,7 +55,7 @@ export default function RegulationsPage() {
     <div style={{ padding: '64px 32px' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <span className="section-label">Regulatory Intelligence</span>
-        <h1 style={{ marginBottom: 8 }}>Ten Regulatory Regimes</h1>
+        <h1 style={{ marginBottom: 8 }}>Twelve Regulatory Regimes</h1>
         <p style={{ color: 'var(--on-surface-var)', marginBottom: 48, fontSize: 15 }}>
           Institutional-grade compliance intelligence covering the world's primary digital asset, AI, and data protection regulatory frameworks.
         </p>

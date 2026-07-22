@@ -279,6 +279,9 @@ export default function IndiaDpdpaGuide() {
         <div style={{ borderTop: '1px solid var(--color-border, #e5e7eb)', paddingTop: '2rem', marginTop: '2rem' }}>
           <p style={{ fontSize: '0.9rem', opacity: 0.7, marginBottom: '1rem' }}>Related compliance resources</p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+            <Link href="/regulations/dpdpa" style={{ padding: '0.4rem 0.9rem', border: '1px solid var(--color-border, #e5e7eb)', borderRadius: '6px', fontSize: '0.85rem', textDecoration: 'none', color: 'inherit' }}>
+              India DPDPA Compliance Hub →
+            </Link>
             <Link href="/guides/gdpr-compliance-checklist-saas" style={{ padding: '0.4rem 0.9rem', border: '1px solid var(--color-border, #e5e7eb)', borderRadius: '6px', fontSize: '0.85rem', textDecoration: 'none', color: 'inherit' }}>
               GDPR Compliance Checklist →
             </Link>

@@ -607,6 +607,128 @@ const HUB_DATA: Record<string, any> = {
       { q: 'How do we share our SOC 2 report with prospects?', a: 'SOC 2 reports are confidential audit documents — not public certifications like ISO 27001. Share the full report under a mutual NDA when the prospect\'s security team requests detailed review. Best practice: maintain a standard one-page SOC 2 summary (auditor name, audit period, trust service criteria, opinion type) for early-stage sharing without NDA. Some companies use the CAIQ (Consensus Assessments Initiative Questionnaire) to pre-answer common vendor risk questions and include their SOC 2 report reference, reducing duplicative questionnaire work.' },
     ],
   },
+  hipaa: {
+    tag: 'US Healthcare Data Privacy',
+    title: 'HIPAA Compliance Hub',
+    subtitle: 'Health Insurance Portability and Accountability Act — PHI Rules for US Healthcare and Health-Tech Companies',
+    authority: 'HHS Office for Civil Rights (OCR)',
+    jurisdiction: 'United States',
+    maxFine: '$100–$50,000 per violation · $1.9M per violation category per year',
+    difficulty: 77,
+    color: '#dc2626',
+    intro: 'HIPAA — the Health Insurance Portability and Accountability Act of 1996 — establishes the foundational legal framework governing the privacy, security, and integrity of Protected Health Information (PHI) in the United States. Enforced by the HHS Office for Civil Rights (OCR), HIPAA applies not only to traditional healthcare providers, health plans, and clearinghouses (Covered Entities) but also to any technology vendor, SaaS platform, or cloud provider that creates, receives, maintains, or transmits PHI on their behalf (Business Associates). The HITECH Act of 2009 dramatically expanded enforcement, authorised state attorneys general to bring HIPAA civil actions, and created the public HHS Breach Portal — commonly called the Wall of Shame — which has tracked over 5,000 reportable breaches affecting more than 500 individuals since 2009.',
+    section1: {
+      title: 'The Three HIPAA Rules',
+      body: 'HIPAA compliance is structured around three primary rules. The Privacy Rule (effective April 2003) defines Protected Health Information (PHI), establishes 18 types of individually identifiable health data, requires patient rights to access and amend their records, and imposes the minimum necessary standard on all PHI disclosures. The Security Rule (effective April 2005) applies specifically to electronic PHI (ePHI) and requires covered entities and business associates to implement administrative, physical, and technical safeguards — including risk analysis, workforce training, access controls, audit controls, encryption in transit, and device and media controls.\n\nThe Breach Notification Rule (effective February 2010 under HITECH) requires covered entities to notify affected individuals within 60 days of discovering a breach, notify HHS for breaches affecting 500+ individuals (triggering immediate publication on the Wall of Shame), and notify HHS annually for breaches affecting fewer than 500 individuals. Media notice is required for breaches affecting 500+ individuals in a state or jurisdiction.',
+    },
+    section2: {
+      title: 'Who Must Comply',
+      checklist: [
+        'Covered Entities: healthcare providers (hospitals, clinics, physicians, pharmacies), health plans (insurers, HMOs), and healthcare clearinghouses',
+        'Business Associates: any vendor receiving, maintaining, or transmitting PHI — cloud providers, EHR vendors, billing platforms, analytics companies, SaaS tools',
+        'Subcontractors of Business Associates who handle PHI (downstream BAA chain)',
+        'Health-tech and digital health startups with access to patient data via API, integration, or data processing agreements',
+        'Telemedicine platforms, remote patient monitoring companies, and digital therapeutics providers',
+        'Research institutions receiving patient data from covered entities for clinical research',
+      ],
+    },
+    section3: {
+      title: 'Penalties and Enforcement History',
+      body: 'HIPAA penalties follow a four-tier structure based on culpability. Tier 1 (did not know): $100–$50,000 per violation, $25,000 annual cap per category. Tier 2 (reasonable cause): $1,000–$50,000 per violation, $100,000 annual cap. Tier 3 (willful neglect corrected): $10,000–$50,000 per violation, $250,000 annual cap. Tier 4 (willful neglect uncorrected): $50,000 per violation, $1.9M annual cap per violation category. The 2024 HIPAA Safe Harbor provision reduces penalties for entities that have implemented recognized cybersecurity frameworks (NIST CSF, NIST SP 800-66) in the 12 months preceding a breach. OCR has collected over $135M in settlements and penalties since 2009.',
+    },
+    timeline: [
+      { date: 'Aug 1996', event: 'HIPAA Enacted', detail: 'Health Insurance Portability and Accountability Act signed. Title II Administrative Simplification provisions required patient data privacy standards for the first time.' },
+      { date: 'Apr 2003', event: 'Privacy Rule Effective', detail: '18 PHI identifiers defined. Minimum necessary standard established. Patient rights to access, amend, and receive an accounting of disclosures codified.' },
+      { date: 'Apr 2005', event: 'Security Rule Effective', detail: 'Technical, administrative, and physical safeguard requirements for ePHI established. Risk analysis mandate and annual review requirements began.' },
+      { date: 'Feb 2010', event: 'HITECH Breach Notification', detail: 'Breach Notification Rule began enforcement. HHS Breach Portal (Wall of Shame) launched. State AG enforcement rights created. BA liability expanded directly (not just through covered entities).' },
+      { date: 'Mar 2024', event: 'HIPAA Safe Harbor for Cybersecurity', detail: 'HHS clarified Safe Harbor reducing penalties for entities implementing NIST CSF or NIST SP 800-66 frameworks before a breach. Change Healthcare cyberattack (100M+ patients affected) prompted renewed enforcement focus.' },
+    ],
+    comparison: {
+      headers: ['Dimension', 'HIPAA', 'GDPR', 'SOC 2'],
+      rows: [
+        ['Type', 'US federal regulation', 'EU data protection law', 'Voluntary audit/attestation'],
+        ['Enforcement Body', 'HHS Office for Civil Rights', 'National DPAs + EDPB', 'No enforcement — commercial'],
+        ['Max Annual Penalty', '$1.9M per violation category', '€20M or 4% global turnover', 'No fine — lost contracts'],
+        ['Breach Notification', '60 days (500+ individuals)', '72 hours to supervisory authority', 'Not required (contractual SLA)'],
+        ['Scope', 'US PHI only', 'EU/EEA personal data', 'Customer data broadly'],
+        ['Privacy Officer', 'Required (Privacy Rule)', 'DPO required for high-risk', 'Not required'],
+      ],
+    },
+    mitigations: [
+      { title: 'Conduct and Document an Annual HIPAA Risk Analysis', body: 'The Security Rule requires a formal risk analysis as a foundation of your HIPAA compliance programme. The risk analysis must identify all ePHI created, received, maintained, or transmitted; identify and evaluate the probability and impact of each threat and vulnerability; implement security measures sufficient to reduce risks and vulnerabilities to a reasonable and appropriate level; and document the process. Risk analysis must be reviewed and updated in response to environmental or operational changes. OCR consistently cites missing or inadequate risk analysis as the #1 compliance failure in investigations.' },
+      { title: 'Execute Business Associate Agreements with Every PHI-Handling Vendor', body: 'Any vendor that creates, receives, maintains, or transmits PHI on your behalf is a Business Associate. HIPAA requires a written Business Associate Agreement (BAA) before any PHI is shared. The BAA must specify permitted uses and disclosures, require the BA to implement appropriate safeguards, require the BA to report breaches, and require the BA to return or destroy PHI at contract termination. Cloud providers (AWS, GCP, Azure) all offer HIPAA-eligible services with BAAs — but signing the BAA and configuring your environment to be HIPAA-eligible are two separate steps. Failure to execute a BAA before sharing PHI is a per-violation HIPAA violation.' },
+      { title: 'Implement Technical Safeguards and Access Controls for ePHI Systems', body: 'Technical safeguards are the most frequently cited area in OCR audits. Required controls: unique user identification (no shared accounts for ePHI systems); automatic logoff after inactivity; encryption and decryption of ePHI in transit (TLS 1.2+ required; TLS 1.3 recommended) and at rest (AES-256 standard); audit logging of all ePHI access, modification, and deletion; and integrity controls to detect unauthorised ePHI alteration. Addressable (required unless documented alternative): encryption at rest, automatic logoff timers, message authentication. The HIPAA Safe Harbor (2024) reduces penalties for entities implementing NIST CSF or NIST SP 800-66 frameworks.' },
+    ],
+    precedent: 'HHS Office for Civil Rights v. Advocate Health Care Network (2016): "$5.55M settlement — the largest HIPAA settlement at the time — resolved alleged violations stemming from the theft of four unencrypted laptops containing ePHI of 4 million patients. OCR investigation found Advocate failed to conduct an accurate and thorough risk analysis, failed to implement policies and procedures governing workstations that access ePHI, and failed to implement physical safeguards for ePHI systems." — HHS OCR Settlement Agreement, Aug 4, 2016.',
+    faqs: [
+      { q: 'Does HIPAA apply to my digital health or healthcare SaaS startup?', a: 'HIPAA applies to your startup if you are (1) a covered entity — a healthcare provider who transmits health information electronically, a health plan, or a healthcare clearinghouse — or (2) a Business Associate — any company that creates, receives, maintains, or transmits PHI on behalf of a covered entity. Most healthcare technology companies, EHR vendors, patient portal providers, health analytics platforms, telehealth companies, and healthcare AI companies are Business Associates. If your product stores, processes, or transmits identifiable patient health information in the US, you almost certainly need a HIPAA compliance programme and BAAs with your covered entity customers.' },
+      { q: 'What are the 18 types of Protected Health Information?', a: 'PHI is health information that identifies an individual and relates to past, present, or future physical or mental health, health care, or payment for health care. The 18 HIPAA identifiers are: name, address (anything more specific than state), dates (except year), phone, fax, email, SSN, medical record number, health plan beneficiary number, account number, certificate/license number, vehicle identifiers, device identifiers, URLs, IP addresses, biometric identifiers, full face photographs, and any other unique identifying number or code. If health information contains any of the 18 identifiers, it is PHI and HIPAA applies. Safe Harbor de-identification requires removing all 18 identifiers before data can be treated as non-PHI.' },
+      { q: 'What is a Business Associate Agreement and when is it required?', a: 'A Business Associate Agreement (BAA) is a written contract that must be executed before a covered entity shares PHI with any Business Associate. The BAA is a HIPAA-mandated document — not just a commercial nicety. It must describe permitted uses and disclosures of PHI, require the BA to implement appropriate safeguards, require reporting of security incidents and breaches, allow the covered entity to terminate the BAA and recover PHI upon violation, and prohibit the BA from further disclosures not permitted by the agreement. Cloud providers (AWS, GCP, Azure) offer BAAs for HIPAA-eligible services — but signing the BAA does not make your entire cloud environment HIPAA-compliant; only HIPAA-eligible services in your specific configuration qualify.' },
+      { q: 'What is the difference between a HIPAA breach and a security incident?', a: 'A security incident is any attempted or successful unauthorized access, use, disclosure, modification, or destruction of ePHI — including phishing attempts, ransomware, misconfigured S3 buckets, and accidental disclosures. A breach is a specific type of security incident: the acquisition, access, use, or disclosure of unsecured PHI in a manner not permitted by the Privacy Rule, presumed to be a reportable breach unless the covered entity or BA demonstrates through a risk assessment that there is a low probability that PHI was compromised (the 4-factor test). Breach notification timelines: individuals within 60 days; HHS simultaneously for 500+ individual breaches; HHS annually for smaller breaches; media notice for 500+ individuals in a state.' },
+      { q: 'How do HIPAA penalties work and how can they be reduced?', a: 'HIPAA civil monetary penalties follow a four-tier structure tied to culpability: unknown violation ($100–$50K/violation, $25K annual cap per category); reasonable cause ($1K–$50K, $100K cap); willful neglect corrected ($10K–$50K, $250K cap); willful neglect uncorrected ($50K/violation, $1.9M cap). The 2024 HIPAA Safe Harbor provision reduces penalties for entities that have implemented a recognised cybersecurity framework (NIST CSF, NIST SP 800-66, CIS Controls, ISO 27001, etc.) in the 12 months before the breach. Criminal HIPAA violations are referred to the Department of Justice and can result in up to 10 years imprisonment. State attorneys general can also bring parallel civil enforcement actions, compounding penalties.' },
+    ],
+  },
+  dpdpa: {
+    tag: 'India Data Privacy Law',
+    title: 'India DPDPA Compliance Hub',
+    subtitle: 'Digital Personal Data Protection Act 2023 — India\'s Privacy Framework for Data Fiduciaries Processing Indian Personal Data',
+    authority: 'Data Protection Board of India (Ministry of Electronics and IT)',
+    jurisdiction: 'India + cross-border processors of Indian data subjects\' personal data',
+    maxFine: '₹250 crore (≈$30M USD) per violation',
+    difficulty: 64,
+    color: '#0891b2',
+    intro: 'India\'s Digital Personal Data Protection Act 2023 (DPDPA), signed into law on 11 August 2023 as Act No. 22 of 2023, represents India\'s first standalone personal data protection statute — replacing years of reliance on Section 43A of the IT Act 2000. The DPDPA establishes a consent-first framework for "digital personal data" — data collected, stored, or processed in digital form — applying to Data Fiduciaries (analogous to GDPR controllers) operating in India or processing data of Indian Data Principals (data subjects) outside India. Enforcement is phased, with the Data Protection Board of India (DPB) constituted under the Ministry of Electronics and Information Technology (MeitY) responsible for adjudication. As of 2025, the draft DPDPA Rules remain under consultation, with enforcement expected to begin in phases through 2025–2026. Indian companies and multinationals processing Indian user data must begin compliance programmes now — waiting for Rules finalization is a significant governance risk.',
+    section1: {
+      title: 'What the DPDPA Covers',
+      body: 'The DPDPA applies to the processing of "digital personal data" — any data about an individual collected in digital form or digitised after collection. The Act establishes two primary categories of regulated parties. Data Fiduciaries determine the purpose and means of processing personal data. Significant Data Fiduciaries (SDFs) are government-designated entities whose scale, sensitivity, or national security implications warrant heightened obligations: mandatory Data Protection Officer, mandatory Data Audits, mandatory algorithmic impact assessments, and data localisation requirements to be specified by government notification.\n\nThe DPDPA defines seven lawful processing grounds: consent (the primary ground), voluntary provision for contractual performance, compliance with legal obligations, medical emergencies, employment purposes, public interest processing, and research/archiving under prescribed conditions. Unlike GDPR\'s six bases, DPDPA heavily emphasises consent — which must be free, specific, informed, unconditional, and unambiguous. The Act mandates Consent Managers: MeitY-registered intermediaries through which Data Principals can give, manage, review, and withdraw consent across multiple Data Fiduciaries via a single interface.',
+    },
+    section2: {
+      title: 'Who Must Comply',
+      checklist: [
+        'Indian companies processing digital personal data of individuals in India',
+        'Foreign companies processing personal data of Indian Data Principals outside India in connection with goods or services offered to them',
+        'Significant Data Fiduciaries (government-designated) — additional obligations apply: DPO, data audit, algorithmic impact assessment, localisation',
+        'Data Processors (vendors) acting on behalf of Data Fiduciaries — must enter into written data processing contracts',
+        'SaaS platforms and cloud services used by Indian enterprises that process personal data of Indian users',
+        'Fintech, healthcare, and e-commerce companies collecting Indian user data for targeting, profiling, or personalisation',
+      ],
+    },
+    section3: {
+      title: 'Penalties and Enforcement',
+      body: 'The DPDPA establishes a tiered penalty structure adjudicated by the Data Protection Board of India. Schedule 1 specifies penalties: failure to implement reasonable security safeguards resulting in a personal data breach — up to ₹250 crore (≈$30M). Failure to notify Data Principals and the Board of a breach — up to ₹200 crore. Failure by a Significant Data Fiduciary to observe additional obligations — up to ₹150 crore. Violation of children\'s data processing restrictions — up to ₹200 crore. Other violations — up to ₹50 crore per violation. The DPB is empowered to investigate, impose penalties, and order discontinuation of processing. Appeals lie to the Telecom Disputes Settlement and Appellate Tribunal (TDSAT) and then to High Courts.',
+    },
+    timeline: [
+      { date: 'Nov 2022', event: 'Previous Bill Withdrawn', detail: 'The Personal Data Protection Bill 2019 (JPC-reviewed) was withdrawn after 3 years. MeitY began drafting a new, leaner statute to reduce compliance burden while maintaining core protections.' },
+      { date: 'Aug 2023', event: 'DPDPA Enacted', detail: 'Digital Personal Data Protection Act 2023 (Act No. 22 of 2023) received Presidential assent and was published in the Official Gazette. A consent-first, digital-first framework with 7 processing grounds.' },
+      { date: 'Jan 2024', event: 'Draft Rules Published', detail: 'MeitY published Draft DPDPA Rules for public consultation. Rules specify Consent Manager registration, Data Protection Officer qualifications, and breach notification timelines (72 hours proposed).' },
+      { date: '2024–2025', event: 'Rules Finalization', detail: 'MeitY consultation rounds on data localisation, cross-border transfer restrictions, and Significant Data Fiduciary designation criteria. Large tech platforms begin compliance mapping exercises.' },
+      { date: '2025–2026', event: 'Phased Enforcement Begins', detail: 'Data Protection Board constituted. First Significant Data Fiduciary designations expected. Grace periods for smaller Data Fiduciaries. Enforcement of breach notification and consent requirements begins.' },
+    ],
+    comparison: {
+      headers: ['Dimension', 'India DPDPA', 'GDPR', 'CCPA / CPRA'],
+      rows: [
+        ['Enforcement Body', 'Data Protection Board of India', 'National DPAs + EDPB', 'CPPA + California AG'],
+        ['Max Penalty', '₹250 crore (≈$30M) per violation', '€20M or 4% global turnover', '$7,500 per intentional violation'],
+        ['Data Localisation', 'Required for Significant DFs (to be specified)', 'No — standard SCCs/BCRs', 'No requirement'],
+        ['Consent Basis', 'Explicit, purpose-specific, withdrawable', 'One of 6 lawful bases (consent preferred)', 'Opt-out right (not consent-first)'],
+        ['Cross-Border Transfer', 'Allowed unless government restricts countries', 'Adequacy decisions/SCCs/BCRs required', 'No specific restriction'],
+        ['Children\'s Data', '18+ or guardian consent (age-gating required)', '13+ in most states (member state variation)', '16+ (opt-in for 13–16) under CPRA'],
+      ],
+    },
+    mitigations: [
+      { title: 'Classify Your Entity and Assess Significant Data Fiduciary Threshold', body: 'Begin by determining whether your organisation qualifies as a Data Fiduciary under the DPDPA and, if so, whether you are likely to be designated a Significant Data Fiduciary (SDF). SDF designation criteria will be specified by MeitY notification but are expected to include: volume of personal data processed (likely 10M+ users), sensitivity of data, national security or public order implications, risk to electoral democracy, and cross-border transfer volumes. SDFs face additional obligations: Data Protection Officer (must be India-resident), annual data audit, algorithmic impact assessments, and data localisation for specified data categories. Even if you are not an SDF, begin compliance mapping now — the breach notification timeline and consent requirements apply to all Data Fiduciaries.' },
+      { title: 'Implement a Consent Management Framework', body: 'The DPDPA\'s primary processing ground is consent — more prominently than GDPR. Consent must be: free (no bundling unrelated consents), specific (for defined purposes), informed (notice explaining purpose, categories, third-party sharing), unconditional (no contingent on service access unless genuinely required), and unambiguous (affirmative act; no pre-ticked boxes). The Draft DPDPA Rules require consent to be given through a "consent artefact" — a machine-readable digital record of each consent, including the entity, purpose, data categories, and withdrawal mechanism. Data Principals have the right to withdraw consent at any time. Withdrawal must be processed within a reasonable time, and post-withdrawal processing must cease (subject to legal retention obligations). Build your consent infrastructure to support artefact generation and withdrawal workflows before enforcement begins.' },
+      { title: 'Establish Breach Detection and Notification Infrastructure', body: 'The DPDPA requires Data Fiduciaries to notify both the Data Protection Board and affected Data Principals of a personal data breach "without delay." The Draft Rules propose a 72-hour notification window for the DPB (aligned with GDPR), with Data Principal notification to follow. Breach notification must include: nature of breach, categories and approximate volume of data affected, likely consequences, and remedial measures taken or proposed. Critical first steps: implement security incident detection logging for all personal data systems; define and document what constitutes a "personal data breach" vs a security incident; establish an internal escalation protocol with clear ownership; and engage legal counsel to assess breach notification obligations before your first incident, not after.' },
+    ],
+    precedent: 'Ministry of Electronics and Information Technology (MeitY) Statement on DPDPA Objectives (Aug 2023): "The Digital Personal Data Protection Act 2023 recognises that data is a valuable resource and that individuals whose data is being processed have a right to have their data protected. The Act seeks to balance the right of individuals to protect their personal data with the need to process personal data for lawful purposes. The Act is designed to be technology-agnostic, principle-based, and focused on accountability of Data Fiduciaries." — MeitY Press Note, August 11, 2023.',
+    faqs: [
+      { q: 'Does India\'s DPDPA apply to companies outside India?', a: 'Yes. The DPDPA applies extra-territorially when a non-Indian entity processes the personal data of Data Principals located in India in connection with offering goods or services to them. This mirrors the GDPR\'s "establishment or targeting" principle. A US or EU company offering a SaaS product to Indian enterprises, or a consumer app with Indian users, must comply with DPDPA obligations including consent requirements, breach notification, and Data Principal rights — regardless of where the company is incorporated or where the data is stored (subject to cross-border transfer restrictions, which are to be specified by government notification).' },
+      { q: 'What is a Significant Data Fiduciary under the DPDPA?', a: 'A Significant Data Fiduciary (SDF) is a category of Data Fiduciary that the central government designates by notification based on: volume and sensitivity of personal data processed, risk to rights of Data Principals, potential impact on sovereignty and integrity of India, risk to electoral democracy, national security implications, and cross-border transfer volumes. SDFs face additional obligations not required of other Data Fiduciaries: appointment of a Data Protection Officer (India-resident), appointment of an independent data auditor, algorithmic impact assessments for processing activities, and data localisation for specified categories. MeitY has not yet published the SDF designation list as of mid-2025, but large tech platforms, payment aggregators, and major consumer internet companies are widely expected to be designated.' },
+      { q: 'What are the notice and consent requirements under the DPDPA?', a: 'Before or at the time of collecting personal data, a Data Fiduciary must provide a clear and plain-language notice specifying: what personal data is being collected, the purpose for which it will be processed, the manner in which Data Principal rights may be exercised, and the manner in which the Data Principal can raise a grievance. Consent must be a clear affirmative act — no pre-ticked boxes, no bundled consents for unrelated purposes. The Draft DPDPA Rules require consent to be recorded in a "consent artefact" — a structured machine-readable record. Data Principals may withdraw consent at any time, and withdrawal must be processed within a timeline specified in rules (expected to mirror GDPR\'s "reasonable time" standard). Importantly, the DPDPA does not permit "legitimate interests" as a standalone processing ground — consent or one of the other six specified lawful purposes must always apply.' },
+      { q: 'How do DPDPA penalties compare to GDPR in practice?', a: 'The DPDPA\'s maximum penalty is ₹250 crore (approximately $30M USD), applied per violation. GDPR\'s maximum is €20M or 4% of global annual turnover — whichever is higher — meaning a large MNC could face a €500M+ GDPR fine while the same company\'s DPDPA exposure is capped near $30M. For small and medium companies, the DPDPA penalty ceiling is significant relative to revenue. However, the Data Protection Board is a new institution with limited enforcement precedent as of 2025. Unlike GDPR\'s 5+ years of active enforcement with documented fines exceeding €4.5B across the EU, the DPDPA\'s enforcement trajectory is uncertain. Practical compliance posture: treat DPDPA obligations as seriously as GDPR obligations for data collected from Indian users, as the penalty and reputational risk is real even if early enforcement actions are targeted rather than mass-market.' },
+      { q: 'What is a Consent Manager and is it required?', a: 'A Consent Manager is a MeitY-registered intermediary through which a Data Principal can provide, manage, review, and withdraw consents across multiple Data Fiduciaries through a single platform. Think of it as an interoperable consent dashboard. Data Fiduciaries are not required to use a Consent Manager for all consent collection — they can maintain their own consent artefacts directly. However, if a Data Principal uses a Consent Manager to withdraw consent, the Data Fiduciary must give effect to that withdrawal. Consent Managers must be registered with MeitY, maintain interoperable standards specified in the Rules, maintain a consent artefact log, and allow Data Principals to review and modify consents. The Consent Manager ecosystem is modelled on the Account Aggregator framework in Indian fintech and is expected to become the dominant consent infrastructure for large consumer-facing platforms.' },
+    ],
+  },
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -813,7 +935,7 @@ export default function RegulationHubPage({ params }: Props) {
             </div>
           ))}
 
-          {(params.slug === 'mica' || params.slug === 'gdpr' || params.slug === 'vara' || params.slug === 'aml' || params.slug === 'ai-act' || params.slug === 'boi' || params.slug === 'ccpa' || params.slug === 'soc2') && (
+          {(params.slug === 'mica' || params.slug === 'gdpr' || params.slug === 'vara' || params.slug === 'aml' || params.slug === 'ai-act' || params.slug === 'boi' || params.slug === 'ccpa' || params.slug === 'soc2' || params.slug === 'dpdpa') && (
             <div style={{ marginTop: 24, padding: '16px 20px', background: 'var(--bg-mid)', border: '0.5px solid var(--outline-var)', borderRadius: 8 }}>
               <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--outline)' }}>Deep Dive Guide</span>
               {params.slug === 'mica' && (
@@ -862,6 +984,12 @@ export default function RegulationHubPage({ params }: Props) {
                 <p style={{ margin: '6px 0 0', fontSize: 13, lineHeight: 1.6 }}>
                   <Link href="/guides/soc2-compliance-checklist-saas" style={{ color: 'var(--primary)', fontWeight: 600 }}>SOC 2 Compliance Checklist →</Link>
                   {' '}Complete control implementation checklist, trust service criteria breakdown, auditor selection guide, and evidence collection playbook for SaaS companies.
+                </p>
+              )}
+              {params.slug === 'dpdpa' && (
+                <p style={{ margin: '6px 0 0', fontSize: 13, lineHeight: 1.6 }}>
+                  <Link href="/guides/india-dpdpa-compliance-guide" style={{ color: 'var(--primary)', fontWeight: 600 }}>India DPDPA Compliance Guide →</Link>
+                  {' '}Consent management, Data Principal rights, breach notification timelines, and cross-border transfer rules for companies processing Indian personal data.
                 </p>
               )}
             </div>
@@ -959,6 +1087,18 @@ export default function RegulationHubPage({ params }: Props) {
                 <Link href="/tools/contract-fixer" style={{ display: 'block', padding: '8px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Contract Risk Scanner →</Link>
               </>
             )}
+            {params.slug === 'hipaa' && (
+              <>
+                <Link href="/tools/website-compliance" style={{ display: 'block', padding: '8px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>Website Compliance Checker →</Link>
+                <Link href="/tools/contract-fixer" style={{ display: 'block', padding: '8px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Contract Risk Scanner →</Link>
+              </>
+            )}
+            {params.slug === 'dpdpa' && (
+              <>
+                <Link href="/tools/website-compliance" style={{ display: 'block', padding: '8px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>Website Compliance Checker →</Link>
+                <Link href="/tools/gdpr-fine-estimator" style={{ display: 'block', padding: '8px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>GDPR Fine Estimator →</Link>
+              </>
+            )}
           </div>
 
           {/* Related guides */}
@@ -1029,6 +1169,20 @@ export default function RegulationHubPage({ params }: Props) {
                 <Link href="/guides/soc2-compliance-checklist-saas" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>SOC 2 Compliance Checklist →</Link>
                 <Link href="/guides/iso-27001-vs-soc2-guide" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>ISO 27001 vs SOC 2 Guide →</Link>
                 <Link href="/guides/compliance-health-score-saas" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Compliance Health Score →</Link>
+              </>
+            )}
+            {params.slug === 'hipaa' && (
+              <>
+                <Link href="/guides/soc2-compliance-checklist-saas" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>SOC 2 Compliance Checklist →</Link>
+                <Link href="/guides/compliance-health-score-saas" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>Compliance Health Score →</Link>
+                <Link href="/guides/startup-compliance-program-guide" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Startup Compliance Program →</Link>
+              </>
+            )}
+            {params.slug === 'dpdpa' && (
+              <>
+                <Link href="/guides/india-dpdpa-compliance-guide" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>India DPDPA Compliance Guide →</Link>
+                <Link href="/guides/privacy-policy-compliance-guide" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>Privacy Policy Compliance Guide →</Link>
+                <Link href="/guides/startup-compliance-program-guide" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Startup Compliance Program →</Link>
               </>
             )}
           </div>
