@@ -223,6 +223,13 @@ const GUIDES = [
     tag: 'Incident Response',
     product: null,
   },
+  {
+    href: '/guides/ip-assignment-agreement-guide',
+    title: 'IP Assignment Agreement Guide: Who Owns Code, Inventions, and Work Product (2025)',
+    description: 'Work-for-hire doctrine only covers 9 statutory categories — standalone software is not one of them. Employee PIIA requirements, contractor IP assignment clauses, co-founder IP gaps that kill Series A due diligence, and the timing of execution relative to when work begins.',
+    tag: 'Intellectual Property',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
