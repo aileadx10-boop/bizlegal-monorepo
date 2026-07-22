@@ -111,6 +111,27 @@ const GUIDES = [
     tag: 'AI Regulation',
     product: null,
   },
+  {
+    href: '/guides/contract-risk-analysis-guide',
+    title: 'Contract Risk Analysis Guide: 7 Red Flags in Every Vendor Agreement (2025)',
+    description: 'Unlimited liability, unilateral modification, auto-renewal traps, perpetual data license grants. The 7 clauses that destroy startups — and the counter-position for each.',
+    tag: 'Contracts',
+    product: null,
+  },
+  {
+    href: '/guides/iso-27001-vs-soc2-guide',
+    title: 'ISO 27001 vs SOC 2: Which Does Your SaaS Startup Need? (2025)',
+    description: 'ISO 27001 takes 9-18 months and costs $40-80K. SOC 2 takes 4-9 months and costs $20-50K. Which one enterprise customers actually require — and when you need both.',
+    tag: 'Security & Compliance',
+    product: null,
+  },
+  {
+    href: '/guides/startup-compliance-program-guide',
+    title: 'Startup Compliance Program Guide: When You Need One and How to Build It (2025)',
+    description: '6 triggers that make a compliance program non-negotiable. 7 program components. 4 staffing models. The 12-month compliance calendar every fintech founder needs.',
+    tag: 'Compliance Strategy',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
