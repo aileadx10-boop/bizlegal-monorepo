@@ -293,6 +293,13 @@ const GUIDES = [
     tag: 'Crypto Regulation',
     product: null,
   },
+  {
+    href: '/guides/venture-capital-term-sheet-guide',
+    title: 'Venture Capital Term Sheet Guide (2025): Liquidation Preferences, Anti-Dilution, Pro-Rata, Drag-Along',
+    description: '1× non-participating vs participating preferred (and why participation matters more than valuation in median exits), broad-based weighted average vs full-ratchet anti-dilution, pro-rata and super pro-rata rights, drag-along thresholds, the option pool shuffle, founder vesting acceleration, and the 5 Series A closing documents and what each one governs.',
+    tag: 'Startup Law',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
