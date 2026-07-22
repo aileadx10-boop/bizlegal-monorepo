@@ -412,6 +412,13 @@ const GUIDES = [
     tag: 'Fintech / Payments',
     product: null,
   },
+  {
+    href: '/guides/regulation-d-private-placement-exemption-guide',
+    title: 'Regulation D Private Placement Exemption Guide (2025): Rule 506(b) vs 506(c), Accredited Investor Definition, General Solicitation, Form D Filing',
+    description: 'Regulation D compliance for startup fundraising: Rule 506(b) vs 506(c) comparison (general solicitation prohibition, verification requirements), 2020 accredited investor definition expansion (Series 7/65/82, knowledgeable employees), Form D 15-day filing deadline and EDGAR mechanics, state blue sky preemption and notice filings, bad actor disqualification under Rule 506(d), and the integration safe harbor doctrine.',
+    tag: 'Securities Law',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
