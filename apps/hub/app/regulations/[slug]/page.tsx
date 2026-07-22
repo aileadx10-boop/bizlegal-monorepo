@@ -421,6 +421,192 @@ const HUB_DATA: Record<string, any> = {
       { q: 'How does BOI reporting affect DAO LLCs and crypto companies?', a: 'DAO LLCs and other Web3 entities registered under state law (Wyoming DAO LLCs, Delaware LLCs) are generally reporting companies. Token holders are typically not beneficial owners unless they hold 25%+ of tokens representing ownership interests and those tokens confer economic rights, not merely governance rights. Smart-contract-based ownership structures require specific beneficial ownership analysis — indirect ownership through voting trust, proxy, or contract arrangements all count toward the 25% threshold. FinCEN has not issued specific guidance for DAOs, so analysis must proceed under the general rule with conservative assumptions.' },
     ],
   },
+  dora: {
+    tag: 'EU Digital Operational Resilience',
+    title: 'DORA Compliance Hub',
+    subtitle: 'Digital Operational Resilience Act — ICT Risk, Incident Reporting, and Third-Party Oversight for EU Financial Entities',
+    authority: 'EBA + EIOPA + ESMA (Joint Committee) + National Competent Authorities',
+    jurisdiction: 'European Union',
+    maxFine: '€5M or 1% of worldwide daily turnover per violation',
+    difficulty: 82,
+    color: '#7c3aed',
+    intro: 'Regulation (EU) 2022/2554, the Digital Operational Resilience Act, entered force on 16 January 2023 and became fully applicable on 17 January 2025. DORA imposes uniform ICT risk management, major incident reporting, digital operational resilience testing, and ICT third-party risk management obligations across more than 22,000 financial entities in the EU. Critically, DORA applies not just to regulated financial institutions but to any ICT third-party service provider — including cloud providers, data analytics vendors, and software-as-a-service platforms — that provides services to in-scope entities.',
+    section1: {
+      title: 'What DORA Covers',
+      body: 'DORA establishes five core pillars: (1) ICT Risk Management — a comprehensive internal framework covering identification, protection, detection, response, and recovery; (2) ICT-Related Incident Management — classification, internal management procedures, and reporting to regulators; (3) Digital Operational Resilience Testing — annual threat-led penetration testing (TLPT) for significant entities; (4) ICT Third-Party Risk Management — pre-contractual due diligence, contract requirements, and concentration risk monitoring; and (5) Information Sharing — voluntary participation in cyber threat intelligence networks.\n\nDORA\'s scope extends beyond traditional banks. In-scope entities include: credit institutions, payment institutions, e-money institutions, crypto-asset service providers (MiCA CASPs), insurance and reinsurance undertakings, investment firms, trading venues, AIFMs, UCITS management companies, credit rating agencies, and ICT third-party service providers deemed "critical" by the ESAs.',
+    },
+    section2: {
+      title: 'Who Must Comply',
+      checklist: [
+        'Credit institutions, payment institutions, and e-money institutions operating in the EU',
+        'Crypto-asset service providers (CASPs) authorised under MiCA',
+        'Investment firms, alternative investment fund managers (AIFMs), and UCITS management companies',
+        'Insurance and reinsurance undertakings and insurance intermediaries',
+        'Trading venues, central counterparties (CCPs), and central securities depositories (CSDs)',
+        'ICT third-party service providers (cloud, SaaS, data analytics) serving in-scope EU financial entities',
+        'Critical ICT third-party providers (CTPPs) designated by the Joint Committee of ESAs',
+      ],
+    },
+    section3: {
+      title: 'Penalties and Enforcement',
+      body: 'DORA confers penalty powers on national competent authorities. For financial entities, penalties can reach €5,000,000 or 1% of the total annual worldwide turnover of the entity for each day of violation, up to 5% of total annual worldwide turnover. For individuals in management, personal penalties of up to €1,000,000 or 2% of annual remuneration apply. Critical ICT third-party providers designated by the ESAs are subject to oversight measures and can be compelled to remediate deficiencies or terminate contracts with EU financial entities.',
+    },
+    timeline: [
+      { date: 'Nov 2022', event: 'DORA Published', detail: 'Regulation (EU) 2022/2554 published in the Official Journal. 24-month implementation clock began for financial entities and regulators.' },
+      { date: 'Jan 2023', event: 'Entry into Force', detail: 'DORA entered into force on 16 January 2023. EBA, EIOPA, and ESMA commenced drafting Level 2 Regulatory Technical Standards (RTS) and Implementing Technical Standards (ITS).' },
+      { date: 'Jan 2024', event: 'First RTS/ITS Published', detail: 'Joint Committee published the first batch of technical standards covering ICT risk management, incident classification, and TLPT requirements. Entities integrated standards into implementation programs.' },
+      { date: 'Jan 2025', event: 'Full Application', detail: 'DORA became fully applicable on 17 January 2025 across all 27 EU Member States. MiCA-authorised CASPs added to scope. Entities without mature ICT risk management programs faced immediate supervisory scrutiny.' },
+      { date: '2025–2026', event: 'First Enforcement Actions', detail: 'NCAs commenced supervisory reviews and inspections of DORA compliance frameworks. Entities lacking documented ICT risk policies, incident playbooks, and third-party registers are primary enforcement targets.' },
+    ],
+    comparison: {
+      headers: ['Dimension', 'DORA', 'NIS2 Directive', 'ISO 27001'],
+      rows: [
+        ['Applicability', 'EU financial entities + ICT providers', 'Essential and important entities broadly', 'Voluntary — any organisation'],
+        ['Max Fine', '€5M or 1% daily turnover', '€10M or 2% annual turnover (essential)', 'N/A (certification standard)'],
+        ['Enforcement Body', 'EBA + EIOPA + ESMA + NCAs', 'National CERT/NIS authorities', 'UKAS/accredited CBs'],
+        ['Testing Mandate', 'Annual TLPT for significant entities', 'Vulnerability scans + audits', 'Internal/external audit'],
+        ['Third-Party Rules', 'Mandatory CTPP oversight framework', 'Supply chain security principles', 'Supplier relationships control set'],
+        ['Crypto Scope', 'Yes — MiCA CASPs included', 'Indirectly via CASP digital infra', 'Optional add-on'],
+      ],
+    },
+    mitigations: [
+      { title: 'Build a DORA-Compliant ICT Risk Management Framework', body: 'The DORA ICT risk management framework (Articles 6-16) must cover: ICT risk strategy, ICT asset inventory, network segmentation, access controls, encryption, business continuity and disaster recovery (BCDR), ICT-related incident management procedures, and a learning-from-incidents review cycle. Document the framework in a board-approved ICT risk management policy. Cross-reference against ISO 27001:2022 Annex A to identify gaps.' },
+      { title: 'Implement ICT-Related Incident Reporting Playbooks', body: 'DORA classifies incidents by materiality criteria set in Commission Delegated Regulation (EU) 2024/1772. Major ICT incidents must be reported to the competent authority within 4 hours of classification (initial report), 72 hours of discovery (intermediate report), and 1 month of resolution (final report). Operationalise via an incident response playbook with defined classification thresholds, NCA notification templates, and automated escalation triggers.' },
+      { title: 'Register and Manage All ICT Third-Party Providers', body: 'Maintain a register of all ICT third-party service providers under Article 28. For each provider, document: contractual DORA-required clauses (audit rights, incident notification, SLA, data portability, exit), concentration risk assessment, and substitutability analysis. Assess whether any provider qualifies for Critical Third-Party Provider (CTPP) designation by the ESAs — CTPP designation triggers direct ESA oversight.' },
+    ],
+    precedent: 'EBA DORA Supervisory Guidance (2025): "Entities operating under DORA must demonstrate not merely formal policy adoption but operational resilience through tested and exercised capabilities. The requirements of Regulation (EU) 2022/2554 apply to crypto-asset service providers authorised under MiCA from the date of their authorisation, without prejudice to the application of equivalent requirements previously imposed under applicable national law." — European Banking Authority.',
+    faqs: [
+      { q: 'Does DORA apply to SaaS companies providing software to EU banks?', a: 'Potentially yes. DORA applies to ICT third-party service providers that provide ICT services to EU financial entities. "ICT services" is defined broadly to include digital and data services, including SaaS. The degree of obligation depends on whether your service is designated "critical" by the ESAs (making you a CTPP, subject to direct oversight) or non-critical (requiring DORA-compliant contractual clauses from your financial entity clients).' },
+      { q: 'What is Threat-Led Penetration Testing (TLPT) under DORA?', a: 'TLPT is an advanced form of penetration testing that simulates real-world cyber attacker techniques based on threat intelligence relevant to the specific financial entity. Under DORA Article 26, significant institutions must conduct TLPT at least every 3 years, using approved testers in a live production environment. TLPT results are reported to the competent authority. ICT third-party service providers used by the financial entity may also be in scope for the test.' },
+      { q: 'How does DORA interact with GDPR and NIS2?', a: 'DORA, GDPR, and NIS2 are complementary but distinct. An ICT security incident at an EU bank may trigger DORA incident reporting (to NCA within 4 hours), NIS2 incident notification (if the bank is also an essential entity), and GDPR personal data breach notification (to DPA within 72 hours). Compliance officers must map all three notification regimes to avoid missed deadlines.' },
+      { q: 'Which EU Member State regulates a DORA entity operating in multiple countries?', a: 'DORA follows the principle of home Member State supervision. A credit institution licensed in France is primarily supervised by the French NCA (ACPR or AMF) for DORA purposes, regardless of branches in other EU states. For ICT third-party providers, the Lead Overseer for CTPP designation is determined by the ESAs based on EU revenue and systemic importance of the client base.' },
+      { q: 'What must DORA contracts with ICT third-party providers include?', a: 'Under DORA Article 30, contracts must include: clear service descriptions and SLAs; provisions allowing the financial entity and its regulator to conduct audits and inspections; incident notification obligations aligned with DORA timeframes; data location and portability rights; termination rights triggered by material security breaches; a plan for the orderly exit of services; and cooperation obligations for TLPT testing. Existing contracts must be brought into DORA compliance — a contract remediation exercise covering all in-scope ICT providers is a Day-1 priority.' },
+    ],
+  },
+  ccpa: {
+    tag: 'California Privacy Law',
+    title: 'CCPA / CPRA Compliance Hub',
+    subtitle: 'California Consumer Privacy Act & Privacy Rights Act — US Privacy Compliance for Businesses with California Customers',
+    authority: 'California Privacy Protection Agency (CPPA) + California Attorney General',
+    jurisdiction: 'California, United States (extraterritorial applicability)',
+    maxFine: '$2,500 per unintentional violation · $7,500 per intentional violation',
+    difficulty: 65,
+    color: '#059669',
+    intro: 'The California Consumer Privacy Act (CCPA), Cal. Civ. Code § 1798.100 et seq., enacted in 2018 and effective from 1 January 2020, established the most comprehensive US state consumer privacy law to date. The California Privacy Rights Act (CPRA), passed via Proposition 24 in November 2020, materially amended the CCPA effective 1 January 2023, creating the California Privacy Protection Agency (CPPA) as a dedicated enforcement body, adding sensitive personal information as a distinct category, and introducing a right to correct inaccurate personal information. Together, CCPA/CPRA imposes significant obligations on any business — regardless of where it is incorporated — that processes California consumer personal information at scale.',
+    section1: {
+      title: 'What CCPA/CPRA Covers',
+      body: 'CCPA/CPRA governs the collection, use, disclosure, and sale of personal information (PI) of California consumers by covered businesses. "Personal information" is defined broadly — any information that identifies, relates to, describes, is reasonably capable of being associated with, or could reasonably be linked with a California consumer or household. It explicitly includes IP addresses, browsing history, purchasing history, inferences drawn from PI to create a profile, and biometric data.\n\nThe CPRA introduced "sensitive personal information" (SPI) as a distinct category: social security numbers, driver\'s license numbers, account credentials, precise geolocation, racial or ethnic origin, religious beliefs, health data, sexual orientation, and contents of communications. Consumers have the right to limit the use of SPI to what is necessary for the primary purpose of collection.',
+    },
+    section2: {
+      title: 'Who Must Comply',
+      checklist: [
+        'For-profit businesses doing business in California with annual gross revenue exceeding $25 million',
+        'Businesses buying, selling, sharing, or receiving PI of 100,000+ California consumers or households annually',
+        'Businesses deriving 50% or more of annual revenue from selling or sharing California consumers\' PI',
+        'Any entity that controls or is controlled by a covered business and shares common branding',
+        'Service providers processing PI on behalf of covered businesses under CPRA-compliant contracts',
+        'Contractors and third parties receiving PI for a business purpose under written contract',
+        'Any company — regardless of state of incorporation — that meets the above thresholds',
+      ],
+    },
+    section3: {
+      title: 'Penalties and Enforcement',
+      body: 'The California Privacy Protection Agency (CPPA) enforces CCPA/CPRA through administrative action. The California Attorney General retains concurrent enforcement authority. Civil penalties: $2,500 per unintentional violation and $7,500 per intentional violation or any violation involving PI of minors (consumers under 16). Each consumer whose rights are violated represents a separate violation — a single unauthorized disclosure of a 50,000-record dataset can theoretically produce $375,000,000 in maximum exposure. Private right of action applies only to data breaches involving certain categories of nonencrypted PI (Social Security numbers, financial account details, medical information, and others listed in Cal. Civ. Code § 1798.150).',
+    },
+    timeline: [
+      { date: 'Jun 2018', event: 'CCPA Enacted', detail: 'California Consumer Privacy Act signed into law, giving California consumers unprecedented rights over personal information. Gave businesses 18 months to comply.' },
+      { date: 'Jan 2020', event: 'CCPA Effective', detail: 'CCPA became operative. Businesses required to implement notice at collection, privacy policies, consumer request procedures, and opt-out of sale mechanisms.' },
+      { date: 'Jul 2020', event: 'AG Enforcement Began', detail: 'California Attorney General commenced enforcement. First wave of enforcement letters sent to companies with noncompliant privacy policies, cookie banners, and opt-out flows.' },
+      { date: 'Nov 2020', event: 'CPRA Passed', detail: 'Proposition 24 passed with 56% of votes. Created CPPA, added sensitive PI category, right to correct, expanded data minimization requirements.' },
+      { date: 'Jan 2023', event: 'CPRA In Force + CPPA Active', detail: 'CPRA amendments became operative. CPPA assumed full enforcement authority. First enforcement actions under CPPA jurisdiction commenced 2024.' },
+    ],
+    comparison: {
+      headers: ['Dimension', 'CCPA/CPRA', 'GDPR', 'Virginia VCDPA'],
+      rows: [
+        ['Scope Trigger', 'Revenue OR data volume threshold', 'Established in EU OR EU data subjects', 'Controller processing 100k+ VA consumers'],
+        ['Max Fine', '$7,500 per intentional violation', '€20M or 4% annual turnover', '$7,500 per violation (AG enforcement)'],
+        ['Enforcement Body', 'CPPA + California AG', 'National DPAs', 'Virginia Attorney General'],
+        ['Private Right of Action', 'Data breach only (limited categories)', 'No (member state variation)', 'None'],
+        ['Employee Data', 'Covered (limited exemptions expired)', 'Covered', 'Excluded'],
+        ['Right to Correct', 'Yes (CPRA addition)', 'Yes (GDPR Art. 16)', 'Yes'],
+      ],
+    },
+    mitigations: [
+      { title: 'Conduct a California PI Data Map', body: 'Map every category of personal information collected from California consumers: the specific data elements, source, business purpose, retention period, and all third parties to whom the PI is disclosed. Update the data map annually and whenever a new data collection process is introduced. The CCPA privacy policy must disclose all categories collected, purposes of use, categories of third parties to whom PI is disclosed, and the categories sold or shared.' },
+      { title: 'Build Consumer Request Procedures and Honour Within Deadlines', body: 'CCPA requires businesses to respond to consumer requests within 45 days (extendable by 45 days with notice). Implement a verified consumer request intake process via at minimum two methods (webform + toll-free number if operating a physical location), identity verification proportionate to sensitivity, a response workflow that retrieves PI from all in-scope systems, and a request log with date tracking. For Sensitive PI requests to limit use, implement a separate "Limit the Use of My Sensitive Personal Information" link.' },
+      { title: 'Update Service Provider Contracts and Implement Data Minimization', body: 'Every contract with a service provider receiving PI must include CPRA-required provisions: permitted business purposes, prohibitions on sale/sharing without consent, obligations to assist with consumer requests, deletion obligations, security standards, and audit cooperation rights. Simultaneously implement data minimization — the CPRA makes collecting only PI reasonably necessary for the disclosed purpose a substantive legal obligation.' },
+    ],
+    precedent: 'Sephora, Inc. — California AG Enforcement Action (2022): "Sephora agreed to pay $1.2 million in penalties and to implement corrective measures after the Attorney General found that Sephora had failed to disclose that it was selling personal information, failed to process opt-out requests via Global Privacy Control (GPC), and failed to cure these violations within the 30-day cure period. This marks the first CCPA enforcement judgment and establishes GPC signal compliance as a mandatory technical implementation requirement." — California AG Press Release, 24 August 2022.',
+    faqs: [
+      { q: 'Does CCPA/CPRA apply to my company if I\'m not based in California?', a: 'Yes, if you meet the threshold criteria. The CCPA applies to any for-profit business "doing business in California" — which includes selling products or services to California consumers online, taking orders from California residents, or targeting California residents in advertising. The thresholds ($25M revenue, 100k consumers, 50% revenue from selling PI) determine whether CCPA applies — not the business\'s state of incorporation or physical location.' },
+      { q: 'What is the difference between "selling" and "sharing" PI under CPRA?', a: 'The CCPA prohibited "selling" PI, defined as transferring PI to a third party for monetary or other valuable consideration. The CPRA added "sharing" to cover disclosure of PI for cross-context behavioral advertising, even if no monetary consideration is paid. This addition captures data disclosures to Google Analytics, Meta Pixel, and other advertising tracking tools. Businesses must honour opt-outs of both sale and sharing via the "Do Not Sell or Share My Personal Information" link and via Global Privacy Control (GPC) signals.' },
+      { q: 'How do we honour Global Privacy Control (GPC) signals?', a: 'The CPPA\'s regulations require that if a consumer sends a GPC signal — a browser-level opt-out signal — the business must treat it as a valid opt-out without requiring a separate form submission. Your consent management platform (CMP) must: detect incoming GPC signals from browsers like Firefox, Brave, and DuckDuckGo; honour them by blocking associated data flows to third-party advertising platforms; and maintain records of GPC signals received. The Sephora enforcement action makes GPC compliance mandatory.' },
+      { q: 'Do we need a Data Processing Agreement (DPA) like GDPR requires?', a: 'CPRA requires a functionally similar but differently named contract. A "service provider" is only exempt from the definition of a "third party" — and thus from sale/sharing restrictions — if it processes PI pursuant to a written contract that prohibits retaining, using, or disclosing the PI outside the direct business relationship, prohibits selling or sharing the PI, and obligates the service provider to notify the business if it cannot honour the terms. Without this contract, your service provider relationship may be recharacterised as a "sale" of PI.' },
+      { q: 'What are the CPRA employee and job applicant PI obligations?', a: 'From 1 January 2023, California employees, independent contractors, and job applicants are "consumers" under CCPA/CPRA with full rights. Businesses must provide Notice at Collection to employees and applicants, disclose all categories of PI collected and business purposes, and honour deletion and portability requests for non-retention-required PI. HR systems holding employee monitoring data, payroll information, performance records, and recruiting data are all in scope.' },
+    ],
+  },
+  soc2: {
+    tag: 'AICPA Trust Services',
+    title: 'SOC 2 Compliance Hub',
+    subtitle: 'System and Organization Controls 2 — The B2B SaaS Security Standard for Enterprise Customer Due Diligence',
+    authority: 'American Institute of CPAs (AICPA) · Licensed CPA Firm Auditors',
+    jurisdiction: 'United States (universally required for global B2B SaaS)',
+    maxFine: 'No regulatory fine — contractual breach + enterprise customer churn',
+    difficulty: 72,
+    color: '#d97706',
+    intro: 'SOC 2 is not a government regulation but a voluntary security framework and audit standard issued by the American Institute of CPAs (AICPA) under the Trust Services Criteria (TSC). Despite being voluntary, SOC 2 Type II has become a de facto contractual requirement for any B2B SaaS company selling to enterprise customers, healthcare organisations, financial institutions, or government contractors. More than 85% of enterprise procurement teams now require a SOC 2 Type II report as a precondition to vendor approval. A SOC 2 report is produced by an independent licensed CPA firm that tests your controls against the AICPA\'s five Trust Service Criteria: Security (mandatory), Availability, Processing Integrity, Confidentiality, and Privacy.',
+    section1: {
+      title: 'SOC 2 Type I vs Type II',
+      body: 'SOC 2 comes in two types. Type I assesses the design of controls at a single point in time — it answers "were the right controls in place on this date?" A Type I report can typically be completed in 2-3 months and is useful for first-time certifications or demonstrating readiness while Type II is underway.\n\nType II assesses the operational effectiveness of controls over a defined observation period, typically 6-12 months. It answers "did the controls work consistently during this period?" Enterprise procurement teams universally require Type II. The observation period clock starts when you implement controls — early implementation is critical to getting your Type II report on a competitive timeline.',
+    },
+    section2: {
+      title: 'Who Needs SOC 2',
+      checklist: [
+        'B2B SaaS companies selling to enterprise customers (any industry)',
+        'Cloud infrastructure and platform providers handling customer data',
+        'Healthcare technology companies (often required alongside HIPAA)',
+        'Financial technology companies (required by bank and fintech buyers)',
+        'HR and payroll platforms (employee PI makes this a procurement requirement)',
+        'AI and analytics platforms processing customer behavioral or operational data',
+        'Any vendor in an enterprise supply chain requiring annual vendor risk assessments',
+      ],
+    },
+    section3: {
+      title: 'Commercial Consequences of Non-Compliance',
+      body: 'SOC 2 has no regulatory enforcement body and no government-imposed fine. The consequences are commercial: enterprise procurement teams reject vendors without Type II reports, extend sales cycles by 6-18 months for questionnaire-based alternatives, or require on-site security reviews that are more invasive than a SOC 2 audit. Lost enterprise deals due to missing SOC 2 commonly represent 10-50× the cost of the audit itself. Additionally, enterprise contracts increasingly require annual SOC 2 renewal — a lapsed report triggers immediate contract review and potential termination rights for data security provisions.',
+    },
+    timeline: [
+      { date: '1992', event: 'SAS 70 Era', detail: 'Statement on Auditing Standards No. 70 (SAS 70) was the predecessor audit standard for service organizations. Widely misused as a security certification despite being an auditing scope document.' },
+      { date: '2011', event: 'SOC 2 Introduced', detail: 'AICPA replaced SAS 70 with the SOC suite. SOC 2 using Trust Service Principles was introduced as the standard for technology and cloud service providers. Type I and Type II reports defined.' },
+      { date: '2017', event: 'Trust Services Criteria Revised', detail: 'AICPA revised the Trust Service Criteria, aligning the CC (Common Criteria / Security) section with COSO framework. SOC 2 + COSO alignment became the accepted enterprise audit standard.' },
+      { date: '2020', event: 'Enterprise SaaS Standard', detail: 'SOC 2 Type II became a de facto requirement for enterprise SaaS sales. Vendor risk management programs at Fortune 500 companies formalized SOC 2 as a precondition to vendor onboarding.' },
+      { date: '2023–2026', event: 'AI and Data Platform Scope Expansion', detail: 'Enterprise buyers added AI transparency and data governance criteria to SOC 2 supplementary questions. SOC 2 + EU AI Act compliance bundles emerging for EU-facing SaaS providers.' },
+    ],
+    comparison: {
+      headers: ['Dimension', 'SOC 2 Type II', 'ISO 27001', 'HIPAA'],
+      rows: [
+        ['Type', 'Audit report (attest)', 'Certification (ISMS)', 'Regulatory compliance'],
+        ['Enforcement', 'Commercial (contracts)', 'Certification withdrawal', 'HHS/OCR — up to $1.9M/year'],
+        ['Audience', 'Customers and prospects', 'Global markets, procurement', 'US healthcare data'],
+        ['Scope Flexibility', 'You define in-scope systems', 'Defined ISMS boundary', 'All ePHI systems mandatory'],
+        ['Renewal Cycle', 'Annual Type II re-audit', 'Annual surveillance + 3yr recertification', 'Ongoing HIPAA programme'],
+        ['AI/Cloud Coverage', 'Yes — via CC6 + supplemental', 'Yes — Annex A 8.25+ (2022)', 'Limited — focused on ePHI'],
+      ],
+    },
+    mitigations: [
+      { title: 'Define Your SOC 2 Scope and Choose Trust Service Criteria', body: 'Define which systems, services, and environments are in scope for your SOC 2 audit. Scope should cover systems that process customer data — typically your production environment, identity and access management, and incident response processes. Security (CC) criteria is mandatory. Add Availability (A) if uptime SLAs are contractual commitments. Add Confidentiality (C) if you process customer confidential business data. Add Privacy (P) only if you process significant volumes of end-consumer PI.' },
+      { title: 'Implement the 60+ Security Controls Mapped to CC Criteria', body: 'The Security (CC) criteria covers 9 Common Criteria groupings: CC1 (Control Environment), CC2 (Communication), CC3 (Risk Assessment), CC4 (Monitoring), CC5 (Control Activities), CC6 (Logical and Physical Access), CC7 (System Operations), CC8 (Change Management), and CC9 (Risk Mitigation). Key controls enterprise auditors scrutinize: MFA on all production access, encryption at rest and in transit, vulnerability scanning and pen test program, change management approvals, and vendor risk management process. Implement controls at least 6 months before your intended audit window start date.' },
+      { title: 'Select a CPA Firm Auditor and Automate Evidence Collection', body: 'SOC 2 auditors must be licensed CPA firms — not just cybersecurity consultancies. Audit fees range from $12,000 to $60,000+ depending on scope and observation period. Use a compliance automation platform (Vanta, Drata, Secureframe, or similar) to continuously collect evidence from cloud providers (AWS, GCP, Azure) and identity providers. Automation reduces manual evidence collection work by 80%. Budget 8-14 months from decision to Type II report issuance.' },
+    ],
+    precedent: 'AICPA Trust Services Criteria (TSC 2017, as amended 2022): "The auditor evaluates whether the service organization\'s controls as described in the system description were suitably designed and, if a Type 2 examination, operating effectively to provide reasonable assurance that the service organization achieved its service commitments and system requirements throughout the specified period... A description that omits relevant controls, or describes controls that are not placed in operation, will result in a qualified or adverse opinion." — AICPA TSC 2017, Section 1.',
+    faqs: [
+      { q: 'How long does SOC 2 Type II certification take?', a: 'Plan for 12-16 months total from initial decision to receiving your Type II report. Timeline: 1-2 months for gap assessment and control implementation planning; 2-4 months for controls implementation; 6-12 months of observation period (the window your auditor formally tests controls); 1-3 months for auditor fieldwork and report drafting. Many SaaS companies begin with a SOC 2 Type I (2-3 months) to demonstrate readiness to prospects while the Type II observation period runs concurrently.' },
+      { q: 'Do we need SOC 2 if we already have ISO 27001?', a: 'Likely yes, if you sell to US enterprise customers. ISO 27001 is more widely recognised in Europe and Asia-Pacific. US enterprise procurement teams — banks, Fortune 500, healthcare systems — almost universally require SOC 2 Type II specifically, because the report format matches their vendor risk assessment templates. The good news: implementing ISO 27001 controls substantially covers SOC 2 CC requirements, so the marginal cost of adding SOC 2 for ISO-certified companies is lower than starting from scratch.' },
+      { q: 'What is the difference between SOC 1 and SOC 2?', a: 'SOC 1 reports on controls relevant to financial reporting — controls at service organizations that affect a customer\'s internal control over financial reporting (ICFR). SOC 1 is relevant for payroll processors, claims processors, and data centres supporting financial statement production. SOC 2 reports on security, availability, processing integrity, confidentiality, and privacy controls — relevant for any technology provider processing customer data. Most B2B SaaS companies need SOC 2, not SOC 1.' },
+      { q: 'Can startups get SOC 2 certified?', a: 'Yes. There is no minimum company size, revenue, or headcount requirement for SOC 2. Early-stage startups increasingly pursue SOC 2 as a commercial accelerant — having a Type II report removes a major enterprise sales blocker and accelerates procurement approval from months to days. Cloud-native startups using AWS, GCP, or Azure have a significant advantage: cloud provider compliance certifications inherit controls for the infrastructure layer, reducing the number of controls you must individually implement.' },
+      { q: 'How do we share our SOC 2 report with prospects?', a: 'SOC 2 reports are confidential audit documents — not public certifications like ISO 27001. Share the full report under a mutual NDA when the prospect\'s security team requests detailed review. Best practice: maintain a standard one-page SOC 2 summary (auditor name, audit period, trust service criteria, opinion type) for early-stage sharing without NDA. Some companies use the CAIQ (Consensus Assessments Initiative Questionnaire) to pre-answer common vendor risk questions and include their SOC 2 report reference, reducing duplicative questionnaire work.' },
+    ],
+  },
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -627,7 +813,7 @@ export default function RegulationHubPage({ params }: Props) {
             </div>
           ))}
 
-          {(params.slug === 'mica' || params.slug === 'gdpr' || params.slug === 'vara' || params.slug === 'aml' || params.slug === 'ai-act' || params.slug === 'boi') && (
+          {(params.slug === 'mica' || params.slug === 'gdpr' || params.slug === 'vara' || params.slug === 'aml' || params.slug === 'ai-act' || params.slug === 'boi' || params.slug === 'ccpa' || params.slug === 'soc2') && (
             <div style={{ marginTop: 24, padding: '16px 20px', background: 'var(--bg-mid)', border: '0.5px solid var(--outline-var)', borderRadius: 8 }}>
               <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--outline)' }}>Deep Dive Guide</span>
               {params.slug === 'mica' && (
@@ -664,6 +850,18 @@ export default function RegulationHubPage({ params }: Props) {
                 <p style={{ margin: '6px 0 0', fontSize: 13, lineHeight: 1.6 }}>
                   <Link href="/guides/beneficial-ownership-information-filing" style={{ color: 'var(--primary)', fontWeight: 600 }}>BOI Filing Guide →</Link>
                   {' '}Who must file, 23 exemption categories, step-by-step FinCEN BOIT system walkthrough, and 30-day update trigger checklist.
+                </p>
+              )}
+              {params.slug === 'ccpa' && (
+                <p style={{ margin: '6px 0 0', fontSize: 13, lineHeight: 1.6 }}>
+                  <Link href="/guides/privacy-policy-compliance-guide" style={{ color: 'var(--primary)', fontWeight: 600 }}>Privacy Policy Compliance Guide →</Link>
+                  {' '}How to build a CCPA/CPRA-compliant privacy policy, data map, and consumer request workflow — including GPC signal implementation.
+                </p>
+              )}
+              {params.slug === 'soc2' && (
+                <p style={{ margin: '6px 0 0', fontSize: 13, lineHeight: 1.6 }}>
+                  <Link href="/guides/soc2-compliance-checklist-saas" style={{ color: 'var(--primary)', fontWeight: 600 }}>SOC 2 Compliance Checklist →</Link>
+                  {' '}Complete control implementation checklist, trust service criteria breakdown, auditor selection guide, and evidence collection playbook for SaaS companies.
                 </p>
               )}
             </div>
@@ -743,6 +941,24 @@ export default function RegulationHubPage({ params }: Props) {
             {params.slug === 'boi' && (
               <Link href="/tools/contract-fixer" style={{ display: 'block', padding: '8px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Contract Risk Scanner →</Link>
             )}
+            {params.slug === 'dora' && (
+              <>
+                <Link href="/tools/website-compliance" style={{ display: 'block', padding: '8px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>Website Compliance Checker →</Link>
+                <Link href="/tools/contract-fixer" style={{ display: 'block', padding: '8px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Contract Risk Scanner →</Link>
+              </>
+            )}
+            {params.slug === 'ccpa' && (
+              <>
+                <Link href="/tools/website-compliance" style={{ display: 'block', padding: '8px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>Website Compliance Checker →</Link>
+                <Link href="/tools/gdpr-breach-timer" style={{ display: 'block', padding: '8px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Breach Timer →</Link>
+              </>
+            )}
+            {params.slug === 'soc2' && (
+              <>
+                <Link href="/tools/saas-risk-scanner" style={{ display: 'block', padding: '8px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>SaaS Risk Scanner →</Link>
+                <Link href="/tools/contract-fixer" style={{ display: 'block', padding: '8px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Contract Risk Scanner →</Link>
+              </>
+            )}
           </div>
 
           {/* Related guides */}
@@ -792,6 +1008,27 @@ export default function RegulationHubPage({ params }: Props) {
               <>
                 <Link href="/guides/beneficial-ownership-information-filing" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>BOI Filing Guide →</Link>
                 <Link href="/guides/startup-compliance-program-guide" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Startup Compliance Program →</Link>
+              </>
+            )}
+            {params.slug === 'dora' && (
+              <>
+                <Link href="/guides/startup-compliance-program-guide" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>Startup Compliance Program →</Link>
+                <Link href="/guides/mica-regulation-crypto-compliance" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>MiCA Compliance Guide →</Link>
+                <Link href="/guides/aml-kyc-compliance-crypto" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>AML & KYC for Crypto →</Link>
+              </>
+            )}
+            {params.slug === 'ccpa' && (
+              <>
+                <Link href="/guides/privacy-policy-compliance-guide" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>Privacy Policy Compliance Guide →</Link>
+                <Link href="/guides/gdpr-compliance-checklist-saas" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>GDPR Checklist for SaaS →</Link>
+                <Link href="/guides/startup-compliance-program-guide" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Startup Compliance Program →</Link>
+              </>
+            )}
+            {params.slug === 'soc2' && (
+              <>
+                <Link href="/guides/soc2-compliance-checklist-saas" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>SOC 2 Compliance Checklist →</Link>
+                <Link href="/guides/iso-27001-vs-soc2-guide" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>ISO 27001 vs SOC 2 Guide →</Link>
+                <Link href="/guides/compliance-health-score-saas" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Compliance Health Score →</Link>
               </>
             )}
           </div>

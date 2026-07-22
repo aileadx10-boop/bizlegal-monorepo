@@ -645,6 +645,12 @@ export default function ISO27001VsSOC2GuidePage() {
               All Compliance Guides
             </a>
           </p>
+          <p style={{ margin: '8px 0 0' }}>
+            <a href="/regulations/soc2" style={{ color: 'var(--primary, #1a56db)', textDecoration: 'none' }}>
+              SOC 2 Compliance Hub →
+            </a>
+            {' '}Type I vs Type II breakdown, Trust Service Criteria, commercial consequences of missing SOC 2, and auditor selection guide.
+          </p>
         </div>
 
         <footer style={{ borderTop: '1px solid var(--color-border, #e5e7eb)', paddingTop: '1.5rem', fontSize: '0.8rem', opacity: 0.5 }}>

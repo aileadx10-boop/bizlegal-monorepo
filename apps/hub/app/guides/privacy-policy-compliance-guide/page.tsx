@@ -750,6 +750,16 @@ export default function PrivacyPolicyComplianceGuidePage() {
             This guide is for informational purposes only and does not constitute legal advice. Privacy regulations are enforced differently across jurisdictions and are subject to legislative and regulatory amendment. Consult a licensed attorney qualified in data protection law for advice specific to your situation.
           </p>
         </footer>
+
+        <div style={{ borderTop: '1px solid var(--color-border, #e5e7eb)', paddingTop: '2rem', marginTop: '2rem' }}>
+          <p style={{ fontSize: '0.9rem', opacity: 0.7, marginBottom: '1rem' }}>Related compliance resources</p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+            <a href="/regulations/ccpa" style={{ padding: '0.4rem 0.9rem', border: '1px solid var(--color-border, #e5e7eb)', borderRadius: '6px', fontSize: '0.85rem', textDecoration: 'none', color: 'inherit' }}>CCPA / CPRA Compliance Hub →</a>
+            <a href="/regulations/gdpr" style={{ padding: '0.4rem 0.9rem', border: '1px solid var(--color-border, #e5e7eb)', borderRadius: '6px', fontSize: '0.85rem', textDecoration: 'none', color: 'inherit' }}>GDPR Compliance Hub →</a>
+            <a href="/guides/gdpr-compliance-checklist-saas" style={{ padding: '0.4rem 0.9rem', border: '1px solid var(--color-border, #e5e7eb)', borderRadius: '6px', fontSize: '0.85rem', textDecoration: 'none', color: 'inherit' }}>GDPR Checklist for SaaS →</a>
+            <a href="/guides" style={{ padding: '0.4rem 0.9rem', border: '1px solid var(--color-border, #e5e7eb)', borderRadius: '6px', fontSize: '0.85rem', textDecoration: 'none', color: 'inherit' }}>All Compliance Guides →</a>
+          </div>
+        </div>
       </main>
     </>
   )
