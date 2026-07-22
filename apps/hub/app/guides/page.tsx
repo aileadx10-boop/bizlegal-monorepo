@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Compliance Guides for SaaS, Fintech & Crypto Startups | BizLegal AI',
-  description: 'Practitioner-written compliance guides for founders. BOI, GDPR, MiCA, EU AI Act, DORA, HIPAA, India DPDPA, SOC 2, AML/KYC, VARA licensing, privacy policy monitoring, marketplace 1099-K, AI governance frameworks, and more.',
+  description: 'Practitioner-written compliance guides for founders. BOI, GDPR, MiCA, EU AI Act, DORA, HIPAA, SEC crypto, India DPDPA, SOC 2, AML/KYC, VARA licensing, privacy policy monitoring, marketplace 1099-K, AI governance frameworks, and more.',
   alternates: { canonical: 'https://bizlegal-ai.com/guides' },
   openGraph: {
     title: 'Compliance Guides — BizLegal AI',
@@ -144,6 +144,13 @@ const GUIDES = [
     title: 'DORA Compliance Guide for ICT Vendors and EU Financial Entities (2025)',
     description: 'Five DORA pillars, Article 30 contract checklist (audit rights, incident notification, exit strategies), 4h/72h/1-month incident reporting, CTPP designation, and TLPT obligations.',
     tag: 'EU Financial Regulation',
+    product: null,
+  },
+  {
+    href: '/guides/sec-crypto-compliance-guide',
+    title: 'SEC Crypto Compliance Guide for Token Issuers and Web3 Startups (2025)',
+    description: 'Howey Test token classification, Reg D / Reg S / Reg CF exemptions, SAFT structures, broker-dealer registration triggers, and the post-Ripple SEC enforcement landscape for crypto founders.',
+    tag: 'US Securities Law',
     product: null,
   },
 ]

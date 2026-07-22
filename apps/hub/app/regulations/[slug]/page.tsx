@@ -935,7 +935,7 @@ export default function RegulationHubPage({ params }: Props) {
             </div>
           ))}
 
-          {(params.slug === 'mica' || params.slug === 'gdpr' || params.slug === 'vara' || params.slug === 'aml' || params.slug === 'ai-act' || params.slug === 'boi' || params.slug === 'dora' || params.slug === 'ccpa' || params.slug === 'soc2' || params.slug === 'hipaa' || params.slug === 'dpdpa') && (
+          {(params.slug === 'mica' || params.slug === 'gdpr' || params.slug === 'vara' || params.slug === 'aml' || params.slug === 'ai-act' || params.slug === 'boi' || params.slug === 'dora' || params.slug === 'ccpa' || params.slug === 'soc2' || params.slug === 'hipaa' || params.slug === 'dpdpa' || params.slug === 'sec') && (
             <div style={{ marginTop: 24, padding: '16px 20px', background: 'var(--bg-mid)', border: '0.5px solid var(--outline-var)', borderRadius: 8 }}>
               <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--outline)' }}>Deep Dive Guide</span>
               {params.slug === 'mica' && (
@@ -1002,6 +1002,12 @@ export default function RegulationHubPage({ params }: Props) {
                 <p style={{ margin: '6px 0 0', fontSize: 13, lineHeight: 1.6 }}>
                   <Link href="/guides/india-dpdpa-compliance-guide" style={{ color: 'var(--primary)', fontWeight: 600 }}>India DPDPA Compliance Guide →</Link>
                   {' '}Consent management, Data Principal rights, breach notification timelines, and cross-border transfer rules for companies processing Indian personal data.
+                </p>
+              )}
+              {params.slug === 'sec' && (
+                <p style={{ margin: '6px 0 0', fontSize: 13, lineHeight: 1.6 }}>
+                  <Link href="/guides/sec-crypto-compliance-guide" style={{ color: 'var(--primary)', fontWeight: 600 }}>SEC Crypto Compliance Guide →</Link>
+                  {' '}Howey Test token classification, Reg D / Reg S / Reg CF exemptions, SAFT structures, broker-dealer registration triggers, and the post-Ripple enforcement landscape for crypto token issuers.
                 </p>
               )}
             </div>
@@ -1137,9 +1143,9 @@ export default function RegulationHubPage({ params }: Props) {
             )}
             {params.slug === 'sec' && (
               <>
-                <Link href="/guides/fractional-cco-vs-compliance-retainer" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>Fractional CCO vs Retainer →</Link>
-                <Link href="/guides/soc2-compliance-checklist-saas" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>SOC 2 Checklist →</Link>
-                <Link href="/guides/compliance-health-score-saas" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Compliance Health Score →</Link>
+                <Link href="/guides/sec-crypto-compliance-guide" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>SEC Crypto Compliance Guide →</Link>
+                <Link href="/guides/aml-kyc-compliance-crypto" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>AML & KYC for Crypto →</Link>
+                <Link href="/guides/mica-regulation-crypto-compliance" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>MiCA Regulation Guide →</Link>
               </>
             )}
             {params.slug === 'vara' && (
