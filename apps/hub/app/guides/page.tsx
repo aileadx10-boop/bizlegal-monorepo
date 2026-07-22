@@ -370,6 +370,13 @@ const GUIDES = [
     tag: 'Financial Crime Prevention',
     product: null,
   },
+  {
+    href: '/guides/ma-due-diligence-compliance-guide',
+    title: 'M&A Legal Due Diligence Guide (2025): IP Audit, Data Privacy, Employment, Change-of-Control, and Representation & Warranty Insurance',
+    description: 'The 8 most common deal-killing findings in technology M&A: IP chain-of-title gaps, open source contamination, worker misclassification, PIIA deficiencies, undisclosed regulatory exposure, data privacy violations, change-of-control triggers in material contracts, and option plan administration errors. IP diligence data room requirements, data privacy due diligence scope, employment law M&A issues, COC provisions management, and RWI policy structure.',
+    tag: 'M&A & Corporate',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
