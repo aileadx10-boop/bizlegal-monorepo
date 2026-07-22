@@ -272,6 +272,13 @@ const GUIDES = [
     tag: 'Crypto Regulation',
     product: null,
   },
+  {
+    href: '/guides/startup-employment-agreement-guide',
+    title: 'Startup Employment Agreement Guide (2025): At-Will, PIIA, Non-Competes, Worker Classification',
+    description: 'At-will employment and its exceptions, the 6 required PIIA provisions (and why "agrees to assign" is weaker than "hereby assigns"), non-compete enforceability by state (void in California, Minnesota, Oklahoma, and North Dakota), the IRS 20-factor test for W-2 vs 1099 misclassification, and the offer letter provisions that preserve at-will status.',
+    tag: 'Employment Law',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
