@@ -300,6 +300,13 @@ const GUIDES = [
     tag: 'Startup Law',
     product: null,
   },
+  {
+    href: '/guides/data-retention-deletion-policy-guide',
+    title: 'Data Retention and Deletion Policy Guide (2025): GDPR Article 17, CCPA, HIPAA, Litigation Holds',
+    description: 'GDPR Article 17 right to erasure (when you can refuse and when you cannot), CCPA deletion request 45-day deadline and 9 exemptions, HIPAA 6-year minimum retention vs GDPR conflict, building a data retention schedule by category, litigation hold obligations when legal proceedings are anticipated, and the 3 common gaps that expose SaaS companies to enforcement.',
+    tag: 'Privacy & Data',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
