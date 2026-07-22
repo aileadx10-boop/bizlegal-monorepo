@@ -342,6 +342,13 @@ const GUIDES = [
     tag: 'Crypto Tax',
     product: null,
   },
+  {
+    href: '/guides/gdpr-legitimate-interests-guide',
+    title: 'GDPR Legitimate Interests Guide (2025): Legitimate Interests Assessment (LIA), B2B Direct Marketing, Right to Object',
+    description: 'GDPR Article 6(1)(f) legitimate interests is the most misused legal basis. How to conduct a 3-part LIA balancing test, when B2B direct marketing can rely on legitimate interests (vs B2C where consent is required), EDPB guidance on using legitimate interests for profiling and analytics, the absolute right to object to direct marketing under Article 21, and the 6 LIA mistakes that create DPA enforcement risk.',
+    tag: 'GDPR & Privacy',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {

@@ -144,5 +144,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/guides/hipaa-business-associate-agreement-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/non-compete-agreement-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/cryptocurrency-tax-compliance-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
+    { url: `${BASE}/guides/gdpr-legitimate-interests-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
   ]
 }
