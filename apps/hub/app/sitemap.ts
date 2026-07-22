@@ -79,6 +79,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/regulations/vara`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE}/regulations/gdpr`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE}/regulations/aml`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${BASE}/regulations/ai-act`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${BASE}/regulations/boi`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
 
     // Individual agent landing pages (product-specific, revenue-driving)
     { url: `${BASE}/agents/boi-tracker`, lastModified: now, changeFrequency: 'monthly', priority: 0.82 },
