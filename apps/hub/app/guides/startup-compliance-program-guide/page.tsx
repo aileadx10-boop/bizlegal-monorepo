@@ -513,6 +513,17 @@ export default function StartupComplianceProgramGuidePage() {
           </div>
         </section>
 
+        <div style={{ margin: '2.5rem 0', padding: '1.5rem', background: 'linear-gradient(135deg, #1a56db08, #1a56db14)', border: '1px solid #1a56db30', borderRadius: '10px' }}>
+          <p style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', opacity: 0.6, marginBottom: '0.5rem' }}>Contract Risk — $97</p>
+          <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 0.75rem' }}>Scan Your First Vendor Agreements As You Build Your Compliance Stack</h3>
+          <p style={{ fontSize: '0.9rem', lineHeight: 1.7, opacity: 0.85, marginBottom: '1.25rem' }}>
+            The contracts you sign before your compliance program is built become the riskiest assets in your company. BizLegal AI reviews your vendor MSAs, data processing agreements, and SaaS subscription terms for the liability traps, unlimited indemnification clauses, and missing data protection provisions that surface during your first regulatory exam.
+          </p>
+          <a href="https://docai.bizlegal-ai.com" style={{ display: 'inline-block', padding: '0.6rem 1.25rem', background: '#1a56db', color: '#fff', borderRadius: '6px', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none' }}>
+            Scan Your Vendor Agreements →
+          </a>
+        </div>
+
         {/* Section 5: FAQ */}
         <section style={{ marginBottom: '3rem' }}>
           <h2 style={{ fontSize: '1.4rem', fontWeight: 700, marginBottom: '1.5rem' }}>

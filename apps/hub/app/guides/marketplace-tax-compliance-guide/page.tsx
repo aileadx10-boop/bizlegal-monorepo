@@ -566,6 +566,17 @@ export default function MarketplaceTaxComplianceGuidePage() {
           </p>
         </section>
 
+        <div style={{ margin: '2.5rem 0', padding: '1.5rem', background: 'linear-gradient(135deg, #1a56db08, #1a56db14)', border: '1px solid #1a56db30', borderRadius: '10px' }}>
+          <p style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', opacity: 0.6, marginBottom: '0.5rem' }}>Contract Risk — $97</p>
+          <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 0.75rem' }}>Review Your Platform-Seller Agreements for Tax Compliance Gaps in 60 Seconds</h3>
+          <p style={{ fontSize: '0.9rem', lineHeight: 1.7, opacity: 0.85, marginBottom: '1.25rem' }}>
+            Marketplace facilitator laws require your platform-seller agreement to clearly define who collects and remits sales tax, who is responsible for 1099-K accuracy, and what happens when seller information is incorrect. BizLegal AI scans your marketplace terms for the missing tax responsibility provisions that generate platform liability.
+          </p>
+          <a href="https://docai.bizlegal-ai.com" style={{ display: 'inline-block', padding: '0.6rem 1.25rem', background: '#1a56db', color: '#fff', borderRadius: '6px', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none' }}>
+            Scan Your Platform Agreement →
+          </a>
+        </div>
+
         {/* Section 6: FAQ */}
         <section style={{ marginBottom: '3rem' }}>
           <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '1.5rem' }}>Frequently Asked Questions</h2>

@@ -430,6 +430,17 @@ export default function AiGovernanceFrameworkGuide() {
           </Link>
         </div>
 
+        <div style={{ margin: '2.5rem 0', padding: '1.5rem', background: 'linear-gradient(135deg, #1a56db08, #1a56db14)', border: '1px solid #1a56db30', borderRadius: '10px' }}>
+          <p style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', opacity: 0.6, marginBottom: '0.5rem' }}>Contract Risk — $97</p>
+          <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 0.75rem' }}>Review Your AI Vendor Contracts for Governance Gaps in 60 Seconds</h3>
+          <p style={{ fontSize: '0.9rem', lineHeight: 1.7, opacity: 0.85, marginBottom: '1.25rem' }}>
+            AI governance frameworks only work if your vendor contracts reinforce them. BizLegal AI scans your AI vendor MSAs, model licensing agreements, and data sharing contracts for missing governance provisions — liability for model errors, data usage restrictions, audit rights, and EU AI Act compliance clauses — and flags every gap with a fix recommendation.
+          </p>
+          <a href="https://docai.bizlegal-ai.com" style={{ display: 'inline-block', padding: '0.6rem 1.25rem', background: '#1a56db', color: '#fff', borderRadius: '6px', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none' }}>
+            Scan Your AI Vendor Contracts →
+          </a>
+        </div>
+
         {/* Section 6: FAQ */}
         <h2 style={{ fontSize: 'clamp(1.35rem, 2.5vw, 1.75rem)', fontWeight: 700, marginTop: '3rem', marginBottom: '1rem', letterSpacing: '-0.015em' }}>
           Frequently asked questions
