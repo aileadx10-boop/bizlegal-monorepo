@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Compliance Guides for SaaS, Fintech & Crypto Startups | BizLegal AI',
-  description: 'Practitioner-written compliance guides for founders. BOI, GDPR, MiCA, EU AI Act, India DPDPA, SOC 2, AML/KYC, VARA licensing, privacy policy monitoring, marketplace 1099-K, AI governance frameworks, and more.',
+  description: 'Practitioner-written compliance guides for founders. BOI, GDPR, MiCA, EU AI Act, DORA, HIPAA, India DPDPA, SOC 2, AML/KYC, VARA licensing, privacy policy monitoring, marketplace 1099-K, AI governance frameworks, and more.',
   alternates: { canonical: 'https://bizlegal-ai.com/guides' },
   openGraph: {
     title: 'Compliance Guides — BizLegal AI',
@@ -130,6 +130,20 @@ const GUIDES = [
     title: 'Startup Compliance Program Guide: When You Need One and How to Build It (2025)',
     description: '6 triggers that make a compliance program non-negotiable. 7 program components. 4 staffing models. The 12-month compliance calendar every fintech founder needs.',
     tag: 'Compliance Strategy',
+    product: null,
+  },
+  {
+    href: '/guides/hipaa-compliance-checklist-saas',
+    title: 'HIPAA Compliance Checklist for Healthcare SaaS (2025)',
+    description: 'The three HIPAA rules, Business Associate Agreement requirements, ePHI technical safeguards, breach notification timelines, and the 2024 HIPAA Safe Harbor for cybersecurity frameworks.',
+    tag: 'Healthcare Privacy',
+    product: null,
+  },
+  {
+    href: '/guides/dora-ict-compliance-guide',
+    title: 'DORA Compliance Guide for ICT Vendors and EU Financial Entities (2025)',
+    description: 'Five DORA pillars, Article 30 contract checklist (audit rights, incident notification, exit strategies), 4h/72h/1-month incident reporting, CTPP designation, and TLPT obligations.',
+    tag: 'EU Financial Regulation',
     product: null,
   },
 ]
