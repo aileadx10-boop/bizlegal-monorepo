@@ -447,6 +447,13 @@ const GUIDES = [
     tag: 'Privacy & Data',
     product: null,
   },
+  {
+    href: '/guides/ftc-section-5-unfair-deceptive-practices-saas-guide',
+    title: 'FTC Section 5 Unfair and Deceptive Practices Guide for SaaS (2025): Dark Patterns, Click-to-Cancel Rule, Data Security Enforcement, COPPA, Multi-Regulator Coordination',
+    description: 'FTC Act Section 5 guide for SaaS and fintech: unfairness (substantial injury, not outweighed, consumer cannot avoid) vs deception (material misrepresentation, reasonable consumer standard); dark patterns enforcement (Amazon Prime $25M, Vonage $100M, Epic Games $520M); Negative Option Rule click-to-cancel (16 CFR Part 425, effective January 2025); FTC data security enforcement (Drizly personal liability, CafePress $500K, Wyndham); COPPA for children\'s apps (TikTok $5.7M, YouTube $170M, Fortnite $275M); FTC/CFPB/state AG coordination.',
+    tag: 'Consumer Protection',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {

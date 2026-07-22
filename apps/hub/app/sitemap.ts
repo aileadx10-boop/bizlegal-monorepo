@@ -159,5 +159,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/guides/hipaa-security-rule-technical-safeguards-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/ccpa-cpra-data-subject-request-operations-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/cross-border-data-transfer-scc-bcr-uk-idta-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
+    { url: `${BASE}/guides/ftc-section-5-unfair-deceptive-practices-saas-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
   ]
 }
