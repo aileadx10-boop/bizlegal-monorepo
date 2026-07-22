@@ -384,6 +384,13 @@ const GUIDES = [
     tag: 'GDPR & Privacy',
     product: null,
   },
+  {
+    href: '/guides/gdpr-cookie-consent-eprivacy-guide',
+    title: 'GDPR Cookie Consent & ePrivacy Guide (2025): Valid Consent, Strictly Necessary Exemption, Google Analytics, IAB TCF, and PECR',
+    description: 'Cookie consent governed by ePrivacy Directive (PECR in UK) + GDPR — both apply. CJEU Planet49 consent standard (no pre-ticked boxes, no "browsing as consent"), 7 cookie categories with consent requirements, Google Analytics DPF compliance update (post-Austrian DSB decisions), IAB TCF vs custom CMP, strictly necessary exemption (session cookies/security tokens qualify; analytics/social sharing do NOT), and UK PECR post-Brexit divergence.',
+    tag: 'GDPR & Privacy',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
