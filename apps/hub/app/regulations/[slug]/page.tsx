@@ -627,7 +627,7 @@ export default function RegulationHubPage({ params }: Props) {
             </div>
           ))}
 
-          {(params.slug === 'mica' || params.slug === 'gdpr' || params.slug === 'vara' || params.slug === 'aml') && (
+          {(params.slug === 'mica' || params.slug === 'gdpr' || params.slug === 'vara' || params.slug === 'aml' || params.slug === 'ai-act' || params.slug === 'boi') && (
             <div style={{ marginTop: 24, padding: '16px 20px', background: 'var(--bg-mid)', border: '0.5px solid var(--outline-var)', borderRadius: 8 }}>
               <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--outline)' }}>Deep Dive Guide</span>
               {params.slug === 'mica' && (
@@ -652,6 +652,18 @@ export default function RegulationHubPage({ params }: Props) {
                 <p style={{ margin: '6px 0 0', fontSize: 13, lineHeight: 1.6 }}>
                   <Link href="/guides/aml-kyc-compliance-crypto" style={{ color: 'var(--primary)', fontWeight: 600 }}>AML & KYC for Crypto →</Link>
                   {' '}FATF Travel Rule implementation, transaction monitoring red flags, KYC program requirements, and AML penalties tracker.
+                </p>
+              )}
+              {params.slug === 'ai-act' && (
+                <p style={{ margin: '6px 0 0', fontSize: 13, lineHeight: 1.6 }}>
+                  <Link href="/guides/eu-ai-act-compliance-guide" style={{ color: 'var(--primary)', fontWeight: 600 }}>EU AI Act Compliance Guide →</Link>
+                  {' '}Risk tier classification, Annex III categories, GPAI model obligations, conformity assessment checklist, and 2025–2026 implementation timeline.
+                </p>
+              )}
+              {params.slug === 'boi' && (
+                <p style={{ margin: '6px 0 0', fontSize: 13, lineHeight: 1.6 }}>
+                  <Link href="/guides/beneficial-ownership-information-filing" style={{ color: 'var(--primary)', fontWeight: 600 }}>BOI Filing Guide →</Link>
+                  {' '}Who must file, 23 exemption categories, step-by-step FinCEN BOIT system walkthrough, and 30-day update trigger checklist.
                 </p>
               )}
             </div>
@@ -722,6 +734,15 @@ export default function RegulationHubPage({ params }: Props) {
                 <Link href="/tools/aml-checklist" style={{ display: 'block', padding: '8px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>AML Checklist →</Link>
               </>
             )}
+            {params.slug === 'ai-act' && (
+              <>
+                <Link href="/tools/website-compliance" style={{ display: 'block', padding: '8px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>Website Compliance Checker →</Link>
+                <Link href="/tools/gdpr-fine-estimator" style={{ display: 'block', padding: '8px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>GDPR Fine Estimator →</Link>
+              </>
+            )}
+            {params.slug === 'boi' && (
+              <Link href="/tools/contract-fixer" style={{ display: 'block', padding: '8px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Contract Risk Scanner →</Link>
+            )}
           </div>
 
           {/* Related guides */}
@@ -760,7 +781,43 @@ export default function RegulationHubPage({ params }: Props) {
                 <Link href="/guides/aml-kyc-compliance-crypto" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>AML & KYC for Crypto →</Link>
               </>
             )}
+            {params.slug === 'ai-act' && (
+              <>
+                <Link href="/guides/eu-ai-act-compliance-guide" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>EU AI Act Compliance Guide →</Link>
+                <Link href="/guides/ai-governance-framework-guide" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>AI Governance Framework Guide →</Link>
+                <Link href="/guides/startup-compliance-program-guide" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Startup Compliance Program →</Link>
+              </>
+            )}
+            {params.slug === 'boi' && (
+              <>
+                <Link href="/guides/beneficial-ownership-information-filing" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>BOI Filing Guide →</Link>
+                <Link href="/guides/startup-compliance-program-guide" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>Startup Compliance Program →</Link>
+              </>
+            )}
           </div>
+
+          {/* Agent CTA — product upsell per regulation */}
+          {(params.slug === 'ai-act' || params.slug === 'boi') && (
+            <div className="card" style={{ marginTop: 16, background: 'var(--bg-mid)', border: '0.5px solid var(--outline-var)' }}>
+              <span className="section-label" style={{ marginBottom: 8 }}>Automate This</span>
+              {params.slug === 'ai-act' && (
+                <>
+                  <p style={{ fontSize: 12, color: 'var(--on-surface-var)', marginBottom: 12, lineHeight: 1.6 }}>Daily monitoring of EU AI Act implementing regs. Email alert when your risk tier is affected.</p>
+                  <Link href="/agents/ai-act" className="btn-primary" style={{ fontSize: 11, padding: '8px 14px', width: '100%', justifyContent: 'center' }}>
+                    AI Act Monitor — $49/mo →
+                  </Link>
+                </>
+              )}
+              {params.slug === 'boi' && (
+                <>
+                  <p style={{ fontSize: 12, color: 'var(--on-surface-var)', marginBottom: 12, lineHeight: 1.6 }}>Automated BOI filing tracker + 30-day ownership change alerts for your entity group.</p>
+                  <Link href="/agents/boi-tracker" className="btn-primary" style={{ fontSize: 11, padding: '8px 14px', width: '100%', justifyContent: 'center' }}>
+                    BOI-Tracker — $149 →
+                  </Link>
+                </>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
