@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Compliance Guides for SaaS, Fintech & Crypto Startups | BizLegal AI',
-  description: 'Practitioner-written compliance guides for founders. BOI filing, GDPR, MiCA, EU AI Act, India DPDPA, SOC 2, AML/KYC for crypto, VARA licensing, CCO vs retainer, wallet investigation, and compliance health scores.',
+  description: 'Practitioner-written compliance guides for founders. BOI, GDPR, MiCA, EU AI Act, India DPDPA, SOC 2, AML/KYC, VARA licensing, privacy policy monitoring, marketplace 1099-K, AI governance frameworks, and more.',
   alternates: { canonical: 'https://bizlegal-ai.com/guides' },
   openGraph: {
     title: 'Compliance Guides — BizLegal AI',
@@ -88,6 +88,27 @@ const GUIDES = [
     title: 'India DPDPA Compliance Guide for B2B SaaS (2025)',
     description: 'Does DPDPA apply to you? Notice + consent requirements, data principal rights, Significant Data Fiduciary criteria, and the ₹250 crore fine schedule — for SaaS with India-resident users.',
     tag: 'Privacy Law',
+    product: null,
+  },
+  {
+    href: '/guides/privacy-policy-compliance-guide',
+    title: 'Privacy Policy Compliance Guide for SaaS Startups (2025)',
+    description: '7 frameworks, 6 policy sections, 6 events that make your policy stale immediately. GDPR, CCPA, CPRA, Quebec Law 25, Colorado, Connecticut, Texas DPSA. Real enforcement cases, real fines.',
+    tag: 'Privacy & Data',
+    product: null,
+  },
+  {
+    href: '/guides/marketplace-tax-compliance-guide',
+    title: 'Marketplace Tax & 1099-K Compliance Guide for Platforms (2025)',
+    description: '1099-K threshold drops to $600 in 2025. Platform-by-platform reporting rules, marketplace facilitator laws in 45 states, and the per-form penalty schedule for getting it wrong.',
+    tag: 'Tax Compliance',
+    product: null,
+  },
+  {
+    href: '/guides/ai-governance-framework-guide',
+    title: 'AI Governance Framework Guide for SaaS & Enterprises (2025)',
+    description: 'NIST AI RMF vs ISO/IEC 42001 vs EU AI Act: who needs what, the 6-component governance program, the 8 high-risk use cases, and penalty comparison across all three frameworks.',
+    tag: 'AI Regulation',
     product: null,
   },
 ]
