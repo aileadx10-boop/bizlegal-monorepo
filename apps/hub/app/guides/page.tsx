@@ -216,6 +216,13 @@ const GUIDES = [
     tag: 'Privacy Law',
     product: null,
   },
+  {
+    href: '/guides/data-breach-response-guide',
+    title: 'Data Breach Response Guide: Notification Timelines and Legal Obligations (2025)',
+    description: 'GDPR 72-hour supervisory authority notification, HIPAA 60-day breach reporting, CCPA breach obligations, 50-state notification laws (30-90 day patchwork), DPA breach clauses, and the first 72-hour legal response playbook.',
+    tag: 'Incident Response',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
