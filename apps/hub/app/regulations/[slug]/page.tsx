@@ -935,7 +935,7 @@ export default function RegulationHubPage({ params }: Props) {
             </div>
           ))}
 
-          {(params.slug === 'mica' || params.slug === 'gdpr' || params.slug === 'vara' || params.slug === 'aml' || params.slug === 'ai-act' || params.slug === 'boi' || params.slug === 'ccpa' || params.slug === 'soc2' || params.slug === 'dpdpa') && (
+          {(params.slug === 'mica' || params.slug === 'gdpr' || params.slug === 'vara' || params.slug === 'aml' || params.slug === 'ai-act' || params.slug === 'boi' || params.slug === 'ccpa' || params.slug === 'soc2' || params.slug === 'hipaa' || params.slug === 'dpdpa') && (
             <div style={{ marginTop: 24, padding: '16px 20px', background: 'var(--bg-mid)', border: '0.5px solid var(--outline-var)', borderRadius: 8 }}>
               <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--outline)' }}>Deep Dive Guide</span>
               {params.slug === 'mica' && (
@@ -984,6 +984,12 @@ export default function RegulationHubPage({ params }: Props) {
                 <p style={{ margin: '6px 0 0', fontSize: 13, lineHeight: 1.6 }}>
                   <Link href="/guides/soc2-compliance-checklist-saas" style={{ color: 'var(--primary)', fontWeight: 600 }}>SOC 2 Compliance Checklist →</Link>
                   {' '}Complete control implementation checklist, trust service criteria breakdown, auditor selection guide, and evidence collection playbook for SaaS companies.
+                </p>
+              )}
+              {params.slug === 'hipaa' && (
+                <p style={{ margin: '6px 0 0', fontSize: 13, lineHeight: 1.6 }}>
+                  <Link href="/guides/hipaa-compliance-checklist-saas" style={{ color: 'var(--primary)', fontWeight: 600 }}>HIPAA Compliance Checklist →</Link>
+                  {' '}Business Associate Agreement requirements, ePHI technical safeguards, breach notification timelines, and the 2024 HIPAA Safe Harbor for cybersecurity frameworks.
                 </p>
               )}
               {params.slug === 'dpdpa' && (
