@@ -202,6 +202,13 @@ const GUIDES = [
     tag: 'Employment Law',
     product: null,
   },
+  {
+    href: '/guides/terms-of-service-guide-saas',
+    title: 'Terms of Service Compliance Guide for SaaS Startups (2025)',
+    description: 'FTC Click-to-Cancel rule (2024), limitation of liability caps, DMCA safe harbor registration, class action waiver enforceability, EU Digital Services Act obligations, and clickwrap vs. browsewrap assent — the 14 ToS provisions every SaaS company must address.',
+    tag: 'Contract Risk',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {

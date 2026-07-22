@@ -124,5 +124,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/guides/saas-vendor-agreement-review-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/nda-review-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/contractor-agreement-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.75 },
+    { url: `${BASE}/guides/terms-of-service-guide-saas`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
   ]
 }
