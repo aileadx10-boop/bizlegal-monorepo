@@ -153,5 +153,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/guides/gdpr-cookie-consent-eprivacy-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/eu-ai-act-high-risk-ai-systems-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/independent-contractor-vs-employee-classification-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
+    { url: `${BASE}/guides/regulation-e-electronic-fund-transfer-fintech-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
   ]
 }

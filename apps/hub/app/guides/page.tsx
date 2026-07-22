@@ -405,6 +405,13 @@ const GUIDES = [
     tag: 'Employment Law',
     product: null,
   },
+  {
+    href: '/guides/regulation-e-electronic-fund-transfer-fintech-guide',
+    title: 'Regulation E Electronic Fund Transfer Compliance Guide for Fintech (2025): Error Resolution, Unauthorized EFT Liability, P2P Platforms, Provisional Credit',
+    description: 'CFPB Regulation E compliance guide for fintech, neobanks, and P2P payment platforms: error resolution procedures (10-business-day provisional credit rule, 45-day investigation limit), unauthorized EFT consumer liability tiers ($0/$50/$500/unlimited based on notification timing), P2P platform obligations under Reg E, required account-opening disclosures, 60-day statement rule, and CFPB enforcement priorities for P2P platforms.',
+    tag: 'Fintech / Payments',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
