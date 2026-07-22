@@ -160,6 +160,13 @@ const GUIDES = [
     tag: 'Payment Security',
     product: null,
   },
+  {
+    href: '/guides/cftc-crypto-regulation-guide',
+    title: 'CFTC Crypto Regulation Guide: Commodity vs Security Classification (2025)',
+    description: 'CFTC jurisdiction over Bitcoin and Ethereum, crypto derivatives exchange registration (DCM, SEF), ECP requirements, CFTC enforcement record (BitMEX, Binance), and the FIT21 digital commodity framework.',
+    tag: 'US Commodities Law',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
