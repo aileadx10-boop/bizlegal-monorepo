@@ -83,6 +83,20 @@ export default function GdprFineEstimator() {
         <Link href="/regulations/gdpr" style={{ fontSize: 12, color: 'var(--primary)' }}>Read the GDPR Compliance Hub →</Link>
         <button onClick={() => window.print()} style={{ background: 'none', border: 'none', fontSize: 12, color: 'var(--outline)', cursor: 'pointer', fontFamily: 'Manrope, sans-serif' }}>Print PDF</button>
       </div>
+
+      <div style={{ marginTop: 48, padding: '28px 32px', background: 'var(--bg-mid)', border: '1px solid var(--outline-var)', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24, flexWrap: 'wrap' }}>
+        <div>
+          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--outline)', marginBottom: 6 }}>Keep your policy compliant automatically</div>
+          <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>Policy Auto-Refresh — $29/mo</div>
+          <div style={{ fontSize: 12, color: 'var(--on-surface-var)', lineHeight: 1.6 }}>Daily 7-framework redline of your privacy policy. Email alert when a new gap appears.</div>
+        </div>
+        <a href="/agents/policy-refresh" style={{ display: 'inline-block', background: 'var(--primary)', color: '#fff', padding: '10px 24px', borderRadius: '8px', fontWeight: 700, fontSize: '13px', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>Start Free Audit →</a>
+      </div>
+      <div style={{ marginTop: 16, display: 'flex', gap: 20, flexWrap: 'wrap' }}>
+        <Link href="/guides/gdpr-compliance-checklist-saas" style={{ fontSize: 12, color: 'var(--primary)' }}>GDPR Compliance Checklist →</Link>
+        <Link href="/guides/privacy-policy-compliance-guide" style={{ fontSize: 12, color: 'var(--primary)' }}>Privacy Policy Compliance Guide →</Link>
+        <Link href="/guides" style={{ fontSize: 12, color: 'var(--primary)' }}>All Guides →</Link>
+      </div>
     </div>
   )
 }

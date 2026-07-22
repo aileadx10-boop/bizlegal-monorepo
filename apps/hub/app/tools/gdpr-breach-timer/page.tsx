@@ -118,8 +118,18 @@ export default function GdprBreachTimer() {
         </div>
       </div>
 
-      <div style={{ marginTop: 32 }}>
+      <div style={{ marginTop: 32, display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'center' }}>
         <Link href="/regulations/gdpr" style={{ fontSize: 12, color: 'var(--primary)' }}>Read the GDPR Compliance Hub →</Link>
+        <Link href="/guides/gdpr-compliance-checklist-saas" style={{ fontSize: 12, color: 'var(--primary)' }}>GDPR Compliance Checklist →</Link>
+      </div>
+
+      <div style={{ marginTop: 32, padding: '24px', background: 'var(--bg-mid)', border: '1px solid var(--outline-var)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
+        <div>
+          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--outline)', marginBottom: 6 }}>Daily monitoring so the next breach is caught immediately</div>
+          <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 4 }}>Policy Auto-Refresh — $29/mo</div>
+          <div style={{ fontSize: 12, color: 'var(--on-surface-var)', lineHeight: 1.6 }}>Daily redline of your privacy policy against 7 frameworks. Email alert when a new gap appears. Free first audit.</div>
+        </div>
+        <Link href="/agents/policy-refresh" style={{ display: 'inline-block', background: 'var(--primary)', color: '#fff', padding: '10px 22px', borderRadius: '8px', fontWeight: 700, fontSize: '13px', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>Start Free Audit →</Link>
       </div>
     </div>
   )

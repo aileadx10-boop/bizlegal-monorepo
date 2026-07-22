@@ -170,9 +170,18 @@ export default function SaasRiskScannerPage() {
                 </div>
               )}
 
-              <div style={{ textAlign: 'center', padding: '20px', borderRadius: '12px', border: '1px solid rgba(125,211,252,0.08)', background: 'rgba(7,9,26,0.5)' }}>
-                <p style={{ fontSize: '12px', color: 'var(--dim)', marginBottom: '12px' }}>Need a lawyer-drafted template that avoids all these issues?</p>
-                <Link href="/pricing" className="btn-primary" style={{ display: 'inline-block' }}>Browse DocStack Templates →</Link>
+              <div style={{ padding: '24px 28px', borderRadius: '12px', border: '1px solid rgba(37,99,235,0.2)', background: 'rgba(37,99,235,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap' }}>
+                <div>
+                  <div style={{ fontSize: '11px', color: 'rgba(125,211,252,0.6)', fontFamily: 'Geist Mono, monospace', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Track your compliance score continuously</div>
+                  <div style={{ fontSize: '16px', fontWeight: 700, color: '#fff', marginBottom: '4px' }}>LexAudit Compliance Health Score — $99/mo</div>
+                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.6 }}>60-signal automated scan. SOC 2, GDPR, CCPA, ISO 27001 gap detection. Monthly report card.</div>
+                </div>
+                <a href="https://lexaudit.bizlegal-ai.com" style={{ display: 'inline-block', background: '#2563eb', color: '#fff', padding: '10px 24px', borderRadius: '8px', fontWeight: 700, fontSize: '13px', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>Get Your Score →</a>
+              </div>
+              <div style={{ marginTop: '12px', display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+                <Link href="/guides/compliance-health-score-saas" style={{ fontSize: '12px', color: 'rgba(125,211,252,0.7)', textDecoration: 'none' }}>What is a Compliance Health Score? →</Link>
+                <Link href="/guides/iso-27001-vs-soc2-guide" style={{ fontSize: '12px', color: 'rgba(125,211,252,0.7)', textDecoration: 'none' }}>ISO 27001 vs SOC 2 →</Link>
+                <Link href="/guides" style={{ fontSize: '12px', color: 'rgba(125,211,252,0.7)', textDecoration: 'none' }}>All Guides →</Link>
               </div>
             </div>
           )}

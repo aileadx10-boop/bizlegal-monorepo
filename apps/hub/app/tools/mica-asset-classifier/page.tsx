@@ -75,9 +75,22 @@ export default function MicaAssetClassifier() {
             </div>
             <p style={{ margin: 0, fontSize: 14, lineHeight: 1.7 }}>{result.desc}</p>
           </div>
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 28 }}>
             <button onClick={() => { setAnswers({}); setStep(0) }} className="btn-ghost">Start Over</button>
             <Link href="/regulations/mica" className="btn-primary" style={{ fontSize: 13 }}>Read MiCA Hub →</Link>
+          </div>
+          <div style={{ padding: '24px', background: 'var(--bg-mid)', border: '1px solid var(--outline-var)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
+            <div>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--outline)', marginBottom: 6 }}>MiCA CASP licensing + ongoing regulatory monitoring</div>
+              <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 4 }}>BRAI Regulatory Risk Reports — from $149</div>
+              <div style={{ fontSize: 12, color: 'var(--on-surface-var)', lineHeight: 1.6 }}>Counterparty risk assessment + MiCA, VARA, and GDPR compliance scoring for crypto companies.</div>
+            </div>
+            <a href="https://brai.bizlegal-ai.com" style={{ display: 'inline-block', background: 'var(--primary)', color: '#fff', padding: '10px 22px', borderRadius: '8px', fontWeight: 700, fontSize: '13px', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>Get a Risk Report →</a>
+          </div>
+          <div style={{ marginTop: 12, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+            <Link href="/guides/mica-regulation-crypto-compliance" style={{ fontSize: 12, color: 'var(--primary)' }}>MiCA Compliance Guide →</Link>
+            <Link href="/guides/vara-licensing-guide" style={{ fontSize: 12, color: 'var(--primary)' }}>VARA Licensing Guide →</Link>
+            <Link href="/guides" style={{ fontSize: 12, color: 'var(--primary)' }}>All Guides →</Link>
           </div>
         </div>
       ) : null}

@@ -191,6 +191,24 @@ export default function ContractFixerPage() {
           )}
         </div>
       </div>
+
+      <div style={{ borderTop: '1px solid rgba(125,211,252,0.08)', marginTop: '48px', padding: '40px 0' }}>
+        <div className="container" style={{ maxWidth: '820px' }}>
+          <div style={{ background: 'rgba(37,99,235,0.08)', border: '1px solid rgba(37,99,235,0.25)', borderRadius: '12px', padding: '28px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '24px', flexWrap: 'wrap' }}>
+            <div>
+              <div style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(147,197,253,0.7)', marginBottom: '6px' }}>Need a full legal contract review?</div>
+              <div style={{ fontSize: '18px', fontWeight: 700, color: '#fff', marginBottom: '4px' }}>DocAI Contract Risk Scan — $97</div>
+              <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.55)' }}>Attorney-grade risk report in under 10 minutes. Every clause flagged, every red flag explained.</div>
+            </div>
+            <a href="https://docai.bizlegal-ai.com" style={{ display: 'inline-block', background: '#2563eb', color: '#fff', padding: '12px 28px', borderRadius: '8px', fontWeight: 700, fontSize: '14px', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>Scan a Contract →</a>
+          </div>
+          <div style={{ marginTop: '20px', display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+            <a href="/guides/contract-risk-analysis-guide" style={{ fontSize: '13px', color: 'rgba(125,211,252,0.8)', textDecoration: 'none' }}>Contract Risk Analysis Guide →</a>
+            <a href="/guides/soc2-compliance-checklist-saas" style={{ fontSize: '13px', color: 'rgba(125,211,252,0.8)', textDecoration: 'none' }}>SOC 2 Compliance Guide →</a>
+            <a href="/guides" style={{ fontSize: '13px', color: 'rgba(125,211,252,0.8)', textDecoration: 'none' }}>All Compliance Guides →</a>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
