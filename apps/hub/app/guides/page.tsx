@@ -181,6 +181,13 @@ const GUIDES = [
     tag: 'US Financial Regulation',
     product: null,
   },
+  {
+    href: '/guides/saas-vendor-agreement-review-guide',
+    title: 'SaaS Vendor Agreement Review Guide: What to Check Before Signing (2025)',
+    description: 'Uncapped liability exposure, broad AI training data rights, auto-renewal traps, IP ownership of work product, uptime SLA gaps, and termination rights — the 10 highest-risk clauses in SaaS vendor agreements and how to negotiate each one.',
+    tag: 'Contract Risk',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
