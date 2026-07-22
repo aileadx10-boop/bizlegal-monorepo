@@ -277,6 +277,24 @@ export default function BOIFilingGuidePage() {
           </div>
         </section>
 
+        <div style={{ borderTop: '1px solid var(--color-border, #e5e7eb)', paddingTop: '2rem', marginTop: '2rem', marginBottom: '2rem' }}>
+          <p style={{ fontSize: '0.9rem', opacity: 0.7, marginBottom: '1rem' }}>Related compliance resources</p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+            <Link href="/regulations/boi" style={{ padding: '0.4rem 0.9rem', border: '1px solid var(--color-border, #e5e7eb)', borderRadius: '6px', fontSize: '0.85rem', textDecoration: 'none', color: 'inherit' }}>
+              BOI / CTA Compliance Hub →
+            </Link>
+            <Link href="/guides/startup-compliance-program-guide" style={{ padding: '0.4rem 0.9rem', border: '1px solid var(--color-border, #e5e7eb)', borderRadius: '6px', fontSize: '0.85rem', textDecoration: 'none', color: 'inherit' }}>
+              Startup Compliance Program →
+            </Link>
+            <Link href="/agents/boi-tracker" style={{ padding: '0.4rem 0.9rem', border: '1px solid var(--color-border, #e5e7eb)', borderRadius: '6px', fontSize: '0.85rem', textDecoration: 'none', color: 'inherit' }}>
+              BOI-Tracker Agent →
+            </Link>
+            <Link href="/guides" style={{ padding: '0.4rem 0.9rem', border: '1px solid var(--color-border, #e5e7eb)', borderRadius: '6px', fontSize: '0.85rem', textDecoration: 'none', color: 'inherit' }}>
+              All Compliance Guides →
+            </Link>
+          </div>
+        </div>
+
         <footer style={{ borderTop: '1px solid var(--color-border, #e5e7eb)', paddingTop: '1.5rem', fontSize: '0.8rem', opacity: 0.5 }}>
           <p>This guide is for informational purposes only and does not constitute legal advice. BOI filing requirements are governed by FinCEN regulations under 31 CFR Part 1010. Consult a licensed attorney for advice specific to your situation. BizLegal AI is operated by DOR INNOVATIONS.</p>
         </footer>
