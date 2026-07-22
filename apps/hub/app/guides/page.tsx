@@ -188,6 +188,13 @@ const GUIDES = [
     tag: 'Contract Risk',
     product: null,
   },
+  {
+    href: '/guides/nda-review-guide',
+    title: 'NDA Review Guide: Red Flags and What to Negotiate Before Signing (2025)',
+    description: 'One-way vs mutual NDAs, overbroad confidentiality scope, perpetual duration, residuals clauses, uncapped liquidated damages, permitted disclosure gaps, and the 8 provisions every legal team should check before signing a non-disclosure agreement.',
+    tag: 'Contract Risk',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
