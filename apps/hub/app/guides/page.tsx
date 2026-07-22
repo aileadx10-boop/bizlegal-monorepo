@@ -433,6 +433,13 @@ const GUIDES = [
     tag: 'HIPAA / Health Tech',
     product: null,
   },
+  {
+    href: '/guides/ccpa-cpra-data-subject-request-operations-guide',
+    title: 'CCPA/CPRA Data Subject Request Operations Guide (2025): 45-Day Response, Opt-Out of Sale/Sharing, GPC Signal, Sensitive Personal Information, Enforcement',
+    description: 'CCPA/CPRA DSR operations guide for SaaS companies: 45-day response deadline and verification tiers, right to know / delete / correct / opt-out / limit SPI, Global Privacy Control (GPC) signal compliance (mandatory under 11 CCR § 7025), authorized agent procedures, employee and B2B exemption expiration (January 2023), AB 2370 right-to-cure elimination (January 2025), Sephora $1.2M enforcement, CPPA enforcement authority, and service provider vs business classification for B2B SaaS.',
+    tag: 'Privacy & Data',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
