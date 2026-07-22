@@ -139,5 +139,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/guides/dao-legal-structure-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/venture-capital-term-sheet-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/data-retention-deletion-policy-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
+    { url: `${BASE}/guides/ai-vendor-due-diligence-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
   ]
 }

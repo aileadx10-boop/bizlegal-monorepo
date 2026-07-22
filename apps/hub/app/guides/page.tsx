@@ -307,6 +307,13 @@ const GUIDES = [
     tag: 'Privacy & Data',
     product: null,
   },
+  {
+    href: '/guides/ai-vendor-due-diligence-guide',
+    title: 'AI Vendor Due Diligence Guide (2025): EU AI Act Deployer Obligations, GDPR Article 22, AI Contract Provisions',
+    description: 'EU AI Act deployer obligations (FRIA, human oversight, log retention, worker notification), GDPR Article 22 automated decision-making restrictions, AI vendor contract provisions to demand (data training prohibition, model cards, bias testing, exit rights, sub-processor disclosure), algorithmic impact assessments, AI disclosure requirements, and the 10-question AI vendor procurement framework.',
+    tag: 'AI Compliance',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
