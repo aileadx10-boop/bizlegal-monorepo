@@ -115,5 +115,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/guides/iso-27001-vs-soc2-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
     { url: `${BASE}/guides/startup-compliance-program-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.75 },
     { url: `${BASE}/guides/hipaa-compliance-checklist-saas`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
+    { url: `${BASE}/guides/dora-ict-compliance-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
   ]
 }

@@ -935,7 +935,7 @@ export default function RegulationHubPage({ params }: Props) {
             </div>
           ))}
 
-          {(params.slug === 'mica' || params.slug === 'gdpr' || params.slug === 'vara' || params.slug === 'aml' || params.slug === 'ai-act' || params.slug === 'boi' || params.slug === 'ccpa' || params.slug === 'soc2' || params.slug === 'hipaa' || params.slug === 'dpdpa') && (
+          {(params.slug === 'mica' || params.slug === 'gdpr' || params.slug === 'vara' || params.slug === 'aml' || params.slug === 'ai-act' || params.slug === 'boi' || params.slug === 'dora' || params.slug === 'ccpa' || params.slug === 'soc2' || params.slug === 'hipaa' || params.slug === 'dpdpa') && (
             <div style={{ marginTop: 24, padding: '16px 20px', background: 'var(--bg-mid)', border: '0.5px solid var(--outline-var)', borderRadius: 8 }}>
               <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--outline)' }}>Deep Dive Guide</span>
               {params.slug === 'mica' && (
@@ -972,6 +972,12 @@ export default function RegulationHubPage({ params }: Props) {
                 <p style={{ margin: '6px 0 0', fontSize: 13, lineHeight: 1.6 }}>
                   <Link href="/guides/beneficial-ownership-information-filing" style={{ color: 'var(--primary)', fontWeight: 600 }}>BOI Filing Guide →</Link>
                   {' '}Who must file, 23 exemption categories, step-by-step FinCEN BOIT system walkthrough, and 30-day update trigger checklist.
+                </p>
+              )}
+              {params.slug === 'dora' && (
+                <p style={{ margin: '6px 0 0', fontSize: 13, lineHeight: 1.6 }}>
+                  <Link href="/guides/dora-ict-compliance-guide" style={{ color: 'var(--primary)', fontWeight: 600 }}>DORA ICT Compliance Guide →</Link>
+                  {' '}Five DORA pillars, Article 30 contract checklist, 4h/72h/1-month incident reporting, CTPP designation, and TLPT obligations for ICT vendors serving EU financial entities.
                 </p>
               )}
               {params.slug === 'ccpa' && (
@@ -1158,7 +1164,7 @@ export default function RegulationHubPage({ params }: Props) {
             )}
             {params.slug === 'dora' && (
               <>
-                <Link href="/guides/startup-compliance-program-guide" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>Startup Compliance Program →</Link>
+                <Link href="/guides/dora-ict-compliance-guide" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>DORA ICT Compliance Guide →</Link>
                 <Link href="/guides/mica-regulation-crypto-compliance" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)', borderBottom: '0.5px solid var(--outline-var)' }}>MiCA Compliance Guide →</Link>
                 <Link href="/guides/aml-kyc-compliance-crypto" style={{ display: 'block', padding: '6px 0', fontSize: 12, color: 'var(--on-surface-var)' }}>AML & KYC for Crypto →</Link>
               </>
