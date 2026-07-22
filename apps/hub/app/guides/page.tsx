@@ -398,6 +398,13 @@ const GUIDES = [
     tag: 'EU AI Act & AI Regulation',
     product: null,
   },
+  {
+    href: '/guides/independent-contractor-vs-employee-classification-guide',
+    title: 'Independent Contractor vs Employee Classification Guide (2025): IRS 20-Factor Test, California ABC Test (AB5), FLSA DOL 2024 Rule, and Misclassification Liability',
+    description: 'Worker misclassification guide: IRS 20-factor behavioral/financial/relationship test, California Dynamex ABC test and AB5, FLSA DOL 2024 Final Rule 6-factor economic reality test, PAGA penalties, 5 high-risk contractor patterns that trigger misclassification (exclusive engineers, data labelers, sales contractors, fractional roles, content creators), and remediation options (prospective conversion, IRS VCSP, PAGA cure under AB 2288 2024 reform).',
+    tag: 'Employment Law',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
