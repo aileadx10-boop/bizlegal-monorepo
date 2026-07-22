@@ -187,6 +187,15 @@ export default function WebsiteCompliancePage() {
                 </div>
               )}
             </div>
+
+            <div style={{ marginTop: '24px', padding: '24px 28px', borderRadius: '12px', border: '1px solid rgba(37,99,235,0.2)', background: 'rgba(37,99,235,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap' }}>
+              <div>
+                <div style={{ fontSize: '11px', color: 'rgba(125,211,252,0.6)', fontFamily: 'Geist Mono, monospace', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Automate compliance monitoring for your site</div>
+                <div style={{ fontSize: '16px', fontWeight: 700, color: '#fff', marginBottom: '4px' }}>LexAudit Compliance Health Score — $99/mo</div>
+                <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.6 }}>60-signal monthly scan covering GDPR, CCPA, SOC 2, ISO 27001, and cookie/consent requirements.</div>
+              </div>
+              <a href="https://lexaudit.bizlegal-ai.com" style={{ display: 'inline-block', background: '#2563eb', color: '#fff', padding: '10px 24px', borderRadius: '8px', fontWeight: 700, fontSize: '13px', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>Get Your Score →</a>
+            </div>
           )}
         </div>
       </div>

@@ -70,8 +70,18 @@ export default function TokenClassifier() {
           </div>
         </div>
       </div>
-      <div style={{ marginTop: 32 }}>
+      <div style={{ marginTop: 32, display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'center' }}>
         <Link href="/regulations/sec" style={{ fontSize: 12, color: 'var(--primary)' }}>Read the SEC Compliance Hub →</Link>
+        <Link href="/guides/aml-kyc-compliance-crypto" style={{ fontSize: 12, color: 'var(--primary)' }}>AML/KYC for Crypto Guide →</Link>
+      </div>
+
+      <div style={{ marginTop: 28, padding: '24px', background: 'var(--bg-mid)', border: '1px solid var(--outline-var)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
+        <div>
+          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--outline)', marginBottom: 6 }}>Need a full regulatory risk assessment for your token or crypto business?</div>
+          <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 4 }}>BRAI Counterparty Risk Reports — from $149</div>
+          <div style={{ fontSize: 12, color: 'var(--on-surface-var)', lineHeight: 1.6 }}>SEC, MiCA, VARA, and GDPR scoring with attorney-drafted risk narrative. Used for investor DD and exchange onboarding.</div>
+        </div>
+        <a href="https://brai.bizlegal-ai.com" style={{ display: 'inline-block', background: 'var(--primary)', color: '#fff', padding: '10px 22px', borderRadius: '8px', fontWeight: 700, fontSize: '13px', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>Get a Risk Report →</a>
       </div>
     </div>
   )

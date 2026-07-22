@@ -83,10 +83,18 @@ export default function VaraLicenceFinder() {
             <cite>VARA Rulebook 2023 — fees subject to annual review</cite>
           </div>
 
-          <div style={{ marginTop: 20 }}>
+          <div style={{ marginTop: 20, display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
             <Link href="/regulations/vara" style={{ fontSize: 12, color: 'var(--primary)' }}>Read the VARA Compliance Hub →</Link>
-            {' · '}
-            <Link href="/tools/vasp-fee-calculator" style={{ fontSize: 12, color: 'var(--outline)' }}>VASP Fee Calculator →</Link>
+            <Link href="/guides/vara-licensing-guide" style={{ fontSize: 12, color: 'var(--primary)' }}>VARA Licensing Guide →</Link>
+          </div>
+
+          <div style={{ marginTop: 24, padding: '24px', background: 'var(--bg-mid)', border: '1px solid var(--outline-var)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
+            <div>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--outline)', marginBottom: 6 }}>VARA-specific regulatory risk scoring</div>
+              <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 4 }}>BRAI Regulatory Risk Reports — from $149</div>
+              <div style={{ fontSize: 12, color: 'var(--on-surface-var)', lineHeight: 1.6 }}>VARA, MiCA, and SEC compliance scoring with attorney narrative. Used for exchange onboarding and investor DD.</div>
+            </div>
+            <a href="https://brai.bizlegal-ai.com" style={{ display: 'inline-block', background: 'var(--primary)', color: '#fff', padding: '10px 22px', borderRadius: '8px', fontWeight: 700, fontSize: '13px', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>Get a Risk Report →</a>
           </div>
         </div>
       )}

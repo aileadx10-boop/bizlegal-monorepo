@@ -211,6 +211,15 @@ export default function DebtCollectionPage() {
                 <div><span style={{ fontSize: '11px', color: 'var(--teal)' }}>Deadline: </span><span style={{ fontSize: '13px', color: 'var(--text)' }}>{result.recommendedDeadline}</span></div>
                 <div><span style={{ fontSize: '11px', color: 'var(--teal)' }}>Escalation: </span><span style={{ fontSize: '13px', color: 'var(--text)' }}>{result.escalationPath}</span></div>
               </div>
+
+              <div style={{ marginTop: '20px', padding: '24px 28px', borderRadius: '12px', border: '1px solid rgba(125,211,252,0.12)', background: 'rgba(7,9,26,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap' }}>
+                <div>
+                  <div style={{ fontSize: '11px', color: 'rgba(125,211,252,0.6)', fontFamily: 'Geist Mono, monospace', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Need ongoing compliance support?</div>
+                  <div style={{ fontSize: '15px', fontWeight: 700, color: '#fff', marginBottom: '4px' }}>Managed Compliance Ops Retainer — $2,500/mo</div>
+                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.6 }}>Designated compliance attorney. BSA/AML, GDPR, enterprise vendor questionnaires, and incident response.</div>
+                </div>
+                <a href="/agents" style={{ display: 'inline-block', background: 'rgba(37,99,235,0.8)', color: '#fff', padding: '10px 22px', borderRadius: '8px', fontWeight: 700, fontSize: '13px', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>Learn More →</a>
+              </div>
             </div>
           )}
         </div>
