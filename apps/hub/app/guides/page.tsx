@@ -314,6 +314,13 @@ const GUIDES = [
     tag: 'AI Compliance',
     product: null,
   },
+  {
+    href: '/guides/saas-billing-compliance-guide',
+    title: 'SaaS Billing Compliance Guide (2025): FTC Click-to-Cancel Rule, Automatic Renewal Laws, EU Omnibus Directive',
+    description: 'FTC Click-to-Cancel Rule requirements (effective January 2025), California ARL affirmative consent and 30-day renewal notice, New York automatic renewal statute, EU Omnibus Directive 30-day prior price disclosure for discounts, CFPB unfair billing enforcement patterns (Adobe $13M, Peloton $19.2M, Amazon $25M), free trial to paid conversion disclosure requirements, and subscription agreement drafting to satisfy all frameworks simultaneously.',
+    tag: 'Consumer Protection',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
