@@ -426,6 +426,13 @@ const GUIDES = [
     tag: 'Security / SOC 2',
     product: null,
   },
+  {
+    href: '/guides/hipaa-security-rule-technical-safeguards-guide',
+    title: 'HIPAA Security Rule Technical Safeguards Guide (2025): § 164.312 Encryption, Audit Controls, Person Authentication, Transmission Security for SaaS',
+    description: 'HIPAA Security Rule § 164.312 technical safeguards for SaaS business associates: access control (unique user IDs, emergency access, automatic logoff, AES-256 at-rest encryption), audit controls (6-year log retention, SIEM, immutable logs), integrity controls, person authentication (MFA / NIST AAL2), transmission security (TLS 1.2+/TLS 1.3), OCR enforcement patterns and penalty tiers, 2023 NPRM proposed changes (MFA Required, encryption Required, quarterly vulnerability scans), and HIPAA / SOC 2 dual-compliance approach.',
+    tag: 'HIPAA / Health Tech',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
