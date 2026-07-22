@@ -391,6 +391,13 @@ const GUIDES = [
     tag: 'GDPR & Privacy',
     product: null,
   },
+  {
+    href: '/guides/eu-ai-act-high-risk-ai-systems-guide',
+    title: 'EU AI Act High-Risk AI Systems Guide (2025): Annex III Categories, Conformity Assessment, CE Marking, QMS, and GPAI Obligations',
+    description: 'The 8 EU AI Act Annex III high-risk categories (biometrics, critical infrastructure, education, employment/HR screening, essential services/credit scoring, law enforcement, migration, administration of justice), conformity assessment routes (internal vs notified body), Article 17 QMS requirements, compliance timeline (Feb 2025/Aug 2025/Aug 2026), provider vs deployer obligation split, and GPAI model systemic risk obligations for models trained above 10^25 FLOPs.',
+    tag: 'EU AI Act & AI Regulation',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
