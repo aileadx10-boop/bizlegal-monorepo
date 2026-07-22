@@ -265,6 +265,13 @@ const GUIDES = [
     tag: 'Contract Law',
     product: null,
   },
+  {
+    href: '/guides/crypto-token-launch-compliance-guide',
+    title: 'Crypto Token Launch Compliance Guide (2025): Howey Test, Reg D, SAFT, MiCA',
+    description: 'Whether your token is a security (Howey test), Reg D 506(c) accredited investor exemption, Reg S offshore exemption, the SAFT framework and why it fails as a legal shield, MiCA whitepaper requirements for EU launches, utility token myths, and the jurisdictions favored for compliant 2025 token launches.',
+    tag: 'Crypto Regulation',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {

@@ -133,5 +133,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/guides/eu-us-data-transfer-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/equity-compensation-guide-startups`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/saas-master-subscription-agreement-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
+    { url: `${BASE}/guides/crypto-token-launch-compliance-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
   ]
 }
