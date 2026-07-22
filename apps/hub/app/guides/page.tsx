@@ -230,6 +230,13 @@ const GUIDES = [
     tag: 'Intellectual Property',
     product: null,
   },
+  {
+    href: '/guides/open-source-license-compliance-guide',
+    title: 'Open Source License Compliance Guide for SaaS (2025): GPL, AGPL, MIT, Apache 2.0',
+    description: 'Does AGPL require you to open-source your SaaS product? GPL copyleft propagation, MIT vs Apache 2.0 patent clauses, LGPL dynamic linking rules, SSPL and BSL source-available licenses, and the SBOM compliance program every SaaS company needs before acquisition diligence.',
+    tag: 'Intellectual Property',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {

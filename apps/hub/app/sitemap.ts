@@ -128,5 +128,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/guides/ccpa-cpra-compliance-checklist`, lastModified: now, changeFrequency: 'monthly', priority: 0.75 },
     { url: `${BASE}/guides/data-breach-response-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/ip-assignment-agreement-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
+    { url: `${BASE}/guides/open-source-license-compliance-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.75 },
   ]
 }
