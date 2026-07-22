@@ -251,6 +251,13 @@ const GUIDES = [
     tag: 'Privacy & Data',
     product: null,
   },
+  {
+    href: '/guides/equity-compensation-guide-startups',
+    title: 'Equity Compensation Guide for Startups (2025): ISO vs NSO, 409A, QSBS, 83(b) Election',
+    description: 'Incentive Stock Options vs Non-Qualified Stock Options (ordinary income vs long-term capital gains), 409A safe harbor valuation requirements, QSBS Section 1202 $10M exclusion, the 30-day 83(b) election window, and the vesting red flags every startup employee should identify before signing.',
+    tag: 'Startup Law',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
