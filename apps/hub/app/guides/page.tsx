@@ -349,6 +349,13 @@ const GUIDES = [
     tag: 'GDPR & Privacy',
     product: null,
   },
+  {
+    href: '/guides/soc2-type-1-vs-type-2-guide',
+    title: 'SOC 2 Type I vs Type II Guide (2025): Trust Service Criteria, Audit Timeline, How to Read a Vendor SOC 2 Report',
+    description: 'SOC 2 Type I is a point-in-time assessment; Type II proves controls operated over 6-12 months — and enterprise buyers require Type II. The 5 Trust Service Criteria and what auditors actually test in each, readiness timeline and cost (13-22 months to first Type II report), how to read a vendor\'s SOC 2 report including exceptions and carve-outs, and SOC 2 vs ISO 27001 comparison.',
+    tag: 'Security Compliance',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
