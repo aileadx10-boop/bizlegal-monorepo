@@ -142,5 +142,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/guides/ai-vendor-due-diligence-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/saas-billing-compliance-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/hipaa-business-associate-agreement-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
+    { url: `${BASE}/guides/non-compete-agreement-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
   ]
 }

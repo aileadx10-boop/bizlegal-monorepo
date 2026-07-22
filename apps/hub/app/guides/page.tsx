@@ -328,6 +328,13 @@ const GUIDES = [
     tag: 'HIPAA Compliance',
     product: null,
   },
+  {
+    href: '/guides/non-compete-agreement-guide',
+    title: 'Non-Compete Agreement Guide (2025): State Enforcement Map, FTC Rule Update, California SB 699, Non-Solicitation Alternatives',
+    description: 'Non-compete enforceability by state (California void / SB 699 applies nationwide, Minnesota void 2023, Florida employer-favorable, Texas blue-pencil), FTC rule blocked by federal court, California AB 1076 notification obligation, 5 drafting errors that void enforcement, garden leave vs non-compete, non-solicitation enforceability when non-compete fails, and founder/VC non-compete drafting in M&A and investment contexts.',
+    tag: 'Employment Law',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
