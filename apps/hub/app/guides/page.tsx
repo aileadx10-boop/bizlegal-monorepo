@@ -237,6 +237,13 @@ const GUIDES = [
     tag: 'Intellectual Property',
     product: null,
   },
+  {
+    href: '/guides/uk-fca-crypto-compliance-guide',
+    title: 'UK FCA Crypto Compliance Guide (2025): Financial Promotions, VASP Registration, PSR Travel Rule',
+    description: 'UK Financial Promotions Regime for crypto (October 2023), mandatory risk warning text, Section 21 approval process, FCA VASP/MLR registration, PSR Travel Rule (all transfers, no threshold), incentives ban, 24-hour cooling-off period, and comparison with EU MiCA.',
+    tag: 'Crypto Regulation',
+    product: null,
+  },
 ]
 
 export default function GuidesIndexPage() {
