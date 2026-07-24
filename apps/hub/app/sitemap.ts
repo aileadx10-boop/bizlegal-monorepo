@@ -95,6 +95,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/agents/india-dpdpa`, lastModified: now, changeFrequency: 'monthly', priority: 0.82 },
     { url: `${BASE}/agents/marketplace-shield`, lastModified: now, changeFrequency: 'monthly', priority: 0.82 },
 
+    { url: `${BASE}/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     // Buyer-intent guides (high-intent SEO, each linked to a product)
     { url: `${BASE}/guides`, lastModified: now, changeFrequency: 'weekly', priority: 0.75 },
     { url: `${BASE}/guides/beneficial-ownership-information-filing`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },
