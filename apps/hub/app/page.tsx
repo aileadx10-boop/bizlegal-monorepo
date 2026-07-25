@@ -382,7 +382,7 @@ export default function HomePage() {
           </>
         }
         primaryCta={{ label: 'Free Jurisdiction Snapshot', href: '/snapshot' }}
-        secondaryCta={{ label: "Today's Brief", href: '/posts' }}
+        secondaryCta={{ label: 'Find your tool', href: '/find' }}
         trustBullets={['Practitioner-reviewed', 'Source-cited', 'Cancel anytime']}
       />
 
@@ -694,6 +694,9 @@ export default function HomePage() {
             <Link href="/snapshot" className="bl-btn-primary">
               Free Jurisdiction Snapshot
               <span aria-hidden="true">→</span>
+            </Link>
+            <Link href="/find" className="bl-btn-ghost">
+              Not sure what you need?
             </Link>
             <Link href="/pricing" className="bl-btn-ghost">
               See pricing
