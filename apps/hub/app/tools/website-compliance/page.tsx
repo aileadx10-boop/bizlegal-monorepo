@@ -150,53 +150,48 @@ export default function WebsiteCompliancePage() {
 
           {/* Results */}
           {result && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', animation: 'fadeUp 0.5s ease' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '180px 1fr', gap: '20px' }}>
-                <div style={{ textAlign: 'center', padding: '28px 20px', borderRadius: '14px', border: '1px solid rgba(125,211,252,0.12)', background: 'rgba(7,9,26,0.7)' }}>
-                  <div style={{ fontFamily: 'Gloock, serif', fontSize: '64px', color: scoreColor, lineHeight: 1, marginBottom: '8px' }}>{result.overallScore}</div>
-                  <div style={{ fontSize: '11px', color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px' }}>Score</div>
-                  <div style={{ padding: '5px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 700, fontFamily: 'Geist Mono, monospace', color: scoreColor, border: `1px solid ${scoreColor}40`, background: `${scoreColor}10` }}>{result.complianceLevel}</div>
-                </div>
-                <div style={{ padding: '24px', borderRadius: '14px', border: '1px solid rgba(125,211,252,0.12)', background: 'rgba(7,9,26,0.7)' }}>
-                  <p style={{ fontFamily: 'Gloock, serif', fontSize: '20px', color: 'var(--white)', lineHeight: 1.4, marginBottom: '10px' }}>{result.verdict}</p>
-                  <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.75, marginBottom: '14px' }}>{result.summary}</p>
-                  <div style={{ padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(251,191,36,0.2)', background: 'rgba(251,191,36,0.04)', fontSize: '12px', color: '#fbbf24' }}>
-                    ⚠️ Fine Risk: {result.estimatedFineRisk}
-                  </div>
-                </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '180px 1fr', gap: '20px' }}>
+              <div style={{ textAlign: 'center', padding: '28px 20px', borderRadius: '14px', border: '1px solid rgba(125,211,252,0.12)', background: 'rgba(7,9,26,0.7)' }}>
+                <div style={{ fontFamily: 'Gloock, serif', fontSize: '64px', color: scoreColor, lineHeight: 1, marginBottom: '8px' }}>{result.overallScore}</div>
+                <div style={{ fontSize: '11px', color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px' }}>Score</div>
+                <div style={{ padding: '5px 12px', borderRadius: '100px', fontSize: '11px', fontWeight: 700, color: scoreColor }}>{result.complianceLevel}</div>
               </div>
-
-              <h3 style={{ fontFamily: 'Gloock, serif', fontSize: '22px', color: 'var(--white)' }}>Compliance Breakdown</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <AreaCard title="GDPR (EU)" area={result.gdpr} />
-                <AreaCard title="CCPA (California)" area={result.ccpa} />
-                <AreaCard title="Cookie Compliance" area={result.cookies} />
-                <AreaCard title="ADA / WCAG Accessibility" area={result.accessibility} />
-                <AreaCard title="Privacy Policy" area={result.privacyPolicy} />
+              <div style={{ padding: '24px', borderRadius: '14px', border: '1px solid rgba(125,211,252,0.12)', background: 'rgba(7,9,26,0.7)' }}>
+                <p style={{ fontFamily: 'Gloock, serif', fontSize: '20px', color: 'var(--white)', lineHeight: 1.4, marginBottom: '10px' }}>{result.verdict}</p>
+                <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.75, marginBottom: '14px' }}>{result.summary}</p>
+                <div style={{ padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(251,191,36,0.2)', background: 'rgba(251,191,36,0.04)', fontSize: '12px', color: '#fbbf24' }}>Fine Risk: {result.estimatedFineRisk}</div>
               </div>
-
-              {result.topPriorities?.length > 0 && (
-                <div style={{ padding: '24px', borderRadius: '14px', border: '1px solid rgba(248,113,113,0.15)', background: 'rgba(248,113,113,0.03)' }}>
-                  <h3 style={{ fontSize: '14px', color: '#f87171', fontFamily: 'Geist Mono, monospace', fontWeight: 700, marginBottom: '14px' }}>🔴 Top Priorities</h3>
-                  {result.topPriorities.map((p, i) => (
-                    <div key={i} style={{ display: 'flex', gap: '10px', padding: '10px 0', borderBottom: '1px solid rgba(125,211,252,0.04)' }}>
-                      <span style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#f8717115', border: '1px solid #f8717140', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', color: '#f87171', fontWeight: 700, flexShrink: 0 }}>{i+1}</span>
-                      <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.65 }}>{p}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
-
+            <h3 style={{ fontFamily: 'Gloock, serif', fontSize: '22px', color: 'var(--white)' }}>Compliance Breakdown</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <AreaCard title="GDPR (EU)" area={result.gdpr} />
+              <AreaCard title="CCPA (California)" area={result.ccpa} />
+              <AreaCard title="Cookie Compliance" area={result.cookies} />
+              <AreaCard title="ADA / WCAG Accessibility" area={result.accessibility} />
+              <AreaCard title="Privacy Policy" area={result.privacyPolicy} />
+            </div>
+            {result.topPriorities && result.topPriorities.length > 0 && (
+              <div style={{ padding: '24px', borderRadius: '14px', border: '1px solid rgba(248,113,113,0.15)', background: 'rgba(248,113,113,0.03)' }}>
+                <h3 style={{ fontSize: '14px', color: '#f87171', fontWeight: 700, marginBottom: '14px' }}>Top Priorities</h3>
+                {result.topPriorities.map((pr, i) => (
+                  <div key={i} style={{ display: 'flex', gap: '10px', padding: '10px 0', borderBottom: '1px solid rgba(125,211,252,0.04)' }}>
+                    <span style={{ flexShrink: 0, color: '#f87171', fontWeight: 700 }}>{i + 1}</span>
+                    <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.65 }}>{pr}</p>
+                  </div>
+                ))}
+              </div>
+            )}
             <div style={{ marginTop: '24px', padding: '24px 28px', borderRadius: '12px', border: '1px solid rgba(37,99,235,0.2)', background: 'rgba(37,99,235,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap' }}>
               <div>
-                <div style={{ fontSize: '11px', color: 'rgba(125,211,252,0.6)', fontFamily: 'Geist Mono, monospace', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Automate compliance monitoring for your site</div>
-                <div style={{ fontSize: '16px', fontWeight: 700, color: '#fff', marginBottom: '4px' }}>LexAudit Compliance Health Score — $99/mo</div>
+                <div style={{ fontSize: '11px', color: 'rgba(125,211,252,0.6)', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Automate compliance monitoring for your site</div>
+                <div style={{ fontSize: '16px', fontWeight: 700, color: '#fff', marginBottom: '4px' }}>LexAudit Compliance Health Score - $99/mo</div>
                 <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.6 }}>60-signal monthly scan covering GDPR, CCPA, SOC 2, ISO 27001, and cookie/consent requirements.</div>
               </div>
-              <a href="https://lexaudit.bizlegal-ai.com" style={{ display: 'inline-block', background: '#2563eb', color: '#fff', padding: '10px 24px', borderRadius: '8px', fontWeight: 700, fontSize: '13px', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>Get Your Score →</a>
+              <a href="https://lexaudit.bizlegal-ai.com" style={{ display: 'inline-block', background: '#2563eb', color: '#fff', padding: '10px 24px', borderRadius: '8px', fontWeight: 700, fontSize: '13px', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>Get Your Score</a>
             </div>
-          )}
+          </div>
+        )}
         </div>
       </div>
     </div>

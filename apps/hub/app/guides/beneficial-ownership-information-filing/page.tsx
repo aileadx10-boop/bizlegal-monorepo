@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'BOI Filing Guide: How to File a Beneficial Ownership Information Report (2025)',

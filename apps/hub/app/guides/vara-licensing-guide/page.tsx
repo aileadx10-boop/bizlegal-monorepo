@@ -23,7 +23,7 @@ const FAQS = [
   },
   {
     q: 'What are the capital requirements for a VARA license?',
-    a: 'VARA's Minimum Required Capital (MRC) varies by activity and business model. Published thresholds as of 2024: Exchange services — AED 2,000,000 to AED 50,000,000+ depending on trading volume tiers; Custody services — AED 2,000,000 minimum, higher for significant AUM; Broker-dealer — AED 2,000,000; Advisory — AED 500,000; Payment/remittance — AED 1,000,000. Capital must be held in UAE accounts and demonstrated throughout the licensing process. VARA also requires Professional Indemnity Insurance and, for custodians and exchanges, crime insurance covering hot wallet assets.',
+    a: 'VARA\'s Minimum Required Capital (MRC) varies by activity and business model. Published thresholds as of 2024: Exchange services — AED 2,000,000 to AED 50,000,000+ depending on trading volume tiers; Custody services — AED 2,000,000 minimum, higher for significant AUM; Broker-dealer — AED 2,000,000; Advisory — AED 500,000; Payment/remittance — AED 1,000,000. Capital must be held in UAE accounts and demonstrated throughout the licensing process. VARA also requires Professional Indemnity Insurance and, for custodians and exchanges, crime insurance covering hot wallet assets.',
   },
   {
     q: 'How long does the VARA licensing process take?',
@@ -31,7 +31,7 @@ const FAQS = [
   },
   {
     q: 'What AML/KYC obligations does VARA impose?',
-    a: 'VARA-licensed entities are subject to UAE Federal AML Law (Federal Law No. 20 of 2018) and VARA's Compliance and Risk Management Rulebook. Specific obligations include: implementing a written AML/CFT program approved by senior management; designating a Compliance Officer and an MLRO (Money Laundering Reporting Officer) who must be UAE-resident; customer due diligence (KYC) at onboarding and for transactions above AED 3,672 (~$1,000); Enhanced Due Diligence for high-risk customers and PEPs; FATF Travel Rule compliance for transfers above AED 3,672; filing Suspicious Transaction Reports (STRs) with the UAE Financial Intelligence Unit (UAEFIU) via the goAML platform; annual AML training for all staff; annual independent AML audit.',
+    a: 'VARA-licensed entities are subject to UAE Federal AML Law (Federal Law No. 20 of 2018) and VARA\'s Compliance and Risk Management Rulebook. Specific obligations include: implementing a written AML/CFT program approved by senior management; designating a Compliance Officer and an MLRO (Money Laundering Reporting Officer) who must be UAE-resident; customer due diligence (KYC) at onboarding and for transactions above AED 3,672 (~$1,000); Enhanced Due Diligence for high-risk customers and PEPs; FATF Travel Rule compliance for transfers above AED 3,672; filing Suspicious Transaction Reports (STRs) with the UAE Financial Intelligence Unit (UAEFIU) via the goAML platform; annual AML training for all staff; annual independent AML audit.',
   },
   {
     q: 'How does VARA compare to EU MiCA for crypto licensing?',
@@ -98,7 +98,7 @@ export default function VARAGuidePage() {
         </h1>
 
         <p style={{ fontSize: '1.05rem', lineHeight: 1.75, opacity: 0.85, marginBottom: '2.5rem' }}>
-          Dubai's Virtual Assets Regulatory Authority (VARA) has established one of the most detailed and internationally recognized crypto licensing frameworks in the world. VARA licenses signal institutional legitimacy for exchanges, custodians, and VASPs operating globally. This guide explains what VARA requires, how the application process works, and how it compares to other major jurisdictions.
+          Dubai\'s Virtual Assets Regulatory Authority (VARA) has established one of the most detailed and internationally recognized crypto licensing frameworks in the world. VARA licenses signal institutional legitimacy for exchanges, custodians, and VASPs operating globally. This guide explains what VARA requires, how the application process works, and how it compares to other major jurisdictions.
         </p>
 
         <hr style={{ border: 'none', borderTop: '1px solid var(--color-border, #e5e7eb)', marginBottom: '2.5rem' }} />
@@ -140,7 +140,7 @@ export default function VARAGuidePage() {
         </section>
 
         <section style={{ marginBottom: '2.5rem' }}>
-          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '1rem' }}>VARA's Three-Stage Licensing Process</h2>
+          <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '1rem' }}>VARA\'s Three-Stage Licensing Process</h2>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1rem' }}>
             {[
@@ -189,7 +189,7 @@ export default function VARAGuidePage() {
             <li><strong>Cyber Liability Insurance:</strong> Strongly encouraged; becoming de facto mandatory for larger operations. Covers costs of cyber incidents including customer notification, forensic investigation, and regulatory response.</li>
           </ul>
           <p style={{ lineHeight: 1.75, marginTop: '1rem', fontSize: '0.9rem', opacity: 0.75 }}>
-            Insurance for crypto businesses is a specialized market. Lloyd's syndicates and dedicated crypto insurers (e.g., Evertas, Relm, Aegis) are the primary providers. Expect premiums of 1–3% of covered assets annually for crime coverage.
+            Insurance for crypto businesses is a specialized market. Lloyd\'s syndicates and dedicated crypto insurers (e.g., Evertas, Relm, Aegis) are the primary providers. Expect premiums of 1–3% of covered assets annually for crime coverage.
           </p>
         </section>
 
@@ -241,7 +241,7 @@ export default function VARAGuidePage() {
           <p style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', opacity: 0.6, marginBottom: '0.5rem' }}>Contract Risk — $97</p>
           <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 0.75rem' }}>Review Your UAE Virtual Asset Contracts in 60 Seconds</h3>
           <p style={{ fontSize: '0.9rem', lineHeight: 1.7, opacity: 0.85, marginBottom: '1.25rem' }}>
-            VARA licensees face specific contractual requirements: client agreements must include required disclosures, AML vendor contracts must meet VARA's third-party oversight standards, and custody agreements need explicit liability allocations. BizLegal AI scans your contracts for missing VARA-required clauses and flags every gap before your regulator does.
+            VARA licensees face specific contractual requirements: client agreements must include required disclosures, AML vendor contracts must meet VARA\'s third-party oversight standards, and custody agreements need explicit liability allocations. BizLegal AI scans your contracts for missing VARA-required clauses and flags every gap before your regulator does.
           </p>
           <a href="https://docai.bizlegal-ai.com" style={{ display: 'inline-block', padding: '0.6rem 1.25rem', background: '#1a56db', color: '#fff', borderRadius: '6px', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none' }}>
             Scan Your VARA Contracts →
