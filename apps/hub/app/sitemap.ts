@@ -17,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/snapshot`, lastModified: now, changeFrequency: 'daily', priority: 0.95 },
     { url: `${BASE}/realestate`, lastModified: now, changeFrequency: 'weekly', priority: 0.92 },
     { url: `${BASE}/pricing`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${BASE}/find`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
 
     // Hub product surfaces (revenue-driving)
     { url: `${BASE}/agents`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
