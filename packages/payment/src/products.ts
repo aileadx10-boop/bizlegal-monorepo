@@ -58,6 +58,11 @@ export type ProductId =
   | 'cle_standalone_monthly'
   // AIA — Compliance Ops Retainer (managed service)
   | 'compliance_ops_retainer'
+  // Trio (2026-07-28 scaffold — inert until each surface goes live; see
+  // decisions/TRIO-PROPSIGNAL-LEASEPARSE-CLOSEFLOW-2026-07-28.md)
+  | 'propsignal_report_49'
+  | 'leaseparse_abstract_59'
+  | 'closeflow_transaction_39'
 
 export type BillingInterval = 'one-time' | 'monthly' | 'yearly'
 
@@ -65,7 +70,7 @@ export interface ProductSpec {
   readonly id: ProductId
   readonly name: string
   readonly description: string
-  readonly product_family: 'boi' | 'ai_act' | 'policy_refresh' | 'psp' | 'tracr' | 'brai' | 'forge' | 'docai' | 'lexaudit' | 'conductor' | 'cle'
+  readonly product_family: 'boi' | 'ai_act' | 'policy_refresh' | 'psp' | 'tracr' | 'brai' | 'forge' | 'docai' | 'lexaudit' | 'conductor' | 'cle' | 'propsignal' | 'leaseparse' | 'closeflow'
   readonly billing_interval: BillingInterval
   readonly amount_cents: number
   readonly currency: 'USD'
@@ -461,6 +466,45 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     checkout_origin: '/services/compliance-ops',
     webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
+  },
+
+  // ───── Trio (scaffold 2026-07-28 — surfaces not yet deployed; checkout
+  // stays dark until Z7-style verification per hard rule #5) ─────
+  propsignal_report_49: {
+    id: 'propsignal_report_49',
+    name: 'PropSignal Property Risk Report',
+    description: 'Public-data property risk report: flood zone, environmental screening, open-data signals, deterministic risk score. Informational only — not an inspection, title opinion, or legal advice.',
+    product_family: 'propsignal',
+    billing_interval: 'one-time',
+    amount_cents: 4900,
+    currency: 'USD',
+    checkout_origin: 'https://propsignal.bizlegal-ai.com',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: false,
+  },
+  leaseparse_abstract_59: {
+    id: 'leaseparse_abstract_59',
+    name: 'LeaseParse Commercial Lease Abstract',
+    description: 'AI-extracted lease abstract: critical dates, financial terms, risk-flag clauses. Document analysis tool — does not render legal advice.',
+    product_family: 'leaseparse',
+    billing_interval: 'one-time',
+    amount_cents: 5900,
+    currency: 'USD',
+    checkout_origin: 'https://leaseparse.bizlegal-ai.com',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: false,
+  },
+  closeflow_transaction_39: {
+    id: 'closeflow_transaction_39',
+    name: 'CloseFlow Closing Checklist',
+    description: 'Jurisdiction-aware closing checklist + deadline tracker + automated reminders for one real-estate transaction. Project-management software — not escrow, title, or legal services.',
+    product_family: 'closeflow',
+    billing_interval: 'one-time',
+    amount_cents: 3900,
+    currency: 'USD',
+    checkout_origin: 'https://closeflow.bizlegal-ai.com',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: false,
   },
 }
 

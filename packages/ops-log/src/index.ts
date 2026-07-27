@@ -99,6 +99,9 @@ export interface LogEventInput {
     | 'curator'
     | 'ea'
     | 'gsc-bot'
+    | 'propsignal'
+    | 'leaseparse'
+    | 'closeflow'
   ref_id?: string
   email?: string
   amount_cents?: number

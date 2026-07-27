@@ -22,6 +22,9 @@ bizlegal-monorepo/
 │   ├── docai/        docai.bizlegal-ai.com — CANONICAL CONTRACT-RISK FUNNEL (SQA + DPA + $97 scan, live since 2026-05-23)
 │   ├── leadforge/    leadforge.bizlegal-ai.com (lead-gen surface)
 │   ├── forge/        forge.bizlegal-ai.com (BOI Kit $149, Passport $297, scan $97)
+│   ├── propsignal/   propsignal.bizlegal-ai.com — property risk reports $49 (TRIO scaffold 2026-07-28, not deployed; see apps/propsignal/CLAUDE.md)
+│   ├── leaseparse/   leaseparse.bizlegal-ai.com — lease abstracting $59 + date monitoring (TRIO scaffold, not deployed; see apps/leaseparse/CLAUDE.md)
+│   ├── closeflow/    closeflow.bizlegal-ai.com — closing checklists $39 + deadline engine (TRIO scaffold, not deployed; see apps/closeflow/CLAUDE.md)
 │   └── blog/         blog.bizlegal-ai.com (curator-fed MDX content; CF Pages)
 ├── services/         non-Vercel runtimes
 │   ├── hetzner/      curator pipeline: scout/brain/publisher/bot (Python, systemd) [Z1.C-pending]
@@ -206,6 +209,7 @@ Every planning + ops doc lives in `decisions/`:
 
 - `decisions/DEPLOYMENT_MAP.md` — authoritative Hetzner box map: CX33, real paths, docker containers (:5678 n8n, :8080 marimo), curator systemd units, openclaw user-unit, Ollama (mistral-nemo), deploy runbook. Updated 2026-06-14.
 - `decisions/JULY10-FIRST-REVENUE.md` — Moses-only 33-minute checklist for first revenue by July 10: rotate NOWPAYMENTS_API_KEY + IPN_SECRET (most urgent), top up Anthropic credits, rotate Resend key, fix PayPal credentials, do $97 test purchase. All code is deployed and correct as of commit f551154.
+- `decisions/TRIO-PROPSIGNAL-LEASEPARSE-CLOSEFLOW-2026-07-28.md` — 3 new real-estate-adjacent surfaces (property risk reports / lease abstracting / closing checklists), $200/mo budget cap on the Ollama+Claude+Perplexity stack, shared liability-shield TOS, cross-sell spine via trio_properties, build order CloseFlow → LeaseParse → PropSignal. SCAFFOLD ONLY — checkout dark, migrations unapplied, nothing deployed.
 
 When you write a new decision, add it here.
 
