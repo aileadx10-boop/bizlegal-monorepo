@@ -102,6 +102,7 @@ export interface LogEventInput {
     | 'propsignal'
     | 'leaseparse'
     | 'closeflow'
+    | 'dealdesk'
   ref_id?: string
   email?: string
   amount_cents?: number

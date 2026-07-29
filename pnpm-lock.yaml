@@ -95,6 +95,34 @@ importers:
         specifier: ^5.9.2
         version: 5.9.3
 
+  apps/dealdesk/web:
+    dependencies:
+      '@supabase/supabase-js':
+        specifier: ^2.57.4
+        version: 2.105.1
+      next:
+        specifier: 14.2.35
+        version: 14.2.35(@opentelemetry/api@1.9.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
+    devDependencies:
+      '@types/node':
+        specifier: ^22.9.0
+        version: 22.19.17
+      '@types/react':
+        specifier: ^18.3.12
+        version: 18.3.28
+      '@types/react-dom':
+        specifier: ^18.3.1
+        version: 18.3.7(@types/react@18.3.28)
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.3
+
   apps/docai/web:
     dependencies:
       '@anthropic-ai/sdk':

@@ -22,9 +22,10 @@ bizlegal-monorepo/
 │   ├── docai/        docai.bizlegal-ai.com — CANONICAL CONTRACT-RISK FUNNEL (SQA + DPA + $97 scan, live since 2026-05-23)
 │   ├── leadforge/    leadforge.bizlegal-ai.com (lead-gen surface)
 │   ├── forge/        forge.bizlegal-ai.com (BOI Kit $149, Passport $297, scan $97)
-│   ├── propsignal/   propsignal.bizlegal-ai.com — property risk reports $49 (TRIO scaffold 2026-07-28, not deployed; see apps/propsignal/CLAUDE.md)
-│   ├── leaseparse/   leaseparse.bizlegal-ai.com — lease abstracting $59 + date monitoring (TRIO scaffold, not deployed; see apps/leaseparse/CLAUDE.md)
-│   ├── closeflow/    closeflow.bizlegal-ai.com — closing checklists $39 + deadline engine (TRIO scaffold, not deployed; see apps/closeflow/CLAUDE.md)
+│   ├── dealdesk/     dealdesk.bizlegal-ai.com — DocParse (lease abstracts) + CloseFlow (closing checklists) in ONE app, one login, shared dd_properties spine. Supersedes leaseparse + closeflow; engines ported verbatim. NOT DEPLOYED, checkout dark (see apps/dealdesk/CLAUDE.md)
+│   ├── propsignal/   propsignal.bizlegal-ai.com — property risk reports $49 (PARKED 2026-07-30: empty Socrata registry + placeholder Perplexity key; see apps/propsignal/CLAUDE.md)
+│   ├── leaseparse/   SUPERSEDED by apps/dealdesk 2026-07-30 — engines ported, dir pending deletion (see apps/leaseparse/CLAUDE.md)
+│   ├── closeflow/    SUPERSEDED by apps/dealdesk 2026-07-30 — engines ported, dir pending deletion (see apps/closeflow/CLAUDE.md)
 │   └── blog/         blog.bizlegal-ai.com (curator-fed MDX content; CF Pages)
 ├── services/         non-Vercel runtimes
 │   ├── hetzner/      curator pipeline: scout/brain/publisher/bot (Python, systemd) [Z1.C-pending]

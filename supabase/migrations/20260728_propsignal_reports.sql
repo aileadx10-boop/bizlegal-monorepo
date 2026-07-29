@@ -1,3 +1,8 @@
+-- PARKED 2026-07-30 — PropSignal is not being built in the current runway.
+-- Its SOCRATA_DATASETS registry is empty and its Perplexity key is a
+-- placeholder. This migration still FKs trio_properties (now dd_properties)
+-- and is intentionally left unapplied and inert. Revive with the app.
+
 -- PropSignal: property risk reports built from free public data sources
 -- (FEMA NFHL, EPA EJScreen/Envirofacts, Socrata open data, Perplexity research).
 -- source_snapshots keeps the raw signals so the daily delta-scan cron can

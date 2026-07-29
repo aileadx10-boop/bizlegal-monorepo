@@ -68,7 +68,7 @@ const ALLOWED_TYPES = new Set([
 const ALLOWED_SOURCES = new Set([
   'hub', 'docai', 'lexaudit', 'tracr', 'brai', 'forge', 'leadforge', 'blog',
   'oci', 'worker', 'curator', 'ea', 'gsc-bot',
-  'propsignal', 'leaseparse', 'closeflow',
+  'propsignal', 'leaseparse', 'closeflow', 'dealdesk',
 ])
 
 export async function POST(req: NextRequest) {
