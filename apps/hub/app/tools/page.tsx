@@ -248,18 +248,7 @@ export default function ToolsPage(): JSX.Element {
               <a
                 key={tool.href}
                 href={tool.href}
-                style={{
-                  display: 'block',
-                  background: '#0b0b16',
-                  border: '1px solid #1a1a2e',
-                  borderRadius: 12,
-                  padding: '20px 22px',
-                  textDecoration: 'none',
-                  transition: 'border-color 0.2s',
-                  position: 'relative',
-                }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '#c9a84c' }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '#1a1a2e' }}
+                className="tool-card-featured"
               >
                 {tool.badge && (
                   <span style={{ position: 'absolute', top: 14, right: 14, fontSize: 10, background: '#c9a84c22', color: '#c9a84c', border: '1px solid #c9a84c44', borderRadius: 999, padding: '2px 8px', fontWeight: 700 }}>
@@ -302,17 +291,7 @@ export default function ToolsPage(): JSX.Element {
                 <Link
                   key={tool.slug}
                   href={`/tools/${tool.slug}`}
-                  style={{
-                    display: 'block',
-                    background: '#0b0b16',
-                    border: '1px solid #1a1a2e',
-                    borderRadius: 10,
-                    padding: '18px 20px',
-                    textDecoration: 'none',
-                    transition: 'border-color 0.2s',
-                  }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '#3a3a5a' }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '#1a1a2e' }}
+                  className="tool-card-compact"
                 >
                   <span style={{
                     display: 'inline-block',

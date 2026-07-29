@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { supabaseAdmin } from '@/lib/supabase'
 import ScoreGauge from '@/components/tools/ScoreGauge'
+import PrintButton from '@/components/report/PrintButton'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
@@ -111,13 +112,7 @@ export default async function ReportPage({ params }: Props) {
         >
           Book Emergency Audit →
         </a>
-        <button
-          onClick={() => window.print()}
-          className="btn-ghost"
-          style={{ width: '100%', justifyContent: 'center', fontSize: 13 }}
-        >
-          Download PDF Report
-        </button>
+        <PrintButton label="Download PDF Report" />
       </div>
 
       {/* Disclaimer */}

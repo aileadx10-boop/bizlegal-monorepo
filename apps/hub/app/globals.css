@@ -743,3 +743,52 @@ h4, h5, h6 { font-family: var(--font-body); font-weight: 600; }
   position: relative;
   z-index: 1;
 }
+
+/* Card + CTA hover states.
+   These live in CSS rather than onMouseEnter/onMouseLeave handlers so the
+   pages that use them can stay server components — React Server Components
+   cannot serialize event handlers to the client. */
+.tool-card-featured {
+  display: block;
+  background: #0b0b16;
+  border: 1px solid #1a1a2e;
+  border-radius: 12px;
+  padding: 20px 22px;
+  text-decoration: none;
+  transition: border-color 0.2s;
+  position: relative;
+}
+.tool-card-featured:hover { border-color: #c9a84c; }
+
+.tool-card-compact {
+  display: block;
+  background: #0b0b16;
+  border: 1px solid #1a1a2e;
+  border-radius: 10px;
+  padding: 18px 20px;
+  text-decoration: none;
+  transition: border-color 0.2s;
+}
+.tool-card-compact:hover { border-color: #3a3a5a; }
+
+.cta-btn-solid {
+  padding: 14px 32px;
+  background: #fff;
+  color: var(--cta);
+  border-radius: 8px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s;
+}
+.cta-btn-solid:hover { transform: scale(1.05); }
+
+.cta-btn-outline {
+  padding: 14px 32px;
+  border: 2px solid #fff;
+  color: #fff;
+  border-radius: 8px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.cta-btn-outline:hover { background: rgba(255, 255, 255, 0.1); }

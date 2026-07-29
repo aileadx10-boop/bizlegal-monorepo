@@ -18,28 +18,14 @@ export function CTA() {
           Start with a free scan. No credit card required.
         </p>
         <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Link href="/risk-engine" style={{
-            padding: '14px 32px', background: '#fff',
-            color: 'var(--cta)', borderRadius: 8, fontWeight: 700,
-            textDecoration: 'none', transition: 'transform 0.2s',
-          }}
-            onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.05)')}
-            onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
-          >
+          <Link href="/risk-engine" className="cta-btn-solid">
             Start Free Scan
           </Link>
           <a
             href="https://calendly.com/ai-leadx10"
             target="_blank"
             rel="noopener noreferrer"
-            style={{
-              padding: '14px 32px',
-              border: '2px solid #fff', color: '#fff',
-              borderRadius: 8, fontWeight: 700,
-              textDecoration: 'none', transition: 'background 0.2s',
-            }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+            className="cta-btn-outline"
           >
             Book Demo
           </a>
