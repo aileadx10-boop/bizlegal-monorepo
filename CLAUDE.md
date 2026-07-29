@@ -215,6 +215,8 @@ Every planning + ops doc lives in `decisions/`:
 - `decisions/VERCEL-PUSH-NOT-DEPLOYING-2026-07-29.md` — **Read before trusting any push.** Vercel stopped processing pushes account-wide (all 7 projects at once) after `175e87b`; `de0d387` + `1888962` are on GitHub with zero deployment records, so production still serves `175e87b`. Contains the `gh api .../deployments` command that distinguishes "not deployed" from "deployed and broken" (curling the URL cannot), the two-project-link trap (deploy the hub from the repo ROOT — `apps/hub/.vercel` points at a dead stray project), and the Moses-only fix.
 - `decisions/TRIO-PROPSIGNAL-LEASEPARSE-CLOSEFLOW-2026-07-28.md` — 3 new real-estate-adjacent surfaces (property risk reports / lease abstracting / closing checklists), $200/mo budget cap on the Ollama+Claude+Perplexity stack, shared liability-shield TOS, cross-sell spine via trio_properties, build order CloseFlow → LeaseParse → PropSignal. SCAFFOLD ONLY — checkout dark, migrations unapplied, nothing deployed.
 
+- `decisions/OVERNIGHT-2026-07-30-MONEY-PATH-AND-DEALDESK.md` — Overnight session: fixed the `/api/pay/start` money-loss path (no `payment_orders` row + `bz_*` order_id unreconcilable by the uuid lookup + claim-before-lookup burning the event); built `apps/dealdesk` porting the leaseparse+closeflow engines; `dd_*` migrations superseding the unapplied trio set. **Both Anthropic keys live-tested funded — the "$0 credit" note was wrong.** Branch `fix/money-path-and-dealdesk`, unmerged. Cloud-routine configs ready to arm, deliberately not armed.
+
 When you write a new decision, add it here.
 
 ---
