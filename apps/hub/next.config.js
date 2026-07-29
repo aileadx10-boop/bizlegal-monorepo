@@ -31,12 +31,18 @@ const nextConfig = {
     return [
       // Legacy SEO routes — content moved to blog.bizlegal-ai.com
       // (factory now lives in bizlegal-ea/projects/bizlegal-seo-site)
-      { source: '/blog',          destination: 'https://blog.bizlegal-ai.com/blog', permanent: true },
-      { source: '/blog/:slug',    destination: 'https://blog.bizlegal-ai.com/blog/:slug', permanent: true },
+      //
+      // /blog and /guides are DELIBERATELY absent: the hub owns both now.
+      // app/blog/page.tsx is a real index (self-canonical, ItemList over all
+      // GUIDES, sitemapped) and app/blog/[slug] canonicalises to /guides/[slug].
+      // Redirect rules here run before routing, so reinstating them silently
+      // kills those pages — which is exactly what happened until 2026-07-30.
       { source: '/articles',      destination: 'https://blog.bizlegal-ai.com/blog', permanent: true },
       { source: '/articles/:slug',destination: 'https://blog.bizlegal-ai.com/blog/:slug', permanent: true },
-      { source: '/guides',        destination: 'https://blog.bizlegal-ai.com/blog', permanent: true },
-      { source: '/guides/:path*', destination: 'https://blog.bizlegal-ai.com/blog', permanent: true },
+      // NOTE: no /guides rule here. The hub owns /guides now — 66 generated pages
+      // with self-referencing canonicals, all listed in app/sitemap.ts. The old
+      // '/guides/:path*' rule predated them (inherited 2026-05-01) and 308'd every
+      // guide to the blog index. Do not reinstate it.
       { source: '/guide/:slug',   destination: 'https://blog.bizlegal-ai.com/blog/:slug', permanent: true },
       { source: '/posts',         destination: 'https://blog.bizlegal-ai.com/blog', permanent: true },
       { source: '/posts/:slug',   destination: 'https://blog.bizlegal-ai.com/blog/:slug', permanent: true },
