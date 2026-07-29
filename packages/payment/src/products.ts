@@ -63,6 +63,13 @@ export type ProductId =
   | 'propsignal_report_49'
   | 'leaseparse_abstract_59'
   | 'closeflow_transaction_39'
+  // Nifty Haven — the /learn layer (2026-07-30). Registered so pre-order
+  // checkout is one flag away, but NOT yet wired to a buy button: /learn has
+  // no auth and no delivery mechanism, so a purchase could not be fulfilled.
+  // /learn currently captures email via double opt-in only. Do not surface
+  // these in a checkout until gated-lesson delivery exists.
+  | 'academy_realestate_annual'
+  | 'academy_founders_annual'
 
 export type BillingInterval = 'one-time' | 'monthly' | 'yearly'
 
@@ -70,7 +77,7 @@ export interface ProductSpec {
   readonly id: ProductId
   readonly name: string
   readonly description: string
-  readonly product_family: 'boi' | 'ai_act' | 'policy_refresh' | 'psp' | 'tracr' | 'brai' | 'forge' | 'docai' | 'lexaudit' | 'conductor' | 'cle' | 'propsignal' | 'leaseparse' | 'closeflow'
+  readonly product_family: 'boi' | 'ai_act' | 'policy_refresh' | 'psp' | 'tracr' | 'brai' | 'forge' | 'docai' | 'lexaudit' | 'conductor' | 'cle' | 'propsignal' | 'leaseparse' | 'closeflow' | 'academy'
   readonly billing_interval: BillingInterval
   readonly amount_cents: number
   readonly currency: 'USD'
@@ -505,6 +512,36 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     checkout_origin: 'https://closeflow.bizlegal-ai.com',
     webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: false,
+  },
+
+  // ───── Learn (Nifty Haven) ─────
+  // Registered but NOT yet sellable. /learn has no account system and no
+  // gated-lesson delivery, so a paid subscriber could not be given access.
+  // /learn captures double-opt-in email only. Wire a buy button here after
+  // delivery exists — not before.
+  academy_realestate_annual: {
+    id: 'academy_realestate_annual',
+    name: 'Learn — Real Estate Track (annual)',
+    description: 'Full real-estate track: reading purchase agreements, disclosure obligations, closing mechanics, and cross-border purchase by non-residents. Written by a practising real-estate lawyer. Educational material only — not legal advice, and it carries no CLE, CPE, or other professional credit.',
+    product_family: 'academy',
+    billing_interval: 'yearly',
+    amount_cents: 24000,
+    currency: 'USD',
+    checkout_origin: '/learn/real-estate',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: true,
+  },
+  academy_founders_annual: {
+    id: 'academy_founders_annual',
+    name: 'Learn — Founders Track (annual)',
+    description: 'Full founder legal-and-compliance literacy track: the obligations that attach at incorporation, reading a contract someone sends you, when counsel is actually required, and personal-data duties. Educational material only — not legal advice, and it carries no CLE, CPE, or other professional credit.',
+    product_family: 'academy',
+    billing_interval: 'yearly',
+    amount_cents: 18000,
+    currency: 'USD',
+    checkout_origin: '/learn/founders',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: true,
   },
 }
 

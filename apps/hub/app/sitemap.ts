@@ -1,4 +1,6 @@
 import { MetadataRoute } from 'next'
+import { TRACKS } from '@/lib/academy/tracks'
+import { lessonHref, trackHref } from '@/lib/academy/types'
 
 /**
  * Hub sitemap — static routes only. Long-form content lives at
@@ -11,6 +13,26 @@ const BASE = 'https://bizlegal-ai.com'
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
 
+  // /learn — tracks plus FREE lessons only. Gated lessons render an outline
+  // instead of a body and carry robots:noindex, so listing them here would
+  // offer search engines pages nobody can read.
+  const learn: MetadataRoute.Sitemap = TRACKS.flatMap((track) => [
+    {
+      url: `${BASE}${trackHref(track.slug)}`,
+      lastModified: now,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    },
+    ...track.lessons
+      .filter((lesson) => lesson.free)
+      .map((lesson) => ({
+        url: `${BASE}${lessonHref(track.slug, lesson.slug)}`,
+        lastModified: now,
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
+      })),
+  ])
+
   return [
     // Top-level
     { url: BASE, lastModified: now, changeFrequency: 'daily', priority: 1.0 },
@@ -18,6 +40,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/realestate`, lastModified: now, changeFrequency: 'weekly', priority: 0.92 },
     { url: `${BASE}/pricing`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE}/find`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+
+    // Learn (/learn index + tracks + free lessons appended below)
+    { url: `${BASE}/learn`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
+    ...learn,
 
     // Hub product surfaces (revenue-driving)
     { url: `${BASE}/agents`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
