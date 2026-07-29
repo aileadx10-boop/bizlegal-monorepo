@@ -5,7 +5,11 @@ import { logEventAsync } from '@/lib/ops/log'
 /**
  * POST /api/transaction/start — checkout entry stub.
  *
- * Intended live flow: forward to hub POST /api/pay/start with
+ * Intended live flow: forward to hub /checkout (apex) — NOT /api/pay/start, which is disabled 2026-07-30
+ *      because it never inserted a payment_orders row and its bz_* order_id
+ *      could not be reconciled by the IPN webhook. Use:
+ *      https://bizlegal-ai.com/checkout?product=&tier=&interval=&amount=&name=
+ *      with
  * { product_id: 'closeflow_transaction_39', user_email, gateway } per the
  * @bizlegal/payment registry, then create the transaction row on the
  * payment.confirmed webhook.

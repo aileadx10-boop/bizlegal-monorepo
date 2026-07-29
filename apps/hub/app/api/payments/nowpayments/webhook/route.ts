@@ -30,6 +30,45 @@ function sortedJsonString(obj: Record<string, unknown>): string {
   return JSON.stringify(sorted)
 }
 
+/**
+ * Alert Moses when an IPN arrives for an order we have no record of.
+ *
+ * Uses plain text (not MarkdownV2) so no payload value can break parsing and
+ * swallow the alert. Fails soft: an alerting failure must never turn into a
+ * non-2xx, or the gateway starts a retry storm on top of the original problem.
+ */
+async function alertUnrecordedPayment(ipn: NowPaymentsIpn): Promise<void> {
+  const token = process.env.TELEGRAM_BOT_TOKEN
+  const chatId = process.env.TELEGRAM_CHAT_ID
+  if (!token || !chatId) return
+
+  const text = [
+    '🚨 UNRECORDED PAYMENT',
+    '',
+    'A NOWPayments IPN referenced an order that does not exist in payment_orders.',
+    'A customer may have paid with no record.',
+    '',
+    `order_id: ${ipn.order_id}`,
+    `payment_id: ${ipn.payment_id}`,
+    `status: ${ipn.payment_status}`,
+    `amount: ${ipn.price_amount ?? '?'} ${ipn.price_currency ?? ''}`,
+    '',
+    'Likely cause: the invoice was created by a /start route that did not insert',
+    'a payment_orders row first (e.g. /api/pay/start). Reconcile manually in the',
+    'NOWPayments dashboard.',
+  ].join('\n')
+
+  try {
+    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ chat_id: chatId, text, disable_web_page_preview: true }),
+    })
+  } catch (err: unknown) {
+    console.error('[nowpayments/webhook] telegram alert failed', err)
+  }
+}
+
 function verifyIpnSignature(rawBody: string, signature: string, secret: string): boolean {
   try {
     const parsed = JSON.parse(rawBody) as Record<string, unknown>
@@ -84,6 +123,55 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'missing_order_id' }, { status: 400 })
     }
 
+    const supabase = getSupabase()
+
+    // Find the order.
+    //
+    // 2026-07-30: this lookup MUST happen before the idempotency claim.
+    // `order_id` is expected to be a `payment_orders.id` uuid — that is the
+    // contract `/api/payments/{nowpayments,paypal,wire}/start` upholds by
+    // inserting the row first and passing its id to the gateway. A malformed
+    // or unknown order_id therefore means the money arrived through a path
+    // that never recorded it (see the `/api/pay/start` 503 in that route).
+    const { data: order } = await supabase
+      .from('payment_orders')
+      .select('id, billing_interval, status, user_email, user_name, amount_cents, product, tier, source')
+      .eq('id', ipn.order_id)
+      .single()
+
+    if (!order) {
+      // Scream, then ACK. Two deliberate choices:
+      //
+      // 1. We return 200, not 404. NOWPayments retries non-2xx for ~25h, and
+      //    a retry storm neither finds the missing row nor alerts anyone.
+      // 2. We alert loudly, because this branch means a customer may have
+      //    paid with no order record. That is the worst failure this service
+      //    has, and it used to be a silent console.warn.
+      console.error('[nowpayments/webhook] ORDER NOT FOUND — possible unrecorded payment', {
+        order_id: ipn.order_id,
+        payment_id: ipn.payment_id,
+        payment_status: ipn.payment_status,
+        price_amount: ipn.price_amount,
+      })
+      logEventAsync({
+        type: 'error',
+        source: 'hub',
+        ref_id: String(ipn.payment_id ?? ipn.order_id),
+        status: 'failed',
+        metadata: {
+          scope: 'nowpayments_webhook',
+          reason: 'order_not_found',
+          order_id: ipn.order_id,
+          payment_id: ipn.payment_id,
+          payment_status: ipn.payment_status,
+          price_amount: ipn.price_amount,
+          hint: 'order_id is not a payment_orders.id uuid — check which /start route created this invoice',
+        },
+      })
+      await alertUnrecordedPayment(ipn)
+      return NextResponse.json({ ok: true, order_not_found: true, alerted: true })
+    }
+
     // 2026-05-11 idempotency claim (CODE-REVIEW-W5 H-01 + SECURITY-W5 S-C1).
     // NOWPayments retries IPN deliveries until they see 2xx. Without a
     // claim, multiple retries for the same payment_id duplicate the
@@ -92,6 +180,10 @@ export async function POST(req: NextRequest) {
     // We claim on (payment_id, payment_status) so transitions through
     // multiple statuses (waiting → confirming → finished) each get
     // processed once, but the SAME status delivered twice is deduped.
+    //
+    // Claiming AFTER the order lookup is deliberate: claiming first meant a
+    // transient lookup failure permanently burned the event, so every
+    // subsequent retry deduped to 200 and the order never reconciled.
     const npEventId = `${ipn.payment_id}:${ipn.payment_status}`
     const claim = await claimWebhookEvent({
       gateway: 'nowpayments',
@@ -106,20 +198,6 @@ export async function POST(req: NextRequest) {
         { error: 'idempotency_storage_failed' },
         { status: 500 },
       )
-    }
-
-    const supabase = getSupabase()
-
-    // Find the order
-    const { data: order } = await supabase
-      .from('payment_orders')
-      .select('id, billing_interval, status, user_email, user_name, amount_cents, product, tier, source')
-      .eq('id', ipn.order_id)
-      .single()
-
-    if (!order) {
-      console.warn('[nowpayments/webhook] order not found', ipn.order_id)
-      return NextResponse.json({ error: 'order not found' }, { status: 404 })
     }
 
     let newStatus: string | null = null

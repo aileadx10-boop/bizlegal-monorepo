@@ -94,6 +94,6 @@ Positioning: *you are a data terminal, we organize what the county clerk already
 
 1. Implement `fetchSignals` in the 4 source clients (FEMA first — highest signal per effort).
 2. Geocoding via free Census Bureau geocoder (no new paid API).
-3. PDF template + Resend delivery; wire hub `/api/pay/start` with `propsignal_report_49`.
+3. PDF template + Resend delivery; wire hub apex `/checkout` (NOT `/api/pay/start` — disabled 2026-07-30, it never wrote a `payment_orders` row so payments could not be reconciled).
 4. Supabase cache table for source snapshots (`propsignal_reports` migration already written, unapplied).
 5. Turn on checkout only after a Moses-verified end-to-end test purchase.

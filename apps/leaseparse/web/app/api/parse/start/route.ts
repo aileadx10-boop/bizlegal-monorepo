@@ -9,7 +9,11 @@ import { logEventAsync } from '@/lib/ops/log'
  *
  * Intended live flow:
  *   1. Validate payload (below).
- *   2. POST hub /api/pay/start { product_id: 'leaseparse_abstract_59',
+ *   2. POST hub /checkout (apex) — NOT /api/pay/start, which is disabled 2026-07-30
+ *      because it never inserted a payment_orders row and its bz_* order_id
+ *      could not be reconciled by the IPN webhook. Use:
+ *      https://bizlegal-ai.com/checkout?product=&tier=&interval=&amount=&name=
+ *      (product family 'leaseparse', tier 'abstract',
  *      user_email, gateway } → redirect user to checkout_url.
  *   3. On payment webhook: signed upload URL to Supabase storage.
  *   4. Extraction pipeline: pdf text → lib/extract/hermes-first →

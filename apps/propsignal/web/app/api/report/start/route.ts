@@ -9,7 +9,11 @@ import { logEventAsync } from '@/lib/ops/log'
  *
  * Intended flow (build phase 3):
  *   1. Validate address + email (below — already live).
- *   2. POST hub /api/pay/start { product_id: 'propsignal_report_49',
+ *   2. POST hub /checkout (apex) — NOT /api/pay/start, which is disabled 2026-07-30
+ *      because it never inserted a payment_orders row and its bz_* order_id
+ *      could not be reconciled by the IPN webhook. Use:
+ *      https://bizlegal-ai.com/checkout?product=&tier=&interval=&amount=&name=
+ *      (product family 'propsignal', tier 'report',
  *      user_email, gateway } → redirect to checkout_url.
  *   3. On payment.confirmed webhook: source fan-out (fema/epa/socrata/
  *      perplexity) → score-engine → PDF → Resend delivery → download.report.

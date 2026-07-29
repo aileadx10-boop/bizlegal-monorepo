@@ -1,146 +1,64 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { logEventAsync } from '@/lib/ops/log'
-import {
-  startCheckout,
-  getProduct,
-  PRODUCTS,
-  type ProductId,
-  type GatewayPreference,
-  type CheckoutResult,
-} from '@bizlegal/payment'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
 
 /**
- * POST /api/pay/start
+ * POST /api/pay/start — DISABLED 2026-07-30. DO NOT RE-ENABLE AS-IS.
  *
- * Universal checkout entry. Replaces every NEXT_PUBLIC_NOWPAYMENTS_*_URL
- * and NEXT_PUBLIC_PAYPAL_*_URL env constant — gateway URL is generated
- * on the fly via @bizlegal/payment.
+ * ┌─ WHY THIS RETURNS 503 ──────────────────────────────────────────────────┐
+ * │ This route took money and left no record. Two compounding defects:      │
+ * │                                                                        │
+ * │ 1. It never INSERTs a `payment_orders` row. The gateway `order_id` came │
+ * │    from `makeOrderId()` in @bizlegal/payment, which emits              │
+ * │    `bz_<product>_<email>_<minute>_<nonce>`.                            │
+ * │ 2. `/api/payments/nowpayments/webhook` reconciles via                  │
+ * │    `.eq('id', ipn.order_id)` against `payment_orders.id`, a **uuid**.   │
+ * │    A `bz_…` string can never match, so the IPN found no order.         │
+ * │                                                                        │
+ * │ Net effect: customer pays → no order row → no entitlement → no receipt.│
+ * │ (The webhook's claim-before-lookup ordering also burned the event so    │
+ * │ every retry deduped to 200. That half is now fixed in the webhook.)     │
+ * └────────────────────────────────────────────────────────────────────────┘
  *
- * Body: { product_id: ProductId; user_email: string; gateway: 'crypto' | 'card' }
- * Returns: { ok: true; checkout_url: string; provider: 'nowpayments'|'paypal'|... }
- *       or 4xx/503 with { ok: false; error: string }
+ * USE INSTEAD — the only reconcilable money path:
+ *   pricing page
+ *     → https://bizlegal-ai.com/checkout?product=&tier=&interval=&amount=&name=
+ *     → /api/payments/{nowpayments,paypal,wire}/start   (INSERTs the row first,
+ *        then passes that row's uuid to the gateway as order_id)
+ *     → /api/payments/nowpayments/webhook               (reconciles on it)
  *
- * Fires:
- *   - agent.checkout (intent — when checkout_url created)
- *   - payment.intent (with metadata.provider, amount_cents, product_id)
- *
- * Webhook (provider IPN) hits the legacy /api/payments/{nowpayments,paypal}/webhook
- * routes, which then fire payment.confirmed. That contract is unchanged.
+ * TO FIX PROPERLY (then delete this block):
+ *   1. Extract the insert from `/api/payments/nowpayments/start` into
+ *      `apps/hub/lib/payments/create-order.ts`, shared by all start routes.
+ *   2. Change `createNowPaymentsInvoice` in @bizlegal/payment to accept an
+ *      INJECTED order_id instead of calling `makeOrderId()`. Keep
+ *      `makeOrderId` only for PayPal's `PayPal-Request-Id` header.
+ *   3. Re-point this route at that helper, then verify with
+ *      `gateway='simulated'` end to end before removing the 503.
  */
+const DISABLED_REASON =
+  'pay_start_disabled_use_apex_checkout: this route did not create a payment_orders row, ' +
+  'so payments through it could not be reconciled. Use ' +
+  'https://bizlegal-ai.com/checkout or POST /api/payments/{nowpayments,paypal,wire}/start.'
 
-interface StartBody {
-  product_id?: string
-  user_email?: string
-  user_name?: string
-  gateway?: GatewayPreference
-}
-
-function isValid(body: unknown): body is Required<Pick<StartBody, 'product_id' | 'user_email' | 'gateway'>> & StartBody {
-  if (!body || typeof body !== 'object') return false
-  const o = body as StartBody
-  if (typeof o.product_id !== 'string') return false
-  if (!(o.product_id in PRODUCTS)) return false
-  if (typeof o.user_email !== 'string' || !o.user_email.includes('@')) return false
-  if (o.gateway !== 'crypto' && o.gateway !== 'card') return false
-  return true
-}
-
-export async function POST(req: NextRequest) {
-  let body: unknown
-  try {
-    body = await req.json()
-  } catch {
-    return NextResponse.json({ ok: false, error: 'invalid_json' }, { status: 400 })
-  }
-  if (!isValid(body)) {
-    return NextResponse.json(
-      {
-        ok: false,
-        error: 'product_id (must match a known ProductId), user_email, gateway (crypto|card) required',
-        valid_product_ids: Object.keys(PRODUCTS),
-      },
-      { status: 400 },
-    )
-  }
-
-  const productId = body.product_id as ProductId
-  const product = getProduct(productId)
-  const preference: GatewayPreference = body.gateway
-
-  // Fire intent BEFORE the gateway call so we count attempts even when
-  // the gateway 503s.
+export async function POST() {
+  // Fail closed before doing anything else. See DISABLED_REASON above.
   logEventAsync({
-    type: 'agent.checkout',
+    type: 'error',
     source: 'hub',
-    email: body.user_email,
-    amount_cents: product.amount_cents,
-    status: 'pending',
+    status: 'failed',
     metadata: {
-      product_id: productId,
-      product_family: product.product_family,
-      billing_interval: product.billing_interval,
-      gateway: preference,
+      scope: 'pay_start_disabled',
+      reason: 'route_disabled_unreconcilable',
+      hint: 'caller should use /checkout or /api/payments/{nowpayments,paypal,wire}/start',
     },
   })
-
-  const result: CheckoutResult = await startCheckout(
-    {
-      product_id: productId,
-      user_email: body.user_email.toLowerCase(),
-      user_name: body.user_name,
-      origin: req.headers.get('origin') ?? undefined,
-    },
-    preference,
+  return NextResponse.json(
+    { ok: false, error: DISABLED_REASON, use_instead: 'https://bizlegal-ai.com/checkout' },
+    { status: 503 },
   )
-
-  if (!result.ok) {
-    logEventAsync({
-      type: 'payment.failed',
-      source: 'hub',
-      email: body.user_email,
-      amount_cents: product.amount_cents,
-      status: 'failed',
-      metadata: {
-        product_id: productId,
-        gateway: preference,
-        provider: result.provider,
-        provider_error: result.error,
-      },
-    })
-    return NextResponse.json(
-      { ok: false, provider: result.provider, error: result.error },
-      { status: result.status_code },
-    )
-  }
-
-  logEventAsync({
-    type: 'payment.intent',
-    source: 'hub',
-    ref_id: result.provider_invoice_id,
-    email: body.user_email,
-    amount_cents: result.amount_cents,
-    status: 'pending',
-    metadata: {
-      product_id: productId,
-      product_family: product.product_family,
-      billing_interval: product.billing_interval,
-      gateway: preference,
-      provider: result.provider,
-      provider_invoice_id: result.provider_invoice_id,
-    },
-  })
-
-  return NextResponse.json({
-    ok: true,
-    provider: result.provider,
-    checkout_url: result.checkout_url,
-    provider_invoice_id: result.provider_invoice_id,
-    product_id: productId,
-    amount_cents: result.amount_cents,
-  })
 }
 
 export const GET = () =>
