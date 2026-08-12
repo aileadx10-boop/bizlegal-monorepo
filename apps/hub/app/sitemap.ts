@@ -99,6 +99,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/tools/gdpr-fine-estimator`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${BASE}/tools/wallet-screener`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE}/tools/mica-asset-classifier`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE}/tools/stablecoin-classifier`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${BASE}/tools/contract-fixer`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
 
     // Regulations (hub-owned reference pages)

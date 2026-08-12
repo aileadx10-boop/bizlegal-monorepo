@@ -6,12 +6,12 @@ export const dynamic = 'force-static'
 export const metadata: Metadata = {
   title: 'Free Compliance Tools — AI-Powered Legal & Regulatory Tools | BizLegal AI',
   description:
-    '20 free compliance tools: GDPR fine estimator, BOI filing check, sanctions & wallet screener, contract risk scanner, crypto wallet analysis, MiCA classifier, MiCA deadline tracker, and more. No account required.',
+    '21 free compliance tools: GDPR fine estimator, BOI filing check, sanctions & wallet screener, contract risk scanner, crypto wallet analysis, stablecoin classifier, MiCA classifier, MiCA deadline tracker, and more. No account required.',
   alternates: { canonical: 'https://bizlegal-ai.com/tools' },
   openGraph: {
     title: 'Free Compliance Tools | BizLegal AI',
     description:
-      '20 free AI-powered tools covering GDPR, BOI/CTA, MiCA, sanctions & wallet screening, contract risk, and more. No signup until you see results.',
+      '21 free AI-powered tools covering GDPR, BOI/CTA, MiCA, sanctions & wallet screening, contract risk, and more. No signup until you see results.',
     url: 'https://bizlegal-ai.com/tools',
   },
 }
@@ -33,6 +33,12 @@ const HUB_TOOLS = [
     slug: 'mica-asset-classifier',
     title: 'MiCA Asset Classifier',
     desc: 'Classify your crypto asset under EU MiCA — e-money token, asset-referenced token, or other crypto-asset.',
+    tag: 'MiCA',
+  },
+  {
+    slug: 'stablecoin-classifier',
+    title: 'Stablecoin Classifier (GENIUS Act + MiCA)',
+    desc: 'Route a token to permitted / non-permitted status under the US GENIUS Act and to EMT / ART / other crypto-asset under EU MiCA — each classification cited.',
     tag: 'MiCA',
   },
   {
@@ -240,7 +246,7 @@ export default function ToolsPage(): JSX.Element {
         {/* Header */}
         <header style={{ textAlign: 'center', marginBottom: 56 }}>
           <span style={{ display: 'inline-block', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.16em', color: '#c9a84c', fontWeight: 700, marginBottom: 12 }}>
-            20 free tools · no account required
+            21 free tools · no account required
           </span>
           <h1 style={{ fontSize: 'clamp(2rem, 1rem + 3.5vw, 3.2rem)', fontWeight: 700, color: '#f7f3e8', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 16 }}>
             Free Compliance Tools
