@@ -50,6 +50,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/risk-engine`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE}/jurisdictions`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE}/mica-readiness`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${BASE}/mica-deadlines`, lastModified: now, changeFrequency: 'daily', priority: 0.8 },
     // /marketplace also 308-redirects; omitted (same rationale as the
     // subdomain landings below).
 
@@ -96,7 +97,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Slugs mirror the PAGES array in app/tools/[slug]/page.tsx.
     { url: `${BASE}/tools`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE}/tools/gdpr-fine-estimator`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${BASE}/tools/sanction-screener`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE}/tools/wallet-screener`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE}/tools/mica-asset-classifier`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${BASE}/tools/contract-fixer`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
 

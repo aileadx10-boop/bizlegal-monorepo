@@ -3,7 +3,6 @@ import Link from 'next/link'
 
 const PAGES = [
   { slug: 'gdpr-fine-estimator', title: 'GDPR Fine Estimator' },
-  { slug: 'sanction-screener', title: 'Sanction Screener' },
   { slug: 'mica-asset-classifier', title: 'MiCA Asset Classifier' },
   { slug: 'contract-fixer', title: 'Contract Fixer' },
 ]

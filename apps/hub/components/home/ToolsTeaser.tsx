@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 const TOOLS = [
   { slug: 'gdpr-fine-estimator', tag: 'CALCULATOR', title: 'GDPR Fine Estimator', desc: 'Calculate maximum exposure under Article 83(4) and 83(5) tracks based on revenue and records affected.' },
-  { slug: 'sanction-screener', tag: 'TOOL', title: 'Sanction Screener', desc: 'Simulate OFAC, EU, and UN sanction list screening for entities and individuals.' },
+  { slug: 'wallet-screener', tag: 'TOOL', title: 'Sanctions & Wallet Screener', desc: 'Check one Ethereum address against the OFAC, UN, and EU sanctions lists — instant result with citations.' },
   { slug: 'mica-asset-classifier', tag: 'TOOL', title: 'MiCA Asset Classifier', desc: 'Decision tree to classify tokens as ARTs, EMTs, or other crypto-assets under MiCA Article 3.' },
   { slug: 'token-classifier', tag: 'TOOL', title: 'Token Classifier (Howey)', desc: 'Apply the four-prong Howey Test interactively to determine securities probability.' },
   { slug: 'gdpr-breach-timer', tag: 'TOOL', title: 'GDPR Breach Timer', desc: 'Live 72-hour countdown from discovery date with authority notification list for all 27 EU DPAs.' },
@@ -11,7 +11,7 @@ const TOOLS = [
 
 const ICONS: Record<string, string> = {
   'gdpr-fine-estimator': 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z',
-  'sanction-screener': 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
+  'wallet-screener': 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
   'mica-asset-classifier': 'M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343',
   'token-classifier': 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
   'gdpr-breach-timer': 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',

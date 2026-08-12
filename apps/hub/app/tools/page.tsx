@@ -6,12 +6,12 @@ export const dynamic = 'force-static'
 export const metadata: Metadata = {
   title: 'Free Compliance Tools — AI-Powered Legal & Regulatory Tools | BizLegal AI',
   description:
-    '18 free compliance tools: GDPR fine estimator, BOI filing check, contract risk scanner, sanctions screener, crypto wallet analysis, MiCA classifier, and more. No account required.',
+    '20 free compliance tools: GDPR fine estimator, BOI filing check, sanctions & wallet screener, contract risk scanner, crypto wallet analysis, MiCA classifier, MiCA deadline tracker, and more. No account required.',
   alternates: { canonical: 'https://bizlegal-ai.com/tools' },
   openGraph: {
     title: 'Free Compliance Tools | BizLegal AI',
     description:
-      '18 free AI-powered tools covering GDPR, BOI/CTA, MiCA, sanctions screening, contract risk, and more. No signup until you see results.',
+      '20 free AI-powered tools covering GDPR, BOI/CTA, MiCA, sanctions & wallet screening, contract risk, and more. No signup until you see results.',
     url: 'https://bizlegal-ai.com/tools',
   },
 }
@@ -24,9 +24,21 @@ const HUB_TOOLS = [
     tag: 'GDPR',
   },
   {
+    slug: 'wallet-screener',
+    title: 'Sanctions & Wallet Screener',
+    desc: 'Check one Ethereum address against the OFAC, UN, and EU sanctions lists — instant three-way result with citations.',
+    tag: 'Sanctions',
+  },
+  {
     slug: 'mica-asset-classifier',
     title: 'MiCA Asset Classifier',
     desc: 'Classify your crypto asset under EU MiCA — e-money token, asset-referenced token, or other crypto-asset.',
+    tag: 'MiCA',
+  },
+  {
+    href: '/mica-deadlines',
+    title: 'MiCA Deadline Tracker',
+    desc: 'Every statutory MiCA milestone for CASPs — authorisation, Travel Rule, grandfathering waves — with citations. Curated daily.',
     tag: 'MiCA',
   },
   {
@@ -144,6 +156,7 @@ const TAG_COLORS: Record<string, string> = {
   Forge: '#4a2a1a',
   BRAI: '#1a3a4a',
   TRACR: '#3a1a4a',
+  Sanctions: '#6b1a1a',
 }
 
 export default function ToolsPage(): JSX.Element {
@@ -158,7 +171,7 @@ export default function ToolsPage(): JSX.Element {
         '@type': 'ListItem',
         position: i + 1,
         name: t.title,
-        url: `https://bizlegal-ai.com/tools/${t.slug}`,
+        url: 'href' in t && t.href ? t.href : `https://bizlegal-ai.com/tools/${t.slug}`,
       })),
       ...SUBDOMAIN_TOOLS.map((t, i) => ({
         '@type': 'ListItem',
@@ -227,7 +240,7 @@ export default function ToolsPage(): JSX.Element {
         {/* Header */}
         <header style={{ textAlign: 'center', marginBottom: 56 }}>
           <span style={{ display: 'inline-block', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.16em', color: '#c9a84c', fontWeight: 700, marginBottom: 12 }}>
-            18 free tools · no account required
+            20 free tools · no account required
           </span>
           <h1 style={{ fontSize: 'clamp(2rem, 1rem + 3.5vw, 3.2rem)', fontWeight: 700, color: '#f7f3e8', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 16 }}>
             Free Compliance Tools
@@ -287,10 +300,11 @@ export default function ToolsPage(): JSX.Element {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 14 }}>
             {HUB_TOOLS.map((tool) => {
               const tagColor = TAG_COLORS[tool.tag] ?? '#1a2a1a'
+              const href = 'href' in tool && tool.href ? tool.href : `/tools/${tool.slug}`
               return (
                 <Link
-                  key={tool.slug}
-                  href={`/tools/${tool.slug}`}
+                  key={href}
+                  href={href}
                   className="tool-card-compact"
                 >
                   <span style={{

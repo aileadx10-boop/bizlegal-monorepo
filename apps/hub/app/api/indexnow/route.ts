@@ -17,6 +17,8 @@ const URLS = [
   `${BASE}/digital-asset-risk-analysis`,
   `${BASE}/digital-asset-regulatory-intelligence`,
   `${BASE}/tools`,
+  `${BASE}/tools/wallet-screener`,
+  `${BASE}/mica-deadlines`,
   `${BASE}/faq`,
   `${BASE}/pricing`,
 ]
