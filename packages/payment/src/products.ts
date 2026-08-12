@@ -70,6 +70,8 @@ export type ProductId =
   // these in a checkout until gated-lesson delivery exists.
   | 'academy_realestate_annual'
   | 'academy_founders_annual'
+  // Stablecoin Reserve Report Generator (W2-5)
+  | 'stablecoin_reserve_monthly'
 
 export type BillingInterval = 'one-time' | 'monthly' | 'yearly'
 
@@ -77,7 +79,7 @@ export interface ProductSpec {
   readonly id: ProductId
   readonly name: string
   readonly description: string
-  readonly product_family: 'boi' | 'ai_act' | 'policy_refresh' | 'psp' | 'tracr' | 'brai' | 'forge' | 'docai' | 'lexaudit' | 'conductor' | 'cle' | 'propsignal' | 'leaseparse' | 'closeflow' | 'academy'
+  readonly product_family: 'boi' | 'ai_act' | 'policy_refresh' | 'psp' | 'tracr' | 'brai' | 'forge' | 'docai' | 'lexaudit' | 'conductor' | 'cle' | 'propsignal' | 'leaseparse' | 'closeflow' | 'academy' | 'reserve_report'
   readonly billing_interval: BillingInterval
   readonly amount_cents: number
   readonly currency: 'USD'
@@ -541,6 +543,23 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     currency: 'USD',
     checkout_origin: '/learn/founders',
     webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: true,
+  },
+
+  // ───── Stablecoin Reserve Report Generator (W2-5) ─────
+  // Fulfilled by the self-contained /api/reserve-report/webhook (TRACR-style:
+  // own webhook + own reserve_reports table), NOT the shared payments webhook,
+  // because the universal /api/pay/start path does not write payment_orders.
+  stablecoin_reserve_monthly: {
+    id: 'stablecoin_reserve_monthly',
+    name: 'Stablecoin Reserve Report Generator (monthly)',
+    description: 'Templated monthly reserve report against GENIUS Act + MiCA reserve rules, generated from issuer-supplied reserve composition. Template generated from your data — not an audit. Human review before use.',
+    product_family: 'reserve_report',
+    billing_interval: 'monthly',
+    amount_cents: 19900,
+    currency: 'USD',
+    checkout_origin: '/reserve-report',
+    webhook_path: '/api/reserve-report/webhook',
     cancellable: true,
   },
 }

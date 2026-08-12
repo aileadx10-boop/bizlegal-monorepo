@@ -19,6 +19,7 @@ const URLS = [
   `${BASE}/tools`,
   `${BASE}/tools/wallet-screener`,
   `${BASE}/tools/stablecoin-classifier`,
+  `${BASE}/reserve-report`,
   `${BASE}/mica-deadlines`,
   `${BASE}/faq`,
   `${BASE}/pricing`,

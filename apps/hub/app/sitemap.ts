@@ -102,6 +102,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/tools/stablecoin-classifier`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${BASE}/tools/contract-fixer`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
 
+    // Products (revenue-driving)
+    { url: `${BASE}/reserve-report`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
+
     // Regulations (hub-owned reference pages)
     { url: `${BASE}/regulations`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE}/regulations/sec`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
