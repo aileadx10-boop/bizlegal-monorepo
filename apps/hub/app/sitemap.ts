@@ -49,6 +49,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/agents`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE}/risk-engine`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE}/jurisdictions`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${BASE}/mica-readiness`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     // /marketplace also 308-redirects; omitted (same rationale as the
     // subdomain landings below).
 
