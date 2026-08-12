@@ -1,11 +1,19 @@
 # BizLegal AI — Skills Book
 
 Session-start skills and high-leverage frameworks Moses uses every session.
-Updated: 2026-07-03
+Updated: 2026-08-13
 
 ---
 
 ## SESSION SKILLS (use every session)
+
+### 0. bizlegal-session-start (RUN FIRST — every new session)
+The default entry point. Reads memory → the operating book (CLAUDE.md, this book, ops runbook, standing orders) → the orders queue (`C:/Users/Moshe Dor/orders/ORDERS.md`) → prints a one-screen "where / what's next / blocked on Moses" brief → begins the top pending order autonomously. Auto-loaded via AGENTS.md in both `bizlegal-monorepo/` and `Firmcited/`. If you are ever unsure what to do, run this.
+
+Companion skills:
+- **bizlegal-file-order** — file a new order into the queue (`orders/O-<ID>-<slug>.md` + row in ORDERS.md).
+- **bizlegal-orders** — show the queue / what's next / what's blocked without the full flow.
+- **firmcited** — FirmCited-specific book (offers, real-money gate, Moses ops) for Firmcited sessions.
 
 ### 1. session-handoff
 Before any `/clear`, produce a structured handoff so the next agent picks up without losing state.

@@ -232,12 +232,13 @@ When you write a new decision, add it here.
 
 ## 10 — How a new agent / subagent should start
 
-1. **Read this file.**
-2. **Read `decisions/concurrent-bouncing-kitten.md`** for current state.
-3. **Run `/api/ops/health`** to see what's actually live vs what the docs claim.
-4. **Pick the smallest possible cut of the next-up phase from Z0-Z7.**
-5. **Follow Operating Book Discipline** (Section 5) — every PR keeps the book + vault current.
-6. **Verify before moving on** — each phase has a binary verification gate. Don't proceed without green.
+1. **Load the `bizlegal-session-start` skill** (or follow `AGENTS.md` at repo root — it's the same flow). It reads memory, this book, the ops runbook, and the orders queue (`C:/Users/Moshe Dor/orders/ORDERS.md`), prints a brief, and begins the top pending order.
+2. **Read this file.**
+3. **Read `decisions/DAILY-WEEKLY-OPS-RUNBOOK.md`** for current operational state.
+4. **Run `/api/ops/health`** to see what's actually live vs what the docs claim.
+5. **Pick the smallest possible cut of the next-up phase from Z0-Z7** (or the top pending order in the queue).
+6. **Follow Operating Book Discipline** (Section 5) — every PR keeps the book + vault current.
+7. **Verify before moving on** — each phase has a binary verification gate. Don't proceed without green.
 
 If you see a doc contradicting current code: **trust the code; update the doc**. Stale docs are worse than missing docs.
 

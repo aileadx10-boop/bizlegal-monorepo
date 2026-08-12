@@ -1,10 +1,26 @@
 # Hermes Standing Orders
 
-**Effective:** 2026-07-04  
+**Effective:** 2026-07-04 (updated 2026-08-13)  
 **Owner:** Moses Dor (BizLegal AI)  
 **Scope:** Every session where Hermes (Claude Code / EA) is active
 
 These orders run in EVERY session, no exception. They take precedence over session-specific goals.
+
+---
+
+## O0 — Session Start From the Book + Orders (run first)
+
+At the very start of every session, load the `bizlegal-session-start` skill and follow it end-to-end:
+
+1. Read memory (`~/.claude/projects/C--Users-Moshe-Dor/memory/MEMORY.md`)
+2. Read the book: `CLAUDE.md`, `decisions/SKILLS-BOOK.md`, `decisions/DAILY-WEEKLY-OPS-RUNBOOK.md`, `agents/HERMES-STANDING-ORDERS.md` (FirmCited sessions: also `Firmcited/AGENTS.md`, `OPS.md`, `vertical.config.ts`)
+3. Read the orders queue (`C:/Users/Moshe Dor/orders/ORDERS.md` + top pending order file)
+4. Print the one-screen brief (WHERE / WHAT'S NEXT / BLOCKED ON MOSES)
+5. Begin the top pending order autonomously; mark it `in_progress` in its file first
+
+Do NOT ask "what should I do?" — the queue answers. If it's empty, say so and stand by; never invent work from nothing. This replaces the old "find the plan manually" shuffle.
+
+**Why:** Sessions were starting blind and re-deriving state. The queue + book make every session pick up exactly where the last left off.
 
 ---
 
