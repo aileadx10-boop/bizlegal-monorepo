@@ -55,7 +55,7 @@ const ALLOWED_TYPES = new Set([
   'routing.attempted', 'curation.action', 'heartbeat',
   // V2 agents (Phase V1-V6)
   'aiact.classified', 'policy.refreshed', 'legal.cite_audit', 'connect.threshold_crossed',
-  'mica.audit.generated', 'sdn.match_detected', 'dao.recommendation',
+  'mica.audit.generated', 'mica.deadline.alert', 'sdn.match_detected', 'dao.recommendation',
   'download.report', 'report.generated', 'agent.checkout', 'webhook.received', 'error',
   // Phase RR — autonomous ops + revenue infrastructure (2026-05-21)
   'agent.run.completed', 'agent.run.error',

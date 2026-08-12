@@ -63,6 +63,7 @@ export type OpsEventType =
   | 'legal.cite_audit'         // lawyer AI hallucination audit run
   | 'connect.threshold_crossed' // Stripe Connect 1099-K or state-MT trigger
   | 'mica.audit.generated'     // MiCA white paper audit produced
+  | 'mica.deadline.alert'      // MiCA deadline digest alert sent
   | 'sdn.match_detected'       // OFAC SDN list match on a watched wallet
   | 'dao.recommendation'       // DAO wrapper-entity decision report
   | 'download.report'          // PDF/HTML download

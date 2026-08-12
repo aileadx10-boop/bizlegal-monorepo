@@ -107,6 +107,7 @@ Key event types in `packages/ops-log/src/index.ts`:
 - `agent.run.success` / `agent.run.failed`
 - `content.published` / `content.indexed`
 - `deal.room.created` / `deal.room.converted`
+- `mica.deadline.alert`      // MiCA deadline digest alert sent
 
 Full list: `packages/ops-log/src/index.ts`
 

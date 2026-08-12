@@ -36,7 +36,8 @@
     "app/api/content/syndicate/route.ts": { "maxDuration": 60 },
     "app/api/cron/invoices/route.ts": { "maxDuration": 60 },
     "app/api/newsletter/send/route.ts": { "maxDuration": 60 },
-    "app/api/cron/guide-social/route.ts": { "maxDuration": 90 }
+    "app/api/cron/guide-social/route.ts": { "maxDuration": 90 },
+    "app/api/cron/mica-deadlines/route.ts": { "maxDuration": 60 }
   },
   "crons": [
     {
@@ -78,7 +79,8 @@
     { "path": "/api/agents/run?task=daily-standing-review",           "schedule": "0 18 * * *" },
     { "path": "/api/agents/enrich-pages",                              "schedule": "0 4 * * 0" },
     { "path": "/api/newsletter/send",                                  "schedule": "0 13 * * 1" },
-    { "path": "/api/cron/guide-social",                                "schedule": "30 5 * * *" }
+    { "path": "/api/cron/guide-social",                                "schedule": "30 5 * * *" },
+    { "path": "/api/cron/mica-deadlines",                              "schedule": "17 15 * * *" }
   ],
   "headers": [
     {
