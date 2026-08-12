@@ -209,3 +209,24 @@ Symptom: `ops_events` shows repeated `error` rows with `smoke_check: digest, sta
 4. Verify: `curl -s -o /dev/null -w "%{http_code}" https://<surface>.bizlegal-ai.com/api/digest` → 200.
 
 > Known instance (2026-06-11): **leadforge** had Root Directory unset since the Z1 migration; its only prod deploy was state=ERROR, returning 500 since 2026-05-25. Every other app already has Root Directory set.
+
+---
+
+## GROWTH + MONOPOLY DEPLOY (2026-08-12)
+
+### What shipped
+- **FirmCited** (cited.bizlegal-ai.com, deployed via Vercel CLI from `C:/Users/Moshe Dor/Firmcited`):
+  - Measurable Outcome block in every audit (bucket/KPI/baseline/target, expectation-not-guarantee)
+  - Case-study generator (consent-gated, anonymized, baseline-only — no firm-name leak)
+  - Customer-loop metrics in daily digest (time-to-first-result, re-engagement rate, cancel buckets)
+  - $200 AI Enablement Session rung + cost-floor note on /pricing; "what's free / what's next" on /free-check
+  - Migration 0010: `fc_audits.outcome` + `metadata jsonb` on subscriptions/orders
+- **Hub** (bizlegal-ai.com/mica-readiness): MiCA readiness assessment tool (Plan 1 W1-1)
+
+### DEPLOY-PATH DISCOVERY (read before deploying hub again)
+**The hub production deploys from `bizlegal-monorepo` → `apps/hub` → `main` branch → Vercel project `bizlegal-ai` (root `apps/hub`).**
+The `BIZLEGAL PROJECTS/bizlegal-ai` repo (dev source, `quantum-wat`) is NOT the deploy source — pushing it triggers a broken deploy ("Root Directory apps/hub does not exist"). To ship hub changes: port files into `bizlegal-monorepo/apps/hub`, commit on `main`, push. All product Vercel projects (bizlegal-ai, lexaudit, brai, trcr, docai-frontend, forge, leadforge-ai) are linked to bizlegal-monorepo with `apps/*` roots. FirmCited is the exception — no git link, deploy via CLI.
+
+### Remaining Plan 1 (not built)
+- W1-2: Sanctions & Wallet-Screening Lite
+- W1-3: MiCA Transition/Deadline Tracker agent
