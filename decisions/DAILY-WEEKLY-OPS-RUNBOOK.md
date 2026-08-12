@@ -230,3 +230,38 @@ The `BIZLEGAL PROJECTS/bizlegal-ai` repo (dev source, `quantum-wat`) is NOT the 
 ### Remaining Plan 1 (not built)
 - W1-2: Sanctions & Wallet-Screening Lite
 - W1-3: MiCA Transition/Deadline Tracker agent
+
+---
+
+## Z7 VERIFICATION — 2026-08-12 (skill /bizlegal-verify-z7)
+
+Fleet status: **9 of 11 rows GREEN; 2 rows need Moses action.**
+
+### GREEN
+- 6 subdomains (forge, tracr, docai, lexaudit, brai, leadforge): all HTTP 200
+- Worker `bizlegal-lead-intake`: `/health` 200 `{ok:true}` (claude-haiku-4-5 extract/critique/score)
+- Hetzner curator timers: `curator-scout.timer` active, `curator-auto-pick.timer` active
+- OCI router: `router.bizlegal-ai.com/health` → `{ok:true, redis:up, supabase:up}` (note: public hostname is `router.bizlegal-ai.com`, NOT `oci.bizlegal-ai.com` — the latter doesn't resolve)
+- HMAC chain: hub self-loop POST to `/api/ops/log` → 200 `{ok:true}`
+
+### ⛔ RED 1 — OPS_DASHBOARD_TOKEN mismatch (blocks /ops dashboards + feed + health API)
+- `/api/ops/health` and `/api/ops/feed` return `404 {"error":"not found"}` with the canonical vault token (CRLF-stripped).
+- `/ops/snapshot?t=<vault>` renders the soft-404 body → production `OPS_DASHBOARD_TOKEN` ≠ vault value.
+- **Fix:** pick one source of truth and resync:
+  - Vercel → Project `bizlegal-ai` → Settings → Environment Variables → update `OPS_DASHBOARD_TOKEN` to the vault value (or update the vault to the Vercel value), then Redeploy.
+  - Or CLI: `cd "C:/Users/Moshe Dor/bizlegal-monorepo/apps/hub" && npx vercel env pull --environment=production` (then copy the value into the vault).
+- Once resynced: `curl "https://bizlegal-ai.com/api/ops/health?token=<token>"` should return `generated_at`.
+
+### ⛔ RED 2 — Curator scout Ollama tunnel failing (content pipeline dead)
+- Every scout cycle: `Client error '404 Not Found' for url 'https://curator.bizlegal-ai.com/api/chat'` → `0/12 items passed filter; exiting`.
+- The endpoint is behind **Cloudflare Access** (302 → `bizlegal.cloudflareaccess.com`, `service_token_status:false`). Tunnel (cloudflared PID on Windows box) routes `curator.bizlegal-ai.com` → `localhost:11434` (local Windows Ollama 0.32.5, not Hetzner).
+- Local `localhost:11434/api/chat` with `gemma4:e2b` returns 200 but with `gemma4:12b` times out — so both the CF-Access service-token path (scout's `OLLAMA_TUNNEL_TOKEN`) and/or local Ollama stability are suspect.
+- **Fix checklist:**
+  1. On Hetzner: `systemctl edit curator-scout.service` → confirm `OLLAMA_TUNNEL_URL=https://curator.bizlegal-ai.com` and `OLLAMA_TUNNEL_TOKEN=<CF service token>` are set; restart: `systemctl restart curator-scout.service`
+  2. In Cloudflare Zero Trust dashboard: confirm the Access policy for `curator.bizlegal-ai.com` **allows Service Auth** and the token's client ID/secret match.
+  3. Local Windows Ollama: verify it can sustain a `/api/chat` response (`curl -s -m 30 localhost:11434/api/chat -d '{"model":"gemma4:12b",...}'`); if it hangs, restart Ollama.
+
+### Skill bugs fixed (2026-08-12)
+- `SKILL.md` token extraction now strips trailing `\r` (vault is CRLF → naive cut appended `\r` → every authed call 404'd).
+- Row 10 hostname corrected to `router.bizlegal-ai.com`.
+- `ssh hetzner` alias replaced with `ssh -i ~/.ssh/id_ed25519 root@204.168.209.235`.
