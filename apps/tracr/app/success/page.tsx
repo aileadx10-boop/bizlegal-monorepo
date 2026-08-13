@@ -118,15 +118,15 @@ function SuccessContent() {
             </a>
           </div>
 
-          {/* Consultation CTA */}
+          {/* Keep-watching upsell — self-serve, no calendar */}
           <div style={{ marginTop: 28, padding: '24px 28px', background: C.amberBg, border: `1px solid ${C.amber}33`, borderRadius: 12, textAlign: 'center' }}>
-            <div style={{ fontSize: 14, fontWeight: 600, color: C.text, marginBottom: 6 }}>Need legal support?</div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: C.text, marginBottom: 6 }}>Keep this wallet under watch</div>
             <p style={{ fontSize: 13, color: C.muted, marginBottom: 16, lineHeight: 1.6 }}>
-              Book a consultation with Advocate Dor — NY Bar, ICC Arbitrator, DIFC Registered.
+              Screen it against the OFAC, UN and EU sanctions lists every day and get an email the moment a new match appears — $29/mo, cancel anytime.
             </p>
-            <a href="https://calendly.com/ai-leadx10" target="_blank" rel="noopener noreferrer"
+            <a href="https://bizlegal-ai.com/tools/ofac-watcher"
               style={{ padding: '10px 24px', border: `1px solid ${C.amber}55`, background: C.amberBg, borderRadius: 8, color: C.amber, textDecoration: 'none', fontSize: 13, fontWeight: 700, fontFamily: C.sans }}>
-              Book Consultation →
+              Set up daily monitoring →
             </a>
           </div>
         </div>

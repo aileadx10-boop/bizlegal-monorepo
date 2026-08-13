@@ -587,7 +587,7 @@ export default function StartupComplianceProgramGuidePage() {
                 fontSize: '0.97rem',
               }}
             >
-              Book a Call
+              Email a question
             </a>
           </div>
         </section>

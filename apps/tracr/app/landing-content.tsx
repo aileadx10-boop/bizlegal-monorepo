@@ -86,7 +86,7 @@ export const TRACR_CONTENT: LandingV2Content = {
         'For freezing-order applications',
         'Practitioner-reviewed narrative',
       ],
-      cta: 'Talk to us',
+      cta: 'Order Silver',
       href: '#contact',
     },
   ],

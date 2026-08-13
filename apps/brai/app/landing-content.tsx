@@ -86,7 +86,7 @@ export const BRAI_CONTENT: LandingV2Content = {
         'Email alert + impact note per change',
         'Quarterly human-reviewed brief',
       ],
-      cta: 'Talk to us',
+      cta: 'Start monitoring',
       href: '#contact',
     },
   ],

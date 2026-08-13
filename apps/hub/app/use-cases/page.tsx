@@ -119,7 +119,7 @@ export default function UseCasesPage() {
             Have a different compliance challenge?
           </h2>
           <p style={{ fontSize: '16px', color: 'var(--muted)', marginBottom: '32px' }}>
-            BizLegal AI covers 50+ regulatory frameworks. See all products or talk to us.
+            BizLegal AI covers 50+ regulatory frameworks. See all products, or send a question by email.
           </p>
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/pricing" className="lx-btn-p">All Products →</Link>

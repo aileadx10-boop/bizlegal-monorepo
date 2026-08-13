@@ -106,11 +106,11 @@ export default async function ReportPage({ params }: Props) {
       {/* CTAs */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 32 }} className="no-print">
         <a
-          href={process.env.NEXT_PUBLIC_CALENDLY_URL || '#'}
+          href="/tools"
           className="btn-primary"
           style={{ justifyContent: 'center', fontSize: 14, padding: '14px' }}
         >
-          Book Emergency Audit →
+          Fix these with the compliance tools →
         </a>
         <PrintButton label="Download PDF Report" />
       </div>

@@ -536,14 +536,12 @@ export default function BlockchainReportPage() {
                   {(report?.overallRiskLevel === 'HIGH' || report?.overallRiskLevel === 'CRITICAL') && (
                     <div style={{ marginTop: 20, padding: '16px 20px', background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: 10 }}>
                       <p style={{ fontSize: 13, color: '#fca5a5', marginBottom: 10 }}>
-                        ⚠ Your project has a {report.overallRiskLevel} risk profile. Book a free 15-min legal strategy call to discuss mitigation options.
+                        ⚠ Your project has a {report.overallRiskLevel} risk profile. Classify your token and check your counterparties against the sanctions lists before launch.
                       </p>
                       <a
-                        href="https://calendly.com/ai-leadx10"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        href="/tools/token-classifier"
                         style={{ display: 'inline-block', padding: '9px 20px', background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.4)', borderRadius: 7, color: '#fca5a5', fontSize: 13, textDecoration: 'none', fontWeight: 600 }}>
-                        📅 Book Free Strategy Call →
+                        Run the token classifier →
                       </a>
                     </div>
                   )}
@@ -745,23 +743,28 @@ export default function BlockchainReportPage() {
               </div>
             </div>
 
-            {/* Calendly CTA for HIGH/CRITICAL risk */}
+            {/* Next-step CTA for HIGH/CRITICAL risk — self-serve, no calendar */}
             {(report.overallRiskLevel === 'HIGH' || report.overallRiskLevel === 'CRITICAL') && (
               <div style={{ background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: 16, padding: 28, marginBottom: 20, textAlign: 'center' }}>
                 <div style={{ fontSize: 24, marginBottom: 10 }}>⚠️</div>
                 <h3 style={{ fontSize: 17, color: '#fca5a5', marginBottom: 8 }}>
-                  {report.overallRiskLevel} Risk Detected — Legal Review Recommended
+                  {report.overallRiskLevel} Risk Detected — Work Through It Before Launch
                 </h3>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 20, maxWidth: 480, margin: '0 auto 20px' }}>
-                  Your project has significant regulatory exposure. Book a free 15-minute strategy call with a licensed attorney to discuss mitigation options before launch.
+                  Your project has significant regulatory exposure. Start with the classification questions that drive most of it: how your token is characterised, and whether anyone you deal with is sanctioned.
                 </p>
-                <a
-                  href="https://calendly.com/ai-leadx10"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ display: 'inline-block', padding: '12px 28px', background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.4)', borderRadius: 8, color: '#fca5a5', fontSize: 14, textDecoration: 'none', fontWeight: 700 }}>
-                  📅 Book Free 15-Min Strategy Call →
-                </a>
+                <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
+                  <a
+                    href="/tools/token-classifier"
+                    style={{ display: 'inline-block', padding: '12px 28px', background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.4)', borderRadius: 8, color: '#fca5a5', fontSize: 14, textDecoration: 'none', fontWeight: 700 }}>
+                    Classify your token →
+                  </a>
+                  <a
+                    href="/tools/wallet-screener"
+                    style={{ display: 'inline-block', padding: '12px 28px', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: 8, color: '#fca5a5', fontSize: 14, textDecoration: 'none', fontWeight: 700 }}>
+                    Screen a wallet →
+                  </a>
+                </div>
               </div>
             )}
 

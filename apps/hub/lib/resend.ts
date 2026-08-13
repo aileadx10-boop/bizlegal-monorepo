@@ -249,7 +249,7 @@ h2 { font-family: Georgia, serif; font-size: 20px; color: #dee1f7; margin: 24px 
   ${threats.slice(0, 2).map(t => `<div class="threat">${t}</div>`).join('')}
   <a href="${reportUrl}" class="btn">View Full Risk Report →</a>
   <p>Your report includes 4 identified threats, 3 mitigation strategies, and a relevant enforcement precedent.</p>
-  <a href="${process.env.NEXT_PUBLIC_CALENDLY_URL || '#'}" style="color:#b4c5ff;font-size:13px;">Book Emergency Compliance Audit →</a>
+  <a href="https://bizlegal-ai.com/tools" style="color:#b4c5ff;font-size:13px;">Fix these with the compliance tools →</a>
   <div class="footer">
     BizLegal AI · Compliance Intelligence Platform<br/>
     This report is for informational purposes only and does not constitute legal advice.<br/>

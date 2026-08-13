@@ -57,8 +57,8 @@ export function Hero() {
 
         <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
           <a href="/risk-engine" data-cta className="btn-primary">Start Free Scan</a>
-          <a href="https://calendly.com/ai-leadx10" target="_blank" rel="noopener noreferrer" data-cta className="btn-ghost">
-            Book Demo
+          <a href="/tools" data-cta className="btn-ghost">
+            Browse the Tools
           </a>
         </div>
 
