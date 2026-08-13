@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { writeAuditRun } from '@/lib/audit-chain'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
@@ -52,7 +53,7 @@ export async function GET(request: NextRequest) {
         .update({ metadata: { ...(order.metadata as Record<string, unknown> || {}), delivered_at: new Date().toISOString() } })
         .eq('id', order.id)
 
-      await supabase.from('agent_runs').insert({
+      await writeAuditRun(supabase, {
         agent_name: 'lead_commander',
         workflow_id: 'WF-3',
         action: 'delivery.sent',

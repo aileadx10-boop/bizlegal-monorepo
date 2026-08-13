@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { draftColdPitch, draftFollowUp, buildRunRecord } from '@/lib/agents/chain/lead-commander'
+import { writeAuditRun } from '@/lib/audit-chain'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -61,7 +62,7 @@ export async function GET(request: NextRequest) {
       }
 
       const run = buildRunRecord('cold_pitch.drafted', 'success', lead.email, { subject: pitch.subject })
-      await supabase.from('agent_runs').insert(run)
+      await writeAuditRun(supabase, run)
       results.pitched++
     }
 
@@ -98,7 +99,7 @@ export async function GET(request: NextRequest) {
       })
 
       const run = buildRunRecord('followup.drafted', 'success', pu.lead_email, { variant: 'followup_1' })
-      await supabase.from('agent_runs').insert(run)
+      await writeAuditRun(supabase, run)
       results.followed_up++
     }
   } catch (err) {

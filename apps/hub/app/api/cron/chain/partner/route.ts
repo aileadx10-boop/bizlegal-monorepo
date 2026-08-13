@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { draftPartnerOutreach, buildDealRunRecord, type PartnerProspect } from '@/lib/agents/chain/deal-closer'
+import { writeAuditRun } from '@/lib/audit-chain'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
@@ -46,7 +47,7 @@ export async function GET(request: NextRequest) {
     })
 
     const run = buildDealRunRecord('partner_outreach.drafted', 'success', prospect.email, { type: prospect.type })
-    await supabase.from('agent_runs').insert(run)
+    await writeAuditRun(supabase, run)
     drafted++
   }
 
