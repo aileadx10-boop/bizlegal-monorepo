@@ -227,6 +227,18 @@ Symptom: `ops_events` shows repeated `error` rows with `smoke_check: digest, sta
 **The hub production deploys from `bizlegal-monorepo` → `apps/hub` → `main` branch → Vercel project `bizlegal-ai` (root `apps/hub`).**
 The `BIZLEGAL PROJECTS/bizlegal-ai` repo (dev source, `quantum-wat`) is NOT the deploy source — pushing it triggers a broken deploy ("Root Directory apps/hub does not exist"). To ship hub changes: port files into `bizlegal-monorepo/apps/hub`, commit on `main`, push. All product Vercel projects (bizlegal-ai, lexaudit, brai, trcr, docai-frontend, forge, leadforge-ai) are linked to bizlegal-monorepo with `apps/*` roots. FirmCited is the exception — no git link, deploy via CLI.
 
+### O-015 DEPLOY READY — 2026-08-14 (pending push to main, human-gated)
+Branch `fix/close-money-loop` holds the money-loop batch + O-015 outreach scaffolding, verified locally:
+- Hub `pnpm typecheck` exit 0 AND `pnpm build` exit 0 on commit `c495548` (carries `outreach.staged`; `/api/ops/log` + `/ops/audit` confirmed in static output).
+- 4 commits, fast-forward clean against `main`. Local `main` was left untouched (production deploy gate).
+
+**To deploy (copy-paste):**
+```
+cd "C:/Users/Moshe Dor/bizlegal-monorepo"
+git checkout main && git merge --ff-only fix/close-money-loop && git push origin main
+```
+Vercel auto-deploys hub from `main`. Confirm after: `https://bizlegal-ai.com/ops/health?t=$OPS_DASHBOARD_TOKEN` returns `generated_at`, and the ops feed shows `outreach.staged` accepted (no regression).
+
 ### Remaining Plan 1 (not built)
 - W1-2: Sanctions & Wallet-Screening Lite
 - W1-3: MiCA Transition/Deadline Tracker agent
