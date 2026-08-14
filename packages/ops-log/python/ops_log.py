@@ -43,6 +43,8 @@ ALLOWED_TYPES = {
     # V0.2 — bot callbacks + service heartbeats
     "curation.action",
     "heartbeat",
+    # Phase AA — outbound 30→10→3→1 cold-outreach staging (O-015)
+    "outreach.staged",
 }
 
 

@@ -1,0 +1,58 @@
+{
+  "pipeline": {
+    "name": "outbound-30-10-3-1",
+    "description": "Weekly cadence: 30 contacts staged -> 10 replies -> 3 calls -> 1 deal. DRAFT-ONLY until O-015 un-gated.",
+    "weekly_budget": 30,
+    "cadence": { "contacts": 30, "replies_target": 10, "calls_target": 3, "deals_target": 1 },
+    "draft_only": true,
+    "source_tables": { "candidates": "leadforge_leads", "staging": "lead_outreach" }
+  },
+  "verticals": [
+    {
+      "key": "casp",
+      "label": "CASP / VASP authorization (MiCA)",
+      "product": "CASP Compliance Bundle ($499/mo)",
+      "pitch_url": "https://bizlegal-ai.com/agents/casp-bundle",
+      "template_key": "T1-CASP",
+      "score_min": 80,
+      "industry_include": ["crypto", "fintech"],
+      "industry_exclude": [],
+      "cap": 12
+    },
+    {
+      "key": "stablecoin",
+      "label": "Stablecoin issuers / PSPs (GENIUS Act + MiCA)",
+      "product": "Stablecoin Classifier",
+      "pitch_url": "https://bizlegal-ai.com/tools/stablecoin-classifier",
+      "template_key": "T1-STABLE",
+      "score_min": 85,
+      "industry_include": ["crypto", "fintech"],
+      "industry_exclude": [],
+      "cap": 8
+    },
+    {
+      "key": "law_firm",
+      "label": "Boutique law firms (5-50 lawyers)",
+      "product": "LexAudit Boutique / FirmCited",
+      "pitch_url": "https://lexaudit.bizlegal-ai.com",
+      "template_key": "T1-FIRM",
+      "score_min": 80,
+      "industry_include": ["law", "legal"],
+      "industry_exclude": [],
+      "cap": 10
+    }
+  ],
+  "filters": {
+    "role_inbox_local_parts": [
+      "noreply", "no-reply", "support", "info", "admin", "webmaster",
+      "postmaster", "abuse", "contact", "sales", "press", "media",
+      "privacy", "careers", "jobs", "investors", "help", "hello",
+      "compliance", "legal"
+    ],
+    "personal_domains": [
+      "gmail.com", "yahoo.com", "outlook.com", "hotmail.com",
+      "icloud.com", "aol.com", "protonmail.com", "me.com", "mac.com"
+    ],
+    "require_enriched_name": true
+  }
+}
