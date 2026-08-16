@@ -38,6 +38,7 @@ bizlegal-monorepo/
 │   ├── outreach/     OCI partner-referral flow only (oci_funnel, oci_deal_closer, partner_onboarding)
 │   └── funnel-mvp/   TOMBSTONED 2026-05-24 — canonical is apps/docai/web/ (Fastify, never deployed; git-history reference only)
 ├── packages/         shared TS + Python siblings
+│   ├── email/        @bizlegal/email — THE outbound email path; suppression + double-opt-in enforced inside the package (never in callers)
 │   ├── ops-log/      @bizlegal/ops-log — HMAC-signed event POST to hub /api/ops/log
 │   ├── firecrawl/    @bizlegal/firecrawl — scrape + Sonnet semantic-diff
 │   ├── safe/         @bizlegal/safe — PII redaction (LexAudit Safe)

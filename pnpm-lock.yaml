@@ -686,6 +686,15 @@ importers:
 
   packages/bizlegal-debug: {}
 
+  packages/email:
+    devDependencies:
+      '@types/node':
+        specifier: ^20.16.0
+        version: 20.19.39
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
   packages/nurture-enqueue:
     devDependencies:
       '@types/node':
