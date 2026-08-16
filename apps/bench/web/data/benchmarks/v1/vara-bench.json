@@ -1,0 +1,265 @@
+{
+  "slug": "vara-bench",
+  "name": "VARA-Bench",
+  "claim": "The standard for evaluating AI reasoning on UAE virtual-asset and DIFC commercial law.",
+  "version": "1.0.0-draft",
+  "status": "draft",
+  "jurisdiction": "UAE",
+  "regime": "VARA (Dubai), CBUAE payment-token rules, DIFC contract/employment/data law, ADGM contrast",
+  "practice_areas": ["vara_licensing", "federal_layer", "difc_contract", "difc_employment", "difc_data", "jurisdiction_map"],
+  "author": "BizLegal AI (Claude-drafted under wf_benchmark_authoring)",
+  "reviewed_by": null,
+  "created": "2026-08-16",
+  "items": [
+    {
+      "id": "vara-001",
+      "practice_area": "jurisdiction_map",
+      "difficulty": 1,
+      "released": true,
+      "prompt": "A crypto exchange wants to serve clients 'in Dubai'. Which regulator(s) could be relevant, and why is the question incomplete?",
+      "gold_standard": "It depends where in Dubai and what activity: VARA regulates virtual-asset activities in the Emirate of Dubai excluding the DIFC; inside the DIFC the DFSA's crypto-token regime applies; securities-type tokens onshore engage the federal SCA; and dirham payment tokens engage the CBUAE. Any answer naming a single regulator without mapping the zone and the token type is incomplete — the UAE is a multi-regulator patchwork by design.",
+      "authority_refs": ["Dubai Law No. 4 of 2022 (VARA)", "DFSA Rulebook (crypto tokens)", "CBUAE Payment Token Services Regulation 2024"],
+      "probes": ["wrong_jurisdiction", "omission"]
+    },
+    {
+      "id": "vara-002",
+      "practice_area": "vara_licensing",
+      "difficulty": 1,
+      "released": false,
+      "prompt": "May a company conduct virtual-asset exchange activity in Dubai (outside DIFC) without a VARA licence?",
+      "gold_standard": "No. Conducting a regulated virtual-asset activity in or from Dubai (excluding DIFC) requires a VARA licence for the specific activity; unlicensed activity attracts enforcement and fines. The licence is per-activity — an exchange licence does not authorise custody or broker-dealer services.",
+      "authority_refs": ["Dubai Law No. 4 of 2022", "VARA Virtual Assets and Related Activities Regulations 2023"],
+      "probes": ["misstatement", "omission"]
+    },
+    {
+      "id": "vara-003",
+      "practice_area": "vara_licensing",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "Name the main categories of VARA-regulated virtual-asset activities.",
+      "gold_standard": "Advisory services; broker-dealer services; custody services; exchange services; lending and borrowing services; virtual-asset management and investment services; and virtual-asset transfer and settlement services — each licensed separately under its own rulebook, on top of the compulsory rulebooks that apply to every VASP. Collapsing these into one generic 'crypto licence' is the misstatement probed.",
+      "authority_refs": ["VARA Virtual Assets and Related Activities Regulations 2023, activity rulebooks"],
+      "probes": ["omission", "misstatement"]
+    },
+    {
+      "id": "vara-004",
+      "practice_area": "vara_licensing",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "What does VARA require of marketing that targets Dubai residents with virtual-asset services?",
+      "gold_standard": "VARA's marketing regulations reach marketing directed at the Dubai market regardless of where the marketer sits: promotions must be fair, clear, not misleading, carry prescribed risk disclosures, and — for entities without a VARA licence — marketing approvals/permits are required before targeting Dubai. Influencer and incentive-driven promotions are specifically constrained. 'We can advertise first and license later' is the classic critical error.",
+      "authority_refs": ["VARA Marketing Regulations (as updated 2024)"],
+      "probes": ["misstatement", "bad_reasoning"]
+    },
+    {
+      "id": "vara-005",
+      "practice_area": "federal_layer",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "Who regulates a dirham-backed payment stablecoin issued for use in the UAE?",
+      "gold_standard": "The Central Bank of the UAE, under the Payment Token Services Regulation 2024: issuing dirham payment tokens requires CBUAE licensing, with reserve, redemption and disclosure obligations, and restrictions on the use of foreign-currency payment tokens for paying for goods and services in the UAE. VARA licensing does not substitute for the CBUAE regime.",
+      "authority_refs": ["CBUAE Payment Token Services Regulation 2024"],
+      "probes": ["wrong_jurisdiction", "misstatement"]
+    },
+    {
+      "id": "vara-006",
+      "practice_area": "jurisdiction_map",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "A fund manager in ADGM wants to run a crypto trading desk. Does VARA regulate it?",
+      "gold_standard": "No. ADGM is Abu Dhabi's financial free zone with its own regulator — the FSRA — whose virtual-asset framework governs there; VARA's remit is the Emirate of Dubai (excluding DIFC). Cross-emirate service provision requires analysing each regime on its own terms, not extrapolating Dubai rules to Abu Dhabi.",
+      "authority_refs": ["FSRA (ADGM) virtual-asset framework", "Dubai Law No. 4 of 2022, scope provisions"],
+      "probes": ["wrong_jurisdiction"]
+    },
+    {
+      "id": "vara-007",
+      "practice_area": "difc_contract",
+      "difficulty": 1,
+      "released": false,
+      "prompt": "Which law governs a contract between two DIFC-registered companies that is silent on governing law?",
+      "gold_standard": "DIFC law is the default: the DIFC is a common-law jurisdiction with its own Contract Law (DIFC Law No. 6 of 2004) and conflicts rules, and DIFC Courts apply DIFC law absent an effective choice. UAE federal civil-code doctrines do not automatically apply inside the DIFC — importing them is the standard wrong-jurisdiction failure.",
+      "authority_refs": ["DIFC Contract Law, DIFC Law No. 6 of 2004", "DIFC Law on the Application of Civil and Commercial Laws (Law No. 3 of 2004)"],
+      "probes": ["wrong_jurisdiction", "misstatement"]
+    },
+    {
+      "id": "vara-008",
+      "practice_area": "difc_contract",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "Can parties with no DIFC connection choose DIFC Courts for their commercial dispute?",
+      "gold_standard": "Yes. DIFC Courts accept opt-in jurisdiction: parties may agree in writing to submit disputes to DIFC Courts even without a DIFC nexus, pre- or post-dispute. A complete answer flags enforcement strategy (DIFC-onshore Dubai enforcement mechanics and treaty routes) as the practical driver of the choice.",
+      "authority_refs": ["Judicial Authority Law (Dubai Law No. 12 of 2004, as amended), Art. 5(A)(2)"],
+      "probes": ["misstatement", "omission"]
+    },
+    {
+      "id": "vara-009",
+      "practice_area": "difc_employment",
+      "difficulty": 2,
+      "released": true,
+      "prompt": "How does end-of-service benefit work for employees of a DIFC company?",
+      "gold_standard": "Since February 2020 the DIFC replaced the accrued end-of-service gratuity with DEWS (or a qualifying alternative scheme): employers make mandatory monthly defined contributions — 5.83% of basic wage for the first five years of service and 8.33% thereafter — into the plan, instead of a terminal gratuity. Answering with the UAE federal gratuity regime for a DIFC employee is the wrong-jurisdiction failure this item probes.",
+      "authority_refs": ["DIFC Employment Law, DIFC Law No. 2 of 2019 (as amended); DEWS regulations"],
+      "probes": ["wrong_jurisdiction", "misstatement"]
+    },
+    {
+      "id": "vara-010",
+      "practice_area": "difc_employment",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "What is the maximum probation period for a DIFC employee, and what notice applies during it?",
+      "gold_standard": "Probation may not exceed six months under the DIFC Employment Law; during probation the statutory minimum notice regime is reduced (the law permits shorter notice than the ordinary length-of-service scale). The precise notice mechanics should be quoted from the current law rather than assumed from federal rules — the two regimes differ.",
+      "authority_refs": ["DIFC Employment Law, DIFC Law No. 2 of 2019, probation and termination provisions"],
+      "probes": ["wrong_jurisdiction", "omission"]
+    },
+    {
+      "id": "vara-011",
+      "practice_area": "federal_layer",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "An onshore Dubai employer (non-free-zone) terminates a 7-year employee. How is end-of-service gratuity calculated?",
+      "gold_standard": "Under Federal Decree-Law No. 33 of 2021, a full-time foreign employee earns 21 days' basic wage per year for the first five years and 30 days' basic wage per year beyond five, calculated on the final basic wage, capped at two years' wage, with unlawful-deduction and pro-rating rules. Using total salary (with allowances) instead of basic wage is the standard computational misstatement.",
+      "authority_refs": ["Federal Decree-Law No. 33 of 2021, Art. 51"],
+      "probes": ["misstatement"]
+    },
+    {
+      "id": "vara-012",
+      "practice_area": "difc_data",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "Which data-protection law applies to a DIFC-registered fintech processing customer data, and who enforces it?",
+      "gold_standard": "The DIFC Data Protection Law (DIFC Law No. 5 of 2020, as amended) — a GDPR-influenced regime enforced by the DIFC Commissioner of Data Protection, with its own bases, transfer rules and fines. Neither the UAE federal PDPL nor UK/EU GDPR governs intra-DIFC processing by default, though extraterritorial overlays can add duties. Citing GDPR articles as the operative law is an unreliable-citation failure.",
+      "authority_refs": ["DIFC Law No. 5 of 2020 (Data Protection), as amended"],
+      "probes": ["wrong_jurisdiction", "unreliable_citation"]
+    },
+    {
+      "id": "vara-013",
+      "practice_area": "vara_licensing",
+      "difficulty": 3,
+      "released": false,
+      "prompt": "A VARA-licensed exchange wants to list a new token. What does the listing/issuance layer require?",
+      "gold_standard": "VARA regulates the token side as well as the service side: issuance of virtual assets in Dubai and exchange listings run through VARA's issuance/approval framework, with due-diligence and disclosure duties on the VASP; certain categories (e.g. anonymity-enhanced tokens) face restrictions. 'Any licensed exchange may list anything' misstates the two-layer architecture.",
+      "authority_refs": ["VARA Regulations 2023 and issuance/token rulebooks"],
+      "probes": ["misstatement", "omission"]
+    },
+    {
+      "id": "vara-014",
+      "practice_area": "federal_layer",
+      "difficulty": 3,
+      "released": false,
+      "prompt": "A token sold to UAE onshore investors gives holders profit-share rights in the issuer. Which regime governs the offering?",
+      "gold_standard": "Profit-share rights push the token toward a security: onshore, the SCA's framework for security tokens and promotions governs, and marketing to onshore investors requires SCA-side compliance regardless of any Dubai VARA licence. The analysis is substance-based token classification first, regulator second — VARA licensing does not immunise a securities offering.",
+      "authority_refs": ["SCA regulations on securities and promotion; UAE federal securities framework"],
+      "probes": ["wrong_jurisdiction", "bad_reasoning"]
+    },
+    {
+      "id": "vara-015",
+      "practice_area": "difc_contract",
+      "difficulty": 3,
+      "released": false,
+      "prompt": "A DIFC contract contains a penalty clause of AED 1M for any breach. Enforceable?",
+      "gold_standard": "DIFC contract law follows the common-law-style approach to agreed remedies: a stipulated sum grossly disproportionate to the loss caused by the breach can be reduced/struck as a penalty, while genuine pre-estimates or clauses protecting a legitimate interest stand. This differs from the onshore civil-code approach, where courts may adjust agreed compensation under statutory powers — the failure mode is analysing a DIFC clause with onshore doctrine or vice versa.",
+      "authority_refs": ["DIFC Contract Law No. 6 of 2004 (agreed payment provisions)", "UAE Civil Code, Art. 390 (contrast, onshore)"],
+      "probes": ["wrong_jurisdiction", "bad_reasoning"]
+    },
+    {
+      "id": "vara-016",
+      "practice_area": "difc_data",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "May a DIFC company transfer personal data to a jurisdiction without a DIFC adequacy decision?",
+      "gold_standard": "Yes, with appropriate safeguards under the DIFC DP Law — standard contractual clauses adopted for the DIFC, binding corporate rules, or listed derogations — mirroring GDPR architecture but under DIFC instruments. Using EU SCCs unmodified, without the DIFC's own mechanisms, is the unreliable-citation trap.",
+      "authority_refs": ["DIFC Law No. 5 of 2020, transfer provisions and Commissioner guidance"],
+      "probes": ["unreliable_citation", "omission"]
+    },
+    {
+      "id": "vara-017",
+      "practice_area": "vara_licensing",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "Are VARA-licensed firms subject to AML obligations, and under which layer of law?",
+      "gold_standard": "Yes — twice over: UAE federal AML law (Federal Decree-Law No. 20 of 2018 and Cabinet decisions) applies to VASPs nationally, including registration/supervision touchpoints with the federal authorities and FIU (goAML), and VARA's compulsory rulebooks impose their own AML/CFT programme, KYC, travel-rule and reporting requirements. Treating VARA rules as the only AML layer misses the federal spine.",
+      "authority_refs": ["Federal Decree-Law No. 20 of 2018 (AML)", "VARA compulsory rulebooks (AML/CFT)"],
+      "probes": ["omission", "misstatement"]
+    },
+    {
+      "id": "vara-018",
+      "practice_area": "jurisdiction_map",
+      "difficulty": 3,
+      "released": false,
+      "prompt": "A DIFC fintech wants a VARA licence to serve mainland-Dubai retail crypto clients. Sketch the structure.",
+      "gold_standard": "One entity cannot straddle the zones for regulated activity: DIFC activity sits under DFSA rules, and mainland-Dubai virtual-asset activity needs a Dubai (non-DIFC) entity licensed by VARA. The usual structure is a separate mainland/free-zone operating entity for the VARA-licensed activity alongside the DIFC entity, with intra-group agreements — plus attention to where clients are onboarded, marketed to, and served. Answers proposing a single 'passported' licence across DIFC and mainland Dubai are wrong.",
+      "authority_refs": ["Dubai Law No. 4 of 2022 (scope), DFSA crypto-token regime"],
+      "probes": ["bad_reasoning", "wrong_jurisdiction"]
+    },
+    {
+      "id": "vara-019",
+      "practice_area": "difc_employment",
+      "difficulty": 3,
+      "released": false,
+      "prompt": "A DIFC employer wants to dismiss for cause and withhold DEWS contributions already made. Advise.",
+      "gold_standard": "Termination for cause under the DIFC Employment Law requires conduct meeting the statutory standard, with procedural fairness strongly advisable; but DEWS contributions already made are the employee's — the scheme is a funded defined-contribution plan, and there is no claw-back for misconduct. Confusing DEWS with the old forfeitable gratuity (or with federal Art. 44 dismissal effects) is the probe.",
+      "authority_refs": ["DIFC Employment Law No. 2 of 2019 (termination for cause; DEWS provisions)"],
+      "probes": ["misstatement", "wrong_jurisdiction"]
+    },
+    {
+      "id": "vara-020",
+      "practice_area": "federal_layer",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "Does the UAE federal Personal Data Protection Law (PDPL) apply inside the DIFC and ADGM?",
+      "gold_standard": "No — the federal PDPL (Federal Decree-Law No. 45 of 2021) expressly carves out the financial free zones, which run their own data-protection laws (DIFC Law No. 5 of 2020; ADGM DP Regulations 2021). A UAE group therefore commonly operates under two or three data regimes simultaneously, mapped by entity location and processing context.",
+      "authority_refs": ["Federal Decree-Law No. 45 of 2021 (PDPL), scope provisions", "DIFC Law No. 5 of 2020", "ADGM Data Protection Regulations 2021"],
+      "probes": ["wrong_jurisdiction", "omission"]
+    },
+    {
+      "id": "vara-021",
+      "practice_area": "vara_licensing",
+      "difficulty": 3,
+      "released": false,
+      "prompt": "What is VARA's posture on anonymity-enhanced cryptocurrencies (privacy coins)?",
+      "gold_standard": "VARA's regulations prohibit activities involving anonymity-enhanced cryptocurrencies — virtual assets that prevent tracing of transactions or ownership — for licensed VASPs in Dubai. An answer that treats privacy-coin support as a mere risk-rating question, rather than a prohibition, misstates the regime.",
+      "authority_refs": ["VARA Virtual Assets and Related Activities Regulations 2023 (prohibited activities/definitions)"],
+      "probes": ["misstatement"]
+    },
+    {
+      "id": "vara-022",
+      "practice_area": "difc_contract",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "Is an arbitration clause seated in the DIFC enforceable, and under what law?",
+      "gold_standard": "Yes. The DIFC has its own Arbitration Law (DIFC Law No. 1 of 2008, UNCITRAL-model-based); DIFC-seated awards are enforced by DIFC Courts and travel onshore via the judicial-authority mechanics, and internationally under the New York Convention through the UAE's accession. The seat determines the curial law — assuming onshore UAE arbitration law (Federal Law No. 6 of 2018) governs a DIFC-seated arbitration is the failure mode.",
+      "authority_refs": ["DIFC Arbitration Law No. 1 of 2008", "UAE accession to the New York Convention"],
+      "probes": ["wrong_jurisdiction", "misstatement"]
+    },
+    {
+      "id": "vara-023",
+      "practice_area": "jurisdiction_map",
+      "difficulty": 3,
+      "released": false,
+      "prompt": "A global exchange holds a VARA licence and markets 'UAE-wide' services from Dubai. What is wrong with that claim?",
+      "gold_standard": "A VARA licence covers virtual-asset activity in/from the Emirate of Dubai (ex-DIFC) only. Serving Abu Dhabi (ADGM/FSRA or onshore SCA), the DIFC (DFSA), or other emirates engages other regulators — and dirham payment-token services engage the CBUAE. 'UAE-wide' marketing from a Dubai licence alone risks unlicensed-activity and marketing breaches in the other zones; the correct posture maps each target zone to its regulator before marketing.",
+      "authority_refs": ["Dubai Law No. 4 of 2022 (scope)", "SCA/FSRA/DFSA/CBUAE frameworks"],
+      "probes": ["misstatement", "bad_reasoning", "wrong_jurisdiction"]
+    },
+    {
+      "id": "vara-024",
+      "practice_area": "difc_data",
+      "difficulty": 3,
+      "released": false,
+      "prompt": "A DIFC company deploys an AI system making automated decisions about individuals. Does DIFC law say anything specific?",
+      "gold_standard": "Yes. The DIFC DP Law as amended (Regulation 10 / 2023 amendments) added specific provisions on autonomous and semi-autonomous systems, including transparency about processing by such systems and requirements around automated decisions producing legal or similarly significant effects. The DIFC moved earlier than most regional regimes here — answering purely from GDPR Article 22 misses the DIFC-specific overlay.",
+      "authority_refs": ["DIFC Law No. 5 of 2020 (as amended); DIFC Regulation 10 (autonomous systems)"],
+      "probes": ["omission", "unreliable_citation"]
+    },
+    {
+      "id": "vara-025",
+      "practice_area": "federal_layer",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "Can a foreign-currency (e.g. USD) stablecoin be used to pay for coffee in a Dubai mall?",
+      "gold_standard": "As a means of payment for goods and services in the UAE, the CBUAE payment-token regime restricts foreign payment tokens: dirham payment tokens are the sanctioned instrument for onshore payments, while foreign-currency tokens face limits (broadly confined to purchases of virtual assets and similar carve-outs). Trading a USD stablecoin on a licensed exchange is a different question from using it as retail payment — conflating the two is the probe.",
+      "authority_refs": ["CBUAE Payment Token Services Regulation 2024"],
+      "probes": ["misstatement", "bad_reasoning"]
+    }
+  ]
+}

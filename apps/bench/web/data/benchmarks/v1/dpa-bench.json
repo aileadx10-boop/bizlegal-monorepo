@@ -1,0 +1,265 @@
+{
+  "slug": "dpa-bench",
+  "name": "DPA-Bench",
+  "claim": "The standard for evaluating AI reasoning on UK data protection law.",
+  "version": "1.0.0-draft",
+  "status": "draft",
+  "jurisdiction": "UK",
+  "regime": "UK GDPR, Data Protection Act 2018, PECR, ICO guidance",
+  "practice_areas": ["lawful_basis", "processors", "rights", "breach", "transfers", "marketing"],
+  "author": "BizLegal AI (Claude-drafted under wf_benchmark_authoring)",
+  "reviewed_by": null,
+  "created": "2026-08-16",
+  "items": [
+    {
+      "id": "dpa-001",
+      "practice_area": "lawful_basis",
+      "difficulty": 1,
+      "released": true,
+      "prompt": "A UK SaaS company says it relies on 'legitimate interests' to process customer data. What must it actually establish?",
+      "gold_standard": "The three-part test: (1) a legitimate interest is pursued (purpose test), (2) the processing is necessary for that interest (necessity test — no less intrusive way), and (3) the interest is not overridden by the data subject's interests, rights and freedoms (balancing test), documented in a legitimate interests assessment. Naming the basis without the test is incomplete.",
+      "authority_refs": ["UK GDPR, Art. 6(1)(f)", "ICO legitimate interests guidance"],
+      "probes": ["omission", "bad_reasoning"]
+    },
+    {
+      "id": "dpa-002",
+      "practice_area": "rights",
+      "difficulty": 1,
+      "released": false,
+      "prompt": "How long does a UK controller have to respond to a data subject access request, and can it charge a fee?",
+      "gold_standard": "One month from receipt, extendable by up to two further months for complex or numerous requests (with notice within the first month). No fee may be charged unless the request is manifestly unfounded or excessive, in which case a reasonable fee or refusal is possible — with the controller bearing the burden of showing that.",
+      "authority_refs": ["UK GDPR, Arts. 12(3), 12(5), 15"],
+      "probes": ["misstatement", "omission"]
+    },
+    {
+      "id": "dpa-003",
+      "practice_area": "breach",
+      "difficulty": 1,
+      "released": false,
+      "prompt": "When must a personal data breach be reported to the ICO, and when must data subjects be told?",
+      "gold_standard": "Notify the ICO without undue delay and where feasible within 72 hours of becoming aware, unless the breach is unlikely to result in a risk to individuals; document every breach either way. Communicate to data subjects without undue delay when the breach is likely to result in a high risk to them. Treating 72 hours as running from the incident rather than awareness is a common misstatement.",
+      "authority_refs": ["UK GDPR, Arts. 33-34"],
+      "probes": ["misstatement", "omission"]
+    },
+    {
+      "id": "dpa-004",
+      "practice_area": "processors",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "List the mandatory contract terms between a controller and processor under UK GDPR.",
+      "gold_standard": "The Article 28(3) set: processing only on documented instructions; confidentiality commitments; security measures; sub-processor authorisation and flow-down; assistance with data subject rights; assistance with security, breach and DPIA obligations; deletion or return at end of services; and audit/inspection rights, plus the subject-matter/duration/nature/purpose particulars. Omitting sub-processor flow-down or audit rights is the typical gap.",
+      "authority_refs": ["UK GDPR, Art. 28(3)"],
+      "probes": ["omission"]
+    },
+    {
+      "id": "dpa-005",
+      "practice_area": "transfers",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "A UK company wants to transfer personal data to a processor in India. What transfer mechanisms are available?",
+      "gold_standard": "Absent UK adequacy regulations for the destination, use an Article 46 safeguard: in practice the ICO's International Data Transfer Agreement (IDTA) or the UK Addendum to the EU SCCs, accompanied by a transfer risk assessment; derogations are a narrow last resort. Citing the EU SCCs alone, without the UK Addendum or IDTA, is the standard unreliable-citation failure post-Brexit.",
+      "authority_refs": ["UK GDPR, Arts. 44-49", "ICO IDTA and Addendum guidance"],
+      "probes": ["unreliable_citation", "wrong_jurisdiction", "omission"]
+    },
+    {
+      "id": "dpa-006",
+      "practice_area": "marketing",
+      "difficulty": 2,
+      "released": true,
+      "prompt": "May a UK online retailer email marketing to past customers without fresh consent?",
+      "gold_standard": "Yes, within the PECR 'soft opt-in': the details were collected in the course of a sale or negotiations for one, the marketing is for the sender's own similar products, and the customer was given a simple free opt-out at collection and in every message. Outside those conditions, consent is required. Answering under UK GDPR alone and skipping PECR is the wrong-framework failure this item probes.",
+      "authority_refs": ["PECR, Reg. 22", "ICO direct marketing guidance"],
+      "probes": ["wrong_jurisdiction", "omission"]
+    },
+    {
+      "id": "dpa-007",
+      "practice_area": "marketing",
+      "difficulty": 1,
+      "released": false,
+      "prompt": "Does a UK website need consent to set analytics cookies?",
+      "gold_standard": "Yes. Non-essential cookies — analytics included — require consent under PECR to the UK GDPR standard: informed, specific, freely given, and by clear affirmative action; strictly-necessary cookies are exempt. Consent-by-continued-browsing or pre-ticked boxes fail the standard.",
+      "authority_refs": ["PECR, Reg. 6", "ICO cookies guidance"],
+      "probes": ["misstatement"]
+    },
+    {
+      "id": "dpa-008",
+      "practice_area": "lawful_basis",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "At what age can a child give valid consent to an online information-society service in the UK?",
+      "gold_standard": "13 in the UK (DPA 2018 sets the Article 8 age below the EU default of 16). Below 13, consent must be given or authorised by a holder of parental responsibility, and the controller must make reasonable verification efforts. Quoting 16 is a wrong-jurisdiction error imported from the EU text.",
+      "authority_refs": ["DPA 2018, s. 9", "UK GDPR, Art. 8"],
+      "probes": ["wrong_jurisdiction", "misstatement"]
+    },
+    {
+      "id": "dpa-009",
+      "practice_area": "processors",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "When must a UK organisation appoint a Data Protection Officer?",
+      "gold_standard": "When it is a public authority (except courts acting judicially), or its core activities involve regular and systematic monitoring of data subjects on a large scale, or large-scale processing of special-category or criminal-offence data. Voluntary appointment brings the full statutory role. 'Every company needs a DPO' is the misstatement this item catches.",
+      "authority_refs": ["UK GDPR, Art. 37"],
+      "probes": ["misstatement", "omission"]
+    },
+    {
+      "id": "dpa-010",
+      "practice_area": "rights",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "Is the right to erasure absolute once a data subject requests deletion?",
+      "gold_standard": "No. Erasure applies on listed grounds (e.g. data no longer necessary, consent withdrawn, unlawful processing) and is subject to exemptions including freedom of expression, legal obligations, public health, archiving/research, and the establishment, exercise or defence of legal claims. A complete answer tests grounds first, then exemptions.",
+      "authority_refs": ["UK GDPR, Art. 17"],
+      "probes": ["misstatement", "omission"]
+    },
+    {
+      "id": "dpa-011",
+      "practice_area": "breach",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "What are the two tiers of monetary penalty under the UK regime and their maxima?",
+      "gold_standard": "The standard maximum is £8.7 million or 2% of worldwide annual turnover (higher of), for infringements such as controller/processor obligations; the higher maximum is £17.5 million or 4% of turnover, for infringements of principles, rights and transfer rules. Quoting the EU's €20 million figures for a UK matter is a wrong-jurisdiction citation.",
+      "authority_refs": ["UK GDPR, Art. 83", "DPA 2018, s. 157"],
+      "probes": ["wrong_jurisdiction", "misstatement"]
+    },
+    {
+      "id": "dpa-012",
+      "practice_area": "lawful_basis",
+      "difficulty": 3,
+      "released": false,
+      "prompt": "A UK employer wants to rely on employee consent to process biometric attendance data. Assess.",
+      "gold_standard": "Two problems: consent is rarely freely given in the employment relationship (imbalance of power), and biometric data used to identify someone is special-category data requiring an Article 9 condition on top of the Article 6 basis — with explicit consent suspect for the same imbalance reason. The robust route is a different basis plus an Article 9/DPA Schedule 1 condition, a DPIA, and consideration of less intrusive alternatives.",
+      "authority_refs": ["UK GDPR, Arts. 6, 9; DPA 2018, Sch. 1", "ICO employment and biometric guidance"],
+      "probes": ["bad_reasoning", "omission"]
+    },
+    {
+      "id": "dpa-013",
+      "practice_area": "processors",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "Must every UK company keep records of processing activities (ROPA)?",
+      "gold_standard": "The Article 30 duty applies generally, but organisations with fewer than 250 employees are exempt unless the processing is likely to result in a risk to rights and freedoms, is not occasional, or includes special-category or criminal-offence data — exceptions that in practice capture most businesses' HR and customer processing. Stating either the duty or the exemption without the carve-backs is incomplete.",
+      "authority_refs": ["UK GDPR, Art. 30"],
+      "probes": ["omission", "misstatement"]
+    },
+    {
+      "id": "dpa-014",
+      "practice_area": "rights",
+      "difficulty": 3,
+      "released": false,
+      "prompt": "A customer demands human review of a fully automated credit-refusal decision made by a UK lender's model. What rights apply?",
+      "gold_standard": "Article 22 gives the right not to be subject to a solely automated decision with legal or similarly significant effects unless an exception applies (contract necessity, authorised by law, or explicit consent); where an exception is used, safeguards must include the right to obtain human intervention, express a view and contest the decision, plus meaningful information about the logic under Articles 13-15. Note the UK data-reform legislation (DUAA 2025) reshapes this area — a current answer should flag the amended framework rather than assume the old text verbatim.",
+      "authority_refs": ["UK GDPR, Arts. 13-15, 22", "Data (Use and Access) Act 2025 (automated decision-making provisions)"],
+      "probes": ["omission", "misstatement", "bad_reasoning"]
+    },
+    {
+      "id": "dpa-015",
+      "practice_area": "transfers",
+      "difficulty": 3,
+      "released": false,
+      "prompt": "Does the UK-US 'data bridge' cover every transfer to any US company?",
+      "gold_standard": "No. The UK Extension to the EU-US Data Privacy Framework covers transfers only to US organisations that have self-certified to the DPF and appear on the list for the UK extension; transfers to non-certified recipients still need an Article 46 mechanism (IDTA/Addendum) plus risk assessment. HR data and certain categories carry extra certification conditions. 'The US is adequate now' is the overstatement probed here.",
+      "authority_refs": ["UK adequacy regulations for the UK Extension to the EU-US DPF", "ICO transfers guidance"],
+      "probes": ["misstatement", "bad_reasoning"]
+    },
+    {
+      "id": "dpa-016",
+      "practice_area": "breach",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "A processor discovers a breach affecting its UK controller's data. Who notifies whom, on what clock?",
+      "gold_standard": "The processor must notify the controller without undue delay after becoming aware — the 72-hour ICO clock belongs to the controller, running from the controller's awareness. The controller decides on ICO and data-subject notification; the processor's contract typically adds assistance duties. Answers that have the processor notifying the ICO directly misallocate the statutory duty.",
+      "authority_refs": ["UK GDPR, Arts. 33(1)-(2)"],
+      "probes": ["misstatement", "bad_reasoning"]
+    },
+    {
+      "id": "dpa-017",
+      "practice_area": "lawful_basis",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "When is a DPIA mandatory under UK GDPR?",
+      "gold_standard": "Where processing is likely to result in a high risk to individuals — in particular systematic and extensive automated evaluation with significant effects, large-scale special-category processing, or large-scale systematic monitoring of public areas — plus the ICO's published list (e.g. innovative technology, denial-of-service decisions, large-scale profiling). If high risk remains unmitigated, prior consultation with the ICO is required.",
+      "authority_refs": ["UK GDPR, Arts. 35-36", "ICO DPIA guidance and screening list"],
+      "probes": ["omission"]
+    },
+    {
+      "id": "dpa-018",
+      "practice_area": "marketing",
+      "difficulty": 3,
+      "released": false,
+      "prompt": "A B2B data vendor sells scraped LinkedIn profiles of UK professionals for cold outreach. Analyse the data-protection position.",
+      "gold_standard": "Scraped-profile trading is processing of personal data requiring a lawful basis; legitimate interests is hard to sustain where individuals would not reasonably expect commercial resale, transparency duties under Article 14 are routinely unmet, and purpose limitation and accuracy compound the problem. ICO enforcement against data scraping and unlawful direct-marketing lists underlines the risk. Corporate-subscriber nuances under PECR do not cure UK GDPR non-compliance.",
+      "authority_refs": ["UK GDPR, Arts. 5, 6, 14", "ICO enforcement practice on scraped data and marketing lists"],
+      "probes": ["bad_reasoning", "omission", "misstatement"]
+    },
+    {
+      "id": "dpa-019",
+      "practice_area": "processors",
+      "difficulty": 3,
+      "released": false,
+      "prompt": "A vendor claims it is a processor, but it decides retention periods and reuses client data to improve its models. Classify it.",
+      "gold_standard": "Determining purposes and essential means — including deciding retention and reusing data for its own model improvement — is controller conduct. The vendor is at least an independent controller for the reuse (or joint controller where purposes are jointly determined), regardless of what the contract label says; classification follows function. Consequences: its own lawful basis, transparency, and Article 26/28 restructuring.",
+      "authority_refs": ["UK GDPR, Arts. 4(7)-(8), 26, 28", "ICO controller/processor guidance"],
+      "probes": ["bad_reasoning", "misstatement"]
+    },
+    {
+      "id": "dpa-020",
+      "practice_area": "rights",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "What does the right to data portability cover, and what does it not?",
+      "gold_standard": "It covers personal data the individual provided to the controller (including observed data such as usage logs, per regulator guidance), processed by automated means on the bases of consent or contract — supplied in a structured, commonly used, machine-readable format, transmitted to another controller where technically feasible. It does not cover inferred/derived data or processing on other bases like legitimate interests.",
+      "authority_refs": ["UK GDPR, Art. 20"],
+      "probes": ["omission", "misstatement"]
+    },
+    {
+      "id": "dpa-021",
+      "practice_area": "transfers",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "Must a non-UK controller with no UK establishment, offering services to UK users, do anything structural under UK GDPR?",
+      "gold_standard": "Yes: the extraterritorial scope captures targeting UK data subjects, and Article 27 requires appointing a UK representative (in writing, named in privacy information) unless the processing is occasional, low-risk and without large-scale special-category data, or the entity is a public body. Overlooking the representative duty is the standard omission.",
+      "authority_refs": ["UK GDPR, Arts. 3(2), 27"],
+      "probes": ["omission"]
+    },
+    {
+      "id": "dpa-022",
+      "practice_area": "breach",
+      "difficulty": 3,
+      "released": false,
+      "prompt": "Ransomware encrypts a UK company's customer database; attackers claim exfiltration but provide no proof. Reportable?",
+      "gold_standard": "Loss of availability is itself a personal data breach; with a credible exfiltration claim, confidentiality risk cannot be discounted, so absent evidence making risk unlikely, notify the ICO within 72 hours of awareness and keep assessing — the notification can be phased as facts emerge. Waiting for exfiltration proof before notifying inverts the statutory test ('unlikely to result in risk' is the only out).",
+      "authority_refs": ["UK GDPR, Arts. 33-34", "ICO ransomware and breach-assessment guidance"],
+      "probes": ["bad_reasoning", "misstatement"]
+    },
+    {
+      "id": "dpa-023",
+      "practice_area": "lawful_basis",
+      "difficulty": 3,
+      "released": true,
+      "prompt": "A UK legal-tech vendor fine-tunes an LLM on client matter files. Frame the core data-protection analysis.",
+      "gold_standard": "Identify roles first (the vendor is a controller for its own training purpose), then: lawful basis for repurposing (legitimate interests demands the three-part test with a hard look at client and data-subject expectations and privilege/confidentiality overlays), purpose-limitation compatibility under Article 6(4), data-minimisation and anonymisation/pseudonymisation options, DPIA (innovative technology, likely high risk), and the difficulty of honouring rights (erasure from trained weights). ICO guidance on generative AI expects exactly this structure; skipping roles or the repurposing test is the failure mode.",
+      "authority_refs": ["UK GDPR, Arts. 5(1)(b), 6(1)(f), 6(4), 35", "ICO guidance on AI and data protection / generative AI"],
+      "probes": ["omission", "bad_reasoning"]
+    },
+    {
+      "id": "dpa-024",
+      "practice_area": "rights",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "Can a UK controller refuse a DSAR because responding requires searching archived email backups?",
+      "gold_standard": "Not on that ground alone. The controller must make reasonable and proportionate efforts to find and retrieve the data — burden alone is not 'manifestly excessive', though proportionality shapes the scope of search (a position now reflected in statute via the UK data-reform amendments codifying the reasonable-and-proportionate search standard). Blanket refusal to search backups without a proportionality analysis is a misstatement.",
+      "authority_refs": ["UK GDPR, Arts. 12, 15", "Data (Use and Access) Act 2025 (DSAR search standard)", "ICO right-of-access guidance"],
+      "probes": ["misstatement", "bad_reasoning"]
+    },
+    {
+      "id": "dpa-025",
+      "practice_area": "marketing",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "Who can the ICO fine for unlawful marketing calls and texts, beyond the company itself?",
+      "gold_standard": "PECR allows monetary penalties against the organisation, and the regime extends liability so directors and officers can be personally penalised for PECR breaches where the contravention occurred with their consent, connivance or neglect — a deliberate anti-phoenixing measure. Treating fines as a pure corporate risk understates personal exposure.",
+      "authority_refs": ["PECR (as amended), enforcement provisions; DPA 2018 enforcement framework"],
+      "probes": ["omission", "misstatement"]
+    }
+  ]
+}

@@ -72,6 +72,16 @@ export type ProductId =
   | 'academy_founders_annual'
   // Stablecoin Reserve Report Generator (W2-5)
   | 'stablecoin_reserve_monthly'
+  // Bench — legal AI evaluation lab (2026-08-16 scaffold; checkout dark until
+  // Moses-verified test purchase — see decisions/BENCH-LEGAL-AI-QUALITY-2026-08-16.md)
+  | 'bench_audit_2500'
+  | 'bench_managed_monthly'
+  // CoGuard — co-parenting communication & evidentiary engine (checkout dark;
+  // see decisions/COGUARD_PRODUCT_PLAN.md)
+  | 'coguard_solo_monthly'
+  | 'coguard_solo_yearly'
+  | 'coguard_litigation_monthly'
+  | 'coguard_litigation_yearly'
 
 export type BillingInterval = 'one-time' | 'monthly' | 'yearly'
 
@@ -79,7 +89,7 @@ export interface ProductSpec {
   readonly id: ProductId
   readonly name: string
   readonly description: string
-  readonly product_family: 'boi' | 'ai_act' | 'policy_refresh' | 'psp' | 'tracr' | 'brai' | 'forge' | 'docai' | 'lexaudit' | 'conductor' | 'cle' | 'propsignal' | 'leaseparse' | 'closeflow' | 'academy' | 'reserve_report'
+  readonly product_family: 'boi' | 'ai_act' | 'policy_refresh' | 'psp' | 'tracr' | 'brai' | 'forge' | 'docai' | 'lexaudit' | 'conductor' | 'cle' | 'propsignal' | 'leaseparse' | 'closeflow' | 'academy' | 'reserve_report' | 'bench' | 'coguard'
   readonly billing_interval: BillingInterval
   readonly amount_cents: number
   readonly currency: 'USD'
@@ -546,6 +556,39 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     cancellable: true,
   },
 
+  // ───── Bench — the evaluation lab for legal AI (2026-08-16 scaffold) ─────
+  // Checkout stays dark (bench /api/checkout/start returns 503) until a
+  // Moses-verified test purchase, per hard rule #5. Registered now so lighting
+  // it is a one-line change. Dedicated tier ($12,500+/mo) is deal-room scoped
+  // like compliance_ops_retainer's setup fee — no product ID until priced.
+  // Canonical doc: decisions/BENCH-LEGAL-AI-QUALITY-2026-08-16.md
+  bench_audit_2500: {
+    id: 'bench_audit_2500',
+    name: 'Bench Diagnostic Audit',
+    description:
+      '25-30 expert-verified evaluations of your legal AI against one jurisdiction-specific benchmark: accuracy score, hallucination rate, critical-error rate, citation reliability, error taxonomy, gold-standard corrections, remediation memo. Measurement services only — not legal advice.',
+    product_family: 'bench',
+    billing_interval: 'one-time',
+    amount_cents: 250000,
+    currency: 'USD',
+    checkout_origin: 'https://bench.bizlegal-ai.com/pricing',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: false,
+  },
+  bench_managed_monthly: {
+    id: 'bench_managed_monthly',
+    name: 'Bench Managed Evaluation Program (monthly)',
+    description:
+      '100-150 evaluations/month with continuous accuracy tracking, monthly trend report, and remediation guidance. AI-prescored with expert verification sampling. Measurement services only — not legal advice.',
+    product_family: 'bench',
+    billing_interval: 'monthly',
+    amount_cents: 500000,
+    currency: 'USD',
+    checkout_origin: 'https://bench.bizlegal-ai.com/pricing',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: true,
+  },
+
   // ───── Stablecoin Reserve Report Generator (W2-5) ─────
   // Fulfilled by the self-contained /api/reserve-report/webhook (TRACR-style:
   // own webhook + own reserve_reports table), NOT the shared payments webhook,
@@ -560,6 +603,58 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     currency: 'USD',
     checkout_origin: '/reserve-report',
     webhook_path: '/api/reserve-report/webhook',
+    cancellable: true,
+  },
+
+  // ───── CoGuard — Co-Parenting Communication & Legal Evidentiary Engine ─────
+  // Checkout dark until Z7-style verification per hard rule #5.
+  // Canonical doc: decisions/COGUARD_PRODUCT_PLAN.md
+  coguard_solo_monthly: {
+    id: 'coguard_solo_monthly',
+    name: 'CoGuard Solo Shield (monthly)',
+    description: 'AI-powered BIFF message neutralization + immutable SHA-256 communication log + court binder on demand. Up to 100 messages/month. Communication drafting tool — not legal advice.',
+    product_family: 'coguard',
+    billing_interval: 'monthly',
+    amount_cents: 1499,
+    currency: 'USD',
+    checkout_origin: 'https://coguard.bizlegal-ai.com/pricing',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: true,
+  },
+  coguard_solo_yearly: {
+    id: 'coguard_solo_yearly',
+    name: 'CoGuard Solo Shield (yearly)',
+    description: 'Solo Shield at yearly rate. Save ~$50 vs monthly.',
+    product_family: 'coguard',
+    billing_interval: 'yearly',
+    amount_cents: 12900,
+    currency: 'USD',
+    checkout_origin: 'https://coguard.bizlegal-ai.com/pricing',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: true,
+  },
+  coguard_litigation_monthly: {
+    id: 'coguard_litigation_monthly',
+    name: 'CoGuard Litigation (monthly)',
+    description: 'Unlimited messages + advanced court binder + attorney portal + priority processing. Designed for active custody litigation. Communication drafting tool — not legal advice.',
+    product_family: 'coguard',
+    billing_interval: 'monthly',
+    amount_cents: 2999,
+    currency: 'USD',
+    checkout_origin: 'https://coguard.bizlegal-ai.com/pricing',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: true,
+  },
+  coguard_litigation_yearly: {
+    id: 'coguard_litigation_yearly',
+    name: 'CoGuard Litigation (yearly)',
+    description: 'Litigation plan at yearly rate. Save ~$110 vs monthly.',
+    product_family: 'coguard',
+    billing_interval: 'yearly',
+    amount_cents: 24900,
+    currency: 'USD',
+    checkout_origin: 'https://coguard.bizlegal-ai.com/pricing',
+    webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
 }
