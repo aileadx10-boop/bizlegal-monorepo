@@ -67,8 +67,18 @@ export type SendEmailError =
   | 'not_confirmed'
   | 'send_failed'
 
+/**
+ * Env without depending on @types/node. Cloudflare Workers has no `process` at
+ * all, so this reads through globalThis and falls back to an empty object —
+ * callers there pass an explicit EmailConfig instead.
+ */
+function readEnv(): Record<string, string | undefined> {
+  const g = globalThis as { process?: { env?: Record<string, string | undefined> } }
+  return g.process?.env ?? {}
+}
+
 function readConfig(cfg?: EmailConfig): Required<Pick<EmailConfig, 'from' | 'replyTo'>> & EmailConfig {
-  const env = (typeof process !== 'undefined' ? process.env : {}) as Record<string, string | undefined>
+  const env = readEnv()
   return {
     resendApiKey: cfg?.resendApiKey ?? env.RESEND_API_KEY,
     supabaseUrl: cfg?.supabaseUrl ?? env.NEXT_PUBLIC_SUPABASE_URL ?? env.SUPABASE_URL,
@@ -124,8 +134,9 @@ export async function hasMarketingConsent(email: string, cfg?: EmailConfig): Pro
     c,
     `newsletter_subscribers?email=eq.${encodeURIComponent(email)}&select=double_optin_confirmed&limit=1`,
   )
-  if (!rows || rows.length === 0) return false
-  return rows[0].double_optin_confirmed === true
+  const row = rows?.[0]
+  if (!row) return false
+  return row.double_optin_confirmed === true
 }
 
 export async function sendEmail(input: SendEmailInput, cfg?: EmailConfig): Promise<SendEmailResult> {
