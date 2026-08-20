@@ -1,0 +1,20 @@
+name = "coguard-email-worker"
+main = "src/index.ts"
+compatibility_date = "2026-08-16"
+compatibility_flags = ["nodejs_compat"]
+
+# Alias → subscriber_id lookup. Namespace: COGUARD_ALIASES
+[[kv_namespaces]]
+binding = "COGUARD_ALIASES"
+id = ""  # CF_COGUARD_KV_NAMESPACE_ID — fill after dashboard creation
+
+[vars]
+OCI_BASE_URL = "https://oci.bizlegal-ai.com"
+
+[observability]
+enabled = true
+head_sampling_rate = 1.0
+
+# Required secrets (set via: wrangler secret put <NAME>):
+# - WEBHOOK_SHARED_SECRET    (= BIZLEGAL_INBOUND_SECRET)
+# - CF_COGUARD_ROUTING_TOKEN (emitted by CF Email Routing, validated in handler)

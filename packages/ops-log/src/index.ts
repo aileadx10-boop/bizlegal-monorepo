@@ -83,6 +83,14 @@ export type OpsEventType =
   | 'referral.attributed'      // payment.confirmed traced back to an affiliate
   | 'social.draft'             // social post draft staged for approval
   | 'social.posted'            // social post fanned out to a channel
+  // CoGuard — co-parenting evidentiary engine (2026-08-16)
+  | 'coguard.message.received'      // incoming email forwarded by subscriber and processed
+  | 'coguard.message.sent'          // outgoing BIFF message sent via Resend
+  | 'coguard.draft.classified'      // outgoing draft tone-checked by Haiku
+  | 'coguard.binder.requested'      // subscriber triggered court binder generation
+  | 'coguard.binder.generated'      // PDF court binder ready for download
+  | 'coguard.subscriber.provisioned' // inbox_alias + reply_address assigned post-payment
+  | 'coguard.attorney.access'       // attorney viewed subscriber timeline via portal
 
 export interface LogEventInput {
   type: OpsEventType
@@ -103,6 +111,7 @@ export interface LogEventInput {
     | 'propsignal'
     | 'leaseparse'
     | 'closeflow'
+    | 'coguard'
   ref_id?: string
   email?: string
   amount_cents?: number

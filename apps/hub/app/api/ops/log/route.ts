@@ -63,12 +63,17 @@ const ALLOWED_TYPES = new Set([
   'content.published',
   'affiliate.signup', 'affiliate.click', 'referral.attributed',
   'social.draft', 'social.posted',
+  // CoGuard — co-parenting evidentiary engine (2026-08-16)
+  'coguard.message.received', 'coguard.message.sent', 'coguard.draft.classified',
+  'coguard.binder.requested', 'coguard.binder.generated',
+  'coguard.subscriber.provisioned', 'coguard.attorney.access',
 ])
 
 const ALLOWED_SOURCES = new Set([
   'hub', 'docai', 'lexaudit', 'tracr', 'brai', 'forge', 'leadforge', 'blog',
   'oci', 'worker', 'curator', 'ea', 'gsc-bot',
   'propsignal', 'leaseparse', 'closeflow',
+  'coguard',
 ])
 
 export async function POST(req: NextRequest) {

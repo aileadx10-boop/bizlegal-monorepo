@@ -1,0 +1,35 @@
+{
+  "name": "@bizlegal/coguard-web",
+  "private": true,
+  "version": "0.1.0",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@bizlegal/email": "workspace:*",
+    "@bizlegal/ops-log": "workspace:*",
+    "@bizlegal/payment": "workspace:*",
+    "@bizlegal/rate-limit": "workspace:*",
+    "@bizlegal/themes": "workspace:*",
+    "@bizlegal/turnstile-verify": "workspace:*",
+    "@bizlegal/turnstile-widget": "workspace:*",
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.57.4",
+    "lucide-react": "^0.468.0",
+    "next": "14.2.35",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "typescript": "^5.9.2"
+  }
+}
