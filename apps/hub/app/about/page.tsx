@@ -102,7 +102,7 @@ export default function AboutPage() {
         </p>
         <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
           <a href="mailto:team@bizlegal-ai.com" className="btn-primary">team@bizlegal-ai.com</a>
-          <Link href="/contact" className="btn-ghost">Book a Consultation</Link>
+          <Link href="/contact" className="btn-ghost">Send a message</Link>
         </div>
       </section>
     </div>

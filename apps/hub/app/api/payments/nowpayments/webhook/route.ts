@@ -5,6 +5,9 @@ import { logEventAsync } from '@/lib/ops/log'
 import { markNurturePaid } from '@/lib/nurture-state'
 import { claimWebhookEvent } from '@/lib/payments/webhook-idempotency'
 import { grantConductorTier } from '@/lib/payments/conductor-grant'
+import { grantCaspBundle } from '@/lib/payments/casp-bundle-grant'
+import { grantAiPolicy } from '@/lib/payments/ai-policy-grant'
+import { grantOfacWatch } from '@/lib/payments/ofac-watch-grant'
 import { sendPaymentConfirmationEmail } from '@/lib/resend'
 
 export const dynamic = 'force-dynamic'
@@ -232,6 +235,12 @@ export async function POST(req: NextRequest) {
         )
         // Conductor entitlement write-through (no-op for other products).
         await grantConductorTier(supabase, order)
+        // CASP bundle access write-through (no-op for other products).
+        await grantCaspBundle(supabase, order)
+        // AI Policy Generator write-through (no-op for other products).
+        await grantAiPolicy(supabase, order)
+        // OFAC watchlist activation (no-op for other products).
+        await grantOfacWatch(supabase, order)
         // Send payment confirmation email to customer (non-blocking).
         void sendPaymentConfirmationEmail(
           order.user_email,

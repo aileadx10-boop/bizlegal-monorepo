@@ -46,6 +46,8 @@ ALLOWED_TYPES = {
     "heartbeat",
     # Phase RR — content engine events (2026-05-21)
     "content.published",
+    # Phase AA — outbound 30→10→3→1 cold-outreach staging (O-015)
+    "outreach.staged",
 }
 
 

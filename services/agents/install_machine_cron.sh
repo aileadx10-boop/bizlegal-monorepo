@@ -14,8 +14,9 @@ mkdir -p "$LOG"
 
 CRON_ENTRIES=(
   "15 0 * * * cd $CURATOR && $PYTHON $AGENTS/orchestrator.py code >> $LOG/code.log 2>&1"
-  "0 2 * * * cd $CURATOR && $PYTHON $AGENTS/orchestrator.py enrichment >> $LOG/enrichment.log 2>&1"
-  "0 14 * * * cd $CURATOR && $PYTHON $AGENTS/orchestrator.py enrichment >> $LOG/enrichment-pm.log 2>&1"
+  # enrichment REMOVED 2026-08-16 — built 360 profiles of people via
+  # Firecrawl+Apify+Apollo, feeding the cold pool. enrichment_agent.py is
+  # deleted, so these entries would have failed on every run anyway.
   # headhunter REMOVED 2026-08-16 — scraped buying signals and queued cold
   # outreach. Outbound is inbound-only; do not re-add.
   "0 6 * * * cd $CURATOR && $PYTHON $AGENTS/orchestrator.py content >> $LOG/content.log 2>&1"

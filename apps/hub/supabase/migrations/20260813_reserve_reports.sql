@@ -28,6 +28,8 @@ create index if not exists reserve_reports_order_email_key_idx
 alter table public.reserve_reports enable row level security;
 
 -- Service-role only (same pattern as mica_deadlines).
+-- Postgres has no CREATE POLICY IF NOT EXISTS, so drop-then-create for rerunnability.
+drop policy if exists "reserve_reports_service_role_all" on public.reserve_reports;
 create policy "reserve_reports_service_role_all"
   on public.reserve_reports
   for all
@@ -40,12 +42,16 @@ insert into storage.buckets (id, name, public)
 values ('reserve-reports', 'reserve-reports', true)
 on conflict (id) do nothing;
 
-create policy if not exists "reserve_reports_public_read"
+drop policy if exists "reserve_reports_public_read" on storage.objects;
+create policy "reserve_reports_public_read"
   on storage.objects
   for select
   using (bucket_id = 'reserve-reports');
 
-create policy if not exists "reserve_reports_service_role_all"
+drop policy if exists "reserve_reports_storage_service_role_all" on storage.objects;
+create policy "reserve_reports_storage_service_role_all"
   on storage.objects
   for all
-  using (bucket_id = 'reserve-reports');
+  to service_role
+  using (bucket_id = 'reserve-reports')
+  with check (bucket_id = 'reserve-reports');

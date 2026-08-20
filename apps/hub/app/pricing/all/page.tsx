@@ -161,7 +161,7 @@ export default function PricingAllPage() {
             rel="noopener noreferrer"
             style={linkBtn}
           >
-            TRACR — Request introduction →
+            TRACR — See wallet report pricing →
           </a>
           <a
             href="https://brai.bizlegal-ai.com/network"
@@ -169,7 +169,7 @@ export default function PricingAllPage() {
             rel="noopener noreferrer"
             style={linkBtn}
           >
-            BRAI — Request introduction →
+            BRAI — See risk report pricing →
           </a>
         </div>
       </section>

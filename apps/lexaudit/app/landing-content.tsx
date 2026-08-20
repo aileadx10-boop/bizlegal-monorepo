@@ -90,7 +90,7 @@ export const LEXAUDIT_CONTENT: LandingV2Content = {
         'Slack/email reachability for impact triage',
         'Priority quarterly review',
       ],
-      cta: 'Talk to us',
+      cta: 'Start the retainer',
       href: '#contact',
     },
   ],

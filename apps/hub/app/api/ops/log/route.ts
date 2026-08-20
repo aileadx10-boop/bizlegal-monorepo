@@ -63,6 +63,7 @@ const ALLOWED_TYPES = new Set([
   'content.published',
   'affiliate.signup', 'affiliate.click', 'referral.attributed',
   'social.draft', 'social.posted',
+  'outreach.staged',
 ])
 
 const ALLOWED_SOURCES = new Set([

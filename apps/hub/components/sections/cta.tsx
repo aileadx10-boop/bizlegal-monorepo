@@ -21,14 +21,9 @@ export function CTA() {
           <Link href="/risk-engine" className="cta-btn-solid">
             Start Free Scan
           </Link>
-          <a
-            href="https://calendly.com/ai-leadx10"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="cta-btn-outline"
-          >
-            Book Demo
-          </a>
+          <Link href="/pricing/all" className="cta-btn-outline">
+            See Pricing
+          </Link>
         </div>
       </div>
     </section>

@@ -96,7 +96,7 @@ export default function LeadCaptureForm({ source = 'general', product, className
           cursor: status === 'loading' ? 'wait' : 'pointer', transition: 'filter 0.2s',
         }}
       >
-        {status === 'loading' ? 'Submitting...' : 'Request Consultation'}
+        {status === 'loading' ? 'Submitting...' : 'Send my question'}
       </button>
 
       {status === 'error' && (

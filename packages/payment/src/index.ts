@@ -29,6 +29,14 @@ export interface CheckoutSpec {
   user_name?: string
   /** Origin domain for success/cancel URL construction. Defaults to https://bizlegal-ai.com. */
   origin?: string
+  /**
+   * Caller-supplied order id sent to the gateway as `order_id` (NOWPayments)
+   * and `custom_id` (PayPal). Pass the `payment_orders.id` UUID here: both
+   * webhooks resolve the order with `.eq('id', <that value>)`, so a generated
+   * id that isn't a real row id makes fulfillment 404. Falls back to
+   * `makeOrderId()` only for callers with no order row of their own.
+   */
+  order_id?: string
 }
 
 export type Provider = 'nowpayments' | 'paypal' | 'lemonsqueezy' | 'paddle'
@@ -38,6 +46,8 @@ export interface CheckoutResultOk {
   provider: Provider
   checkout_url: string
   provider_invoice_id: string
+  /** The order id handed to the gateway — echoed back on the IPN/webhook. */
+  order_id: string
   product: ProductSpec
   amount_cents: number
 }
@@ -122,7 +132,7 @@ export async function createNowPaymentsInvoice(spec: CheckoutSpec): Promise<Chec
     return { ok: false, provider: 'nowpayments', error: 'NOWPAYMENTS_API_KEY unset', status_code: 503 }
   }
   const product = getProduct(spec.product_id)
-  const orderId = makeOrderId(spec.product_id, spec.user_email)
+  const orderId = spec.order_id ?? makeOrderId(spec.product_id, spec.user_email)
   try {
     const res = await fetch('https://api.nowpayments.io/v1/invoice', {
       method: 'POST',
@@ -151,6 +161,7 @@ export async function createNowPaymentsInvoice(spec: CheckoutSpec): Promise<Chec
       provider: 'nowpayments',
       checkout_url: body.invoice_url,
       provider_invoice_id: body.id,
+      order_id: orderId,
       product,
       amount_cents: product.amount_cents,
     }
@@ -309,7 +320,7 @@ export async function createPayPalOrder(spec: CheckoutSpec): Promise<CheckoutRes
     }
   }
   const product = getProduct(spec.product_id)
-  const orderId = makeOrderId(spec.product_id, spec.user_email)
+  const orderId = spec.order_id ?? makeOrderId(spec.product_id, spec.user_email)
   try {
     // OAuth token
     const tokenRes = await fetch(`${apiUrl}/v1/oauth2/token`, {
@@ -343,6 +354,10 @@ export async function createPayPalOrder(spec: CheckoutSpec): Promise<CheckoutRes
         purchase_units: [
           {
             reference_id: orderId,
+            // PAYMENT.CAPTURE.COMPLETED echoes custom_id at resource top level;
+            // /api/payments/paypal/webhook resolves the order from it and
+            // ignores any event without one.
+            custom_id: orderId,
             description: product.description.slice(0, 127),
             amount: {
               currency_code: product.currency,
@@ -381,6 +396,7 @@ export async function createPayPalOrder(spec: CheckoutSpec): Promise<CheckoutRes
       provider: 'paypal',
       checkout_url: approveUrl,
       provider_invoice_id: body.id,
+      order_id: orderId,
       product,
       amount_cents: product.amount_cents,
     }

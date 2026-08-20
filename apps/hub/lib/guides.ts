@@ -469,4 +469,11 @@ export const GUIDES: Guide[] = [
     tag: 'SaaS / Contracts',
     product: null,
   },
+  {
+    href: '/guides/fixed-fee-pricing-playbook',
+    title: 'Law Firm Fixed-Fee Pricing Playbook (2025): How to Price Flat-Fee Legal Services',
+    description: 'How to price fixed-fee legal services: the hourly-rate conversion formula (hours × effective rate × burden factor), scope control, the 5 pricing models (flat fee per matter, flat retainer, tiered, flat + hourly overage, subscription), retainer ranges by practice area, and the mistakes that turn flat fees into losses.',
+    tag: 'Law Firm Business',
+    product: null,
+  },
 ]

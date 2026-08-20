@@ -83,6 +83,8 @@ export type OpsEventType =
   | 'referral.attributed'      // payment.confirmed traced back to an affiliate
   | 'social.draft'             // social post draft staged for approval
   | 'social.posted'            // social post fanned out to a channel
+  // Phase AA — outbound 30→10→3→1 cold-outreach pipeline (O-015)
+  | 'outreach.staged'          // lead staged to lead_outreach as drafted, awaiting Moses approval (draft-only)
 
 export interface LogEventInput {
   type: OpsEventType

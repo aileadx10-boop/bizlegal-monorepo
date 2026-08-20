@@ -13,6 +13,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { createHmac } from 'node:crypto'
+import { enqueueNurture, type NurtureVertical } from '@/lib/nurture-state'
 
 export const dynamic = 'force-dynamic'
 
@@ -44,6 +45,45 @@ function verifyToken(fullToken: string): { ok: boolean; reason?: string } {
   if (a.length !== b.length) return { ok: false, reason: 'bad_sig' }
   if (!require('node:crypto').timingSafeEqual(a, b)) return { ok: false, reason: 'bad_sig' }
   return { ok: true }
+}
+
+/**
+ * Releases everything gated on this address's consent:
+ *  - MiCA digest rows parked as 'pending' by /api/mica-deadlines/subscribe
+ *  - the nurture cadence deferred by /api/leads and /api/inbound-lead
+ * Best-effort: confirmation itself has already succeeded by the time this runs.
+ */
+async function activatePendingSubscriptions(sb: SbClient, email: string): Promise<void> {
+  try {
+    await (sb as any)
+      .from('mica_deadline_subs')
+      .update({ status: 'active' })
+      .ilike('email', email)
+      .eq('status', 'pending')
+  } catch (err) {
+    console.warn('[confirm] mica activation failed:', err instanceof Error ? err.message : err)
+  }
+
+  try {
+    const { data } = await (sb as any)
+      .from('newsletter_subscribers')
+      .select('source, vertical_interest')
+      .eq('email', email)
+      .maybeSingle()
+    const source: string = typeof data?.source === 'string' ? data.source : 'newsletter'
+    // Only capture surfaces that defer a cadence carry a lead: prefix.
+    if (!source.startsWith('lead:')) return
+    const vertical = Array.isArray(data?.vertical_interest) ? data.vertical_interest[0] : null
+    await enqueueNurture({
+      lead_id: `hub-${email}-${source}`,
+      email,
+      vertical: (vertical ?? 'compliance') as NurtureVertical,
+      source: `hub:${source}`,
+      lead_classification: { confirmed_via: 'double_optin' },
+    })
+  } catch (err) {
+    console.warn('[confirm] nurture enqueue failed:', err instanceof Error ? err.message : err)
+  }
 }
 
 function htmlResponse(status: number, title: string, bodyInner: string): NextResponse {
@@ -121,6 +161,11 @@ export async function GET(req: NextRequest) {
     return htmlResponse(500, 'Confirmation failed',
       `<div class="err">Something went wrong on our end. Reply to any past @bizlegal-ai.com email and we'll confirm you manually.</div>`)
   }
+  // Consent is now on file, so anything that was parked pending this address
+  // can start. Each step is best-effort — a failure here must not turn a
+  // successful confirmation into an error page.
+  await activatePendingSubscriptions(sb, sub.email)
+
   // Write audit-trail consent_log entry
   const { data: cl, error: consentErr } = await sb
     .from('email_consent_log')

@@ -3,7 +3,7 @@ import crypto from 'node:crypto'
 import { logEventAsync } from '@/lib/ops/log'
 import { supabaseAdmin } from '@/lib/supabase'
 import { claimWebhookEvent } from '@/lib/payments/webhook-idempotency'
-import { analyzeReserve, parseOrderEmailKey, renderReportHtml, validateReserveInput } from '@/lib/reserve-report'
+import { analyzeReserve, orderEmailKey, parseOrderEmailKey, renderReportHtml, validateReserveInput } from '@/lib/reserve-report'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -12,9 +12,10 @@ export const maxDuration = 60
  * POST /api/reserve-report/webhook — NOWPayments IPN for the W2-5 reserve
  * report product (webhook_path on stablecoin_reserve_monthly).
  *
- * Self-contained fulfillment (TRACR-style): the universal /api/pay/start path
- * does not write payment_orders, so this handler matches the reserve_reports
- * row by the order_id's embedded email key, generates the template report
+ * Self-contained fulfillment (TRACR-style): this handler owns the reserve_reports
+ * row rather than payment_orders, matching it by the buyer's email key —
+ * resolved from the payment_orders row the gateway order id points at, or from
+ * the order id itself for pre-2026-08 invoices. It generates the template report
  * deterministically from the stored payload, uploads it, emails the link, and
  * emits payment.confirmed + report.generated. No audit claims — the report
  * template is generated from issuer-supplied data.
@@ -50,6 +51,19 @@ function verifyIpnSignature(rawBody: string, signature: string, secret: string):
   }
 }
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+async function emailKeyFromPaymentOrder(orderId: string): Promise<string | null> {
+  if (!UUID_RE.test(orderId)) return null
+  const { data } = await supabaseAdmin
+    .from('payment_orders')
+    .select('user_email')
+    .eq('id', orderId)
+    .maybeSingle()
+  const email = typeof data?.user_email === 'string' ? data.user_email : null
+  return email ? orderEmailKey(email) : null
+}
+
 export async function POST(req: NextRequest) {
   try {
     const secret = process.env.NOWPAYMENTS_IPN_SECRET
@@ -82,7 +96,12 @@ export async function POST(req: NextRequest) {
     if (claim === 'error') return NextResponse.json({ error: 'idempotency_storage_failed' }, { status: 500 })
 
     // Map the pay/start order_id back to the reserve_reports row.
-    const emailKey = parseOrderEmailKey(orderId)
+    //
+    // /api/pay/start now creates a payment_orders row and hands the gateway
+    // that row's UUID, so resolve the buyer's email from it first. The
+    // bz_<productId>_<safeEmail>_… parse stays as the fallback for invoices
+    // minted before that change.
+    const emailKey = (await emailKeyFromPaymentOrder(orderId)) ?? parseOrderEmailKey(orderId)
     if (!emailKey) {
       // Not one of our order ids — acknowledge without fulfilling.
       return NextResponse.json({ received: true })

@@ -103,7 +103,8 @@ All defined in `apps/hub/vercel.json`. Run serverlessly on hub.bizlegal-ai.com (
 Key event types in `packages/ops-log/src/index.ts`:
 
 - `payment.initiated` / `payment.confirmed` / `payment.failed`
-- `lead.captured` / `lead.qualified` / `lead.outreach.drafted`
+- `lead.inbound` / `lead.qualified` / `outreach.staged`  (O-015 draft-only staging)
+- `email.sent` / `email.failed`
 - `agent.run.success` / `agent.run.failed`
 - `content.published` / `content.indexed`
 - `deal.room.created` / `deal.room.converted`

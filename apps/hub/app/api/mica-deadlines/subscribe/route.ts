@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { logEventAsync } from '@bizlegal/ops-log'
+import { startDoubleOptIn, originFromHeaders } from '@/lib/newsletter-optin'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 15
@@ -58,15 +59,49 @@ export async function POST(req: NextRequest) {
     auth: { persistSession: false, autoRefreshToken: false },
   })
 
+  // Land as 'pending'. The daily digest cron selects status='active' only, so
+  // nobody receives mail until /api/newsletter/confirm activates them. An
+  // already-active subscriber (re-subscribing to change jurisdiction) stays
+  // active — re-confirming a confirmed address would be pointless friction.
+  const { data: existingSub } = await supabase
+    .from('mica_deadline_subs')
+    .select('status')
+    .eq('email', email)
+    .maybeSingle()
+  const nextStatus = existingSub?.status === 'active' ? 'active' : 'pending'
+
   const { error } = await supabase
     .from('mica_deadline_subs')
     .upsert(
-      { email, jurisdiction, status: 'active' },
+      { email, jurisdiction, status: nextStatus },
       { onConflict: 'email' }
     )
   if (error) {
     logEventAsync({ type: 'error', source: 'hub', ref_id: 'mica-deadlines-subscribe', status: 'failed', metadata: { reason: error.message } })
     return NextResponse.json({ error: 'Could not save your subscription. Please try again.' }, { status: 500 })
+  }
+
+  if (nextStatus === 'pending') {
+    const optIn = await startDoubleOptIn({
+      sb: supabase,
+      email,
+      source: 'mica_deadlines',
+      verticalInterest: 'mica-deadlines',
+      origin: originFromHeaders(req.headers),
+    })
+    if (!optIn.ok) {
+      const message =
+        optIn.error === 'suppressed'
+          ? 'This address cannot be subscribed.'
+          : optIn.error === 'invalid_email'
+            ? 'Please use a real, personal work email (no role inboxes).'
+            : 'Could not send the confirmation email. Please try again.'
+      return NextResponse.json({ error: message }, { status: optIn.error === 'store_failed' ? 500 : 400 })
+    }
+    if (optIn.alreadyConfirmed) {
+      // Consent already on file — activate the digest immediately.
+      await supabase.from('mica_deadline_subs').update({ status: 'active' }).eq('email', email)
+    }
   }
 
   logEventAsync({
@@ -78,5 +113,14 @@ export async function POST(req: NextRequest) {
     metadata: { vertical: 'mica-deadlines', jurisdiction },
   })
 
-  return NextResponse.json({ ok: true, email, jurisdiction })
+  return NextResponse.json({
+    ok: true,
+    email,
+    jurisdiction,
+    status: nextStatus,
+    message:
+      nextStatus === 'pending'
+        ? 'Check your inbox and confirm to start receiving the daily digest.'
+        : 'Subscription updated.',
+  })
 }
