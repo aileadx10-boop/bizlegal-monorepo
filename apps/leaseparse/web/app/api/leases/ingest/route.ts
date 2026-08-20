@@ -17,6 +17,14 @@
  * maxDuration 300 (Vercel Pro) to handle large leases + slow Ollama.
  *
  * Body: { lease_id, storage_path }
+ *
+ * OPEN GAP — READ BEFORE FLIPPING LEASEPARSE_CHECKOUT_LIVE:
+ * neither this route nor /api/leases/upload-url verifies that the lease was
+ * paid for. Today that is harmless because checkout is gated off, but once the
+ * gate opens an unauthenticated caller could burn Claude spend and send email
+ * on someone else's behalf. Closing it needs a paid-order reference on
+ * leaseparse_leases (a schema change, hence out of this build's fixed scope)
+ * checked here before extraction begins.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
