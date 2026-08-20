@@ -24,6 +24,8 @@ import { getServiceClient } from '@/lib/db/client'
 import { extractWithHermes, scoreConfidence } from '@/lib/extract/hermes-first'
 import { shouldFallback, extractWithClaude } from '@/lib/extract/claude-fallback'
 import { deriveCriticalDates } from '@/lib/extract/date-engine'
+import { extractPdfText } from '@/lib/extract/pdf-text'
+import { scoreLeaseRisk } from '@/lib/risk/score-engine'
 import { logEventAsync } from '@/lib/ops/log'
 import type { ExtractionResult } from '@/lib/extract/types'
 
@@ -32,14 +34,6 @@ export const runtime = 'nodejs'
 export const maxDuration = 300
 
 const BUCKET = 'lease-documents'
-
-async function extractTextFromPdf(buffer: Buffer): Promise<string> {
-  // pdf-parse is a CommonJS module — use require() to avoid ESM interop issues
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const pdfParse = require('pdf-parse') as (buf: Buffer) => Promise<{ text: string }>
-  const result = await pdfParse(buffer)
-  return result.text
-}
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   let body: unknown
@@ -84,19 +78,52 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'storage_download_failed' }, { status: 500 })
   }
 
-  // 2. Extract text
-  let leaseText: string
-  try {
-    const arrayBuffer = await fileData.arrayBuffer()
-    leaseText = await extractTextFromPdf(Buffer.from(arrayBuffer))
-  } catch (err) {
-    console.error('[leases/ingest] pdf-parse failed', err instanceof Error ? err.message : err)
-    return NextResponse.json({ error: 'pdf_parse_failed' }, { status: 422 })
+  // 2. Extract the text layer. A scanned PDF stops here — LeaseParse has no
+  //    OCR (fixed scope), and an image-only lease must reach the refund path
+  //    rather than an LLM, which would happily invent an abstract from nothing.
+  const arrayBuffer = await fileData.arrayBuffer()
+  const pdfText = await extractPdfText(Buffer.from(arrayBuffer))
+
+  if (!pdfText.ok) {
+    const refundable = pdfText.reason === 'no_text_layer' || pdfText.reason === 'empty_file'
+    console.warn('[leases/ingest] text extraction failed', pdfText.reason, pdfText.message)
+
+    await db
+      .from('leaseparse_leases')
+      .update({ extracted_json: { unparseable: pdfText.reason, message: pdfText.message } })
+      .eq('id', lease_id)
+
+    logEventAsync({
+      type: 'error',
+      source: 'leaseparse',
+      ref_id: lease_id,
+      email: lease.email ?? undefined,
+      status: 'failed',
+      metadata: {
+        step: 'pdf_text_extraction',
+        reason: pdfText.reason,
+        pages: pdfText.pages,
+        chars: pdfText.chars,
+        refund_required: refundable,
+      },
+    })
+
+    return NextResponse.json(
+      {
+        ok: false,
+        error: refundable ? 'scanned_pdf_not_supported' : 'pdf_parse_failed',
+        lease_id,
+        refund_required: refundable,
+        detail: pdfText.message,
+        next_step: refundable
+          ? 'LeaseParse reads text-layer PDFs only. This document has no extractable text, so the order is refundable — contact team@bizlegal-ai.com and we will refund it.'
+          : 'The PDF could not be read. Re-upload or contact team@bizlegal-ai.com.',
+      },
+      { status: 422 }
+    )
   }
 
-  if (!leaseText || leaseText.trim().length < 50) {
-    return NextResponse.json({ error: 'pdf_text_empty_or_too_short' }, { status: 422 })
-  }
+  const leaseText = pdfText.text
 
   // 3. Extract with Hermes (Ollama)
   let result: ExtractionResult
