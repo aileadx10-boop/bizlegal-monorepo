@@ -35,10 +35,10 @@ bizlegal-monorepo/
 │   ├── browser-extension/ Manifest V3 Chrome/Firefox compliance capture extension (P3)
 │   ├── spy/          competitor intelligence crawlers: pricing/content/backlinks/social (P5)
 │   ├── seo-agents/   SEO pipeline scripts (headhunter, daily_orchestrator, publisher, etc.)
-│   ├── outreach/     outbound email scripts (cold_email_sender, headhunter, lead_nurture)
-│   ├── hunt/         outbound enrichment: apollo_enrich/intent_signals/warm_intro (P5)
+│   ├── outreach/     OCI partner-referral flow only (oci_funnel, oci_deal_closer, partner_onboarding)
 │   └── funnel-mvp/   TOMBSTONED 2026-05-24 — canonical is apps/docai/web/ (Fastify, never deployed; git-history reference only)
 ├── packages/         shared TS + Python siblings
+│   ├── email/        @bizlegal/email — THE outbound email path; suppression + double-opt-in enforced inside the package (never in callers)
 │   ├── ops-log/      @bizlegal/ops-log — HMAC-signed event POST to hub /api/ops/log
 │   ├── firecrawl/    @bizlegal/firecrawl — scrape + Sonnet semantic-diff
 │   ├── safe/         @bizlegal/safe — PII redaction (LexAudit Safe)
@@ -139,6 +139,12 @@ A future Claude Code session SHALL refuse to merge a PR that fails the operating
 4. **No new entries on /agents page.**
 5. **No real money taken** until Z7 verification matrix runs all GREEN for 24 consecutive hours.
 6. **Stabilization first.** Frustration > ambition until the chain is solid.
+7. **Outbound is inbound-only.** We email people who contacted us and confirmed. No
+   prospect scraping, no cold senders, no purchased or guessed addresses — in any repo,
+   on any branch. The cold path was deleted 2026-08-16 after it was found running on
+   every 10-minute tick with no approval step and a kill-switch that failed open
+   (`fc_flags` had no migration). Do not reintroduce it; a "gated" cold sender is still
+   a cold sender.
 
 When in doubt, ask: "does this advance Z0-Z7 verification or does it add scope?" If it adds scope, defer to post-Z7.
 

@@ -16,7 +16,8 @@ CRON_ENTRIES=(
   "15 0 * * * cd $CURATOR && $PYTHON $AGENTS/orchestrator.py code >> $LOG/code.log 2>&1"
   "0 2 * * * cd $CURATOR && $PYTHON $AGENTS/orchestrator.py enrichment >> $LOG/enrichment.log 2>&1"
   "0 14 * * * cd $CURATOR && $PYTHON $AGENTS/orchestrator.py enrichment >> $LOG/enrichment-pm.log 2>&1"
-  "30 4 * * * cd $CURATOR && $PYTHON $AGENTS/orchestrator.py headhunter >> $LOG/headhunter.log 2>&1"
+  # headhunter REMOVED 2026-08-16 — scraped buying signals and queued cold
+  # outreach. Outbound is inbound-only; do not re-add.
   "0 6 * * * cd $CURATOR && $PYTHON $AGENTS/orchestrator.py content >> $LOG/content.log 2>&1"
   "0 9 * * * cd $CURATOR && $PYTHON $AGENTS/orchestrator.py socials >> $LOG/socials-am.log 2>&1"
   "0 13 * * * cd $CURATOR && $PYTHON $AGENTS/orchestrator.py socials >> $LOG/socials-noon.log 2>&1"

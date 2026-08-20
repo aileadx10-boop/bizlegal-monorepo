@@ -1,12 +1,16 @@
 # BizLegal cron jobs (auto-installed by cron_installer.py)
 # DO NOT EDIT BY HAND — run cron_installer.py to update
-0 1 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/signal_scout.py >> /var/log/signal-scout.log 2>&1
+#
+# 2026-08-16 — COLD OUTBOUND REMOVED. signal_scout.py (LinkedIn→Apollo prospect
+# scrape), marketing_outreach.py (10 cold emails/day) and lead_nurture.py (cold
+# day-3/7 follow-ups) were deleted from this file, alongside the FirmCited cold
+# sender. Outbound is inbound-only: we email people who contacted us and
+# confirmed. Do not re-add a scraper or a cold sender here.
 30 6 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/aeo_loop.py >> /var/log/aeo-loop.log 2>&1
 0 7 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/marketing_copy.py >> /var/log/marketing-copy.log 2>&1
 0 8 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/daily_digest.py >> /var/log/daily-digest.log 2>&1
 0 9 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/env_audit.py >> /var/log/env-audit.log 2>&1
 0 9 * * 1 cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/weekly_health.py >> /var/log/weekly-health.log 2>&1
-0 10 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/marketing_outreach.py >> /var/log/marketing-outreach.log 2>&1
 30 18 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/marketing_revenue.py >> /var/log/marketing-revenue.log 2>&1
 */5 * * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/self_heal.py >> /var/log/self-heal.log 2>&1
 */30 * * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/code_fixer.py >> /var/log/code-fixer.log 2>&1
@@ -40,8 +44,9 @@
 30 15 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/distributor.py >> /var/log/bizlegal/distributor.log 2>&1
 # Dunning — checkout-abandonment follow-ups (day 3/7/14 staged reminders via Resend)
 30 9 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/dunning.py >> /var/log/bizlegal/dunning.log 2>&1
-# Lead Nurture — cold outreach day-3/7 follow-up drafts → sales_outreach → Moses approves at /sales
-0 10 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/lead_nurture.py >> /var/log/bizlegal/lead-nurture.log 2>&1
+# REMOVED 2026-08-16 — lead_nurture.py drafted COLD day-3/7 follow-ups. Warm,
+# opt-in nurture is handled by the Cloudflare worker (services/worker, */5),
+# which only sends to confirmed addresses.
 # PERMANENTLY DISABLED — DO NOT RE-ENABLE without Moses's explicit written approval
 # Opt-in outreach: disabled 2026-07-10 (ef3d90e spam incident — sent to unverified/fabricated inboxes)
 # Re-enable requires: (a) opt-in lead source, (b) suppression list, (c) verified addresses, (d) Moses written approval
