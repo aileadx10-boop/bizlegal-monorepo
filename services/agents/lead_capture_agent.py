@@ -3,7 +3,7 @@ Lead Capture Agent — Form submission -> 4-stage Haiku pipeline.
 
 Job: Receive form submission -> run 4-stage Haiku pipeline (extract ->
 critique -> score -> summary) -> write to leadforge_leads -> trigger
-headhunter_agent if score >= 8.0.
+opt-in nurture picks the lead up from there (no prospecting hand-off).
 
 Stack: Webhook from any of 7 subdomains, Haiku 4.5 for all 4 stages
 (cheap, fast, deterministic), schema validation against lead-profile.json.
@@ -236,13 +236,10 @@ def run(ctx: dict | None = None) -> dict:
     if not dry_run and not profile.get("_parse_error"):
         lead_id = _upsert_lead(profile, qualification, summary)
 
-    # Stage 5: If hot, hand off to headhunter
-    if qualification.get("recommended_action") == "respond_immediately" and lead_id:
-        try:
-            from services.agents.headhunter_agent import run as headhunter_run
-            headhunter_run({"limit": 1, "min_score": int(qualification["overall_score"] * 10), "dry_run": dry_run})
-        except Exception:
-            pass
+    # Stage 5 (removed 2026-08-16): a hot lead used to be handed to
+    # headhunter_agent, which queued outreach off scraped signals. The lead is
+    # already inbound and already stored — the opt-in nurture worker picks it up
+    # from there. No hand-off to a prospecting agent.
 
     return {
         "ok": "ok" in str(profile).lower() or not profile.get("_parse_error"),

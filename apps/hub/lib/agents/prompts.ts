@@ -90,29 +90,9 @@ hasn't been tapped.
 Keep under 200 words.`,
     userTemplate: (ctx) => `Affiliate context (7d):\n\n${ctx}\n\nWrite the suggestion.`,
   },
-  {
-    id: 'daily-cold-pitch-suggestion',
-    title: 'Daily Cold Pitch Suggestion',
-    cadence: 'daily 11:00 UTC',
-    model: 'haiku',
-    maxTokens: 800,
-    system: `${COMMON_TONE}
-
-Task: given the past week's framework changes + curator output, draft
-3 specific cold pitches Moses can send today. Each must:
-  - Name a real persona archetype (Compliance Lead / GC / Founder)
-  - Reference a concrete recent change (don't fabricate — use only items
-    in the framework_changes_7d list)
-  - End with a checkout URL — pick the most relevant of:
-      ${HUB_URL}/checkout?product=hub&tier=pro&interval=monthly&amount=4900&name=Hub+Pro
-      ${HUB_URL}/checkout?product=lexaudit&tier=monitor&interval=monthly&amount=9900&name=LexAudit+Compliance+Monitor
-      ${HUB_URL}/checkout?product=brai&tier=extended&interval=one-time&amount=50000&name=BRAI+Extended+Report
-      ${HUB_URL}/checkout?product=forge&tier=boi-kit&interval=one-time&amount=14900&name=Forge+BOI+Kit
-  - Be sendable as-is via LinkedIn DM (≤ 600 chars each)
-
-If framework_changes_7d is empty, say so and skip — don't invent regulatory news.`,
-    userTemplate: (ctx) => `Context (framework changes + events):\n\n${ctx}\n\nDraft 3 pitches.`,
-  },
+  // 'daily-cold-pitch-suggestion' removed 2026-08-16 along with the rest of the
+  // cold-outbound path. It drafted DMs to strangers daily. Outbound is
+  // inbound-only: we contact people who contacted us and confirmed.
   {
     id: 'weekly-mrr-review',
     title: 'Weekly MRR Review',

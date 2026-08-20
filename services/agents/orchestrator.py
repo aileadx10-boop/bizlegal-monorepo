@@ -34,19 +34,11 @@ SUPABASE_KEY = (
 )
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 
+# 2026-08-16 — "enrichment" and "headhunter" removed with the rest of the cold
+# path. enrichment built 360 profiles of people via Firecrawl+Apify+Apollo;
+# headhunter turned scraped buying signals into queued outreach. Both fed a cold
+# pool. Outbound is inbound-only: we contact people who contacted us.
 AGENT_REGISTRY = {
-    "enrichment": {
-        "module": "services.agents.enrichment_agent",
-        "function": "run",
-        "schedule": "02:00,14:00 UTC",
-        "purpose": "Domain/person -> 360 profile via Firecrawl + Apify + Apollo",
-    },
-    "headhunter": {
-        "module": "services.agents.headhunter_agent",
-        "function": "run",
-        "schedule": "04:30 UTC daily",
-        "purpose": "Find buying signals -> queue personalized outreach",
-    },
     "lead_capture": {
         "module": "services.agents.lead_capture_agent",
         "function": "run",
@@ -220,10 +212,8 @@ def dispatch(goal: str, context: dict | None = None, dry_run: bool = False) -> d
 def _plan_from_goal(goal: str) -> list:
     """Keyword routing. Cheap and deterministic. LLM fallback for unknown goals."""
     g = goal.lower()
-    if any(k in g for k in ["enrich", "profile", "360", "deep dive"]):
-        return ["enrichment"]
-    if any(k in g for k in ["signal", "hunt", "headhunt", "find leads", "find prospects"]):
-        return ["headhunter", "enrichment"]
+    # Prospect-hunting goals are intentionally unroutable — the enrichment and
+    # headhunter agents were removed with the cold path (2026-08-16).
     if any(k in g for k in ["capture lead", "form submit", "inbound"]):
         return ["lead_capture"]
     if any(k in g for k in ["blog", "post", "write", "content", "newsletter"]):
@@ -240,12 +230,12 @@ def _plan_from_goal(goal: str) -> list:
 def _llm_plan(goal: str) -> list:
     """Ask Claude which agents to run. Used when keyword routing fails."""
     if not ANTHROPIC_API_KEY:
-        return ["headhunter"]  # safe default
+        return ["lead_capture"]  # safe default: inbound only
     try:
         import urllib.request
         prompt = (
             "You are a routing agent. Given a goal, output a JSON list of agent names "
-            "from this set: enrichment, headhunter, lead_capture, content, socials, "
+            "from this set: lead_capture, content, socials, "
             "code, newsletter, monetization. Order matters. Output ONLY the JSON list, "
             "nothing else.\n\n"
             f"Goal: {goal}\n"
@@ -279,7 +269,7 @@ def _llm_plan(goal: str) -> list:
         return plan or ["headhunter"]
     except Exception as e:
         print(f"[orchestrator] LLM plan fallback: {e}")
-        return ["headhunter"]
+        return ["lead_capture"]
 
 
 def _summarize(results: list) -> str:
