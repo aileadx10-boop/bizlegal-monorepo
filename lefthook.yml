@@ -15,6 +15,16 @@ pre-commit:
         Vault path: C:/Users/Moshe Dor/Downloads/env-hub-bizlegal-ai.txt
         See CLAUDE.md Section 4 + Section 5 for why this rule exists.
 
+    audit-shared-stream:
+      run: node scripts/audit-shared-stream.mjs --staged
+      stage_fixed: false
+      fail_text: |
+        ❌ A staged file bypasses the shared stream (see the paths above).
+        One email path (@bizlegal/email), one LLM router (packages/llm), one cron
+        source, and no cold outbound. Written rules did not hold — this is the
+        mechanical version. Deliberate exceptions: add `bizlegal-allow: <check-id>`
+        on the line so the exception is visible in review.
+
     audit-operating-book:
       run: node scripts/audit-operating-book.mjs --staged
       stage_fixed: false
