@@ -26,6 +26,7 @@ import { shouldFallback, extractWithClaude } from '@/lib/extract/claude-fallback
 import { deriveCriticalDates } from '@/lib/extract/date-engine'
 import { extractPdfText } from '@/lib/extract/pdf-text'
 import { scoreLeaseRisk } from '@/lib/risk/score-engine'
+import { deliverLeaseReport } from '@/lib/report/deliver'
 import { logEventAsync } from '@/lib/ops/log'
 import type { ExtractionResult } from '@/lib/extract/types'
 
@@ -172,15 +173,17 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
   }
 
-  // 5. Derive critical-date alerts
+  // 5. Derive critical-date alerts and score the lease (both deterministic)
   const alerts = deriveCriticalDates(result.abstract)
+  const risk = scoreLeaseRisk(result.abstract)
 
-  // 6. Persist to DB
+  // 6. Persist to DB. extracted_json carries the score alongside the abstract
+  //    so the dashboard and report never recompute it inconsistently.
   const { error: updateErr } = await db
     .from('leaseparse_leases')
     .update({
       pdf_url: storage_path,
-      extracted_json: result.abstract,
+      extracted_json: { ...result.abstract, risk_score: risk },
       confidence_score: result.confidence,
       engine: result.engine,
       critical_dates: result.abstract.critical_dates,
@@ -194,6 +197,33 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'db_update_failed' }, { status: 500 })
   }
 
+  // 7. Generate + store the report and email the link. Delivery problems are
+  //    logged, not fatal — the parse succeeded and the row is already saved.
+  const delivery = await deliverLeaseReport({
+    db,
+    leaseId: lease_id,
+    email: lease.email ?? null,
+    abstract: result.abstract,
+    risk,
+    alerts,
+    engine: result.engine,
+    confidence: result.confidence,
+    warnings: result.warnings,
+  })
+
+  if (delivery.issues.length > 0) {
+    console.warn('[leases/ingest] delivery issues', delivery.issues.join('; '))
+  }
+
+  logEventAsync({
+    type: delivery.emailed ? 'email.sent' : 'email.failed',
+    source: 'leaseparse',
+    ref_id: lease_id,
+    email: lease.email ?? undefined,
+    status: delivery.emailed ? 'ok' : 'failed',
+    metadata: { step: 'report_delivery', report_url: delivery.reportUrl, issues: delivery.issues },
+  })
+
   logEventAsync({
     type: 'download.report',
     source: 'leaseparse',
@@ -203,6 +233,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     metadata: {
       engine: result.engine,
       confidence: result.confidence,
+      risk_score: risk.score,
+      risk_grade: risk.grade,
       critical_date_count: result.abstract.critical_dates.length,
       risk_flag_count: result.abstract.risk_flags.length,
       upcoming_alert_count: alerts.length,
@@ -216,6 +248,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     engine: result.engine,
     confidence: result.confidence,
     abstract: result.abstract,
+    risk,
+    report_url: delivery.reportUrl,
+    emailed: delivery.emailed,
     upcoming_alerts: alerts,
     warnings: result.warnings,
   })
