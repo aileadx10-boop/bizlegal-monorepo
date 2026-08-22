@@ -10,13 +10,21 @@
  *   3. Extract lease abstract with Hermes (Ollama, $0 marginal cost)
  *   4. If confidence < CONFIDENCE_FLOOR (0.85), fall back to Claude Haiku
  *   5. Derive critical-date alerts
- *   6. Persist extracted_json + critical_dates + risk_flags to dd_leases
+ *   6. Persist extracted_json + critical_dates + risk_flags to leaseparse_leases
  *   7. Return the full extraction result
  *
  * Uses Node.js runtime because pdf-parse relies on Node builtins.
  * maxDuration 300 (Vercel Pro) to handle large leases + slow Ollama.
  *
  * Body: { lease_id, storage_path }
+ *
+ * OPEN GAP — READ BEFORE FLIPPING LEASEPARSE_CHECKOUT_LIVE:
+ * neither this route nor /api/leases/upload-url verifies that the lease was
+ * paid for. Today that is harmless because checkout is gated off, but once the
+ * gate opens an unauthenticated caller could burn Claude spend and send email
+ * on someone else's behalf. Closing it needs a paid-order reference on
+ * leaseparse_leases (a schema change, hence out of this build's fixed scope)
+ * checked here before extraction begins.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -24,6 +32,9 @@ import { getServiceClient } from '@/lib/db/client'
 import { extractWithHermes, scoreConfidence } from '@/lib/extract/hermes-first'
 import { shouldFallback, extractWithClaude } from '@/lib/extract/claude-fallback'
 import { deriveCriticalDates } from '@/lib/extract/date-engine'
+import { extractPdfText } from '@/lib/extract/pdf-text'
+import { scoreLeaseRisk } from '@/lib/risk/score-engine'
+import { deliverLeaseReport } from '@/lib/report/deliver'
 import { logEventAsync } from '@/lib/ops/log'
 import type { ExtractionResult } from '@/lib/extract/types'
 
@@ -32,14 +43,6 @@ export const runtime = 'nodejs'
 export const maxDuration = 300
 
 const BUCKET = 'lease-documents'
-
-async function extractTextFromPdf(buffer: Buffer): Promise<string> {
-  // pdf-parse is a CommonJS module — use require() to avoid ESM interop issues
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const pdfParse = require('pdf-parse') as (buf: Buffer) => Promise<{ text: string }>
-  const result = await pdfParse(buffer)
-  return result.text
-}
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   let body: unknown
@@ -84,19 +87,52 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'storage_download_failed' }, { status: 500 })
   }
 
-  // 2. Extract text
-  let leaseText: string
-  try {
-    const arrayBuffer = await fileData.arrayBuffer()
-    leaseText = await extractTextFromPdf(Buffer.from(arrayBuffer))
-  } catch (err) {
-    console.error('[leases/ingest] pdf-parse failed', err instanceof Error ? err.message : err)
-    return NextResponse.json({ error: 'pdf_parse_failed' }, { status: 422 })
+  // 2. Extract the text layer. A scanned PDF stops here — LeaseParse has no
+  //    OCR (fixed scope), and an image-only lease must reach the refund path
+  //    rather than an LLM, which would happily invent an abstract from nothing.
+  const arrayBuffer = await fileData.arrayBuffer()
+  const pdfText = await extractPdfText(Buffer.from(arrayBuffer))
+
+  if (!pdfText.ok) {
+    const refundable = pdfText.reason === 'no_text_layer' || pdfText.reason === 'empty_file'
+    console.warn('[leases/ingest] text extraction failed', pdfText.reason, pdfText.message)
+
+    await db
+      .from('leaseparse_leases')
+      .update({ extracted_json: { unparseable: pdfText.reason, message: pdfText.message } })
+      .eq('id', lease_id)
+
+    logEventAsync({
+      type: 'error',
+      source: 'leaseparse',
+      ref_id: lease_id,
+      email: lease.email ?? undefined,
+      status: 'failed',
+      metadata: {
+        step: 'pdf_text_extraction',
+        reason: pdfText.reason,
+        pages: pdfText.pages,
+        chars: pdfText.chars,
+        refund_required: refundable,
+      },
+    })
+
+    return NextResponse.json(
+      {
+        ok: false,
+        error: refundable ? 'scanned_pdf_not_supported' : 'pdf_parse_failed',
+        lease_id,
+        refund_required: refundable,
+        detail: pdfText.message,
+        next_step: refundable
+          ? 'LeaseParse reads text-layer PDFs only. This document has no extractable text, so the order is refundable — contact team@bizlegal-ai.com and we will refund it.'
+          : 'The PDF could not be read. Re-upload or contact team@bizlegal-ai.com.',
+      },
+      { status: 422 }
+    )
   }
 
-  if (!leaseText || leaseText.trim().length < 50) {
-    return NextResponse.json({ error: 'pdf_text_empty_or_too_short' }, { status: 422 })
-  }
+  const leaseText = pdfText.text
 
   // 3. Extract with Hermes (Ollama)
   let result: ExtractionResult
@@ -145,15 +181,17 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
   }
 
-  // 5. Derive critical-date alerts
+  // 5. Derive critical-date alerts and score the lease (both deterministic)
   const alerts = deriveCriticalDates(result.abstract)
+  const risk = scoreLeaseRisk(result.abstract)
 
-  // 6. Persist to DB
+  // 6. Persist to DB. extracted_json carries the score alongside the abstract
+  //    so the dashboard and report never recompute it inconsistently.
   const { error: updateErr } = await db
     .from('leaseparse_leases')
     .update({
       pdf_url: storage_path,
-      extracted_json: result.abstract,
+      extracted_json: { ...result.abstract, risk_score: risk },
       confidence_score: result.confidence,
       engine: result.engine,
       critical_dates: result.abstract.critical_dates,
@@ -167,6 +205,33 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'db_update_failed' }, { status: 500 })
   }
 
+  // 7. Generate + store the report and email the link. Delivery problems are
+  //    logged, not fatal — the parse succeeded and the row is already saved.
+  const delivery = await deliverLeaseReport({
+    db,
+    leaseId: lease_id,
+    email: lease.email ?? null,
+    abstract: result.abstract,
+    risk,
+    alerts,
+    engine: result.engine,
+    confidence: result.confidence,
+    warnings: result.warnings,
+  })
+
+  if (delivery.issues.length > 0) {
+    console.warn('[leases/ingest] delivery issues', delivery.issues.join('; '))
+  }
+
+  logEventAsync({
+    type: delivery.emailed ? 'email.sent' : 'email.failed',
+    source: 'leaseparse',
+    ref_id: lease_id,
+    email: lease.email ?? undefined,
+    status: delivery.emailed ? 'ok' : 'failed',
+    metadata: { step: 'report_delivery', report_url: delivery.reportUrl, issues: delivery.issues },
+  })
+
   logEventAsync({
     type: 'download.report',
     source: 'leaseparse',
@@ -176,6 +241,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     metadata: {
       engine: result.engine,
       confidence: result.confidence,
+      risk_score: risk.score,
+      risk_grade: risk.grade,
       critical_date_count: result.abstract.critical_dates.length,
       risk_flag_count: result.abstract.risk_flags.length,
       upcoming_alert_count: alerts.length,
@@ -189,6 +256,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     engine: result.engine,
     confidence: result.confidence,
     abstract: result.abstract,
+    risk,
+    report_url: delivery.reportUrl,
+    emailed: delivery.emailed,
     upcoming_alerts: alerts,
     warnings: result.warnings,
   })

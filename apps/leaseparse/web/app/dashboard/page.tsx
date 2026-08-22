@@ -37,11 +37,12 @@ interface DdProperty {
   id: string
   address: string
   city: string | null
-  state: string | null
-  zip: string | null
+  country: string | null
+  region: string | null
+  postcode: string | null
   created_at: string
-  dd_leases: DdLease[]
-  dd_transactions: DdTransaction[]
+  leaseparse_leases: DdLease[]
+  closeflow_transactions: DdTransaction[]
 }
 
 const TX_LABELS: Record<string, string> = {
@@ -69,7 +70,7 @@ export default function DashboardPage() {
   const [err, setErr] = useState<string | null>(null)
 
   const [showAddProp, setShowAddProp] = useState(false)
-  const [propForm, setPropForm] = useState({ address: '', city: '', state: '', zip: '' })
+  const [propForm, setPropForm] = useState({ address: '', city: '', region: '', postcode: '' })
 
   const [uploadFor, setUploadFor] = useState<string | null>(null)
   const [closingFor, setClosingFor] = useState<string | null>(null)
@@ -133,7 +134,7 @@ export default function DashboardPage() {
     const data = await res.json() as { ok: boolean }
     if (data.ok) {
       setShowAddProp(false)
-      setPropForm({ address: '', city: '', state: '', zip: '' })
+      setPropForm({ address: '', city: '', region: '', postcode: '' })
       await loadProperties(savedEmail)
     }
   }
@@ -312,8 +313,8 @@ export default function DashboardPage() {
               </div>
               <input style={inp} placeholder="City" value={propForm.city}
                 onChange={e => setPropForm(p => ({ ...p, city: e.target.value }))} />
-              <input style={inp} placeholder="State (CA)" maxLength={2} value={propForm.state}
-                onChange={e => setPropForm(p => ({ ...p, state: e.target.value.toUpperCase() }))} />
+              <input style={inp} placeholder="Region / Emirate" value={propForm.region}
+                onChange={e => setPropForm(p => ({ ...p, region: e.target.value }))} />
             </div>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               <button style={btn()} onClick={() => void addProperty()}>Save Property</button>
@@ -337,9 +338,9 @@ export default function DashboardPage() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
             <div>
               <p style={{ margin: 0, fontWeight: 600, fontSize: '0.95rem' }}>{prop.address}</p>
-              {(prop.city || prop.state) && (
+              {(prop.city || prop.region) && (
                 <p style={{ margin: '0.15rem 0 0', color: C.muted, fontSize: '0.8rem' }}>
-                  {[prop.city, prop.state].filter(Boolean).join(', ')}
+                  {[prop.city, prop.region].filter(Boolean).join(', ')}
                 </p>
               )}
             </div>
@@ -369,10 +370,10 @@ export default function DashboardPage() {
           </div>
 
           {/* Leases list */}
-          {prop.dd_leases.length > 0 && (
+          {prop.leaseparse_leases.length > 0 && (
             <div style={{ marginBottom: '0.6rem' }}>
               <p style={{ margin: '0 0 0.3rem', fontSize: '0.7rem', color: C.muted, textTransform: 'uppercase', letterSpacing: '0.07em' }}>Leases</p>
-              {prop.dd_leases.map(lease => (
+              {prop.leaseparse_leases.map(lease => (
                 <div key={lease.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.3rem 0', borderBottom: `1px solid ${C.border}` }}>
                   <span style={{ fontSize: '0.85rem', color: C.body }}>
                     {lease.lease_type ?? 'lease'} ·{' '}
@@ -393,10 +394,10 @@ export default function DashboardPage() {
           )}
 
           {/* Closings list */}
-          {prop.dd_transactions.length > 0 && (
+          {prop.closeflow_transactions.length > 0 && (
             <div style={{ marginBottom: '0.6rem' }}>
               <p style={{ margin: '0 0 0.3rem', fontSize: '0.7rem', color: C.muted, textTransform: 'uppercase', letterSpacing: '0.07em' }}>Closings</p>
-              {prop.dd_transactions.map(tx => (
+              {prop.closeflow_transactions.map(tx => (
                 <div key={tx.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.3rem 0', borderBottom: `1px solid ${C.border}` }}>
                   <span style={{ fontSize: '0.85rem', color: C.body }}>
                     {TX_LABELS[tx.transaction_type] ?? tx.transaction_type} · closes {fmtDate(tx.closing_date)} ·{' '}

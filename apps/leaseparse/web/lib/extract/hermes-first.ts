@@ -7,11 +7,11 @@
  * deterministically. Claude is consulted only when
  * shouldFallback() in claude-fallback.ts says the score is too low.
  *
- * Implementation lands in trio build phase 2 (LeaseParse). The
- * signatures, prompt template, and confidence scorer below are the
- * stable contract the route handlers already compile against.
+ * Untrusted model JSON is narrowed into a LeaseAbstract by ./coerce —
+ * nothing here trusts the shape of what the model returns.
  */
 
+import { coerceLeaseAbstract, parseModelJson } from './coerce'
 import type { ExtractionResult, LeaseAbstract } from './types'
 
 export interface HermesOptions {
@@ -53,6 +53,60 @@ export function scoreConfidence(abstract: LeaseAbstract): number {
   return passed / checks.length
 }
 
+/** Ollama can be slow on a long lease; below this we'd rather fail to Claude. */
+const HERMES_TIMEOUT_MS = 240_000
+
+interface OllamaGenerateResponse {
+  response?: string
+  error?: string
+}
+
+async function callOllama(
+  baseUrl: string,
+  model: string,
+  prompt: string,
+  signal: AbortSignal
+): Promise<string> {
+  const res = await fetch(`${baseUrl.replace(/\/+$/, '')}/api/generate`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      // Cloudflare in front of the Hetzner box 1010s requests with no UA.
+      'user-agent': 'bizlegal-leaseparse/1.0',
+    },
+    body: JSON.stringify({
+      model,
+      prompt,
+      format: 'json',
+      stream: false,
+      options: { temperature: 0 },
+    }),
+    signal,
+  })
+
+  if (!res.ok) {
+    throw new Error(`hermes_http_${res.status}`)
+  }
+
+  const payload = (await res.json()) as OllamaGenerateResponse
+  if (payload.error) throw new Error(`hermes_error: ${payload.error}`)
+  const body = payload.response ?? ''
+  if (body.trim().length === 0) throw new Error('hermes_empty_response')
+  return body
+}
+
+/**
+ * One repair round-trip. The model is shown its own malformed output and asked
+ * for the object again — cheaper and far more reliable than re-reading the
+ * whole lease, and it caps the blast radius of a bad generation at two calls.
+ */
+function repairPrompt(broken: string): string {
+  return `The following was supposed to be a single JSON object matching the lease-abstract schema, but it did not parse.
+Return ONLY the corrected JSON object. No prose, no code fences, no explanation.
+
+${broken.slice(0, 8_000)}`
+}
+
 export async function extractWithHermes(
   text: string,
   opts: HermesOptions = {}
@@ -62,7 +116,47 @@ export async function extractWithHermes(
   if (!baseUrl) {
     throw new Error('hermes_unconfigured: OLLAMA_BASE_URL missing')
   }
-  void text
-  void model
-  throw new Error('not_implemented: build phase 2')
+  if (text.trim().length === 0) {
+    // Defence in depth — extractPdfText already refuses empty documents, and an
+    // empty prompt makes an LLM confidently invent an entire lease.
+    throw new Error('hermes_empty_input: refusing to extract from empty text')
+  }
+
+  const warnings: string[] = []
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), HERMES_TIMEOUT_MS)
+
+  try {
+    const raw = await callOllama(
+      baseUrl,
+      model,
+      `${EXTRACTION_PROMPT}\n\n--- LEASE TEXT ---\n${text}`,
+      controller.signal
+    )
+
+    let parsed = parseModelJson(raw)
+    if (parsed === null) {
+      warnings.push('hermes returned malformed JSON; attempted one repair pass')
+      const repaired = await callOllama(baseUrl, model, repairPrompt(raw), controller.signal)
+      parsed = parseModelJson(repaired)
+      if (parsed === null) {
+        throw new Error('hermes_unparseable_json: repair pass also failed')
+      }
+    }
+
+    const { abstract, warnings: coerceWarnings } = coerceLeaseAbstract(parsed)
+    return {
+      abstract,
+      confidence: scoreConfidence(abstract),
+      engine: 'hermes',
+      warnings: [...warnings, ...coerceWarnings],
+    }
+  } catch (err) {
+    if (err instanceof Error && err.name === 'AbortError') {
+      throw new Error(`hermes_timeout: no response in ${HERMES_TIMEOUT_MS}ms`)
+    }
+    throw err
+  } finally {
+    clearTimeout(timer)
+  }
 }

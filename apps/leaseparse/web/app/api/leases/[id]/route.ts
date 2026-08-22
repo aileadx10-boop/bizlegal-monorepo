@@ -1,7 +1,7 @@
 /**
  * GET /api/leases/[id]
  *
- * Return a single dd_leases row with the full extracted abstract
+ * Return a single leaseparse_leases row with the full extracted abstract
  * and recomputed upcoming alerts.
  */
 

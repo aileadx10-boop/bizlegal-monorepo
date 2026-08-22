@@ -2,7 +2,7 @@
  * POST /api/closings
  *
  * Creates a closing transaction: generates the dated checklist and derives
- * deadline milestones from the closing date, then persists to dd_transactions.
+ * deadline milestones from the closing date, then persists to closeflow_transactions.
  *
  * This is CloseFlow's core — the LLM is not involved. Every result is
  * deterministic: same closing date + type always produces the same checklist.
