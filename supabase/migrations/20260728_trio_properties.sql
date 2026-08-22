@@ -15,8 +15,16 @@ create table if not exists public.trio_properties (
   email       text,
   address     text not null,
   city        text,
-  state       text check (state is null or char_length(state) = 2),
-  zip         text check (zip is null or zip ~ '^[0-9]{5}(-[0-9]{4})?$'),
+  -- 2026-08-23: `state`/`zip` originally carried US-only CHECKs (2-char state,
+  -- 5-digit ZIP). Dubai is the first jurisdiction pack, and no Dubai address
+  -- satisfies either — "Dubai" is not two characters and there is no ZIP at all.
+  -- Since this migration had never been applied, the shape was still free to
+  -- change. `region` and `postcode` are free-form; `country` is ISO-3166-1
+  -- alpha-2 and defaults to US so existing US-shaped callers are unaffected.
+  country     text not null default 'US'
+                check (char_length(country) = 2),
+  region      text,
+  postcode    text,
   lat         double precision,
   lon         double precision,
   created_at  timestamptz not null default now()
