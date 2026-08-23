@@ -1,0 +1,27 @@
+/* CoGuard global styles — import theme tokens via @bizlegal/themes */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Hostility badge colors */
+.badge-high   { background: #fee2e2; color: #991b1b; }
+.badge-medium { background: #fef3c7; color: #92400e; }
+.badge-low    { background: #d1fae5; color: #065f46; }
+
+/* Message card */
+.msg-card {
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.msg-card--incoming { border-left: 3px solid #f59e0b; }
+.msg-card--outgoing { border-left: 3px solid #10b981; }

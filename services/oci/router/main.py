@@ -40,6 +40,9 @@ logging.basicConfig(level=os.environ.get("LOG_LEVEL", "INFO"))
 
 app = FastAPI(title="bizlegal deal-router", version="v1.0.0-p1")
 
+from coguard import coguard_router
+app.include_router(coguard_router, prefix="/coguard")
+
 DISCLAIMER_VERSION = os.environ.get("DISCLAIMER_VERSION", "v1.0.0-p1")
 DEDUPE_TTL_SECONDS = 60 * 60 * 24  # 24h
 

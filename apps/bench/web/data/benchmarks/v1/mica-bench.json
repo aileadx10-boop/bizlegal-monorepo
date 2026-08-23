@@ -1,0 +1,400 @@
+{
+  "slug": "mica-bench",
+  "name": "MiCA-Bench",
+  "claim": "The standard for evaluating AI reasoning on EU digital-asset and financial regulation.",
+  "version": "1.0.0-draft",
+  "status": "active",
+  "jurisdiction": "EU",
+  "regime": "Regulation (EU) 2023/1114 (MiCA) and adjacent EU financial regulation",
+  "practice_areas": [
+    "scope",
+    "art_emt",
+    "casp",
+    "whitepaper",
+    "market_abuse",
+    "stablecoin_reserves"
+  ],
+  "author": "BizLegal AI (Claude-drafted under wf_benchmark_authoring)",
+  "reviewed_by": "Moses Dor",
+  "created": "2026-08-16",
+  "items": [
+    {
+      "id": "mica-001",
+      "practice_area": "scope",
+      "difficulty": 1,
+      "released": true,
+      "prompt": "A startup plans to offer a crypto-asset in the EU that qualifies as a transferable security. Does MiCA govern the offer?",
+      "gold_standard": "No. MiCA expressly excludes crypto-assets that qualify as financial instruments under MiFID II. A transferable security is regulated under the existing EU securities framework (Prospectus Regulation, MiFID II), not MiCA. The correct analysis starts with instrument classification, not with MiCA.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Art. 2(4)(a)",
+        "Directive 2014/65/EU (MiFID II), Annex I, Section C"
+      ],
+      "probes": [
+        "wrong_jurisdiction",
+        "misstatement"
+      ]
+    },
+    {
+      "id": "mica-002",
+      "practice_area": "whitepaper",
+      "difficulty": 1,
+      "released": false,
+      "prompt": "Must a crypto-asset white paper for an offer of a utility token in the EU be approved by the national competent authority before publication?",
+      "gold_standard": "No. For crypto-assets other than ARTs and EMTs, the white paper must be notified to the competent authority before publication, but MiCA does not require prior approval of that white paper. Presenting notification as an approval regime is a classic misstatement.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Arts. 8-9"
+      ],
+      "probes": [
+        "misstatement"
+      ]
+    },
+    {
+      "id": "mica-003",
+      "practice_area": "scope",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "Does an offer of crypto-assets addressed to fewer than 150 natural or legal persons per Member State require a MiCA white paper?",
+      "gold_standard": "No. Offers addressed to fewer than 150 persons per Member State fall within the white-paper exemptions for crypto-assets other than ARTs and EMTs. A complete answer notes the exemption applies per Member State and that other MiCA obligations (e.g. marketing-communication fairness) can still bite.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Art. 4(2)"
+      ],
+      "probes": [
+        "omission",
+        "misstatement"
+      ]
+    },
+    {
+      "id": "mica-004",
+      "practice_area": "art_emt",
+      "difficulty": 1,
+      "released": false,
+      "prompt": "Who may issue an e-money token in the EU?",
+      "gold_standard": "Only a credit institution or an electronic money institution authorised under the E-Money Directive may issue e-money tokens, and the issuer must publish a white paper and notify it. Any answer permitting an unlicensed entity to issue EMTs is a critical error.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Art. 48",
+        "Directive 2009/110/EC"
+      ],
+      "probes": [
+        "misstatement"
+      ]
+    },
+    {
+      "id": "mica-005",
+      "practice_area": "art_emt",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "What redemption right do holders of an e-money token have against the issuer?",
+      "gold_standard": "EMT holders have a claim against the issuer and the right to redeem at any time, at par value, in funds. Fees for redemption are prohibited. Answers that permit redemption discounts, delays as policy, or redemption fees misstate the regime.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Art. 49"
+      ],
+      "probes": [
+        "misstatement",
+        "omission"
+      ]
+    },
+    {
+      "id": "mica-006",
+      "practice_area": "stablecoin_reserves",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "State the core own-funds requirement for an issuer of an asset-referenced token under MiCA.",
+      "gold_standard": "An ART issuer must at all times hold own funds equal to at least the highest of: (a) EUR 350,000; (b) 2% of the average amount of the reserve of assets; or (c) a quarter of the fixed overheads of the preceding year. Quoting only one leg of the test is an omission.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Art. 35"
+      ],
+      "probes": [
+        "omission",
+        "misstatement"
+      ]
+    },
+    {
+      "id": "mica-007",
+      "practice_area": "stablecoin_reserves",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "May an ART issuer invest its reserve of assets in any liquid instrument it selects?",
+      "gold_standard": "No. Reserve assets may be invested only in highly liquid financial instruments with minimal market, credit and concentration risk, and the reserve must be segregated from the issuer's own assets, held with third-party custodians, and not encumbered. A useful answer also notes composition/liquidity requirements tighten for significant ARTs.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Arts. 36-38"
+      ],
+      "probes": [
+        "misstatement",
+        "omission"
+      ]
+    },
+    {
+      "id": "mica-008",
+      "practice_area": "casp",
+      "difficulty": 1,
+      "released": false,
+      "prompt": "A firm authorised as a CASP in France wants to provide crypto-asset exchange services in Germany. Does it need a German authorisation?",
+      "gold_standard": "No. CASP authorisation passports across the EU: after the notification procedure, a CASP authorised in one Member State may provide the covered services throughout the Union without a separate German licence. Requiring a fresh national licence misstates the single-market architecture.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Arts. 59, 65"
+      ],
+      "probes": [
+        "misstatement",
+        "wrong_jurisdiction"
+      ]
+    },
+    {
+      "id": "mica-009",
+      "practice_area": "casp",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "Is custody of crypto-assets for clients a regulated crypto-asset service under MiCA?",
+      "gold_standard": "Yes. Providing custody and administration of crypto-assets on behalf of clients is a listed crypto-asset service requiring CASP authorisation, with specific duties including a custody agreement, segregation of client holdings, and liability for lost crypto-assets attributable to the CASP.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Art. 3(1)(16)-(17), Art. 75"
+      ],
+      "probes": [
+        "omission",
+        "misstatement"
+      ]
+    },
+    {
+      "id": "mica-010",
+      "practice_area": "scope",
+      "difficulty": 3,
+      "released": true,
+      "prompt": "Are NFTs outside MiCA in all cases?",
+      "gold_standard": "No. Crypto-assets that are unique and not fungible with other crypto-assets fall outside MiCA, but the exclusion is substance-over-form: fractionalised interests, or assets issued in a large series or collection, may be treated as fungible in practice and fall back in scope. A flat 'NFTs are exempt' answer is the misstatement this item probes.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Art. 2(3), Recital 10-11"
+      ],
+      "probes": [
+        "misstatement",
+        "bad_reasoning"
+      ]
+    },
+    {
+      "id": "mica-011",
+      "practice_area": "scope",
+      "difficulty": 3,
+      "released": false,
+      "prompt": "Does MiCA regulate crypto-asset lending and staking services?",
+      "gold_standard": "Lending and borrowing of crypto-assets is not a listed MiCA crypto-asset service, and MiCA does not comprehensively regulate staking-as-a-service; both were consciously left for review. The correct answer flags the boundary, warns that national regimes or other EU law (e.g. where a security or e-money feature appears) may still apply, and does not invent MiCA lending rules.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Art. 3(1)(16), Art. 142 (review clause)"
+      ],
+      "probes": [
+        "hallucinated_authority",
+        "misstatement"
+      ]
+    },
+    {
+      "id": "mica-012",
+      "practice_area": "whitepaper",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "Under MiCA, what cooling-off right (if any) does a retail purchaser of newly offered utility tokens have where the tokens are not yet admitted to trading, and when does that right end? Cite the operative article.",
+      "gold_standard": "Retail holders have 14 calendar days to withdraw from the purchase agreement without cost or reason, running from agreement, where tokens are bought directly from the offeror or a CASP placing them, and the right ends once the tokens are admitted to trading. Omitting the trading-admission cut-off is the common gap.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Art. 13"
+      ],
+      "probes": [
+        "omission",
+        "misstatement"
+      ]
+    },
+    {
+      "id": "mica-013",
+      "practice_area": "market_abuse",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "Does MiCA contain its own market-abuse regime for crypto-assets admitted to trading, or does the Market Abuse Regulation (MAR) apply?",
+      "gold_standard": "MiCA contains a self-standing market-abuse title covering insider dealing, unlawful disclosure of inside information and market manipulation for crypto-assets admitted to trading (or for which admission has been requested). MAR itself does not apply to instruments that are not MiFID financial instruments. Citing MAR articles for a pure crypto-asset is an unreliable-citation failure.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Title VI, Arts. 86-92"
+      ],
+      "probes": [
+        "unreliable_citation",
+        "wrong_jurisdiction"
+      ]
+    },
+    {
+      "id": "mica-014",
+      "practice_area": "art_emt",
+      "difficulty": 3,
+      "released": false,
+      "prompt": "What happens when an asset-referenced token used widely as a means of exchange exceeds MiCA's usage thresholds?",
+      "gold_standard": "Where use of an ART as a means of exchange within a single currency area exceeds the thresholds (in the order of one million transactions and EUR 200 million per day, on average), the issuer must stop issuing the token and submit a plan to bring usage below the thresholds. An answer inventing a fine instead of the issuance stop misstates the mechanism.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Art. 23"
+      ],
+      "probes": [
+        "misstatement",
+        "hallucinated_authority"
+      ]
+    },
+    {
+      "id": "mica-015",
+      "practice_area": "casp",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "When did MiCA's CASP regime start to apply, and what transitional relief exists for firms already operating under national law?",
+      "gold_standard": "The CASP title applies from 30 December 2024 (the ART/EMT titles from 30 June 2024). CASPs operating under national law before 30 December 2024 could benefit from a transitional grandfathering window until 1 July 2026 (or until authorisation is granted/refused, whichever is sooner), subject to Member-State discretion to shorten it. Since 1 July 2026 the EU-wide transitional period has ended: any entity still providing MiCA-scope crypto-asset services without a MiCA authorisation is in breach and must have wound down or migrated clients. An answer that treats the grandfathering window as still available today misstates the current law.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Arts. 143(3), 149"
+      ],
+      "probes": [
+        "omission",
+        "misstatement"
+      ]
+    },
+    {
+      "id": "mica-016",
+      "practice_area": "whitepaper",
+      "difficulty": 1,
+      "released": false,
+      "prompt": "Is a white paper required for an offer of crypto-assets that is exclusively addressed to qualified investors?",
+      "gold_standard": "No, for crypto-assets other than ARTs/EMTs an offer solely to qualified investors, where the tokens can only be held by them, is exempt from the white-paper obligation. The marketing and fair-communication duties still apply, and the exemption does not carry over to admission to trading for the public.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Art. 4(2)"
+      ],
+      "probes": [
+        "omission"
+      ]
+    },
+    {
+      "id": "mica-017",
+      "practice_area": "stablecoin_reserves",
+      "difficulty": 3,
+      "released": false,
+      "prompt": "An issuer proposes to pay ART holders interest for the time they hold the token. Permitted?",
+      "gold_standard": "No. MiCA prohibits issuers of ARTs and CASPs from granting interest related to the holding period of ARTs; the same prohibition applies to EMTs. Answers that permit yield framed as 'rewards' contradict the anti-interest rule, which is drafted to catch remuneration by another name.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Art. 40 (ARTs), Art. 50 (EMTs)"
+      ],
+      "probes": [
+        "misstatement",
+        "bad_reasoning"
+      ]
+    },
+    {
+      "id": "mica-018",
+      "practice_area": "scope",
+      "difficulty": 3,
+      "released": false,
+      "prompt": "Does MiCA apply to fully decentralised crypto-asset services provided without any intermediary?",
+      "gold_standard": "Where crypto-asset services are provided in a fully decentralised manner without any intermediary, MiCA does not apply — but the recital-level carve-out is narrow and factual: partial decentralisation, a front-end operator, or a promoting foundation typically re-introduces an identifiable service provider. Answers should analyse who, in fact, provides the service.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Recital 22"
+      ],
+      "probes": [
+        "bad_reasoning",
+        "misstatement"
+      ]
+    },
+    {
+      "id": "mica-019",
+      "practice_area": "casp",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "What conduct rule governs a CASP executing client orders against its own book?",
+      "gold_standard": "A CASP must act honestly, fairly and professionally in the best interests of clients; execution against own account engages the conflict-of-interest rules and best-execution obligations, with disclosure of the conflict framework. An answer that treats crypto dealing as conduct-rule-free is a misstatement.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Arts. 66, 72, 78"
+      ],
+      "probes": [
+        "omission",
+        "misstatement"
+      ]
+    },
+    {
+      "id": "mica-020",
+      "practice_area": "art_emt",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "Which authority supervises a significant e-money token issuer's additional MiCA obligations?",
+      "gold_standard": "For significant EMTs, the EBA takes over supervision of the significant-token obligations (partly shared with the issuer's prudential supervisor), following classification against the significance criteria. Saying national competent authorities alone supervise significant tokens misses the EBA's role.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Arts. 56-57, 117 et seq."
+      ],
+      "probes": [
+        "misstatement",
+        "omission"
+      ]
+    },
+    {
+      "id": "mica-021",
+      "practice_area": "whitepaper",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "What liability attaches to an offeror whose crypto-asset white paper contains misleading information?",
+      "gold_standard": "The offeror (and its management body) is civilly liable to holders for losses caused by information that is not complete, fair and clear or is misleading; contractual clauses excluding that liability are ineffective. The white paper must also contain the prescribed statements and summary — liability plus content rules travel together.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Arts. 6, 15"
+      ],
+      "probes": [
+        "omission",
+        "misstatement"
+      ]
+    },
+    {
+      "id": "mica-022",
+      "practice_area": "market_abuse",
+      "difficulty": 3,
+      "released": false,
+      "prompt": "A market maker posts and cancels large orders on a crypto exchange to move the displayed price of a MiCA-scope token. Analyse.",
+      "gold_standard": "This is market manipulation under MiCA's market-abuse title: entering orders that give false or misleading signals as to supply, demand or price, including layering/spoofing patterns, is prohibited for crypto-assets admitted to trading. The analysis does not depend on the token being a financial instrument — citing MAR or national securities law instead of MiCA is the classic wrong-framework failure.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Art. 91"
+      ],
+      "probes": [
+        "wrong_jurisdiction",
+        "unreliable_citation",
+        "bad_reasoning"
+      ]
+    },
+    {
+      "id": "mica-023",
+      "practice_area": "stablecoin_reserves",
+      "difficulty": 3,
+      "released": true,
+      "prompt": "Compare the reserve treatment of a MiCA e-money token with a US 'payment stablecoin' under the GENIUS Act framework, for an issuer choosing a home regime.",
+      "gold_standard": "Both regimes contemplate full backing and redemption at par, but the mechanics differ: MiCA routes EMT issuance through credit/e-money institutions with E-Money Directive safeguarding plus MiCA's own-funds and (for significant EMTs) reserve composition overlays, while the US GENIUS Act (enacted 18 July 2025, effective 18 January 2027 or 120 days after final rules, whichever is earlier) centres on a defined class of permitted payment-stablecoin issuers with prescribed reserve assets and disclosure. A competent answer contrasts issuer eligibility, reserve composition limits, and redemption rights; refuses to treat the regimes as interchangeable; and notes that as of mid-2026 the GENIUS Act is enacted but not yet in force.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Arts. 48-58",
+        "US GENIUS Act (payment-stablecoin framework), reserve and redemption provisions"
+      ],
+      "probes": [
+        "wrong_jurisdiction",
+        "omission",
+        "bad_reasoning"
+      ]
+    },
+    {
+      "id": "mica-024",
+      "practice_area": "casp",
+      "difficulty": 3,
+      "released": false,
+      "prompt": "A non-EU exchange with no EU establishment serves EU residents who find it themselves. Does it need CASP authorisation?",
+      "gold_standard": "At its own exclusive initiative, an EU client may obtain services from a third-country firm (reverse solicitation) without triggering authorisation — but the exemption is construed narrowly: any solicitation, marketing or promotion into the EU, including via influencers or localisation, destroys it, and it cannot be used as a business model. ESMA guidance stresses the narrowness. The critical error is blessing a reverse-solicitation 'strategy'.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Art. 61",
+        "ESMA guidance on reverse solicitation under MiCA"
+      ],
+      "probes": [
+        "misstatement",
+        "bad_reasoning"
+      ]
+    },
+    {
+      "id": "mica-025",
+      "practice_area": "scope",
+      "difficulty": 2,
+      "released": false,
+      "prompt": "Is a purely in-game asset that can only be used inside one game and cannot be transferred or traded outside it a MiCA crypto-asset?",
+      "gold_standard": "Generally no. If the asset is not transferable to other holders or is accepted only by the issuer within a closed ecosystem, it falls outside MiCA's crypto-asset definition or within the closed-loop logic the regulation contemplates. The analysis turns on transferability and use beyond the issuer — once tradable on secondary markets, the conclusion flips.",
+      "authority_refs": [
+        "Regulation (EU) 2023/1114, Art. 3(1)(5), Recitals 10-17"
+      ],
+      "probes": [
+        "bad_reasoning",
+        "misstatement"
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Hermes Standing Orders
 
-**Effective:** 2026-07-04 (updated 2026-08-13)  
+**Effective:** 2026-07-04 (updated 2026-08-23)  
 **Owner:** Moses Dor (BizLegal AI)  
 **Scope:** Every session where Hermes (Claude Code / EA) is active
 
@@ -112,6 +112,31 @@ Never claim "done" based on code looking correct. Code that looks correct and co
 
 ---
 
+## O8 — End-of-Session Handoff (MANDATORY, 2026-08-23)
+
+Before the final message of EVERY session, persist state to disk so the next session starts where this one ended. This runs unconditionally on session end — do not wait until 70% context like O3.
+
+**Required artifacts (write all that apply):**
+1. `decisions/<topic>-<date>.md` — summary of what got built, what got decided, what's still open, and the exact next action. One file per topic, append-only.
+2. `~/.claude/projects/c--Users-Moshe-Dor*/memory/MEMORY.md` + any `project_*.md` files — updated long-term memory entries.
+3. New or updated skills under `~/AppData/Local/hermes/skills/` — for workflows learned this session that will recur.
+4. Standup files, orders queue updates, agent registry rows if relevant.
+
+**Triggers (any one fires it):**
+- User says "wrap up" / "stop" / "done" / "that's it"
+- Context window approaching 70% (cross-check with O3 — O8 is the broader rule)
+- Session is winding down for any reason
+- About to lose state (crash, timeout, kill signal)
+
+**Hard rules:**
+- Do NOT ask first — just do it. The handoff is mandatory.
+- Do NOT skip even if "nothing happened" — confirm with a one-line `decisions/noop-<date>.md` that the session ended cleanly.
+- The handoff must be self-contained: a fresh session reading only the handoff + O1 files can resume work without asking the user a single question.
+
+**Why:** O3 covers emergency handoff at 70% context. O8 makes it the default at every session end. A session that does useful work and then disappears without a handoff is wasted time — the next session starts blind and re-derives the same state.
+
+---
+
 ## Enforcement
 
-These orders are self-enforcing via the SKILLS-BOOK (`decisions/SKILLS-BOOK.md`). If a session starts without following O1-O7, the downstream cost is multiplied for every session that follows.
+These orders are self-enforcing via the SKILLS-BOOK (`decisions/SKILLS-BOOK.md`). If a session starts without following O1-O7, the downstream cost is multiplied for every session that follows. O8 is the same way — a session that does not produce a handoff has not really ended.

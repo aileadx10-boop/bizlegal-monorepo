@@ -25,12 +25,15 @@ bizlegal-monorepo/
 │   ├── propsignal/   propsignal.bizlegal-ai.com — property risk reports $49 (TRIO scaffold 2026-07-28, not deployed; see apps/propsignal/CLAUDE.md)
 │   ├── leaseparse/   leaseparse.bizlegal-ai.com — lease abstracting $59 + date monitoring (TRIO scaffold, not deployed; see apps/leaseparse/CLAUDE.md)
 │   ├── closeflow/    closeflow.bizlegal-ai.com — closing checklists $39 + deadline engine (TRIO scaffold, not deployed; see apps/closeflow/CLAUDE.md)
+│   ├── bench/        bench.bizlegal-ai.com — evaluation lab for legal AI: $2,500 audits + $5K/mo programs, MiCA/DPA/VARA benchmarks (scaffold 2026-08-16, checkout live 2026-08-23; see apps/bench/CLAUDE.md)
+│   ├── coguard/      coguard.bizlegal-ai.com — co-parenting communication & legal evidentiary engine ($14.99-$29.99/mo scaffold 2026-08-16, not deployed; see apps/coguard/CLAUDE.md)
 │   └── blog/         blog.bizlegal-ai.com (curator-fed MDX content; CF Pages)
 ├── services/         non-Vercel runtimes
 │   ├── hetzner/      curator pipeline: scout/brain/publisher/bot (Python, systemd) [Z1.C-pending]
 │   ├── oci/          deal-router (FastAPI, Docker, Caddy + Cloudflare Tunnel) [Z1.C-pending]
 │   ├── worker/       Cloudflare Worker — bizlegal-lead-intake (TS, wrangler) [Z1.C-pending]
 │   ├── telegram-hub/ CF Worker — @BizlegalHubBot customer FAQ (Z4.2)
+│   ├── coguard-worker/ CF Worker — CoGuard CF Email Routing handler (alias → subscriber_id → OCI process)
 │   ├── gsc-bot/      CF Worker — weekly GSC sitemap re-submission across 8 surfaces
 │   ├── browser-extension/ Manifest V3 Chrome/Firefox compliance capture extension (P3)
 │   ├── spy/          competitor intelligence crawlers: pricing/content/backlinks/social (P5)
@@ -220,6 +223,8 @@ Every planning + ops doc lives in `decisions/`:
 - `decisions/workflows/learn_nurture.md` — WAT SOP for the `/learn` email sequence: 5 emails / 18 days, double-opt-in only (the 2026-07-10 rule applies without exception), track-segmented via `vertical_interest`. Email 5 asks the price question directly — a reply is the demand signal, since checkout is dark. Decision rule: build out only the track that gets yes-replies; both silent means `/learn` stops at Phase 0.
 - `decisions/VERCEL-PUSH-NOT-DEPLOYING-2026-07-29.md` — **Read before trusting any push.** Vercel stopped processing pushes account-wide (all 7 projects at once) after `175e87b`; `de0d387` + `1888962` are on GitHub with zero deployment records, so production still serves `175e87b`. Contains the `gh api .../deployments` command that distinguishes "not deployed" from "deployed and broken" (curling the URL cannot), the two-project-link trap (deploy the hub from the repo ROOT — `apps/hub/.vercel` points at a dead stray project), and the Moses-only fix.
 - `decisions/TRIO-PROPSIGNAL-LEASEPARSE-CLOSEFLOW-2026-07-28.md` — 3 new real-estate-adjacent surfaces (property risk reports / lease abstracting / closing checklists), $200/mo budget cap on the Ollama+Claude+Perplexity stack, shared liability-shield TOS, cross-sell spine via trio_properties, build order CloseFlow → LeaseParse → PropSignal. SCAFFOLD ONLY — checkout dark, migrations unapplied, nothing deployed.
+- `decisions/BENCH-LEGAL-AI-QUALITY-2026-08-16.md` — Bench (apps/bench): the evaluation lab for legal AI. Measurement company identity, $2,500 diagnostic audits / $5K-mo managed programs, MiCA-Bench + DPA-Bench + VARA-Bench (75 git-versioned gold-standard items, Moses review gate pending), delivery-economics table, 3-category data-rights clause, rule-7-clean inbound GTM (cold-email engine from the source plan was NOT built). SCAFFOLD — legal review passed 2026-08-23, checkout flipped live.
+- `decisions/COGUARD_PRODUCT_PLAN.md` — Co-parenting communication & legal evidentiary engine: zero-liability two-channel architecture (outgoing BIFF via Resend + incoming subscriber-forwarded via CF Email Routing), $14.99-$29.99/mo, ReportLab court binder with Bates numbering, attorney read-only portal. 6 workflow SOPs in decisions/workflows/coguard_*.md. SCAFFOLD 2026-08-16 — checkout dark, migrations unapplied, not deployed.
 
 When you write a new decision, add it here.
 
