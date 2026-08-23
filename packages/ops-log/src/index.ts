@@ -91,6 +91,8 @@ export type OpsEventType =
   | 'coguard.binder.generated'      // PDF court binder ready for download
   | 'coguard.subscriber.provisioned' // inbox_alias + reply_address assigned post-payment
   | 'coguard.attorney.access'       // attorney viewed subscriber timeline via portal
+  // Phase AA — outbound 30→10→3→1 cold-outreach pipeline (O-015)
+  | 'outreach.staged'          // lead staged to lead_outreach as drafted, awaiting Moses approval (draft-only)
 
 export interface LogEventInput {
   type: OpsEventType

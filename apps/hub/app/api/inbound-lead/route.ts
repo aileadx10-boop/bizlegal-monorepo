@@ -7,15 +7,18 @@
  * Wire:
  *   NewsletterSignup { email, source, page, product }
  *     ↓
- *   newsletter_subscribers upsert (Supabase)
+ *   newsletter_subscribers upsert as UNCONFIRMED (Supabase)
  *     ↓
- *   Resend welcome email (non-fatal)
+ *   Resend double-opt-in confirmation request
  *     ↓
  *   logEventAsync('lead.inbound', source: 'blog')
+ *
+ * The address becomes mailable only after /api/newsletter/confirm.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { startDoubleOptIn, originFromHeaders } from '@/lib/newsletter-optin'
 import { logEventAsync } from '@/lib/ops/log'
 
 export const dynamic = 'force-dynamic'
@@ -96,34 +99,27 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ ok: true, status: 'already_subscribed' }, { headers: cors })
   }
 
-  if (existing) {
-    await supabase
-      .from('newsletter_subscribers')
-      .update({ active: true, source, unsubscribed_at: null })
-      .eq('id', existing.id)
-  } else {
-    const { error } = await supabase
-      .from('newsletter_subscribers')
-      .insert({ email, source, active: true })
-    if (error) {
-      console.error('[inbound-lead] insert failed', error)
-      return NextResponse.json({ error: 'subscribe_failed' }, { status: 500, headers: cors })
-    }
-  }
+  // Consent gate (2026-08-14). This route used to mark the address active and
+  // send a "You're in" welcome immediately, subscribing people who had only
+  // typed an address into a public form. startDoubleOptIn writes the row as
+  // unconfirmed and sends the confirm request instead; /api/newsletter/confirm
+  // is what makes the address mailable.
+  const optIn = await startDoubleOptIn({
+    sb: supabase,
+    email,
+    source,
+    origin: originFromHeaders(req.headers),
+  })
 
-  const resendKey = process.env.RESEND_API_KEY
-  if (resendKey) {
-    void fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        from: 'BizLegal AI <hello@bizlegal-ai.com>',
-        to: [email],
-        reply_to: 'team@bizlegal-ai.com',
-        subject: "You're in — regulatory alerts from BizLegal AI",
-        html: welcomeHtml(),
-      }),
-    }).catch((e) => console.warn('[inbound-lead] welcome email failed', e))
+  if (!optIn.ok) {
+    if (optIn.error === 'suppressed') {
+      return NextResponse.json({ error: 'cannot_subscribe' }, { status: 403, headers: cors })
+    }
+    if (optIn.error === 'invalid_email') {
+      return NextResponse.json({ error: 'invalid_email' }, { status: 400, headers: cors })
+    }
+    console.error('[inbound-lead] opt-in start failed')
+    return NextResponse.json({ error: 'subscribe_failed' }, { status: 500, headers: cors })
   }
 
   void logEventAsync({
@@ -131,26 +127,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     source: 'blog',
     email,
     status: 'ok',
-    metadata: { product, source },
+    metadata: { product, source, pending_confirmation: !optIn.alreadyConfirmed },
   })
 
-  return NextResponse.json({ ok: true, status: 'subscribed' }, { headers: cors })
+  return NextResponse.json(
+    { ok: true, status: optIn.alreadyConfirmed ? 'already_subscribed' : 'confirmation_sent' },
+    { headers: cors },
+  )
 }
 
-function welcomeHtml(): string {
-  return `<div style="font-family:Inter,sans-serif;max-width:560px;margin:auto;padding:24px;color:#0e0b1a">
-<h2 style="font-weight:800;letter-spacing:-0.02em;margin:0 0 12px">You're on the list.</h2>
-<p style="line-height:1.7;color:#4b3f6a">
-  You'll get one email when a regulation that affects crypto, fintech, or cross-border deals
-  actually changes — not when someone writes a blog post about it.
-</p>
-<p style="line-height:1.7;color:#4b3f6a">
-  Until then, catch up on the latest compliance intelligence at
-  <a href="https://blog.bizlegal-ai.com" style="color:#5b21b6">blog.bizlegal-ai.com</a>.
-</p>
-<p style="font-size:12px;color:#6b6188;margin-top:24px">
-  BizLegal AI · Regulatory intelligence for crypto, fintech &amp; cross-border deals.<br>
-  Reply to unsubscribe at any time.
-</p>
-</div>`
-}

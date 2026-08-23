@@ -340,13 +340,13 @@ export default function ReportPage() {
               }}>Print / Save as PDF</button>
             </div>
 
-            {/* Consultation CTA */}
+            {/* Keep-watching upsell — self-serve, no calendar */}
             <div style={{ marginTop: 28, padding: '28px 32px', borderRadius: 12, textAlign: 'center', background: C.amberBg, border: `1px solid rgba(212,168,67,0.2)` }}>
-              <h3 style={{ fontFamily: C.serif, fontSize: 18, color: C.text, marginBottom: 8 }}>Need legal support for this investigation?</h3>
-              <p style={{ fontSize: 13, color: C.muted, marginBottom: 20, lineHeight: 1.7 }}>Book a consultation with Advocate Dor — NY Bar, ICC Arbitrator, DIFC Registered.</p>
-              <a href="https://calendly.com/ai-leadx10" target="_blank" rel="noopener noreferrer"
+              <h3 style={{ fontFamily: C.serif, fontSize: 18, color: C.text, marginBottom: 8 }}>Keep these addresses under watch</h3>
+              <p style={{ fontSize: 13, color: C.muted, marginBottom: 20, lineHeight: 1.7 }}>A trace is a snapshot. Daily screening against the OFAC, UN and EU lists emails you the moment a watched address appears on one — $29/mo, cancel anytime.</p>
+              <a href="https://bizlegal-ai.com/tools/ofac-watcher"
                 style={{ display: 'inline-block', padding: '12px 30px', background: C.amberBg, border: `1px solid ${C.amber}66`, borderRadius: 8, color: C.amber, fontSize: 14, fontWeight: 700, textDecoration: 'none' }}>
-                Book a Consultation →
+                Set up daily monitoring →
               </a>
             </div>
           </>

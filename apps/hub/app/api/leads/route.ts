@@ -15,7 +15,8 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
 import { logEventAsync } from '@/lib/ops/log'
-import { enqueueNurture, type NurtureVertical } from '@/lib/nurture-state'
+import { type NurtureVertical } from '@/lib/nurture-state'
+import { startDoubleOptIn, originFromHeaders } from '@/lib/newsletter-optin'
 
 export const dynamic = 'force-dynamic'
 
@@ -77,25 +78,20 @@ export async function POST(req: NextRequest) {
       metadata: { source: source ?? 'unknown', page, product, jurisdiction, company },
     })
 
-    // Phase AA V3 — enqueue into lead_nurture_state so the CF Worker
-    // sends a welcome email in 5 min and runs the 4-step cadence.
-    // Fire-and-forget; a Supabase blip on the nurture table must not
-    // fail the lead-capture POST.
-    //
-    // D7 INTEGRATION-V3 W-2 fix: lead_id falls back to `page` before
-    // 'unknown'. Older code collapsed every form lacking a `source`
-    // field into one row per email, silently dropping the second
-    // submission. `page` is set on every form, so this gives each
-    // funnel its own row.
+    // Consent gate (2026-08-14). This used to enqueue the 4-step nurture
+    // cadence directly, so filling in any lead form started a sequence of
+    // marketing emails the person never agreed to. The cadence is now armed
+    // by /api/newsletter/confirm — see activatePendingSubscriptions there,
+    // which keys off this `lead:` source prefix.
     const normalizedEmail = email.toLowerCase().trim()
     const leadIdSuffix = source ?? page ?? 'unknown'
-    void enqueueNurture({
-      lead_id: `hub-${normalizedEmail}-${leadIdSuffix}`,
+    void startDoubleOptIn({
+      sb,
       email: normalizedEmail,
-      vertical: pickVertical(product),
-      source: `hub:${source ?? page ?? 'unknown'}`,
-      lead_classification: { name, company, jurisdiction, page, product },
-    }).catch((err) => console.warn('[leads] nurture enqueue failed:', err))
+      source: `lead:${leadIdSuffix}`,
+      verticalInterest: pickVertical(product),
+      origin: originFromHeaders(req.headers),
+    }).catch((err) => console.warn('[leads] opt-in start failed:', err))
 
     return NextResponse.json({ success: true })
   } catch (err) {

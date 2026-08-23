@@ -6,12 +6,12 @@ export const dynamic = 'force-static'
 export const metadata: Metadata = {
   title: 'Free Compliance Tools — AI-Powered Legal & Regulatory Tools | BizLegal AI',
   description:
-    '21 free compliance tools: GDPR fine estimator, BOI filing check, sanctions & wallet screener, contract risk scanner, crypto wallet analysis, stablecoin classifier, MiCA classifier, MiCA deadline tracker, and more. No account required.',
+    '26 free compliance tools: GDPR fine estimator, BOI filing check, sanctions & wallet screener, contract risk scanner, crypto wallet analysis, stablecoin classifier, MiCA classifier, MiCA deadline tracker, AI policy generator, fixed-fee pricing calculator, and more. No account required.',
   alternates: { canonical: 'https://bizlegal-ai.com/tools' },
   openGraph: {
     title: 'Free Compliance Tools | BizLegal AI',
     description:
-      '21 free AI-powered tools covering GDPR, BOI/CTA, MiCA, sanctions & wallet screening, contract risk, and more. No signup until you see results.',
+      '26 free AI-powered tools covering GDPR, BOI/CTA, MiCA, sanctions & wallet screening, contract risk, AI policy drafting, fixed-fee pricing, and more. No signup until you see results.',
     url: 'https://bizlegal-ai.com/tools',
   },
 }
@@ -28,6 +28,30 @@ const HUB_TOOLS = [
     title: 'Sanctions & Wallet Screener',
     desc: 'Check one Ethereum address against the OFAC, UN, and EU sanctions lists — instant three-way result with citations.',
     tag: 'Sanctions',
+  },
+  {
+    slug: 'ofac-watcher',
+    title: 'OFAC Sanctions List Watcher',
+    desc: 'Register addresses and entities to watch — daily diff of the OFAC SDN, UN, and EU lists with email alerts on new matches. $29/mo.',
+    tag: 'Sanctions',
+  },
+  {
+    slug: 'obligation-extractor',
+    title: 'Compliance Obligation Extractor',
+    desc: 'Paste a regulation or contract — get a structured checklist of every obligation (who, what, by when, what evidence), each tied to the exact provision.',
+    tag: 'Compliance',
+  },
+  {
+    slug: 'ai-policy-generator',
+    title: 'AI Policy Generator',
+    desc: 'Draft a firm-wide AI usage policy with citations to ABA Formal Opinion 512 and the Model Rules — template, attorney review required. $99 one-time.',
+    tag: 'Compliance',
+  },
+  {
+    href: '/agents/casp-bundle',
+    title: 'CASP Compliance Bundle',
+    desc: 'The MiCA CASP toolkit in one subscription: screening, deadline tracking, stablecoin classification, reserve reports, obligation extraction, and OFAC watch. $499/mo.',
+    tag: 'MiCA',
   },
   {
     slug: 'mica-asset-classifier',
@@ -88,6 +112,12 @@ const HUB_TOOLS = [
     title: 'AI Website Compliance Checker',
     desc: 'Enter your URL — AI audits cookie consent, privacy policy, accessibility basics, and GDPR signals.',
     tag: 'Privacy',
+  },
+  {
+    slug: 'fixed-fee-pricing-calculator',
+    title: 'Fixed-Fee Pricing Calculator',
+    desc: 'Convert your hourly estimate into a profitable flat fee — hours × effective rate × burden factor, with a recommended range and monthly retainer equivalent.',
+    tag: 'Compliance',
   },
 ]
 
@@ -163,6 +193,7 @@ const TAG_COLORS: Record<string, string> = {
   BRAI: '#1a3a4a',
   TRACR: '#3a1a4a',
   Sanctions: '#6b1a1a',
+  Compliance: '#1a5a3a',
 }
 
 export default function ToolsPage(): JSX.Element {
@@ -246,7 +277,7 @@ export default function ToolsPage(): JSX.Element {
         {/* Header */}
         <header style={{ textAlign: 'center', marginBottom: 56 }}>
           <span style={{ display: 'inline-block', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.16em', color: '#c9a84c', fontWeight: 700, marginBottom: 12 }}>
-            21 free tools · no account required
+            26 free tools · no account required
           </span>
           <h1 style={{ fontSize: 'clamp(2rem, 1rem + 3.5vw, 3.2rem)', fontWeight: 700, color: '#f7f3e8', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 16 }}>
             Free Compliance Tools

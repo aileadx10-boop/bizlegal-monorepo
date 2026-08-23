@@ -564,12 +564,21 @@ importers:
 
   apps/leaseparse/web:
     dependencies:
+      '@anthropic-ai/sdk':
+        specifier: ^0.27.0
+        version: 0.27.3
+      '@bizlegal/email':
+        specifier: workspace:*
+        version: link:../../../packages/email
       '@supabase/supabase-js':
         specifier: ^2.57.4
         version: 2.105.1
       next:
         specifier: 14.2.35
         version: 14.2.35(@opentelemetry/api@1.9.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      pdf-parse:
+        specifier: ^1.1.1
+        version: 1.1.4
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -580,6 +589,9 @@ importers:
       '@types/node':
         specifier: ^22.9.0
         version: 22.19.17
+      '@types/pdf-parse':
+        specifier: ^1.1.4
+        version: 1.1.5
       '@types/react':
         specifier: ^18.3.12
         version: 18.3.28

@@ -67,6 +67,7 @@ const ALLOWED_TYPES = new Set([
   'coguard.message.received', 'coguard.message.sent', 'coguard.draft.classified',
   'coguard.binder.requested', 'coguard.binder.generated',
   'coguard.subscriber.provisioned', 'coguard.attorney.access',
+  'outreach.staged',
 ])
 
 const ALLOWED_SOURCES = new Set([

@@ -443,3 +443,86 @@ your system. Here's the test in 5 questions. 🧵
 - Funnel data on which post types converted vs which were noise
 
 If week 1 hits 0 paying customers across 12+ posts, the message-market fit is broken on the spear product page itself — not on the channels. Iterate the landing copy before adding more channels.
+
+---
+
+## Cold email templates — T1 (O-015 outbound 30→10→3→1, DRAFT-ONLY)
+
+Staged by `services/outreach/stage_outreach.py` into `lead_outreach`
+(`status='drafted'`, `stage=0`) for Moses review. **No template below is
+sent automatically** — the send step is un-gated via O-015 acceptance
+(Apify actor IDs + sending domain). Every staged row is `REQUIRES APPROVAL`.
+
+Voice rules (shared with `cold_email_sender.py`): 60-90 word body, one
+specific persona pain, soft CTA (15-min call), P.S. with a piece of value,
+no flattery, no "hope this finds you well", no first name in body, no
+emojis, no exclamation marks. Sign as `Moses / BizLegal AI / bizlegal-ai.com`.
+
+### T1-CASP — to CASPs / VASPs under MiCA (product: CASP Compliance Bundle)
+
+```
+Subject: MiCA CASP authorization — the workstream nobody budgeted
+
+A CASP licence application comes with a fixed MiCA deliverable set:
+governance policies, financial-resilience documentation, crypto-asset
+white papers, and a compliance function that survives the transition
+period.
+
+We package exactly that documentation set — flat-fee, no hourly overruns —
+with a named-human review step before anything is filed.
+
+Worth 15 minutes to compare it against what your current counsel is
+quoting?
+
+Moses
+BizLegal AI
+https://bizlegal-ai.com
+
+P.S. The bundle includes the transition-period monitoring calendar, not
+just the application documents.
+```
+
+### T1-STABLE — to stablecoin issuers / PSPs (product: Stablecoin Classifier)
+
+```
+Subject: Your token's regime depends on how it's structured
+
+The classification of a stablecoin determines which regime applies —
+GENIUS Act or MiCA — and the edge cases change the answer: e-receipt
+tokens, wrapped assets, redeemable versus non-redeemable structures.
+
+We built a classifier that maps a token's structure to the applicable
+regime and lists the obligations that follow.
+
+Worth 15 minutes to run your token through it?
+
+Moses
+BizLegal AI
+https://bizlegal-ai.com
+
+P.S. It runs on public token metadata — no sensitive documents leave your
+side.
+```
+
+### T1-FIRM — to boutique law firms (product: LexAudit Boutique / FirmCited)
+
+```
+Subject: CASP and stablecoin work without building the stack in-house
+
+Your clients are bringing MiCA CASP authorisations and stablecoin
+questions. Each engagement needs classification logic, policy frameworks,
+and ongoing monitoring — buildable, but slow to assemble by hand.
+
+We package that as a white-label engine: you keep the client relationship,
+we keep the compliance stack current as regulators update.
+
+Worth a call to see the white-label terms?
+
+Moses
+BizLegal AI
+https://bizlegal-ai.com
+
+P.S. Firm tier includes a monitor that flags rule changes for the clients
+you serve.
+```
+

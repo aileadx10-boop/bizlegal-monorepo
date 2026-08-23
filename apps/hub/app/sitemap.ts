@@ -98,9 +98,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/tools`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE}/tools/gdpr-fine-estimator`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${BASE}/tools/wallet-screener`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${BASE}/tools/ofac-watcher`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${BASE}/tools/obligation-extractor`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${BASE}/tools/ai-policy-generator`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE}/tools/mica-asset-classifier`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${BASE}/tools/stablecoin-classifier`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${BASE}/tools/contract-fixer`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE}/tools/fixed-fee-pricing-calculator`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
 
     // Products (revenue-driving)
     { url: `${BASE}/reserve-report`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
@@ -127,6 +131,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/agents/ai-governance`, lastModified: now, changeFrequency: 'monthly', priority: 0.82 },
     { url: `${BASE}/agents/india-dpdpa`, lastModified: now, changeFrequency: 'monthly', priority: 0.82 },
     { url: `${BASE}/agents/marketplace-shield`, lastModified: now, changeFrequency: 'monthly', priority: 0.82 },
+    { url: `${BASE}/agents/casp-bundle`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
 
     { url: `${BASE}/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     // Buyer-intent guides (high-intent SEO, each linked to a product)
@@ -197,5 +202,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/guides/aml-bsa-compliance-program-fintech-neobank-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/ofac-sanctions-compliance-crypto-fintech-saas-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
     { url: `${BASE}/guides/saas-terms-of-service-limitation-liability-indemnification-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
+    { url: `${BASE}/guides/fixed-fee-pricing-playbook`, lastModified: now, changeFrequency: 'monthly', priority: 0.76 },
   ]
 }

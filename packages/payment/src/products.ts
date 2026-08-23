@@ -82,6 +82,12 @@ export type ProductId =
   | 'coguard_solo_yearly'
   | 'coguard_litigation_monthly'
   | 'coguard_litigation_yearly'
+  // OFAC Sanctions List Watcher (W2-6)
+  | 'ofac_watch_monthly'
+  // CASP Compliance Bundle (W4-12) — flagship recurring SKU
+  | 'casp_bundle_monthly'
+  // AI Policy Generator (W3-8) — $99 one-time wizard
+  | 'ai_policy_generator'
 
 export type BillingInterval = 'one-time' | 'monthly' | 'yearly'
 
@@ -89,7 +95,7 @@ export interface ProductSpec {
   readonly id: ProductId
   readonly name: string
   readonly description: string
-  readonly product_family: 'boi' | 'ai_act' | 'policy_refresh' | 'psp' | 'tracr' | 'brai' | 'forge' | 'docai' | 'lexaudit' | 'conductor' | 'cle' | 'propsignal' | 'leaseparse' | 'closeflow' | 'academy' | 'reserve_report' | 'bench' | 'coguard'
+  readonly product_family: 'boi' | 'ai_act' | 'policy_refresh' | 'psp' | 'tracr' | 'brai' | 'forge' | 'docai' | 'lexaudit' | 'conductor' | 'cle' | 'propsignal' | 'leaseparse' | 'closeflow' | 'academy' | 'reserve_report' | 'bench' | 'coguard' | 'ofac_watch' | 'casp' | 'ai_policy'
   readonly billing_interval: BillingInterval
   readonly amount_cents: number
   readonly currency: 'USD'
@@ -592,7 +598,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
   // ───── Stablecoin Reserve Report Generator (W2-5) ─────
   // Fulfilled by the self-contained /api/reserve-report/webhook (TRACR-style:
   // own webhook + own reserve_reports table), NOT the shared payments webhook,
-  // because the universal /api/pay/start path does not write payment_orders.
+  // because fulfillment needs the stored reserve payload, not just an order row.
   stablecoin_reserve_monthly: {
     id: 'stablecoin_reserve_monthly',
     name: 'Stablecoin Reserve Report Generator (monthly)',
@@ -656,6 +662,59 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     checkout_origin: 'https://coguard.bizlegal-ai.com/pricing',
     webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
+  },
+  // ───── OFAC Sanctions List Watcher (W2-6) ─────
+  // $29/mo recurring watcher. Subscriber registers watched addresses/entities;
+  // the daily cron diffs sanctions_cache and emails on new matches. Fulfilled
+  // by the shared payments webhook (no per-product fulfillment table needed —
+  // the watch subscription is the access grant).
+  ofac_watch_monthly: {
+    id: 'ofac_watch_monthly',
+    name: 'OFAC Sanctions List Watcher (monthly)',
+    description: 'Daily diff of the OFAC SDN / UN / EU sanctions lists against your watched addresses and entities, with email alerts on new matches. Alerts are possible matches — verify independently before acting.',
+    product_family: 'ofac_watch',
+    billing_interval: 'monthly',
+    amount_cents: 2900,
+    currency: 'USD',
+    checkout_origin: '/tools/ofac-watcher',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: true,
+  },
+  // ───── CASP Compliance Bundle (W4-12) ─────
+  // The monopoly wedge, packaged: MiCA CASP gets screening + deadline
+  // tracking + stablecoin classification + reserve reports + obligation
+  // extraction + OFAC watch in one $499/mo bundle. payment.confirmed grants
+  // an active row in casp_bundle_subs (grantCaspBundle). The bundle is a
+  // compliance toolkit + intelligence, not a legal opinion / not regulatory
+  // approval — per-tool disclaimers inherited.
+  casp_bundle_monthly: {
+    id: 'casp_bundle_monthly',
+    name: 'CASP Compliance Bundle (monthly)',
+    description: 'MiCA CASP compliance toolkit: sanctions & wallet screening, MiCA deadline tracking, stablecoin classification, reserve reports, obligation extraction, and OFAC list watch — one $499/mo bundle. Compliance toolkit + intelligence, not a legal opinion or regulatory approval.',
+    product_family: 'casp',
+    billing_interval: 'monthly',
+    amount_cents: 49900,
+    currency: 'USD',
+    checkout_origin: '/agents/casp-bundle',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: true,
+  },
+  // ───── AI Policy Generator (W3-8) ─────
+  // $99 one-time wizard → firm AI usage policy with ABA citations. The
+  // generated policy is a TEMPLATE — attorney must review before adoption.
+  // payment.confirmed flips the matching ai_policy_drafts row to 'paid' and
+  // emails the policy (grantAiPolicy).
+  ai_policy_generator: {
+    id: 'ai_policy_generator',
+    name: 'AI Policy Generator',
+    description: 'Firm-wide AI usage policy drafted from your firm size, practice areas, and AI tools — with citations to ABA Formal Opinion 512 and the Model Rules. Template — attorney must review before adoption.',
+    product_family: 'ai_policy',
+    billing_interval: 'one-time',
+    amount_cents: 9900,
+    currency: 'USD',
+    checkout_origin: '/tools/ai-policy-generator',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: false,
   },
 }
 
