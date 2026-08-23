@@ -20,8 +20,9 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+// apps/bench/scripts → apps/bench → apps → monorepo root (3 levels up)
 const here = dirname(fileURLToPath(import.meta.url))
-const repoRoot = resolve(here, '..', '..', '..', '..')
+const repoRoot = resolve(here, '..', '..', '..')
 const dataDir = join(here, '..', 'web', 'data', 'benchmarks', 'v1')
 
 // ── load vault ──────────────────────────────────────────────────────────────
@@ -164,7 +165,7 @@ const dataLines = rows.map((row) => {
 })
 
 const csv = [headerLine, ...dataLines].join('\r\n')
-const outPath = join(repoRoot, 'bench-scoring-workbook.csv')
+const outPath = process.env.BENCH_CSV_OUT ?? join(repoRoot, 'bench-scoring-workbook.csv')
 writeFileSync(outPath, csv, 'utf8')
 
 console.log(`\nWrote ${rows.length} rows → ${outPath}`)
