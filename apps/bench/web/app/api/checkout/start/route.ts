@@ -4,14 +4,9 @@ import { logEventAsync } from '@/lib/ops/log'
 export const dynamic = 'force-dynamic'
 
 /**
- * POST /api/checkout/start — DARK, by design (hard rule 5: no real money
- * until a Moses-verified test purchase). Trio precedent: the 503 is a signal,
- * not a placeholder.
- *
- * TO LIGHT THIS UP (one change, after the verified test purchase):
- *   flip CHECKOUT_LIVE to true. The route then forwards the validated body to
- *   hub /api/pay/start, which builds the gateway URL via @bizlegal/payment
- *   (products bench_audit_2500 / bench_managed_monthly are already registered).
+ * POST /api/checkout/start — LIVE (2026-08-23). Forwards the validated body to
+ * hub /api/pay/start, which builds the gateway URL via @bizlegal/payment
+ * (products bench_audit_2500 / bench_managed_monthly are already registered).
  */
 
 const CHECKOUT_LIVE = true as boolean

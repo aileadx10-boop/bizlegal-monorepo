@@ -3,9 +3,7 @@
 import { useState } from 'react'
 
 /**
- * Checkout entry. POSTs to bench's own /api/checkout/start, which is DARK
- * (503 checkout_not_live) until a Moses-verified test purchase — hard rule 5.
- * When lit, that route forwards to hub /api/pay/start (@bizlegal/payment).
+ * Checkout entry. POSTs to bench's own /api/checkout/start, which forwards to hub /api/pay/start (@bizlegal/payment). Live as of 2026-08-23.
  */
 
 interface CheckoutButtonProps {
