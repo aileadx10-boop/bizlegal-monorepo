@@ -1,0 +1,8 @@
+{
+  "auth": {
+    "password_hash": "<sha256 of password — run: node -e \"console.log(require('crypto').createHash('sha256').update('YOUR_PASSWORD').digest('hex'))\"",
+    "keyword_hash": "<sha256 of keyword — run the same with YOUR_KEYWORD>"
+  },
+  "max_amount_cents": 250000,
+  "enabled": true
+}
