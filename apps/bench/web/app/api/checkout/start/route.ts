@@ -14,7 +14,7 @@ export const dynamic = 'force-dynamic'
  *   (products bench_audit_2500 / bench_managed_monthly are already registered).
  */
 
-const CHECKOUT_LIVE = false as boolean
+const CHECKOUT_LIVE = true as boolean
 
 const BENCH_PRODUCTS = new Set(['bench_audit_2500', 'bench_managed_monthly'])
 const HUB_PAY_START = 'https://bizlegal-ai.com/api/pay/start'
