@@ -125,3 +125,11 @@ Full list: `packages/ops-log/src/index.ts`
 | cold_email_outreach.py live mode | cold outreach sending | BLOCKED (dry-run only) |
 | hub.bizlegal-ai.com CNAME in Cloudflare | hub DNS public resolution | MISSING (Moses-only) |
 | STRIPE_SECRET_KEY live key | Stripe checkout for Compliance Snapshot | MISSING |
+
+---
+
+## Local Tooling — Security-Sensitive Helpers
+
+| Tool | File | Purpose | Status |
+|---|---|---|---|
+| Test Payment Agent | `apps/bench/scripts/test-payment-agent.mjs` | Authorized test-payment executor for bench (password+keyword auth, amount guard, execution log) | LIVE (requires `.payment-agent.json` config) |

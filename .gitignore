@@ -63,3 +63,8 @@ scripts/_*
 tmp_probes/
 tmp_*.py
 tmp_*/
+
+# Test payment agent
+.payment-agent.json
+apps/bench/scripts/.logs/
+
