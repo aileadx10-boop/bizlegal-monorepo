@@ -126,7 +126,7 @@
       "practice_area": "whitepaper",
       "difficulty": 2,
       "released": false,
-      "prompt": "A retail buyer purchases newly offered utility tokens that are not yet admitted to trading. What withdrawal right applies?",
+      "prompt": "Under MiCA, what cooling-off right (if any) does a retail purchaser of newly offered utility tokens have where the tokens are not yet admitted to trading, and when does that right end? Cite the operative article.",
       "gold_standard": "Retail holders have 14 calendar days to withdraw from the purchase agreement without cost or reason, running from agreement, where tokens are bought directly from the offeror or a CASP placing them, and the right ends once the tokens are admitted to trading. Omitting the trading-admission cut-off is the common gap.",
       "authority_refs": ["Regulation (EU) 2023/1114, Art. 13"],
       "probes": ["omission", "misstatement"]

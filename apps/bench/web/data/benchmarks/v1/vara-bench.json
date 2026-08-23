@@ -146,7 +146,7 @@
       "practice_area": "federal_layer",
       "difficulty": 3,
       "released": false,
-      "prompt": "A token sold to UAE onshore investors gives holders profit-share rights in the issuer. Which regime governs the offering?",
+      "prompt": "Under UAE federal and emirate-level frameworks, how is a token classified that grants holders a contractual right to a share of the issuer's profits, when that token is offered to onshore (non-DIFC) UAE investors? Which regulator has primary authority over the offering and promotion, and does a Dubai VARA licence by itself permit that onshore marketing? Cite the operative regulator(s).",
       "gold_standard": "Profit-share rights push the token toward a security: onshore, the SCA's framework for security tokens and promotions governs, and marketing to onshore investors requires SCA-side compliance regardless of any Dubai VARA licence. The analysis is substance-based token classification first, regulator second — VARA licensing does not immunise a securities offering.",
       "authority_refs": ["SCA regulations on securities and promotion; UAE federal securities framework"],
       "probes": ["wrong_jurisdiction", "bad_reasoning"]
