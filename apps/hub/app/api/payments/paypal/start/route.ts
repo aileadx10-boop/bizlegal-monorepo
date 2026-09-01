@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { logEventAsync } from '@/lib/ops/log'
 import { readAffiliateCode } from '@/lib/affiliate'
+import { resolveCheckoutPrice } from '@/lib/payments/price-map'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
@@ -10,7 +11,8 @@ interface StartBody {
   product: string
   tier: string
   interval: 'one-time' | 'monthly' | 'yearly'
-  amount_cents: number
+  /** Display hint only — the charged amount is resolved server-side. */
+  amount_cents?: number
   email: string
   name?: string
   source?: string
@@ -63,12 +65,21 @@ export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as Partial<StartBody>
 
-    if (!body.product || !body.tier || !body.interval || !body.amount_cents || !body.email) {
+    if (!body.product || !body.tier || !body.interval || !body.email) {
       return NextResponse.json(
-        { error: 'product, tier, interval, amount_cents, email required' },
+        { error: 'product, tier, interval, email required' },
         { status: 400 },
       )
     }
+
+    // F2 fix (2026-09-01): the amount is resolved from the server-side
+    // price map — a client-supplied amount_cents is accepted only when it
+    // matches the map, and never charged as-is.
+    const price = resolveCheckoutPrice(body.product, body.tier, body.interval, body.amount_cents)
+    if (!price.ok) {
+      return NextResponse.json({ error: price.message, code: price.error }, { status: 400 })
+    }
+    const amountCents = price.amountCents
 
     const supabase = getSupabase()
     const affiliateCode = readAffiliateCode(req.headers.get('cookie'))
@@ -81,7 +92,7 @@ export async function POST(req: NextRequest) {
         product: body.product,
         tier: body.tier,
         billing_interval: body.interval,
-        amount_cents: body.amount_cents,
+        amount_cents: amountCents,
         gateway: 'paypal',
         status: 'pending',
         source: body.source ?? 'hub_pricing',
@@ -113,10 +124,13 @@ export async function POST(req: NextRequest) {
           purchase_units: [
             {
               reference_id: order.id,
+              // Echoed as resource.custom_id on PAYMENT.CAPTURE.COMPLETED so
+              // the webhook can resolve the order row.
+              custom_id: order.id,
               description: `${body.product} ${body.tier} one-time`,
               amount: {
                 currency_code: 'USD',
-                value: (body.amount_cents / 100).toFixed(2),
+                value: (amountCents / 100).toFixed(2),
               },
             },
           ],
@@ -146,7 +160,7 @@ export async function POST(req: NextRequest) {
         source: 'hub',
         ref_id: String(order.id),
         email: body.email,
-        amount_cents: body.amount_cents,
+        amount_cents: amountCents,
         status: 'pending',
         metadata: {
           gateway: 'paypal',
@@ -217,7 +231,7 @@ export async function POST(req: NextRequest) {
       source: 'hub',
       ref_id: String(order.id),
       email: body.email,
-      amount_cents: body.amount_cents,
+      amount_cents: amountCents,
       status: 'pending',
       metadata: {
         gateway: 'paypal',

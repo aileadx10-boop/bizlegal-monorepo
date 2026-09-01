@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import { logEventAsync } from '@/lib/ops/log'
 import { markNurturePaid } from '@/lib/nurture-state'
 import { claimWebhookEvent } from '@/lib/payments/webhook-idempotency'
+import { captureHubPayPalOrder } from '@/lib/payments/paypal-capture'
 import { grantConductorTier } from '@/lib/payments/conductor-grant'
 import { grantCaspBundle } from '@/lib/payments/casp-bundle-grant'
 import { grantAiPolicy } from '@/lib/payments/ai-policy-grant'
@@ -38,6 +39,11 @@ interface PayPalEvent {
     custom_id?: string
     id?: string
     status?: string
+    // Present on CAPTURE.* events — the captured amount.
+    amount?: { currency_code?: string; value?: string }
+    // Present on CHECKOUT.ORDER.* events — hub-created orders carry the
+    // internal order id here (reference_id/custom_id on the purchase unit).
+    purchase_units?: Array<{ custom_id?: string; reference_id?: string }>
   }
 }
 
@@ -126,34 +132,112 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // PayPal Subscriptions: custom_id we set during start() ties back to our order.id
-    const orderId = event.resource.custom_id
+    // custom_id we set during start() ties back to our order.id.
+    // Orders API events (CHECKOUT.ORDER.*) carry it on the purchase unit;
+    // CAPTURE.* events echo it at resource top level. Reference_id is the
+    // fallback for hub-created orders that predate custom_id on the unit.
+    const orderId =
+      event.resource.custom_id ??
+      event.resource.purchase_units?.[0]?.custom_id ??
+      event.resource.purchase_units?.[0]?.reference_id
 
     if (!orderId) {
       console.warn('[paypal/webhook] no custom_id on event', event.event_type)
       return NextResponse.json({ ok: true, ignored: true })
     }
 
-    const updates: Record<string, unknown> = {
-      metadata: { last_event: event },
-    }
-
     // Terminal-state guard: read the row's current status BEFORE applying
     // the transition. If we've already moved to cancelled/expired/refunded,
     // a stale earlier event must not rewind state. Closes CODE-REVIEW-W5
-    // H-01 second half (out-of-order delivery).
+    // H-01 second half (out-of-order delivery). metadata + amount_cents are
+    // read here too: metadata for merge-on-write + grant idempotency,
+    // amount_cents for the capture-amount cross-check.
     const { data: currentRow } = await supabase
       .from('payment_orders')
-      .select('status')
+      .select('status, metadata, amount_cents')
       .eq('id', orderId)
       .maybeSingle()
     const currentStatus = typeof currentRow?.status === 'string' ? currentRow.status : null
     const isTerminal = currentStatus !== null && TERMINAL_STATES.has(currentStatus)
+    const existingMeta =
+      currentRow?.metadata && typeof currentRow.metadata === 'object'
+        ? (currentRow.metadata as Record<string, unknown>)
+        : {}
 
-    // Map PayPal event_type → our status
+    // Merge into existing metadata — a wholesale overwrite used to clobber
+    // capture ids and reconcile markers written by other flows.
+    const updates: Record<string, unknown> = {
+      metadata: { ...existingMeta, last_event: event },
+    }
+
+    // Map PayPal event_type → our status.
+    //
+    // F1 fix (2026-09-01): CHECKOUT.ORDER.APPROVED is NOT a paid event —
+    // with intent=CAPTURE no money has moved until the order is captured.
+    // Treating it as paid granted product access + sent "payment confirmed"
+    // emails on $0 orders. The paid signal is PAYMENT.CAPTURE.COMPLETED.
+    let skipGrants = false
     switch (event.event_type) {
-      case 'CHECKOUT.ORDER.APPROVED':
-      case 'PAYMENT.CAPTURE.COMPLETED':
+      case 'CHECKOUT.ORDER.APPROVED': {
+        // Defensive capture: the return URL (/payment/paypal/return) is the
+        // primary capture path, but buyers sometimes close the tab before
+        // the redirect. captureHubPayPalOrder reads the order status first,
+        // so this is a no-op when the return page already captured.
+        if (isTerminal) break
+        const capture = await captureHubPayPalOrder({
+          orderId,
+          paypalOrderId: event.resource.id,
+          source: 'webhook',
+          supabase,
+        })
+        updates.metadata = {
+          ...(updates.metadata as Record<string, unknown>),
+          approved_capture_attempt: capture.outcome,
+          ...(capture.error ? { approved_capture_error: capture.error } : {}),
+        }
+        if (capture.outcome === 'failed') {
+          console.warn('[paypal/webhook] defensive capture failed', orderId, capture.error)
+        }
+        break
+      }
+      case 'PAYMENT.CAPTURE.COMPLETED': {
+        // Cross-check the captured amount against the order row before
+        // granting anything — a mismatch means tampering or a stale row,
+        // so we flag it and leave the order pending for manual review.
+        const capturedCents = Math.round(Number(event.resource.amount?.value ?? NaN) * 100)
+        if (
+          typeof currentRow?.amount_cents === 'number' &&
+          Number.isFinite(capturedCents) &&
+          capturedCents !== currentRow.amount_cents
+        ) {
+          console.error(
+            `[paypal/webhook] capture amount mismatch order=${orderId} expected=${currentRow.amount_cents} captured=${capturedCents}`,
+          )
+          updates.metadata = {
+            ...(updates.metadata as Record<string, unknown>),
+            amount_mismatch: { expected_cents: currentRow.amount_cents, captured_cents: capturedCents },
+          }
+          skipGrants = true
+          break
+        }
+        // Grant idempotency: if this capture id already fired grants (e.g.
+        // manual event replay with a fresh event id), record the event but
+        // don't re-grant or re-email.
+        const captureId = typeof event.resource.id === 'string' ? event.resource.id : null
+        if (captureId && existingMeta.granted_capture_id === captureId) {
+          skipGrants = true
+        }
+        updates.status = 'active'
+        updates.activated_at = new Date().toISOString()
+        updates.last_charge_at = new Date().toISOString()
+        if (captureId) {
+          updates.metadata = {
+            ...(updates.metadata as Record<string, unknown>),
+            paypal_capture_id: captureId,
+          }
+        }
+        break
+      }
       case 'BILLING.SUBSCRIPTION.ACTIVATED':
         updates.status = 'active'
         updates.activated_at = new Date().toISOString()
@@ -247,7 +331,10 @@ export async function POST(req: NextRequest) {
         })
 
         // Phase AA V3 — stop nurture cadence on confirmed payment.
-        if (opsType === 'payment.confirmed' && orderRow?.user_email) {
+        // skipGrants: capture amount mismatch (manual review) or this
+        // capture id already granted — record the transition, don't
+        // re-grant / re-email.
+        if (opsType === 'payment.confirmed' && orderRow?.user_email && !skipGrants) {
           void markNurturePaid(orderRow.user_email).catch((err) =>
             console.warn('[paypal/webhook] mark-paid failed:', err),
           )
@@ -265,6 +352,19 @@ export async function POST(req: NextRequest) {
           ).catch((err) =>
             console.warn('[paypal/webhook] confirmation email failed:', err),
           )
+          // Mark this capture id as granted so a replayed event can't
+          // re-fire the grants above.
+          if (event.event_type === 'PAYMENT.CAPTURE.COMPLETED' && event.resource.id) {
+            await supabase
+              .from('payment_orders')
+              .update({
+                metadata: {
+                  ...(updates.metadata as Record<string, unknown>),
+                  granted_capture_id: event.resource.id,
+                },
+              })
+              .eq('id', orderId)
+          }
         }
       }
     }

@@ -30,6 +30,7 @@ import {
 } from '@/lib/payments/wire'
 import { sendBankWireInstructions } from '@/lib/resend'
 import { readAffiliateCode } from '@/lib/affiliate'
+import { resolveCheckoutPrice } from '@/lib/payments/price-map'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
@@ -38,7 +39,8 @@ interface WireStartBody {
   product: string
   tier: string
   interval: 'one-time' | 'monthly' | 'yearly'
-  amount_cents: number
+  /** Display hint only — the charged amount is resolved server-side. */
+  amount_cents?: number
   email: string
   name?: string
   currency: WireCurrency
@@ -59,19 +61,28 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       !body.product ||
       !body.tier ||
       !body.interval ||
-      !body.amount_cents ||
       !body.email ||
       !body.currency
     ) {
       return NextResponse.json(
-        { error: 'product, tier, interval, amount_cents, email, currency required' },
+        { error: 'product, tier, interval, email, currency required' },
         { status: 400 },
       )
     }
     if (!['USD', 'EUR'].includes(body.currency)) {
       return NextResponse.json({ error: 'currency must be USD or EUR' }, { status: 400 })
     }
-    if (body.amount_cents < WIRE_MIN_ORDER_CENTS) {
+
+    // F2 fix (2026-09-01): the amount is resolved from the server-side
+    // price map — a client-supplied amount_cents is accepted only when it
+    // matches the map, and never used as-is.
+    const price = resolveCheckoutPrice(body.product, body.tier, body.interval, body.amount_cents)
+    if (!price.ok) {
+      return NextResponse.json({ error: price.message, code: price.error }, { status: 400 })
+    }
+    const amountCents = price.amountCents
+
+    if (amountCents < WIRE_MIN_ORDER_CENTS) {
       return NextResponse.json(
         {
           error: `Bank wire is available for orders of $500 / €500 and above. For smaller orders, please use crypto or PayPal at the checkout page.`,
@@ -104,7 +115,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         product: body.product,
         tier: body.tier,
         billing_interval: body.interval,
-        amount_cents: body.amount_cents,
+        amount_cents: amountCents,
         gateway: 'wire',
         status: 'pending_wire',
         source: body.source ?? 'checkout_wire',
@@ -135,7 +146,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         email: body.email,
         orderId: String(order.id),
         reference,
-        amountCents: body.amount_cents,
+        amountCents: amountCents,
         currency,
         productLabel,
         wire,
@@ -152,7 +163,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       source: 'hub',
       ref_id: String(order.id),
       email: body.email,
-      amount_cents: body.amount_cents,
+      amount_cents: amountCents,
       status: 'pending',
       metadata: {
         gateway: 'wire',

@@ -105,6 +105,15 @@ function successUrl(spec: CheckoutSpec, orderId: string): string {
   return `${origin}/payment/success?order=${encodeURIComponent(orderId)}&product=${encodeURIComponent(product.id)}`
 }
 
+// PayPal redirects here after buyer approval with ?token=<paypalOrderId>
+// appended. The hub route at /payment/paypal/return CAPTURES the order
+// server-side before showing success — with intent=CAPTURE an approved
+// order moves no money until /v2/checkout/orders/{id}/capture is called.
+function paypalReturnUrl(spec: CheckoutSpec, orderId: string): string {
+  const origin = spec.origin ?? HUB_ORIGIN
+  return `${origin}/payment/paypal/return?order=${encodeURIComponent(orderId)}`
+}
+
 function cancelUrl(spec: CheckoutSpec, orderId: string): string {
   const product = getProduct(spec.product_id)
   const origin = spec.origin ?? HUB_ORIGIN
@@ -307,6 +316,136 @@ interface PayPalOrderResponse {
   links: Array<{ href: string; rel: string }>
 }
 
+// Shape of GET /v2/checkout/orders/{id} and the capture response — only the
+// fields the capture flow reads.
+export interface PayPalOrderDetails {
+  id: string
+  status: string // CREATED | SAVED | APPROVED | VOIDED | COMPLETED | ...
+  purchase_units?: Array<{
+    reference_id?: string
+    custom_id?: string
+    amount?: { currency_code?: string; value?: string }
+    payments?: { captures?: Array<{ id: string; status: string }> }
+  }>
+}
+
+export interface PayPalOrderLookupResult {
+  ok: boolean
+  order?: PayPalOrderDetails
+  error?: string
+  status_code: number
+}
+
+function paypalApiUrl(override?: string): string {
+  // Explicit override wins (hub passes its PAYPAL_ENV-derived base so the
+  // capture hits the same environment that created the order). Otherwise
+  // PAYPAL_API_URL, then live — matching createPayPalOrder.
+  return override ?? process.env.PAYPAL_API_URL ?? 'https://api-m.paypal.com'
+}
+
+async function paypalAccessToken(apiUrl: string): Promise<string | null> {
+  const clientId = process.env.PAYPAL_CLIENT_ID
+  const clientSecret = process.env.PAYPAL_CLIENT_SECRET
+  if (!clientId || !clientSecret) return null
+  const tokenRes = await fetch(`${apiUrl}/v1/oauth2/token`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`,
+      'content-type': 'application/x-www-form-urlencoded',
+    },
+    body: 'grant_type=client_credentials',
+  })
+  if (!tokenRes.ok) return null
+  const { access_token } = (await tokenRes.json()) as PayPalAccessTokenResponse
+  return access_token
+}
+
+/** First completed/pending capture id on an order, if any. */
+export function paypalCaptureId(order: PayPalOrderDetails): string | undefined {
+  for (const unit of order.purchase_units ?? []) {
+    for (const cap of unit.payments?.captures ?? []) {
+      if (cap.id) return cap.id
+    }
+  }
+  return undefined
+}
+
+/**
+ * Fetch a PayPal order's current status. Used before capturing so a retry
+ * (return-page refresh, APPROVED webhook + return race) is idempotent:
+ * an order already COMPLETED is not captured twice.
+ */
+export async function getPayPalOrder(
+  paypalOrderId: string,
+  opts?: { apiUrl?: string },
+): Promise<PayPalOrderLookupResult> {
+  const apiUrl = paypalApiUrl(opts?.apiUrl)
+  try {
+    const token = await paypalAccessToken(apiUrl)
+    if (!token) {
+      return { ok: false, error: 'paypal_token_failed', status_code: 503 }
+    }
+    const res = await fetch(`${apiUrl}/v2/checkout/orders/${encodeURIComponent(paypalOrderId)}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    if (!res.ok) {
+      return { ok: false, error: `paypal_get_order_${res.status}`, status_code: res.status }
+    }
+    const order = (await res.json()) as PayPalOrderDetails
+    return { ok: true, order, status_code: 200 }
+  } catch (err) {
+    return {
+      ok: false,
+      error: err instanceof Error ? err.message : 'network_error',
+      status_code: 502,
+    }
+  }
+}
+
+/**
+ * Capture an APPROVED PayPal order (moves the money). Caller should
+ * getPayPalOrder() first and skip when status is already COMPLETED.
+ * `requestId` maps to PayPal-Request-Id — pass the internal order id so
+ * duplicate capture calls collapse gateway-side.
+ */
+export async function capturePayPalOrder(
+  paypalOrderId: string,
+  opts?: { apiUrl?: string; requestId?: string },
+): Promise<PayPalOrderLookupResult> {
+  const apiUrl = paypalApiUrl(opts?.apiUrl)
+  try {
+    const token = await paypalAccessToken(apiUrl)
+    if (!token) {
+      return { ok: false, error: 'paypal_token_failed', status_code: 503 }
+    }
+    const headers: Record<string, string> = {
+      Authorization: `Bearer ${token}`,
+      'content-type': 'application/json',
+    }
+    if (opts?.requestId) headers['PayPal-Request-Id'] = opts.requestId
+    const res = await fetch(
+      `${apiUrl}/v2/checkout/orders/${encodeURIComponent(paypalOrderId)}/capture`,
+      { method: 'POST', headers },
+    )
+    if (!res.ok) {
+      const txt = await res.text().catch(() => '')
+      return {
+        ok: false,
+        error: `paypal_capture_${res.status}${txt ? `: ${txt.slice(0, 200)}` : ''}`,
+        status_code: res.status,
+      }
+    }
+    const order = (await res.json()) as PayPalOrderDetails
+    return { ok: true, order, status_code: 200 }
+  } catch (err) {
+    return {
+      ok: false,
+      error: err instanceof Error ? err.message : 'network_error',
+      status_code: 502,
+    }
+  }
+}
+
 export async function createPayPalOrder(spec: CheckoutSpec): Promise<CheckoutResult> {
   const clientId = process.env.PAYPAL_CLIENT_ID
   const clientSecret = process.env.PAYPAL_CLIENT_SECRET
@@ -366,7 +505,7 @@ export async function createPayPalOrder(spec: CheckoutSpec): Promise<CheckoutRes
           },
         ],
         application_context: {
-          return_url: successUrl(spec, orderId),
+          return_url: paypalReturnUrl(spec, orderId),
           cancel_url: cancelUrl(spec, orderId),
           shipping_preference: 'NO_SHIPPING',
           user_action: 'PAY_NOW',

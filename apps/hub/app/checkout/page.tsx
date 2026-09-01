@@ -26,6 +26,13 @@
  * URL contract:
  *   /checkout?product=<slug>&tier=<slug>&interval=one-time|monthly|yearly&amount=<cents>&name=<display>
  *
+ * `amount` is a display hint only (F2 fix, 2026-09-01): the page resolves
+ * the real price server-side via /api/payments/price, which reads the
+ * price map in lib/payments/price-map.ts. Unknown product/tier/interval
+ * combinations show an error and cannot reach a gateway. The gateway
+ * start routes re-resolve the amount server-side too, so a hand-crafted
+ * POST can't charge an arbitrary amount either.
+ *
  * All subdomain pricing pages link here (https://bizlegal-ai.com/checkout?...)
  * — centralised so we don't replicate gateway logic per subdomain and so the
  * MoR-facing checkout domain stays a single one.
@@ -42,7 +49,6 @@ interface CheckoutParams {
   product: string
   tier: string
   interval: Interval
-  amountCents: number
   displayName: string
 }
 
@@ -50,24 +56,18 @@ function parseParams(sp: URLSearchParams): CheckoutParams | { error: string } {
   const product = sp.get('product')?.trim() || ''
   const tier = sp.get('tier')?.trim() || ''
   const intervalRaw = (sp.get('interval')?.trim() || 'one-time') as Interval
-  const amountStr = sp.get('amount')?.trim() || ''
   const displayName = sp.get('name')?.trim() || ''
 
-  if (!product || !tier || !amountStr) {
-    return { error: 'Missing required parameter (product, tier, amount).' }
+  if (!product || !tier) {
+    return { error: 'Missing required parameter (product, tier).' }
   }
   if (!['one-time', 'monthly', 'yearly'].includes(intervalRaw)) {
     return { error: `Invalid interval: ${intervalRaw}` }
-  }
-  const amountCents = Number(amountStr)
-  if (!Number.isFinite(amountCents) || amountCents < 50 || amountCents > 100000_00) {
-    return { error: 'Amount out of acceptable range.' }
   }
   return {
     product,
     tier,
     interval: intervalRaw,
-    amountCents,
     displayName: displayName || `${product} ${tier} ${intervalRaw}`,
   }
 }
@@ -83,6 +83,40 @@ function CheckoutInner() {
   const [busy, setBusy] = useState<null | 'crypto' | 'paypal' | 'wire_eur' | 'wire_usd'>(null)
   const [err, setErr] = useState<string | null>(null)
   const [wireSuccess, setWireSuccess] = useState<{ ref: string; bank: string; email: string } | null>(null)
+  // Server-resolved price: null = still resolving, 'unknown' = not a sellable SKU.
+  const [amountCents, setAmountCents] = useState<number | 'unknown' | null>(null)
+
+  const paramsKey = 'error' in parsed ? '' : `${parsed.product}${parsed.tier}${parsed.interval}`
+
+  // Resolve the price server-side. Until this returns, no pay button is
+  // armed; if it 404s the SKU is unknown and we fail closed.
+  useEffect(() => {
+    if ('error' in parsed) return
+    let cancelled = false
+    setAmountCents(null)
+    const q = new URLSearchParams({
+      product: parsed.product,
+      tier: parsed.tier,
+      interval: parsed.interval,
+    })
+    fetch(`/api/payments/price?${q.toString()}`)
+      .then(async (res) => {
+        const data = (await res.json().catch(() => ({}))) as { ok?: boolean; amount_cents?: number }
+        if (cancelled) return
+        if (res.ok && data.ok && typeof data.amount_cents === 'number') {
+          setAmountCents(data.amount_cents)
+        } else {
+          setAmountCents('unknown')
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setAmountCents('unknown')
+      })
+    return () => {
+      cancelled = true
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paramsKey])
 
   // Reset error when user starts typing
   useEffect(() => {
@@ -105,7 +139,32 @@ function CheckoutInner() {
     )
   }
 
-  const { product, tier, interval, amountCents, displayName } = parsed
+  if (amountCents === 'unknown') {
+    return (
+      <main style={{ padding: '4rem 1.5rem', maxWidth: 640, margin: '0 auto' }}>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.75rem' }}>
+          Checkout link invalid
+        </h1>
+        <p style={{ color: 'var(--bl-text-muted)', marginBottom: '1.25rem' }}>
+          This product or plan isn&rsquo;t available for checkout. Please return to the pricing
+          page and click the product button again.
+        </p>
+        <Link href="/pricing" className="bl-btn-primary">
+          Back to pricing
+        </Link>
+      </main>
+    )
+  }
+
+  if (amountCents === null) {
+    return (
+      <main style={{ padding: '4rem 1.5rem', textAlign: 'center' }}>
+        <p>Loading checkout…</p>
+      </main>
+    )
+  }
+
+  const { product, tier, interval, displayName } = parsed
   const priceLabel = `$${(amountCents / 100).toLocaleString('en-US')}${
     interval === 'monthly' ? ' / month' : interval === 'yearly' ? ' / year' : ''
   }`

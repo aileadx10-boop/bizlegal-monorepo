@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { logEventAsync } from '@/lib/ops/log'
 import { readAffiliateCode } from '@/lib/affiliate'
+import { resolveCheckoutPrice } from '@/lib/payments/price-map'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
@@ -10,7 +11,8 @@ interface StartBody {
   product: string
   tier: string
   interval: 'one-time' | 'monthly' | 'yearly'
-  amount_cents: number
+  /** Display hint only — the charged amount is resolved server-side. */
+  amount_cents?: number
   email: string
   name?: string
   source?: string
@@ -27,18 +29,24 @@ export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as Partial<StartBody>
 
-    if (!body.product || !body.tier || !body.interval || !body.amount_cents || !body.email) {
+    if (!body.product || !body.tier || !body.interval || !body.email) {
       return NextResponse.json(
-        { error: 'product, tier, interval, amount_cents, email required' },
+        { error: 'product, tier, interval, email required' },
         { status: 400 },
       )
     }
     if (!['one-time', 'monthly', 'yearly'].includes(body.interval)) {
       return NextResponse.json({ error: 'invalid interval' }, { status: 400 })
     }
-    if (body.amount_cents < 50 || body.amount_cents > 100000_00) {
-      return NextResponse.json({ error: 'amount out of range' }, { status: 400 })
+
+    // F2 fix (2026-09-01): the amount is resolved from the server-side
+    // price map — a client-supplied amount_cents is accepted only when it
+    // matches the map, and never charged as-is.
+    const price = resolveCheckoutPrice(body.product, body.tier, body.interval, body.amount_cents)
+    if (!price.ok) {
+      return NextResponse.json({ error: price.message, code: price.error }, { status: 400 })
     }
+    const amountCents = price.amountCents
 
     const apiKey = process.env.NOWPAYMENTS_API_KEY
     if (!apiKey) {
@@ -62,7 +70,7 @@ export async function POST(req: NextRequest) {
         product: body.product,
         tier: body.tier,
         billing_interval: body.interval,
-        amount_cents: body.amount_cents,
+        amount_cents: amountCents,
         gateway: 'nowpayments',
         status: 'pending',
         source: body.source ?? 'hub_pricing',
@@ -88,7 +96,7 @@ export async function POST(req: NextRequest) {
         'content-type': 'application/json',
       },
       body: JSON.stringify({
-        price_amount: body.amount_cents / 100,
+        price_amount: amountCents / 100,
         price_currency: 'usd',
         order_id: order.id,
         order_description: `${body.product} ${body.tier} ${body.interval}`,
@@ -123,7 +131,7 @@ export async function POST(req: NextRequest) {
       source: 'hub',
       ref_id: String(order.id),
       email: body.email,
-      amount_cents: body.amount_cents,
+      amount_cents: amountCents,
       status: 'pending',
       metadata: {
         gateway: 'nowpayments',
