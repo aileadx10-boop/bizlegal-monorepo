@@ -1,23 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
-
-const TIER_PRICES: Record<string, { crypto: number; fiat: number }> = {
-  regulatory:   { crypto: 29,  fiat: 29  },
-  standard:     { crypto: 149, fiat: 169 },
-  professional: { crypto: 349, fiat: 389 },
-  enterprise:   { crypto: 799, fiat: 879 },
-}
+import { TIER_PRICES_USD } from '@/lib/tiers'
 
 export async function POST(req: NextRequest) {
   try {
     const { email, wallet_address, network, tier, case_context } = await req.json()
 
-    if (!email || !tier || !TIER_PRICES[tier]) {
+    if (!email || !tier || !TIER_PRICES_USD[tier]) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
     const report_id = 'TR-' + new Date().getFullYear() + '-' + Math.floor(Math.random() * 90000 + 10000)
-    const price = TIER_PRICES[tier]
+    const price = TIER_PRICES_USD[tier]
     const ipnBase = 'https://tracr.bizlegal-ai.com'
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? ipnBase
     const nowKey = process.env.NOWPAYMENTS_API_KEY
@@ -31,7 +25,7 @@ export async function POST(req: NextRequest) {
         email,
         wallet_address,
         network: network ?? 'ethereum',
-        amount: price.crypto,
+        amount: price,
         tier,
         status: 'pending',
         payment_provider: 'nowpayments',
@@ -48,7 +42,7 @@ export async function POST(req: NextRequest) {
       method: 'POST',
       headers: { 'x-api-key': nowKey, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        price_amount: price.crypto,
+        price_amount: price,
         price_currency: 'usd',
         order_id: report_id,
         order_description: tier === 'regulatory' ? 'TRACR Regulatory Risk Report' : `TRCR ${tier} forensic report`,

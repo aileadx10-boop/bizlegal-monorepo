@@ -633,11 +633,13 @@ const SEVERITY_COLORS: Record<string, string> = {
 }
 
 function ResultsPhase({
-  risk, onUnlock, checkoutLoading, checkoutErr,
+  risk, onUnlock, onCardUnlock, checkoutLoading, cardLoading, checkoutErr,
 }: {
   risk: RiskResult
   onUnlock: () => void
+  onCardUnlock: () => void
   checkoutLoading: boolean
+  cardLoading: boolean
   checkoutErr: string
 }) {
   const levelColor = { Critical: C.red, High: C.orange, Moderate: '#f39c12', Low: C.green }[risk.level] || C.red
@@ -795,17 +797,27 @@ function ResultsPhase({
               </div>
             )}
 
-            <button onClick={onUnlock} disabled={checkoutLoading} style={{
+            <button onClick={onUnlock} disabled={checkoutLoading || cardLoading} style={{
               padding: '16px 48px', background: C.red, color: '#fff',
               border: 'none', borderRadius: 8, fontSize: 16, fontWeight: 700,
-              cursor: checkoutLoading ? 'wait' : 'pointer', fontFamily: C.sans,
+              cursor: checkoutLoading || cardLoading ? 'wait' : 'pointer', fontFamily: C.sans,
               boxShadow: `0 4px 28px rgba(192,57,43,0.4)`,
             }}>
               {checkoutLoading ? 'Creating order…' : 'Unlock Full Report — $29'}
             </button>
 
+            <div style={{ marginTop: 12 }}>
+              <button onClick={onCardUnlock} disabled={checkoutLoading || cardLoading} style={{
+                padding: '10px 24px', background: 'transparent', color: C.muted,
+                border: `1px solid ${C.border}`, borderRadius: 8, fontSize: 13, fontWeight: 600,
+                cursor: checkoutLoading || cardLoading ? 'wait' : 'pointer', fontFamily: C.sans,
+              }}>
+                {cardLoading ? 'Redirecting to PayPal…' : 'Pay by Card (PayPal)'}
+              </button>
+            </div>
+
             <p style={{ marginTop: 14, fontFamily: C.mono, fontSize: 11, color: C.dim }}>
-              Secure payment · PDF delivered to your email · No subscription
+              Crypto via NOWPayments · Card via PayPal · PDF delivered to your email · No subscription
             </p>
           </div>
         </div>
@@ -863,6 +875,7 @@ export default function ScanPage() {
   const [emailErr, setEmailErr] = useState('')
   const [risk, setRisk] = useState<RiskResult | null>(null)
   const [checkoutLoading, setCheckoutLoading] = useState(false)
+  const [cardLoading, setCardLoading] = useState(false)
   const [checkoutErr, setCheckoutErr] = useState('')
 
   function addAlert(msg: string) {
@@ -934,6 +947,38 @@ export default function ScanPage() {
     }
   }
 
+  async function handleCardUnlock() {
+    if (!email) return
+    setCardLoading(true)
+    setCheckoutErr('')
+    try {
+      const res = await fetch('/api/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          wallet: `REG-${Date.now()}`,
+          network: 'regulatory',
+          tier: 'regulatory',
+          caseContext: JSON.stringify({
+            bizType: formData.bizType,
+            jurisdictions: formData.jurisdictions,
+            revenue: formData.revenue,
+            hasCustody: formData.hasCustody,
+            collectsData: formData.collectsData,
+          }),
+        }),
+      })
+      const data = await res.json()
+      if (data.approvalUrl) window.location.href = data.approvalUrl
+      else setCheckoutErr(data.error || 'Card checkout failed. Please try again or pay with crypto.')
+    } catch {
+      setCheckoutErr('Network error. Please try again.')
+    } finally {
+      setCardLoading(false)
+    }
+  }
+
   if (phase === 'hero')    return <HeroPhase onStart={() => setPhase('form')} />
   if (phase === 'scanning') return <ScanningOverlay />
   if (phase === 'form')    return (
@@ -950,8 +995,8 @@ export default function ScanPage() {
   )
   if (phase === 'results' && risk) return (
     <ResultsPhase
-      risk={risk} onUnlock={handleUnlock}
-      checkoutLoading={checkoutLoading} checkoutErr={checkoutErr}
+      risk={risk} onUnlock={handleUnlock} onCardUnlock={handleCardUnlock}
+      checkoutLoading={checkoutLoading} cardLoading={cardLoading} checkoutErr={checkoutErr}
     />
   )
 

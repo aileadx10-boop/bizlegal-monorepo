@@ -48,6 +48,7 @@ interface Order {
   network: string
   tier: string
   status: string
+  email?: string
   risk_score?: number
   risk_level?: string
   ai_content?: AiContent
@@ -218,6 +219,7 @@ export default function ReportPage() {
   const [order, setOrder] = useState<Order | null>(null)
   const [loading, setLoading] = useState(true)
   const [payLoading, setPayLoading] = useState(false)
+  const [payErr, setPayErr] = useState('')
   const [generating, setGenerating] = useState(false)
 
   useEffect(() => {
@@ -230,14 +232,16 @@ export default function ReportPage() {
   async function handleCryptoPay() {
     if (!order) return
     setPayLoading(true)
+    setPayErr('')
     try {
       const res = await fetch('/api/scan/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: '', wallet_address: order.wallet_address, network: order.network, tier: order.tier }),
+        body: JSON.stringify({ email: order.email ?? '', wallet_address: order.wallet_address, network: order.network, tier: order.tier }),
       })
       const data = await res.json()
       if (data.invoice_url) window.location.href = data.invoice_url
+      else setPayErr(data.error || 'Could not create payment link. Email info@bizlegal-ai.com with your report ID.')
     } finally {
       setPayLoading(false)
     }
@@ -391,6 +395,9 @@ export default function ReportPage() {
                 Pay by Card — Email Us →
               </a>
             </div>
+            {payErr && (
+              <p style={{ fontSize: 12, color: C.red, fontFamily: C.mono, marginBottom: 12 }}>{payErr}</p>
+            )}
             <p style={{ fontSize: 11, color: C.dim, fontFamily: C.mono }}>Crypto via NOWPayments · Card via email arrangement</p>
           </div>
         )}

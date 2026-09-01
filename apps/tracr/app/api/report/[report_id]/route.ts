@@ -8,7 +8,7 @@ export async function GET(
   const { report_id } = await params
   const { data: order } = await supabaseAdmin
     .from('tracr_orders')
-    .select('report_id, wallet_address, network, tier, status, risk_score, risk_level, ai_content')
+    .select('report_id, wallet_address, network, tier, status, risk_score, risk_level, ai_content, email')
     .eq('report_id', report_id)
     .single()
 

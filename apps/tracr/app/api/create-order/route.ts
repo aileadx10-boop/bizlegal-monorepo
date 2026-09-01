@@ -1,14 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createPayPalOrder } from '@/lib/paypal'
 import { supabaseAdmin } from '@/lib/supabase'
-
-const TIER_PRICES: Record<string, number> = {
-  regulatory:   29,
-  standard:    149,
-  priority:    249,
-  litigation:  500,
-  enterprise:  799,
-}
+import { TIER_PRICES_USD } from '@/lib/tiers'
 
 export async function POST(req: NextRequest) {
   try {
@@ -18,11 +11,11 @@ export async function POST(req: NextRequest) {
       role, caseContext,
     } = await req.json()
 
-    if (!email || !tier || !TIER_PRICES[tier]) {
+    if (!email || !tier || !TIER_PRICES_USD[tier]) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    const amount = TIER_PRICES[tier]
+    const amount = TIER_PRICES_USD[tier]
     const reportId = 'TR-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 90000) + 10000)
     const walletAddr = wallet?.trim() || `REG-SCAN-${Date.now()}`
 
