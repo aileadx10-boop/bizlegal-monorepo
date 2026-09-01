@@ -41,7 +41,8 @@ const initial: FormData = {
 
 function buildPayload(form: FormData) {
   return {
-    url: 'https://fincen.gov/boi',
+    // Reference statute: NY LLC Transparency Act (NY LLC Law § 1106).
+    url: 'https://www.nysenate.gov/legislation/laws/LLC/1106',
     company_name: form.company_name,
     formation_date: form.formation_date,
     state: form.state,
@@ -122,25 +123,28 @@ export default function BOIPage() {
       <nav className="text-sm text-forge-muted mb-6">
         <Link href="/" className="hover:text-forge-accent">Home</Link>
         <span className="mx-2">/</span>
-        <span className="text-white">BOI Report</span>
+        <span className="text-white">State Transparency Kit</span>
       </nav>
 
       {/* Header */}
       <div className="mb-8">
         <div className="inline-flex items-center gap-2 bg-indigo-400/15 border border-indigo-400/30 text-indigo-300 text-xs font-bold px-3 py-1.5 rounded-full mb-4">
           <span className="w-2 h-2 rounded-full bg-indigo-300 animate-pulse" />
-          $500/DAY STATUTORY EXPOSURE
+          STATE TRANSPARENCY DUTIES — NY ENACTED, MORE PROPOSED
         </div>
-        <h1 className="text-3xl font-bold text-white mt-2 mb-3">CTA/BOI Report Filer</h1>
+        <h1 className="text-3xl font-bold text-white mt-2 mb-3">State Transparency Report Kit</h1>
         <p className="text-forge-muted">
-          The Corporate Transparency Act requires most US businesses to file Beneficial Ownership Information
-          with FinCEN — with <strong className="text-white">$500/day penalties</strong> for non-compliance.
-          Get a Compliance Snapshot in 2–5 minutes.
+          FinCEN&apos;s 2025 interim rule ended federal BOI filing for US domestic companies — and
+          states are moving to fill the gap. New York&apos;s LLC Transparency Act is enacted
+          (effective for new LLCs from January 1, 2026; existing LLCs by January 1, 2027) and
+          similar bills are proposed elsewhere. This kit maps your entity details to the
+          state-level disclosure duties that apply to you — with statute citations. We publish
+          the signals; you decide.
         </p>
         <div className="mt-4 flex items-center gap-4 text-sm text-forge-muted">
           <span className="flex items-center gap-1"><span className="text-green-400">✓</span> $149 flat fee</span>
           <span className="flex items-center gap-1"><span className="text-green-400">✓</span> Delivered in 2–5 minutes</span>
-          <span className="flex items-center gap-1"><span className="text-green-400">✓</span> FinCEN Form 1 included</span>
+          <span className="flex items-center gap-1"><span className="text-green-400">✓</span> Enacted vs proposed, cited</span>
         </div>
       </div>
 
@@ -202,10 +206,10 @@ export default function BOIPage() {
           </div>
 
           <div className="card space-y-4">
-            <h2 className="font-semibold text-white">BOI Filing Status</h2>
+            <h2 className="font-semibold text-white">Ownership &amp; Disclosure Status</h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="label">Has a BOI report been filed with FinCEN? *</label>
+                <label className="label">Has the entity ever filed a beneficial-ownership or transparency disclosure (federal or state)? *</label>
                 <select className="input-field" value={form.boi_filed}
                   onChange={(e) => set('boi_filed', e.target.value)}>
                   <option value="">Select...</option>
@@ -214,14 +218,14 @@ export default function BOIPage() {
               </div>
               {form.boi_filed === 'Yes' && (
                 <div>
-                  <label className="label">Date of Last BOI Filing</label>
+                  <label className="label">Date of Most Recent Disclosure Filing</label>
                   <input type="date" className="input-field"
                     value={form.boi_filing_date} onChange={(e) => set('boi_filing_date', e.target.value)} />
                 </div>
               )}
             </div>
             <div>
-              <label className="label">Has ownership changed since the last BOI filing? *</label>
+              <label className="label">Has ownership or control changed since that disclosure? *</label>
               <select className="input-field" value={form.ownership_changed}
                 onChange={(e) => set('ownership_changed', e.target.value)}>
                 <option value="">Select...</option>
@@ -262,7 +266,7 @@ export default function BOIPage() {
           )}
 
           <button type="submit" disabled={loading} className="btn-primary w-full">
-            {loading ? 'Analyzing...' : 'Run BOI Compliance Check — $149'}
+            {loading ? 'Analyzing...' : 'Run State Transparency Check — $149'}
           </button>
           <p className="text-xs text-forge-muted text-center">
             🔒 Secure payment · Not legal advice — regulatory intelligence only · Delivered in 2–5 minutes
@@ -274,7 +278,7 @@ export default function BOIPage() {
       {step === 'payment' && result && (
         <div className="card space-y-6">
           <div>
-            <h2 className="text-xl font-bold text-white mb-2">BOI Compliance Report</h2>
+            <h2 className="text-xl font-bold text-white mb-2">State Transparency Report</h2>
             <span className={`text-xs font-bold px-2 py-1 rounded-full ${(result as { risk_level?: string }).risk_level === 'critical' ? 'bg-red-500/20 text-red-400' : (result as { risk_level?: string }).risk_level === 'high' ? 'bg-orange-500/20 text-orange-400' : 'bg-yellow-500/20 text-yellow-400'}`}>
               {((result as { risk_level?: string }).risk_level ?? 'medium').toUpperCase()} RISK
             </span>
@@ -282,9 +286,10 @@ export default function BOIPage() {
 
           {(result as { filing_overdue?: boolean }).filing_overdue && (
             <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
-              <p className="text-red-400 font-semibold text-sm">⚠️ BOI Filing Overdue</p>
+              <p className="text-red-400 font-semibold text-sm">⚠️ State Disclosure Duty Identified</p>
               <p className="text-forge-muted text-sm mt-1">
-                Filing has been overdue. Penalties accruing at $500/day since {form.formation_date}.
+                An enacted or proposed state transparency law appears to apply to your entity.
+                The full report cites the statute and the exact disclosure steps.
               </p>
             </div>
           )}
@@ -318,7 +323,7 @@ export default function BOIPage() {
                 </div>
               </div>
               <a
-                href={`https://bizlegal-ai.com/checkout?product=forge&tier=boi&interval=one-time&amount=16900&name=Forge+BOI+Report+Kit`}
+                href={`https://bizlegal-ai.com/checkout?product=forge&tier=boi&interval=one-time&amount=16900&name=Forge+State+Transparency+Report+Kit`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary w-full block text-center"
@@ -340,7 +345,7 @@ export default function BOIPage() {
           <div className="text-5xl">✅</div>
           <h2 className="text-2xl font-bold text-white">Payment Initiated</h2>
           <p className="text-forge-muted leading-relaxed">
-            Thank you. Your BOI compliance report will be delivered to <strong className="text-white">{form.contact_email}</strong> within 24 hours.
+            Thank you. Your state transparency report will be delivered to <strong className="text-white">{form.contact_email}</strong> within 24 hours.
           </p>
           <p className="text-sm text-forge-muted">
             Reference: <span className="font-mono text-forge-accent">{(result as { scan_id?: string }).scan_id}</span>

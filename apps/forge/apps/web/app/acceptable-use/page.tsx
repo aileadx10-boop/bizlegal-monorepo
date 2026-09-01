@@ -11,7 +11,7 @@ export default function AcceptableUsePage() {
         <section style={{ marginBottom: 32 }}>
           <h2 style={{ fontSize: 20, fontWeight: 600, color: '#fff', marginBottom: 12 }}>Permitted Uses</h2>
           <ul style={{ paddingLeft: 20, lineHeight: 1.8, color: '#94a3b8' }}>
-            <li style={{ marginBottom: 8 }}>✓ Filing BOI/CTA reports for your own business or clients (with authorization)</li>
+            <li style={{ marginBottom: 8 }}>✓ Generating state transparency and regulatory compliance reports for your own business or clients (with authorization)</li>
             <li style={{ marginBottom: 8 }}>✓ Generating regulatory compliance reports for legitimate business purposes</li>
             <li style={{ marginBottom: 8 }}>✓ Using the web compliance scanner on websites you own or are authorized to audit</li>
             <li style={{ marginBottom: 8 }}>✓ Creating regulatory passports for jurisdictions where you operate</li>
@@ -22,8 +22,8 @@ export default function AcceptableUsePage() {
         <section style={{ marginBottom: 32 }}>
           <h2 style={{ fontSize: 20, fontWeight: 600, color: '#fff', marginBottom: 12 }}>Prohibited Uses</h2>
           <ul style={{ paddingLeft: 20, lineHeight: 1.8, color: '#94a3b8' }}>
-            <li style={{ marginBottom: 8 }}>✕ Using BOI reports to facilitate identity theft or fraud</li>
-            <li style={{ marginBottom: 8 }}>✕ Filing false or misleading information with FinCEN or any government agency</li>
+            <li style={{ marginBottom: 8 }}>✕ Using transparency reports to facilitate identity theft or fraud</li>
+            <li style={{ marginBottom: 8 }}>✕ Filing false or misleading information with any government agency</li>
             <li style={{ marginBottom: 8 }}>✕ Using regulatory passports to misrepresent compliance status</li>
             <li style={{ marginBottom: 8 }}>✕ Scraping or reverse-engineering the platform</li>
             <li style={{ marginBottom: 8 }}>✕ Reselling reports without written permission</li>
@@ -34,7 +34,7 @@ export default function AcceptableUsePage() {
           <h2 style={{ fontSize: 20, fontWeight: 600, color: '#fff', marginBottom: 12 }}>Compliance-Specific Rules</h2>
           <ul style={{ paddingLeft: 20, lineHeight: 1.8, color: '#94a3b8' }}>
             <li style={{ marginBottom: 8 }}>✕ Do not use the platform to evade regulatory obligations</li>
-            <li style={{ marginBottom: 8 }}>✕ Do not submit BOI reports containing knowingly false beneficial ownership information</li>
+            <li style={{ marginBottom: 8 }}>✕ Do not submit state transparency disclosures containing knowingly false beneficial ownership information</li>
             <li style={{ marginBottom: 8 }}>✕ Do not use web scanner results to extort or harass website owners</li>
             <li style={{ marginBottom: 8 }}>✕ Do not represent Forge intelligence briefs as formal legal opinions</li>
           </ul>
@@ -43,7 +43,7 @@ export default function AcceptableUsePage() {
         <section style={{ marginBottom: 32 }}>
           <h2 style={{ fontSize: 20, fontWeight: 600, color: '#fff', marginBottom: 12 }}>Output Limitations</h2>
           <ul style={{ paddingLeft: 20, lineHeight: 1.8, color: '#94a3b8' }}>
-            <li style={{ marginBottom: 8 }}>! BOI reports are machine-assisted and pass practitioner review before delivery; you remain the filer of record</li>
+            <li style={{ marginBottom: 8 }}>! Transparency reports are machine-assisted and pass practitioner review before delivery; you remain the filer of record</li>
             <li style={{ marginBottom: 8 }}>! Compliance scores are estimates, not guarantees of regulatory compliance</li>
             <li style={{ marginBottom: 8 }}>! Web scanner results may not capture all regulatory requirements for every jurisdiction</li>
             <li style={{ marginBottom: 8 }}>! Regulatory passports should be verified by qualified legal counsel before reliance</li>

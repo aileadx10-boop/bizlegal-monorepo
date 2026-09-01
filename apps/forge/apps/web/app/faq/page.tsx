@@ -4,16 +4,16 @@ import { useState } from 'react'
 
 const FAQS = [
   {
-    q: 'What is a BOI report and why do I need one?',
-    a: 'The Beneficial Ownership Information (BOI) report is required by the Corporate Transparency Act (CTA). Most US businesses must file with FinCEN disclosing beneficial owners (25%+ ownership or substantial control). Failure to file results in $500/day penalties.',
+    q: 'Is federal BOI filing still required?',
+    a: 'Not for US domestic companies. FinCEN\'s March 2025 interim final rule removed domestic companies from the Corporate Transparency Act\'s beneficial-ownership reporting requirement; only certain foreign companies remain in scope. State-level transparency laws are a separate, live matter.',
   },
   {
-    q: 'Who needs to file a BOI report?',
-    a: 'Most US corporations, LLCs, and similar entities created or registered to do business in any US state. There are 23 exemption categories, but most small businesses do not qualify for exemptions.',
+    q: 'What are state transparency acts?',
+    a: 'State-level beneficial-ownership disclosure laws filling the gap left by the end of federal BOI filing for domestic companies. New York\'s LLC Transparency Act (NY LLC Law § 1106) is enacted — effective January 1, 2026 for newly formed LLCs and January 1, 2027 for existing ones — and similar bills are proposed in other states.',
   },
   {
-    q: 'What happens if I don\'t file?',
-    a: 'Penalties of $500 per day for each day the violation continues. Willful violations can result in fines up to $10,000 and/or 2 years imprisonment. Our report helps you avoid these penalties.',
+    q: 'What does the State Transparency Report Kit cover?',
+    a: 'It maps your entity details to the state-level disclosure duties that apply to you — distinguishing enacted law from proposed bills, citing the controlling statute for each item, and walking you through what each law actually requires. $149 one-time.',
   },
   {
     q: 'How long does delivery take?',

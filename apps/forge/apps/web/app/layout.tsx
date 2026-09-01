@@ -23,11 +23,11 @@ export const metadata: Metadata = {
     default: 'Forge Compliance Engine — Continuous Regulatory Intelligence',
     template: '%s | Forge Compliance',
   },
-  description: 'Multi-framework regulatory compliance briefs for US businesses and Israeli tech companies expanding globally. BOI/CTA filing, Regulatory Passport, Web Compliance Scanner.',
-  keywords: ['BOI report', 'CTA compliance', 'FinCEN filing', 'regulatory passport', 'web compliance scanner', 'Israeli tech compliance', 'GDPR', 'CIPA'],
+  description: 'Multi-framework regulatory compliance briefs for US businesses and Israeli tech companies expanding globally. State transparency report kits, Regulatory Passport, Web Compliance Scanner.',
+  keywords: ['state transparency act', 'NY LLC Transparency Act', 'LLC disclosure requirements', 'regulatory passport', 'web compliance scanner', 'Israeli tech compliance', 'GDPR', 'CIPA'],
   openGraph: {
     title: 'Forge Compliance Engine — Continuous Regulatory Intelligence',
-    description: 'Reduce $500/day BOI exposure. Compliance Snapshots delivered in 2–5 minutes.',
+    description: 'Map your LLC to state-level transparency duties. Compliance Snapshots delivered in 2–5 minutes.',
     url: 'https://forge.bizlegal-ai.com',
     siteName: 'Forge Compliance Engine',
     locale: 'en_US',
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Forge Compliance Engine',
-    description: 'Continuous regulatory intelligence. Reduce $500/day BOI exposure.',
+    description: 'Continuous regulatory intelligence. State transparency duties mapped to your entity.',
   },
   robots: {
     index: true,
@@ -88,7 +88,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               Forge<span className="text-forge-accent" aria-hidden="true">.</span>
             </a>
             <nav className="hidden md:flex items-center gap-8 text-sm text-forge-text-secondary" aria-label="Primary">
-              <a href="/boi" className="hover:text-white transition-colors">BOI Report</a>
+              <a href="/boi" className="hover:text-white transition-colors">State Transparency Kit</a>
               <a href="/passport" className="hover:text-white transition-colors">Regulatory Passport</a>
               <a href="/audit" className="hover:text-white transition-colors">Web Scanner</a>
               <a href="/pricing" className="hover:text-white transition-colors">Pricing</a>
@@ -98,7 +98,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <ThemeToggle size={32} />
               <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-1 text-xs text-forge-text-secondary bg-forge-border rounded border border-forge-border" aria-hidden="true">⌘K</kbd>
               <a href="/boi" className="btn-primary text-sm px-4 py-2 hidden sm:inline-block">
-                File BOI — $149
+                Transparency Kit — $149
               </a>
             </div>
           </div>
@@ -126,7 +126,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <div>
                 <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-3">Products</h3>
                 <ul className="space-y-2 text-sm">
-                  <li><a href="/boi" className="text-forge-muted hover:text-forge-accent transition-colors">BOI/CTA Report — $149</a></li>
+                  <li><a href="/boi" className="text-forge-muted hover:text-forge-accent transition-colors">State Transparency Kit — $149</a></li>
                   <li><a href="/passport" className="text-forge-muted hover:text-forge-accent transition-colors">Regulatory Passport — $297</a></li>
                   <li><a href="/audit" className="text-forge-muted hover:text-forge-accent transition-colors">Web Compliance Scanner — from $99</a></li>
                   <li><a href="/pricing" className="text-forge-muted hover:text-forge-accent transition-colors">Compare Plans</a></li>

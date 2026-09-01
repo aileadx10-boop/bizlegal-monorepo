@@ -32,13 +32,13 @@ export function StickyConversionBar() {
             <div className="flex items-center gap-4">
               <div className="hidden sm:flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-indigo-300 animate-pulse" />
-                <span className="text-xs font-bold text-indigo-300 tracking-wider">$500/DAY STATUTORY EXPOSURE</span>
+                <span className="text-xs font-bold text-indigo-300 tracking-wider">STATE TRANSPARENCY DUTIES — NY ENACTED</span>
               </div>
 
               <div className="h-4 w-px bg-forge-border hidden sm:block" />
 
               <p className="text-sm text-forge-text">
-                <span className="hidden md:inline">Reduce FinCEN exposure. </span>
+                <span className="hidden md:inline">Map your state transparency duties. </span>
                 <span className="text-forge-accent font-semibold">Compliance Snapshot in 2–5 minutes.</span>
               </p>
             </div>
@@ -55,7 +55,7 @@ export function StickyConversionBar() {
                 href="/boi"
                 className="inline-flex items-center gap-2 bg-forge-accent hover:bg-forge-accent-hover text-white text-sm font-bold px-4 py-2 rounded-lg transition-colors"
               >
-                File BOI Report
+                State Transparency Kit
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>

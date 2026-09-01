@@ -182,9 +182,9 @@ function buildMockPayload(url: string, vertical: string): Record<string, unknown
       exposure_min: 15000,
       exposure_max: 180000,
       findings: [
-        'BOI filing deadline has passed. $500/day penalties accruing since formation date.',
-        'Ownership structure indicates 3 beneficial owners — all must be disclosed.',
-        'FinCEN Form 1 not yet filed. Immediate action required.',
+        'State transparency duty identified: an enacted state act (e.g. NY LLC Transparency Act) appears to apply to this entity.',
+        'Ownership structure indicates 3 beneficial owners — all would be disclosable under the state model.',
+        'No state transparency disclosure on record. Duty mapping recommended before the phase-in deadline.',
       ],
     }
   }

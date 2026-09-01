@@ -5,7 +5,7 @@ import * as React from 'react'
 /**
  * Forge homepage pre-banner — Phase AA Subdomain Design Pass
  * (rebrand-only). Sits above the existing Hero + IntelligenceCard
- * grid. Adds a BOI-screen CTA + 3-step brief in the Daybreak palette.
+ * grid. Adds a transparency-screen CTA + 3-step brief in the Daybreak palette.
  */
 export function ForgeLandingPreBanner(): React.ReactElement {
   return (
@@ -47,7 +47,7 @@ export function ForgeLandingPreBanner(): React.ReactElement {
                   boxShadow: '0 0 12px var(--brand, #5B49E0)',
                 }}
               />
-              Free 60-second BOI screen
+              Free 60-second transparency screen
             </span>
             <h2
               style={{
@@ -60,11 +60,12 @@ export function ForgeLandingPreBanner(): React.ReactElement {
                 color: 'var(--paper, #1A1530)',
               }}
             >
-              Do you need to file a BOI report?
+              Do state transparency laws apply to your LLC?
             </h2>
             <p style={{ marginTop: 12, color: 'var(--paper-dim, #5C5670)', maxWidth: 560, fontSize: 15, lineHeight: 1.6 }}>
-              Run the 5-question screen first — get a real preliminary signal across the FinCEN
-              CTA exemptions before deciding whether to buy the full report below.
+              Federal BOI filing for US domestic companies ended in 2025 — states are filling the
+              gap. Run the 5-question screen first — get a real preliminary signal on your
+              state-level disclosure duties before deciding whether to buy the full report below.
             </p>
           </div>
           <a
@@ -84,7 +85,7 @@ export function ForgeLandingPreBanner(): React.ReactElement {
             }}
           >
             <span aria-hidden style={{ width: 8, height: 8, borderRadius: 99, background: '#fff' }} />
-            Run BOI screen →
+            Run transparency screen →
           </a>
         </div>
 
@@ -99,17 +100,17 @@ export function ForgeLandingPreBanner(): React.ReactElement {
             {
               title: 'Run the screen',
               body:
-                '5 questions across reporting-entity status, US presence, employee count, revenue, and formation date. No signup until verdict.',
+                '5 questions across entity type, formation state, US presence, employee count, and revenue. No signup until verdict.',
             },
             {
               title: 'Get the brief',
               body:
-                'Within 5 minutes: the BOI report shape — FinCEN-formatted entity + beneficial-owner records with citations to the relevant CTA sections.',
+                'Within 5 minutes: which enacted or proposed state transparency acts match your entity — with citations to the controlling statutes.',
             },
             {
               title: 'Decide your move',
               body:
-                'File the full report ($149 below), keep the exemption attestation template, or talk to a BOI counsel we route you to.',
+                'Get the full State Transparency Kit ($149 below), keep the duty-mapping checklist, or talk to counsel we route you to.',
             },
           ].map((s, i) => (
             <div

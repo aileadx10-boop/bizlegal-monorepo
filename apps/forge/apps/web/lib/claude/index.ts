@@ -301,20 +301,25 @@ Return JSON:
   "fix_steps": []
 }`,
 
-  boi: (p) => `Analyze this company's Beneficial Ownership Information (BOI) filing status under the Corporate Transparency Act (31 CFR 1010.306).
+  boi: (p) => `Analyze this company's state-level transparency disclosure duties.
+
+Context: federal BOI filing for US domestic companies ended under FinCEN's March 2025 interim
+final rule (only certain foreign companies remain in scope of the CTA). States are filling the
+gap — New York's LLC Transparency Act (NY LLC Law § 1106) is enacted (effective Jan 1, 2026 for
+newly formed LLCs; Jan 1, 2027 for existing ones) and similar bills are proposed in other states.
 
 Company: ${p.company_name || 'Unknown'}
 Formation date: ${p.formation_date || 'Unknown'}
 State formed: ${p.state || 'Unknown'}
-Has BOI been filed with FinCEN: ${p.boi_filed || 'Unknown'}
-Ownership change since filing: ${p.ownership_changed || 'No'}
+Prior beneficial-ownership or transparency disclosure filed (federal or state): ${p.boi_filed || 'Unknown'}
+Ownership change since that disclosure: ${p.ownership_changed || 'No'}
 Number of beneficial owners (25%+ or substantial control): ${p.owner_count || 'Unknown'}
-Prior BOI filing date: ${p.boi_filing_date || 'Never filed'}
+Date of most recent disclosure filing: ${p.boi_filing_date || 'Never filed'}
 
-CTA requires:
-- FinCEN BOI Report (Form 1) within 90 days of formation for existing companies, or 30 days for companies formed after Jan 1, 2024
-- Updates within 30 days of any ownership change
-- Penalties: $500/day per violation, accruing from Jan 1, 2024
+Assess:
+- Whether an enacted state transparency act applies to this entity (distinguish enacted from proposed; cite the controlling statute)
+- Which individuals would be disclosable under the state beneficial-ownership model
+- Phase-in deadlines and update duties (state acts generally require updates within 30 days of change)
 
 Return JSON:
 {

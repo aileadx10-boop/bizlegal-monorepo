@@ -1,7 +1,7 @@
 'use client'
 
 /**
- * DecisionTree — interactive BOI Filing Decision Tree.
+ * DecisionTree — interactive State Transparency Duty Screen.
  *
  * V1 conversion-machine: take a visitor through 4-5 yes/no questions,
  * give them a real preliminary answer, and gate the full PDF guide
@@ -10,7 +10,7 @@
  * This is the V1 lead-magnet pattern; once it converts, the same
  * shape is replicated to other verticals (TRACR / DocAI / LexAudit).
  *
- * Liability rule: never claim certainty about a filing requirement.
+ * Liability rule: never claim certainty about a disclosure duty.
  * Output is "preliminary signal" + recommendation to verify with a
  * named partner. See /agents/ea/templates/referral-contract-template.md
  * for the same disclosure shape.
@@ -31,27 +31,27 @@ interface VerdictPayload {
 const VERDICTS: Record<Verdict, VerdictPayload> = {
   must_file: {
     verdict: 'must_file',
-    headline: 'Looks like you need to file a BOI report.',
+    headline: 'State transparency duties likely apply to you.',
     explainer:
-      'Based on your answers, your entity falls inside FinCEN\'s reporting-company definition under the Corporate Transparency Act. The 23 statutory exemptions (e.g. large operating company, public company, regulated entity) do not appear to apply.',
+      'Federal BOI filing for US domestic companies ended under FinCEN\'s 2025 rule — but states are filling the gap. Based on your answers, your entity profile matches the scope of enacted or proposed state transparency acts (New York\'s LLC Transparency Act is enacted; more are pending).',
     recommended_next_step:
-      'The full Forge BOI report walks you through the FinCEN BOIR fields with primary-source citations and a ready-to-file format. Save your spot below — we\'ll email you the breakdown.',
+      'The full Forge State Transparency Kit maps your entity to each applicable state duty with statute citations and the exact disclosure steps. Save your spot below — we\'ll email you the breakdown.',
   },
   likely_exempt: {
     verdict: 'likely_exempt',
-    headline: 'You\'re likely exempt from BOI filing.',
+    headline: 'You\'re likely outside current state transparency duties.',
     explainer:
-      'Your answers suggest you fall under one of the CTA\'s 23 statutory exemptions — most commonly the "large operating company" exemption (>20 FTEs + >$5M gross receipts + US physical office). Exemptions are strict; the safe move is to document the basis.',
+      'Your answers suggest your entity profile falls outside the enacted state disclosure regimes — larger operating companies and non-LLC structures are treated differently under the state acts now in force. Rules are moving quickly; the safe move is to document the basis.',
     recommended_next_step:
-      'Save your spot below for a one-page "exemption attestation" template — the doc you keep on file in case FinCEN asks why you didn\'t file.',
+      'Save your spot below for a one-page duty-mapping checklist — the doc you keep on file in case a state regulator asks how you assessed your position.',
   },
   edge_case: {
     verdict: 'edge_case',
     headline: 'Edge case — your situation needs a closer look.',
     explainer:
-      'A couple of your answers point to a fact pattern that doesn\'t cleanly fit the standard BOI rules — most often a recent formation date, mixed-class ownership, or partial exemption.',
+      'A couple of your answers point to a fact pattern that doesn\'t cleanly fit the standard state transparency rules — most often a recent formation date, mixed-class ownership, or a multi-state footprint.',
     recommended_next_step:
-      'Save your spot below — we\'ll send you a checklist of the specific FinCEN regulations that apply to your facts, plus a partner contact who handles edge-case BOI matters.',
+      'Save your spot below — we\'ll send you a checklist of the specific state statutes that apply to your facts, plus a partner contact who handles edge-case transparency matters.',
   },
 }
 
@@ -66,7 +66,7 @@ const QUESTIONS: Question[] = [
     id: 'is_reporting_entity',
     prompt:
       'Is your business a US LLC, corporation, or limited partnership (or formed in the US by a similar filing with a state)?',
-    help: 'BOI applies to entities created by filing a document with a US state or tribe. Sole proprietorships and general partnerships are usually outside the rule.',
+    help: 'State transparency acts apply to entities created by filing a document with a US state. Sole proprietorships and general partnerships are usually outside scope.',
   },
   {
     id: 'has_us_office',
@@ -84,7 +84,7 @@ const QUESTIONS: Question[] = [
   {
     id: 'recently_formed',
     prompt: 'Was the entity formed on or after January 1, 2024?',
-    help: 'Formation date matters for filing deadlines: pre-2024 entities had until Jan 1, 2025; new entities have 30 days.',
+    help: 'Formation date matters: enacted state acts phase in differently for new vs existing entities (NY LLCTA: Jan 1, 2026 for new LLCs, Jan 1, 2027 for existing).',
   },
 ]
 
@@ -238,7 +238,7 @@ export function DecisionTree(): JSX.Element {
             disabled={submitting || !email || (turnstileRequired && !turnstileToken)}
             className="w-full bg-forge-accent hover:bg-forge-accent-hover disabled:bg-forge-border disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors"
           >
-            {submitting ? 'Sending…' : 'Email me the BOI report'}
+            {submitting ? 'Sending…' : 'Email me the duty breakdown'}
           </button>
           {error && <p className="text-sm text-red-400">{error}</p>}
           <p className="text-[11px] text-forge-muted leading-relaxed">
@@ -251,7 +251,7 @@ export function DecisionTree(): JSX.Element {
             Sent — check your inbox in a few minutes.
           </p>
           <p className="text-xs text-forge-text-secondary leading-relaxed">
-            We\'ll send the {done.verdict === 'likely_exempt' ? 'exemption attestation template' : 'BOI report breakdown'} shortly.
+            We\'ll send the {done.verdict === 'likely_exempt' ? 'duty-mapping checklist' : 'state transparency breakdown'} shortly.
           </p>
         </div>
       )}

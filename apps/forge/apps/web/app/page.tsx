@@ -47,15 +47,15 @@ function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
 const PRODUCTS = [
   {
     id: 'boi',
-    category: 'BOI / CTA',
-    name: 'BOI Report Kit',
-    tagline: 'FinCEN BOI / CTA filing — $149',
+    category: 'State transparency',
+    name: 'State Transparency Report Kit',
+    tagline: 'State-level disclosure mapping — $149',
     description:
-      'CTA Beneficial Ownership Information report generated from your LLC details + FinCEN-ready PDF. Filing-ready in 5 minutes. Reduce $500/day non-filing exposure.',
+      'Federal BOI filing for US domestic companies ended under FinCEN\'s 2025 interim rule — states are filling the gap. This kit maps your LLC details to state-level transparency duties (NY\'s enacted LLC Transparency Act; proposed acts elsewhere) with statute citations.',
     features: [
-      'FinCEN-ready BOIR PDF',
-      'Beneficial owner walkthrough',
-      'Annual refresh reminder',
+      'State-by-state duty mapping',
+      'NY LLCTA readiness check',
+      'Enacted vs proposed tracker',
       'Practitioner-reviewed template',
     ],
     href: '/boi',
@@ -113,9 +113,9 @@ const PRODUCTS = [
 
 const METRICS = [
   { value: 8, suffix: '', label: 'Frameworks covered' },
-  { value: 500, suffix: '/day', label: 'BOI penalty avoided', dollar: true },
-  { value: 5, suffix: ' min', label: 'BOI report turnaround' },
-  { value: 2026, suffix: '', label: 'CTA reporting year' },
+  { value: 51, suffix: '', label: 'US jurisdictions monitored' },
+  { value: 5, suffix: ' min', label: 'Report turnaround' },
+  { value: 2026, suffix: '', label: 'NY LLCTA effective year' },
 ]
 
 export default function ForgeHomepage() {
@@ -126,22 +126,24 @@ export default function ForgeHomepage() {
         eyebrow="Forge · Compliance scanner for US LLC owners + cross-border founders"
         headline={
           <>
-            File the BOI report. Pass the audit.{' '}
+            Map your state transparency duties. Pass the audit.{' '}
             <span className="bl-grad-text">In an afternoon.</span>
           </>
         }
         subheadline={
           <>
-            Forge generates your FinCEN BOI report, scans your website for
-            CIPA / GDPR gaps, and tracks regulator changes across 8 frameworks
-            — all from one operator workspace.{' '}
+            Forge maps your LLC to state-level transparency laws — New York&apos;s
+            enacted LLC Transparency Act and proposed acts elsewhere — scans your
+            website for CIPA / GDPR gaps, and tracks regulator changes across 8
+            frameworks, all from one operator workspace.{' '}
             <span style={{ color: 'var(--bl-text-subtle)' }}>
-              Built for the founder who would rather ship product than read 73 pages of
-              FinCEN guidance.
+              Federal BOI filing for US domestic companies ended under FinCEN&apos;s
+              2025 rule. The disclosure frontier moved to the states — we publish the
+              signals, you decide.
             </span>
           </>
         }
-        primaryCta={{ label: 'File BOI Report — $149', href: '/boi' }}
+        primaryCta={{ label: 'State Transparency Kit — $149', href: '/boi' }}
         secondaryCta={{ label: 'See pricing', href: '/pricing' }}
       />
 
@@ -174,7 +176,7 @@ export default function ForgeHomepage() {
                   letterSpacing: '-0.02em',
                 }}
               >
-                {m.dollar && '$'}<Counter end={m.value} />{m.suffix}
+                <Counter end={m.value} />{m.suffix}
               </div>
               <div
                 className="bl-label"
@@ -223,9 +225,9 @@ export default function ForgeHomepage() {
                   margin: 0,
                 }}
               >
-                Each product solves one filing or scan in one sitting. Buy the
-                BOI Kit one-time, the Passport on subscription, the Audit per
-                scan, and the Gap Monitor as ongoing intelligence.
+                Each product solves one report or scan in one sitting. Buy the
+                State Transparency Kit one-time, the Passport on subscription,
+                the Audit per scan, and the Gap Monitor as ongoing intelligence.
               </p>
             </div>
           </Reveal>
@@ -319,7 +321,7 @@ export default function ForgeHomepage() {
               marginBottom: '1rem',
             }}
           >
-            File the BOI report{' '}
+            Map your state transparency duties{' '}
             <span className="bl-grad-text">in 5 minutes.</span>
           </h2>
           <p
@@ -331,16 +333,16 @@ export default function ForgeHomepage() {
               marginBottom: '2rem',
             }}
           >
-            $149 one-time. Practitioner-reviewed FinCEN BOIR template.
-            Generated PDF, ready to file. 14-day money back.
+            $149 one-time. Practitioner-reviewed, citation-backed report on the
+            state-level disclosure duties that apply to your LLC. 14-day money back.
           </p>
           <Link href="/boi" className="bl-btn-primary">
-            File BOI Report — $149
+            State Transparency Kit — $149
             <span aria-hidden="true">→</span>
           </Link>
         </div>
       </section>
-      <StickyLeadBadge href="/decision-tree" label="Run free Forge BOI screen →" />
+      <StickyLeadBadge href="/decision-tree" label="Run free Forge transparency screen →" />
     </>
   )
 }

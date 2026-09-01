@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Order Confirmed — Forge Compliance Engine',
-  description: 'Your BOI compliance report order has been confirmed.',
+  description: 'Your state transparency report order has been confirmed.',
 }
 
 export default function BOISuccessPage() {
@@ -18,11 +18,11 @@ export default function BOISuccessPage() {
         </div>
 
         <h1 className="text-3xl font-light mb-4 tracking-tight">
-          Your BOI report is being prepared.
+          Your state transparency report is being prepared.
         </h1>
 
         <p className="max-w-md mx-auto mb-10 leading-relaxed" style={{ color: '#94a3b8' }}>
-          You&apos;ll receive your complete BOI Compliance Report within 24 hours at the email
+          You&apos;ll receive your complete State Transparency Report within 24 hours at the email
           address you provided. Check your inbox (and spam folder).
         </p>
 

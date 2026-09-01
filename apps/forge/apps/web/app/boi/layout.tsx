@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'CTA/BOI Report Filing — $149 | Forge Compliance Engine',
-  description: 'File your Corporate Transparency Act Beneficial Ownership Information report with FinCEN. Reduce $500/day exposure. Guided process, delivered in 2–5 minutes, practitioner-reviewed.',
-  keywords: 'BOI report, CTA compliance, FinCEN filing, beneficial ownership, Corporate Transparency Act, $500 penalty',
+  title: 'State Transparency Report Kit — $149 | Forge Compliance Engine',
+  description: 'Federal BOI filing for US domestic companies ended under FinCEN\'s 2025 rule. Map your LLC to state-level transparency duties — New York\'s enacted LLC Transparency Act and proposed acts elsewhere. Statute-cited, practitioner-reviewed, delivered in 2–5 minutes.',
+  keywords: 'state transparency act, NY LLC Transparency Act, LLC disclosure requirements, beneficial ownership state law, LLC transparency, state disclosure duty',
   openGraph: {
-    title: 'File Your BOI Report Before $500/Day Penalties Stack Up',
-    description: 'Corporate Transparency Act compliance. FinCEN Form 1 generation, ownership analysis, and annual reminders. $149 flat fee.',
+    title: 'State Transparency Report Kit — Map Your LLC to State Disclosure Duties',
+    description: 'States are filling the gap left by the end of federal BOI filing for domestic companies. NY LLCTA enacted; more states proposed. $149 flat fee, statute-cited.',
     url: 'https://forge.bizlegal-ai.com/boi',
     siteName: 'Forge Compliance Engine',
     type: 'website',
@@ -25,9 +25,9 @@ export default function BOILayout({ children }: { children: React.ReactNode }) {
             '@graph': [
               {
                 '@type': 'SoftwareApplication',
-                name: 'BOI/CTA Compliance Report Kit',
+                name: 'State Transparency Report Kit',
                 url: 'https://forge.bizlegal-ai.com/boi',
-                description: 'Guided FinCEN Beneficial Ownership Information (BOI) report filing kit. CTA compliance for LLCs, corporations, and partnerships. Practitioner-reviewed output in 2–5 minutes. $149 flat fee.',
+                description: 'Guided state-level transparency disclosure kit for US LLCs, corporations, and partnerships. Maps entity details to enacted and proposed state transparency laws (e.g. NY LLC Transparency Act) with statute citations. Practitioner-reviewed output in 2–5 minutes. $149 flat fee.',
                 applicationCategory: 'BusinessApplication',
                 operatingSystem: 'Web',
                 offers: {
@@ -48,42 +48,42 @@ export default function BOILayout({ children }: { children: React.ReactNode }) {
                 mainEntity: [
                   {
                     '@type': 'Question',
-                    name: 'What is the BOI/CTA Compliance Kit?',
+                    name: 'What is the State Transparency Report Kit?',
                     acceptedAnswer: {
                       '@type': 'Answer',
-                      text: 'The BOI/CTA Compliance Kit walks you through filing a FinCEN Beneficial Ownership Information (BOI) report under the Corporate Transparency Act. It generates your completed report, identifies which individuals qualify as beneficial owners, and delivers a practitioner-reviewed filing package.',
+                      text: 'The kit maps your entity details to the state-level transparency disclosure laws that apply to you. Federal BOI filing for US domestic companies ended under FinCEN\'s 2025 interim rule, and states are filling the gap — New York\'s LLC Transparency Act is enacted, and similar bills are proposed in other states. The kit identifies which duties apply, cites the controlling statutes, and walks you through what each law actually requires.',
                     },
                   },
                   {
                     '@type': 'Question',
-                    name: 'Who needs to file a BOI report?',
+                    name: 'Is federal BOI filing still required?',
                     acceptedAnswer: {
                       '@type': 'Answer',
-                      text: 'Most US LLCs, corporations, and similar entities with fewer than 20 employees and under $5M in annual revenue must file. There are 23 exemption categories — the kit determines your exemption status before you proceed.',
+                      text: 'No for US domestic companies. FinCEN\'s interim final rule (March 2025) removed domestic companies from the Corporate Transparency Act\'s beneficial-ownership reporting requirement; only certain foreign companies remain in scope. State-level transparency laws are a separate matter — New York\'s LLC Transparency Act (NY LLC Law § 1106) is enacted and phases in from January 1, 2026.',
                     },
                   },
                   {
                     '@type': 'Question',
-                    name: 'What is the penalty for not filing a BOI report?',
+                    name: 'Which states currently have transparency disclosure laws?',
                     acceptedAnswer: {
                       '@type': 'Answer',
-                      text: 'FinCEN can impose civil penalties of $500 per day for each day a violation continues, plus potential criminal penalties of up to $10,000 and 2 years imprisonment for willful violations.',
+                      text: 'As of this writing, New York\'s LLC Transparency Act is enacted (effective January 1, 2026 for newly formed LLCs; January 1, 2027 for existing ones). Disclosure bills have been proposed in other states — including California- and DC-style proposals — but are not enacted law. The kit distinguishes enacted duties from proposed legislation and cites each source so you can verify.',
                     },
                   },
                   {
                     '@type': 'Question',
-                    name: 'What information is needed to file a BOI report?',
+                    name: 'What information does a state transparency disclosure typically require?',
                     acceptedAnswer: {
                       '@type': 'Answer',
-                      text: 'For each beneficial owner (those owning 25%+ or exercising substantial control): full legal name, date of birth, current residential address, and a copy of a government-issued ID (passport or driver\'s license). The kit guides you through each requirement.',
+                      text: 'State transparency acts generally follow the beneficial-ownership model: for each individual owning 25%+ or exercising substantial control, expect to disclose name, address, and identifying details. Exact requirements vary by state — the kit maps the specifics for your formation state and cites the controlling statute for each item.',
                     },
                   },
                   {
                     '@type': 'Question',
-                    name: 'Does the $149 kit include annual reminders?',
+                    name: 'Does the $149 kit include update reminders?',
                     acceptedAnswer: {
                       '@type': 'Answer',
-                      text: 'Yes. The kit includes annual CTA compliance reminders so you know when to update your BOI report if beneficial ownership changes — a requirement for any change within 30 days.',
+                      text: 'Yes. The kit includes reminders to re-check your state disclosure duties when ownership changes or when a proposed state bill is enacted — state transparency legislation is moving quickly and duties can appear mid-year.',
                     },
                   },
                 ],
@@ -92,7 +92,7 @@ export default function BOILayout({ children }: { children: React.ReactNode }) {
                 '@type': 'BreadcrumbList',
                 itemListElement: [
                   { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://forge.bizlegal-ai.com' },
-                  { '@type': 'ListItem', position: 2, name: 'BOI Report', item: 'https://forge.bizlegal-ai.com/boi' },
+                  { '@type': 'ListItem', position: 2, name: 'State Transparency Kit', item: 'https://forge.bizlegal-ai.com/boi' },
                 ],
               },
             ],

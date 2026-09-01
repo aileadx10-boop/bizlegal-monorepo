@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
                 <h1 style="font-size: 24px; font-weight: 700; color: #0f1117; margin-bottom: 16px;">Welcome to Forge</h1>
                 <p style="font-size: 16px; color: #374151; line-height: 1.6; margin-bottom: 24px;">
                   You're now subscribed to compliance intelligence updates from Forge.
-                  We'll keep you informed about regulatory changes that affect your business — including BOI/CTA deadlines,
+                  We'll keep you informed about regulatory changes that affect your business — including state transparency act developments,
                   CIPA enforcement actions, GDPR developments, and more.
                 </p>
                 <a href="https://forge.bizlegal-ai.com/audit" style="display: inline-block; background: #6366f1; color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px;">

@@ -37,7 +37,7 @@ const COMMANDS = [
     group: 'Navigation',
     items: [
       { id: 'home', label: 'Home', icon: Home, href: '/', shortcut: ['H'] },
-      { id: 'boi', label: 'BOI Report', icon: FileText, href: '/boi', shortcut: ['B'] },
+      { id: 'boi', label: 'State Transparency Kit', icon: FileText, href: '/boi', shortcut: ['B'] },
       { id: 'passport', label: 'Regulatory Passport', icon: Shield, href: '/passport', shortcut: ['P'] },
       { id: 'audit', label: 'Web Scanner', icon: Search, href: '/audit', shortcut: ['S'] },
       { id: 'pricing', label: 'Pricing', icon: DollarSign, href: '/pricing', shortcut: ['$'] },
@@ -47,10 +47,10 @@ const COMMANDS = [
   {
     group: 'Quick Actions',
     items: [
-      { id: 'file-boi', label: 'File BOI Report', icon: ArrowRight, href: '/boi', shortcut: ['⌘', 'B'] },
+      { id: 'file-boi', label: 'Get State Transparency Kit', icon: ArrowRight, href: '/boi', shortcut: ['⌘', 'B'] },
       { id: 'buy-passport', label: 'Buy Regulatory Passport', icon: CreditCard, href: '/passport', shortcut: ['⌘', 'P'] },
       { id: 'run-scan', label: 'Run Compliance Scan', icon: Search, href: '/audit', shortcut: ['⌘', 'S'] },
-      { id: 'boi-campaign', label: 'View BOI Campaign', icon: Megaphone, href: '/campaign/boi', shortcut: ['C'] },
+      { id: 'boi-campaign', label: 'View Transparency Campaign', icon: Megaphone, href: '/campaign/boi', shortcut: ['C'] },
     ],
   },
 ]

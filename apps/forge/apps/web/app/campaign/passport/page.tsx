@@ -153,7 +153,7 @@ export default function CampaignPassportPage() {
               { q: 'How is this different from a law firm?', a: 'A law firm charges $500-$297/hour to scope what you need. Forge analyzes your specific profile against each market\'s requirements, sends every brief through practitioner review, and delivers a structured roadmap in 24 hours.' },
               { q: 'What if I need a license in a market?', a: 'Your report will tell you exactly which license, from which regulator, with what timeline and cost. We don\'t file the applications — but we tell you exactly what you need.' },
               { q: 'I\'m already in discussions with a UK VC. Is this too late?', a: 'No — a regulatory passport is exactly what UK VCs want to see. It shows you understand your obligations and have a plan.' },
-              { q: 'Does this cover the US market?', a: 'Yes — including FinCEN MSB registration, CTA/BOI filing requirements, SEC Reg D considerations, and state-level money transmitter obligations.' },
+              { q: 'Does this cover the US market?', a: 'Yes — including FinCEN MSB registration, state transparency disclosure duties (NY LLCTA and proposed acts), SEC Reg D considerations, and state-level money transmitter obligations.' },
             ].map((faq) => (
               <div key={faq.q} className="card">
                 <h3 className="font-semibold text-white mb-2">{faq.q}</h3>

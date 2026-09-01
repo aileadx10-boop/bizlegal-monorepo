@@ -62,7 +62,7 @@ export default function StructuredData(): ReactElement {
     "@id": "https://forge.bizlegal-ai.com#site",
     "url": "https://forge.bizlegal-ai.com",
     "name": "Forge Compliance Engine",
-    "description": "BOI/CTA filing kits, Regulatory Passports, and Web Compliance Scanner for US businesses and Israeli tech companies expanding globally. Practitioner-reviewed compliance intelligence.",
+    "description": "State transparency report kits, Regulatory Passports, and Web Compliance Scanner for US businesses and Israeli tech companies expanding globally. Practitioner-reviewed compliance intelligence.",
     "inLanguage": "en-US",
     "publisher": { "@id": "https://forge.bizlegal-ai.com#organization" },
   };
@@ -72,7 +72,7 @@ export default function StructuredData(): ReactElement {
     "@type": "SoftwareApplication",
     "name": "Forge Compliance Engine",
     "url": "https://forge.bizlegal-ai.com",
-    "description": "Multi-framework regulatory compliance for modern businesses. BOI Report Kit $149, Regulatory Passport $297, Web Compliance Scanner from $99. Practitioner-reviewed. Crypto + card checkout. 14-day money-back.",
+    "description": "Multi-framework regulatory compliance for modern businesses. State Transparency Report Kit $149, Regulatory Passport $297, Web Compliance Scanner from $99. Practitioner-reviewed. Crypto + card checkout. 14-day money-back.",
     "applicationCategory": "BusinessApplication",
     "operatingSystem": "Web",
     "offers": {

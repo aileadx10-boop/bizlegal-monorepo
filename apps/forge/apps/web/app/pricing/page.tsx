@@ -7,11 +7,11 @@ import { PricingTierCard, type PricingTierData } from '../components/ui-v2/Prici
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Pricing — BizLegal Forge | BOI Kit, Regulatory Passport & Compliance Audit',
-  description: 'BOI Report Kit $149 one-time. Regulatory Passport $297 one-time or $99/mo. Web Compliance Scanner $99/scan or $49/mo. Crypto + card checkout. 14-day money-back.',
+  title: 'Pricing — BizLegal Forge | State Transparency Kit, Regulatory Passport & Compliance Audit',
+  description: 'State Transparency Report Kit $149 one-time. Regulatory Passport $297 one-time or $99/mo. Web Compliance Scanner $99/scan or $49/mo. Crypto + card checkout. 14-day money-back.',
   openGraph: {
-    title: 'BizLegal Forge Pricing — BOI Kit, Passport & Audit',
-    description: 'Transparent compliance tool pricing. BOI Kit $149, Passport $297, Web Audit $99. Crypto via NOWPayments, card via PayPal. 14-day money-back.',
+    title: 'BizLegal Forge Pricing — State Transparency Kit, Passport & Audit',
+    description: 'Transparent compliance tool pricing. State Transparency Kit $149, Passport $297, Web Audit $99. Crypto via NOWPayments, card via PayPal. 14-day money-back.',
     url: 'https://forge.bizlegal-ai.com/pricing',
   },
   alternates: { canonical: 'https://forge.bizlegal-ai.com/pricing' },
@@ -36,17 +36,18 @@ function apexCheckout(
 }
 
 const BOI_TIER: PricingTierData = {
-  name: 'BOI Report Kit',
+  name: 'State Transparency Report Kit',
   badge: 'Most popular',
   description:
-    'CTA Beneficial Ownership Information report — generated from your LLC details, filing-ready FinCEN BOIR PDF in 5 minutes. Avoid $500/day non-filing exposure.',
+    'Federal BOI filing for US domestic companies ended under FinCEN\'s 2025 rule — states are filling the gap. This kit maps your LLC details to state-level disclosure duties (NY\'s enacted LLC Transparency Act; proposed acts elsewhere), statute-cited, in 5 minutes.',
   prices: {
     oneTime: { amount: 149, currency: 'USD', label: 'one-time' },
     yearly: { amount: 149, currency: 'USD', saveLabel: '+ refresh', label: '/year (annual refresh)' },
   },
   features: [
-    'FinCEN-ready BOIR PDF',
-    'Beneficial owner walkthrough',
+    'State-by-state duty mapping',
+    'NY LLCTA readiness check',
+    'Enacted vs proposed tracker',
     'Ownership structure analyzer',
     'Annual refresh reminder',
     'Practitioner-reviewed template',
@@ -114,10 +115,10 @@ export default function ForgePricingPage() {
     "mainEntity": [
       {
         "@type": "Question",
-        "name": "What is the BOI Kit?",
+        "name": "What is the State Transparency Report Kit?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "The BOI Kit is a downloadable package with the FinCEN Beneficial Ownership Information report template, a state-by-state checklist, a sample ownership structure diagram, and a 60-minute video walkthrough. Price: $149 one-time.",
+          "text": "The State Transparency Report Kit maps your LLC's details to state-level transparency disclosure duties. Federal BOI filing for US domestic companies ended under FinCEN's 2025 rule; states are filling the gap — New York's LLC Transparency Act is enacted, others are proposed. The kit identifies which duties apply, cites the controlling statutes, and includes an ownership-structure worksheet. Price: $149 one-time.",
         },
       },
       {
@@ -125,7 +126,7 @@ export default function ForgePricingPage() {
         "name": "What is the BizLegal Passport?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "The Passport is our flagship compliance binder — a 200-page document covering your entity, BOI filing, beneficial ownership structure, license status, and a year of monitoring. Reviewed by a named analyst. Price: $297 one-time.",
+          "text": "The Passport is our flagship compliance binder — a 200-page document covering your entity, state transparency duties, ownership structure, license status, and a year of monitoring. Reviewed by a named analyst. Price: $297 one-time.",
         },
       },
       {
@@ -162,11 +163,11 @@ export default function ForgePricingPage() {
     "applicationCategory": "BusinessApplication",
     "operatingSystem": "Web",
     "description":
-      "Compliance templates and binders for small businesses — BOI Kit, BizLegal Passport, and entity-specific packages.",
+      "Compliance templates and binders for small businesses — State Transparency Report Kit, BizLegal Passport, and entity-specific packages.",
     "url": "https://forge.bizlegal-ai.com/pricing",
     "image": "https://forge.bizlegal-ai.com/og.png",
     "offers": [
-      { "@type": "Offer", "name": "BOI Kit", "price": "149", "priceCurrency": "USD",
+      { "@type": "Offer", "name": "State Transparency Report Kit", "price": "149", "priceCurrency": "USD",
         "category": "one-time", "url": "https://forge.bizlegal-ai.com/boi" },
       { "@type": "Offer", "name": "BizLegal Passport", "price": "297", "priceCurrency": "USD",
         "category": "one-time", "url": "https://forge.bizlegal-ai.com/passport" },
@@ -230,9 +231,9 @@ export default function ForgePricingPage() {
               margin: 0,
             }}
           >
-            BOI Kit one-time. Passport on subscription. Audit per scan
-            or monthly. Crypto via NOWPayments, card via PayPal. 14-day
-            money-back, no questions.
+            State Transparency Kit one-time. Passport on subscription. Audit
+            per scan or monthly. Crypto via NOWPayments, card via PayPal.
+            14-day money-back, no questions.
           </p>
         </div>
       </section>
@@ -299,11 +300,11 @@ export default function ForgePricingPage() {
               marginBottom: '1.5rem',
             }}
           >
-            BOI + Passport + Audit on a single annual plan — saves ~$300
+            Transparency Kit + Passport + Audit on a single annual plan — saves ~$300
             vs the per-product prices.
           </p>
           <Link href="/boi" className="bl-btn-primary">
-            Start with BOI ($149)
+            Start with the Transparency Kit ($149)
             <span aria-hidden="true">→</span>
           </Link>
         </div>

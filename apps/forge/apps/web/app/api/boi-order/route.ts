@@ -34,10 +34,10 @@ export async function POST(req: NextRequest) {
         body: JSON.stringify({
           from: `Forge Compliance <${process.env.RESEND_FROM ?? 'hello@bizlegal-ai.com'}>`,
           to: [body.payer_email],
-          subject: 'Your BOI Compliance Report — Order Confirmed',
+          subject: 'Your State Transparency Report — Order Confirmed',
           html: `
             <div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:40px 24px">
-              <h2 style="color:#111">Order Confirmed — BOI Compliance Report</h2>
+              <h2 style="color:#111">Order Confirmed — State Transparency Report</h2>
               <p style="color:#444;line-height:1.7">Thank you. Your order has been received and is being processed.</p>
               <div style="background:#f8f9fa;border-left:4px solid #4f46e5;padding:16px 20px;margin:24px 0">
                 <p style="margin:0;font-size:13px;color:#666">Order ID</p>
@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           chat_id: chatId,
-          text: `🚨 NEW BOI ORDER — $149\nCompany: ${body.form_data?.companyName || 'N/A'}\nEmail: ${body.payer_email}\nPayment: ${body.paypal_order_id || 'crypto'}`,
+          text: `🚨 NEW TRANSPARENCY KIT ORDER — $149\nCompany: ${body.form_data?.companyName || 'N/A'}\nEmail: ${body.payer_email}\nPayment: ${body.paypal_order_id || 'crypto'}`,
         }),
       }).catch(console.error)
     }

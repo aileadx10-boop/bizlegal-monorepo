@@ -111,7 +111,7 @@ export async function POST(req: NextRequest) {
       const invoice = await createNowPaymentsInvoiceRaw({
         amount_usd: PRICES.boi.crypto,
         order_id: `boi_${reference_id}`,
-        description: 'Forge BOI Report Kit',
+        description: 'Forge State Transparency Report Kit',
         success_url: `${appUrl}/boi/success?id=${reference_id}`,
         cancel_url: `${appUrl}/boi`,
         ipn_url: ipnUrl,

@@ -88,8 +88,8 @@ function decisionToolFor(gap: {
   ) {
     return {
       href: '/decision-tree',
-      label: 'BOI filing decision tree',
-      cta: 'Run BOI screen',
+      label: 'State transparency duty screen',
+      cta: 'Run transparency screen',
     }
   }
   if (

@@ -14,12 +14,12 @@ interface ScanFinding {
 
 const SCAN_SEQUENCES = [
   { step: 'Initializing compliance engine...', duration: 400 },
-  { step: 'Loading regulatory frameworks (CTA/BOI)...', duration: 600 },
-  { step: 'Querying FinCEN database...', duration: 800 },
+  { step: 'Loading state transparency statutes (NY LLCTA, proposed acts)...', duration: 600 },
+  { step: 'Checking enacted vs proposed duties...', duration: 800 },
   { step: 'Analyzing corporate structure...', duration: 500 },
-  { step: 'Cross-referencing UBO registry...', duration: 700 },
-  { step: 'Checking filing deadlines...', duration: 400 },
-  { step: 'Calculating penalty exposure...', duration: 600 },
+  { step: 'Cross-referencing ownership thresholds...', duration: 700 },
+  { step: 'Checking disclosure deadlines...', duration: 400 },
+  { step: 'Calculating exposure...', duration: 600 },
   { step: 'Generating risk assessment...', duration: 500 },
 ]
 
@@ -27,16 +27,15 @@ const MOCK_FINDINGS: ScanFinding[] = [
   {
     id: '1',
     severity: 'critical',
-    title: 'BOI Not Filed',
-    description: 'No Beneficial Ownership Information report found in FinCEN registry',
-    penalty: '$500/day accumulating',
+    title: 'State Transparency Duty Identified',
+    description: 'Entity profile matches an enacted state transparency disclosure law (e.g. NY LLC Transparency Act)',
+    penalty: 'Disclosure deadline applies',
   },
   {
     id: '2',
     severity: 'critical',
-    title: 'CTA Violation Detected',
-    description: 'Corporate Transparency Act requirements not met for entity type',
-    penalty: '$10,000 + 2 years imprisonment',
+    title: 'Formation-State Gap',
+    description: 'No state transparency disclosure on record for this entity type',
   },
   {
     id: '3',
@@ -48,13 +47,13 @@ const MOCK_FINDINGS: ScanFinding[] = [
     id: '4',
     severity: 'warning',
     title: 'No Update Mechanism',
-    description: 'Changes in ownership must be reported within 30 days',
+    description: 'State acts typically require updates within 30 days of ownership change',
   },
   {
     id: '5',
     severity: 'info',
-    title: 'State-Level Requirements',
-    description: 'Additional state-specific filings may apply',
+    title: 'Proposed Legislation Tracker',
+    description: 'Additional states have transparency bills pending — duties can appear mid-year',
   },
 ]
 
@@ -145,11 +144,11 @@ export function ComplianceScannerWidget() {
                 </div>
 
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">
-                  Free BOI Compliance Scan
+                  Free Transparency Duty Scan
                 </h2>
 
                 <p className="text-forge-text-secondary mb-8 max-w-md">
-                  Surface $500/day BOI exposure and FinCEN gaps in a 2–5 minute Compliance Snapshot.
+                  Surface state-level transparency duties and disclosure gaps in a 2–5 minute Compliance Snapshot.
                   See what a regulator review would surface first.
                 </p>
 
@@ -399,7 +398,7 @@ export function ComplianceScannerWidget() {
 
               <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
                 <a href="/boi" className="btn-primary inline-flex items-center gap-2">
-                  File BOI Now — $149
+                  Get the Transparency Kit — $149
                   <ArrowRight className="w-4 h-4" />
                 </a>
                 <button

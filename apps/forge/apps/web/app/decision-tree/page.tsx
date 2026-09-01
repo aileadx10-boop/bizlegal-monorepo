@@ -4,13 +4,13 @@ import DecisionTree from '@/components/DecisionTree'
 export const dynamic = 'force-static'
 
 export const metadata: Metadata = {
-  title: 'BOI Filing Decision Tree | BizLegal Forge',
+  title: 'State Transparency Duty Screen | BizLegal Forge',
   description:
-    'Find out in 60 seconds whether your US entity needs to file a Beneficial Ownership Information report under FinCEN\'s Corporate Transparency Act. Free, no signup until the result.',
+    'Find out in 60 seconds whether enacted or proposed state transparency laws (e.g. New York\'s LLC Transparency Act) create disclosure duties for your US entity. Free, no signup until the result.',
   openGraph: {
-    title: 'BOI Filing Decision Tree | BizLegal Forge',
+    title: 'State Transparency Duty Screen | BizLegal Forge',
     description:
-      'Free 60-second BOI filing screen. Real preliminary signal, not a marketing quiz. Email-gated full breakdown.',
+      'Free 60-second state transparency screen. Real preliminary signal, not a marketing quiz. Email-gated full breakdown.',
     url: 'https://forge.bizlegal-ai.com/decision-tree',
   },
 }
@@ -24,34 +24,34 @@ export default function DecisionTreePage(): JSX.Element {
     mainEntity: [
       {
         '@type': 'Question',
-        name: 'Who has to file a BOI report?',
+        name: 'Is federal BOI filing still required for US companies?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Any LLC, corporation, or limited partnership formed by filing a document with a US state or tribe must file a Beneficial Ownership Information report with FinCEN, unless it qualifies for one of the 23 statutory exemptions under the Corporate Transparency Act.',
+          text: 'No. FinCEN\'s interim final rule (March 2025) removed US domestic companies from the Corporate Transparency Act\'s beneficial-ownership reporting requirement; only certain foreign companies remain in scope. State-level transparency laws are a separate matter.',
         },
       },
       {
         '@type': 'Question',
-        name: 'What is the large operating company exemption?',
+        name: 'Which states have transparency disclosure laws?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'An entity is exempt if it has more than 20 US-based full-time employees, more than $5 million in US gross receipts on its prior-year tax return, AND a physical office in the United States. All three conditions must be met.',
+          text: 'New York\'s LLC Transparency Act (NY LLC Law § 1106) is enacted — effective January 1, 2026 for newly formed LLCs and January 1, 2027 for existing ones. Similar disclosure bills have been proposed in other states but are not enacted law.',
         },
       },
       {
         '@type': 'Question',
-        name: 'When are BOI reports due?',
+        name: 'What does a state transparency disclosure typically require?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Entities formed before January 1, 2024 had until January 1, 2025 to file the initial report. Entities formed during 2024 had 90 days from formation; entities formed in or after 2025 have 30 days. Material changes to beneficial-ownership info must be re-filed within 30 days.',
+          text: 'State acts generally follow the beneficial-ownership model: for each individual owning 25%+ or exercising substantial control, expect to disclose name, address, and identifying details. Exact requirements and exemptions vary by state.',
         },
       },
       {
         '@type': 'Question',
-        name: 'What are the penalties for not filing?',
+        name: 'What happens if a state disclosure duty applies and I miss it?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'FinCEN\'s civil penalty is up to $591 per day (adjusted annually for inflation) for willful failure to file. Criminal penalties of up to $10,000 in fines and 2 years imprisonment apply for willful violation or providing false information.',
+          text: 'Consequences vary by state. Under New York\'s LLC Transparency Act, non-compliant LLCs can be flagged as delinquent and face enforcement by the state Attorney General. The kit cites the controlling statute for each duty so you can verify.',
         },
       },
     ],
@@ -69,7 +69,7 @@ export default function DecisionTreePage(): JSX.Element {
             Free tool · 60 seconds
           </span>
           <h1 className="text-3xl md:text-5xl font-bold text-white tracking-tight leading-tight mb-4">
-            Do you need to file a BOI report?
+            Do state transparency laws apply to your LLC?
           </h1>
           <p className="text-base md:text-lg text-forge-text-secondary leading-relaxed max-w-lg mx-auto">
             Five questions. Real preliminary signal — not a marketing quiz. Email-gated only after
@@ -81,7 +81,8 @@ export default function DecisionTreePage(): JSX.Element {
 
         <footer className="mt-12 text-center">
           <p className="text-xs text-forge-muted leading-relaxed">
-            Built on FinCEN&apos;s 31 CFR § 1010.380 and the Corporate Transparency Act (Pub. L. 116-283).
+            Tracks enacted and proposed state transparency acts — including New York&apos;s LLC
+            Transparency Act (NY LLC Law § 1106).
             BizLegal-AI is software, not a law firm — outcomes depend on your specific facts.
           </p>
         </footer>
