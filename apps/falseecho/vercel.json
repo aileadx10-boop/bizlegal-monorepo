@@ -1,0 +1,20 @@
+{
+  "framework": "nextjs",
+  "devCommand": "next dev",
+  "installCommand": "corepack enable && cd ../.. && corepack pnpm install --frozen-lockfile=false --ignore-scripts",
+  "buildCommand": "cd ../.. && corepack pnpm turbo build --filter=@bizlegal/falseecho...",
+  "functions": {
+    "app/api/scan/route.ts": { "maxDuration": 60 },
+    "app/api/scan/run/route.ts": { "maxDuration": 60 }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    }
+  ]
+}

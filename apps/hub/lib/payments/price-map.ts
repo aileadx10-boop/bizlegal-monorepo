@@ -85,6 +85,12 @@ export const CHECKOUT_PRICE_MAP: Readonly<Record<string, TierMap>> = {
     firm: { 'one-time': [19900], monthly: [19900], yearly: [199000] },
   },
 
+  // ───── FalseEcho (apps/falseecho/app/pricing/page.tsx) ─────
+  falseecho: {
+    audit: { 'one-time': [2900] },
+    monitor: { monthly: [14900] },
+  },
+
   // ───── AI Conductor (amounts derived from @bizlegal/payment registry
   // by /api/payments/conductor/start — keep in sync with products.ts) ─────
   conductor: {
