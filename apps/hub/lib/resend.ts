@@ -170,6 +170,46 @@ export async function sendPaymentConfirmationEmail(
   const family = Object.keys(accessUrlMap).find((k) => product.startsWith(k))
   const accessUrl = family ? accessUrlMap[family] : 'https://bizlegal-ai.com'
 
+  // Products with automated fulfillment wired into the payment webhooks
+  // (grant helpers in lib/payments/*-grant.ts). Everything else bought via
+  // hub checkout currently gets no automated delivery, so the email must
+  // set honest expectations instead of promising instant access that
+  // doesn't exist (fleet finding F4, closed 2026-09-02).
+  const AUTO_FULFILLED = new Set([
+    'conductor',
+    'casp_bundle_monthly',
+    'ai_policy_generator',
+    'ofac_watch_monthly',
+    'falseecho',
+  ])
+  const isAutoFulfilled = AUTO_FULFILLED.has(product)
+
+  // Per-family "what happens next" — each line matches what that product
+  // actually does today (manual delivery from the ops queue).
+  const manualNextStepMap: Record<string, string> = {
+    tracr:
+      'Our team will email you within 1 business day to collect the wallet address or entity you want screened. Your report is then delivered by email — typically within 48 hours of receiving the target.',
+    docai:
+      'Our team will provision your workspace and email sign-in details to this address within 1 business day.',
+    lexaudit:
+      'Our team will set up your monitoring workspace and email your first report to this address within 1 business day.',
+    forge:
+      'Our team will email your deliverable and next steps to this address within 1 business day.',
+    boi: 'Our team will email your deliverable and next steps to this address within 1 business day.',
+    bench:
+      'This is a human-delivered measurement engagement. Our team will contact you within 1 business day to kick off — typical turnaround is 3 business days from kickoff.',
+  }
+  const manualFamily = Object.keys(manualNextStepMap).find((k) => product.startsWith(k))
+  const nextStep = manualFamily
+    ? manualNextStepMap[manualFamily]
+    : 'Your order is confirmed and queued with our delivery team. You will receive setup instructions at this email address within 1 business day.'
+
+  const deliveryBlock = isAutoFulfilled
+    ? `<p>You can access your product using the link below. If you have any questions, reply to this email or contact us at <a href="mailto:team@bizlegal-ai.com" style="color:#b4c5ff;">team@bizlegal-ai.com</a>.</p>
+  <a href="${accessUrl}" class="btn">Access Your Product →</a>`
+    : `<p><strong style="color:#dee1f7;">What happens next:</strong> ${nextStep}</p>
+  <p>Questions in the meantime? Reply to this email or contact us at <a href="mailto:team@bizlegal-ai.com" style="color:#b4c5ff;">team@bizlegal-ai.com</a>.</p>`
+
   return resend.emails.send({
     from: 'BizLegal AI <orders@intelligence.bizlegal-ai.com>',
     to: email,
@@ -194,11 +234,10 @@ p { color: #c3c6d7; font-size: 14px; line-height: 1.65; margin-bottom: 16px; }
   <div class="logo">BizLegal <span>•</span> AI</div>
   <span class="tag">Order Confirmed</span>
   <h1>Your payment was received.</h1>
-  <p>Thank you for your purchase. Your order is now active.</p>
+  <p>Thank you for your purchase. Your order is confirmed.</p>
   <p><strong style="color:#dee1f7;">Product:</strong> ${product.replace(/_/g, ' ')}</p>
   <p><strong style="color:#dee1f7;">Amount paid:</strong> <span class="amount">${amount}${intervalLabel}</span></p>
-  <p>You can access your product using the link below. If you have any questions, reply to this email or contact us at <a href="mailto:team@bizlegal-ai.com" style="color:#b4c5ff;">team@bizlegal-ai.com</a>.</p>
-  <a href="${accessUrl}" class="btn">Access Your Product →</a>
+  ${deliveryBlock}
   <hr class="divider"/>
   <p class="footer">BizLegal AI is software operated by DOR INNOVATIONS. Not a law firm; outputs are research, not legal advice.<br/>
   This email was sent to ${email}. <a href="${process.env.NEXT_PUBLIC_SITE_URL}/contact?subject=unsubscribe" style="color:#8d90a0;">Unsubscribe</a></p>

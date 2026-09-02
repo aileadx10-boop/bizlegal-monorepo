@@ -33,8 +33,8 @@ export type ProductId =
   // TRACR forensic reports (dynamic per-wallet; tier sets the price)
   | 'tracr_bronze'
   | 'tracr_silver'
-  // BRAI full report
-  | 'brai_full_report'
+  // BRAI full report removed 2026-09-02 — stop-sold (no fulfillment code,
+  // fleet finding F4). Unknown id now fails closed at checkout.
   // Forge surfaces
   | 'forge_boi_kit'
   | 'forge_passport'
@@ -262,19 +262,10 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     cancellable: false,
   },
 
-  // ───── BRAI ─────
-  brai_full_report: {
-    id: 'brai_full_report',
-    name: 'BRAI Full Blockchain Regulatory Report',
-    description: 'Wallet risk preview + comprehensive jurisdictional analysis.',
-    product_family: 'brai',
-    billing_interval: 'one-time',
-    amount_cents: 4900,
-    currency: 'USD',
-    checkout_origin: 'https://brai.bizlegal-ai.com',
-    webhook_path: '/api/brai/webhook',
-    cancellable: false,
-  },
+  // ───── BRAI — removed 2026-09-02 (stop-sell, fleet finding F4): ─────
+  // brai_full_report was a $49 SKU with no report-generation or fulfillment
+  // code anywhere in apps/brai. Deleted so /api/pay/start fails closed on
+  // it. Re-add only when paid report delivery exists.
 
   // ───── Forge ─────
   forge_boi_kit: {

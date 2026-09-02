@@ -609,7 +609,7 @@ export function OpsMasterClient({ token }: { token: string }) {
                 { product: 'Forge BOI Kit', price: '$149', url: `https://bizlegal-ai.com/checkout?product=forge&tier=boi-kit&interval=one-time&amount=14900&name=Forge%20BOI%20Kit` },
                 { product: 'Hub Pro', price: '$149/mo', url: `https://bizlegal-ai.com/checkout?product=hub&tier=pro&interval=monthly&amount=14900&name=BizLegal%20Hub%20Pro` },
                 { product: 'LexAudit Monitor', price: '$99/mo', url: `https://bizlegal-ai.com/checkout?product=lexaudit&tier=monitor&interval=monthly&amount=9900&name=LexAudit%20Monitor` },
-                { product: 'BRAI Extended', price: '$500', url: `https://bizlegal-ai.com/checkout?product=brai&tier=extended&interval=one-time&amount=50000&name=BRAI%20Extended` },
+                // BRAI removed 2026-09-02 — stop-sold (no fulfillment code); slug fails closed in price-map
               ].map(item => (
                 <a key={item.product} href={item.url} target="_blank" rel="noopener noreferrer" style={{
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center',

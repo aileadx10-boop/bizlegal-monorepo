@@ -267,10 +267,11 @@ export default function HomePage() {
               '@type': 'Offer',
               price: '49',
               priceCurrency: 'USD',
-              availability: 'https://schema.org/InStock',
-              availabilityStarts: '2024-01-01T00:00:00Z',
+              // Stop-sell (2026-09-02): paid checkout paused — offer points at
+              // the waitlist page, not a checkout URL.
+              availability: 'https://schema.org/OutOfStock',
               priceValidUntil: '2027-12-31T23:59:59Z',
-              url: 'https://bizlegal-ai.com/checkout?product=brai_intelligence_report',
+              url: 'https://brai.bizlegal-ai.com/pricing',
               seller: { '@type': 'Organization', name: 'BizLegal AI', url: 'https://bizlegal-ai.com' },
             },
           } },

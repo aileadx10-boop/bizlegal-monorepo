@@ -114,8 +114,6 @@ export default function BlockchainReportPage() {
   const [email, setEmail] = useState('')
   const [emailSent, setEmailSent] = useState(false)
   const [leadId, setLeadId] = useState<string | null>(null)
-  const [invoiceUrl, setInvoiceUrl] = useState<string | null>(null)
-  const [invoiceLoading, setInvoiceLoading] = useState(false)
 
   const [form, setForm] = useState({
     projectName: '',
@@ -196,21 +194,6 @@ export default function BlockchainReportPage() {
     } catch { /* silent */ }
   }, [email, report, form])
 
-  const handleCreateInvoice = useCallback(async () => {
-    if (!leadId) return
-    setInvoiceLoading(true)
-    try {
-      const res = await fetch('/api/brai/invoice', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, leadId }),
-      })
-      const data = await res.json()
-      if (data.invoiceUrl) setInvoiceUrl(data.invoiceUrl)
-    } catch { /* silent */ }
-    setInvoiceLoading(false)
-  }, [email, leadId])
-
   const handleEmailSubmit = useCallback(async () => {
     if (!email.includes('@')) return
     setEmailSent(true)
@@ -251,12 +234,12 @@ export default function BlockchainReportPage() {
           </h1>
           <p style={{ fontSize: 16, color: 'var(--muted)', maxWidth: 540, margin: '0 auto', lineHeight: 1.7 }}>
             Get analysis across VARA, MiCA, SEC, FCA, MAS &amp; CSA, delivered in 2&ndash;5 minutes.
-            Free preview report &middot; Full report from $99 &middot; Used by 200+ Web3 founders.
+            Free preview report &middot; Full report free while waitlist-only &middot; Used by 200+ Web3 founders.
           </p>
 
           {/* STATS ROW */}
           <div style={{ display: 'flex', gap: 24, justifyContent: 'center', flexWrap: 'wrap', marginTop: 28 }}>
-            {[['6', 'Jurisdictions'], ['30s', 'Generation Time'], ['200+', 'Reports Generated'], ['$99', 'Full Report']].map(([v, l]) => (
+            {[['6', 'Jurisdictions'], ['30s', 'Generation Time'], ['200+', 'Reports Generated'], ['Free', 'Full Report']].map(([v, l]) => (
               <div key={l} style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--sky)', fontFamily: 'Geist Mono, monospace' }}>{v}</div>
                 <div style={{ fontSize: 11, color: 'var(--muted)', letterSpacing: '0.05em' }}>{l}</div>
@@ -508,31 +491,20 @@ export default function BlockchainReportPage() {
                       Get Full Report →
                     </button>
                   </div>
-                  <p style={{ fontSize: 11, color: 'var(--dim)', marginTop: 12 }}>No spam. Unlock for $49. Cancel anytime.</p>
+                  <p style={{ fontSize: 11, color: 'var(--dim)', marginTop: 12 }}>No spam. Full reports are waitlist-only while we scale analyst review.</p>
                 </>
-              ) : !invoiceUrl ? (
+              ) : (
                 <>
-                  <div style={{ color: 'var(--teal)', fontSize: 14, marginBottom: 16 }}>✓ Email confirmed — one step left</div>
-                  <h3 style={{ fontSize: 18, color: '#fff', marginBottom: 8 }}>Unlock Full Report</h3>
+                  <div style={{ color: 'var(--teal)', fontSize: 14, marginBottom: 16 }}>✓ You&apos;re on the list</div>
+                  <h3 style={{ fontSize: 18, color: '#fff', marginBottom: 8 }}>Full reports are waitlist-only right now</h3>
                   <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 24 }}>
-                    Full report made available to {email} within minutes of payment.
+                    Paid report checkout is paused while we scale analyst review. We&apos;ll email {email} the moment full reports reopen — waitlist members keep today&apos;s pricing.
                   </p>
-                  <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 16 }}>
-                    <button
-                      onClick={handleCreateInvoice}
-                      disabled={invoiceLoading}
-                      style={{ padding: '14px 28px', background: 'linear-gradient(135deg, rgba(165,180,252,0.2), rgba(125,211,252,0.15))', border: '1px solid rgba(165,180,252,0.4)', borderRadius: 8, color: '#fff', fontSize: 14, cursor: invoiceLoading ? 'wait' : 'pointer', fontWeight: 700 }}>
-                      {invoiceLoading ? 'Creating Link...' : '₿ Pay $49 with Crypto'}
-                    </button>
-                    <a
-                      href={process.env.NEXT_PUBLIC_PAYONEER_BRAI_LINK ?? 'https://payoneer.com'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ display: 'inline-flex', alignItems: 'center', padding: '14px 28px', background: 'rgba(94,234,212,0.1)', border: '1px solid rgba(94,234,212,0.35)', borderRadius: 8, color: 'var(--teal)', fontSize: 14, textDecoration: 'none', fontWeight: 700 }}>
-                      💳 Pay $59 by Card
-                    </a>
-                  </div>
-                  <p style={{ fontSize: 11, color: 'var(--dim)', marginTop: 4 }}>Crypto via NOWPayments · Card via Payoneer</p>
+                  <button
+                    onClick={() => runReport('full')}
+                    style={{ padding: '14px 28px', background: 'linear-gradient(135deg, rgba(165,180,252,0.2), rgba(125,211,252,0.15))', border: '1px solid rgba(165,180,252,0.4)', borderRadius: 8, color: '#fff', fontSize: 14, cursor: 'pointer', fontWeight: 700 }}>
+                    Generate Full Report — Free →
+                  </button>
                   {(report?.overallRiskLevel === 'HIGH' || report?.overallRiskLevel === 'CRITICAL') && (
                     <div style={{ marginTop: 20, padding: '16px 20px', background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: 10 }}>
                       <p style={{ fontSize: 13, color: '#fca5a5', marginBottom: 10 }}>
@@ -546,25 +518,11 @@ export default function BlockchainReportPage() {
                     </div>
                   )}
                 </>
-              ) : (
-                <>
-                  <div style={{ color: 'var(--teal)', fontSize: 14, marginBottom: 16 }}>✓ Payment link created</div>
-                  <a
-                    href={invoiceUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ display: 'inline-block', padding: '14px 36px', background: 'linear-gradient(135deg, rgba(165,180,252,0.2), rgba(125,211,252,0.15))', border: '1px solid rgba(165,180,252,0.5)', borderRadius: 8, color: '#fff', fontSize: 15, textDecoration: 'none', fontWeight: 700, marginBottom: 12 }}>
-                    Complete Payment — $49 →
-                  </a>
-                  <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12 }}>
-                    Your full report will be emailed to {email} after payment confirmation.
-                  </p>
-                </>
               )}
             </div>
 
             <div style={{ textAlign: 'center', marginTop: 20 }}>
-              <button onClick={() => { setStep('form'); setReport(null); setEmailSent(false); setLeadId(null); setInvoiceUrl(null) }}
+              <button onClick={() => { setStep('form'); setReport(null); setEmailSent(false); setLeadId(null) }}
                 style={{ padding: '10px 24px', background: 'transparent', border: '1px solid var(--border)', borderRadius: 7, color: 'var(--muted)', fontSize: 13, cursor: 'pointer' }}>
                 ← Run Another Report
               </button>
@@ -705,7 +663,7 @@ export default function BlockchainReportPage() {
                   </div>
                   <button onClick={() => runReport('full')}
                     style={{ padding: '14px 32px', background: 'linear-gradient(135deg, rgba(94,234,212,0.15), rgba(125,211,252,0.1))', border: '1px solid rgba(94,234,212,0.4)', borderRadius: 8, color: 'var(--teal)', fontSize: 15, fontWeight: 700, cursor: 'pointer', display: 'block', width: '100%', maxWidth: 360, margin: '0 auto' }}>
-                    Get Full Report — $99 →
+                    Get Full Report — Free →
                   </button>
                   <div style={{ fontSize: 11, color: 'var(--dim)', marginTop: 10 }}>Or run free unlimited scans with <a href="https://brai.bizlegal-ai.com" style={{ color: 'var(--indigo)', textDecoration: 'none' }}>BRAI →</a></div>
                 </div>

@@ -72,8 +72,10 @@ export function recommend(answers: FinderAnswers): Recommendation {
   if (need === 'compliance_proof' || need === 'ongoing_monitoring') {
     if (crypto === 'yes') {
       // Crypto-specific, low-friction one-time report to start.
+      // 2026-09-02: was brai_full_report — BRAI is stop-sold (no fulfillment
+      // code, fleet finding F4). TRACR has a working native paid loop.
       return {
-        productId: 'brai_full_report',
+        productId: 'tracr_bronze',
         rationale: 'they need a blockchain / crypto regulatory posture they can show a counterparty or investor',
       }
     }

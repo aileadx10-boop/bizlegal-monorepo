@@ -1,32 +1,15 @@
 import type { Metadata } from "next"
 import LegalPage from "@/components/layout/LegalPage"
 import { PricingTierCard, type PricingTierData } from "../components/ui-v2/PricingTierCard"
+import { PricingWaitlistForm } from "./waitlist-form"
 
 export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = {
   title: "Pricing — BRAI",
   description:
-    "Per-report pricing or a monthly retainer for high-volume desks. Standard $149, Priority 12h $249, Extended Sanctions $500. Crypto via NOWPayments, card via PayPal.",
+    "Per-report pricing or a monthly retainer for high-volume desks. Standard $149, Priority 12h $249, Extended Sanctions $500. Checkout is paused while we scale analyst review — join the waitlist.",
   alternates: { canonical: "https://brai.bizlegal-ai.com/pricing" },
-}
-
-
-function apexCheckout(
-  product: string,
-  tier: string,
-  interval: 'one-time' | 'monthly' | 'yearly',
-  amountCents: number,
-  name: string,
-): string {
-  const params = new URLSearchParams({
-    product,
-    tier,
-    interval,
-    amount: String(amountCents),
-    name,
-  })
-  return `https://bizlegal-ai.com/checkout?${params.toString()}`
 }
 
 const STANDARD_TIER: PricingTierData = {
@@ -47,11 +30,9 @@ const STANDARD_TIER: PricingTierData = {
     "PDF + JSON export",
   ],
   excludes: ["Priority 12h delivery", "Extended sanctions deep-dive"],
-  checkoutUrls: {
-    oneTime: { checkout: apexCheckout('brai', 'standard', 'one-time', 14900, 'BRAI standard one-time') },
-    monthly: { checkout: apexCheckout('brai', 'standard', 'monthly', 59900, 'BRAI standard monthly') },
-    yearly: { checkout: apexCheckout('brai', 'standard', 'yearly', 599000, 'BRAI standard yearly') },
-  },
+  // Stop-sell (2026-09-02): empty checkout URLs — cards render a disabled
+  // "Checkout coming soon" CTA; the waitlist form below captures demand.
+  checkoutUrls: {},
 }
 
 const PRIORITY_TIER: PricingTierData = {
@@ -72,11 +53,7 @@ const PRIORITY_TIER: PricingTierData = {
     "Up to 3 stakeholder distribution",
   ],
   excludes: ["Extended sanctions deep-dive"],
-  checkoutUrls: {
-    oneTime: { checkout: apexCheckout('brai', 'priority', 'one-time', 24900, 'BRAI priority one-time') },
-    monthly: { checkout: apexCheckout('brai', 'priority', 'monthly', 99900, 'BRAI priority monthly') },
-    yearly: { checkout: apexCheckout('brai', 'priority', 'yearly', 999000, 'BRAI priority yearly') },
-  },
+  checkoutUrls: {},
   highlighted: true,
 }
 
@@ -98,11 +75,7 @@ const EXTENDED_TIER: PricingTierData = {
     "Director / beneficial-owner trace",
     "Notarised PDF for audit committees",
   ],
-  checkoutUrls: {
-    oneTime: { checkout: apexCheckout('brai', 'extended', 'one-time', 50000, 'BRAI extended one-time') },
-    monthly: { checkout: apexCheckout('brai', 'extended', 'monthly', 199900, 'BRAI extended monthly') },
-    yearly: { checkout: apexCheckout('brai', 'extended', 'yearly', 1999000, 'BRAI extended yearly') },
-  },
+  checkoutUrls: {},
 }
 
 export default function PricingPage() {
@@ -139,7 +112,7 @@ export default function PricingPage() {
         "name": "What payment methods are supported?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Crypto via NOWPayments (BTC, ETH, USDT), card via PayPal. Wire transfer for retainer clients.",
+          "text": "Paid checkout is paused while we scale analyst review — join the waitlist on this page and we'll email you when reports reopen. For urgent needs, request an introduction via the Verified Intelligence Network below.",
         },
       },
       {
@@ -200,7 +173,7 @@ export default function PricingPage() {
   return (
     <LegalPage
       title="Pricing."
-      intro="Per-report pricing or a monthly retainer for high-volume desks. Every report is reviewed by a named human analyst before delivery. Crypto via NOWPayments, card via PayPal. Cancel retainers anytime; one-time reports non-refundable once produced unless damaged or defective."
+      intro="Per-report pricing or a monthly retainer for high-volume desks. Every report is reviewed by a named human analyst before delivery. Checkout is currently paused while we scale analyst review — join the waitlist below and we'll email you the moment reports reopen."
     >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productLd) }} />
@@ -217,6 +190,36 @@ export default function PricingPage() {
         <PricingTierCard {...STANDARD_TIER} defaultInterval="one-time" />
         <PricingTierCard {...PRIORITY_TIER} defaultInterval="one-time" />
         <PricingTierCard {...EXTENDED_TIER} defaultInterval="one-time" />
+      </section>
+
+      <section
+        style={{
+          marginTop: 32,
+          padding: 28,
+          border: "1px solid var(--outline-var)",
+          borderRadius: 12,
+          background: "var(--bg-low, var(--bg-2))",
+          textAlign: "center",
+        }}
+      >
+        <p
+          style={{
+            fontFamily: "var(--font-mono, ui-monospace)",
+            fontSize: 11,
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            color: "var(--accent, var(--gold))",
+            margin: 0,
+          }}
+        >
+          Waitlist
+        </p>
+        <p style={{ margin: "8px auto 20px", fontSize: 14, lineHeight: 1.7, maxWidth: 520 }}>
+          Paid reports are paused while we scale analyst review. Leave your email
+          and we&apos;ll notify you the moment checkout reopens — waitlist members
+          keep today&apos;s pricing.
+        </p>
+        <PricingWaitlistForm />
       </section>
 
       <section
