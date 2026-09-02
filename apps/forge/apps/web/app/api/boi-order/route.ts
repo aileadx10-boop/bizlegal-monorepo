@@ -7,6 +7,19 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const supabase = createServerClient()
 
+    // Idempotency: duplicate NOWPayments IPNs (or double form submits) must
+    // not create a second order or re-send the kit email.
+    if (body.nowpayments_payment_id) {
+      const { data: existing } = await supabase
+        .from('boi_orders')
+        .select('id')
+        .eq('nowpayments_payment_id', body.nowpayments_payment_id)
+        .maybeSingle()
+      if (existing) {
+        return NextResponse.json({ success: true, order_id: existing.id, duplicate: true })
+      }
+    }
+
     const { data, error } = await supabase.from('boi_orders').insert({
       id: crypto.randomUUID(),
       paypal_order_id: body.paypal_order_id || null,
