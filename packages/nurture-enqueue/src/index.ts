@@ -31,6 +31,7 @@ export type NurtureVertical =
   | 'forge'
   | 'leadforge'
   | 'falseecho'
+  | 'sellerradar'
   | 'realestate'
   | 'generic'
 

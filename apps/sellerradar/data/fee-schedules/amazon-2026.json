@@ -1,0 +1,30 @@
+{
+  "marketplace": "amazon.com",
+  "version": "2026",
+  "effective_date": "2026-02-01",
+  "source_url": "https://sell.amazon.com/fulfillment-by-amazon/pricing",
+  "referral_pct": {
+    "default": 0.15,
+    "electronics": 0.08,
+    "apparel": 0.18,
+    "home_kitchen": 0.16,
+    "beauty": 0.15,
+    "toys_games": 0.15,
+    "sports_outdoors": 0.15,
+    "health_household": 0.16,
+    "grocery": 0.15,
+    "pet_supplies": 0.15,
+    "books": 0.15,
+    "office_products": 0.15
+  },
+  "fba_fulfillment": {
+    "small_standard": 3.22,
+    "large_standard": 4.99,
+    "large_bulky": 10.22,
+    "oversize": 19.36
+  },
+  "storage_per_cuft_monthly": {
+    "standard": 0.87,
+    "oversize": 0.56
+  }
+}

@@ -15,7 +15,7 @@
  * Every entry below mirrors a real link in the fleet (verified by grep
  * for `bizlegal-ai.com/checkout?` and direct /api/payments/*\/start
  * callers):
- *   - apps/{brai,tracr,lexaudit,docai}/app/pricing/page.tsx apexCheckout()
+ *   - apps/{tracr,lexaudit,docai}/app/pricing/page.tsx apexCheckout()
  *   - apps/forge/apps/web/app/pricing/page.tsx apexCheckout() + app/boi/page.tsx
  *   - apps/hub/app/pricing/page.tsx checkoutHref()
  *   - apps/hub/app/agents/page.tsx AgentCheckoutButton (tier = agent.name)
@@ -42,12 +42,12 @@ export const CHECKOUT_PRICE_MAP: Readonly<Record<string, TierMap>> = {
     scale: { 'one-time': [49900], monthly: [49900], yearly: [499000] },
   },
 
-  // ───── BRAI (apps/brai/app/pricing/page.tsx) ─────
-  brai: {
-    standard: { 'one-time': [14900], monthly: [59900], yearly: [599000] },
-    priority: { 'one-time': [24900], monthly: [99900], yearly: [999000] },
-    extended: { 'one-time': [50000], monthly: [199900], yearly: [1999000] },
-  },
+  // ───── BRAI — STOP-SOLD 2026-09-02 (fleet finding F4/brai). ─────
+  // BRAI has no report-generation or fulfillment code, so paid checkout
+  // was money taken for an email. Its SKUs were removed here so any
+  // brai/* slug fails closed (unknown_checkout_sku → checkout error,
+  // nothing is charged). The brai pricing page now captures a waitlist
+  // instead. Re-add only when report delivery exists.
 
   // ───── TRACR (apps/tracr/app/pricing/page.tsx) ─────
   tracr: {
@@ -89,6 +89,12 @@ export const CHECKOUT_PRICE_MAP: Readonly<Record<string, TierMap>> = {
   falseecho: {
     audit: { 'one-time': [2900] },
     monitor: { monthly: [14900] },
+  },
+
+  // ───── SellerRadar (apps/sellerradar/app/pricing/page.tsx) ─────
+  sellerradar: {
+    audit: { 'one-time': [4900] },
+    monitor: { monthly: [9900] },
   },
 
   // ───── AI Conductor (amounts derived from @bizlegal/payment registry

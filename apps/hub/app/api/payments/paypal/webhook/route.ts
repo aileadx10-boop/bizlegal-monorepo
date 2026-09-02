@@ -9,6 +9,7 @@ import { grantCaspBundle } from '@/lib/payments/casp-bundle-grant'
 import { grantAiPolicy } from '@/lib/payments/ai-policy-grant'
 import { grantOfacWatch } from '@/lib/payments/ofac-watch-grant'
 import { grantFalseEcho } from '@/lib/payments/falseecho-grant'
+import { grantSellerRadar } from '@/lib/payments/sellerradar-grant'
 import { sendPaymentConfirmationEmail } from '@/lib/resend'
 
 export const dynamic = 'force-dynamic'
@@ -346,6 +347,8 @@ export async function POST(req: NextRequest) {
           await grantOfacWatch(supabase, orderRow)
           // FalseEcho fulfillment POST (no-op for other products).
           await grantFalseEcho(orderRow)
+          // SellerRadar fulfillment POST (no-op for other products).
+          await grantSellerRadar(orderRow)
           // Send payment confirmation email to customer (non-blocking).
           void sendPaymentConfirmationEmail(
             orderRow.user_email,
