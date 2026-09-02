@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { crossSellFor } from '@bizlegal/nurture-enqueue/cross-sell'
 
 export const metadata: Metadata = {
   title: 'Order Confirmed — Forge Compliance Engine',
@@ -81,6 +82,45 @@ export default function BOISuccessPage() {
           >
             Add BOI Tracker → $29/mo
           </a>
+        </div>
+
+        {/* ─── Fleet cross-sell ─────────────────────────────────────── */}
+        <div className="mb-10 text-left">
+          <div
+            style={{
+              fontFamily: 'monospace',
+              fontSize: 11,
+              letterSpacing: '0.16em',
+              textTransform: 'uppercase',
+              color: '#94a3b8',
+              marginBottom: 12,
+              textAlign: 'center',
+            }}
+          >
+            Also from the fleet
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {crossSellFor('forge_boi').map((offer) => (
+              <a
+                key={offer.url}
+                href={offer.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block rounded-xl border border-gray-800 p-4 hover:border-gray-600 transition"
+                style={{ textDecoration: 'none' }}
+              >
+                <div className="text-sm font-medium mb-1" style={{ color: '#f1f5f9' }}>
+                  {offer.headline}
+                </div>
+                <p style={{ color: '#94a3b8', fontSize: 13, lineHeight: 1.55, marginBottom: 8 }}>
+                  {offer.blurb}
+                </p>
+                <div className="text-xs font-mono" style={{ color: '#c4b5fd' }}>
+                  {offer.product} · {offer.price} &rarr;
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
 
         <div className="flex gap-4 flex-wrap justify-center">

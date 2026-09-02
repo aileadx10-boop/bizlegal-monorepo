@@ -2,6 +2,7 @@
 
 import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { crossSellFor } from '@bizlegal/nurture-enqueue/cross-sell'
 
 const C = {
   bg: '#07090e', surface: '#0d1118', border: '#1a2035', text: '#e8ecf4',
@@ -126,6 +127,23 @@ function SuccessContent() {
               style={{ padding: '10px 24px', border: `1px solid ${C.amber}55`, background: C.amberBg, borderRadius: 8, color: C.amber, textDecoration: 'none', fontSize: 13, fontWeight: 700, fontFamily: C.sans }}>
               Set up monitoring →
             </a>
+          </div>
+
+          {/* Fleet cross-sell — other live products relevant to this buyer */}
+          <div style={{ marginTop: 28, textAlign: 'left' }}>
+            <div style={{ fontFamily: C.mono, fontSize: 11, color: C.muted, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 12, textAlign: 'center' }}>
+              Also from the fleet
+            </div>
+            <div style={{ display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>
+              {crossSellFor('falseecho').map((offer) => (
+                <a key={offer.url} href={offer.url} target="_blank" rel="noopener noreferrer"
+                  style={{ display: 'block', padding: '18px 20px', background: C.surface, border: `1px solid ${C.border}`, borderRadius: 12, textDecoration: 'none' }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: C.text, marginBottom: 4 }}>{offer.headline}</div>
+                  <div style={{ fontSize: 12, color: C.muted, lineHeight: 1.55, marginBottom: 10 }}>{offer.blurb}</div>
+                  <div style={{ fontFamily: C.mono, fontSize: 11, color: C.amber }}>{offer.product} · {offer.price} →</div>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       )}

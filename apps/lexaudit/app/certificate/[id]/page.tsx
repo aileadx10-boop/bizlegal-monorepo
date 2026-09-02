@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
+import { crossSellFor } from '@bizlegal/nurture-enqueue/cross-sell'
 
 export default function CertificatePage() {
   const [cert, setCert] = useState<any>(null)
@@ -173,6 +174,21 @@ export default function CertificatePage() {
             Regulatory intelligence — not legal advice.<br />
             Audit-ready process record. No verdict implied.
           </div>
+        </div>
+      </div>
+
+      {/* Fleet cross-sell — screen only, never printed with the snapshot */}
+      <div className="no-print" style={{ maxWidth: '740px', margin: '0 auto 40px', padding: '0 20px' }}>
+        <div style={{ fontSize: '9px', letterSpacing: '3px', color: '#94a3b8', marginBottom: '12px', textAlign: 'center' }}>ALSO FROM THE FLEET</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
+          {crossSellFor('lexaudit').map((offer) => (
+            <a key={offer.url} href={offer.url} target="_blank" rel="noopener noreferrer"
+              style={{ display: 'block', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '4px', padding: '16px 18px', textDecoration: 'none' }}>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a', marginBottom: '4px' }}>{offer.headline}</div>
+              <div style={{ fontSize: '12px', color: '#64748b', lineHeight: 1.6, marginBottom: '8px' }}>{offer.blurb}</div>
+              <div style={{ fontFamily: 'monospace', fontSize: '11px', color: '#a07830' }}>{offer.product} · {offer.price} →</div>
+            </a>
+          ))}
         </div>
       </div>
 

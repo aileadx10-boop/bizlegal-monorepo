@@ -10,6 +10,11 @@
       "types": "./src/index.ts",
       "import": "./src/index.ts",
       "default": "./src/index.ts"
+    },
+    "./cross-sell": {
+      "types": "./src/cross-sell.ts",
+      "import": "./src/cross-sell.ts",
+      "default": "./src/cross-sell.ts"
     }
   },
   "files": ["src", "dist"],
