@@ -1,6 +1,6 @@
 # MOSES HANDOFF — Revenue Marathon Finish Line
 
-**For:** Moses (owner). **From:** the revenue-marathon branch `feat/revenue-marathon` (commits `851a581` → `1c0306e`, 2026-09-01/02).
+**For:** Moses (owner). **From:** the revenue-marathon branch `feat/revenue-marathon` (commits `851a581` → `4012620`, 2026-09-01 → 09-06).
 **What this is:** every step only you can do — dashboards, deploys, env vars, real-money tests, and decisions. Work top to bottom. Each step is independent enough that you can stop and resume.
 **Time estimate:** 2–4 hours of clicking, plus DNS propagation.
 
@@ -11,14 +11,15 @@
 
 ---
 
-## Step 1 — Supabase: run the two new migrations
+## Step 1 — Supabase: run the three new migrations
 
-Two new apps (FalseEcho, SellerRadar) need their database tables. This is one copy-paste each.
+Two new apps (FalseEcho, SellerRadar) plus the marketing content queue need their database tables. This is one copy-paste each.
 
 - [ ] Go to supabase.com → your BizLegal project → **SQL Editor** → **New query**.
 - [ ] Open `supabase/migrations/20260901_falseecho_mvp.sql` in the repo, copy the **entire file**, paste into the SQL editor, click **Run**. Expect: "Success. No rows returned."
 - [ ] Repeat with `supabase/migrations/20260902_sellerradar_mvp.sql`.
-- [ ] Verify: in **Table Editor** you should now see `falseecho_scans`, `falseecho_evidence`, `falseecho_monitors`, and `fee_schedules` plus the sellerradar tables.
+- [ ] Repeat with `supabase/migrations/20260906_content_queue.sql` (marketing engine queue — without it the new hub `/api/marketing/*` endpoints return 503 by design).
+- [ ] Verify: in **Table Editor** you should now see `falseecho_scans`, `falseecho_evidence`, `falseecho_monitors`, and `fee_schedules` plus the sellerradar tables, plus `content_queue`, `content_assets`, `published_content`.
 - [ ] If you get "relation already exists" that's fine — the migration is written to be safely re-run (`create table if not exists`).
 
 ---
@@ -61,6 +62,7 @@ Fleet ops (values shared with the other apps — copy from the hub Vercel projec
 - [ ] `OPS_LOG_URL` = `https://bizlegal-ai.com/api/ops/log`
 - [ ] `BIZLEGAL_INBOUND_SECRET`
 - [ ] `OPS_DASHBOARD_TOKEN`
+- [ ] `MARKETING_TRIGGER_URL` = `https://bizlegal-ai.com/api/marketing/trigger` (feeds detected-falsehood events into the content queue; optional until Step 9 marketing is live)
 
 Site:
 - [ ] `NEXT_PUBLIC_SITE_URL` = `https://falseecho.bizlegal-ai.com`
@@ -71,7 +73,7 @@ Site:
 
 ### 2c. Env vars — SellerRadar
 
-Same as FalseEcho **except**: no engine keys (`OPENAI/ANTHROPIC/PERPLEXITY/SERPAPI` not needed); add `CRON_SECRET` (generate a long random string); and the plan var is `PAYPAL_PLAN_ID_SELLERRADAR_MONITOR_MONTHLY` (Step 3). `NEXT_PUBLIC_SITE_URL` = `https://sellerradar.bizlegal-ai.com`.
+Same as FalseEcho **except**: no engine keys (`OPENAI/ANTHROPIC/PERPLEXITY/SERPAPI` not needed); add `CRON_SECRET` (generate a long random string); and the plan var is `PAYPAL_PLAN_ID_SELLERRADAR_MONITOR_MONTHLY` (Step 3). `NEXT_PUBLIC_SITE_URL` = `https://sellerradar.bizlegal-ai.com`. Same optional `MARKETING_TRIGGER_URL` for fee-change events.
 
 ### 2d. Deploy + DNS
 
@@ -201,10 +203,21 @@ Do these **after** Steps 1–5. Use small amounts. Keep the order confirmations;
 ## Step 8 — What is NOT done (so you're not surprised)
 
 - [ ] **Monitor crons are stubs.** FalseEcho's and SellerRadar's monitor tiers ($149/mo, $99/mo) have the tables, the token-gated `/api/cron/monitor` endpoint, and dashboards — but the actual "re-scan and email the customer on a schedule" job is **not implemented**. Selling monitor tier today = manual delivery until the cron ships.
-- [ ] **Marketing engine M.1–M.7** (programmatic SEO pages, content pipeline, distribution) from the marathon plan is not built.
+- [ ] **Marketing engine is code-complete in-repo, not switched on.** Built this week: content queue tables (Step 1), hub `/api/marketing/trigger` + `/callback` endpoints, FalseEcho `falsehood_detected` and SellerRadar `fee_change_detected` event emission, a 6-hourly Trigger.dev queue processor, a Monday newsletter task, and the `/ops/content` dashboard. **Not built:** the n8n side (M.2 brand-voice workflows, M.5 video pipeline) — that needs your n8n instance and the social/API accounts. To activate what's built, see Step 9.
 - [ ] **Subscription 503 matrix (F3) is only half closed.** Any plan you didn't create in Step 3b still returns "unavailable" at checkout. The full list of missing combos is in Step 3b — it's a dashboard chore, not code.
 - [ ] **F5 known limitation:** "monthly" SKUs sold through hub's generic `/api/pay/start` card path charge **once**, not recurring (affects `bench_managed_monthly` $5,000/mo). True recurring needs the PayPal Subscriptions work — a future engineering task.
 - [ ] **No automated cross-app fulfillment.** TRACR bought via hub, docai tiers, lexaudit monitor, and forge products bought via hub get an *honest* "here's what happens next" email, then a human (you) delivers. Watch the ops log.
+
+---
+
+## Step 9 — Optional: switch on the marketing engine
+
+Only after Steps 1–5 are done.
+
+- [ ] Create a Trigger.dev project (cloud.trigger.dev), copy the project ref into `TRIGGER_PROJECT_REF` in `services/marketing/trigger.config.ts` (currently a placeholder), then from `services/marketing` run `pnpm trigger deploy`. This activates the 6-hourly queue processor and the Monday newsletter.
+- [ ] Set newsletter env vars in Trigger.dev (or wherever the tasks run): `RESEND_API_KEY`, `NEWSLETTER_FROM`, `FOUNDER_EMAIL`, plus Supabase service vars. Without them the newsletter logs instead of sending — safe either way.
+- [ ] When your n8n instance is ready: set `N8N_MARKETING_WEBHOOK_URL` in Trigger.dev, and give n8n the `BIZLEGAL_INBOUND_SECRET` so it can sign callbacks to `/api/marketing/callback`. Until then, queued content simply waits — nothing breaks.
+- [ ] Check the dashboard: `https://bizlegal-ai.com/ops/content` (uses your `OPS_DASHBOARD_TOKEN`). It shows published counts, pipeline status, and a red banner if more than 3 content jobs fail in 24h.
 
 ---
 
