@@ -48,7 +48,6 @@ interface Order {
   network: string
   tier: string
   status: string
-  email?: string
   risk_score?: number
   risk_level?: string
   ai_content?: AiContent
@@ -220,6 +219,7 @@ export default function ReportPage() {
   const [loading, setLoading] = useState(true)
   const [payLoading, setPayLoading] = useState(false)
   const [payErr, setPayErr] = useState('')
+  const [payEmail, setPayEmail] = useState('')
   const [generating, setGenerating] = useState(false)
 
   useEffect(() => {
@@ -231,13 +231,19 @@ export default function ReportPage() {
 
   async function handleCryptoPay() {
     if (!order) return
+    // The API no longer returns the buyer email — collect it here instead.
+    const email = payEmail.trim()
+    if (!email || !email.includes('@')) {
+      setPayErr('Enter the email you used for this report to continue to payment.')
+      return
+    }
     setPayLoading(true)
     setPayErr('')
     try {
       const res = await fetch('/api/scan/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: order.email ?? '', wallet_address: order.wallet_address, network: order.network, tier: order.tier }),
+        body: JSON.stringify({ email, wallet_address: order.wallet_address, network: order.network, tier: order.tier }),
       })
       const data = await res.json()
       if (data.invoice_url) window.location.href = data.invoice_url
@@ -380,6 +386,17 @@ export default function ReportPage() {
             <p style={{ fontSize: 14, color: C.muted, marginBottom: 28, lineHeight: 1.7, maxWidth: 420, margin: '0 auto 28px' }}>
               Complete payment to unlock the full forensic analysis, legal summary, and recommended actions.
             </p>
+            <input
+              type="email"
+              value={payEmail}
+              onChange={e => setPayEmail(e.target.value)}
+              placeholder="Email used for this report"
+              style={{
+                display: 'block', width: '100%', maxWidth: 360, margin: '0 auto 16px',
+                padding: '12px 16px', background: C.card, border: `1px solid ${C.border}`,
+                borderRadius: 8, color: C.text, fontSize: 14, fontFamily: C.sans, outline: 'none',
+              }}
+            />
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 16 }}>
               <button onClick={handleCryptoPay} disabled={payLoading} style={{
                 padding: '13px 30px', background: C.redBg, border: `1px solid ${C.redBorder}`,
