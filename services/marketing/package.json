@@ -1,0 +1,20 @@
+{
+  "name": "@bizlegal/marketing",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Marketing automation tasks (Trigger.dev v4): weekly content newsletter.",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "dev": "trigger dev",
+    "deploy": "trigger deploy"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "@trigger.dev/sdk": "^4.0.0",
+    "resend": "^6.9.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "typescript": "^5"
+  }
+}
