@@ -82,6 +82,7 @@ Defined in each product app's `vercel.json` (not the hub).
 | Endpoint | Surface | Schedule | Purpose | Status |
 |---|---|---|---|---|
 | `/api/cron/monitor` | falseecho (`apps/falseecho/vercel.json`) | 06:00 daily | Monitor-tier re-scan, flag diff, alert emails | LIVE |
+| `/api/cron/monitor` | sellerradar (`apps/sellerradar/vercel.json`) | Mon 06:00 UTC | Monitor-tier weekly fee-schedule re-scan, impact diff, alert emails | LIVE |
 
 ---
 

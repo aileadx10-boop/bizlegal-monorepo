@@ -61,6 +61,87 @@ export async function sendReportReady(params: {
 }
 
 /**
+ * Monitor-tier weekly alert: a new fee schedule (or a recomputed impact)
+ * moved the subscriber's numbers. Carries old vs new dollar impact and a
+ * link to the fresh re-scan report. Same liability voice as the disclaimer
+ * page: estimates, not guarantees — verify against settlement reports.
+ */
+export async function sendMonitorAlert(params: {
+  to: string
+  reportRef: string
+  oldMonthlyImpact: number
+  oldAnnualImpact: number
+  newMonthlyImpact: number
+  newAnnualImpact: number
+  changedFeeTypes: readonly string[]
+  scheduleTo: string
+}) {
+  const { to, reportRef, oldMonthlyImpact, oldAnnualImpact, newMonthlyImpact, newAnnualImpact, changedFeeTypes, scheduleTo } =
+    params
+  const reportUrl = `${SITE}/report/${reportRef}`
+  const fmt = (n: number) =>
+    `$${Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+
+  await getResend().emails.send({
+    from: `SellerRadar <${FROM}>`,
+    to,
+    subject: 'Amazon fee update changed your numbers',
+    html: `
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"></head>
+<body style="font-family: 'DM Sans', -apple-system, sans-serif; background: #07090e; color: #e8ecf4; padding: 40px 20px; margin: 0;">
+  <div style="max-width: 560px; margin: 0 auto;">
+    <div style="font-family: monospace; font-size: 22px; font-weight: 500; letter-spacing: 0.12em; margin-bottom: 32px;">
+      Seller<span style="color: #d4a843;">Radar</span>
+    </div>
+
+    <div style="background: #0d1118; border: 1px solid #1a2035; border-radius: 12px; padding: 32px; margin-bottom: 24px;">
+      <div style="font-family: monospace; font-size: 11px; color: #5a6278; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 12px;">Monitor Alert · Fee Schedule ${scheduleTo}</div>
+      <h1 style="font-family: Georgia, serif; font-size: 26px; font-weight: 700; color: #e8ecf4; margin: 0 0 16px;">
+        An Amazon fee update changed your numbers.
+      </h1>
+      <p style="font-size: 14px; color: #5a6278; line-height: 1.7; margin: 0 0 20px;">
+        Your weekly monitor re-scan detected a fee-schedule change
+        ${changedFeeTypes.length > 0 ? `(<strong style="color: #e8ecf4;">${changedFeeTypes.join(', ')}</strong>)` : ''}
+        affecting your catalog. Recomputed impact:
+      </p>
+
+      <table style="width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 24px;">
+        <tr style="color: #5a6278; font-family: monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;">
+          <td style="padding: 6px 0;"></td>
+          <td style="padding: 6px 0; text-align: right;">Before</td>
+          <td style="padding: 6px 0; text-align: right;">Now</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; color: #e8ecf4;">Monthly impact</td>
+          <td style="padding: 6px 0; text-align: right; color: #5a6278;">${fmt(oldMonthlyImpact)}/mo</td>
+          <td style="padding: 6px 0; text-align: right; color: #c0392b; font-weight: 700;">${fmt(newMonthlyImpact)}/mo</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; color: #e8ecf4;">Annual impact</td>
+          <td style="padding: 6px 0; text-align: right; color: #5a6278;">${fmt(oldAnnualImpact)}/yr</td>
+          <td style="padding: 6px 0; text-align: right; color: #c0392b; font-weight: 700;">${fmt(newAnnualImpact)}/yr</td>
+        </tr>
+      </table>
+
+      <a href="${reportUrl}" style="display: block; text-align: center; padding: 14px; background: #d4a843; color: #07090e; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 15px;">
+        View Updated Report →
+      </a>
+    </div>
+
+    <p style="font-size: 11px; color: #2e3450; font-family: monospace; line-height: 1.7; text-align: center;">
+      SellerRadar · ${SITE}<br>
+      ${ESTIMATE_NOTE}<br>
+      No savings are guaranteed. Not financial or tax advice. Report ref: ${reportRef}
+    </p>
+  </div>
+</body>
+</html>`,
+  })
+}
+
+/**
  * Sent when a hub apex checkout (bizlegal-ai.com/checkout?product=sellerradar)
  * completes: we know the buyer's email + tier but not their catalog yet, so
  * the email drives them to the upload form to claim the paid audit.

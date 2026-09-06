@@ -75,21 +75,47 @@ function round2(n: number): number {
 
 /** Compute the per-unit Amazon fee stack for one SKU under one schedule. */
 export function computeFees(sku: SellerSkuInput, schedule: FeeSchedule): FeeBreakdown {
-  const sizeTier = classifySizeTier(sku)
-  const categoryKey = normalizeCategory(sku.category)
+  return computeStoredFees(
+    {
+      price: sku.price,
+      category: sku.category,
+      sizeTier: classifySizeTier(sku),
+      volumeCuFt: cubicFeet(sku),
+    },
+    schedule,
+  )
+}
+
+/**
+ * Fee computation for a SKU whose size tier + volume are already known.
+ * The monitor re-scan path needs this: sellerradar_skus rows persist the
+ * classified size_tier (and the old storage fee, from which volume is
+ * recoverable) but not the raw dimensions/weight classifySizeTier wants.
+ * computeFees delegates here so there is exactly one fee formula.
+ */
+export interface StoredFeeInput {
+  readonly price: number
+  readonly category: string
+  readonly sizeTier: SizeTier
+  /** Cubic feet per unit; 0 when dimensions were never supplied. */
+  readonly volumeCuFt: number
+}
+
+export function computeStoredFees(input: StoredFeeInput, schedule: FeeSchedule): FeeBreakdown {
+  const categoryKey = normalizeCategory(input.category)
   const referralPct = schedule.referral_pct[categoryKey] ?? schedule.referral_pct.default
-  const referral = round2(sku.price * referralPct)
-  const fulfillment = schedule.fba_fulfillment[sizeTier]
-  const isOversize = sizeTier === 'oversize' || sizeTier === 'large_bulky'
+  const referral = round2(input.price * referralPct)
+  const fulfillment = schedule.fba_fulfillment[input.sizeTier]
+  const isOversize = input.sizeTier === 'oversize' || input.sizeTier === 'large_bulky'
   const storage = round2(
-    cubicFeet(sku) * (isOversize ? schedule.storage_per_cuft_monthly.oversize : schedule.storage_per_cuft_monthly.standard),
+    input.volumeCuFt * (isOversize ? schedule.storage_per_cuft_monthly.oversize : schedule.storage_per_cuft_monthly.standard),
   )
   return {
     referral,
     fulfillment,
     storage,
     total: round2(referral + fulfillment + storage),
-    sizeTier,
+    sizeTier: input.sizeTier,
   }
 }
 

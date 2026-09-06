@@ -4,8 +4,10 @@
   "installCommand": "corepack enable && cd ../.. && corepack pnpm install --frozen-lockfile=false --ignore-scripts",
   "buildCommand": "cd ../.. && corepack pnpm turbo build --filter=@bizlegal/sellerradar...",
   "functions": {
-    "app/api/analyze/route.ts": { "maxDuration": 60 }
+    "app/api/analyze/route.ts": { "maxDuration": 60 },
+    "app/api/cron/monitor/route.ts": { "maxDuration": 60 }
   },
+  "crons": [{ "path": "/api/cron/monitor", "schedule": "0 6 * * 1" }],
   "headers": [
     {
       "source": "/(.*)",

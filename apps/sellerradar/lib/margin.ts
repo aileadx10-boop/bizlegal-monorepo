@@ -6,7 +6,16 @@
    "verify against your settlement reports" label (liability shrinker). */
 
 import type { SellerSkuInput } from './csv'
-import { computeFees, diffFeeTypes, FeeBreakdown, FeeSchedule, FeeType, SizeTier } from './fees'
+import {
+  classifySizeTier,
+  computeStoredFees,
+  cubicFeet,
+  diffFeeTypes,
+  FeeBreakdown,
+  FeeSchedule,
+  FeeType,
+  SizeTier,
+} from './fees'
 
 export interface SkuImpact {
   readonly sku: string
@@ -58,9 +67,48 @@ export function analyzeCatalog(
   prev: FeeSchedule,
   next: FeeSchedule,
 ): CatalogImpact {
+  return analyzeStoredCatalog(
+    skus.map((sku) => ({
+      sku: sku.sku,
+      asin: sku.asin,
+      category: sku.category,
+      price: sku.price,
+      cogs: sku.cogs,
+      monthlyUnits: sku.monthlyUnits,
+      sizeTier: classifySizeTier(sku),
+      volumeCuFt: cubicFeet(sku),
+    })),
+    prev,
+    next,
+  )
+}
+
+/**
+ * A SKU row as persisted in sellerradar_skus: raw dimensions/weight are not
+ * stored, only the classified size_tier — volumeCuFt is recovered from the
+ * stored storage fee (fees_old.storage ÷ the schedule's storage rate, 0 when
+ * the SKU never had dimensions). Used by the monitor weekly re-scan, which
+ * re-runs the diff on a stored catalog instead of a fresh CSV.
+ */
+export interface StoredSkuInput {
+  readonly sku: string
+  readonly asin: string | null
+  readonly category: string
+  readonly price: number
+  readonly cogs: number
+  readonly monthlyUnits: number
+  readonly sizeTier: SizeTier
+  readonly volumeCuFt: number
+}
+
+export function analyzeStoredCatalog(
+  skus: readonly StoredSkuInput[],
+  prev: FeeSchedule,
+  next: FeeSchedule,
+): CatalogImpact {
   const perSku: SkuImpact[] = skus.map((sku) => {
-    const feesOld = computeFees(sku, prev)
-    const feesNew = computeFees(sku, next)
+    const feesOld = computeStoredFees(sku, prev)
+    const feesNew = computeStoredFees(sku, next)
     const feeDeltaPerUnit = round2(feesNew.total - feesOld.total)
     const monthlyImpact = round2(feeDeltaPerUnit * sku.monthlyUnits)
     return {

@@ -176,8 +176,8 @@ export async function POST(req: NextRequest) {
     // Marketing hook (goal M.4): when this analysis surfaced fee changes,
     // hand each changed fee type to the hub content queue as a
     // fee_change_detected event. Wired here — the analyze flow — because the
-    // monitor cron is an explicit post-MVP stub and this is where a fee diff
-    // meets a real catalog (giving a real impact_estimate). Fire-and-forget;
+    // monitor cron (/api/cron/monitor) runs on stored catalogs and this is
+    // where a fee diff meets a fresh upload (giving a real impact_estimate). Fire-and-forget;
     // no-op without MARKETING_TRIGGER_URL configured.
     for (const feeType of impact.changedFeeTypes) {
       const rates =
