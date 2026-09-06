@@ -11,6 +11,7 @@ export const dynamic = 'force-dynamic'
  * Paid-gated (spec §4): unpaid reports return the top-line totals (SKU
  * count, affected count, monthly/annual impact, changed fee types) but
  * NEVER the per-SKU rows. Per-SKU detail only ships for paid reports.
+ * Buyer email is never served here; checkout resolves it server-side.
  */
 export async function GET(
   _req: NextRequest,
@@ -19,7 +20,7 @@ export async function GET(
   try {
     const { data: report, error } = await supabaseAdmin
       .from('sellerradar_reports')
-      .select('id, report_ref, email, tier, status, sku_count, affected_count, monthly_impact, annual_impact, avg_margin_delta_pct, changed_fee_types, schedule_from, schedule_to, warnings, created_at, completed_at, paid_at')
+      .select('id, report_ref, tier, status, sku_count, affected_count, monthly_impact, annual_impact, avg_margin_delta_pct, changed_fee_types, schedule_from, schedule_to, warnings, created_at, completed_at, paid_at')
       .eq('report_ref', params.report_ref)
       .maybeSingle()
 
@@ -33,7 +34,6 @@ export async function GET(
 
     const summary = {
       report_ref: report.report_ref,
-      email: report.email,
       tier: report.tier,
       status: report.status,
       sku_count: report.sku_count,

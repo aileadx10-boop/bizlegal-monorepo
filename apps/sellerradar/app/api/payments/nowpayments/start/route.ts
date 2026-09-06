@@ -15,11 +15,11 @@ export const maxDuration = 30
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : ''
+    let email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : ''
     const tier = typeof body.tier === 'string' ? body.tier : ''
     const reportRef = typeof body.reportRef === 'string' ? body.reportRef : ''
 
-    if (!email || !email.includes('@') || !TIER_PRICES_USD[tier]) {
+    if (!TIER_PRICES_USD[tier]) {
       return NextResponse.json({ error: 'email and a valid tier are required' }, { status: 400 })
     }
 
@@ -35,14 +35,22 @@ export async function POST(req: NextRequest) {
     const interval = TIER_INTERVALS[tier] ?? 'one-time'
     const reportId = 'SR-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 90000) + 10000)
 
+    // Link to the analysis; resolve the buyer email server-side from the
+    // report row when the client does not send one (report API no longer
+    // serves it).
     let analysisId: string | null = null
     if (reportRef) {
       const { data: report } = await supabaseAdmin
         .from('sellerradar_reports')
-        .select('id')
+        .select('id, email')
         .eq('report_ref', reportRef)
         .maybeSingle()
       analysisId = report?.id ?? null
+      if (!email && report?.email) email = report.email.trim().toLowerCase()
+    }
+
+    if (!email || !email.includes('@')) {
+      return NextResponse.json({ error: 'email and a valid tier are required' }, { status: 400 })
     }
 
     const { data: order, error: insertErr } = await supabaseAdmin

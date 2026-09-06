@@ -40,7 +40,6 @@ interface ScanMeta {
   scan_sha256: string | null
   created_at: string
   completed_at: string | null
-  email?: string
 }
 
 const ENGINE_NAMES: Record<string, string> = {
@@ -87,7 +86,7 @@ export default function ReportPage() {
       const res = await fetch('/api/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: scan.email ?? '', tier: 'audit', scanRef: scan.scan_ref }),
+        body: JSON.stringify({ tier: 'audit', scanRef: scan.scan_ref }),
       })
       const data = await res.json()
       if (data.approvalUrl) window.location.href = data.approvalUrl
@@ -103,7 +102,7 @@ export default function ReportPage() {
       const res = await fetch('/api/payments/nowpayments/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: scan.email ?? '', tier: 'audit', scanRef: scan.scan_ref }),
+        body: JSON.stringify({ tier: 'audit', scanRef: scan.scan_ref }),
       })
       const data = await res.json()
       if (data.invoice_url) window.location.href = data.invoice_url

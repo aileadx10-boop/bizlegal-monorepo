@@ -13,7 +13,24 @@ export const dynamic = 'force-dynamic'
  */
 export async function POST(req: NextRequest) {
   try {
-    const { email, tier = 'audit', scanRef } = await req.json()
+    const body = await req.json()
+    let email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : ''
+    const tier = typeof body.tier === 'string' ? body.tier : 'audit'
+    const scanRef = typeof body.scanRef === 'string' ? body.scanRef : ''
+
+    // Link to the scan if the client passed a scan reference. The buyer's
+    // email is resolved server-side from the scan row when the client does
+    // not send one — the report API no longer serves email to browsers.
+    let scanId: string | null = null
+    if (scanRef) {
+      const { data: scan } = await supabaseAdmin
+        .from('falseecho_scans')
+        .select('id, email')
+        .eq('scan_ref', scanRef)
+        .maybeSingle()
+      scanId = scan?.id ?? null
+      if (!email && scan?.email) email = scan.email
+    }
 
     if (!email || !tier || !TIER_PRICES_USD[tier]) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
@@ -22,17 +39,6 @@ export async function POST(req: NextRequest) {
     const amount = TIER_PRICES_USD[tier]
     const interval = TIER_INTERVALS[tier] ?? 'one-time'
     const reportId = 'FE-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 90000) + 10000)
-
-    // Link to the scan if the client passed a scan reference
-    let scanId: string | null = null
-    if (typeof scanRef === 'string' && scanRef) {
-      const { data: scan } = await supabaseAdmin
-        .from('falseecho_scans')
-        .select('id')
-        .eq('scan_ref', scanRef)
-        .maybeSingle()
-      scanId = scan?.id ?? null
-    }
 
     const { error: dbErr } = await supabaseAdmin.from('falseecho_orders').insert({
       report_id: reportId,

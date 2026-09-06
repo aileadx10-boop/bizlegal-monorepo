@@ -15,11 +15,11 @@ export const maxDuration = 30
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : ''
+    let email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : ''
     const tier = typeof body.tier === 'string' ? body.tier : ''
     const scanRef = typeof body.scanRef === 'string' ? body.scanRef : ''
 
-    if (!email || !email.includes('@') || !TIER_PRICES_USD[tier]) {
+    if (!TIER_PRICES_USD[tier]) {
       return NextResponse.json({ error: 'email and a valid tier are required' }, { status: 400 })
     }
 
@@ -35,14 +35,21 @@ export async function POST(req: NextRequest) {
     const interval = TIER_INTERVALS[tier] ?? 'one-time'
     const reportId = 'FE-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 90000) + 10000)
 
+    // Link to the scan; resolve the buyer email server-side from the scan
+    // row when the client does not send one (report API no longer serves it).
     let scanId: string | null = null
     if (scanRef) {
       const { data: scan } = await supabaseAdmin
         .from('falseecho_scans')
-        .select('id')
+        .select('id, email')
         .eq('scan_ref', scanRef)
         .maybeSingle()
       scanId = scan?.id ?? null
+      if (!email && scan?.email) email = scan.email.trim().toLowerCase()
+    }
+
+    if (!email || !email.includes('@')) {
+      return NextResponse.json({ error: 'email and a valid tier are required' }, { status: 400 })
     }
 
     const { data: order, error: insertErr } = await supabaseAdmin

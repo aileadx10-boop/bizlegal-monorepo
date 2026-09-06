@@ -42,7 +42,6 @@ interface SkuRow {
 
 interface ReportMeta {
   report_ref: string
-  email?: string
   tier: string
   status: string
   sku_count: number
@@ -100,7 +99,7 @@ export default function ReportPage() {
       const res = await fetch('/api/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: report.email ?? '', tier: 'audit', reportRef: report.report_ref }),
+        body: JSON.stringify({ tier: 'audit', reportRef: report.report_ref }),
       })
       const data = await res.json()
       if (data.approvalUrl) window.location.href = data.approvalUrl
@@ -116,7 +115,7 @@ export default function ReportPage() {
       const res = await fetch('/api/payments/nowpayments/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: report.email ?? '', tier: 'audit', reportRef: report.report_ref }),
+        body: JSON.stringify({ tier: 'audit', reportRef: report.report_ref }),
       })
       const data = await res.json()
       if (data.invoice_url) window.location.href = data.invoice_url

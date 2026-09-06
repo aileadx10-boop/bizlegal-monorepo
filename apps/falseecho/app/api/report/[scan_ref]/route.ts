@@ -10,6 +10,7 @@ export const dynamic = 'force-dynamic'
  * Paid-gated: unpaid scans return the exposure summary (score, flags count,
  * engine matrix) but NEVER the evidence rows. Evidence — prompts, responses,
  * SHA-256 anchors, narratives — only ships for paid/delivered scans.
+ * Buyer email is never served here; checkout resolves it server-side.
  */
 export async function GET(
   _req: NextRequest,
@@ -18,7 +19,7 @@ export async function GET(
   try {
     const { data: scan, error } = await supabaseAdmin
       .from('falseecho_scans')
-      .select('id, scan_ref, entity, tier, status, score, flags_count, engines, submission_sha256, scan_sha256, created_at, completed_at, paid_at, email')
+      .select('id, scan_ref, entity, tier, status, score, flags_count, engines, submission_sha256, scan_sha256, created_at, completed_at, paid_at')
       .eq('scan_ref', params.scan_ref)
       .maybeSingle()
 
@@ -41,7 +42,6 @@ export async function GET(
           flags_count: scan.flags_count,
           engines: scan.engines,
           created_at: scan.created_at,
-          email: scan.email,
         },
         evidence: null,
         paid: false,
@@ -67,7 +67,6 @@ export async function GET(
         scan_sha256: scan.scan_sha256,
         created_at: scan.created_at,
         completed_at: scan.completed_at,
-        email: scan.email,
       },
       evidence: evidence ?? [],
       paid: true,

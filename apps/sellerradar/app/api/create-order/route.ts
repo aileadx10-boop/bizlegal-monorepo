@@ -13,7 +13,24 @@ export const dynamic = 'force-dynamic'
  */
 export async function POST(req: NextRequest) {
   try {
-    const { email, tier = 'audit', reportRef } = await req.json()
+    const body = await req.json()
+    let email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : ''
+    const tier = typeof body.tier === 'string' ? body.tier : 'audit'
+    const reportRef = typeof body.reportRef === 'string' ? body.reportRef : ''
+
+    // Link to the analysis if the client passed a report reference. The
+    // buyer's email is resolved server-side from the report row when the
+    // client does not send one — the report API no longer serves email.
+    let analysisId: string | null = null
+    if (reportRef) {
+      const { data: report } = await supabaseAdmin
+        .from('sellerradar_reports')
+        .select('id, email')
+        .eq('report_ref', reportRef)
+        .maybeSingle()
+      analysisId = report?.id ?? null
+      if (!email && report?.email) email = report.email
+    }
 
     if (!email || !tier || !TIER_PRICES_USD[tier]) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
@@ -22,17 +39,6 @@ export async function POST(req: NextRequest) {
     const amount = TIER_PRICES_USD[tier]
     const interval = TIER_INTERVALS[tier] ?? 'one-time'
     const reportId = 'SR-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 90000) + 10000)
-
-    // Link to the analysis if the client passed a report reference
-    let analysisId: string | null = null
-    if (typeof reportRef === 'string' && reportRef) {
-      const { data: report } = await supabaseAdmin
-        .from('sellerradar_reports')
-        .select('id')
-        .eq('report_ref', reportRef)
-        .maybeSingle()
-      analysisId = report?.id ?? null
-    }
 
     const { error: dbErr } = await supabaseAdmin.from('sellerradar_orders').insert({
       report_id: reportId,
