@@ -6,6 +6,7 @@ import { analyzeCatalog } from '@/lib/margin'
 import { getPreviousSchedule, getCurrentSchedule } from '@/lib/schedules'
 import { logEventAsync } from '@/lib/ops/log'
 import { sendReportReady } from '@/lib/email'
+import { emitMarketingEventAsync } from '@/lib/marketing'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -171,6 +172,41 @@ export async function POST(req: NextRequest) {
       affectedCount: impact.totals.affectedCount,
       annualImpact: impact.totals.annualImpact,
     }).catch((err) => console.warn('[analyze] report email failed:', err))
+
+    // Marketing hook (goal M.4): when this analysis surfaced fee changes,
+    // hand each changed fee type to the hub content queue as a
+    // fee_change_detected event. Wired here — the analyze flow — because the
+    // monitor cron is an explicit post-MVP stub and this is where a fee diff
+    // meets a real catalog (giving a real impact_estimate). Fire-and-forget;
+    // no-op without MARKETING_TRIGGER_URL configured.
+    for (const feeType of impact.changedFeeTypes) {
+      const rates =
+        feeType === 'referral'
+          ? { old_rate: prev.referral_pct.default, new_rate: curr.referral_pct.default, category: 'default' }
+          : feeType === 'fba_fulfillment'
+            ? {
+                old_rate: prev.fba_fulfillment.large_standard,
+                new_rate: curr.fba_fulfillment.large_standard,
+                category: 'large_standard',
+              }
+            : {
+                old_rate: prev.storage_per_cuft_monthly.standard,
+                new_rate: curr.storage_per_cuft_monthly.standard,
+                category: 'standard',
+              }
+      emitMarketingEventAsync({
+        product: 'sellerradar',
+        event_type: 'fee_change_detected',
+        payload: {
+          fee_type: feeType,
+          old_rate: rates.old_rate,
+          new_rate: rates.new_rate,
+          effective_date: curr.effective_date,
+          category: rates.category,
+          impact_estimate: impact.totals.annualImpact,
+        },
+      })
+    }
 
     return NextResponse.json({
       ok: true,

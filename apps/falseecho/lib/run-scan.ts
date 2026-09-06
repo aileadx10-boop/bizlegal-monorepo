@@ -9,6 +9,7 @@ import { runBattery, engineStatusMatrix, ENGINE_IDS, BatteryItem } from './engin
 import { heuristicFlag, combineResults } from './triage'
 import { evidenceHash } from './evidence'
 import { logEventAsync } from './ops/log'
+import { emitMarketingEventAsync } from './marketing'
 
 export interface ScanRow {
   id: string
@@ -170,6 +171,26 @@ export async function executeScan(scan: ScanRow, mode: 'free' | 'full'): Promise
       unavailable_engines: scoring.unavailableEngines,
     },
   })
+
+  // Marketing hook (goal M.3): hand flagged evidence to the hub content
+  // queue as falsehood_detected events. Fire-and-forget, capped per scan —
+  // marketing must never break or delay a scan. No-op without
+  // MARKETING_TRIGGER_URL configured.
+  const MAX_MARKETING_EVENTS = 3
+  for (const row of rows.filter((r) => r.flagged).slice(0, MAX_MARKETING_EVENTS)) {
+    emitMarketingEventAsync({
+      product: 'falseecho',
+      event_type: 'falsehood_detected',
+      payload: {
+        entity: scan.entity,
+        engine: row.engine,
+        false_claim: (row.response ?? '').slice(0, 500),
+        actual_fact: row.narrative ?? null,
+        confidence: row.confidence ?? null,
+        evidence_hash: row.sha256,
+      },
+    })
+  }
 
   return {
     ok: true,
