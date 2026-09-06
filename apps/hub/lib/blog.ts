@@ -2,7 +2,32 @@ import fs from "node:fs"
 import path from "node:path"
 import matter from "gray-matter"
 
-const CONTENT_DIR = path.join(process.cwd(), "content/blog")
+/**
+ * Resolve the canonical blog content directory.
+ *
+ * The MDX library lives at the monorepo root (`content/blog/`), but the hub
+ * app runs with `process.cwd()` = `apps/hub` (Vercel root directory, pnpm -F).
+ * Try the monorepo-root path first, then fall back to a cwd-relative path
+ * (covers running from the repo root, and the legacy hub-local content dir).
+ */
+function resolveContentDir(): string {
+  const candidates = [
+    // Canonical: monorepo root content/blog (cwd = apps/hub on Vercel + pnpm -F)
+    path.join(process.cwd(), "../../content/blog"),
+    // cwd = monorepo root, or legacy hub-local content dir
+    path.join(process.cwd(), "content/blog"),
+  ]
+  for (const candidate of candidates) {
+    try {
+      if (fs.existsSync(candidate)) return candidate
+    } catch {
+      // ignore and try the next candidate
+    }
+  }
+  return candidates[0]
+}
+
+const CONTENT_DIR = resolveContentDir()
 
 export interface BlogPost {
   slug: string
@@ -23,15 +48,30 @@ export interface BlogPost {
 
 export interface BlogPostMeta extends Omit<BlogPost, "content"> {}
 
-function readPost(filename: string): BlogPost | null {
+/** Recursively collect every `.mdx` / `.md` file under `dir` (one level deep or more). */
+function walkContentDir(dir: string): string[] {
+  const entries = fs.readdirSync(dir, { withFileTypes: true })
+  const files: string[] = []
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name)
+    if (entry.isDirectory()) {
+      files.push(...walkContentDir(fullPath))
+    } else if (/\.mdx?$/.test(entry.name)) {
+      files.push(fullPath)
+    }
+  }
+  return files
+}
+
+function readPost(filePath: string): BlogPost | null {
   try {
-    const filePath = path.join(CONTENT_DIR, filename)
     const raw = fs.readFileSync(filePath, "utf-8")
     const { data, content } = matter(raw)
 
     if (!data.title || !data.date || !data.published) return null
 
-    const slug = filename.replace(/\.mdx?$/, "")
+    // Subdirectory posts keep their filename slug (e.g. comparisons/foo.mdx → "foo").
+    const slug = path.basename(filePath).replace(/\.mdx?$/, "")
 
     return {
       slug,
@@ -65,12 +105,18 @@ function ensureContentDir(): boolean {
 export function getAllPosts(): BlogPostMeta[] {
   if (!ensureContentDir()) return []
 
-  const files = fs.readdirSync(CONTENT_DIR).filter((f) => /\.mdx?$/.test(f))
-
-  const posts = files
-    .map((f) => readPost(f))
+  const seen = new Set<string>()
+  const posts = walkContentDir(CONTENT_DIR)
+    .map((filePath) => readPost(filePath))
     // biome-ignore lint/complexity/useOptionalChain: type guard requires explicit null check
     .filter((p): p is BlogPost => p !== null && p.published)
+    // Defensive: if a flat file and a subdirectory file share a basename slug,
+    // keep the first (root-level) occurrence and drop the duplicate.
+    .filter((p) => {
+      if (seen.has(p.slug)) return false
+      seen.add(p.slug)
+      return true
+    })
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .map(({ content: _content, ...meta }) => meta)
 
@@ -80,13 +126,11 @@ export function getAllPosts(): BlogPostMeta[] {
 export function getPostBySlug(slug: string): BlogPost | null {
   if (!ensureContentDir()) return null
 
-  const extensions = ["mdx", "md"]
-  for (const ext of extensions) {
-    const post = readPost(`${slug}.${ext}`)
-    if (post) return post
-  }
+  const match = walkContentDir(CONTENT_DIR).find(
+    (filePath) => path.basename(filePath).replace(/\.mdx?$/, "") === slug
+  )
 
-  return null
+  return match ? readPost(match) : null
 }
 
 export function getFeaturedPosts(limit = 2): BlogPostMeta[] {

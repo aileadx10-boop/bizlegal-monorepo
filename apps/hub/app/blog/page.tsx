@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { GUIDES } from '@/lib/guides'
+import { getAllPosts } from '@/lib/blog'
 import BlogGrid from './BlogGrid'
+import BlogPostGrid from './BlogPostGrid'
 
 export const metadata: Metadata = {
   title: 'Blog — Compliance Intelligence for SaaS, Fintech & Crypto Startups | BizLegal AI',
@@ -15,6 +17,9 @@ export const metadata: Metadata = {
 }
 
 export default function BlogIndexPage() {
+  const posts = getAllPosts()
+  const allItems = [...posts, ...GUIDES]
+
   const breadcrumbLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -30,14 +35,23 @@ export default function BlogIndexPage() {
     name: 'BizLegal AI Blog',
     description: 'Regulatory analysis and compliance intelligence for SaaS, fintech, and crypto startups',
     url: 'https://bizlegal-ai.com/blog',
-    numberOfItems: GUIDES.length,
-    itemListElement: GUIDES.map((g, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      name: g.title,
-      url: `https://bizlegal-ai.com${g.href}`,
-      description: g.description,
-    })),
+    numberOfItems: allItems.length,
+    itemListElement: [
+      ...posts.map((p, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: p.title,
+        url: `https://bizlegal-ai.com/blog/${p.slug}`,
+        description: p.description,
+      })),
+      ...GUIDES.map((g, i) => ({
+        '@type': 'ListItem',
+        position: posts.length + i + 1,
+        name: g.title,
+        url: `https://bizlegal-ai.com${g.href}`,
+        description: g.description,
+      })),
+    ],
   }
 
   return (
@@ -61,6 +75,18 @@ export default function BlogIndexPage() {
           Regulatory analysis and compliance intelligence for founders and compliance teams — BOI, GDPR, MiCA, crypto forensics, and compliance program structure, written by practicing attorneys.
         </p>
 
+        {posts.length > 0 && (
+          <>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.25rem' }}>
+              Latest analysis
+            </h2>
+            <BlogPostGrid posts={posts} />
+          </>
+        )}
+
+        <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.25rem' }}>
+          Guides
+        </h2>
         <BlogGrid guides={GUIDES} />
 
         <div

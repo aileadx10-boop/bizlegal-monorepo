@@ -21,7 +21,19 @@ const nextConfig = {
     '@bizlegal/turnstile-widget',
     '@bizlegal/ops-log',
     '@bizlegal/payment',
+    '@bizlegal/deal-engine',
   ],
+
+  // @bizlegal/deal-engine is authored NodeNext-style (relative imports carry
+  // the .js extension, as its own tsc build requires). Webpack does not map
+  // .js → .ts by default, so teach it to try the .ts sibling first.
+  webpack: (config) => {
+    config.resolve.extensionAlias = {
+      ...config.resolve.extensionAlias,
+      '.js': ['.ts', '.js'],
+    }
+    return config
+  },
 
   experimental: {
     turbopack: true,
