@@ -1,22 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { runMonitorSweep } from '@/lib/monitor'
 import { logEventAsync } from '@/lib/ops/log'
 
 export const dynamic = 'force-dynamic'
-export const maxDuration = 30
+// Each due monitor is a full probe battery; the 25-monitor cap inside
+// runMonitorSweep keeps the run within this function-duration budget.
+export const maxDuration = 300
 
 /**
- * GET/POST /api/cron/monitor — monitor-tier daily scan cron.
+ * GET/POST /api/cron/monitor — monitor-tier daily re-scan cron (wired in
+ * vercel.json "crons"). Token-gated on CRON_SECRET.
  *
- * ⚠ MVP STUB (spec §4 lists the daily scan + diff + alert + weekly PDF as
- * monitor-tier scope; the marathon task defers the cron implementation).
- * What exists: the falseecho_monitors table (rows provisioned on monitor
- * payment), this token-gated endpoint that logs cron.fired, and the report
- * page that renders scan history per entity.
- *
- * What's missing by design (post-MVP): iterating active monitors, running
- * executeScan per entity, diffing flags vs the previous scan, alert emails,
- * weekly summary PDF. Wire a Vercel cron (vercel.json "crons") to this
- * route when implementing.
+ * Per due monitor (falseecho_monitors, next_scan_at <= now): full probe
+ * battery via executeScan → new falseecho_scans row (tier 'monitor') with
+ * hash-anchored evidence → diff flagged items vs the monitor's previous
+ * scan → alert email on new flags. Always exits 200 with a
+ * {scanned, alerted, skipped, errors} summary; missing Supabase/Resend env
+ * degrades to log + skip, never a 5xx.
  */
 async function handle(req: NextRequest) {
   const token =
@@ -32,14 +32,19 @@ async function handle(req: NextRequest) {
     type: 'cron.fired',
     source: 'falseecho',
     status: 'ok',
-    metadata: { cron: 'monitor', stub: true },
+    metadata: { cron: 'monitor' },
   })
 
-  return NextResponse.json({
-    ok: true,
-    stub: true,
-    note: 'Monitor daily-scan cron is a post-MVP stub: monitors are provisioned on payment but not yet re-scanned.',
+  const summary = await runMonitorSweep()
+
+  logEventAsync({
+    type: 'cron.completed',
+    source: 'falseecho',
+    status: summary.errors.length > 0 ? 'failed' : 'ok',
+    metadata: { cron: 'monitor', ...summary },
   })
+
+  return NextResponse.json({ ok: true, ...summary })
 }
 
 export async function GET(req: NextRequest) {

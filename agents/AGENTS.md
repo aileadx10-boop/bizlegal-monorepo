@@ -1,6 +1,6 @@
 # Agents Index — BizLegal AI
 
-**Last updated:** 2026-07-04  
+**Last updated:** 2026-09-06  
 **Surfaces:** Hetzner CX33 + Vercel (hub) + Cloudflare Workers  
 
 This file is the authoritative index of every agent, cron job, and tool in the BizLegal AI system.  
@@ -72,6 +72,16 @@ All defined in `apps/hub/vercel.json`. Run serverlessly on hub.bizlegal-ai.com (
 | `/api/cron/daily-todo` | 06:00 daily | Daily todo generation | LIVE |
 | `/api/cron/invoices` | 10:00 daily | Invoice follow-up cron | LIVE |
 | `/api/cron/affiliate-reconcile` | Fri 10:30 | Affiliate reconciliation | LIVE |
+
+---
+
+## Vercel Product Crons
+
+Defined in each product app's `vercel.json` (not the hub).
+
+| Endpoint | Surface | Schedule | Purpose | Status |
+|---|---|---|---|---|
+| `/api/cron/monitor` | falseecho (`apps/falseecho/vercel.json`) | 06:00 daily | Monitor-tier re-scan, flag diff, alert emails | LIVE |
 
 ---
 

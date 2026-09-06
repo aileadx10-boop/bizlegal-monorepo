@@ -5,8 +5,12 @@
   "buildCommand": "cd ../.. && corepack pnpm turbo build --filter=@bizlegal/falseecho...",
   "functions": {
     "app/api/scan/route.ts": { "maxDuration": 60 },
-    "app/api/scan/run/route.ts": { "maxDuration": 60 }
+    "app/api/scan/run/route.ts": { "maxDuration": 60 },
+    "app/api/cron/monitor/route.ts": { "maxDuration": 300 }
   },
+  "crons": [
+    { "path": "/api/cron/monitor", "schedule": "0 6 * * *" }
+  ],
   "headers": [
     {
       "source": "/(.*)",

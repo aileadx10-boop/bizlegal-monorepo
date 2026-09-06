@@ -70,6 +70,85 @@ export async function sendReportReady(params: {
 }
 
 /**
+ * Monitor-tier daily alert — sent by /api/cron/monitor when a re-scan flags
+ * a falsehood that the entity's previous scan did not flag. Carries the
+ * hash-anchored evidence references and links the full report page.
+ */
+export async function sendMonitorAlert(params: {
+  to: string
+  entity: string
+  scanRef: string
+  score: number
+  newFlags: Array<{
+    engine: string
+    prompt: string
+    narrative: string | null
+    flag_terms: string[] | null
+    sha256: string
+  }>
+}) {
+  const { to, entity, scanRef, score, newFlags } = params
+  const reportUrl = `${SITE}/report/${scanRef}`
+
+  const flagRows = newFlags
+    .map(
+      (f) => `
+      <div style="border: 1px solid #1a2035; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; background: #111622;">
+        <div style="font-family: monospace; font-size: 10px; color: #d4a843; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px;">${f.engine}</div>
+        <div style="font-size: 12px; color: #5a6278; margin-bottom: 8px;">Probe: "${f.prompt.slice(0, 140)}"</div>
+        <div style="font-size: 13px; color: #e8ecf4; line-height: 1.6; margin-bottom: 8px;">
+          ${f.narrative ?? `Flagged terms: ${(f.flag_terms ?? []).join(', ')}`}
+        </div>
+        <div style="font-family: monospace; font-size: 10px; color: #2e3450; word-break: break-all;">evidence sha256: ${f.sha256}</div>
+      </div>`,
+    )
+    .join('')
+
+  await getResend().emails.send({
+    from: `FalseEcho <${FROM}>`,
+    to,
+    subject: `New falsehood detected about ${entity}`,
+    html: `
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"></head>
+<body style="font-family: 'DM Sans', -apple-system, sans-serif; background: #07090e; color: #e8ecf4; padding: 40px 20px; margin: 0;">
+  <div style="max-width: 560px; margin: 0 auto;">
+    <div style="font-family: monospace; font-size: 22px; font-weight: 500; letter-spacing: 0.12em; margin-bottom: 32px;">
+      False<span style="color: #d4a843;">Echo</span>
+    </div>
+
+    <div style="background: #0d1118; border: 1px solid #1a2035; border-radius: 12px; padding: 32px; margin-bottom: 24px;">
+      <div style="font-family: monospace; font-size: 11px; color: #c0392b; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 12px;">Monitor Alert</div>
+      <h1 style="font-family: Georgia, serif; font-size: 24px; font-weight: 700; color: #e8ecf4; margin: 0 0 16px;">
+        New falsehood detected about ${entity}
+      </h1>
+      <p style="font-size: 14px; color: #5a6278; line-height: 1.7; margin: 0 0 24px;">
+        Today's scheduled re-scan flagged <strong style="color: #c0392b;">${newFlags.length}</strong>
+        new suspected falsehood${newFlags.length === 1 ? '' : 's'} that your previous scan did not flag.
+        Current exposure score: <strong style="color: #d4a843;">${score}</strong>/100.
+        Each captured response is hash-anchored (SHA-256 + UTC timestamp) in your evidence trail.
+      </p>
+
+      ${flagRows}
+
+      <a href="${reportUrl}" style="display: block; text-align: center; padding: 14px; background: #d4a843; color: #07090e; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 15px; margin-top: 8px;">
+        View Full Report →
+      </a>
+    </div>
+
+    <p style="font-size: 11px; color: #2e3450; font-family: monospace; line-height: 1.7; text-align: center;">
+      FalseEcho · ${SITE}<br>
+      We publish signals, you decide. These are heuristic signals, not verdicts — this alert states facts and sources, is not legal advice, and makes no defamation determination.<br>
+      Scan ref: ${scanRef}
+    </p>
+  </div>
+</body>
+</html>`,
+  })
+}
+
+/**
  * Sent when a hub apex checkout (bizlegal-ai.com/checkout?product=falseecho)
  * completes: we know the buyer's email + tier but not the entity yet, so
  * the email drives them to the intake form to claim the paid scan.
