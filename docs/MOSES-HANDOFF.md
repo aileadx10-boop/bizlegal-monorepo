@@ -1,6 +1,6 @@
 # MOSES HANDOFF — Revenue Marathon Finish Line
 
-**For:** Moses (owner). **From:** the revenue-marathon branch `feat/revenue-marathon` (commits `851a581` → `4012620`, 2026-09-01 → 09-06).
+**For:** Moses (owner). **From:** the revenue-marathon branch `feat/revenue-marathon` (commits `851a581` → `542a2bd`, 2026-09-01 → 09-06).
 **What this is:** every step only you can do — dashboards, deploys, env vars, real-money tests, and decisions. Work top to bottom. Each step is independent enough that you can stop and resume.
 **Time estimate:** 2–4 hours of clicking, plus DNS propagation.
 
@@ -19,6 +19,7 @@ Two new apps (FalseEcho, SellerRadar) plus the marketing content queue need thei
 - [ ] Open `supabase/migrations/20260901_falseecho_mvp.sql` in the repo, copy the **entire file**, paste into the SQL editor, click **Run**. Expect: "Success. No rows returned."
 - [ ] Repeat with `supabase/migrations/20260902_sellerradar_mvp.sql`.
 - [ ] Repeat with `supabase/migrations/20260906_content_queue.sql` (marketing engine queue — without it the new hub `/api/marketing/*` endpoints return 503 by design).
+- [ ] Repeat with `supabase/migrations/20260907_sellerradar_monitor_scan_state.sql` (monitor scan state — without it the SellerRadar weekly monitor cron will no-op with errors).
 - [ ] Verify: in **Table Editor** you should now see `falseecho_scans`, `falseecho_evidence`, `falseecho_monitors`, and `fee_schedules` plus the sellerradar tables, plus `content_queue`, `content_assets`, `published_content`.
 - [ ] If you get "relation already exists" that's fine — the migration is written to be safely re-run (`create table if not exists`).
 
@@ -202,7 +203,7 @@ Do these **after** Steps 1–5. Use small amounts. Keep the order confirmations;
 
 ## Step 8 — What is NOT done (so you're not surprised)
 
-- [ ] **Monitor crons are stubs.** FalseEcho's and SellerRadar's monitor tiers ($149/mo, $99/mo) have the tables, the token-gated `/api/cron/monitor` endpoint, and dashboards — but the actual "re-scan and email the customer on a schedule" job is **not implemented**. Selling monitor tier today = manual delivery until the cron ships.
+- [ ] **Monitor crons are now real but need env vars.** FalseEcho (daily 06:00 UTC) and SellerRadar (weekly Mon 06:00 UTC) re-scan monitors and email on changes. They only fire if `CRON_SECRET` is set in each app's Vercel project (Vercel sends it automatically with cron calls) and the migrations from Step 1 are applied. Verify after deploy: trigger once manually with the token and check the ops log for `cron.completed`.
 - [ ] **Marketing engine is code-complete in-repo, not switched on.** Built this week: content queue tables (Step 1), hub `/api/marketing/trigger` + `/callback` endpoints, FalseEcho `falsehood_detected` and SellerRadar `fee_change_detected` event emission, a 6-hourly Trigger.dev queue processor, a Monday newsletter task, and the `/ops/content` dashboard. **Not built:** the n8n side (M.2 brand-voice workflows, M.5 video pipeline) — that needs your n8n instance and the social/API accounts. To activate what's built, see Step 9.
 - [ ] **Subscription 503 matrix (F3) is only half closed.** Any plan you didn't create in Step 3b still returns "unavailable" at checkout. The full list of missing combos is in Step 3b — it's a dashboard chore, not code.
 - [ ] **F5 known limitation:** "monthly" SKUs sold through hub's generic `/api/pay/start` card path charge **once**, not recurring (affects `bench_managed_monthly` $5,000/mo). True recurring needs the PayPal Subscriptions work — a future engineering task.
