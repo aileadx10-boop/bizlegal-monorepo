@@ -20,7 +20,7 @@ import { runNurtureCron } from "./nurture";
 //   "0 9 * * *" — daily snapshot smoke test
 
 export default {
-  async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
+  async scheduled(event: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
     // Branch on the cron expression so a single scheduled() handler
     // can drive multiple jobs without crowding wrangler.toml with
     // separate triggers blocks.
@@ -100,7 +100,7 @@ export default {
   }
 } satisfies ExportedHandler<Env>;
 
-async function runDailyDigest(env: Env, event: ScheduledEvent): Promise<void> {
+async function runDailyDigest(env: Env, event: ScheduledController): Promise<void> {
   const tag = `digest-${new Date(event.scheduledTime).toISOString().slice(0, 10)}`;
   const start = Date.now();
   console.log(`[cron] running ${tag}`);
@@ -223,7 +223,7 @@ const SMOKE_ROTATION: readonly [string, string, string][] = [
   ["CH", "SG", "DeFi protocol licensing: FINMA vs MAS sandbox pathway comparison"],
 ];
 
-async function runSmokeTest(env: Env, event: ScheduledEvent): Promise<void> {
+async function runSmokeTest(env: Env, event: ScheduledController): Promise<void> {
   const tag = `smoketest-${new Date(event.scheduledTime).toISOString().slice(0, 10)}`;
   console.log(`[cron] running ${tag}`);
   try {

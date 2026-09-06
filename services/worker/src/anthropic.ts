@@ -181,7 +181,7 @@ function errString(e: unknown): string {
 
 export class AnthropicCallFailed extends Error {
   override readonly name = "AnthropicCallFailed";
-  constructor(message: string, readonly cause: unknown) {
+  constructor(message: string, override readonly cause: unknown) {
     super(message);
   }
 }

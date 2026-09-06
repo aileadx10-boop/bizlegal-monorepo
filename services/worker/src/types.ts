@@ -23,6 +23,7 @@ export interface Env {
   readonly RESEND_FROM?: string;          // e.g., "BizLegal-AI <team@intelligence.bizlegal-ai.com>" (Resend-verified subdomain)
   readonly RESEND_REPLY_TO?: string;      // e.g., "team@bizlegal-ai.com" (Namecheap PrivateEmail inbox)
   readonly PUBLIC_SNAPSHOT_ENABLED?: string; // "1" to enable the unauthenticated public endpoint
+  readonly TURNSTILE_SECRET_KEY?: string;    // Optional — enables Turnstile verification on /report/snapshot-public
   readonly OPS_LOG_URL?: string;          // Optional override; defaults to https://bizlegal-ai.com/api/ops/log
 
   // Phase AA V3 — lead-nurture machine. Worker reads/writes
@@ -108,7 +109,7 @@ export interface LeadProfile {
     concerns: string[];
     escalate_to_cloud: boolean;
   };
-  summary_bullets?: [string, string, string, string, string];
+  summary_bullets?: readonly [string, string, string, string, string];
   pipeline_meta: {
     extraction_model: string;
     critique_model?: string;
