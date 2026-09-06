@@ -39,7 +39,10 @@ export async function POST(req: NextRequest) {
 
     const supabase = createServerClient()
     const appUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://forge.bizlegal-ai.com'
-    const internalSecret = process.env.INTERNAL_SECRET ?? ''
+    // Receivers (/api/passport/process, /api/scan/report) check
+    // INTERNAL_API_SECRET — accept the legacy alias so a vault that only has
+    // one of the two names still fulfills paid orders.
+    const internalSecret = process.env.INTERNAL_API_SECRET ?? process.env.INTERNAL_SECRET ?? ''
 
     if (order_id.startsWith('passport_')) {
       const passportId = order_id.replace('passport_', '')
