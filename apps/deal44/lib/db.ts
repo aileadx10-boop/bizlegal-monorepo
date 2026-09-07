@@ -73,6 +73,7 @@ export interface PartyRow {
   token_cipher: string | null
   token_expires_at: string | null
   alerts_enabled: boolean
+  can_manage: boolean
   invited_at: string | null
   last_seen_at: string | null
 }
@@ -90,6 +91,10 @@ export interface TaskRow {
   day_type: 'business' | 'calendar'
   due_date: string | null
   statutory: boolean
+  source: 'statutory' | 'contractual' | 'operational' | 'third_party' | 'judgment'
+  provenance: Record<string, unknown> | null
+  no_date_reason: string | null
+  legal_review: boolean
   origin: 'template' | 'manual' | 'extracted'
   status: 'open' | 'done' | 'suggested' | 'dismissed'
   completed_at: string | null

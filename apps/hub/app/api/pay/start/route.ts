@@ -87,21 +87,23 @@ export async function POST(req: NextRequest) {
   const product = getProduct(productId)
   const preference: GatewayPreference = body.gateway
 
-  // Non-USD products are DARK on this path, deliberately.
+  // Non-USD is open on the rail that can actually carry it, and only there.
   //
-  // ILS SKUs exist in @bizlegal/payment so the fleet agrees on one price, but
-  // no gateway wired here is confirmed to settle shekels: PayPal receives a
-  // `currency_code` it may reject, NOWPayments takes an arbitrary
-  // `price_currency` whose payout behaviour is unverified, and the wire route
-  // is USD/EUR-only above a $500 floor. Taking money we cannot reconcile is the
-  // exact failure this route was rebuilt to end. Non-USD is invoiced manually
-  // and recorded as a `gateway='manual'` order instead.
-  if (product.currency !== 'USD') {
+  // NOWPayments prices an invoice in fiat and settles in crypto, so a shekel
+  // price is just a number it converts — that path is live for ILS. PayPal is
+  // different: ILS is not a currency a PayPal account can RECEIVE, so the order
+  // would be created and then fail to settle, which is the "money moves, no
+  // reconcilable record" failure this route exists to prevent. That one stays
+  // closed until a rail that settles shekels is wired, and says so plainly
+  // rather than pretending to be a policy choice.
+  if (product.currency !== 'USD' && preference === 'card') {
     return NextResponse.json(
       {
         ok: false,
-        error: 'currency_not_supported',
-        detail: `${product.currency} checkout is not live; this product is invoiced manually.`,
+        error: 'currency_not_supported_by_gateway',
+        detail:
+          `Card checkout cannot settle ${product.currency}. Use the crypto option, ` +
+          'or ask for an invoice.',
       },
       { status: 503 },
     )

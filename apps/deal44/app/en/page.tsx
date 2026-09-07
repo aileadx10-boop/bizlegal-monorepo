@@ -28,7 +28,7 @@ export default function EnglishLandingPage() {
         </p>
 
         <p style={{ margin: '1.5rem 0' }}>
-          <Link className="btn" href="/start">
+          <Link className="btn" href="/en/start">
             {t(L, 'landing.cta')}
           </Link>
         </p>
@@ -46,7 +46,11 @@ export default function EnglishLandingPage() {
 
         <footer>
           <p className="muted">{t(L, 'landing.disclaimer')}</p>
-          <p className="muted">
+          <p className="muted" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            <Link href="/pricing">Pricing</Link>
+            <Link href="/privacy">Privacy</Link>
+            <Link href="/terms">Terms</Link>
+            <Link href="/disclaimer">Disclaimer</Link>
             <Link href="/">עברית</Link>
           </p>
         </footer>

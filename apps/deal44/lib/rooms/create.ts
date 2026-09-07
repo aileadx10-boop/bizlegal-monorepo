@@ -11,6 +11,7 @@ import { encryptToken, hashToken, isExpired, mintToken, tokenExpiryFor } from '.
 import { logEventAsync } from '@/lib/ops/log'
 import {
   IL_WORKING_WEEK,
+  MON_FRI,
   getTemplate,
   materialiseTasks,
   templateAccepts,
@@ -44,9 +45,20 @@ export class RoomError extends Error {
   }
 }
 
-/** Israel is the only working-week we ship today; others fall back to it explicitly. */
-function calendarFor(_jurisdiction: string) {
-  return IL_WORKING_WEEK
+/**
+ * The working week for a jurisdiction.
+ *
+ * Israel and the Gulf run Sun–Thu; the US, UK and most of Europe run Mon–Fri.
+ * Getting this wrong is not a rounding error — it shifts every business-day
+ * deadline in the room, in both directions.
+ *
+ * Holidays are not attached to either: an empty table is reported as
+ * "not configured" and shown to the user, which is honest, whereas a stale
+ * hardcoded list is confidently wrong. See packages/closing-engine/src/holidays.
+ */
+export function calendarFor(jurisdiction: string) {
+  const sunToThu = new Set(['IL', 'AE', 'QA', 'KW', 'BH', 'OM', 'EG', 'JO'])
+  return sunToThu.has(jurisdiction.toUpperCase()) ? IL_WORKING_WEEK : MON_FRI
 }
 
 function resolveTemplate(templateId: string | null): TaskTemplate | null {
@@ -60,16 +72,14 @@ export async function createRoom(input: CreateRoomInput): Promise<CreateRoomResu
   const db = getServiceClient()
   const template = resolveTemplate(input.template_id ?? null)
 
-  // The reviewed gate lives here, at the boundary — the engine itself stays
-  // pure and ungated so it can be tested without a fixture pretending to be
-  // reviewed. Same contract as the unreviewed Dubai pack in hub's deal audit.
-  if (template && !template.reviewed) {
-    throw new RoomError(
-      'template_not_reviewed',
-      409,
-      'This checklist has not been confirmed by a practitioner. Create a manual room instead.',
-    )
-  }
+  // An unreviewed template no longer blocks room creation (founder decision,
+  // 2026-09-07). It is surfaced instead: the engine emits a
+  // `template_not_reviewed` warning, `buildRoomPayload` passes it through, and
+  // every party sees a banner saying these dates are a working list rather than
+  // confirmed deadlines.
+  //
+  // The honesty stays where it matters — on the screen the parties actually
+  // read — instead of in an error the broker cannot get past.
 
   const roles = [input.broker.role ?? 'broker', ...input.parties.map((p) => p.role)]
   if (template) {
@@ -104,7 +114,13 @@ export async function createRoom(input: CreateRoomInput): Promise<CreateRoomResu
 
   // ── Parties, each with a freshly minted token ─────────────────────────────
   const expiresAt = tokenExpiryFor(input.anchors.closing ?? null)
-  const people = [{ ...input.broker, role: input.broker.role ?? 'broker' }, ...input.parties]
+  // The party who opens the room manages it. Flagged explicitly rather than
+  // inferred from the role name, which is template vocabulary — the US set
+  // calls this person 'agent', not 'broker'.
+  const people = [
+    { ...input.broker, role: input.broker.role ?? 'broker', can_manage: true },
+    ...input.parties.map((p) => ({ ...p, can_manage: false })),
+  ]
   const minted = people.map((person) => ({ person, token: mintToken() }))
 
   const { data: partyData, error: partyErr } = await db
@@ -119,6 +135,7 @@ export async function createRoom(input: CreateRoomInput): Promise<CreateRoomResu
         token_hash: hashToken(token),
         token_cipher: encryptToken(token),
         token_expires_at: expiresAt,
+        can_manage: person.can_manage,
       })),
     )
     .select('*')
@@ -154,8 +171,11 @@ export async function createRoom(input: CreateRoomInput): Promise<CreateRoomResu
         tasks.map((task, index) => ({
           deal_id: deal.id,
           key: task.key,
+          // Exactly one of these, enforced by a CHECK on the table. A template
+          // written in the deal's own language (the US set) carries its text;
+          // one the app translates (Israel) carries a key.
           label_key: task.labelKey,
-          label_text: null,
+          label_text: task.labelKey ? null : task.labelText,
           phase: task.phase,
           assignee_role: task.assigneeRole,
           anchor: task.anchor,
@@ -163,6 +183,12 @@ export async function createRoom(input: CreateRoomInput): Promise<CreateRoomResu
           day_type: task.dayType,
           due_date: task.dueDate,
           statutory: task.statutory,
+          source: task.source,
+          // The chain, not just the answer. A date with no provenance cannot be
+          // challenged, which is how a computed guess passes for a legal fact.
+          provenance: task.provenance,
+          no_date_reason: task.noDateReason,
+          legal_review: task.legalReview,
           origin: 'template' as const,
           status: 'open' as const,
           sort_order: index,

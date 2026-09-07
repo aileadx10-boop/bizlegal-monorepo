@@ -1,29 +1,42 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
-import { canToggleTask, canManageRoom, isBroker } from '../lib/rooms/access'
+import { canToggleTask, canManageRoom } from '../lib/rooms/access'
 import { hashToken, mintToken, isExpired, tokenExpiryFor, encryptToken, decryptToken } from '../lib/rooms/tokens'
 import { computeDigests, applySendCap, alertKey, crossingPriority } from '../lib/alerts/compute'
 import { t, taskLabel, dirFor, langFor } from '../lib/i18n'
 import { fmtDate, fmtMoney, fmtDaysLeft } from '../lib/i18n/format'
 import { en } from '../lib/i18n/en'
+import { TEMPLATES } from '@bizlegal/closing-engine'
 import { he } from '../lib/i18n/he'
 import { getServiceClient } from '../lib/db'
 import type { PartyRow, TaskRow } from '../lib/db'
 
 // ── Access rules ────────────────────────────────────────────────────────────
 
+/** Management is a flag, never a role name — templates own the vocabulary. */
+const actor = (role: string, can_manage = false) => ({ role, can_manage })
+
 test('a party may tick their own tasks and nobody else does it for them', () => {
-  assert.equal(canToggleTask('buyer', 'buyer'), true)
-  assert.equal(canToggleTask('buyer', 'seller_lawyer'), false)
-  assert.equal(canToggleTask('seller', 'buyer'), false)
+  assert.equal(canToggleTask(actor('buyer'), 'buyer'), true)
+  assert.equal(canToggleTask(actor('buyer'), 'seller_lawyer'), false)
+  assert.equal(canToggleTask(actor('seller'), 'buyer'), false)
 })
 
-test('the broker may tick anything and manage the room', () => {
-  assert.equal(canToggleTask('broker', 'seller_lawyer'), true)
-  assert.equal(canManageRoom('broker'), true)
-  assert.equal(canManageRoom('buyer'), false)
-  assert.equal(isBroker('broker'), true)
+test('whoever runs the room may tick anything and manage it', () => {
+  const manager = actor('broker', true)
+  assert.equal(canToggleTask(manager, 'seller_lawyer'), true)
+  assert.equal(canManageRoom(manager), true)
+  assert.equal(canManageRoom(actor('buyer')), false)
+})
+
+test('management follows the flag, not the word "broker"', () => {
+  // The US template calls this person 'agent'. Keying off the role name gave
+  // the person who opened and paid for the room a 403 on their own room.
+  assert.equal(canManageRoom(actor('agent', true)), true)
+  assert.equal(canToggleTask(actor('agent', true), 'title'), true)
+  // And a party who merely calls themselves 'broker' manages nothing.
+  assert.equal(canManageRoom(actor('broker', false)), false)
 })
 
 // ── Tokens ──────────────────────────────────────────────────────────────────
@@ -83,6 +96,7 @@ const party = (over: Partial<PartyRow> = {}): PartyRow => ({
   token_cipher: null,
   token_expires_at: null,
   alerts_enabled: true,
+  can_manage: false,
   invited_at: null,
   last_seen_at: null,
   ...over,
@@ -101,6 +115,10 @@ const task = (over: Partial<TaskRow> = {}): TaskRow => ({
   day_type: 'calendar',
   due_date: '2026-09-25',
   statutory: true,
+  source: 'statutory',
+  provenance: null,
+  no_date_reason: null,
+  legal_review: true,
   origin: 'template',
   status: 'open',
   completed_at: null,
@@ -144,7 +162,7 @@ test('an overdue task is flagged once, as overdue', () => {
 
 test('the broker sees another party as their own concern, a party does not', () => {
   const t2 = task({ assignee_role: 'seller_lawyer' })
-  const asBroker = computeDigests([t2], [party({ role: 'broker' })], new Set(), TODAY)
+  const asBroker = computeDigests([t2], [party({ role: 'broker', can_manage: true })], new Set(), TODAY)
   const asBuyer = computeDigests([t2], [party({ role: 'buyer' })], new Set(), TODAY)
   assert.equal(asBroker[0]?.crossings[0]?.isOwn, true)
   assert.equal(asBuyer[0]?.crossings[0]?.isOwn, false)
@@ -211,10 +229,7 @@ test('days left never renders a bare negative number', () => {
 })
 
 test('a template task renders from its key, a manual task from its text', () => {
-  assert.equal(
-    taskLabel('en-US', 'task.il.purchase_tax_declaration', null),
-    'Purchase-tax declaration filed',
-  )
+  assert.equal(taskLabel('en-US', 'task.il.purchase_tax_payment', null), 'Purchase tax payment')
   assert.equal(taskLabel('he-IL', null, 'משהו ידני'), 'משהו ידני')
 })
 
@@ -246,4 +261,16 @@ test('the Supabase client opts out of Next fetch caching', async () => {
 
   assert.ok(seen.length > 0, 'the client should have issued a request')
   assert.equal((seen[0] as { cache?: string } | undefined)?.cache, 'no-store')
+})
+
+test('every role and phase in every shipped template has a label', () => {
+  // The US template speaks a different vocabulary from the Israeli one — roles
+  // agent/lender/title, phases diligence/closing/post_closing. Without these a
+  // buyer opening a US room reads "role.agent" where a name should be.
+  const missing: string[] = []
+  for (const template of Object.values(TEMPLATES)) {
+    for (const role of template.roles) if (!(`role.${role}` in en)) missing.push(`role.${role}`)
+    for (const phase of template.phases) if (!(`phase.${phase}` in en)) missing.push(`phase.${phase}`)
+  }
+  assert.deepEqual([...new Set(missing)], [])
 })

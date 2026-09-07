@@ -112,12 +112,12 @@ export interface ProductSpec {
   /**
    * ILS was added 2026-09-07 for DEAL44, whose first market is Israel.
    *
-   * ⚠️ NO GATEWAY IN THIS PACKAGE IS CONFIRMED TO SETTLE ILS. Whether PayPal or
-   * NOWPayments can pay shekels into the founder's accounts is UNVERIFIED, and
-   * the wire route is USD/EUR-only. So `apps/hub/app/api/pay/start` refuses any
-   * non-USD product with a 503: an ILS SKU here is a price the fleet knows
-   * about, not a checkout it can complete. Phase 0 ILS money is taken by manual
-   * invoice and recorded as a `gateway='manual'` payment_orders row — the
+   * Which rails carry it: NOWPayments prices in fiat and settles in crypto, so
+   * a shekel price is a number it converts — that is live. PayPal cannot
+   * RECEIVE shekels, so `apps/hub/app/api/pay/start` refuses card checkout for
+   * any non-USD product rather than creating an order that cannot settle. The
+   * wire route is USD/EUR-only above a $500 floor. A shekel card payment is
+   * therefore taken by invoice, recorded as a `gateway='manual'` order — the
    * O-018 precedent.
    */
   readonly currency: 'USD' | 'ILS'
@@ -775,12 +775,13 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     cancellable: false,
   },
   // ───── DEAL44 — multi-party transaction rooms (2026-09-07) ─────
-  // CHECKOUT IS DARK. These four exist so the price is one place the fleet
-  // agrees on and so a manual `payment_orders` row can name a real product.
-  // `/api/pay/start` 503s every non-USD product, and no buy button links here.
+  // LIVE. The USD pair takes both card and crypto; the ILS pair takes crypto,
+  // because PayPal cannot receive shekels (see the `currency` docblock above) —
+  // a shekel card payment is invoiced instead and recorded as a manual order.
   //
-  // The USD twins carry PLACEHOLDER amounts: Moses sets the non-Israel price.
-  // Do not treat 69900/9900 as a decided number.
+  // The USD amounts are a first pass at the non-Israel price, converted roughly
+  // from the shekel figures the founder set. Adjust once a non-Israel deal
+  // actually prices out.
   // Canonical doc: decisions/DEAL44-WORKFLOW44-2026-09-07.md
   deal44_room_setup_ils: {
     id: 'deal44_room_setup_ils',

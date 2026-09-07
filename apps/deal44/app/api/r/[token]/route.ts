@@ -61,7 +61,7 @@ export async function PATCH(req: NextRequest, { params }: Ctx): Promise<NextResp
 
   // Authorisation is on the server, from the role the token resolved to — the
   // client's disabled checkbox is a courtesy, not a control.
-  if (!canToggleTask(resolved.party.role, task.assignee_role)) {
+  if (!canToggleTask(resolved.party, task.assignee_role)) {
     return NextResponse.json({ error: 'not_your_task' }, { status: 403 })
   }
 

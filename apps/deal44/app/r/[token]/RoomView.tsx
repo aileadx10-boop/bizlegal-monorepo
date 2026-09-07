@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { t, taskLabel, dirFor, langFor, type Locale, type DictKey } from '@/lib/i18n'
 import { fmtDate, fmtDaysLeft } from '@/lib/i18n/format'
 import { canToggleTask, canManageRoom } from '@/lib/rooms/access'
+import BrokerPanel from './BrokerPanel'
 
 export interface RoomTask {
   id: string
@@ -15,6 +16,9 @@ export interface RoomTask {
   due_date: string | null
   days_until: number | null
   statutory: boolean
+  source: string
+  legal_review: boolean
+  no_date_reason: string | null
   status: string
   completed_at: string | null
 }
@@ -31,7 +35,7 @@ export interface RoomPayload {
   anchors: Record<string, string>
   phases: string[]
   warnings: string[]
-  party: { id: string; role: string; display_name: string; locale: Locale }
+  party: { id: string; role: string; display_name: string; locale: Locale; can_manage: boolean }
   parties: RoomParty[]
   tasks: RoomTask[]
 }
@@ -46,7 +50,6 @@ function dueColour(days: number | null): string {
 export default function RoomView({ token, initial }: { token: string; initial: RoomPayload }) {
   const [room, setRoom] = useState<RoomPayload>(initial)
   const [busy, setBusy] = useState<string | null>(null)
-  const [adding, setAdding] = useState(false)
   const locale = room.party.locale
 
   // The document is Hebrew/RTL by default. A party whose own locale is English
@@ -94,33 +97,6 @@ export default function RoomView({ token, initial }: { token: string; initial: R
     const data = (await res.json()) as { ok: boolean; room: RoomPayload }
     if (data.ok) setRoom(data.room)
   }, [token])
-
-  const addTask = useCallback(
-    async (form: FormData, el: HTMLFormElement) => {
-      setAdding(true)
-      try {
-        const due = String(form.get('due_date') ?? '')
-        const res = await fetch(`/api/r/${token}/tasks`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            label_text: String(form.get('label_text') ?? ''),
-            phase: String(form.get('phase') ?? ''),
-            assignee_role: String(form.get('assignee_role') ?? ''),
-            due_date: due || null,
-            statutory: false,
-          }),
-        })
-        if (res.ok) {
-          el.reset()
-          await refresh()
-        }
-      } finally {
-        setAdding(false)
-      }
-    },
-    [token, refresh],
-  )
 
   const done = room.tasks.filter((x) => x.status === 'done').length
   const total = room.tasks.length
@@ -177,7 +153,7 @@ export default function RoomView({ token, initial }: { token: string; initial: R
             </div>
 
             {tasks.map((task) => {
-              const mine = canToggleTask(room.party.role, task.assignee_role)
+              const mine = canToggleTask(room.party, task.assignee_role)
               const isDone = task.status === 'done'
               return (
                 <label
@@ -195,9 +171,15 @@ export default function RoomView({ token, initial }: { token: string; initial: R
                     <span className={isDone ? 'strike' : ''}>
                       {taskLabel(locale, task.label_key, task.label_text)}
                     </span>
-                    {task.statutory && (
-                      <span className="pill" style={{ marginInlineStart: '0.5rem' }}>
-                        {t(locale, 'room.statutory')}
+                    {/* Where the deadline comes from decides how much weight it
+                        carries — a statutory date and a working step are not the
+                        same kind of claim, so the room says which it is. */}
+                    <span className="pill" style={{ marginInlineStart: '0.5rem' }}>
+                      {t(locale, `room.source.${task.source}` as DictKey) || task.source}
+                    </span>
+                    {task.legal_review && (
+                      <span className="pill" style={{ marginInlineStart: '0.35rem' }}>
+                        {t(locale, 'room.review_counsel')}
                       </span>
                     )}
                     <span className="muted" style={{ display: 'block' }}>
@@ -211,7 +193,9 @@ export default function RoomView({ token, initial }: { token: string; initial: R
                             : ''}
                         </span>
                       ) : (
-                        t(locale, 'room.no_date')
+                        // A blank date is a deliberate state, not missing data:
+                        // this one comes from the agreement, not from us.
+                        t(locale, task.no_date_reason === 'no_auto_date' ? 'room.no_auto_date' : 'room.no_date')
                       )}
                       {isDone && task.completed_at
                         ? ` · ${t(locale, 'room.done_on', { date: fmtDate(locale, task.completed_at.slice(0, 10)) })}`
@@ -225,55 +209,8 @@ export default function RoomView({ token, initial }: { token: string; initial: R
         )
       })}
 
-      {/* Broker-only. The Israeli template ships unreviewed, so a real room
-          starts empty and the broker types the contract's dates in by hand.
-          This form is therefore the Phase-0 path, not a convenience. */}
-      {canManageRoom(room.party.role) && (
-        <div className="card">
-          <p className="label" style={{ marginBottom: '0.6rem' }}>
-            {t(locale, 'room.add_task')}
-          </p>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault()
-              void addTask(new FormData(e.currentTarget), e.currentTarget)
-            }}
-          >
-            <label className="field">
-              <span>{t(locale, 'room.task_label')}</span>
-              <input name="label_text" required maxLength={300} />
-            </label>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.5rem' }}>
-              <label className="field">
-                <span>{t(locale, 'room.task_phase')}</span>
-                <select name="phase" defaultValue={room.phases[0]}>
-                  {room.phases.map((p) => (
-                    <option key={p} value={p}>
-                      {t(locale, `phase.${p}` as DictKey) || p}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label className="field">
-                <span>{t(locale, 'room.task_owner')}</span>
-                <select name="assignee_role" defaultValue={room.party.role}>
-                  {[...new Set(room.parties.map((p) => p.role))].map((r) => (
-                    <option key={r} value={r}>
-                      {roleLabel(r)}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label className="field">
-                <span>{t(locale, 'room.task_due')}</span>
-                <input name="due_date" type="date" />
-              </label>
-            </div>
-            <button className="btn" type="submit" disabled={adding}>
-              {adding ? t(locale, 'intake.sending') : t(locale, 'room.add_task')}
-            </button>
-          </form>
-        </div>
+      {canManageRoom(room.party) && (
+        <BrokerPanel token={token} room={room} onChanged={refresh} />
       )}
 
       <div className="card">

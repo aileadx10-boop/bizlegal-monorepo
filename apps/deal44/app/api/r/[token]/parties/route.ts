@@ -39,7 +39,7 @@ export async function POST(req: NextRequest, { params }: Ctx): Promise<NextRespo
   const resolved = await resolveRoomByToken(params.token)
   if (!resolved) return NextResponse.json({ error: 'not_found' }, { status: 404 })
 
-  if (!canManageRoom(resolved.party.role)) {
+  if (!canManageRoom(resolved.party)) {
     return NextResponse.json({ error: 'not_permitted' }, { status: 403 })
   }
 

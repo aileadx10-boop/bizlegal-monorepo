@@ -39,7 +39,11 @@ export default function LandingPage() {
 
       <footer>
         <p className="muted">{t(L, 'landing.disclaimer')}</p>
-        <p className="muted">
+        <p className="muted" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+          <Link href="/pricing">מחירים</Link>
+          <Link href="/privacy">פרטיות</Link>
+          <Link href="/terms">תנאי שימוש</Link>
+          <Link href="/disclaimer">הבהרה</Link>
           <Link href="/en">English</Link>
         </p>
       </footer>

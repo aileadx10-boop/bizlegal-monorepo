@@ -21,7 +21,7 @@ export interface RoomPayloadDto {
   anchors: Record<string, string>
   phases: string[]
   warnings: string[]
-  party: { id: string; role: string; display_name: string; locale: Locale }
+  party: { id: string; role: string; display_name: string; locale: Locale; can_manage: boolean }
   parties: Array<{ id: string; role: string; display_name: string }>
   tasks: Array<{
     id: string
@@ -33,6 +33,9 @@ export interface RoomPayloadDto {
     due_date: string | null
     days_until: number | null
     statutory: boolean
+    source: string
+    legal_review: boolean
+    no_date_reason: string | null
     status: string
     completed_at: string | null
   }>
@@ -78,6 +81,7 @@ export function buildRoomPayload(resolved: ResolvedRoom, now: Date = new Date())
       role: party.role,
       display_name: party.display_name,
       locale: asLocale(party.locale),
+      can_manage: party.can_manage === true,
     },
     parties: parties.map((p) => ({ id: p.id, role: p.role, display_name: p.display_name })),
     tasks: tasks
@@ -92,6 +96,9 @@ export function buildRoomPayload(resolved: ResolvedRoom, now: Date = new Date())
         due_date: task.due_date,
         days_until: daysFor(task, now),
         statutory: task.statutory,
+        source: task.source ?? 'operational',
+        legal_review: task.legal_review === true,
+        no_date_reason: task.no_date_reason,
         status: task.status,
         completed_at: task.completed_at,
       })),

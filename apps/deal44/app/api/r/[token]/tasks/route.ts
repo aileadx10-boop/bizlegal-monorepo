@@ -38,7 +38,7 @@ export async function POST(req: NextRequest, { params }: Ctx): Promise<NextRespo
 
   // Only the broker shapes the checklist. A buyer adding tasks for a seller is
   // how a shared checklist turns into an argument.
-  if (!canManageRoom(resolved.party.role)) {
+  if (!canManageRoom(resolved.party)) {
     return NextResponse.json({ error: 'not_permitted' }, { status: 403 })
   }
 
@@ -91,6 +91,10 @@ export async function POST(req: NextRequest, { params }: Ctx): Promise<NextRespo
       phase: input.phase,
       assignee_role: input.assignee_role,
       day_type: 'calendar',
+      // Typed in from the agreement, so contractual by definition, and never
+      // computed: whatever date the broker enters is the date.
+      source: 'contractual',
+      no_date_reason: input.due_date ? null : 'no_auto_date',
       due_date: input.due_date,
       statutory: input.statutory,
       origin: 'manual',

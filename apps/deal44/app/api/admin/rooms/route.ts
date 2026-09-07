@@ -56,8 +56,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'create_failed' }, { status: 500 })
   }
 
-  // Invites are OFF unless explicitly requested. Until the spam-law position is
-  // confirmed, Moses forwards the links himself — see lib/email/send.ts.
+  // Invites go out by default now. Pass send_invites:false to hold them and
+  // forward the links by hand — the links come back either way.
   const invites: Array<{ email: string; ok: boolean; error?: string }> = []
   if (parsed.data.send_invites) {
     const broker = created.parties.find((p) => p.role === 'broker')

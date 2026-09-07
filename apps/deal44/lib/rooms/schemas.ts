@@ -36,13 +36,24 @@ export const createRoomSchema = z.object({
   anchors: z.record(z.string(), isoDate).default({}),
   broker: personSchema.extend({ role: z.string().min(1).max(40).default('broker') }),
   parties: z.array(personSchema).max(12).default([]),
-  send_invites: z.boolean().default(false),
+  /**
+   * Invites go out by default (founder decision, 2026-09-07). A room whose
+   * parties are never told it exists is not a product. The message is
+   * transactional and carries a one-line opt-out — see lib/email/send.ts.
+   * Pass false to hold the links back and forward them by hand.
+   */
+  send_invites: z.boolean().default(true),
 })
 
 export type CreateRoomInput = z.infer<typeof createRoomSchema>
 
 export const addPartySchema = personSchema.extend({
-  send_invite: z.boolean().default(false),
+  send_invite: z.boolean().default(true),
+})
+
+/** Changing the signing or delivery date re-dates every template task. */
+export const setAnchorsSchema = z.object({
+  anchors: z.record(z.string(), isoDate),
 })
 
 export const addTaskSchema = z.object({

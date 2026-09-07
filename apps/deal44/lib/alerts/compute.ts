@@ -82,7 +82,7 @@ export function computeDigests(
           daysUntil: days,
           dueDate: task.due_date as string,
           assigneeRole: task.assignee_role,
-          isOwn: task.assignee_role === party.role || party.role === 'broker',
+          isOwn: task.assignee_role === party.role || party.can_manage === true,
         }))
         .sort((a, b) => crossingPriority(a.tier) - crossingPriority(b.tier))
 
