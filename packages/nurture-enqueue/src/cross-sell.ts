@@ -39,6 +39,7 @@ export type CrossSellSurface =
   | 'lexaudit'
   | 'falseecho'
   | 'sellerradar'
+  | 'leadforge'
 
 const CROSS_SELL: Readonly<Record<CrossSellSurface, readonly CrossSellOffer[]>> = {
   // Wallet-trace buyer → sanctions screening + ongoing monitoring.
@@ -178,6 +179,37 @@ const CROSS_SELL: Readonly<Record<CrossSellSurface, readonly CrossSellOffer[]>> 
         'Evidence-cited risk report on supplier agreements, Amazon ToS, or DPAs — red flags and fix recommendations.',
       price: '$97 one-time',
       url: 'https://docai.bizlegal-ai.com',
+    },
+  ],
+
+  // Free-audit lead → contract hygiene for lead-buy agreements,
+  // ongoing TCPA/FCC rule drift, and evidence-grade AI-claim docs.
+  // LeadForge has no paid tier of its own — this block IS the
+  // conversion path.
+  leadforge: [
+    {
+      product: 'DocAI Contract Risk Report',
+      headline: 'Review your lead-purchase agreements',
+      blurb:
+        'Evidence-cited risk report on a lead-buying contract, DPA, or vendor ToS — consent-scope clauses, indemnification gaps, and fix recommendations.',
+      price: '$97 one-time',
+      url: 'https://docai.bizlegal-ai.com',
+    },
+    {
+      product: 'LexAudit Compliance Monitor',
+      headline: 'Track TCPA / FCC rule drift',
+      blurb:
+        'Daily monitoring of FCC, FTC, and state-AG guidance affecting outbound campaigns, with drift alerts when consent or revocation rules change.',
+      price: '$99/mo',
+      url: 'https://lexaudit.bizlegal-ai.com',
+    },
+    {
+      product: 'FalseEcho AI Falsehood Audit',
+      headline: 'What do AI engines say about you?',
+      blurb:
+        '25-prompt battery across four AI answer engines with a hash-anchored evidence pack documenting any false claims verbatim.',
+      price: '$29 one-time',
+      url: 'https://falseecho.bizlegal-ai.com',
     },
   ],
 }

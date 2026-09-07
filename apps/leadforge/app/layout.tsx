@@ -86,6 +86,7 @@ export default function RootLayout({
             nav={[
               { label: 'Pipeline', href: '/#pipeline' },
               { label: 'Decision tree', href: '/decision-tree' },
+              { label: 'Free audit', href: '/free-audit' },
               { label: 'Pricing', href: '/pricing' },
               { label: 'Contact', href: '/contact' },
             ]}

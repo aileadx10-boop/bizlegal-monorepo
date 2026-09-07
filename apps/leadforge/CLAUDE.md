@@ -2,9 +2,9 @@
 
 > First read the monorepo root [`CLAUDE.md`](../../CLAUDE.md).
 
-Lead-generation surface. No paid products currently — pure top-of-funnel.
+Lead-generation surface. No paid products of its own — top-of-funnel with fleet cross-sell as the conversion path (`/free-audit` result → `crossSellFor('leadforge')` in @bizlegal/nurture-enqueue).
 
-**Primary surfaces:** `/api/generate-report`, `/api/inbound-lead`, `/api/ops/health`, `/api/digest`.
+**Primary surfaces:** `/api/generate-report`, `/api/inbound-lead`, `/api/ops/health`, `/api/digest`, `/free-audit` + `/api/free-audit` (10-point consent & suppression self-audit; deterministic scorer in `lib/free-audit.ts`, rate-limit + Turnstile, nurture enqueue vertical='leadforge'), `/decision-tree`.
 
 **Critical envs:** `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `BIZLEGAL_INBOUND_SECRET`, `OPS_DASHBOARD_TOKEN`, `ANTHROPIC_API_KEY`, `RESEND_API_KEY`. Optional: `NOWPAYMENTS_API_KEY` (if any paid surfaces ship), `APIFY_TOKEN` (lead enrichment).
 
