@@ -3,11 +3,15 @@ import { z } from 'zod'
 import { createServerClient } from '@/lib/supabase/server'
 import { runModule, type VerticalType } from '@/lib/claude/index'
 import { getRateLimiter, getIpFromRequest } from '@/lib/rate-limit'
+import { enqueueNurture } from '@/lib/nurture-enqueue'
+import { logEventAsync } from '@/lib/ops/log'
+import { verifyTurnstile, clientIpFromHeaders } from '@bizlegal/turnstile-verify'
 
 const ScanSchema = z.object({
   url: z.string().url().optional(),
   email: z.string().email(),
   vertical: z.enum(['cipa', 'gpc', 'mhmda', 'gdpr', 'sms', 'tdpsa', 'boi', 'iso27001', 'gipa', 'edtech', 'surplus']),
+  turnstile_token: z.string().optional(),
   company_name: z.string().optional(),
   formation_date: z.string().optional(),
   state: z.string().optional(),
@@ -52,6 +56,21 @@ export async function POST(req: NextRequest) {
     }
 
     const { url, email, vertical, company_name } = parsed.data
+
+    // Turnstile bot challenge (skip-if-not-configured): this endpoint
+    // spends Anthropic tokens per call, so when TURNSTILE_SECRET_KEY is
+    // set a token is required. Mirrors /api/decision-tree/lead.
+    const turnstile = await verifyTurnstile({
+      token: parsed.data.turnstile_token,
+      clientIp: clientIpFromHeaders(req.headers),
+    })
+    if (!turnstile.ok) {
+      return NextResponse.json(
+        { error: 'turnstile_failed', codes: turnstile.errorCodes },
+        { status: 403 },
+      )
+    }
+
     const supabase = createServerClient()
 
     // Create scan record
@@ -110,6 +129,41 @@ export async function POST(req: NextRequest) {
         exposure_max: d.exposure_max as number,
       })
       .eq('id', scan.id)
+
+    // Lead capture (lexaudit /api/free-scan pattern): every successful
+    // free scan enqueues a nurture lead (vertical='forge') and emits a
+    // lead.qualified ops event. Both fire-and-forget — a nurture failure
+    // must never break the scan response.
+    const leadEmail = email.toLowerCase().trim()
+    const leadId = `forge-free-scan-${leadEmail}`
+    void enqueueNurture({
+      lead_id: leadId,
+      email: leadEmail,
+      vertical: 'forge',
+      source: 'forge:free-scan',
+      lead_classification: {
+        magnet: 'free-scan',
+        scan_id: scan.id,
+        scan_vertical: vertical,
+        company_name: company_name ?? null,
+        risk_level: (d.risk_level as string) || 'low',
+        violation: Boolean(d.violation),
+      },
+    }).catch((err) => console.warn('[scan] nurture enqueue failed:', err))
+
+    logEventAsync({
+      type: 'lead.qualified',
+      source: 'forge',
+      ref_id: scan.id,
+      email: leadEmail,
+      status: 'ok',
+      metadata: {
+        magnet: 'free-scan',
+        scan_vertical: vertical,
+        risk_level: (d.risk_level as string) || 'low',
+        violation: Boolean(d.violation),
+      },
+    })
 
     // Return preview (truncated findings — full report behind paywall)
     const findings = (d.findings as string[]) ?? []

@@ -10,7 +10,9 @@
 export const PRICES = {
   scan: { crypto: 97, fiat: 119 },
   passport: { crypto: 297, fiat: 347 },
-  boi: { crypto: 149, fiat: 169 },
+  // boi fiat collapsed to the canonical $149 (was $169) to match the
+  // pricing page and PRODUCTS.forge_boi_kit; hub price-map accepts both.
+  boi: { crypto: 149, fiat: 149 },
 }
 
 // ── Payoneer Links (static, from env) ────────────────────────────────────────

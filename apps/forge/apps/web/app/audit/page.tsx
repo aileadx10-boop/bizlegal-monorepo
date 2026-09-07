@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import TurnstileWidget from '@/components/TurnstileWidget'
 
 const VERTICALS = [
   { id: 'cipa', label: 'CIPA §631', description: 'CA wiretapping — pre-consent tracker detection', price: 999 },
@@ -47,6 +48,8 @@ export default function AuditPage() {
   }>(null)
   const [paymentOptions, setPaymentOptions] = useState<PaymentOptions | null>(null)
   const [error, setError] = useState('')
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const turnstileRequired = Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY)
 
   async function handleScan(e: React.FormEvent) {
     e.preventDefault()
@@ -68,7 +71,7 @@ export default function AuditPage() {
       const res = await fetch('/api/scan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url, email, vertical }),
+        body: JSON.stringify({ url, email, vertical, turnstile_token: turnstileToken ?? undefined }),
       })
       const data = await res.json()
       if (!res.ok) {
@@ -181,7 +184,8 @@ export default function AuditPage() {
             {error && (
               <div className="bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-3 text-red-400 text-sm">{error}</div>
             )}
-            <button type="submit" disabled={loading} className="btn-primary w-full">
+            <TurnstileWidget onToken={setTurnstileToken} theme="dark" />
+            <button type="submit" disabled={loading || (turnstileRequired && !turnstileToken)} className="btn-primary w-full">
               {loading ? 'Scanning...' : 'Run Free Scan'}
             </button>
           </form>

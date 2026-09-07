@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import TurnstileWidget from '@/components/TurnstileWidget'
 
 const ENTITY_TYPES = ['LLC', 'Corporation', 'Limited Partnership', 'LLP', 'S-Corp', 'Other']
 const STATES = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC']
@@ -62,6 +63,8 @@ export default function BOIPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [result, setResult] = useState<Record<string, unknown> | null>(null)
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const turnstileRequired = Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY)
 
   function set(field: keyof FormData, value: string) {
     setForm((f) => ({ ...f, [field]: value }))
@@ -82,7 +85,7 @@ export default function BOIPage() {
       const res = await fetch('/api/scan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...payload, email: form.contact_email, vertical: 'boi' }),
+        body: JSON.stringify({ ...payload, email: form.contact_email, vertical: 'boi', turnstile_token: turnstileToken ?? undefined }),
       })
       const data = await res.json()
       if (!res.ok) {
@@ -265,7 +268,8 @@ export default function BOIPage() {
             <div className="bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-3 text-red-400 text-sm">{error}</div>
           )}
 
-          <button type="submit" disabled={loading} className="btn-primary w-full">
+          <TurnstileWidget onToken={setTurnstileToken} theme="dark" />
+          <button type="submit" disabled={loading || (turnstileRequired && !turnstileToken)} className="btn-primary w-full">
             {loading ? 'Analyzing...' : 'Run State Transparency Check — $149'}
           </button>
           <p className="text-xs text-forge-muted text-center">
@@ -318,17 +322,17 @@ export default function BOIPage() {
               <div className="flex items-center gap-3 mb-3">
                 <div className="text-2xl">💳</div>
                 <div>
-                  <h4 className="font-bold text-white">Card / Bank — $169</h4>
+                  <h4 className="font-bold text-white">Card / Bank — $149</h4>
                   <p className="text-sm text-forge-muted">Pay by card via secure checkout</p>
                 </div>
               </div>
               <a
-                href={`https://bizlegal-ai.com/checkout?product=forge&tier=boi&interval=one-time&amount=16900&name=Forge+State+Transparency+Report+Kit`}
+                href={`https://bizlegal-ai.com/checkout?product=forge&tier=boi&interval=one-time&amount=14900&name=Forge+State+Transparency+Report+Kit`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary w-full block text-center"
               >
-                Pay $169 by Card →
+                Pay $149 by Card →
               </a>
             </div>
           </div>
