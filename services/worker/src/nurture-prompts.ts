@@ -38,13 +38,13 @@ export interface VerticalContext {
 
 export const VERTICAL_CONTEXTS: Record<NurtureVertical, VerticalContext> = {
   boi: {
-    product_name: "BOI Tracker",
+    product_name: "State Transparency Kit",
     product_url: "https://forge.bizlegal-ai.com/boi",
-    regulator_focus: "FinCEN beneficial-ownership reporting (CTA)",
-    pain_point: "missing or late BOI filings carry $591/day civil penalties + criminal exposure",
-    deliverable: "ready-to-file BOI report with FinCEN-formatted entity + beneficial-owner records, citations to the relevant CTA sections",
-    decision_pressure: "FinCEN deadline windows are short; late filings compound by the day",
-    comparison_alts: "DIY via FinCEN portal (slow, error-prone), CPA filing ($300-800), law firm ($1500+), other vendors (template-only, no audit trail)",
+    regulator_focus: "state-level transparency/LLC reporting duties (NY LLCTA and similar state acts)",
+    pain_point: "state transparency acts create new LLC disclosure duties with their own deadlines and penalties, and the rules differ state by state",
+    deliverable: "state-by-state transparency duty assessment with a ready-to-use filing checklist and citations to the relevant state statutes",
+    decision_pressure: "state deadlines run on their own clocks; missing one is a per-state problem that compounds quietly",
+    comparison_alts: "DIY across 50 state portals (slow, error-prone), a registered-agent upsell ($100-300/yr, no analysis), a law firm ($1500+), template vendors (no state-specific guidance)",
   },
   brai: {
     product_name: "BRAI Sanctions Scan",
