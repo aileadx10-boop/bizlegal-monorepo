@@ -131,7 +131,7 @@ export async function POST(req: NextRequest) {
         // order in boi_orders, emails the buyer, and fires the Telegram alert.
         fetch(`${appUrl}/api/boi-order`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'x-internal-secret': internalSecret },
           body: JSON.stringify({
             payer_email: boiScan.email,
             form_data: { companyName: boiScan.company_name, scan_id: scanId },

@@ -3,6 +3,15 @@ import { createServerClient } from '@/lib/supabase/server'
 import { logEventAsync } from '@/lib/ops/log'
 
 export async function POST(req: NextRequest) {
+  const secret = req.headers.get('x-internal-secret')
+  // Accept the legacy alias so a vault that only has INTERNAL_SECRET (and not
+  // INTERNAL_API_SECRET) still fulfills paid orders — the webhook sender in
+  // /api/payment/webhook uses the same fallback order.
+  const expected = process.env.INTERNAL_API_SECRET ?? process.env.INTERNAL_SECRET
+  if (!expected || secret !== expected) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   try {
     const body = await req.json()
     const supabase = createServerClient()
