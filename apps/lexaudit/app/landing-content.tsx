@@ -7,6 +7,7 @@ import type { LandingV2Content } from '@bizlegal/themes'
 export const LEXAUDIT_CONTENT: LandingV2Content = {
   brand: 'LexAudit',
   nav: [
+    { label: 'Free Scan', href: '/free-scan' },
     { label: 'Health Score', href: '/compliance-health-score' },
     { label: 'Decision Tree', href: '/decision-tree' },
     { label: 'Pricing', href: '/pricing' },
