@@ -7,6 +7,8 @@ import { captureHubPayPalOrder } from '@/lib/payments/paypal-capture'
 import { grantConductorTier } from '@/lib/payments/conductor-grant'
 import { grantCaspBundle } from '@/lib/payments/casp-bundle-grant'
 import { grantAiPolicy } from '@/lib/payments/ai-policy-grant'
+import { grantPracticeProducts } from '@/lib/payments/practice-grant'
+import { grantPracticeRevenueReport } from '@/lib/payments/practice-revenue-grant'
 import { grantOfacWatch } from '@/lib/payments/ofac-watch-grant'
 import { grantFalseEcho } from '@/lib/payments/falseecho-grant'
 import { grantSellerRadar } from '@/lib/payments/sellerradar-grant'
@@ -344,6 +346,10 @@ export async function POST(req: NextRequest) {
           await grantConductorTier(supabase, orderRow)
           await grantCaspBundle(supabase, orderRow)
           await grantAiPolicy(supabase, orderRow)
+          // AI practice review / teammate kit delivery (O-018; no-op for other products).
+          await grantPracticeProducts({ ...orderRow, id: orderId })
+          // Practice Revenue Report unlock (no-op for other products).
+          await grantPracticeRevenueReport(supabase, { ...orderRow, id: orderId })
           await grantOfacWatch(supabase, orderRow)
           // FalseEcho fulfillment POST (no-op for other products).
           await grantFalseEcho(orderRow)

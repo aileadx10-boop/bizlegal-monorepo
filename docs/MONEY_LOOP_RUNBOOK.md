@@ -47,7 +47,7 @@ NOWPayments IPN  → /api/payments/nowpayments/webhook
   → failed/expired/refunded map to matching statuses
 ```
 
-Known hole (MONEY_LOOP_STATUS F6): forge/tracr IPN handlers verify only `if (secret && sig)` — an unset secret means **unverified IPNs accepted**. Hub fails closed; the product apps don't. Fix = same IPN secret set in every crypto app's Vercel project.
+F6 fixed (2026-09-08): all IPN handlers now fail closed — forge/tracr's old `if (secret && sig)` verify-only-when-configured hole is gone. `NOWPAYMENTS_IPN_SECRET` is **mandatory in every crypto app's Vercel project**: unset secret → 503 `ipn_secret_not_configured` (NOWPayments retries; no fulfillment), missing/mismatched signature → 401.
 
 ---
 

@@ -95,10 +95,32 @@ export async function PATCH(req: NextRequest) {
   if (action === "approve") {
     const source = (draft.sales_lead as any)?.source || ""
     const email = (draft.sales_lead as any)?.email || ""
+    if (!email) return NextResponse.json({ error: "lead has no email" }, { status: 400 })
+
+    // Rule 7 v2 (2026-09-07): an outbound draft is never sent from here — this
+    // path is Resend on the transactional domain, which its policy forbids for
+    // cold mail. Approving an outbound draft QUEUES it; the dispatch cron sends
+    // it through @bizlegal/email kind 'outbound' once the campaign is running,
+    // the address is verified and OUTBOUND_AUTOSEND=1.
+    if (source.startsWith("outbound_")) {
+      const { data: leadRow } = await sb().from("sales_lead").select("verification_status, lawful_basis, campaign_id").eq("id", draft.lead_id).single()
+      if (!leadRow?.campaign_id) return NextResponse.json({ error: "outbound draft has no campaign — approve campaigns on /sales, not single drafts" }, { status: 403 })
+      if (leadRow.verification_status !== "valid" || !leadRow.lawful_basis) {
+        return NextResponse.json({ error: "lead is not provider-verified or has no lawful basis — the dispatch cron would refuse it" }, { status: 403 })
+      }
+      await sb().from("sales_outreach").update({
+        status: "approved",
+        approved_at: new Date().toISOString(),
+        approved_by: "moses",
+        body: edited_body || (draft as any).body,
+        subject: edited_subject || (draft as any).subject,
+      }).eq("id", id)
+      return NextResponse.json({ ok: true, status: "approved", note: "queued for /api/cron/outbound-dispatch" })
+    }
+
     if (!isOptIn(source)) {
       return NextResponse.json({ error: `source '${source}' not in opt-in list — edit agent or manually override source in DB` }, { status: 403 })
     }
-    if (!email) return NextResponse.json({ error: "lead has no email" }, { status: 400 })
 
     // Gate 1: suppression list
     const { data: sup } = await sb().from("email_suppression_list").select("email").eq("email", email.toLowerCase()).limit(1)

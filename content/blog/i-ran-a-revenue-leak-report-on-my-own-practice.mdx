@@ -1,0 +1,66 @@
+---
+title: "I Ran a Revenue-Leak Report on My Own Practice"
+description: "What a practising attorney found when he read his own invoice export back: aging, unbilled work, collection and realization rates, computed with the formulas printed next to each number. No inbox connection; client names never left the browser."
+date: "[YYYY-MM-DD — set on publication]"
+author: "Moses Dor, Adv."
+tag: "Practice Revenue"
+readTime: "7 min"
+published: false
+keywords: ["law firm unbilled work", "solo lawyer collection rate", "realization rate solo practice", "law firm receivables aging", "revenue leak law practice", "invoice export analysis lawyers"]
+jurisdiction: ["US", "IL", "AE"]
+---
+
+# I Ran a Revenue-Leak Report on My Own Practice
+
+_Every number in this article is a placeholder in [brackets] until I fill it from my own export. Nothing here is invented; if a bracket is still visible, the number was not available._
+
+Most of the advice about law-firm revenue is aimed at firms with a finance team. I run a practice by myself. The billing software holds the answer to a question I had never asked it plainly: how much of last quarter's work was invoiced late, and how much was never invoiced at all?
+
+So I exported the invoices and the time entries as CSV and read them back with a tool I built for exactly that. Here is what it printed, and what I did about it.
+
+## The setup, and what it did not touch
+
+Two files, exported the same way any billing tool exports them. Before either file left my browser, every client, matter and invoice identifier was replaced with a code — "Client 01", "Matter 01-02", "INV-0001" — and the key stayed on my machine. The server only ever saw codes and amounts. Nothing connected to my inbox or my practice software.
+
+## The numbers
+
+| Measure | My practice, [period] | How it is computed |
+|---|---|---|
+| Open receivables | [amount] | sum of open balances |
+| Past due 60+ days | [amount] | open balances more than 60 days past the due date |
+| Unbilled work | [amount] / [hours] h | billable entries with no invoice link |
+| Collection rate | [pct]% | collected ÷ invoiced |
+| Realization rate | [pct]% | invoiced billable hours ÷ billable hours |
+| Days sales outstanding | [days] | open receivables ÷ (invoiced in the last 90 days ÷ 90) |
+
+For comparison, the figures Clio publishes for the average firm are [verified figures only — 38% utilization, 88% realization, 93% collection if confirmed against the 2025 report].
+
+## What the per-invoice rows showed
+
+[Two or three sentences about what the aging table made obvious — for example, that the past-due balance was concentrated in [N] invoices, or that the invoicing lag was [days] days after the last time entry. Codes only; no client names.]
+
+## What I changed
+
+1. [The first change — for example, invoicing within three days of the last entry on a matter.]
+2. [The second change.]
+3. [The third change.]
+
+## What this is not
+
+It is not a financial statement, and it is not legal, tax or accounting advice. It is arithmetic on an export, with the formula printed next to each number so you can disagree with it. Decisions about existing client relationships are outside its scope; the "reprice" column is a number to think about before quoting new work, nothing more.
+
+## Try it on your own export
+
+The free totals need only the invoice CSV and take about two minutes: [https://bizlegal-ai.com/practice-revenue](https://bizlegal-ai.com/practice-revenue). The full report — every overdue invoice with a reminder drafted, every unbilled entry, clients ranked by collected money per hour — is $99 once. There is no call; if you have a question, reply to the email the totals arrive in and I answer in writing.
+
+## Questions people ask
+
+**Does it connect to my inbox or my practice software?** No. You upload a CSV you already have.
+
+**Where do client names go?** Nowhere. Your browser replaces them with codes before upload and keeps the key.
+
+**Is there a subscription?** No. The totals are free; the full report is $99 once.
+
+---
+
+_This article is written by Moses Dor in his personal capacity as a practising attorney and is for general information only. It is not legal advice, does not create an attorney-client relationship, and does not recommend any vendor or product. Consult a licensed attorney in your jurisdiction before acting on it. BizLegal AI (DOR INNOVATIONS) is a software company, not a law firm. Facts cited are drawn from the primary sources linked inline and are current as of [date]._

@@ -27,6 +27,7 @@ bizlegal-monorepo/
 │   ├── closeflow/    closeflow.bizlegal-ai.com — closing checklists $39 + deadline engine (TRIO scaffold, not deployed; see apps/closeflow/CLAUDE.md)
 │   ├── bench/        bench.bizlegal-ai.com — evaluation lab for legal AI: $2,500 audits + $5K/mo programs, MiCA/DPA/VARA benchmarks (scaffold 2026-08-16, checkout live 2026-08-23; see apps/bench/CLAUDE.md)
 │   ├── coguard/      coguard.bizlegal-ai.com — co-parenting communication & legal evidentiary engine ($14.99-$29.99/mo scaffold 2026-08-16, not deployed; see apps/coguard/CLAUDE.md)
+│   ├── deal44/       deal44.bizlegal-ai.com — Hebrew/RTL multi-party property deal rooms; ₪2,500 setup + ₪349/mo (scaffold 2026-09-07, checkout dark, migration unapplied; see apps/deal44/CLAUDE.md)
 │   └── blog/         blog.bizlegal-ai.com (curator-fed MDX content; CF Pages)
 ├── services/         non-Vercel runtimes
 │   ├── hetzner/      curator pipeline: scout/brain/publisher/bot (Python, systemd) [Z1.C-pending]
@@ -42,6 +43,7 @@ bizlegal-monorepo/
 │   └── funnel-mvp/   TOMBSTONED 2026-05-24 — canonical is apps/docai/web/ (Fastify, never deployed; git-history reference only)
 ├── packages/         shared TS + Python siblings
 │   ├── deal-engine/  @bizlegal/deal-engine — transaction reconciliation core (normalise/reconcile/jurisdiction packs); pure, no LLM
+│   ├── closing-engine/ @bizlegal/closing-engine — pluggable working-week calendar (Sun–Thu vs Mon–Fri), task templates, alert tiers; the closeflow/leaseparse engine de-duplicated
 │   ├── email/        @bizlegal/email — THE outbound email path; suppression + double-opt-in enforced inside the package (never in callers)
 │   ├── ops-log/      @bizlegal/ops-log — HMAC-signed event POST to hub /api/ops/log
 │   ├── firecrawl/    @bizlegal/firecrawl — scrape + Sonnet semantic-diff
@@ -60,6 +62,7 @@ bizlegal-monorepo/
 │   └── bizlegal-debug/ @bizlegal/debug — Python debug shim: trace replay + breakpoints (P4)
 ├── agents/           AGENTS.md + agent prompt seeds + WAT specs
 │   ├── ea/           Executive Assistant brain — prompts, schemas, templates, context (Z1.F)
+│   ├── outbound/     AI outbound engine, agent side (rule 7 v2, 2026-09-07): routine prompt, campaign templates + reply sets; see agents/outbound/CLAUDE.md
 │   └── socials/      Consent-based social acquisition plans, skills, and prompt seeds
 ├── decisions/        all planning + ops docs (single canonical location)
 │   └── strategy/     SKOOL-NATE strategy chapters (01-11) + THE-MACHINE + master plans (Z1.G)
@@ -143,12 +146,34 @@ A future Claude Code session SHALL refuse to merge a PR that fails the operating
 4. **No new entries on /agents page.**
 5. **No real money taken** until Z7 verification matrix runs all GREEN for 24 consecutive hours.
 6. **Stabilization first.** Frustration > ambition until the chain is solid.
-7. **Outbound is inbound-only.** We email people who contacted us and confirmed. No
-   prospect scraping, no cold senders, no purchased or guessed addresses — in any repo,
-   on any branch. The cold path was deleted 2026-08-16 after it was found running on
-   every 10-minute tick with no approval step and a kill-switch that failed open
-   (`fc_flags` had no migration). Do not reintroduce it; a "gated" cold sender is still
-   a cold sender.
+7. **Outbound — rule 7 v2 (amended 2026-09-07 by Moses: "llm and ai can scrape, persuade,
+   headhunt and sell").** Cold outbound is ALLOWED, and only under all seven invariants
+   below. Every one of them is a lesson from the 2026-07-10 incident, where a pipeline
+   slugified company names into addresses, sent 63 unsolicited mails from the
+   transactional domain with no approval gate, raised 244 fake $2,500 invoices, had a
+   kill-switch that failed open, and under-reported its own sends by 17×.
+   1. **Verified addresses only.** Provider-verified, published business addresses. Never
+      constructed, guessed or pattern-built; no role inboxes. A guessed address is still
+      forbidden and always will be.
+   2. **Lawful basis recorded per recipient**, with the `source_url` where the address was
+      published. **v1 scope is US CAN-SPAM only. The EU and ISRAEL are EXCLUDED** —
+      Israel's Communications Law s.30A is opt-in with statutory damages, so Israeli
+      prospects are reached by warm human contact, inbound content and referral, never by
+      the cold pipeline. (This is why DEAL44, whose first market is Israel, has no cold
+      acquisition path — see `decisions/DEAL44-WORKFLOW44-2026-09-07.md`.)
+   3. **Suppression, one-click unsubscribe and bounce/complaint handling live inside
+      `@bizlegal/email`**, never in a caller. A caller that forgets is indistinguishable
+      from one that decided not to.
+   4. **Caps are DB constants (`sales_cap`) and every switch fails closed.** No readable
+      cap, no send. `OUTBOUND_AUTOSEND` unset means nothing sends.
+   5. **Moses approves each campaign** (ICP + template + cap) on `/sales`. Per-message
+      approval is not required; auto-replies are limited to interest, questions, pricing
+      and objections — never a legal question, never a call.
+   6. **Cold mail never touches Resend or `intelligence.bizlegal-ai.com`** (Resend's AUP
+      bans it, and one complaint there kills every receipt the fleet sends). A dedicated,
+      warmed sending domain only.
+   7. **Counts come from tables** (`email_send_log`, `sales_outreach`), never from an
+      agent's own report.
 
 When in doubt, ask: "does this advance Z0-Z7 verification or does it add scope?" If it adds scope, defer to post-Z7.
 
@@ -225,6 +250,10 @@ Every planning + ops doc lives in `decisions/`:
 - `decisions/TRIO-PROPSIGNAL-LEASEPARSE-CLOSEFLOW-2026-07-28.md` — 3 new real-estate-adjacent surfaces (property risk reports / lease abstracting / closing checklists), $200/mo budget cap on the Ollama+Claude+Perplexity stack, shared liability-shield TOS, cross-sell spine via trio_properties, build order CloseFlow → LeaseParse → PropSignal. SCAFFOLD ONLY — checkout dark, migrations unapplied, nothing deployed.
 - `decisions/BENCH-LEGAL-AI-QUALITY-2026-08-16.md` — Bench (apps/bench): the evaluation lab for legal AI. Measurement company identity, $2,500 diagnostic audits / $5K-mo managed programs, MiCA-Bench + DPA-Bench + VARA-Bench (75 git-versioned gold-standard items, Moses review gate pending), delivery-economics table, 3-category data-rights clause, rule-7-clean inbound GTM (cold-email engine from the source plan was NOT built). SCAFFOLD — legal review passed 2026-08-23, checkout flipped live.
 - `decisions/COGUARD_PRODUCT_PLAN.md` — Co-parenting communication & legal evidentiary engine: zero-liability two-channel architecture (outgoing BIFF via Resend + incoming subscriber-forwarded via CF Email Routing), $14.99-$29.99/mo, ReportLab court binder with Bates numbering, attorney read-only portal. 6 workflow SOPs in decisions/workflows/coguard_*.md. SCAFFOLD 2026-08-16 — checkout dark, migrations unapplied, not deployed.
+- `decisions/DEAL44-WORKFLOW44-2026-09-07.md` — DEAL44 → WORKFLOW44: Hebrew/RTL multi-party property deal rooms for brokers (₪2,500 per transaction, ₪349/mo later), built on the existing `deals` head plus the de-duplicated closing engine. **Amends hard rule 7** by founder decision (AI may scrape, headhunt and persuade) under named guardrails. Phase 0 is manual invoicing; the ILS rail is unverified and `/api/pay/start` now 503s every non-USD product. The Israeli task template ships `reviewed: false` pending a ten-question written interview.
+- `decisions/AI-TEAMMATES-FOUR-CS-2026-09-06.md` — **Grok Bot rejected** (beta since 2026-08-11, only bundled at $120–300/mo, no spend cap, exceeds the ≤$200/mo cap; re-open gate: G1 + business ToS/DPA/spend cap + a paying engagement). The Four Cs (Context/Connections/Capabilities/Cadence) kept as an audit lens: verification line in `COMMON_TONE`, morning-brief Claude routine replacing the API-credit-dependent `daily-revenue-digest`, nothing else added. Sell side is `decisions/workflows/ai_practice_review.md` — a $200 written review, no calls (Moses is an introvert; see `PHASE-1-INTROVERT-FOUNDER.md`). Order O-018.
+- `decisions/REVENUE-OS-IDEAS-RATED-2026-09-07.md` — the pasted "Legal Revenue OS / Base44 platform / solo sprint" ideas researched and rated against existing infra (28 ideas, weights, kill list, market numbers with sources, outbound legal matrix). Built the same day: **Practice Revenue Report** (`/practice-revenue`, free totals → $99, pure engine, browser-side pseudonymisation; workflow `decisions/workflows/practice_revenue_report.md`) and the outbound engine below. Orders O-020 / O-021.
+- `decisions/OUTBOUND-V2-RULE-7-AMENDED-2026-09-07.md` — **rule 7 amended by Moses**: outbound allowed under nine code-enforced invariants (`@bizlegal/email` kind `outbound`, dispatch cron as the only sender, per-campaign approval on `/sales`, `OUTBOUND_AUTOSEND` fail-closed, Instantly on a dedicated domain, never Resend). Incident lessons mapped to tests. Workflow `decisions/workflows/outbound_campaign.md`; agent side `agents/outbound/`.
 
 When you write a new decision, add it here.
 

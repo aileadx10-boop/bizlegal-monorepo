@@ -114,6 +114,7 @@ export interface LogEventInput {
     | 'leaseparse'
     | 'closeflow'
     | 'coguard'
+    | 'deal44'
   ref_id?: string
   email?: string
   amount_cents?: number

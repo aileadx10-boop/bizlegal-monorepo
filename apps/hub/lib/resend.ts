@@ -1,9 +1,9 @@
-import { Resend } from 'resend'
+import { Resend } from 'resend'  // bizlegal-allow: email — legacy transport kept for receipts/wire/report mails; new senders use @bizlegal/email
 
 // Lazy init — avoids build-time throw when RESEND_API_KEY is not set
 let _resend: Resend | null = null
 function getResend(): Resend {
-  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY || 'placeholder')
+  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY || 'placeholder')  // bizlegal-allow: email — legacy transport kept for receipts/wire/report mails; new senders use @bizlegal/email
   return _resend
 }
 export const resend = { emails: { send: (...args: Parameters<Resend['emails']['send']>) => getResend().emails.send(...args) } }
@@ -166,6 +166,11 @@ export async function sendPaymentConfirmationEmail(
     tracr: 'https://tracr.bizlegal-ai.com',
     brai: 'https://brai.bizlegal-ai.com',
     forge: 'https://forge.bizlegal-ai.com',
+    // O-018 — written, async products; the grant email carries the real delivery.
+    ai_practice_review: 'https://bizlegal-ai.com/ai-practice-review#after-payment',
+    ai_teammate_kit: 'https://bizlegal-ai.com/ai-practice-review#after-payment',
+    // Practice Revenue Report — the grant email carries the unlocked link.
+    practice_revenue_report: 'https://bizlegal-ai.com/practice-revenue#after-payment',
   }
   const family = Object.keys(accessUrlMap).find((k) => product.startsWith(k))
   const accessUrl = family ? accessUrlMap[family] : 'https://bizlegal-ai.com'
@@ -181,6 +186,11 @@ export async function sendPaymentConfirmationEmail(
     'ai_policy_generator',
     'ofac_watch_monthly',
     'falseecho',
+    // O-018 — lib/payments/practice-grant.ts emails the five questions / kit link.
+    'ai_practice_review',
+    'ai_teammate_kit',
+    // lib/payments/practice-revenue-grant.ts flips the report to paid + emails the link.
+    'practice_revenue_report',
   ])
   const isAutoFulfilled = AUTO_FULFILLED.has(product)
 

@@ -7,6 +7,8 @@ import { claimWebhookEvent } from '@/lib/payments/webhook-idempotency'
 import { grantConductorTier } from '@/lib/payments/conductor-grant'
 import { grantCaspBundle } from '@/lib/payments/casp-bundle-grant'
 import { grantAiPolicy } from '@/lib/payments/ai-policy-grant'
+import { grantPracticeProducts } from '@/lib/payments/practice-grant'
+import { grantPracticeRevenueReport } from '@/lib/payments/practice-revenue-grant'
 import { grantOfacWatch } from '@/lib/payments/ofac-watch-grant'
 import { grantFalseEcho } from '@/lib/payments/falseecho-grant'
 import { grantSellerRadar } from '@/lib/payments/sellerradar-grant'
@@ -241,6 +243,10 @@ export async function POST(req: NextRequest) {
         await grantCaspBundle(supabase, order)
         // AI Policy Generator write-through (no-op for other products).
         await grantAiPolicy(supabase, order)
+        // AI practice review / teammate kit delivery (O-018; no-op for other products).
+        await grantPracticeProducts(order)
+        // Practice Revenue Report unlock (no-op for other products).
+        await grantPracticeRevenueReport(supabase, order)
         // OFAC watchlist activation (no-op for other products).
         await grantOfacWatch(supabase, order)
         // FalseEcho fulfillment POST (no-op for other products).

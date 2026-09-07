@@ -101,6 +101,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/tools/ofac-watcher`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE}/tools/obligation-extractor`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE}/tools/ai-policy-generator`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${BASE}/ai-practice-review`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${BASE}/practice-revenue`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE}/tools/mica-asset-classifier`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${BASE}/tools/stablecoin-classifier`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${BASE}/tools/contract-fixer`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },

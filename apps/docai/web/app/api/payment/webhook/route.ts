@@ -35,6 +35,15 @@ export async function POST(request: NextRequest) {
     const rawBody = await request.text();
     const signature = request.headers.get("x-nowpayments-sig");
 
+    // Fail-closed: without the IPN secret no signature can be verified.
+    // 503 (not 401) so NOWPayments retries after the env is fixed and ops
+    // can distinguish misconfiguration from a forged request.
+    if (!process.env.NOWPAYMENTS_IPN_SECRET) {
+      // eslint-disable-next-line no-console
+      console.error("[docai/webhook] NOWPAYMENTS_IPN_SECRET not configured");
+      return NextResponse.json({ error: "ipn_secret_not_configured" }, { status: 503 });
+    }
+
     if (!verifyNOWPaymentsSignature(rawBody, signature)) {
       return NextResponse.json({ error: "invalid_signature" }, { status: 401 });
     }

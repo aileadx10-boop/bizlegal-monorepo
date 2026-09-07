@@ -87,6 +87,26 @@ export async function POST(req: NextRequest) {
   const product = getProduct(productId)
   const preference: GatewayPreference = body.gateway
 
+  // Non-USD products are DARK on this path, deliberately.
+  //
+  // ILS SKUs exist in @bizlegal/payment so the fleet agrees on one price, but
+  // no gateway wired here is confirmed to settle shekels: PayPal receives a
+  // `currency_code` it may reject, NOWPayments takes an arbitrary
+  // `price_currency` whose payout behaviour is unverified, and the wire route
+  // is USD/EUR-only above a $500 floor. Taking money we cannot reconcile is the
+  // exact failure this route was rebuilt to end. Non-USD is invoiced manually
+  // and recorded as a `gateway='manual'` order instead.
+  if (product.currency !== 'USD') {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: 'currency_not_supported',
+        detail: `${product.currency} checkout is not live; this product is invoiced manually.`,
+      },
+      { status: 503 },
+    )
+  }
+
   // Fire intent BEFORE the gateway call so we count attempts even when
   // the gateway 503s.
   logEventAsync({

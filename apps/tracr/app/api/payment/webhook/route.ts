@@ -14,14 +14,23 @@ export async function POST(req: NextRequest) {
     const body = await req.text()
     const sig = req.headers.get('x-nowpayments-sig')
     const secret = process.env.NOWPAYMENTS_IPN_SECRET
+
+    // Fail-closed: without the IPN secret there is no way to authenticate
+    // the sender — refuse instead of fulfilling a possibly forged payment.
+    if (!secret) {
+      console.error('[payment/webhook] NOWPAYMENTS_IPN_SECRET not configured')
+      return NextResponse.json({ error: 'ipn_secret_not_configured' }, { status: 503 })
+    }
+    if (!sig) {
+      return NextResponse.json({ error: 'Missing signature' }, { status: 401 })
+    }
+
     const parsed = JSON.parse(body)
 
-    if (secret && sig) {
-      const sorted = sortObjectKeys(parsed)
-      const hmac = crypto.createHmac('sha512', secret).update(JSON.stringify(sorted)).digest('hex')
-      if (hmac !== sig) {
-        return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
-      }
+    const sorted = sortObjectKeys(parsed)
+    const hmac = crypto.createHmac('sha512', secret).update(JSON.stringify(sorted)).digest('hex')
+    if (hmac !== sig) {
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
     }
 
     const { payment_status, order_id: report_id, payment_id } = parsed

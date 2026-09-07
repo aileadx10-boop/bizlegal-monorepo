@@ -1,0 +1,29 @@
+{
+  "framework": "nextjs",
+  "devCommand": "next dev",
+  "installCommand": "corepack enable && cd ../.. && corepack pnpm install --frozen-lockfile=false --ignore-scripts",
+  "buildCommand": "cd ../.. && corepack pnpm turbo build --filter=@bizlegal/deal44...",
+  "functions": {
+    "app/api/cron/alerts/route.ts": { "maxDuration": 60 }
+  },
+  "crons": [
+    { "path": "/api/cron/alerts", "schedule": "0 5 * * *" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    },
+    {
+      "source": "/r/(.*)",
+      "headers": [
+        { "key": "Referrer-Policy", "value": "no-referrer" },
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+      ]
+    }
+  ]
+}

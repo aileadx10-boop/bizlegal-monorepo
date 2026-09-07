@@ -1,0 +1,4 @@
+Invoice #,Client,Issue Date,Due Date,Amount,Amount Paid,Paid Date
+1001,Example Client A,2026-06-01,2026-07-01,1500.00,1500.00,2026-06-20
+1002,Example Client B,2026-07-15,2026-08-14,2400.00,0.00,
+1003,Example Client A,2026-08-03,2026-09-02,800.00,400.00,2026-08-28

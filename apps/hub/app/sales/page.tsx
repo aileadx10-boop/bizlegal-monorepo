@@ -5,6 +5,7 @@
  * Built 2026-07-13. Mobile-first (Moses approves from his phone).
  */
 import { useEffect, useState } from "react"
+import CampaignsPanel from "./CampaignsPanel"
 
 type Draft = {
   id: string
@@ -107,6 +108,8 @@ export default function SalesPage() {
           ))}
         </section>
       )}
+
+      <CampaignsPanel token={token} />
 
       <section>
         <h2 className="text-lg font-semibold text-gray-900 mb-3">Drafts awaiting your review ({drafts.length})</h2>

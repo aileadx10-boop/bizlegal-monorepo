@@ -42,7 +42,7 @@
 
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
-export type WebhookGateway = 'paypal' | 'lemonsqueezy' | 'nowpayments' | 'paddle' | 'docai_nowpayments'
+export type WebhookGateway = 'paypal' | 'lemonsqueezy' | 'nowpayments' | 'paddle' | 'docai_nowpayments' | 'instantly'
 
 export type ClaimResult = 'claimed' | 'duplicate' | 'error'
 

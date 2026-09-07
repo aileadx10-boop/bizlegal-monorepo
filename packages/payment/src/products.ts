@@ -88,6 +88,17 @@ export type ProductId =
   | 'casp_bundle_monthly'
   // AI Policy Generator (W3-8) — $99 one-time wizard
   | 'ai_policy_generator'
+  // AI Practice Review + AI Teammate Kit (O-018, 2026-09-06). Written, async
+  // products offered by Moses Dor, Adv. in his personal capacity; payment is
+  // processed by DOR INNOVATIONS. Fulfilled by lib/payments/practice-grant.ts
+  // (five-question email / gated kit link). No calls, no live delivery.
+  | 'ai_practice_review'
+  | 'ai_teammate_kit'
+  | 'practice_revenue_report'
+  | 'deal44_room_setup_ils'
+  | 'deal44_broker_monthly_ils'
+  | 'deal44_room_setup_usd'
+  | 'deal44_broker_monthly_usd'
 
 export type BillingInterval = 'one-time' | 'monthly' | 'yearly'
 
@@ -95,10 +106,21 @@ export interface ProductSpec {
   readonly id: ProductId
   readonly name: string
   readonly description: string
-  readonly product_family: 'boi' | 'ai_act' | 'policy_refresh' | 'psp' | 'tracr' | 'brai' | 'forge' | 'docai' | 'lexaudit' | 'conductor' | 'cle' | 'propsignal' | 'leaseparse' | 'closeflow' | 'academy' | 'reserve_report' | 'bench' | 'coguard' | 'ofac_watch' | 'casp' | 'ai_policy'
+  readonly product_family: 'boi' | 'ai_act' | 'policy_refresh' | 'psp' | 'tracr' | 'brai' | 'forge' | 'docai' | 'lexaudit' | 'conductor' | 'cle' | 'propsignal' | 'leaseparse' | 'closeflow' | 'academy' | 'reserve_report' | 'bench' | 'coguard' | 'ofac_watch' | 'casp' | 'ai_policy' | 'practice' | 'deal44'
   readonly billing_interval: BillingInterval
   readonly amount_cents: number
-  readonly currency: 'USD'
+  /**
+   * ILS was added 2026-09-07 for DEAL44, whose first market is Israel.
+   *
+   * ⚠️ NO GATEWAY IN THIS PACKAGE IS CONFIRMED TO SETTLE ILS. Whether PayPal or
+   * NOWPayments can pay shekels into the founder's accounts is UNVERIFIED, and
+   * the wire route is USD/EUR-only. So `apps/hub/app/api/pay/start` refuses any
+   * non-USD product with a 503: an ILS SKU here is a price the fleet knows
+   * about, not a checkout it can complete. Phase 0 ILS money is taken by manual
+   * invoice and recorded as a `gateway='manual'` payment_orders row — the
+   * O-018 precedent.
+   */
+  readonly currency: 'USD' | 'ILS'
   /** Hub agent landing where this product is bought (relative path). */
   readonly checkout_origin: string
   /** Webhook callback path on hub — gateway IPN/webhook fires here on payment confirmation. */
@@ -706,6 +728,107 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     checkout_origin: '/tools/ai-policy-generator',
     webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: false,
+  },
+  // ───── AI Practice Review + AI Teammate Kit (O-018, 2026-09-06) ─────
+  // Two written, async products from decisions/workflows/ai_practice_review.md.
+  // payment.confirmed → lib/payments/practice-grant.ts emails the buyer the
+  // five questions (review) or the gated kit link (kit) and pings Moses on
+  // Telegram. The memo itself is written by Moses — nothing is auto-generated
+  // as advice. Priced to the FirmCited Session rung ($200) and the kit at $49.
+  // 2026-09-07 — Practice Revenue Report: free totals on /practice-revenue,
+  // $99 unlocks the full report. Fulfilled by lib/payments/practice-revenue-
+  // grant.ts, which reads the report ref from payment_orders.source.
+  practice_revenue_report: {
+    id: 'practice_revenue_report',
+    name: 'Practice Revenue Report (full)',
+    description: 'Unlocks the full Practice Revenue Report for one upload: every overdue invoice and unbilled entry with drafts, client ranking, closed-matter rows, timing counterfactuals. Arithmetic on your own billing export; not a financial statement; not legal, tax or accounting advice. Delivered by email within minutes.',
+    product_family: 'practice',
+    billing_interval: 'one-time',
+    amount_cents: 9900,
+    currency: 'USD',
+    checkout_origin: '/practice-revenue',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: false,
+  },
+  ai_practice_review: {
+    id: 'ai_practice_review',
+    name: 'AI Practice Review (written memo)',
+    description: 'Five questions by email, one written memo back: your intended AI-agent setup checked against the published checklist of a practising attorney. Not legal advice; not a review of any client matter. Delivered by email within five working days of your answers.',
+    product_family: 'practice',
+    billing_interval: 'one-time',
+    amount_cents: 20000,
+    currency: 'USD',
+    checkout_origin: '/ai-practice-review',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: false,
+  },
+  ai_teammate_kit: {
+    id: 'ai_teammate_kit',
+    name: 'AI Teammate Kit for Law Practices',
+    description: 'Eight-part written kit: pre-flight confidentiality checklist, engagement-letter and client-consent clauses, agent role card, three draft-only recipes, activity-log template, ten vendor questions, five never-automate rules, 30-day rollout. For licensed practitioners; adapt with counsel.',
+    product_family: 'practice',
+    billing_interval: 'one-time',
+    amount_cents: 4900,
+    currency: 'USD',
+    checkout_origin: '/ai-practice-review',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: false,
+  },
+  // ───── DEAL44 — multi-party transaction rooms (2026-09-07) ─────
+  // CHECKOUT IS DARK. These four exist so the price is one place the fleet
+  // agrees on and so a manual `payment_orders` row can name a real product.
+  // `/api/pay/start` 503s every non-USD product, and no buy button links here.
+  //
+  // The USD twins carry PLACEHOLDER amounts: Moses sets the non-Israel price.
+  // Do not treat 69900/9900 as a decided number.
+  // Canonical doc: decisions/DEAL44-WORKFLOW44-2026-09-07.md
+  deal44_room_setup_ils: {
+    id: 'deal44_room_setup_ils',
+    name: 'DEAL44 deal room — setup and run (Israel)',
+    description: 'One property transaction: a shared checklist for every party, dated against the signing and delivery dates, with reminders before each deadline. Set up and kept current for the life of the transaction. Software that organises the checklist — not legal services, not legal advice, and not a substitute for the parties own lawyers.',
+    product_family: 'deal44',
+    billing_interval: 'one-time',
+    amount_cents: 250000,
+    currency: 'ILS',
+    checkout_origin: '/start',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: false,
+  },
+  deal44_broker_monthly_ils: {
+    id: 'deal44_broker_monthly_ils',
+    name: 'DEAL44 for brokers (monthly, Israel)',
+    description: 'Open your own deal rooms for every transaction you run: shared checklists, per-party links, deadline reminders. Software that organises the checklist — not legal services and not legal advice.',
+    product_family: 'deal44',
+    billing_interval: 'monthly',
+    amount_cents: 34900,
+    currency: 'ILS',
+    checkout_origin: '/start',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: true,
+  },
+  deal44_room_setup_usd: {
+    id: 'deal44_room_setup_usd',
+    name: 'DEAL44 deal room — setup and run',
+    description: 'One property transaction: a shared checklist for every party, dated against the signing and closing dates, with reminders before each deadline. Set up and kept current for the life of the transaction. Software that organises the checklist — not legal services, not legal advice, and not a substitute for the parties own lawyers. PLACEHOLDER PRICE pending the founder decision.',
+    product_family: 'deal44',
+    billing_interval: 'one-time',
+    amount_cents: 69900,
+    currency: 'USD',
+    checkout_origin: '/start',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: false,
+  },
+  deal44_broker_monthly_usd: {
+    id: 'deal44_broker_monthly_usd',
+    name: 'DEAL44 for brokers (monthly)',
+    description: 'Open your own deal rooms for every transaction you run: shared checklists, per-party links, deadline reminders. Software that organises the checklist — not legal services and not legal advice. PLACEHOLDER PRICE pending the founder decision.',
+    product_family: 'deal44',
+    billing_interval: 'monthly',
+    amount_cents: 9900,
+    currency: 'USD',
+    checkout_origin: '/start',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: true,
   },
 }
 

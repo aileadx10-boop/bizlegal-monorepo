@@ -38,7 +38,9 @@
     "app/api/newsletter/send/route.ts": { "maxDuration": 60 },
     "app/api/cron/guide-social/route.ts": { "maxDuration": 90 },
     "app/api/cron/mica-deadlines/route.ts": { "maxDuration": 60 },
-    "app/api/cron/ofac-watch/route.ts": { "maxDuration": 60 }
+    "app/api/cron/ofac-watch/route.ts": { "maxDuration": 60 },
+    "app/api/cron/outbound-dispatch/route.ts": { "maxDuration": 60 },
+    "app/api/practice-revenue/analyze/route.ts": { "maxDuration": 30 }
   },
   "crons": [
     {
@@ -80,7 +82,8 @@
     { "path": "/api/newsletter/send",                                  "schedule": "0 13 * * 1" },
     { "path": "/api/cron/guide-social",                                "schedule": "30 5 * * *" },
     { "path": "/api/cron/mica-deadlines",                              "schedule": "17 15 * * *" },
-    { "path": "/api/cron/ofac-watch",                                  "schedule": "23 6 * * *" }
+    { "path": "/api/cron/ofac-watch",                                  "schedule": "23 6 * * *" },
+    { "path": "/api/cron/outbound-dispatch",                           "schedule": "*/30 * * * *" }
   ],
   "headers": [
     {

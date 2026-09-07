@@ -28,6 +28,13 @@
 
 const RESEND_URL = 'https://api.resend.com/emails'
 
+// Rule 7 v2 (2026-09-07): the third kind, 'outbound', lives in ./outbound and
+// never touches Resend — see that file's header. Re-exported here so callers
+// have one import path and the pre-commit transport check has one exemption.
+export * from './outbound'
+export * from './senders/instantly'
+export type { OutboundSender, SenderSendRequest, SenderSendResult } from './senders/types'
+
 export type EmailKind = 'transactional' | 'marketing'
 
 export interface EmailConfig {
@@ -77,7 +84,7 @@ function readEnv(): Record<string, string | undefined> {
   return g.process?.env ?? {}
 }
 
-function readConfig(cfg?: EmailConfig): Required<Pick<EmailConfig, 'from' | 'replyTo'>> & EmailConfig {
+export function readConfig(cfg?: EmailConfig): Required<Pick<EmailConfig, 'from' | 'replyTo'>> & EmailConfig {
   const env = readEnv()
   return {
     resendApiKey: cfg?.resendApiKey ?? env.RESEND_API_KEY,

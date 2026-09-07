@@ -14,8 +14,13 @@
  * Checks (staged files only):
  *   1. No raw Resend transport outside packages/email
  *   2. No new Anthropic/LLM client outside packages/llm
- *   3. No cold-outbound vocabulary anywhere (hard rule 7)
+ *   3. No cold-sender / verification transport outside packages/email (rule 7 v2)
+ *   3b. sendOutbound() only from the dispatch cron (rule 7 v2)
  *   4. No new crontab source file outside the sanctioned set
+ *
+ * Rule 7 was amended 2026-09-07 (decisions/OUTBOUND-V2-RULE-7-AMENDED-2026-09-07.md):
+ * the vocabulary ban is gone; what is enforced now is that every cold message
+ * passes the invariants in packages/email/src/outbound.ts.
  *
  * Escape hatch: a file may carry `bizlegal-allow: <check>` in a comment on the
  * offending line when there is a real reason. That makes the exception visible
@@ -48,15 +53,29 @@ const CHECKS = [
       '    and the spend cap stay a one-line change instead of 41.',
   },
   {
-    id: 'cold-outbound',
-    // Hard rule 7. Deliberately broad — the cost of a false positive is one
-    // comment marker; the cost of a false negative is a spam incident.
-    pattern: /cold[_-]?(email|outbound|pitch)|sendColdOutbound|draftColdOutbound|COLD_BATCH|apollo[_-]?enrich|prospect[_-]?scrape/i,
-    exemptPaths: [/^scripts\/audit-shared-stream\.mjs$/, /^decisions\//, /CLAUDE\.md$/],
+    id: 'outbound-transport',
+    // Rule 7 v2 (2026-09-07): outbound is allowed, but only through the
+    // invariants in packages/email/src/outbound.ts. Any direct call to a
+    // cold-sender or verification API outside that package bypasses the
+    // verified-address, lawful-basis, suppression, cap and footer checks.
+    pattern: /api\.instantly\.ai|api\.smartlead\.ai|api\.lemlist\.com|api\.woodpecker\.co|api\.apollo\.io\/v1\/emailer|api\.zerobounce\.net/i,
+    exemptPaths: [/^packages\/email\//, /^apps\/hub\/lib\/outbound\/verify\.ts$/],
     message:
-      'cold-outbound code. Hard rule 7: outbound is inbound-only — we email people who\n' +
-      '    contacted us and confirmed. The previous engine ran on a 10-minute tick with no\n' +
-      '    approval step and a kill-switch that failed open. Do not reintroduce it.',
+      'a direct cold-sender or verification transport. Go through sendOutbound() in\n' +
+      '    @bizlegal/email (and lib/outbound/verify.ts for verification) so the rule 7 v2\n' +
+      '    invariants — verified address, lawful basis, suppression, caps, footer — apply.',
+  },
+  {
+    id: 'outbound-kind',
+    // The only caller allowed to hand a message to the cold sender is the
+    // dispatch cron; every other path must go through it so the per-campaign
+    // approval gate and the fail-closed switch cannot be skipped.
+    pattern: /sendOutbound\s*\(/,
+    exemptPaths: [/^packages\/email\//, /^apps\/hub\/app\/api\/cron\/outbound-dispatch\//, /\.test\.ts$/],
+    message:
+      'sendOutbound() outside the dispatch cron. Cold mail is dispatched by\n' +
+      '    apps/hub/app/api/cron/outbound-dispatch only, after the campaign was approved\n' +
+      '    on /sales and OUTBOUND_AUTOSEND=1. Queue a sales_outreach row instead.',
   },
 ]
 

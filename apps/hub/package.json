@@ -11,11 +11,14 @@
     "check": "biome check --apply .",
     "typecheck": "tsc --noEmit",
     "lead:report": "tsx scripts/lead-report.ts",
-    "test:audit": "tsx --test lib/deal-audit/audit.test.ts"
+    "test:audit": "tsx --test lib/deal-audit/audit.test.ts",
+    "test:practice-revenue": "tsx --test lib/practice-revenue/engine.test.ts lib/practice-revenue/csv.test.ts lib/practice-revenue/pseudonymise.test.ts",
+    "test:outbound": "tsx --test lib/outbound/outbound.test.ts"
   },
   "dependencies": {
     "@bizlegal/deal-engine": "workspace:*",
     "@bizlegal/ops-log": "workspace:*",
+    "@bizlegal/email": "workspace:*",
     "@bizlegal/payment": "workspace:*",
     "@bizlegal/themes": "workspace:*",
     "@bizlegal/turnstile-widget": "workspace:*",

@@ -59,8 +59,8 @@ export async function POST(req: NextRequest) {
   try {
     const secret = process.env.NOWPAYMENTS_IPN_SECRET
     if (!secret) {
-      console.error('[nowpayments/webhook] NOWPAYMENTS_IPN_SECRET missing')
-      return NextResponse.json({ error: 'webhook secret not configured' }, { status: 500 })
+      console.error('[nowpayments/webhook] NOWPAYMENTS_IPN_SECRET missing — refusing IPN (fail-closed)')
+      return NextResponse.json({ error: 'ipn_secret_not_configured' }, { status: 503 })
     }
 
     const signature = req.headers.get('x-nowpayments-sig') ?? ''

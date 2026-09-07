@@ -1,0 +1,132 @@
+/*
+ * Logical properties only — never `left`/`right`/`margin-left`.
+ *
+ * The same stylesheet renders a Hebrew room right-to-left and an English room
+ * left-to-right. `margin-inline-start` flips with `dir`; `margin-left` does not,
+ * and that is how an RTL layout ends up with the checkbox on the wrong side and
+ * the text jammed against the edge.
+ */
+
+:root {
+  --bg: #0e1116;
+  --surface: #161b22;
+  --border: #262d38;
+  --text: #e8e6e3;
+  --body: #c3c9d6;
+  --muted: #8b93a7;
+  --accent: #3b72e8;
+  --success: #2db66e;
+  --warn: #e8a325;
+  --danger: #e05450;
+  --radius: 8px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+main { max-width: 52rem; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
+h1, h2, h3 { line-height: 1.25; margin: 0 0 0.5rem; }
+h1 { font-size: clamp(1.6rem, 1.2rem + 2vw, 2.4rem); }
+h2 { font-size: 1.2rem; }
+p { margin: 0 0 0.9rem; }
+a { color: var(--accent); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin-block-end: 1rem;
+}
+
+.label {
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin: 0;
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding-block: 0.45rem;
+  border-block-end: 1px solid var(--border);
+}
+.row:last-child { border-block-end: none; }
+
+.between { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+
+.muted { color: var(--muted); font-size: 0.8rem; }
+.strike { text-decoration: line-through; color: var(--muted); }
+
+.bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.bar > span { display: block; height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.3s; }
+.bar > span.full { background: var(--success); }
+
+.pill {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.notice {
+  border: 1px solid var(--warn);
+  background: rgba(232, 163, 37, 0.08);
+  color: #f0d9a8;
+  border-radius: var(--radius);
+  padding: 0.8rem 1rem;
+  margin-block-end: 1rem;
+  font-size: 0.875rem;
+}
+
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn:disabled { opacity: 0.55; cursor: default; }
+
+label.field { display: block; margin-block-end: 0.9rem; font-size: 0.875rem; color: var(--body); }
+label.field > span { display: block; margin-block-end: 0.3rem; }
+input, textarea, select {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 0.55rem 0.7rem;
+  font: inherit;
+  font-size: 0.95rem;
+}
+textarea { min-height: 5rem; resize: vertical; }
+
+input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  margin-block-start: 0.25rem;
+  accent-color: var(--success);
+  flex-shrink: 0;
+}
+
+footer { border-block-start: 1px solid var(--border); margin-block-start: 3rem; padding-block-start: 1rem; }

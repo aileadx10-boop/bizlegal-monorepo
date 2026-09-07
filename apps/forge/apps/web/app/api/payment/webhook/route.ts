@@ -13,21 +13,29 @@ export async function POST(req: NextRequest) {
     const sig = req.headers.get('x-nowpayments-sig')
     const secret = process.env.NOWPAYMENTS_IPN_SECRET
 
+    // Fail-closed: without the IPN secret there is no way to authenticate
+    // the sender — refuse instead of fulfilling a possibly forged payment.
+    if (!secret) {
+      console.error('[forge/payment/webhook] NOWPAYMENTS_IPN_SECRET not configured')
+      return NextResponse.json({ error: 'ipn_secret_not_configured' }, { status: 503 })
+    }
+    if (!sig) {
+      return NextResponse.json({ error: 'Missing signature' }, { status: 401 })
+    }
+
     const payload = JSON.parse(body)
 
     // Verify HMAC-SHA512 — sort JSON keys alphabetically before hashing
-    if (secret && sig) {
-      const sorted = Object.keys(payload).sort().reduce((acc, k) => {
-        acc[k] = payload[k]
-        return acc
-      }, {} as Record<string, unknown>)
-      const expected = crypto
-        .createHmac('sha512', secret)
-        .update(JSON.stringify(sorted))
-        .digest('hex')
-      if (expected !== sig) {
-        return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
-      }
+    const sorted = Object.keys(payload).sort().reduce((acc, k) => {
+      acc[k] = payload[k]
+      return acc
+    }, {} as Record<string, unknown>)
+    const expected = crypto
+      .createHmac('sha512', secret)
+      .update(JSON.stringify(sorted))
+      .digest('hex')
+    if (expected !== sig) {
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
     }
 
     const { payment_status, order_id } = payload

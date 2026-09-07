@@ -46,3 +46,7 @@ Config can also be passed explicitly as the second argument, which is how Worker
 - Don't add a `skipConsent` flag. If a send needs to reach someone who hasn't opted in and isn't replying to their own action, that send should not exist.
 - Don't call `api.resend.com` directly from an app or a script. Import this.
 - Don't catch `not_confirmed` and retry as `transactional`.
+
+## Third kind: outbound (rule 7 v2, 2026-09-07)
+
+`sendOutbound()` in `src/outbound.ts` is the only way a cold message leaves the fleet, and `/api/cron/outbound-dispatch` on the hub is its only caller (pre-commit check `outbound-kind`). It refuses unless every invariant holds: provider-verified address (no role inboxes, no blocked domains), lawful basis + source_url (v1: US only), fail-closed suppression lookup, campaign approved + running + `OUTBOUND_AUTOSEND=1`, caps (hard 50/mailbox/day here), real postal address, unsubscribe, sender domain, and no bounce/complaint breach in the trailing window. The CAN-SPAM footer is assembled here, never by a template. Transport is the Instantly adapter in `src/senders/instantly.ts` on a dedicated warmed domain; Resend is never used for it (its acceptable-use policy forbids cold mail). Tests: `src/outbound.test.ts` (one refusing test per invariant). Decision: `decisions/OUTBOUND-V2-RULE-7-AMENDED-2026-09-07.md`.

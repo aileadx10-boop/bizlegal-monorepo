@@ -106,9 +106,13 @@ export default async function PaymentSuccessPage({ searchParams }: PageProps) {
         )}
 
         <p style={{ color: '#c3c6d7', fontSize: 15, lineHeight: 1.65, marginBottom: 24 }}>
-          {confirmed
-            ? 'Your order is confirmed. You will receive a confirmation email shortly with next steps and access instructions.'
-            : 'Your payment is processing — crypto confirmations can take a few minutes. You will receive an email once confirmed.'}
+          {productName === 'practice_revenue_report'
+            ? confirmed
+              ? 'Your full Practice Revenue Report is unlocked. The link is in your email; you can also refresh the report page you came from.'
+              : 'Your payment is processing — crypto confirmations can take a few minutes. The unlock link for your Practice Revenue Report arrives by email once confirmed.'
+            : confirmed
+              ? 'Your order is confirmed. You will receive a confirmation email shortly with next steps and access instructions.'
+              : 'Your payment is processing — crypto confirmations can take a few minutes. You will receive an email once confirmed.'}
         </p>
 
         {orderId && (
