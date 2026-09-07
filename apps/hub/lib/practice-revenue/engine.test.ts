@@ -109,9 +109,13 @@ test('fixture: dormant clients', () => {
   assert.equal(r.dormant[0]?.clientId, 'CLIENT 04')
 })
 
-test('fixture: benchmark block is null while unverified', () => {
+test('fixture: benchmark block carries the verified Clio 2025 figures with their source', () => {
   const r = build()
-  assert.equal(r.benchmark, null)
+  assert.ok(r.benchmark)
+  assert.equal(r.benchmark?.utilizationPct, 38)
+  assert.equal(r.benchmark?.realizationPct, 88)
+  assert.equal(r.benchmark?.collectionPct, 93)
+  assert.match(r.benchmark?.source.url ?? '', /clio\.com/)
 })
 
 test('fixture: drafts are neutral and reference only codes', () => {

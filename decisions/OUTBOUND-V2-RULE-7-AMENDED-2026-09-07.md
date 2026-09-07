@@ -49,3 +49,5 @@ Instantly ~$37–97/mo · 2 pre-warmed mailboxes ~$8–14/mo + domain ~$12/yr ·
 ## 7. What is still forbidden
 
 Constructed or pattern-generated addresses under any name · EU or Israel recipients · role inboxes · LinkedIn automation or DMs · direct LinkedIn scraping (Clay providers only) · a call in any template · a legal answer from the machine · a number without a source · any send while `OUTBOUND_AUTOSEND` is unset.
+
+**Sending domain decision (Moses, 2026-09-07):** a subdomain of bizlegal-ai.com, `notes.bizlegal-ai.com`, not a purchased domain. SPF/DKIM/DMARC records for the subdomain come from Instantly when the mailboxes are created; the transactional subdomain `intelligence.bizlegal-ai.com` stays separate. Vault: `OUTBOUND_SENDING_DOMAIN=notes.bizlegal-ai.com`.
