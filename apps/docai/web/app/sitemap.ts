@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: BASE, lastModified: now, changeFrequency: 'weekly', priority: 1.0 },
     { url: `${BASE}/decision-tree`, lastModified: now, changeFrequency: 'weekly', priority: 0.95 },
+    { url: `${BASE}/free-kb`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE}/pricing`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE}/sqa`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
     { url: `${BASE}/dpa`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },

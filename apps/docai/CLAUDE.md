@@ -4,7 +4,7 @@
 
 DocAI workspace. The Next.js app lives at `apps/docai/web/` (so Vercel project Root Directory = `apps/docai/web`). Plus shared `lib/`, `infrastructure/`, `supabase/`, `brand-assets/` siblings.
 
-**Primary surfaces** (in `web/app/`): `/sqa` (SOC 2 Questionnaire Assistant), `/dpa` (DPA Negotiator), `/pricing`, `/api/digest`, `/api/inbound-lead`, `/api/ops/health`, KB upload routes for the Firm tier.
+**Primary surfaces** (in `web/app/`): `/free-kb` (free KB Q&A demo → Team-tier funnel), `/sqa` (SOC 2 Questionnaire Assistant), `/dpa` (DPA Negotiator), `/pricing`, `/api/free-kb/ask` (free demo endpoint: 3 questions/day/IP + Turnstile), `/api/digest`, `/api/inbound-lead`, `/api/ops/health`, KB upload routes for the Firm tier.
 
 **Pricing:** Team $69/mo (50 SQA drafts + DPA Negotiator + 5 seats), Firm $199/mo (Team + Firm-tier KB + dedicated reviewer).
 
