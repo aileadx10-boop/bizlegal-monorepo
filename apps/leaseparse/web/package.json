@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.0",
+    "@bizlegal/closing-engine": "workspace:*",
     "@bizlegal/email": "workspace:*",
     "@supabase/supabase-js": "^2.57.4",
     "next": "14.2.35",

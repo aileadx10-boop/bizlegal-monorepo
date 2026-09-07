@@ -39,8 +39,12 @@ node packages/closing-engine/tests/run.cjs   # builds, then 27 tests
 
 Use the runner, not `node --test tests/` — pointing `--test` at a directory reports a phantom failing suite on Windows.
 
-## Not done yet
+## Consumers
 
-`apps/closeflow` and `apps/leaseparse` still carry their own copies. Replacing them with `export * from '@bizlegal/closing-engine/us/...'` shims is week-3 work and needs a `pnpm install` to link the workspace dep. Do not move `apps/leaseparse/web/lib/extract/date-engine.ts`: its test runner compiles TS to CommonJS and cannot see workspace-package sources, so the move would break its 22 tests.
+`apps/closeflow/web/lib/{date-calculator,checklist-templates}.ts` and `apps/leaseparse/web/lib/closing/{date-calculator,checklist-templates}.ts` are now **one-line re-export shims** — 530 lines of duplication removed. `apps/deal44` imports the package directly.
+
+Both apps need `transpilePackages: ['@bizlegal/closing-engine']` **and** the `.js → .ts` `extensionAlias` webpack rule, because the package is authored NodeNext-style and webpack does not map the extension on its own.
+
+Still duplicated on purpose: `apps/leaseparse/web/lib/extract/date-engine.ts` keeps its own 20-line `tierFor`. Do not move it — that file's test runner compiles TypeScript to CommonJS with node10 resolution and cannot see workspace-package sources, so the move would break its 22 tests for no gain.
 
 Canonical plan: `decisions/DEAL44-WORKFLOW44-2026-09-07.md`.

@@ -37,6 +37,11 @@ export const he: Record<DictKey, string> = {
   "room.closing": "מסירה",
   "room.statutory": "מועד סטטוטורי",
   "room.draft_dates": "תאריכים בטיוטה",
+  "room.add_task": "הוספת משימה",
+  "room.task_label": "מה צריך לקרות",
+  "room.task_phase": "שלב",
+  "room.task_owner": "באחריות מי",
+  "room.task_due": "עד מתי",
   "room.link_expired": "תוקף הקישור פג. בקשו מהמתווך קישור חדש.",
 
   // ── Warnings the room must never hide ─────────────────────────────────────

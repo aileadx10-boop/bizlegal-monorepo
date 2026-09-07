@@ -8,6 +8,13 @@
 
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
+/**
+ * `cache` is on the DOM RequestInit but not on Node's, and this file is
+ * typechecked under both (the app uses lib.dom, the test runner does not).
+ * Widening once here keeps the assertion out of the call site.
+ */
+const NO_STORE = { cache: 'no-store' } as unknown as RequestInit
+
 let client: SupabaseClient | null = null
 
 export function getServiceClient(): SupabaseClient {
@@ -17,7 +24,24 @@ export function getServiceClient(): SupabaseClient {
   if (!url || !key) {
     throw new Error('supabase_unconfigured: NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_KEY missing')
   }
-  client = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } })
+  client = createClient(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false },
+    global: {
+      // MANDATORY. Next's App Router patches global fetch and caches GET
+      // responses; supabase-js reads through fetch, so without this every query
+      // in a route handler can be served from Next's cache.
+      //
+      // This was not theoretical. Caught 2026-09-07 in an end-to-end run: the
+      // alerts cron returned 1 open task while the database held 4, because the
+      // first invocation's response had been cached. A deadline product whose
+      // reminder job reads yesterday's checklist is worse than no reminder — it
+      // reports "nothing due" on the morning something is due.
+      //
+      // `dynamic = 'force-dynamic'` does NOT cover this. That controls route
+      // rendering; this controls the individual fetch.
+      fetch: (input, init) => fetch(input, { ...init, ...NO_STORE }),
+    },
+  })
   return client
 }
 

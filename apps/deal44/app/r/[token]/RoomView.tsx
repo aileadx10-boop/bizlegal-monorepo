@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { t, taskLabel, dirFor, langFor, type Locale, type DictKey } from '@/lib/i18n'
 import { fmtDate, fmtDaysLeft } from '@/lib/i18n/format'
-import { canToggleTask } from '@/lib/rooms/access'
+import { canToggleTask, canManageRoom } from '@/lib/rooms/access'
 
 export interface RoomTask {
   id: string
@@ -46,6 +46,7 @@ function dueColour(days: number | null): string {
 export default function RoomView({ token, initial }: { token: string; initial: RoomPayload }) {
   const [room, setRoom] = useState<RoomPayload>(initial)
   const [busy, setBusy] = useState<string | null>(null)
+  const [adding, setAdding] = useState(false)
   const locale = room.party.locale
 
   // The document is Hebrew/RTL by default. A party whose own locale is English
@@ -85,6 +86,40 @@ export default function RoomView({ token, initial }: { token: string; initial: R
       }
     },
     [room, token],
+  )
+
+  const refresh = useCallback(async () => {
+    const res = await fetch(`/api/r/${token}`)
+    if (!res.ok) return
+    const data = (await res.json()) as { ok: boolean; room: RoomPayload }
+    if (data.ok) setRoom(data.room)
+  }, [token])
+
+  const addTask = useCallback(
+    async (form: FormData, el: HTMLFormElement) => {
+      setAdding(true)
+      try {
+        const due = String(form.get('due_date') ?? '')
+        const res = await fetch(`/api/r/${token}/tasks`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            label_text: String(form.get('label_text') ?? ''),
+            phase: String(form.get('phase') ?? ''),
+            assignee_role: String(form.get('assignee_role') ?? ''),
+            due_date: due || null,
+            statutory: false,
+          }),
+        })
+        if (res.ok) {
+          el.reset()
+          await refresh()
+        }
+      } finally {
+        setAdding(false)
+      }
+    },
+    [token, refresh],
   )
 
   const done = room.tasks.filter((x) => x.status === 'done').length
@@ -189,6 +224,57 @@ export default function RoomView({ token, initial }: { token: string; initial: R
           </div>
         )
       })}
+
+      {/* Broker-only. The Israeli template ships unreviewed, so a real room
+          starts empty and the broker types the contract's dates in by hand.
+          This form is therefore the Phase-0 path, not a convenience. */}
+      {canManageRoom(room.party.role) && (
+        <div className="card">
+          <p className="label" style={{ marginBottom: '0.6rem' }}>
+            {t(locale, 'room.add_task')}
+          </p>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              void addTask(new FormData(e.currentTarget), e.currentTarget)
+            }}
+          >
+            <label className="field">
+              <span>{t(locale, 'room.task_label')}</span>
+              <input name="label_text" required maxLength={300} />
+            </label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.5rem' }}>
+              <label className="field">
+                <span>{t(locale, 'room.task_phase')}</span>
+                <select name="phase" defaultValue={room.phases[0]}>
+                  {room.phases.map((p) => (
+                    <option key={p} value={p}>
+                      {t(locale, `phase.${p}` as DictKey) || p}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="field">
+                <span>{t(locale, 'room.task_owner')}</span>
+                <select name="assignee_role" defaultValue={room.party.role}>
+                  {[...new Set(room.parties.map((p) => p.role))].map((r) => (
+                    <option key={r} value={r}>
+                      {roleLabel(r)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="field">
+                <span>{t(locale, 'room.task_due')}</span>
+                <input name="due_date" type="date" />
+              </label>
+            </div>
+            <button className="btn" type="submit" disabled={adding}>
+              {adding ? t(locale, 'intake.sending') : t(locale, 'room.add_task')}
+            </button>
+          </form>
+        </div>
+      )}
 
       <div className="card">
         <p className="label" style={{ marginBottom: '0.6rem' }}>

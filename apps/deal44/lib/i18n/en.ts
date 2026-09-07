@@ -34,6 +34,11 @@ export const en = {
   "room.closing": "Delivery",
   "room.statutory": "Statutory deadline",
   "room.draft_dates": "Draft dates",
+  "room.add_task": "Add a task",
+  "room.task_label": "What has to happen",
+  "room.task_phase": "Stage",
+  "room.task_owner": "Whose job",
+  "room.task_due": "Due date",
   "room.link_expired": "This link has expired. Ask your broker for a new one.",
 
   // ── Warnings the room must never hide ─────────────────────────────────────

@@ -34,6 +34,13 @@ No Vercel project, no domain, migration unapplied, checkout dark. Phase 0 money 
 8. **No new ops event types** (hard rule 3). Room events map onto existing types with `metadata.step`; `'deal44'` is registered in both `packages/ops-log/src/index.ts` and hub's `ALLOWED_SOURCES`.
 9. **No advice framing.** The room describes what was done, never what should be done.
 10. `next.config.mjs` needs the `.js → .ts` `extensionAlias` for the NodeNext-authored engine packages — same fix as `apps/hub/next.config.js`.
+11. **The Supabase client must pass `cache: 'no-store'`** (`lib/db.ts`). Next's App Router patches global `fetch` and caches GET responses, and supabase-js reads through `fetch`. Caught in an end-to-end run on 2026-09-07: the alerts cron reported **1 open task while the database held 4**, because the first invocation's response was cached. `export const dynamic = 'force-dynamic'` does **not** cover this — it governs route rendering, not the individual fetch. Locked by a test in `tests/pure.test.ts`. **Every other app in the fleet that builds a Supabase client inside a route handler has the same exposure and has not been audited.**
+
+## Verified end to end (2026-09-07, live database, data since removed)
+
+Room created with three parties and three distinct links · broker adds a manual task ✓ · buyer adding a task refused 403 ✓ · buyer ticks own task 200, another party's task 403, broker ticks anything 200 ✓ · unknown token 404 ✓ · no party email leaks into another party's payload ✓ · cron without the bearer 401 ✓ · cron dry-run planned two digests with correct tiers (today 0, overdue −1, five days out 7) ✓ · simulated ILS order → activation → `payment.confirmed` ✓ · Hebrew round-trips byte-identical through the real path ✓.
+
+**Test-harness trap:** Git Bash `curl` on Windows destroys UTF-8 request bodies — Hebrew arrives as U+FFFD. The app is fine; the shell is not. Drive Hebrew requests from Node, never from a Git Bash heredoc.
 
 ## Build + test
 

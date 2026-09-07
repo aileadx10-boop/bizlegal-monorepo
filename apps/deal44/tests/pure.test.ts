@@ -8,6 +8,7 @@ import { t, taskLabel, dirFor, langFor } from '../lib/i18n'
 import { fmtDate, fmtMoney, fmtDaysLeft } from '../lib/i18n/format'
 import { en } from '../lib/i18n/en'
 import { he } from '../lib/i18n/he'
+import { getServiceClient } from '../lib/db'
 import type { PartyRow, TaskRow } from '../lib/db'
 
 // ── Access rules ────────────────────────────────────────────────────────────
@@ -215,4 +216,34 @@ test('a template task renders from its key, a manual task from its text', () => 
     'Purchase-tax declaration filed',
   )
   assert.equal(taskLabel('he-IL', null, 'משהו ידני'), 'משהו ידני')
+})
+
+// ── Next's fetch cache (a real bug, caught end-to-end 2026-09-07) ────────────
+
+test('the Supabase client opts out of Next fetch caching', async () => {
+  // Next's App Router patches global fetch and caches GET responses. supabase-js
+  // reads through fetch, so without cache:'no-store' the alerts cron serves
+  // yesterday's checklist: observed returning 1 open task while the database
+  // held 4. `dynamic = 'force-dynamic'` does not cover this — it governs route
+  // rendering, not the individual fetch.
+  process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://example.supabase.co'
+  process.env.SUPABASE_SERVICE_KEY = 'test-key'
+
+  const seen: Array<RequestInit | undefined> = []
+  const realFetch = globalThis.fetch
+  globalThis.fetch = (async (_input: unknown, init?: RequestInit) => {
+    seen.push(init)
+    return new Response('[]', { status: 200, headers: { 'Content-Type': 'application/json' } })
+  }) as typeof fetch
+
+  try {
+    await getServiceClient().from('deal_tasks').select('id').limit(1)
+  } catch {
+    // a network-shaped failure is fine; we only care what init was passed
+  } finally {
+    globalThis.fetch = realFetch
+  }
+
+  assert.ok(seen.length > 0, 'the client should have issued a request')
+  assert.equal((seen[0] as { cache?: string } | undefined)?.cache, 'no-store')
 })

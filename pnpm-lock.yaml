@@ -97,6 +97,9 @@ importers:
 
   apps/closeflow/web:
     dependencies:
+      '@bizlegal/closing-engine':
+        specifier: workspace:*
+        version: link:../../../packages/closing-engine
       '@supabase/supabase-js':
         specifier: ^2.57.4
         version: 2.105.1
@@ -164,6 +167,55 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+    devDependencies:
+      '@types/node':
+        specifier: ^22.9.0
+        version: 22.19.17
+      '@types/react':
+        specifier: ^18.3.12
+        version: 18.3.28
+      '@types/react-dom':
+        specifier: ^18.3.1
+        version: 18.3.7(@types/react@18.3.28)
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.3
+
+  apps/deal44:
+    dependencies:
+      '@bizlegal/closing-engine':
+        specifier: workspace:*
+        version: link:../../packages/closing-engine
+      '@bizlegal/deal-engine':
+        specifier: workspace:*
+        version: link:../../packages/deal-engine
+      '@bizlegal/email':
+        specifier: workspace:*
+        version: link:../../packages/email
+      '@bizlegal/rate-limit':
+        specifier: workspace:*
+        version: link:../../packages/rate-limit
+      '@bizlegal/turnstile-verify':
+        specifier: workspace:*
+        version: link:../../packages/turnstile-verify
+      '@bizlegal/turnstile-widget':
+        specifier: workspace:*
+        version: link:../../packages/turnstile-widget
+      '@supabase/supabase-js':
+        specifier: ^2.57.4
+        version: 2.105.1
+      next:
+        specifier: 14.2.35
+        version: 14.2.35(@opentelemetry/api@1.9.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
+      zod:
+        specifier: ^4.3.6
+        version: 4.4.2
     devDependencies:
       '@types/node':
         specifier: ^22.9.0
@@ -631,6 +683,9 @@ importers:
       '@anthropic-ai/sdk':
         specifier: ^0.27.0
         version: 0.27.3
+      '@bizlegal/closing-engine':
+        specifier: workspace:*
+        version: link:../../../packages/closing-engine
       '@bizlegal/email':
         specifier: workspace:*
         version: link:../../../packages/email
@@ -899,6 +954,15 @@ importers:
         version: 5.9.3
 
   packages/bizlegal-debug: {}
+
+  packages/closing-engine:
+    devDependencies:
+      '@types/node':
+        specifier: ^20.16.0
+        version: 20.19.39
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
 
   packages/deal-engine:
     devDependencies:
