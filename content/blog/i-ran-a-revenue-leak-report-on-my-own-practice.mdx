@@ -35,6 +35,21 @@ Two files, exported the same way any billing tool exports them. Before either fi
 
 For comparison, the figures Clio publishes for the average firm are [verified figures only — 38% utilization, 88% realization, 93% collection if confirmed against the 2025 report].
 
+## What the report prints, on a synthetic sample
+
+Before my own export, here is the report run on the synthetic test fixture the engine ships with (ten time entries, six invoices, as of 2026-09-01, US dollars). These are not my numbers; they exist to show the shape of the output and are the same figures the engine's tests assert.
+
+| Measure | Synthetic sample | How it is computed |
+|---|---|---|
+| Open receivables | $2,850.00 | sum of open balances |
+| Past due 60+ days | $2,000.00 | open balances more than 60 days past the due date |
+| Unbilled work | $1,800.00 / 5.5 h | billable entries with no invoice link |
+| Collection rate | 45.7% | collected ÷ invoiced |
+| Realization rate | 72.5% | invoiced billable hours ÷ billable hours |
+| Days sales outstanding | 213.8 | open receivables ÷ (invoiced in the last 90 days ÷ 90) |
+
+Against Clio's published 2025 averages (utilization 38%, realization 88%, collection 93%, from [Clio's law-firm KPI benchmarks page](https://www.clio.com/resources/legal-trends/benchmarks/)), the sample firm collects less than half of what it invoices and waits about seven months for its money. That is what a leak looks like in numbers.
+
 ## What the per-invoice rows showed
 
 [Two or three sentences about what the aging table made obvious — for example, that the past-due balance was concentrated in [N] invoices, or that the invoicing lag was [days] days after the last time entry. Codes only; no client names.]
