@@ -42,6 +42,12 @@ ENV_SB_KEY = "SUP" + chr(65) + "BASE_SERVICE_ROLE" + chr(95) + "KEY"
 
 ANTH_KEY = os.environ.get(ENV_ANT, "")
 GEM_KEY = os.environ.get(ENV_GEM, "")
+
+# Ollama (local, free). Default: this Windows box. From Hetzner set
+# OLLAMA_BASE_URL to a reachable tunnel endpoint.
+OLLAMA_BASE = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434").rstrip("/")
+OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "gemma4:12b")
+OLLAMA_FAST_MODEL = os.environ.get("OLLAMA_FAST_MODEL", "llama3.2:3b")
 SB_URL = os.environ.get(ENV_SB_URL, "")
 SB_KEY = (
     os.environ.get(ENV_SB_KEY, "")
@@ -123,6 +129,55 @@ def _anthropic_chat(system: str, messages: list, model: str, max_tokens: int) ->
         return ChatResponse("", model, 0, 0, 0, int((time.time() - started) * 1000), "anthropic", f"{type(e).__name__}: {str(e)[:80]}")
 
 
+def _ollama_chat(system: str, messages: list, model: str, max_tokens: int) -> ChatResponse:
+    """Local Ollama via the OpenAI-compatible endpoint. Free, no PII leaves the box."""
+    started = time.time()
+    omsgs = ([{"role": "system", "content": system}] if system else []) + [
+        {"role": m.role if m.role in ("user", "assistant", "system") else "user", "content": m.content}
+        for m in messages
+    ]
+    body = json.dumps({
+        "model": model,
+        "messages": omsgs,
+        "max_tokens": max_tokens,
+        "stream": False,
+    }).encode()
+    try:
+        req = urllib.request.Request(
+            f"{OLLAMA_BASE}/v1/chat/completions", data=body, method="POST",
+            headers={"Content-Type": "application/json", "User-Agent": "bizlegal-agent/1.0"})
+        r = urllib.request.urlopen(req, timeout=120)
+        data = json.loads(r.read())
+        choices = data.get("choices", [])
+        if not choices:
+            return ChatResponse("", model, 0, 0, 0, int((time.time() - started) * 1000), "ollama", "no_choices")
+        text = choices[0].get("message", {}).get("content", "")
+        usage = data.get("usage", {})
+        return ChatResponse(text, model, usage.get("prompt_tokens", 0), usage.get("completion_tokens", 0),
+                            0.0, int((time.time() - started) * 1000), "ollama")
+    except urllib.error.HTTPError as e:
+        body_text = e.read()[:200].decode(errors="replace")
+        return ChatResponse("", model, 0, 0, 0, int((time.time() - started) * 1000), "ollama", f"http_{e.code}: {body_text[:120]}")
+    except Exception as e:
+        return ChatResponse("", model, 0, 0, 0, int((time.time() - started) * 1000), "ollama", f"{type(e).__name__}: {str(e)[:80]}")
+
+
+_ollama_up_cache: Optional[float] = None  # epoch of last successful reachability check
+
+
+def _ollama_reachable() -> bool:
+    """Cheap cached reachability probe (60s TTL) so dead-ollama doesn't add latency per call."""
+    global _ollama_up_cache
+    if _ollama_up_cache and time.time() - _ollama_up_cache < 60:
+        return True
+    try:
+        urllib.request.urlopen(f"{OLLAMA_BASE}/api/version", timeout=3)
+        _ollama_up_cache = time.time()
+        return True
+    except Exception:
+        return False
+
+
 def _gemini_chat(system: str, messages: list, model: str, max_tokens: int, anonymize_pii: bool) -> ChatResponse:
     started = time.time()
     # Gemini API: contents is a list of {role, parts:[{text}]}
@@ -164,18 +219,24 @@ def chat(system: str, messages: list, model_tier: str = "auto", max_tokens: int 
 
     model_tier:
       "premium"  — Anthropic Claude Sonnet 4.5 (high quality, costs money)
-      "fast"     — Gemini 2.5 Flash (cheap/free, lower quality)
-      "auto"     — Try Anthropic, fall back to Gemini on 4xx/5xx
-    force_provider: "anthropic" | "gemini" | "" (use tier)
+      "fast"     — Ollama local (free) first, Gemini 2.5 Flash fallback
+      "auto"     — Anthropic Haiku → Gemini → Ollama (never dead-ends while any provider lives)
+    force_provider: "anthropic" | "gemini" | "ollama" | "" (use tier)
     """
     # Select provider
     if force_provider == "anthropic":
         return _anthropic_chat(system, messages, "claude-sonnet-4-5", max_tokens)
     if force_provider == "gemini":
         return _gemini_chat(system, messages, "gemini-2.5-flash", max_tokens, anonymize_for_gemini)
+    if force_provider == "ollama":
+        return _ollama_chat(system, messages, OLLAMA_MODEL, max_tokens)
     if model_tier == "premium":
         return _anthropic_chat(system, messages, "claude-sonnet-4-5", max_tokens)
     if model_tier == "fast":
+        if _ollama_reachable():
+            resp = _ollama_chat(system, messages, OLLAMA_FAST_MODEL, max_tokens)
+            if not resp.error:
+                return resp
         return _gemini_chat(system, messages, "gemini-2.5-flash", max_tokens, anonymize_for_gemini)
     # auto
     if ANTH_KEY:
@@ -184,7 +245,11 @@ def chat(system: str, messages: list, model_tier: str = "auto", max_tokens: int 
             return resp
         # Fall through to Gemini
     if GEM_KEY:
-        return _gemini_chat(system, messages, "gemini-2.5-flash", max_tokens, anonymize_for_gemini)
+        resp = _gemini_chat(system, messages, "gemini-2.5-flash", max_tokens, anonymize_for_gemini)
+        if not resp.error:
+            return resp
+    if _ollama_reachable():
+        return _ollama_chat(system, messages, OLLAMA_MODEL, max_tokens)
     return ChatResponse("", "none", 0, 0, 0, 0, "error", "no_provider_available")
 
 
@@ -223,14 +288,17 @@ def heartbeat(agent: str, resp: ChatResponse, action: str = "llm_call") -> None:
 def main() -> int:
     """Self-test the router. Prints a single line per provider."""
     print("=== llm_router self-test ===")
-    print(f"  ANTHROPIC: {'YES' if ANTH_KEY else 'NO'}  GEMINI: {'YES' if GEM_KEY else 'NO'}")
+    print(f"  ANTHROPIC: {'YES' if ANTH_KEY else 'NO'}  GEMINI: {'YES' if GEM_KEY else 'NO'}  OLLAMA: {'YES' if _ollama_reachable() else 'NO'} ({OLLAMA_BASE}, {OLLAMA_MODEL})")
     msgs = [ChatMessage("user", "Reply with exactly: OK")]
-    for provider in ("anthropic", "gemini"):
+    for provider in ("ollama", "anthropic", "gemini"):
         if (provider == "anthropic" and not ANTH_KEY) or (provider == "gemini" and not GEM_KEY):
             print(f"  {provider:<10} skipped (no key)")
             continue
+        if provider == "ollama" and not _ollama_reachable():
+            print(f"  {provider:<10} skipped (not reachable)")
+            continue
         r = chat("", msgs, force_provider=provider, max_tokens=20, anonymize_for_gemini=False)
-        marker = "✓" if not r.error else "✗"
+        marker = "OK " if not r.error else "FAIL"
         print(f"  {provider:<10} {marker} model={r.model_used:<28} latency={r.latency_ms}ms cost_cents={r.cost_cents}")
         if r.error:
             print(f"             error: {r.error[:120]}")
