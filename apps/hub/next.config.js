@@ -21,6 +21,7 @@ const nextConfig = {
     '@bizlegal/turnstile-widget',
     '@bizlegal/ops-log',
     '@bizlegal/payment',
+    '@bizlegal/email',
     '@bizlegal/deal-engine',
   ],
 

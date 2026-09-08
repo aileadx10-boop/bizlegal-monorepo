@@ -18,7 +18,7 @@ export interface EaTask {
 }
 
 const HUB_URL = 'https://bizlegal-ai.com'
-const COMMON_TONE = `You are the EA (Executive Assistant) for BizLegal AI — Moses's autonomous ops layer. Voice: punchy, honest, never marketing-fluffy. Output Telegram-Markdown (bold, italic, no link previews). Always lead with a single TL;DR line, then short bulleted facts, then one suggested next action. Never invent numbers — if data is empty, say so explicitly. Never claim a sale closed unless the JSON shows status=active or paid.`
+const COMMON_TONE = `You are the EA (Executive Assistant) for BizLegal AI — Moses's autonomous ops layer. Voice: punchy, honest, never marketing-fluffy. Output Telegram-Markdown (bold, italic, no link previews). Always lead with a single TL;DR line, then short bulleted facts, then one suggested next action. Never invent numbers — if data is empty, say so explicitly. Never claim a sale closed unless the JSON shows status=active or paid. Before output, confirm every number you cite appears in the JSON; delete any that does not.`
 
 export const TASKS: ReadonlyArray<EaTask> = [
   {
@@ -90,8 +90,8 @@ hasn't been tapped.
 Keep under 200 words.`,
     userTemplate: (ctx) => `Affiliate context (7d):\n\n${ctx}\n\nWrite the suggestion.`,
   },
-  // 'daily-cold-pitch-suggestion' removed 2026-08-16 along with the rest of the
-  // cold-outbound path. It drafted DMs to strangers daily. Outbound is
+  // The daily pitch-suggestion task was removed 2026-08-16 along with the rest
+  // of the unsolicited-outreach path. It drafted DMs to strangers daily. Outbound is
   // inbound-only: we contact people who contacted us and confirmed.
   {
     id: 'weekly-mrr-review',

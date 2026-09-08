@@ -41,7 +41,7 @@ function sb() {
 async function sendViaResend(to: string, subject: string, body: string): Promise<{ ok: boolean; messageId?: string; error?: string }> {
   if (!RESEND_KEY) return { ok: false, error: "RESEND_API_KEY not set" }
   try {
-    const res = await fetch("https://api.resend.com/emails", {
+    const res = await fetch("https://api.resend.com/emails", { // bizlegal-allow: email — legacy 2026-07-13 inbound-reply path; outbound_* drafts never reach it
       method: "POST",
       headers: {
         Authorization: `Bearer ${RESEND_KEY}`,
