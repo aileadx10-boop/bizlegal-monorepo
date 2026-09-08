@@ -14,20 +14,23 @@ export async function POST(req: Request) {
     }
 
     const stripeKey = process.env["STRIPE_" + "SECRET_" + "KEY"]
-    if (stripeKey) {
-      // Real Stripe path — implemented when STRIPE_SECRET_KEY is added to vault.
-      // For now return a 503 so the UI shows the "checkout coming soon" fallback.
+    if (!stripeKey) {
+      // Fail closed: without a payment rail there is no legitimate unlock.
+      // UI shows the "checkout coming soon" fallback; nothing is granted.
+      console.log(`[compliance-snapshot] checkout refused (no rail) email=${email} score=${body?.score}`)
       return NextResponse.json(
         { error: "Checkout temporarily unavailable, please retry" },
         { status: 503 }
       )
     }
 
-    // No Stripe key yet — return a stub response so the client can still mark
-    // "paid" locally and email the report manually until payments are wired.
-    // (We log the intent so the agent can follow up.)
-    console.log(`[compliance-snapshot] unlock request email=${email} score=${body?.score}`)
-    return NextResponse.json({ unlocked: true, email, score: body?.score })
+    // Stripe key present — real checkout must be implemented before this path
+    // is reached. Until then, still fail closed rather than grant free access.
+    console.log(`[compliance-snapshot] checkout requested email=${email} score=${body?.score}`)
+    return NextResponse.json(
+      { error: "Checkout temporarily unavailable, please retry" },
+      { status: 503 }
+    )
   } catch (e: any) {
     return NextResponse.json({ error: e?.message || "Checkout failed" }, { status: 500 })
   }
