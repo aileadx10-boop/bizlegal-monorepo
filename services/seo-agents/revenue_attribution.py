@@ -78,7 +78,7 @@ def supabase_insert(table, row):
 
 
 def parse_url_to_article(url: str) -> dict:
-    """Extract pillar + slug from a URL like https://blog.bizlegal-ai.com/posts/uae-vara-vasp-license-guide."""
+    """Extract pillar + slug from a URL like https://blog.bizlegal-ai.com/blog/uae-vara-vasp-license-guide."""
     if not url:
         return {}
     # Map slug prefix to pillar
@@ -89,7 +89,7 @@ def parse_url_to_article(url: str) -> dict:
         "crypto": 4, "wallet": 4, "tracr": 4, "mixer": 4, "sanctions": 4,
         "vs": 8, "compare": 8, "comparison": 8,
     }
-    m = re.search(r"/posts/([^/?#]+)", url)
+    m = re.search(r"/blog/([^/?#]+)", url)
     if not m:
         return {}
     slug = m.group(1)

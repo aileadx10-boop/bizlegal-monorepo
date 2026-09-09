@@ -47,7 +47,7 @@ SURFACES = {
     "docai":     ("docai.bizlegal-ai.com", ["/", "/pricing", "/sqa", "/dpa", "/about", "/contact"]),
     "leadforge": ("leadforge.bizlegal-ai.com", ["/", "/pricing", "/icp", "/playbooks", "/about"]),
     "forge":     ("forge.bizlegal-ai.com", ["/", "/boi", "/passport", "/pricing", "/states", "/about"]),
-    "blog":      ("blog.bizlegal-ai.com",  ["/", "/posts", "/categories", "/glossary", "/about"]),
+    "blog":      ("blog.bizlegal-ai.com",  ["/", "/blog", "/categories", "/glossary", "/about"]),
 }
 
 AI_CRAWLERS = ["GPTBot", "ClaudeBot", "PerplexityBot", "Google-Extended",

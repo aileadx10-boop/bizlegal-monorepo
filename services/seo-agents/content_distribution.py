@@ -90,7 +90,7 @@ REDDIT_TARGETS = [
 def render_reddit_post(post: dict, sub: str) -> str:
     """Render a Reddit-style post from a blog post record."""
     title = post.get("title", "")
-    url = f"https://blog.bizlegal-ai.com/posts/{post.get('slug', '')}"
+    url = f"https://blog.bizlegal-ai.com/blog/{post.get('slug', '')}"
     excerpt = post.get("description", post.get("meta_description", ""))[:300]
 
     body = f"""# {title}
@@ -121,7 +121,7 @@ again in comments to respect subreddit rules.)
 def render_linkedin_post(post: dict) -> str:
     """1300-char personal-pov LinkedIn post."""
     title = post.get("title", "")
-    url = f"https://blog.bizlegal-ai.com/posts/{post.get('slug', '')}"
+    url = f"https://blog.bizlegal-ai.com/blog/{post.get('slug', '')}"
     insight = post.get("description", post.get("meta_description", ""))[:200]
 
     body = f"""Most {post.get('topic', 'compliance')} advice is generic.
@@ -145,7 +145,7 @@ What's your experience with {post.get('topic', 'this')}?
 def render_x_thread(post: dict) -> list[str]:
     """7-tweet thread from a blog post."""
     title = post.get("title", "")
-    url = f"https://blog.bizlegal-ai.com/posts/{post.get('slug', '')}"
+    url = f"https://blog.bizlegal-ai.com/blog/{post.get('slug', '')}"
     excerpt = post.get("description", post.get("meta_description", ""))[:200]
 
     tweets = [
@@ -225,7 +225,7 @@ def main():
         slug = p.get("slug", "")
         title = p.get("title", "")
         md.append(f"## {title}\n\n")
-        md.append(f"URL: https://blog.bizlegal-ai.com/posts/{slug}\n\n")
+        md.append(f"URL: https://blog.bizlegal-ai.com/blog/{slug}\n\n")
 
         # Reddit
         md.append("### Reddit drafts\n\n")

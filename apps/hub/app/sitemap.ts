@@ -1,12 +1,17 @@
 import { MetadataRoute } from 'next'
 import { TRACKS } from '@/lib/academy/tracks'
 import { lessonHref, trackHref } from '@/lib/academy/types'
+import { getAllPosts } from '@/lib/blog'
 
 /**
- * Hub sitemap — static routes only. Long-form content lives at
- * blog.bizlegal-ai.com which has its own sitemap.xml served by the
- * Cloudflare-Pages SEO factory. Listing blog URLs here would cause
- * SEO cannibalisation against the canonical blog subdomain.
+ * Hub sitemap — static routes plus the hub's own blog posts.
+ *
+ * The hub serves its own long-form blog at /blog/[slug] from the
+ * monorepo content/blog MDX library (apps/hub/lib/blog.ts). Those posts
+ * are live but were NOT listed here, so they were never submitted to
+ * search engines. blog.bizlegal-ai.com (Cloudflare Pages) is a separate
+ * surface with its own sitemap — no cannibalisation: the two blogs are
+ * distinct content sets on distinct domains.
  */
 const BASE = 'https://bizlegal-ai.com'
 
@@ -16,6 +21,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // /learn — tracks plus FREE lessons only. Gated lessons render an outline
   // instead of a body and carry robots:noindex, so listing them here would
   // offer search engines pages nobody can read.
+  // Hub blog posts (monorepo content/blog, served at /blog/[slug]).
+  // Only published posts — the same filter getAllPosts() applies.
+  const blog: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
+    url: `${BASE}/blog/${post.slug}`,
+    lastModified: new Date(post.date),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }))
+
   const learn: MetadataRoute.Sitemap = TRACKS.flatMap((track) => [
     {
       url: `${BASE}${trackHref(track.slug)}`,
@@ -136,6 +150,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/agents/casp-bundle`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
 
     { url: `${BASE}/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    ...blog,
     // Buyer-intent guides (high-intent SEO, each linked to a product)
     { url: `${BASE}/guides`, lastModified: now, changeFrequency: 'weekly', priority: 0.75 },
     { url: `${BASE}/guides/beneficial-ownership-information-filing`, lastModified: now, changeFrequency: 'monthly', priority: 0.72 },

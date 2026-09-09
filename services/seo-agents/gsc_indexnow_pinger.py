@@ -235,7 +235,7 @@ def main() -> int:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--input", required=True, help="Directory of .mdx files")
     ap.add_argument("--prefix", default=os.environ.get("BLOG_PREFIX",
-                                                       "https://blog.bizlegal-ai.com/posts"),
+                                                       "https://blog.bizlegal-ai.com/blog"),
                     help="URL prefix for derived URLs")
     ap.add_argument("--host", default=os.environ.get("BLOG_HOST", "blog.bizlegal-ai.com"),
                     help="Host (for IndexNow keyLocation)")

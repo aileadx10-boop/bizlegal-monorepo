@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getAllPosts } from '@/lib/blog'
 
 const BASE = 'https://bizlegal-ai.com'
 
 // URLs to submit on each ping — the highest-value pages that change frequently.
+// Blog posts are appended dynamically so fresh content is pinged the moment
+// it lands (the hub blog serves monorepo content/blog at /blog/[slug]).
 const URLS = [
   BASE,
   `${BASE}/agents`,
@@ -29,6 +32,7 @@ const URLS = [
   `${BASE}/mica-deadlines`,
   `${BASE}/faq`,
   `${BASE}/pricing`,
+  ...getAllPosts().map((post) => `${BASE}/blog/${post.slug}`),
 ]
 
 // IndexNow supports Bing, Yandex, and Seznam simultaneously.

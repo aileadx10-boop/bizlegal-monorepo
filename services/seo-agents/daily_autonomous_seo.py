@@ -140,7 +140,7 @@ def main():
         [PYTHON, f"{CURATOR_DIR}/services/seo-agents/gsc_indexnow_pinger.py",
          "--input", f"{CURATOR_DIR}/services/seo-agents/blog_content",
          "--state", f"{CURATOR_DIR}/services/seo-agents/state/indexnow_state.json",
-         "--prefix", "https://blog.bizlegal-ai.com/posts",
+         "--prefix", "https://blog.bizlegal-ai.com/blog",
          "--host", "blog.bizlegal-ai.com"])
     telegram_send(f"🔎 S4 indexnow: {'✅' if results['S4_indexnow']['ok'] else '❌'} {results['S4_indexnow']['seconds']}s")
 
