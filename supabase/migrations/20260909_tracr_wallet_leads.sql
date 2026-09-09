@@ -1,14 +1,20 @@
 -- 20260909_tracr_wallet_leads.sql
 -- Consolidated migration for the BRAI scan payment-gate lead table.
 --
--- The table was originally created only in the pre-monorepo hub-local
--- migration apps/hub/supabase/migrations/003_rls_and_leads.sql, which is
--- NOT part of the consolidated supabase/migrations/ set. Prod DBs built
--- from the consolidated set therefore lack the table, and
--- POST /api/brai/leads fails with "Failed to save lead" on every insert.
+-- Two shapes exist in the wild:
+--   1. Fresh DBs built from the consolidated supabase/migrations/ set — table
+--      absent, so CREATE below is the whole story.
+--   2. Pre-monorepo prod — table already exists (created by the hub-local
+--      migration apps/hub/supabase/migrations/003_rls_and_leads.sql, which is
+--      NOT part of the consolidated set) but with a DIFFERENT schema: it has
+--      network + ip_address columns and wallet_address NOT NULL, yet is
+--      MISSING payment_status and invoice_id. The BRAI webhook does
+--      .update({ payment_status: 'paid' }) on it, so every payment-confirmed
+--      IPN 500s with "column payment_status does not exist".
 --
--- Idempotent: CREATE TABLE IF NOT EXISTS — safe to apply whether or not
--- the table already exists (pre-monorepo prod).
+-- Idempotent: CREATE TABLE IF NOT EXISTS + ALTER TABLE ADD COLUMN IF NOT
+-- EXISTS — safe to apply whether the table exists (pre-monorepo prod) or not
+-- (fresh consolidated build).
 
 CREATE TABLE IF NOT EXISTS public.tracr_wallet_leads (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -23,6 +29,18 @@ CREATE TABLE IF NOT EXISTS public.tracr_wallet_leads (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Upgrade path for the pre-monorepo table that lacks the payment-gate columns.
+ALTER TABLE public.tracr_wallet_leads
+  ADD COLUMN IF NOT EXISTS payment_status TEXT DEFAULT 'pending'
+    CHECK (payment_status IN ('pending', 'paid', 'expired')),
+  ADD COLUMN IF NOT EXISTS invoice_id TEXT;
+
+-- The pre-monorepo table declared wallet_address NOT NULL; the BRAI leads
+-- route inserts wallet_address ?? null, so a scan without a wallet would
+-- violate it. Relax to nullable to match the canonical schema.
+ALTER TABLE public.tracr_wallet_leads
+  ALTER COLUMN wallet_address DROP NOT NULL;
 
 CREATE INDEX IF NOT EXISTS idx_tracr_wallet_leads_email ON public.tracr_wallet_leads(email);
 CREATE INDEX IF NOT EXISTS idx_tracr_wallet_leads_invoice ON public.tracr_wallet_leads(invoice_id) WHERE invoice_id IS NOT NULL;
