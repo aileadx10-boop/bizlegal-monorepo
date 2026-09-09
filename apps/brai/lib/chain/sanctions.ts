@@ -107,7 +107,11 @@ export async function getCachedListsFromSupabase(): Promise<
     for (const row of rows) {
       out[row.list] = { fetched_at: row.fetched_at, size: row.address_count }
     }
-  } catch {}
+  } catch (err) {
+    // Never silent: a cache read failure must be visible, not mistaken for
+    // "no lists cached".
+    console.error("[sanctions] getCachedListsFromSupabase failed:", err)
+  }
   return out as Record<SanctionsList, { fetched_at: string; size: number } | null>
 }
 
@@ -146,7 +150,25 @@ export async function screenAddress(address: WalletAddress): Promise<SanctionsHi
         matched_entity: `${list.toUpperCase()} list entry (address match)`,
         citation,
       })
-    } catch {}
+    } catch (err) {
+      // Fail CLOSED on a sanctions screen: a cache outage must never report
+      // a clean screen. Surface a clearly-labelled "unavailable" hit so the
+      // composite score and report treat the address as unverified.
+      console.error(`[sanctions] screen ${list} failed — marking UNAVAILABLE (fail-closed):`, err)
+      hits.push({
+        address,
+        list,
+        kind: "direct",
+        hops: 0,
+        matched_entity: "SCREEN UNAVAILABLE — sanctions cache read failed",
+        citation: {
+          list,
+          source_url: DEFAULT_URLS[list],
+          retrieved_at: new Date().toISOString(),
+          list_version: undefined,
+        },
+      })
+    }
   }
   return hits
 }

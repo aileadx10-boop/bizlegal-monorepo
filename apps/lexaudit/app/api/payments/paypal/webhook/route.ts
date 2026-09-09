@@ -145,6 +145,39 @@ export async function POST(req: NextRequest) {
     }
 
     if (typeof updates.status === 'string') {
+      const { data: orderRow } = await supabase
+        .from('payment_orders')
+        .select('user_email, amount_cents, product, tier, billing_interval, source')
+        .eq('id', orderId)
+        .maybeSingle()
+
+      // Provision compliance_subs row when payment activates so the daily
+      // monitor cron has someone to notify (mirrors nowpayments webhook).
+      if (updates.status === 'active' && orderRow?.user_email) {
+        const { data: existingSub } = await supabase
+          .from('compliance_subs')
+          .select('id')
+          .eq('user_email', orderRow.user_email)
+          .eq('status', 'active')
+          .maybeSingle()
+
+        if (existingSub) {
+          await supabase
+            .from('compliance_subs')
+            .update({ payment_order_id: orderId, updated_at: new Date().toISOString() })
+            .eq('id', existingSub.id)
+        } else {
+          await supabase.from('compliance_subs').insert({
+            user_email: orderRow.user_email,
+            frameworks: ['soc2', 'iso27001', 'gdpr', 'hipaa', 'dpdp', 'nist-800-53'],
+            status: 'active',
+            subscribed_signals: [],
+            notification_channel: 'email',
+            payment_order_id: orderId,
+          })
+        }
+      }
+
       const opsType =
         updates.status === 'active'
           ? 'payment.confirmed'
@@ -156,11 +189,6 @@ export async function POST(req: NextRequest) {
                 ? 'payment.failed'
                 : null
       if (opsType) {
-        const { data: orderRow } = await supabase
-          .from('payment_orders')
-          .select('user_email, amount_cents, product, tier, billing_interval, source')
-          .eq('id', orderId)
-          .maybeSingle()
         logEventAsync({
           type: opsType,
           source: 'lexaudit',
