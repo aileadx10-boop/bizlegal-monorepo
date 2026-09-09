@@ -1,6 +1,6 @@
 # BizLegal-AI Monorepo — Operating Book
 
-**Read this file first.** Every Claude Code session, every subagent, every new agent (Codex, Cursor, manual hire) starts here.
+**Read this file first.** Every Claude Code session, every subagent, every new agent (Codex, Cursor, manual hire) starts here. Kimi Work sessions start at [`KIMI.md`](./KIMI.md) — a routing layer over this book (drive map, session-start flow, current-state digest); it points here as the canonical source.
 
 **Last consolidated:** 2026-07-17 (Phase AA — Revenue Machine live, cohort-2 agents deployed)
 **Owner:** Moses (founder, BizLegal AI / DOR INNOVATIONS)
@@ -28,6 +28,10 @@ bizlegal-monorepo/
 │   ├── bench/        bench.bizlegal-ai.com — evaluation lab for legal AI: $2,500 audits + $5K/mo programs, MiCA/DPA/VARA benchmarks (scaffold 2026-08-16, checkout live 2026-08-23; see apps/bench/CLAUDE.md)
 │   ├── coguard/      coguard.bizlegal-ai.com — co-parenting communication & legal evidentiary engine ($14.99-$29.99/mo scaffold 2026-08-16, not deployed; see apps/coguard/CLAUDE.md)
 │   ├── deal44/       deal44.bizlegal-ai.com — Hebrew/RTL multi-party property deal rooms; ₪2,500 setup + ₪349/mo (scaffold 2026-09-07, checkout dark, migration unapplied; see apps/deal44/CLAUDE.md)
+│   ├── falseecho/    falseecho.bizlegal-ai.com — financial false-claims monitor MVP cron (built 2026-09, no Vercel project yet; see apps/falseecho/CLAUDE.md)
+│   ├── sellerradar/  sellerradar.bizlegal-ai.com — seller-risk monitor MVP cron (built 2026-09, no Vercel project yet; see apps/sellerradar/CLAUDE.md)
+│   ├── caseaudit/    case-document audit SCAFFOLD (untracked mid-flight; engine in packages/case-engine; see apps/caseaudit/CLAUDE.md)
+│   ├── dealdesk/     deal-workspace SCAFFOLD (docs/workflows + empty web shell; see apps/dealdesk/CLAUDE.md)
 │   └── blog/         blog.bizlegal-ai.com (curator-fed MDX content; CF Pages)
 ├── services/         non-Vercel runtimes
 │   ├── hetzner/      curator pipeline: scout/brain/publisher/bot (Python, systemd) [Z1.C-pending]
@@ -39,11 +43,13 @@ bizlegal-monorepo/
 │   ├── browser-extension/ Manifest V3 Chrome/Firefox compliance capture extension (P3)
 │   ├── spy/          competitor intelligence crawlers: pricing/content/backlinks/social (P5)
 │   ├── seo-agents/   SEO pipeline scripts (headhunter, daily_orchestrator, publisher, etc.)
+│   ├── marketing/    Trigger.dev marketing jobs (weekly-newsletter, content queue; see services/marketing/CLAUDE.md)
 │   ├── outreach/     OCI partner-referral flow only (oci_funnel, oci_deal_closer, partner_onboarding)
 │   └── funnel-mvp/   TOMBSTONED 2026-05-24 — canonical is apps/docai/web/ (Fastify, never deployed; git-history reference only)
 ├── packages/         shared TS + Python siblings
 │   ├── deal-engine/  @bizlegal/deal-engine — transaction reconciliation core (normalise/reconcile/jurisdiction packs); pure, no LLM
 │   ├── closing-engine/ @bizlegal/closing-engine — pluggable working-week calendar (Sun–Thu vs Mon–Fri), task templates, alert tiers; the closeflow/leaseparse engine de-duplicated
+│   ├── case-engine/  @bizlegal/case-engine — case-document analysis engine (ingest/extract/analysis; consumed by apps/caseaudit)
 │   ├── email/        @bizlegal/email — THE outbound email path; suppression + double-opt-in enforced inside the package (never in callers)
 │   ├── ops-log/      @bizlegal/ops-log — HMAC-signed event POST to hub /api/ops/log
 │   ├── firecrawl/    @bizlegal/firecrawl — scrape + Sonnet semantic-diff
@@ -59,7 +65,8 @@ bizlegal-monorepo/
 │   ├── turnstile-widget/ @bizlegal/turnstile-widget — client-side Turnstile widget wrapper
 │   ├── ops-heartbeat/ @bizlegal/ops-heartbeat — TS + Python heartbeat client (PLATFORM-BUILD P1)
 │   ├── api-client/   @bizlegal/api-client — typed hub API client + OpenAPI spec (P2)
-│   └── bizlegal-debug/ @bizlegal/debug — Python debug shim: trace replay + breakpoints (P4)
+│   ├── bizlegal-debug/ @bizlegal/debug — Python debug shim: trace replay + breakpoints (P4)
+│   └── llm/          @bizlegal/llm — PLACEHOLDER scaffold (no sources yet; planned shared LLM client)
 ├── agents/           AGENTS.md + agent prompt seeds + WAT specs
 │   ├── ea/           Executive Assistant brain — prompts, schemas, templates, context (Z1.F)
 │   ├── outbound/     AI outbound engine, agent side (rule 7 v2, 2026-09-07): routine prompt, campaign templates + reply sets; see agents/outbound/CLAUDE.md

@@ -1,0 +1,9 @@
+{
+  "calls": 42,
+  "inputTokens": 125437,
+  "outputTokens": 45868,
+  "cacheReadTokens": 0,
+  "estimatedCents": 106.46,
+  "seconds": 563,
+  "pages": 4
+}

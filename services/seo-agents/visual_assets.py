@@ -26,7 +26,7 @@ from datetime import datetime
 # Config
 CONTENT_DIR = Path('/opt/bizlegal/curator/drafts')
 ASSETS_DIR = CONTENT_DIR  # _assets live alongside the MDX
-GH_TOKEN = os.environ.get('GH_TOKEN', '')
+GH_TOKEN = os.environ.get('GITHUB_TOKEN', '')
 BLOG_REPO = 'bizlegal-ea'
 BLOG_BRANCH = 'main'
 OPENAI_KEY = os.environ.get('OPENAI_API_KEY', '')

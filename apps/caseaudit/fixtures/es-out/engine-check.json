@@ -1,0 +1,160 @@
+{
+  "lang": "es",
+  "matter": "García c. Construcciones Valmar S.L.",
+  "seconds": 665,
+  "counts": {
+    "documents": 10,
+    "segments": 57,
+    "facts": 119,
+    "factsSourcePinned": 119,
+    "factsFuzzy": 0,
+    "factsModelTranscribed": 0,
+    "factsUnverified": 0,
+    "actors": 9,
+    "events": 24,
+    "contradictions": 11,
+    "contradictionsHigh": 10,
+    "contradictionPairs": 53,
+    "allegations": 15,
+    "gaps": 7
+  },
+  "cost": {
+    "calls": 43,
+    "inputTokens": 160623,
+    "outputTokens": 54780,
+    "cacheReadTokens": 0,
+    "estimatedCents": 130.35
+  },
+  "pinnedRate": 1,
+  "plantedContradictions": [
+    {
+      "id": "PC1",
+      "label": "Declaración jurada: conocimiento en marzo 2025 vs WhatsApp 14/11/2024",
+      "found": true,
+      "by": "C4",
+      "severity": "high"
+    },
+    {
+      "id": "PC2",
+      "label": "Contestación: sin aviso escrito hasta la demanda vs confirmación de lectura 20/3/2025",
+      "found": true,
+      "by": "C12",
+      "severity": "high"
+    },
+    {
+      "id": "PC3",
+      "label": "Anticipo 48.000 (declaración/demanda) vs banco 40.000",
+      "found": true,
+      "by": "C1",
+      "severity": "high"
+    },
+    {
+      "id": "PC4",
+      "label": "Declaración jurada: nunca habló de la cubierta antes de marzo 2025 vs testigo noviembre 2024",
+      "found": true,
+      "by": "C38",
+      "severity": "medium"
+    },
+    {
+      "id": "PC5",
+      "label": "Carta Valmar: conocimiento el 20/3/2025 vs WhatsApp Ibarra 14/11/2024 y 10/1/2025",
+      "found": true,
+      "by": "C50",
+      "severity": "medium"
+    }
+  ],
+  "plantedRecall": 1,
+  "unplannedContradictions": [
+    {
+      "id": "I5",
+      "severity": "high",
+      "label": "Creencia sobre estado perfecto de cubierta antes de marzo 2025",
+      "pairs": 5,
+      "docs": [
+        "06-email-aviso-defectos-2025-03-20.eml",
+        "03-declaracion-jurada-lucia-garcia.pdf"
+      ]
+    },
+    {
+      "id": "I7",
+      "severity": "high",
+      "label": "Fecha de firma del certificado de fin de obra",
+      "pairs": 2,
+      "docs": [
+        "10-carta-valmar-2025-04-02.pdf",
+        "02-contestacion.docx"
+      ]
+    },
+    {
+      "id": "I8",
+      "severity": "high",
+      "label": "Causa de entrada de agua en cubierta",
+      "pairs": 2,
+      "docs": [
+        "02-contestacion.docx",
+        "04-whatsapp-garcia-ibarra.txt"
+      ]
+    },
+    {
+      "id": "I9",
+      "severity": "high",
+      "label": "Ofrecimiento de Tomás Ibarra para reparar cubierta",
+      "pairs": 1,
+      "docs": [
+        "03-declaracion-jurada-lucia-garcia.pdf",
+        "04-whatsapp-garcia-ibarra.txt"
+      ]
+    },
+    {
+      "id": "I10",
+      "severity": "high",
+      "label": "Solicitud de reparación previa a la demanda",
+      "pairs": 1,
+      "docs": [
+        "02-contestacion.docx",
+        "04-whatsapp-garcia-ibarra.txt"
+      ]
+    },
+    {
+      "id": "I11",
+      "severity": "medium",
+      "label": "Fecha de finalización de las obras",
+      "pairs": 1,
+      "docs": [
+        "07-contrato-reforma-2024-01-12.pdf",
+        "08-email-finalizacion-2024-09-02.eml"
+      ]
+    }
+  ],
+  "precisionOnPlanted": 0.455,
+  "plantedGaps": [
+    {
+      "id": "PG1",
+      "label": "Coste de reparación 35.000 valorado por ingeniero — sin informe pericial",
+      "found": true,
+      "by": "A11",
+      "suggestedDocumentsMatch": true
+    },
+    {
+      "id": "PG2",
+      "label": "Licencia nunca obtenida — sin registro oficial",
+      "found": true,
+      "by": "A12",
+      "suggestedDocumentsMatch": true
+    },
+    {
+      "id": "PG3",
+      "label": "Certificado de fin de obra firmado — no consta en el expediente",
+      "found": false,
+      "suggestedDocumentsMatch": false
+    }
+  ],
+  "gapRecall": 0.667,
+  "warnings": [],
+  "gates": {
+    "plantedRecall": true,
+    "gapRecall": true,
+    "pinnedRate": true
+  },
+  "pass": true
+}

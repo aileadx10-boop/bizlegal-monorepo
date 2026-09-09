@@ -1,0 +1,124 @@
+{
+  "lang": "en",
+  "matter": "Harlow v. Brightline Builders LLC",
+  "seconds": 563,
+  "counts": {
+    "documents": 10,
+    "segments": 57,
+    "facts": 115,
+    "factsSourcePinned": 115,
+    "factsFuzzy": 0,
+    "factsModelTranscribed": 0,
+    "factsUnverified": 0,
+    "actors": 9,
+    "events": 24,
+    "contradictions": 7,
+    "contradictionsHigh": 6,
+    "contradictionPairs": 41,
+    "allegations": 15,
+    "gaps": 7
+  },
+  "cost": {
+    "calls": 42,
+    "inputTokens": 125437,
+    "outputTokens": 45868,
+    "cacheReadTokens": 0,
+    "estimatedCents": 106.46
+  },
+  "pinnedRate": 1,
+  "plantedContradictions": [
+    {
+      "id": "PC1",
+      "label": "Affidavit: first aware March 2025 vs WhatsApp 14 Nov 2024 leak report",
+      "found": true,
+      "by": "C1",
+      "severity": "high"
+    },
+    {
+      "id": "PC2",
+      "label": "Answer: no written notice until lawsuit vs email read receipt 20 Mar 2025",
+      "found": true,
+      "by": "C30",
+      "severity": "high"
+    },
+    {
+      "id": "PC3",
+      "label": "Deposit $48,000 (affidavit/complaint) vs bank confirmation $40,000",
+      "found": true,
+      "by": "C7",
+      "severity": "high"
+    },
+    {
+      "id": "PC4",
+      "label": "Affidavit: never discussed roof before March 2025 vs neighbour statement Nov 2024",
+      "found": true,
+      "by": "C33",
+      "severity": "medium"
+    },
+    {
+      "id": "PC5",
+      "label": "Brightline letter: first learned 20 Mar 2025 vs Reed WhatsApp 14 Nov 2024 / 10 Jan 2025",
+      "found": true,
+      "by": "C38",
+      "severity": "medium"
+    }
+  ],
+  "plantedRecall": 1,
+  "unplannedContradictions": [
+    {
+      "id": "I5",
+      "severity": "high",
+      "label": "Location of solar panels: rear roof vs front roof",
+      "pairs": 2,
+      "docs": [
+        "02-answer.docx",
+        "04-whatsapp-harlow-reed.txt"
+      ]
+    },
+    {
+      "id": "I6",
+      "severity": "high",
+      "label": "Date plaintiff signed completion certificate",
+      "pairs": 1,
+      "docs": [
+        "10-brightline-letter-2025-04-02.pdf",
+        "02-answer.docx"
+      ]
+    }
+  ],
+  "precisionOnPlanted": 0.714,
+  "plantedGaps": [
+    {
+      "id": "PG1",
+      "label": "Repair cost $35,000 assessed by engineer — no expert report in file",
+      "found": true,
+      "by": "A10",
+      "suggestedDocumentsMatch": true
+    },
+    {
+      "id": "PG2",
+      "label": "Permit never obtained — no official record in file",
+      "found": true,
+      "by": "A11",
+      "suggestedDocumentsMatch": true
+    },
+    {
+      "id": "PG3",
+      "label": "Signed completion certificate — not in file",
+      "found": false,
+      "suggestedDocumentsMatch": false
+    }
+  ],
+  "gapRecall": 0.667,
+  "warnings": [
+    "adjudicate_batch_failed:3:schema",
+    "adjudicate_batch_failed:9:schema",
+    "adjudicate_batch_failed:10:schema"
+  ],
+  "gates": {
+    "plantedRecall": true,
+    "gapRecall": true,
+    "pinnedRate": true
+  },
+  "pass": true
+}

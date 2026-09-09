@@ -23,7 +23,7 @@ ENV_GH = 'GH_T' + 'OKEN'
 ENV_GH_FALLBACK = 'GITHUB_TOKEN'
 
 CONTENT_DIR = Path('/opt/bizlegal/curator/drafts')
-GH_TOKEN=os.environ.get('GH_TOKEN', '') or os.environ.get('GITHUB_TOKEN', '')
+GH_TOKEN=os.environ.get('GITHUB_TOKEN', '')
 
 BLOG_REPO = 'bizlegal-ea'
 BLOG_BRANCH = 'main'

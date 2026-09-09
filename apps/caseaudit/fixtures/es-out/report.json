@@ -1,0 +1,5085 @@
+{
+  "matterTitle": "García c. Construcciones Valmar S.L.",
+  "lang": "es",
+  "generatedAt": "2026-08-23T21:18:20.954Z",
+  "disclaimerVersion": "v1.0.0-p4",
+  "documents": [
+    {
+      "id": "d1",
+      "name": "01-demanda.docx",
+      "kind": "docx",
+      "sha256": "0697cbab938a7bd4ceb75ec48f80b4f1ca08cf95d4c40c6c2b53de3a59848159",
+      "bytes": 9580,
+      "mode": "n/a",
+      "lang": "es",
+      "warnings": []
+    },
+    {
+      "id": "d2",
+      "name": "02-contestacion.docx",
+      "kind": "docx",
+      "sha256": "c48120bc2e1c74f299887e8de12722fe5869012b3007217595106b3e7600e4f6",
+      "bytes": 9417,
+      "mode": "n/a",
+      "lang": "es",
+      "warnings": []
+    },
+    {
+      "id": "d3",
+      "name": "03-declaracion-jurada-lucia-garcia.pdf",
+      "kind": "pdf",
+      "sha256": "f01012f440add6f920934bc20613896fd879f9a1fa8880bc0e57d6fff7370b8e",
+      "bytes": 2453,
+      "pages": 1,
+      "mode": "text",
+      "lang": "es",
+      "warnings": []
+    },
+    {
+      "id": "d4",
+      "name": "04-whatsapp-garcia-ibarra.txt",
+      "kind": "whatsapp",
+      "sha256": "a9253070c2135cfaced4f9d4ae432debafcc8e6d70461ca1460e9fcc6f13a4c3",
+      "bytes": 1152,
+      "mode": "n/a",
+      "lang": "es",
+      "warnings": []
+    },
+    {
+      "id": "d5",
+      "name": "05-banco-meridional-confirmacion.pdf",
+      "kind": "pdf",
+      "sha256": "941b39f2acb7ca073ec75e443802538a8f59983f7c2bd422bb6a95a31c6d2be5",
+      "bytes": 1836,
+      "pages": 1,
+      "mode": "text",
+      "lang": "es",
+      "warnings": []
+    },
+    {
+      "id": "d6",
+      "name": "06-email-aviso-defectos-2025-03-20.eml",
+      "kind": "eml",
+      "sha256": "d4c5aac704921928efef90d175c663cbb515b6a4ce2f41a2c38dd7b2bc375bee",
+      "bytes": 974,
+      "mode": "n/a",
+      "lang": "es",
+      "warnings": []
+    },
+    {
+      "id": "d7",
+      "name": "07-contrato-reforma-2024-01-12.pdf",
+      "kind": "pdf",
+      "sha256": "ec8fa1d663a97c9aad8ded84e21ddd45273c5ffb90ac6a492f01d0ef57d19b24",
+      "bytes": 2380,
+      "pages": 1,
+      "mode": "text",
+      "lang": "es",
+      "warnings": []
+    },
+    {
+      "id": "d8",
+      "name": "08-email-finalizacion-2024-09-02.eml",
+      "kind": "eml",
+      "sha256": "6e0cfba97b28951e9a5e501a330543a838e6c5db012200b28e4f14ed2ccb19c6",
+      "bytes": 546,
+      "mode": "n/a",
+      "lang": "es",
+      "warnings": []
+    },
+    {
+      "id": "d9",
+      "name": "09-declaracion-testigo-carmen-soler.docx",
+      "kind": "docx",
+      "sha256": "66875f1d66dcef60a7310bb5679eba84181c9f118144de3405d561c850e528ea",
+      "bytes": 9116,
+      "mode": "n/a",
+      "lang": "es",
+      "warnings": []
+    },
+    {
+      "id": "d10",
+      "name": "10-carta-valmar-2025-04-02.pdf",
+      "kind": "pdf",
+      "sha256": "fc0065e6c4bef67a76b4f06ca8b58e84c4f332854f43ca7760bda67d7b91d29a",
+      "bytes": 1980,
+      "pages": 1,
+      "mode": "text",
+      "lang": "es",
+      "warnings": []
+    }
+  ],
+  "segments": [
+    {
+      "docId": "d1",
+      "seq": 1,
+      "kind": "paragraph",
+      "label": "¶1",
+      "text": "JUZGADO DE PRIMERA INSTANCIA · Procedimiento ordinario 412/2026",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 2,
+      "kind": "paragraph",
+      "label": "¶2",
+      "text": "LUCÍA GARCÍA ROMERO, demandante, contra CONSTRUCCIONES VALMAR S.L., demandada.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 3,
+      "kind": "paragraph",
+      "label": "¶3",
+      "text": "DEMANDA DE JUICIO ORDINARIO POR INCUMPLIMIENTO CONTRACTUAL Y DEFECTOS DE EJECUCIÓN",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 4,
+      "kind": "paragraph",
+      "label": "¶4",
+      "text": "PRIMERO. La demandante es propietaria de la vivienda sita en calle Los Alisos 18, Villanueva.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 5,
+      "kind": "paragraph",
+      "label": "¶5",
+      "text": "SEGUNDO. La demandada es una empresa constructora. Su administrador único es don Tomás Ibarra.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 6,
+      "kind": "paragraph",
+      "label": "¶6",
+      "text": "TERCERO. El 12 de enero de 2024 las partes firmaron un contrato de obra para la reforma de la cocina y la sustitución del faldón trasero de la cubierta por un precio cerrado de 96.000 euros.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 7,
+      "kind": "paragraph",
+      "label": "¶7",
+      "text": "CUARTO. El 14 de febrero de 2024 la demandante abonó a la demandada el anticipo contractual de 48.000 euros mediante transferencia desde su cuenta en Banco Meridional.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 8,
+      "kind": "paragraph",
+      "label": "¶8",
+      "text": "QUINTO. La demandada manifestó que las obras quedaron terminadas el 30 de agosto de 2024.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 9,
+      "kind": "paragraph",
+      "label": "¶9",
+      "text": "SEXTO. La cubierta sustituida por la demandada es defectuosa. El agua penetra por el techo del dormitorio trasero cada vez que llueve.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 10,
+      "kind": "paragraph",
+      "label": "¶10",
+      "text": "SÉPTIMO. La demandante descubrió el defecto por primera vez en marzo de 2025, cuando aparecieron manchas de humedad en el techo del dormitorio trasero.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 11,
+      "kind": "paragraph",
+      "label": "¶11",
+      "text": "OCTAVO. El 20 de marzo de 2025, dentro de los diez días siguientes al descubrimiento, la demandante comunicó por escrito el defecto a la demandada mediante correo electrónico, conforme a la cláusula 9 del contrato.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 12,
+      "kind": "paragraph",
+      "label": "¶12",
+      "text": "NOVENO. La demandada se ha negado a reparar el defecto.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 13,
+      "kind": "paragraph",
+      "label": "¶13",
+      "text": "DÉCIMO. El coste de las obras de reparación ha sido valorado en 35.000 euros por un ingeniero especialista en cubiertas.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 14,
+      "kind": "paragraph",
+      "label": "¶14",
+      "text": "UNDÉCIMO. La demandada nunca obtuvo la licencia de obras exigida para los trabajos de cubierta, en contra de la cláusula 6 del contrato.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 15,
+      "kind": "paragraph",
+      "label": "¶15",
+      "text": "SUPLICO AL JUZGADO que condene a la demandada al pago de 35.000 euros en concepto de daños, intereses y costas.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 16,
+      "kind": "paragraph",
+      "label": "¶16",
+      "text": "En Villanueva, a 2 de junio de 2026. Letrado de la demandante.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 1,
+      "kind": "paragraph",
+      "label": "¶1",
+      "text": "JUZGADO DE PRIMERA INSTANCIA · Procedimiento ordinario 412/2026",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 2,
+      "kind": "paragraph",
+      "label": "¶2",
+      "text": "LUCÍA GARCÍA ROMERO, demandante, contra CONSTRUCCIONES VALMAR S.L., demandada.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 3,
+      "kind": "paragraph",
+      "label": "¶3",
+      "text": "CONTESTACIÓN A LA DEMANDA DE CONSTRUCCIONES VALMAR S.L.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 4,
+      "kind": "paragraph",
+      "label": "¶4",
+      "text": "PRIMERO. Se admiten los hechos primero, segundo y tercero de la demanda.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 5,
+      "kind": "paragraph",
+      "label": "¶5",
+      "text": "SEGUNDO. Se niega el hecho cuarto. La demandante abonó a la demandada 40.000 euros el 14 de febrero de 2024, no 48.000 euros, y el resto del anticipo nunca fue pagado.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 6,
+      "kind": "paragraph",
+      "label": "¶6",
+      "text": "TERCERO. Se admite que la demandada terminó las obras el 30 de agosto de 2024 y se hace constar que la demandante firmó el 2 de septiembre de 2024 un certificado de fin de obra en el que confirmaba que las obras estaban completas y a su satisfacción.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 7,
+      "kind": "paragraph",
+      "label": "¶7",
+      "text": "CUARTO. Se niegan los hechos sexto y séptimo. Cualquier entrada de agua se debe a los paneles solares instalados en la cubierta trasera por un tercero contratado por la demandante en octubre de 2024, después de que la demandada abandonara la obra.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 8,
+      "kind": "paragraph",
+      "label": "¶8",
+      "text": "QUINTO. Se niega el hecho octavo. La demandada no recibió ninguna comunicación escrita sobre supuestos defectos hasta que le fue notificada esta demanda.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 9,
+      "kind": "paragraph",
+      "label": "¶9",
+      "text": "SEXTO. Se niega el hecho noveno. No se solicitó reparación alguna antes de interponer la demanda.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 10,
+      "kind": "paragraph",
+      "label": "¶10",
+      "text": "SÉPTIMO. Se niega el hecho décimo y se exige a la demandante prueba estricta del supuesto coste de reparación.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 11,
+      "kind": "paragraph",
+      "label": "¶11",
+      "text": "OCTAVO. Se niega el hecho undécimo. Se obtuvieron todas las licencias necesarias.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 12,
+      "kind": "paragraph",
+      "label": "¶12",
+      "text": "SUPLICO AL JUZGADO que desestime íntegramente la demanda con imposición de costas a la demandante.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 13,
+      "kind": "paragraph",
+      "label": "¶13",
+      "text": "En Villanueva, a 30 de junio de 2026. Letrado de la demandada.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d3",
+      "seq": 1,
+      "kind": "page",
+      "label": "p.1",
+      "text": "DECLARACIÓN JURADA DE LUCÍA GARCÍA ROMERO\n\nYo, Lucía García Romero, con domicilio en calle Los Alisos 18, Villanueva, declaro bajo juramento\n\nlo siguiente:\n\n1. Soy la demandante en este procedimiento y declaro sobre hechos que me constan\n\npersonalmente.\n\n2. El 12 de enero de 2024 firmé el contrato de obra con Construcciones Valmar S.L. Don Tomás\n\nIbarra firmó en nombre de la empresa.\n\n3. El 14 de febrero de 2024 pagué a Construcciones Valmar S.L. la cantidad de 48.000 euros\n\nmediante transferencia desde mi cuenta en Banco Meridional. Era la totalidad del anticipo exigido\n\npor el contrato.\n\n4. Valmar me comunicó que las obras estaban terminadas a finales de agosto de 2024.\n\n5. Tuve conocimiento por primera vez de la gotera del dormitorio trasero en marzo de 2025, cuando\n\nobservé manchas marrones de humedad extendiéndose por el techo tras unas lluvias intensas.\n\n6. Antes de marzo de 2025 nunca había hablado de ningún problema de la cubierta con Valmar ni\n\ncon el señor Ibarra. No había nada de que hablar; creía que la cubierta estaba en perfecto estado.\n\n7. El 20 de marzo de 2025 envié al señor Ibarra un correo electrónico con el asunto \"Aviso formal\n\nde defectos\" describiendo la gotera y pidiendo a Valmar que la reparase.\n\n8. El señor Ibarra no se ofreció a reparar la cubierta. El 2 de abril de 2025 Valmar me escribió\n\nnegando cualquier responsabilidad.\n\n9. He obtenido un presupuesto de 35.000 euros para las obras de reparación.\n\nJurado el 28 de mayo de 2026 ante notario.\n\nLucía García Romero",
+      "source": "pdf-parse",
+      "meta": {
+        "page": 1
+      }
+    },
+    {
+      "docId": "d4",
+      "seq": 1,
+      "kind": "message",
+      "label": "msg 1",
+      "text": "2024-08-28 18:12 — Lucía García: La cocina ha quedado genial, gracias al equipo",
+      "source": "whatsapp-txt",
+      "meta": {
+        "sender": "Lucía García",
+        "timestamp": "2024-08-28T18:12"
+      }
+    },
+    {
+      "docId": "d4",
+      "seq": 2,
+      "kind": "message",
+      "label": "msg 2",
+      "text": "2024-08-28 18:20 — Tomás Ibarra: Me alegro. La cubierta también está terminada, solo falta retirar el andamio",
+      "source": "whatsapp-txt",
+      "meta": {
+        "sender": "Tomás Ibarra",
+        "timestamp": "2024-08-28T18:20"
+      }
+    },
+    {
+      "docId": "d4",
+      "seq": 3,
+      "kind": "message",
+      "label": "msg 3",
+      "text": "2024-09-02 10:05 — Tomás Ibarra: Te he enviado el certificado de fin de obra por correo, fírmalo y devuélvemelo cuando puedas",
+      "source": "whatsapp-txt",
+      "meta": {
+        "sender": "Tomás Ibarra",
+        "timestamp": "2024-09-02T10:05"
+      }
+    },
+    {
+      "docId": "d4",
+      "seq": 4,
+      "kind": "message",
+      "label": "msg 4",
+      "text": "2024-11-14 21:41 — Lucía García: Tomás, el techo del dormitorio de atrás vuelve a gotear después de la lluvia de anoche. Hay una mancha húmeda del tamaño de un plato",
+      "source": "whatsapp-txt",
+      "meta": {
+        "sender": "Lucía García",
+        "timestamp": "2024-11-14T21:41"
+      }
+    },
+    {
+      "docId": "d4",
+      "seq": 5,
+      "kind": "message",
+      "label": "msg 5",
+      "text": "2024-11-14 21:58 — Tomás Ibarra: Vale. Puede ser el remate de la chimenea. El lunes mando a alguien a mirarlo",
+      "source": "whatsapp-txt",
+      "meta": {
+        "sender": "Tomás Ibarra",
+        "timestamp": "2024-11-14T21:58"
+      }
+    },
+    {
+      "docId": "d4",
+      "seq": 6,
+      "kind": "message",
+      "label": "msg 6",
+      "text": "2024-11-18 08:30 — Tomás Ibarra: Al equipo lo han desviado a otra obra, será la semana que viene",
+      "source": "whatsapp-txt",
+      "meta": {
+        "sender": "Tomás Ibarra",
+        "timestamp": "2024-11-18T08:30"
+      }
+    },
+    {
+      "docId": "d4",
+      "seq": 7,
+      "kind": "message",
+      "label": "msg 7",
+      "text": "2024-12-03 19:15 — Lucía García: Sigo esperando. El domingo volvió a gotear",
+      "source": "whatsapp-txt",
+      "meta": {
+        "sender": "Lucía García",
+        "timestamp": "2024-12-03T19:15"
+      }
+    },
+    {
+      "docId": "d4",
+      "seq": 8,
+      "kind": "message",
+      "label": "msg 8",
+      "text": "2025-01-10 11:02 — Tomás Ibarra: He visto las fotos. El problema de la cubierta es de los de las placas solares que contrataste, no nuestro. Han cortado nuestra lámina",
+      "source": "whatsapp-txt",
+      "meta": {
+        "sender": "Tomás Ibarra",
+        "timestamp": "2025-01-10T11:02"
+      }
+    },
+    {
+      "docId": "d4",
+      "seq": 9,
+      "kind": "message",
+      "label": "msg 9",
+      "text": "2025-01-10 11:30 — Lucía García: Las placas solares están en el faldón delantero, la gotera está en el de atrás",
+      "source": "whatsapp-txt",
+      "meta": {
+        "sender": "Lucía García",
+        "timestamp": "2025-01-10T11:30"
+      }
+    },
+    {
+      "docId": "d4",
+      "seq": 10,
+      "kind": "message",
+      "label": "msg 10",
+      "text": "2025-03-20 16:02 — Lucía García: Te acabo de enviar un correo formal sobre la cubierta, léelo por favor",
+      "source": "whatsapp-txt",
+      "meta": {
+        "sender": "Lucía García",
+        "timestamp": "2025-03-20T16:02"
+      }
+    },
+    {
+      "docId": "d5",
+      "seq": 1,
+      "kind": "page",
+      "label": "p.1",
+      "text": "BANCO MERIDIONAL\n\nConfirmación de pago · Referencia BM-2024-118822\n\nFecha de emisión: 3 de marzo de 2026\n\nA quien corresponda:\n\nA petición de nuestra cliente doña Lucía García Romero, confirmamos la siguiente transferencia\n\nemitida desde la cuenta terminada en 4471:\n\nFecha valor: 14 de febrero de 2024\n\nImporte: 40.000,00 EUR (cuarenta mil euros)\n\nBeneficiario: Construcciones Valmar S.L.\n\nReferencia del beneficiario: VAL-ANT-0124\n\nConcepto: \"Anticipo reforma - Los Alisos 18\"\n\nNo consta ninguna otra transferencia a este beneficiario desde esta cuenta entre el 1 de enero de\n\n2024 y el 31 de marzo de 2024.\n\nEsta confirmación se emite únicamente a efectos informativos.\n\nBanco Meridional, Atención al Cliente",
+      "source": "pdf-parse",
+      "meta": {
+        "page": 1
+      }
+    },
+    {
+      "docId": "d6",
+      "seq": 1,
+      "kind": "header",
+      "label": "header",
+      "text": "From: Lucía García <l.garcia@example.com>\nTo: Tomás Ibarra <tomas@valmar-construcciones.example>\nDate: Thu, 20 Mar 2025 15:48:00 +0100\nSubject: Aviso formal de defectos - cubierta Los Alisos 18",
+      "source": "eml",
+      "meta": {
+        "timestamp": "Thu, 20 Mar 2025 15:48:00 +0100"
+      }
+    },
+    {
+      "docId": "d6",
+      "seq": 2,
+      "kind": "paragraph",
+      "label": "¶1",
+      "text": "Estimado señor Ibarra: La presente constituye aviso formal por escrito conforme a la cláusula 9 del contrato de obra de 12 de enero de 2024. El faldón trasero de la cubierta sustituido por Construcciones Valmar S.L. tiene goteras. Entra agua en el dormitorio trasero a través del techo cada vez que llueve. Adjunto fotografías. Requiero a Valmar para que inspeccione y repare el defecto en el plazo de 14 días desde este aviso. Le ruego confirme la recepción de este correo. Atentamente, Lucía García Romero",
+      "source": "eml"
+    },
+    {
+      "docId": "d6",
+      "seq": 3,
+      "kind": "paragraph",
+      "label": "¶2",
+      "text": "--- Confirmación de lectura --- Su mensaje \"Aviso formal de defectos - cubierta Los Alisos 18\" fue leído por tomas@valmar-construcciones.example el 20 de marzo de 2025 a las 16:02.",
+      "source": "eml"
+    },
+    {
+      "docId": "d7",
+      "seq": 1,
+      "kind": "page",
+      "label": "p.1",
+      "text": "CONTRATO DE OBRA\n\nEn Villanueva, a 12 de enero de 2024, entre doña Lucía García Romero (la \"Propietaria\"), con\n\ndomicilio en calle Los Alisos 18, y Construcciones Valmar S.L. (la \"Contratista\"), representada por\n\nsu administrador don Tomás Ibarra.\n\n1. Obras. La Contratista reformará la cocina y sustituirá el faldón trasero de la cubierta de la\n\nvivienda de la Propietaria conforme a la memoria del Anexo A.\n\n2. Precio. El precio cerrado de las Obras es de 96.000 euros.\n\n3. Anticipo. La Propietaria abonará un anticipo del 50 % del precio, es decir 48.000 euros, en los 30\n\ndías siguientes a la firma. El resto se abonará a la finalización.\n\n4. Plazo. La Contratista terminará las Obras antes del 30 de junio de 2024.\n\n5. Materiales. Todos los materiales serán nuevos y de calidad comercial.\n\n6. Licencias. La Contratista obtendrá todas las licencias de obra necesarias antes de iniciar la\n\nparte correspondiente de las Obras.\n\n7. Garantía. La Contratista garantiza las Obras frente a defectos de ejecución durante 24 meses\n\ndesde la finalización.\n\n8. Subcontratación. La Contratista solo podrá subcontratar los trabajos de cubierta con el\n\nconsentimiento escrito de la Propietaria.\n\n9. Aviso de defectos. La Propietaria comunicará por escrito a la Contratista cualquier defecto en los\n\n10 días siguientes a su descubrimiento. La Contratista inspeccionará en los 14 días siguientes al\n\naviso.\n\n10. Certificado de fin de obra. A la finalización, las partes firmarán un certificado de fin de obra.\n\nFirmado: Lucía García Romero, Propietaria. Firmado: Tomás Ibarra, por Construcciones Valmar\n\nS.L.",
+      "source": "pdf-parse",
+      "meta": {
+        "page": 1
+      }
+    },
+    {
+      "docId": "d8",
+      "seq": 1,
+      "kind": "header",
+      "label": "header",
+      "text": "From: Tomás Ibarra <tomas@valmar-construcciones.example>\nTo: Lucía García <l.garcia@example.com>\nDate: Mon, 2 Sep 2024 10:01:00 +0200\nSubject: Obras terminadas - certificado adjunto",
+      "source": "eml",
+      "meta": {
+        "timestamp": "Mon, 2 Sep 2024 10:01:00 +0200"
+      }
+    },
+    {
+      "docId": "d8",
+      "seq": 2,
+      "kind": "paragraph",
+      "label": "¶1",
+      "text": "Hola Lucía: Las obras de Los Alisos 18 quedaron terminadas el 30 de agosto de 2024. Adjunto el certificado de fin de obra para tu firma. Por favor fírmalo y devuélveme una copia para nuestro archivo. La factura final por el resto de 48.000 euros te llegará esta semana. Gracias, Tomás",
+      "source": "eml"
+    },
+    {
+      "docId": "d9",
+      "seq": 1,
+      "kind": "paragraph",
+      "label": "¶1",
+      "text": "DECLARACIÓN TESTIFICAL DE CARMEN SOLER",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d9",
+      "seq": 2,
+      "kind": "paragraph",
+      "label": "¶2",
+      "text": "Yo, Carmen Soler, con domicilio en calle Los Alisos 20, Villanueva, declaro lo siguiente:",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d9",
+      "seq": 3,
+      "kind": "paragraph",
+      "label": "¶3",
+      "text": "1. Soy vecina de Lucía García Romero desde 2019.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d9",
+      "seq": 4,
+      "kind": "paragraph",
+      "label": "¶4",
+      "text": "2. A principios de noviembre de 2024, en torno a las primeras lluvias fuertes del otoño, Lucía me contó que entraba agua por el techo de su dormitorio trasero y que había escrito por mensaje a su constructor.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d9",
+      "seq": 5,
+      "kind": "paragraph",
+      "label": "¶5",
+      "text": "3. Yo misma vi una mancha marrón de humedad en ese techo el 16 de noviembre de 2024 aproximadamente, cuando ayudé a Lucía a separar un armario de la pared.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d9",
+      "seq": 6,
+      "kind": "paragraph",
+      "label": "¶6",
+      "text": "4. En diciembre de 2024 Lucía me dijo que el constructor todavía no había ido a verlo.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d9",
+      "seq": 7,
+      "kind": "paragraph",
+      "label": "¶7",
+      "text": "5. No vi a ningún operario de Valmar en la casa entre septiembre de 2024 y la primavera de 2025.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d9",
+      "seq": 8,
+      "kind": "paragraph",
+      "label": "¶8",
+      "text": "Manifiesto que los hechos de esta declaración son ciertos.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d9",
+      "seq": 9,
+      "kind": "paragraph",
+      "label": "¶9",
+      "text": "Firmado: Carmen Soler. A 20 de mayo de 2026.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d10",
+      "seq": 1,
+      "kind": "page",
+      "label": "p.1",
+      "text": "CONSTRUCCIONES VALMAR S.L.\n\n2 de abril de 2025\n\nDoña Lucía García Romero, calle Los Alisos 18, Villanueva\n\nAsunto: Su escrito de 20 de marzo de 2025 - supuesto defecto de la cubierta\n\nEstimada señora García:\n\nAcusamos recibo de su correo electrónico de 20 de marzo de 2025. Tuvimos conocimiento por\n\nprimera vez del supuesto defecto de la cubierta a través de ese escrito, más de seis meses\n\ndespués de terminadas y certificadas las obras.\n\nNuestros trabajos de cubierta se terminaron conforme a la memoria el 30 de agosto de 2024 y\n\nusted firmó el certificado de fin de obra. Tenemos entendido que posteriormente un tercero\n\ncontratado por usted instaló placas solares en la cubierta. A nuestro juicio, cualquier entrada de\n\nagua es atribuible a esa instalación posterior y no a nuestros trabajos.\n\nPor tanto, no aceptamos responsabilidad por el supuesto defecto y no realizaremos obras de\n\nreparación.\n\nAtentamente,\n\nTomás Ibarra, Administrador",
+      "source": "pdf-parse",
+      "meta": {
+        "page": 1
+      }
+    }
+  ],
+  "facts": [
+    {
+      "id": "f1",
+      "docId": "d1",
+      "kind": "representation",
+      "statement": "La demandante Lucía García Romero es propietaria de la vivienda sita en calle Los Alisos 18, Villanueva",
+      "actors": [
+        "Lucía García Romero",
+        "demandante"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 4,
+        "quote": "La demandante es propietaria de la vivienda sita en calle Los Alisos 18, Villanueva."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 4,
+      "matchScore": 1
+    },
+    {
+      "id": "f2",
+      "docId": "d1",
+      "kind": "representation",
+      "statement": "La demandada Construcciones Valmar S.L. es una empresa constructora",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "demandada"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 5,
+        "quote": "La demandada es una empresa constructora."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 5,
+      "matchScore": 1
+    },
+    {
+      "id": "f3",
+      "docId": "d1",
+      "kind": "representation",
+      "statement": "Tomás Ibarra es el administrador único de Construcciones Valmar S.L.",
+      "actors": [
+        "Tomás Ibarra",
+        "Construcciones Valmar S.L."
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 5,
+        "quote": "Su administrador único es don Tomás Ibarra."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 5,
+      "matchScore": 1
+    },
+    {
+      "id": "f4",
+      "docId": "d1",
+      "kind": "obligation",
+      "statement": "Las partes firmaron un contrato de obra para la reforma de la cocina y la sustitución del faldón trasero de la cubierta",
+      "actors": [
+        "Lucía García Romero",
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2024-01-12",
+      "datePrecision": "day",
+      "amount": {
+        "value": 96000,
+        "currency": "EUR"
+      },
+      "anchor": {
+        "seq": 6,
+        "quote": "El 12 de enero de 2024 las partes firmaron un contrato de obra para la reforma de la cocina y la sustitución del faldón trasero de la cubierta por un precio cerrado de 96.000 euros."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 6,
+      "matchScore": 1
+    },
+    {
+      "id": "f5",
+      "docId": "d1",
+      "kind": "payment",
+      "statement": "La demandante abonó a la demandada el anticipo contractual mediante transferencia desde su cuenta en Banco Meridional",
+      "actors": [
+        "Lucía García Romero",
+        "demandante",
+        "Construcciones Valmar S.L.",
+        "demandada"
+      ],
+      "date": "2024-02-14",
+      "datePrecision": "day",
+      "amount": {
+        "value": 48000,
+        "currency": "EUR"
+      },
+      "anchor": {
+        "seq": 7,
+        "quote": "El 14 de febrero de 2024 la demandante abonó a la demandada el anticipo contractual de 48.000 euros mediante transferencia desde su cuenta en Banco Meridional."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 7,
+      "matchScore": 1
+    },
+    {
+      "id": "f6",
+      "docId": "d1",
+      "kind": "representation",
+      "statement": "La demandada manifestó que las obras quedaron terminadas el 30 de agosto de 2024",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "demandada"
+      ],
+      "date": "2024-08-30",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 8,
+        "quote": "La demandada manifestó que las obras quedaron terminadas el 30 de agosto de 2024."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 8,
+      "matchScore": 1
+    },
+    {
+      "id": "f7",
+      "docId": "d1",
+      "kind": "representation",
+      "statement": "La cubierta sustituida por la demandada es defectuosa y el agua penetra por el techo del dormitorio trasero cada vez que llueve",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "demandada"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 9,
+        "quote": "La cubierta sustituida por la demandada es defectuosa. El agua penetra por el techo del dormitorio trasero cada vez que llueve."
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 9,
+      "matchScore": 1
+    },
+    {
+      "id": "f8",
+      "docId": "d1",
+      "kind": "event",
+      "statement": "La demandante descubrió el defecto por primera vez cuando aparecieron manchas de humedad en el techo del dormitorio trasero",
+      "actors": [
+        "Lucía García Romero",
+        "demandante"
+      ],
+      "date": "2025-03",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 10,
+        "quote": "La demandante descubrió el defecto por primera vez en marzo de 2025, cuando aparecieron manchas de humedad en el techo del dormitorio trasero."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 10,
+      "matchScore": 1
+    },
+    {
+      "id": "f9",
+      "docId": "d1",
+      "kind": "communication",
+      "statement": "La demandante comunicó por escrito el defecto a la demandada mediante correo electrónico, dentro de los diez días siguientes al descubrimiento, conforme a la cláusula 9 del contrato",
+      "actors": [
+        "Lucía García Romero",
+        "demandante",
+        "Construcciones Valmar S.L.",
+        "demandada"
+      ],
+      "date": "2025-03-20",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 11,
+        "quote": "El 20 de marzo de 2025, dentro de los diez días siguientes al descubrimiento, la demandante comunicó por escrito el defecto a la demandada mediante correo electrónico, conforme a la cláusula 9 del contrato."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 11,
+      "matchScore": 1
+    },
+    {
+      "id": "f10",
+      "docId": "d1",
+      "kind": "denial",
+      "statement": "La demandada se ha negado a reparar el defecto",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "demandada"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 12,
+        "quote": "La demandada se ha negado a reparar el defecto."
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 12,
+      "matchScore": 1
+    },
+    {
+      "id": "f11",
+      "docId": "d1",
+      "kind": "representation",
+      "statement": "El coste de las obras de reparación ha sido valorado en 35.000 euros por un ingeniero especialista en cubiertas",
+      "actors": [
+        "Lucía García Romero",
+        "demandante"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": {
+        "value": 35000,
+        "currency": "EUR"
+      },
+      "anchor": {
+        "seq": 13,
+        "quote": "El coste de las obras de reparación ha sido valorado en 35.000 euros por un ingeniero especialista en cubiertas."
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 13,
+      "matchScore": 1
+    },
+    {
+      "id": "f12",
+      "docId": "d1",
+      "kind": "representation",
+      "statement": "La demandada nunca obtuvo la licencia de obras exigida para los trabajos de cubierta, en contra de la cláusula 6 del contrato",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "demandada"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 14,
+        "quote": "La demandada nunca obtuvo la licencia de obras exigida para los trabajos de cubierta, en contra de la cláusula 6 del contrato."
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 14,
+      "matchScore": 1
+    },
+    {
+      "id": "f13",
+      "docId": "d2",
+      "kind": "admission",
+      "statement": "Construcciones Valmar S.L. (demandada) admite los hechos primero, segundo y tercero de la demanda.",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "demandada"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 4,
+        "quote": "Se admiten los hechos primero, segundo y tercero de la demanda."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 4,
+      "matchScore": 1
+    },
+    {
+      "id": "f14",
+      "docId": "d2",
+      "kind": "denial",
+      "statement": "Construcciones Valmar S.L. (demandada) niega el hecho cuarto de la demanda.",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "demandada"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 5,
+        "quote": "Se niega el hecho cuarto."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 5,
+      "matchScore": 1
+    },
+    {
+      "id": "f15",
+      "docId": "d2",
+      "kind": "payment",
+      "statement": "Lucía García Romero (demandante) abonó a Construcciones Valmar S.L. (demandada) 40.000 euros el 14 de febrero de 2024.",
+      "actors": [
+        "Lucía García Romero",
+        "demandante",
+        "Construcciones Valmar S.L.",
+        "demandada"
+      ],
+      "date": "2024-02-14",
+      "datePrecision": "day",
+      "amount": {
+        "value": 40000,
+        "currency": "EUR"
+      },
+      "anchor": {
+        "seq": 5,
+        "quote": "La demandante abonó a la demandada 40.000 euros el 14 de febrero de 2024"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 5,
+      "matchScore": 1
+    },
+    {
+      "id": "f16",
+      "docId": "d2",
+      "kind": "representation",
+      "statement": "Construcciones Valmar S.L. (demandada) afirma que la demandante no abonó 48.000 euros, sino 40.000 euros.",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "demandada",
+        "Lucía García Romero",
+        "demandante"
+      ],
+      "date": "2024-02-14",
+      "datePrecision": "day",
+      "amount": {
+        "value": 48000,
+        "currency": "EUR"
+      },
+      "anchor": {
+        "seq": 5,
+        "quote": "La demandante abonó a la demandada 40.000 euros el 14 de febrero de 2024, no 48.000 euros"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 5,
+      "matchScore": 1
+    },
+    {
+      "id": "f17",
+      "docId": "d2",
+      "kind": "representation",
+      "statement": "Construcciones Valmar S.L. (demandada) afirma que el resto del anticipo nunca fue pagado por la demandante.",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "demandada",
+        "Lucía García Romero",
+        "demandante"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 5,
+        "quote": "el resto del anticipo nunca fue pagado"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 5,
+      "matchScore": 1
+    },
+    {
+      "id": "f18",
+      "docId": "d2",
+      "kind": "admission",
+      "statement": "Construcciones Valmar S.L. (demandada) admite que terminó las obras el 30 de agosto de 2024.",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "demandada"
+      ],
+      "date": "2024-08-30",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 6,
+        "quote": "Se admite que la demandada terminó las obras el 30 de agosto de 2024"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 6,
+      "matchScore": 1
+    },
+    {
+      "id": "f19",
+      "docId": "d2",
+      "kind": "event",
+      "statement": "Lucía García Romero (demandante) firmó un certificado de fin de obra el 2 de septiembre de 2024.",
+      "actors": [
+        "Lucía García Romero",
+        "demandante"
+      ],
+      "date": "2024-09-02",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 6,
+        "quote": "la demandante firmó el 2 de septiembre de 2024 un certificado de fin de obra"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 6,
+      "matchScore": 1
+    },
+    {
+      "id": "f20",
+      "docId": "d2",
+      "kind": "representation",
+      "statement": "Lucía García Romero (demandante) confirmó en el certificado de fin de obra que las obras estaban completas y a su satisfacción.",
+      "actors": [
+        "Lucía García Romero",
+        "demandante"
+      ],
+      "date": "2024-09-02",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 6,
+        "quote": "certificado de fin de obra en el que confirmaba que las obras estaban completas y a su satisfacción"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 6,
+      "matchScore": 1
+    },
+    {
+      "id": "f21",
+      "docId": "d2",
+      "kind": "denial",
+      "statement": "Construcciones Valmar S.L. (demandada) niega los hechos sexto y séptimo de la demanda.",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "demandada"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 7,
+        "quote": "Se niegan los hechos sexto y séptimo."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 7,
+      "matchScore": 1
+    },
+    {
+      "id": "f22",
+      "docId": "d2",
+      "kind": "representation",
+      "statement": "Construcciones Valmar S.L. (demandada) afirma que cualquier entrada de agua se debe a los paneles solares instalados por un tercero contratado por la demandante.",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "demandada",
+        "Lucía García Romero",
+        "demandante"
+      ],
+      "date": "2024-10",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 7,
+        "quote": "Cualquier entrada de agua se debe a los paneles solares instalados en la cubierta trasera por un tercero contratado por la demandante en octubre de 2024"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 7,
+      "matchScore": 1
+    },
+    {
+      "id": "f23",
+      "docId": "d2",
+      "kind": "event",
+      "statement": "Un tercero contratado por Lucía García Romero (demandante) instaló paneles solares en la cubierta trasera en octubre de 2024.",
+      "actors": [
+        "Lucía García Romero",
+        "demandante"
+      ],
+      "date": "2024-10",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 7,
+        "quote": "paneles solares instalados en la cubierta trasera por un tercero contratado por la demandante en octubre de 2024"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 7,
+      "matchScore": 1
+    },
+    {
+      "id": "f24",
+      "docId": "d2",
+      "kind": "event",
+      "statement": "Construcciones Valmar S.L. (demandada) abandonó la obra antes de octubre de 2024.",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "demandada"
+      ],
+      "date": "2024-10",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 7,
+        "quote": "después de que la demandada abandonara la obra"
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 7,
+      "matchScore": 1
+    },
+    {
+      "id": "f25",
+      "docId": "d2",
+      "kind": "denial",
+      "statement": "Construcciones Valmar S.L. (demandada) niega el hecho octavo de la demanda.",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "demandada"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 8,
+        "quote": "Se niega el hecho octavo."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 8,
+      "matchScore": 1
+    },
+    {
+      "id": "f26",
+      "docId": "d2",
+      "kind": "representation",
+      "statement": "Construcciones Valmar S.L. (demandada) afirma que no recibió ninguna comunicación escrita sobre supuestos defectos hasta que le fue notificada la demanda.",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "demandada"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 8,
+        "quote": "La demandada no recibió ninguna comunicación escrita sobre supuestos defectos hasta que le fue notificada esta demanda."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 8,
+      "matchScore": 1
+    },
+    {
+      "id": "f27",
+      "docId": "d2",
+      "kind": "denial",
+      "statement": "Construcciones Valmar S.L. (demandada) niega el hecho noveno de la demanda.",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "demandada"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 9,
+        "quote": "Se niega el hecho noveno."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 9,
+      "matchScore": 1
+    },
+    {
+      "id": "f28",
+      "docId": "d2",
+      "kind": "representation",
+      "statement": "Construcciones Valmar S.L. (demandada) afirma que no se solicitó reparación alguna antes de interponer la demanda.",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "demandada"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 9,
+        "quote": "No se solicitó reparación alguna antes de interponer la demanda."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 9,
+      "matchScore": 1
+    },
+    {
+      "id": "f29",
+      "docId": "d2",
+      "kind": "denial",
+      "statement": "Construcciones Valmar S.L. (demandada) niega el hecho décimo de la demanda.",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "demandada"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 10,
+        "quote": "Se niega el hecho décimo"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 10,
+      "matchScore": 1
+    },
+    {
+      "id": "f30",
+      "docId": "d2",
+      "kind": "denial",
+      "statement": "Construcciones Valmar S.L. (demandada) niega el hecho undécimo de la demanda.",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "demandada"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 11,
+        "quote": "Se niega el hecho undécimo."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 11,
+      "matchScore": 1
+    },
+    {
+      "id": "f31",
+      "docId": "d2",
+      "kind": "representation",
+      "statement": "Construcciones Valmar S.L. (demandada) afirma que se obtuvieron todas las licencias necesarias.",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "demandada"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 11,
+        "quote": "Se obtuvieron todas las licencias necesarias."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 11,
+      "matchScore": 1
+    },
+    {
+      "id": "f32",
+      "docId": "d3",
+      "kind": "representation",
+      "statement": "Lucía García Romero es la demandante en este procedimiento y declara sobre hechos que le constan personalmente",
+      "actors": [
+        "Lucía García Romero"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Soy la demandante en este procedimiento y declaro sobre hechos que me constan\n\npersonalmente."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f33",
+      "docId": "d3",
+      "kind": "event",
+      "statement": "Lucía García Romero firmó el contrato de obra con Construcciones Valmar S.L.",
+      "actors": [
+        "Lucía García Romero",
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2024-01-12",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "El 12 de enero de 2024 firmé el contrato de obra con Construcciones Valmar S.L."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f34",
+      "docId": "d3",
+      "kind": "event",
+      "statement": "Tomás Ibarra firmó el contrato en nombre de Construcciones Valmar S.L.",
+      "actors": [
+        "Tomás Ibarra",
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2024-01-12",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Don Tomás\n\nIbarra firmó en nombre de la empresa."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f35",
+      "docId": "d3",
+      "kind": "payment",
+      "statement": "Lucía García Romero pagó a Construcciones Valmar S.L. 48.000 euros mediante transferencia desde su cuenta en Banco Meridional como anticipo exigido por el contrato",
+      "actors": [
+        "Lucía García Romero",
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2024-02-14",
+      "datePrecision": "day",
+      "amount": {
+        "value": 48000,
+        "currency": "EUR"
+      },
+      "anchor": {
+        "seq": 1,
+        "quote": "El 14 de febrero de 2024 pagué a Construcciones Valmar S.L. la cantidad de 48.000 euros\n\nmediante transferencia desde mi cuenta en Banco Meridional."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f36",
+      "docId": "d3",
+      "kind": "representation",
+      "statement": "El pago de 48.000 euros era la totalidad del anticipo exigido por el contrato",
+      "actors": [
+        "Lucía García Romero"
+      ],
+      "date": "2024-02-14",
+      "datePrecision": "day",
+      "amount": {
+        "value": 48000,
+        "currency": "EUR"
+      },
+      "anchor": {
+        "seq": 1,
+        "quote": "Era la totalidad del anticipo exigido\n\npor el contrato."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f37",
+      "docId": "d3",
+      "kind": "communication",
+      "statement": "Construcciones Valmar S.L. comunicó a Lucía García Romero que las obras estaban terminadas a finales de agosto de 2024",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "Lucía García Romero"
+      ],
+      "date": "2024-08",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Valmar me comunicó que las obras estaban terminadas a finales de agosto de 2024."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f38",
+      "docId": "d3",
+      "kind": "event",
+      "statement": "Lucía García Romero tuvo conocimiento por primera vez de la gotera del dormitorio trasero en marzo de 2025 cuando observó manchas marrones de humedad extendiéndose por el techo tras unas lluvias intensas",
+      "actors": [
+        "Lucía García Romero"
+      ],
+      "date": "2025-03",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Tuve conocimiento por primera vez de la gotera del dormitorio trasero en marzo de 2025, cuando\n\nobservé manchas marrones de humedad extendiéndose por el techo tras unas lluvias intensas."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f39",
+      "docId": "d3",
+      "kind": "denial",
+      "statement": "Lucía García Romero niega haber hablado antes de marzo de 2025 de ningún problema de la cubierta con Construcciones Valmar S.L. ni con Tomás Ibarra",
+      "actors": [
+        "Lucía García Romero",
+        "Construcciones Valmar S.L.",
+        "Tomás Ibarra"
+      ],
+      "date": "2025-03",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Antes de marzo de 2025 nunca había hablado de ningún problema de la cubierta con Valmar ni\n\ncon el señor Ibarra."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f40",
+      "docId": "d3",
+      "kind": "representation",
+      "statement": "Lucía García Romero creía que la cubierta estaba en perfecto estado antes de marzo de 2025",
+      "actors": [
+        "Lucía García Romero"
+      ],
+      "date": "2025-03",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "No había nada de que hablar; creía que la cubierta estaba en perfecto estado."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f41",
+      "docId": "d3",
+      "kind": "communication",
+      "statement": "Lucía García Romero envió a Tomás Ibarra un correo electrónico con el asunto 'Aviso formal de defectos' describiendo la gotera y pidiendo a Construcciones Valmar S.L. que la reparase",
+      "actors": [
+        "Lucía García Romero",
+        "Tomás Ibarra",
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2025-03-20",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "El 20 de marzo de 2025 envié al señor Ibarra un correo electrónico con el asunto \"Aviso formal\n\nde defectos\" describiendo la gotera y pidiendo a Valmar que la reparase."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f42",
+      "docId": "d3",
+      "kind": "denial",
+      "statement": "Tomás Ibarra no se ofreció a reparar la cubierta",
+      "actors": [
+        "Tomás Ibarra"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "El señor Ibarra no se ofreció a reparar la cubierta."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f43",
+      "docId": "d3",
+      "kind": "communication",
+      "statement": "Construcciones Valmar S.L. escribió a Lucía García Romero negando cualquier responsabilidad",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "Lucía García Romero"
+      ],
+      "date": "2025-04-02",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "El 2 de abril de 2025 Valmar me escribió\n\nnegando cualquier responsabilidad."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f44",
+      "docId": "d3",
+      "kind": "representation",
+      "statement": "Lucía García Romero ha obtenido un presupuesto de 35.000 euros para las obras de reparación",
+      "actors": [
+        "Lucía García Romero"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": {
+        "value": 35000,
+        "currency": "EUR"
+      },
+      "anchor": {
+        "seq": 1,
+        "quote": "He obtenido un presupuesto de 35.000 euros para las obras de reparación."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f45",
+      "docId": "d3",
+      "kind": "event",
+      "statement": "Lucía García Romero juró esta declaración el 28 de mayo de 2026 ante notario",
+      "actors": [
+        "Lucía García Romero"
+      ],
+      "date": "2026-05-28",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Jurado el 28 de mayo de 2026 ante notario."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f46",
+      "docId": "d4",
+      "kind": "event",
+      "statement": "La cocina quedó terminada",
+      "actors": [
+        "Lucía García Romero"
+      ],
+      "date": "2024-08-28",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "La cocina ha quedado genial, gracias al equipo"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f47",
+      "docId": "d4",
+      "kind": "event",
+      "statement": "La cubierta estaba terminada",
+      "actors": [
+        "Tomás Ibarra",
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2024-08-28",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 2,
+        "quote": "La cubierta también está terminada"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f48",
+      "docId": "d4",
+      "kind": "obligation",
+      "statement": "Faltaba retirar el andamio",
+      "actors": [
+        "Tomás Ibarra",
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2024-08-28",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 2,
+        "quote": "solo falta retirar el andamio"
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f49",
+      "docId": "d4",
+      "kind": "communication",
+      "statement": "Tomás Ibarra envió el certificado de fin de obra por correo a Lucía García",
+      "actors": [
+        "Tomás Ibarra",
+        "Lucía García Romero"
+      ],
+      "date": "2024-09-02",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 3,
+        "quote": "Te he enviado el certificado de fin de obra por correo"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 3,
+      "matchScore": 1
+    },
+    {
+      "id": "f50",
+      "docId": "d4",
+      "kind": "obligation",
+      "statement": "Lucía García debía firmar y devolver el certificado de fin de obra",
+      "actors": [
+        "Lucía García Romero"
+      ],
+      "date": "2024-09-02",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 3,
+        "quote": "fírmalo y devuélvemelo cuando puedas"
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 3,
+      "matchScore": 1
+    },
+    {
+      "id": "f51",
+      "docId": "d4",
+      "kind": "event",
+      "statement": "El techo del dormitorio de atrás goteó después de la lluvia",
+      "actors": [
+        "Lucía García Romero"
+      ],
+      "date": "2024-11-14",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 4,
+        "quote": "el techo del dormitorio de atrás vuelve a gotear después de la lluvia de anoche"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 4,
+      "matchScore": 1
+    },
+    {
+      "id": "f52",
+      "docId": "d4",
+      "kind": "event",
+      "statement": "Había una mancha húmeda del tamaño de un plato en el techo del dormitorio",
+      "actors": [
+        "Lucía García Romero"
+      ],
+      "date": "2024-11-14",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 4,
+        "quote": "Hay una mancha húmeda del tamaño de un plato"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 4,
+      "matchScore": 1
+    },
+    {
+      "id": "f53",
+      "docId": "d4",
+      "kind": "representation",
+      "statement": "Tomás Ibarra indicó que el problema podía ser el remate de la chimenea",
+      "actors": [
+        "Tomás Ibarra"
+      ],
+      "date": "2024-11-14",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 5,
+        "quote": "Puede ser el remate de la chimenea"
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 5,
+      "matchScore": 1
+    },
+    {
+      "id": "f54",
+      "docId": "d4",
+      "kind": "obligation",
+      "statement": "Tomás Ibarra se comprometió a enviar a alguien el lunes a revisar la gotera",
+      "actors": [
+        "Tomás Ibarra",
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2024-11-18",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 5,
+        "quote": "El lunes mando a alguien a mirarlo"
+      },
+      "confidence": 0.85,
+      "verification": "verified",
+      "verifiedSeq": 5,
+      "matchScore": 1
+    },
+    {
+      "id": "f55",
+      "docId": "d4",
+      "kind": "event",
+      "statement": "El equipo fue desviado a otra obra y no pudo revisar la gotera",
+      "actors": [
+        "Tomás Ibarra",
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2024-11-18",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 6,
+        "quote": "Al equipo lo han desviado a otra obra, será la semana que viene"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 6,
+      "matchScore": 1
+    },
+    {
+      "id": "f56",
+      "docId": "d4",
+      "kind": "event",
+      "statement": "El techo volvió a gotear el domingo",
+      "actors": [
+        "Lucía García Romero"
+      ],
+      "date": "2024-12-03",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 7,
+        "quote": "El domingo volvió a gotear"
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 7,
+      "matchScore": 1
+    },
+    {
+      "id": "f57",
+      "docId": "d4",
+      "kind": "communication",
+      "statement": "Tomás Ibarra vio fotos del problema de la cubierta",
+      "actors": [
+        "Tomás Ibarra",
+        "Lucía García Romero"
+      ],
+      "date": "2025-01-10",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 8,
+        "quote": "He visto las fotos"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 8,
+      "matchScore": 1
+    },
+    {
+      "id": "f58",
+      "docId": "d4",
+      "kind": "denial",
+      "statement": "Tomás Ibarra negó que el problema de la cubierta fuera responsabilidad suya, atribuyéndolo a los instaladores de placas solares",
+      "actors": [
+        "Tomás Ibarra",
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2025-01-10",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 8,
+        "quote": "El problema de la cubierta es de los de las placas solares que contrataste, no nuestro"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 8,
+      "matchScore": 1
+    },
+    {
+      "id": "f59",
+      "docId": "d4",
+      "kind": "representation",
+      "statement": "Tomás Ibarra afirmó que los instaladores de placas solares cortaron la lámina de la cubierta",
+      "actors": [
+        "Tomás Ibarra"
+      ],
+      "date": "2025-01-10",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 8,
+        "quote": "Han cortado nuestra lámina"
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 8,
+      "matchScore": 1
+    },
+    {
+      "id": "f60",
+      "docId": "d4",
+      "kind": "representation",
+      "statement": "Lucía García indicó que las placas solares están en el faldón delantero y la gotera en el de atrás",
+      "actors": [
+        "Lucía García Romero"
+      ],
+      "date": "2025-01-10",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 9,
+        "quote": "Las placas solares están en el faldón delantero, la gotera está en el de atrás"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 9,
+      "matchScore": 1
+    },
+    {
+      "id": "f61",
+      "docId": "d4",
+      "kind": "communication",
+      "statement": "Lucía García envió un correo formal a Tomás Ibarra sobre la cubierta",
+      "actors": [
+        "Lucía García Romero",
+        "Tomás Ibarra"
+      ],
+      "date": "2025-03-20",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 10,
+        "quote": "Te acabo de enviar un correo formal sobre la cubierta"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 10,
+      "matchScore": 1
+    },
+    {
+      "id": "f62",
+      "docId": "d5",
+      "kind": "payment",
+      "statement": "Lucía García Romero realizó una transferencia bancaria a Construcciones Valmar S.L. por importe de 40.000,00 EUR con fecha valor 14 de febrero de 2024",
+      "actors": [
+        "Lucía García Romero",
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2024-02-14",
+      "datePrecision": "day",
+      "amount": {
+        "value": 40000,
+        "currency": "EUR"
+      },
+      "anchor": {
+        "seq": 1,
+        "quote": "Fecha valor: 14 de febrero de 2024\n\nImporte: 40.000,00 EUR (cuarenta mil euros)\n\nBeneficiario: Construcciones Valmar S.L."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f63",
+      "docId": "d5",
+      "kind": "payment",
+      "statement": "El pago de 40.000 EUR fue emitido desde la cuenta de Lucía García Romero terminada en 4471",
+      "actors": [
+        "Lucía García Romero"
+      ],
+      "date": "2024-02-14",
+      "datePrecision": "day",
+      "amount": {
+        "value": 40000,
+        "currency": "EUR"
+      },
+      "anchor": {
+        "seq": 1,
+        "quote": "emitida desde la cuenta terminada en 4471:\n\nFecha valor: 14 de febrero de 2024"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f64",
+      "docId": "d5",
+      "kind": "representation",
+      "statement": "La transferencia de 40.000 EUR tenía como concepto 'Anticipo reforma - Los Alisos 18'",
+      "actors": [
+        "Lucía García Romero",
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2024-02-14",
+      "datePrecision": "day",
+      "amount": {
+        "value": 40000,
+        "currency": "EUR"
+      },
+      "anchor": {
+        "seq": 1,
+        "quote": "Concepto: \"Anticipo reforma - Los Alisos 18\""
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f65",
+      "docId": "d5",
+      "kind": "representation",
+      "statement": "La referencia del beneficiario para la transferencia fue VAL-ANT-0124",
+      "actors": [
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2024-02-14",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Referencia del beneficiario: VAL-ANT-0124"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f66",
+      "docId": "d5",
+      "kind": "representation",
+      "statement": "Banco Meridional confirma que no consta ninguna otra transferencia a Construcciones Valmar S.L. desde la cuenta de Lucía García Romero entre el 1 de enero de 2024 y el 31 de marzo de 2024",
+      "actors": [
+        "Lucía García Romero",
+        "Construcciones Valmar S.L.",
+        "Banco Meridional"
+      ],
+      "date": "2024",
+      "datePrecision": "year",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "No consta ninguna otra transferencia a este beneficiario desde esta cuenta entre el 1 de enero de\n\n2024 y el 31 de marzo de 2024."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f67",
+      "docId": "d5",
+      "kind": "event",
+      "statement": "Banco Meridional emitió la confirmación de pago con referencia BM-2024-118822 el 3 de marzo de 2026",
+      "actors": [
+        "Banco Meridional"
+      ],
+      "date": "2026-03-03",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Confirmación de pago · Referencia BM-2024-118822\n\nFecha de emisión: 3 de marzo de 2026"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f68",
+      "docId": "d5",
+      "kind": "communication",
+      "statement": "La confirmación de pago fue emitida a petición de Lucía García Romero",
+      "actors": [
+        "Lucía García Romero",
+        "Banco Meridional"
+      ],
+      "date": "2026-03-03",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "A petición de nuestra cliente doña Lucía García Romero, confirmamos la siguiente transferencia"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f69",
+      "docId": "d6",
+      "kind": "communication",
+      "statement": "Lucía García Romero envió un correo electrónico a Tomás Ibarra con asunto 'Aviso formal de defectos - cubierta Los Alisos 18'",
+      "actors": [
+        "Lucía García Romero",
+        "Tomás Ibarra"
+      ],
+      "date": "2025-03-20",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "From: Lucía García <l.garcia@example.com>\nTo: Tomás Ibarra <tomas@valmar-construcciones.example>\nDate: Thu, 20 Mar 2025 15:48:00 +0100"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f70",
+      "docId": "d6",
+      "kind": "communication",
+      "statement": "Lucía García Romero notificó formalmente por escrito conforme a la cláusula 9 del contrato de obra de 12 de enero de 2024",
+      "actors": [
+        "Lucía García Romero"
+      ],
+      "date": "2025-03-20",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 2,
+        "quote": "La presente constituye aviso formal por escrito conforme a la cláusula 9 del contrato de obra de 12 de enero de 2024."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f71",
+      "docId": "d6",
+      "kind": "representation",
+      "statement": "Lucía García Romero afirmó que el faldón trasero de la cubierta sustituido por Construcciones Valmar S.L. tiene goteras",
+      "actors": [
+        "Lucía García Romero",
+        "Construcciones Valmar S.L."
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 2,
+        "quote": "El faldón trasero de la cubierta sustituido por Construcciones Valmar S.L. tiene goteras."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f72",
+      "docId": "d6",
+      "kind": "event",
+      "statement": "Construcciones Valmar S.L. sustituyó el faldón trasero de la cubierta",
+      "actors": [
+        "Construcciones Valmar S.L."
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 2,
+        "quote": "El faldón trasero de la cubierta sustituido por Construcciones Valmar S.L."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f73",
+      "docId": "d6",
+      "kind": "representation",
+      "statement": "Lucía García Romero afirmó que entra agua en el dormitorio trasero a través del techo cada vez que llueve",
+      "actors": [
+        "Lucía García Romero"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 2,
+        "quote": "Entra agua en el dormitorio trasero a través del techo cada vez que llueve."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f74",
+      "docId": "d6",
+      "kind": "communication",
+      "statement": "Lucía García Romero adjuntó fotografías al correo",
+      "actors": [
+        "Lucía García Romero"
+      ],
+      "date": "2025-03-20",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 2,
+        "quote": "Adjunto fotografías."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f75",
+      "docId": "d6",
+      "kind": "obligation",
+      "statement": "Lucía García Romero requirió a Construcciones Valmar S.L. para que inspeccione y repare el defecto en el plazo de 14 días desde el aviso del 20 de marzo de 2025",
+      "actors": [
+        "Lucía García Romero",
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2025-03-20",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 2,
+        "quote": "Requiero a Valmar para que inspeccione y repare el defecto en el plazo de 14 días desde este aviso."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f76",
+      "docId": "d6",
+      "kind": "communication",
+      "statement": "Tomás Ibarra leyó el mensaje 'Aviso formal de defectos - cubierta Los Alisos 18' el 20 de marzo de 2025 a las 16:02",
+      "actors": [
+        "Tomás Ibarra"
+      ],
+      "date": "2025-03-20",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 3,
+        "quote": "Su mensaje \"Aviso formal de defectos - cubierta Los Alisos 18\" fue leído por tomas@valmar-construcciones.example el 20 de marzo de 2025 a las 16:02."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 3,
+      "matchScore": 1
+    },
+    {
+      "id": "f82",
+      "docId": "d7",
+      "kind": "event",
+      "statement": "Contrato de obra firmado entre Lucía García Romero y Construcciones Valmar S.L.",
+      "actors": [
+        "Lucía García Romero",
+        "Construcciones Valmar S.L.",
+        "Tomás Ibarra"
+      ],
+      "date": "2024-01-12",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "En Villanueva, a 12 de enero de 2024, entre doña Lucía García Romero (la \"Propietaria\"), con"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f83",
+      "docId": "d7",
+      "kind": "representation",
+      "statement": "Tomás Ibarra actúa como administrador de Construcciones Valmar S.L.",
+      "actors": [
+        "Tomás Ibarra",
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2024-01-12",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Construcciones Valmar S.L. (la \"Contratista\"), representada por\n\nsu administrador don Tomás Ibarra."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f84",
+      "docId": "d7",
+      "kind": "representation",
+      "statement": "Lucía García Romero tiene domicilio en calle Los Alisos 18",
+      "actors": [
+        "Lucía García Romero"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "doña Lucía García Romero (la \"Propietaria\"), con\n\ndomicilio en calle Los Alisos 18"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f85",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "La Contratista reformará la cocina de la vivienda de la Propietaria conforme a la memoria del Anexo A",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "Contratista"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "La Contratista reformará la cocina y sustituirá el faldón trasero de la cubierta de la\n\nvivienda de la Propietaria conforme a la memoria del Anexo A."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f86",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "La Contratista sustituirá el faldón trasero de la cubierta de la vivienda de la Propietaria conforme a la memoria del Anexo A",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "Contratista"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "La Contratista reformará la cocina y sustituirá el faldón trasero de la cubierta de la\n\nvivienda de la Propietaria conforme a la memoria del Anexo A."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f87",
+      "docId": "d7",
+      "kind": "representation",
+      "statement": "El precio cerrado de las Obras es de 96.000 euros",
+      "actors": [
+        "Lucía García Romero",
+        "Construcciones Valmar S.L."
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": {
+        "value": 96000,
+        "currency": "EUR"
+      },
+      "anchor": {
+        "seq": 1,
+        "quote": "El precio cerrado de las Obras es de 96.000 euros."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f88",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "La Propietaria abonará un anticipo del 50% del precio, es decir 48.000 euros, en los 30 días siguientes a la firma",
+      "actors": [
+        "Lucía García Romero",
+        "Propietaria"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": {
+        "value": 48000,
+        "currency": "EUR"
+      },
+      "anchor": {
+        "seq": 1,
+        "quote": "La Propietaria abonará un anticipo del 50 % del precio, es decir 48.000 euros, en los 30\n\ndías siguientes a la firma."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f89",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "La Propietaria abonará el resto del precio a la finalización de las Obras",
+      "actors": [
+        "Lucía García Romero",
+        "Propietaria"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "El resto se abonará a la finalización."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f90",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "La Contratista terminará las Obras antes del 30 de junio de 2024",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "Contratista"
+      ],
+      "date": "2024-06-30",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "La Contratista terminará las Obras antes del 30 de junio de 2024."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f91",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "Todos los materiales serán nuevos y de calidad comercial",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "Contratista"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Todos los materiales serán nuevos y de calidad comercial."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f92",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "La Contratista obtendrá todas las licencias de obra necesarias antes de iniciar la parte correspondiente de las Obras",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "Contratista"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "La Contratista obtendrá todas las licencias de obra necesarias antes de iniciar la\n\nparte correspondiente de las Obras."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f93",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "La Contratista garantiza las Obras frente a defectos de ejecución durante 24 meses desde la finalización",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "Contratista"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "La Contratista garantiza las Obras frente a defectos de ejecución durante 24 meses\n\ndesde la finalización."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f94",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "La Contratista solo podrá subcontratar los trabajos de cubierta con el consentimiento escrito de la Propietaria",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "Contratista",
+        "Lucía García Romero",
+        "Propietaria"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "La Contratista solo podrá subcontratar los trabajos de cubierta con el\n\nconsentimiento escrito de la Propietaria."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f95",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "La Propietaria comunicará por escrito a la Contratista cualquier defecto en los 10 días siguientes a su descubrimiento",
+      "actors": [
+        "Lucía García Romero",
+        "Propietaria",
+        "Construcciones Valmar S.L.",
+        "Contratista"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "La Propietaria comunicará por escrito a la Contratista cualquier defecto en los\n\n10 días siguientes a su descubrimiento."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f96",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "La Contratista inspeccionará en los 14 días siguientes al aviso de defecto",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "Contratista"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "La Contratista inspeccionará en los 14 días siguientes al\n\naviso."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f97",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "A la finalización, las partes firmarán un certificado de fin de obra",
+      "actors": [
+        "Lucía García Romero",
+        "Construcciones Valmar S.L."
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "A la finalización, las partes firmarán un certificado de fin de obra."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f98",
+      "docId": "d7",
+      "kind": "event",
+      "statement": "Lucía García Romero firmó el contrato como Propietaria",
+      "actors": [
+        "Lucía García Romero",
+        "Propietaria"
+      ],
+      "date": "2024-01-12",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Firmado: Lucía García Romero, Propietaria."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f99",
+      "docId": "d7",
+      "kind": "event",
+      "statement": "Tomás Ibarra firmó el contrato por Construcciones Valmar S.L.",
+      "actors": [
+        "Tomás Ibarra",
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2024-01-12",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Firmado: Tomás Ibarra, por Construcciones Valmar\n\nS.L."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f77",
+      "docId": "d8",
+      "kind": "event",
+      "statement": "Las obras de Los Alisos 18 quedaron terminadas el 30 de agosto de 2024",
+      "actors": [
+        "Tomás Ibarra",
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2024-08-30",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 2,
+        "quote": "Las obras de Los Alisos 18 quedaron terminadas el 30 de agosto de 2024."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f78",
+      "docId": "d8",
+      "kind": "communication",
+      "statement": "Tomás Ibarra envió a Lucía García Romero un certificado de fin de obra adjunto al correo del 2 de septiembre de 2024",
+      "actors": [
+        "Tomás Ibarra",
+        "Construcciones Valmar S.L.",
+        "Lucía García Romero"
+      ],
+      "date": "2024-09-02",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 2,
+        "quote": "Adjunto el certificado de fin de obra para tu firma."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f79",
+      "docId": "d8",
+      "kind": "obligation",
+      "statement": "Lucía García Romero debe firmar el certificado de fin de obra y devolver una copia a Tomás Ibarra",
+      "actors": [
+        "Lucía García Romero",
+        "Tomás Ibarra"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 2,
+        "quote": "Por favor fírmalo y devuélveme una copia para nuestro archivo."
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f80",
+      "docId": "d8",
+      "kind": "payment",
+      "statement": "La factura final por el resto de 48.000 euros será enviada a Lucía García Romero durante la semana del 2 de septiembre de 2024",
+      "actors": [
+        "Tomás Ibarra",
+        "Construcciones Valmar S.L.",
+        "Lucía García Romero"
+      ],
+      "date": "2024-09",
+      "datePrecision": "month",
+      "amount": {
+        "value": 48000,
+        "currency": "EUR"
+      },
+      "anchor": {
+        "seq": 2,
+        "quote": "La factura final por el resto de 48.000 euros te llegará esta semana."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f81",
+      "docId": "d8",
+      "kind": "communication",
+      "statement": "Tomás Ibarra envió correo electrónico a Lucía García el 2 de septiembre de 2024 a las 10:01",
+      "actors": [
+        "Tomás Ibarra",
+        "Lucía García Romero"
+      ],
+      "date": "2024-09-02",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Date: Mon, 2 Sep 2024 10:01:00 +0200"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f100",
+      "docId": "d9",
+      "kind": "representation",
+      "statement": "Carmen Soler declara ser vecina de Lucía García Romero desde 2019.",
+      "actors": [
+        "Carmen Soler",
+        "Lucía García Romero"
+      ],
+      "date": "2019",
+      "datePrecision": "year",
+      "amount": null,
+      "anchor": {
+        "seq": 3,
+        "quote": "Soy vecina de Lucía García Romero desde 2019."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 3,
+      "matchScore": 1
+    },
+    {
+      "id": "f101",
+      "docId": "d9",
+      "kind": "communication",
+      "statement": "A principios de noviembre de 2024, Lucía García Romero contó a Carmen Soler que entraba agua por el techo de su dormitorio trasero.",
+      "actors": [
+        "Lucía García Romero",
+        "Carmen Soler"
+      ],
+      "date": "2024-11",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 4,
+        "quote": "A principios de noviembre de 2024, en torno a las primeras lluvias fuertes del otoño, Lucía me contó que entraba agua por el techo de su dormitorio trasero"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 4,
+      "matchScore": 1
+    },
+    {
+      "id": "f102",
+      "docId": "d9",
+      "kind": "event",
+      "statement": "Entraba agua por el techo del dormitorio trasero de Lucía García Romero a principios de noviembre de 2024.",
+      "actors": [
+        "Lucía García Romero"
+      ],
+      "date": "2024-11",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 4,
+        "quote": "entraba agua por el techo de su dormitorio trasero"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 4,
+      "matchScore": 1
+    },
+    {
+      "id": "f103",
+      "docId": "d9",
+      "kind": "communication",
+      "statement": "Lucía García Romero había escrito por mensaje a su constructor a principios de noviembre de 2024.",
+      "actors": [
+        "Lucía García Romero"
+      ],
+      "date": "2024-11",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 4,
+        "quote": "había escrito por mensaje a su constructor"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 4,
+      "matchScore": 1
+    },
+    {
+      "id": "f104",
+      "docId": "d9",
+      "kind": "event",
+      "statement": "Carmen Soler vio una mancha marrón de humedad en el techo del dormitorio de Lucía García Romero el 16 de noviembre de 2024 aproximadamente.",
+      "actors": [
+        "Carmen Soler",
+        "Lucía García Romero"
+      ],
+      "date": "2024-11-16",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 5,
+        "quote": "Yo misma vi una mancha marrón de humedad en ese techo el 16 de noviembre de 2024 aproximadamente"
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 5,
+      "matchScore": 1
+    },
+    {
+      "id": "f105",
+      "docId": "d9",
+      "kind": "event",
+      "statement": "Carmen Soler ayudó a Lucía García Romero a separar un armario de la pared el 16 de noviembre de 2024 aproximadamente.",
+      "actors": [
+        "Carmen Soler",
+        "Lucía García Romero"
+      ],
+      "date": "2024-11-16",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 5,
+        "quote": "cuando ayudé a Lucía a separar un armario de la pared"
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 5,
+      "matchScore": 1
+    },
+    {
+      "id": "f106",
+      "docId": "d9",
+      "kind": "communication",
+      "statement": "En diciembre de 2024, Lucía García Romero dijo a Carmen Soler que el constructor todavía no había ido a ver el problema.",
+      "actors": [
+        "Lucía García Romero",
+        "Carmen Soler"
+      ],
+      "date": "2024-12",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 6,
+        "quote": "En diciembre de 2024 Lucía me dijo que el constructor todavía no había ido a verlo."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 6,
+      "matchScore": 1
+    },
+    {
+      "id": "f107",
+      "docId": "d9",
+      "kind": "representation",
+      "statement": "Carmen Soler declara no haber visto a ningún operario de Construcciones Valmar S.L. en la casa entre septiembre de 2024 y la primavera de 2025.",
+      "actors": [
+        "Carmen Soler",
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2024-09",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 7,
+        "quote": "No vi a ningún operario de Valmar en la casa entre septiembre de 2024 y la primavera de 2025."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 7,
+      "matchScore": 1
+    },
+    {
+      "id": "f108",
+      "docId": "d9",
+      "kind": "event",
+      "statement": "Carmen Soler firmó su declaración testifical el 20 de mayo de 2026.",
+      "actors": [
+        "Carmen Soler"
+      ],
+      "date": "2026-05-20",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 9,
+        "quote": "Firmado: Carmen Soler. A 20 de mayo de 2026."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 9,
+      "matchScore": 1
+    },
+    {
+      "id": "f109",
+      "docId": "d10",
+      "kind": "communication",
+      "statement": "Lucía García Romero envió un correo electrónico a Construcciones Valmar S.L. sobre un supuesto defecto de la cubierta",
+      "actors": [
+        "Lucía García Romero",
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2025-03-20",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "su correo electrónico de 20 de marzo de 2025"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f110",
+      "docId": "d10",
+      "kind": "communication",
+      "statement": "Construcciones Valmar S.L. acusa recibo del correo electrónico de Lucía García Romero de 20 de marzo de 2025",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "Lucía García Romero"
+      ],
+      "date": "2025-04-02",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Acusamos recibo de su correo electrónico de 20 de marzo de 2025"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f111",
+      "docId": "d10",
+      "kind": "representation",
+      "statement": "Construcciones Valmar S.L. tuvo conocimiento por primera vez del supuesto defecto de la cubierta a través del escrito de 20 de marzo de 2025",
+      "actors": [
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2025-03-20",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Tuvimos conocimiento por primera vez del supuesto defecto de la cubierta a través de ese escrito"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f112",
+      "docId": "d10",
+      "kind": "representation",
+      "statement": "El supuesto defecto fue comunicado más de seis meses después de terminadas y certificadas las obras",
+      "actors": [
+        "Construcciones Valmar S.L."
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "más de seis meses después de terminadas y certificadas las obras"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f113",
+      "docId": "d10",
+      "kind": "event",
+      "statement": "Los trabajos de cubierta de Construcciones Valmar S.L. se terminaron conforme a la memoria",
+      "actors": [
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2024-08-30",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Nuestros trabajos de cubierta se terminaron conforme a la memoria el 30 de agosto de 2024"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f114",
+      "docId": "d10",
+      "kind": "event",
+      "statement": "Lucía García Romero firmó el certificado de fin de obra",
+      "actors": [
+        "Lucía García Romero"
+      ],
+      "date": "2024-08-30",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "usted firmó el certificado de fin de obra"
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f115",
+      "docId": "d10",
+      "kind": "representation",
+      "statement": "Construcciones Valmar S.L. tiene entendido que posteriormente un tercero contratado por Lucía García Romero instaló placas solares en la cubierta",
+      "actors": [
+        "Construcciones Valmar S.L.",
+        "Lucía García Romero"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Tenemos entendido que posteriormente un tercero contratado por usted instaló placas solares en la cubierta"
+      },
+      "confidence": 0.85,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f116",
+      "docId": "d10",
+      "kind": "representation",
+      "statement": "Según Construcciones Valmar S.L., cualquier entrada de agua es atribuible a la instalación posterior de placas solares y no a sus trabajos",
+      "actors": [
+        "Construcciones Valmar S.L."
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "A nuestro juicio, cualquier entrada de agua es atribuible a esa instalación posterior y no a nuestros trabajos"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f117",
+      "docId": "d10",
+      "kind": "denial",
+      "statement": "Construcciones Valmar S.L. no acepta responsabilidad por el supuesto defecto",
+      "actors": [
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2025-04-02",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "no aceptamos responsabilidad por el supuesto defecto"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f118",
+      "docId": "d10",
+      "kind": "denial",
+      "statement": "Construcciones Valmar S.L. no realizará obras de reparación",
+      "actors": [
+        "Construcciones Valmar S.L."
+      ],
+      "date": "2025-04-02",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "no realizaremos obras de reparación"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f119",
+      "docId": "d10",
+      "kind": "communication",
+      "statement": "Tomás Ibarra, como Administrador de Construcciones Valmar S.L., firma la carta dirigida a Lucía García Romero",
+      "actors": [
+        "Tomás Ibarra",
+        "Construcciones Valmar S.L.",
+        "Lucía García Romero"
+      ],
+      "date": "2025-04-02",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Tomás Ibarra, Administrador"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    }
+  ],
+  "actors": [
+    "Banco Meridional",
+    "Carmen Soler",
+    "Construcciones Valmar S.L.",
+    "Contratista",
+    "demandada",
+    "demandante",
+    "Lucía García Romero",
+    "Propietaria",
+    "Tomás Ibarra"
+  ],
+  "timeline": [
+    {
+      "id": "e1",
+      "date": "2019",
+      "precision": "year",
+      "factIds": [
+        "f100"
+      ],
+      "summary": "Carmen Soler declara ser vecina de Lucía García Romero desde 2019."
+    },
+    {
+      "id": "e2",
+      "date": "2024",
+      "precision": "year",
+      "factIds": [
+        "f66"
+      ],
+      "summary": "Banco Meridional confirma que no consta ninguna otra transferencia a Construcciones Valmar S.L. desde la cuenta de Lucía García Romero entre el 1 de enero de 2024 y el 31 de marzo de 2024"
+    },
+    {
+      "id": "e3",
+      "date": "2024-01-12",
+      "precision": "day",
+      "factIds": [
+        "f4",
+        "f33",
+        "f34",
+        "f82",
+        "f83",
+        "f98",
+        "f99"
+      ],
+      "summary": "Las partes firmaron un contrato de obra para la reforma de la cocina y la sustitución del faldón trasero de la cubierta · Lucía García Romero firmó el contrato de obra con Construcciones Valmar S.L."
+    },
+    {
+      "id": "e4",
+      "date": "2024-02-14",
+      "precision": "day",
+      "factIds": [
+        "f5",
+        "f15",
+        "f16",
+        "f35",
+        "f36",
+        "f62",
+        "f63",
+        "f64",
+        "f65"
+      ],
+      "summary": "La demandante abonó a la demandada el anticipo contractual mediante transferencia desde su cuenta en Banco Meridional · Lucía García Romero (demandante) abonó a Construcciones Valmar S.L. (demandada) 40.000 euros el 14 de febrero de 2024."
+    },
+    {
+      "id": "e5",
+      "date": "2024-06-30",
+      "precision": "day",
+      "factIds": [
+        "f90"
+      ],
+      "summary": "La Contratista terminará las Obras antes del 30 de junio de 2024"
+    },
+    {
+      "id": "e6",
+      "date": "2024-08",
+      "precision": "month",
+      "factIds": [
+        "f37"
+      ],
+      "summary": "Construcciones Valmar S.L. comunicó a Lucía García Romero que las obras estaban terminadas a finales de agosto de 2024"
+    },
+    {
+      "id": "e7",
+      "date": "2024-08-28",
+      "precision": "day",
+      "factIds": [
+        "f46",
+        "f47",
+        "f48"
+      ],
+      "summary": "La cocina quedó terminada · La cubierta estaba terminada"
+    },
+    {
+      "id": "e8",
+      "date": "2024-08-30",
+      "precision": "day",
+      "factIds": [
+        "f6",
+        "f18",
+        "f77",
+        "f113",
+        "f114"
+      ],
+      "summary": "La demandada manifestó que las obras quedaron terminadas el 30 de agosto de 2024 · Construcciones Valmar S.L. (demandada) admite que terminó las obras el 30 de agosto de 2024."
+    },
+    {
+      "id": "e9",
+      "date": "2024-09",
+      "precision": "month",
+      "factIds": [
+        "f80",
+        "f107"
+      ],
+      "summary": "La factura final por el resto de 48.000 euros será enviada a Lucía García Romero durante la semana del 2 de septiembre de 2024 · Carmen Soler declara no haber visto a ningún operario de Construcciones Valmar S.L. en la casa entre septiembre de 2024 y la primavera de 2025."
+    },
+    {
+      "id": "e10",
+      "date": "2024-09-02",
+      "precision": "day",
+      "factIds": [
+        "f19",
+        "f20",
+        "f49",
+        "f50",
+        "f78",
+        "f81"
+      ],
+      "summary": "Lucía García Romero (demandante) firmó un certificado de fin de obra el 2 de septiembre de 2024. · Lucía García Romero (demandante) confirmó en el certificado de fin de obra que las obras estaban completas y a su satisfacción."
+    },
+    {
+      "id": "e11",
+      "date": "2024-10",
+      "precision": "month",
+      "factIds": [
+        "f22",
+        "f23",
+        "f24"
+      ],
+      "summary": "Construcciones Valmar S.L. (demandada) afirma que cualquier entrada de agua se debe a los paneles solares instalados por un tercero contratado por la demandante. · Un tercero contratado por Lucía García Romero (demandante) instaló paneles solares en la cubierta trasera en octubre de 2024."
+    },
+    {
+      "id": "e12",
+      "date": "2024-11",
+      "precision": "month",
+      "factIds": [
+        "f101",
+        "f102",
+        "f103"
+      ],
+      "summary": "A principios de noviembre de 2024, Lucía García Romero contó a Carmen Soler que entraba agua por el techo de su dormitorio trasero. · Entraba agua por el techo del dormitorio trasero de Lucía García Romero a principios de noviembre de 2024."
+    },
+    {
+      "id": "e13",
+      "date": "2024-11-14",
+      "precision": "day",
+      "factIds": [
+        "f51",
+        "f52",
+        "f53"
+      ],
+      "summary": "El techo del dormitorio de atrás goteó después de la lluvia · Había una mancha húmeda del tamaño de un plato en el techo del dormitorio"
+    },
+    {
+      "id": "e14",
+      "date": "2024-11-16",
+      "precision": "day",
+      "factIds": [
+        "f104",
+        "f105"
+      ],
+      "summary": "Carmen Soler vio una mancha marrón de humedad en el techo del dormitorio de Lucía García Romero el 16 de noviembre de 2024 aproximadamente. · Carmen Soler ayudó a Lucía García Romero a separar un armario de la pared el 16 de noviembre de 2024 aproximadamente."
+    },
+    {
+      "id": "e15",
+      "date": "2024-11-18",
+      "precision": "day",
+      "factIds": [
+        "f54",
+        "f55"
+      ],
+      "summary": "Tomás Ibarra se comprometió a enviar a alguien el lunes a revisar la gotera · El equipo fue desviado a otra obra y no pudo revisar la gotera"
+    },
+    {
+      "id": "e16",
+      "date": "2024-12",
+      "precision": "month",
+      "factIds": [
+        "f106"
+      ],
+      "summary": "En diciembre de 2024, Lucía García Romero dijo a Carmen Soler que el constructor todavía no había ido a ver el problema."
+    },
+    {
+      "id": "e17",
+      "date": "2024-12-03",
+      "precision": "day",
+      "factIds": [
+        "f56"
+      ],
+      "summary": "El techo volvió a gotear el domingo"
+    },
+    {
+      "id": "e18",
+      "date": "2025-01-10",
+      "precision": "day",
+      "factIds": [
+        "f57",
+        "f58",
+        "f59",
+        "f60"
+      ],
+      "summary": "Tomás Ibarra vio fotos del problema de la cubierta · Tomás Ibarra negó que el problema de la cubierta fuera responsabilidad suya, atribuyéndolo a los instaladores de placas solares"
+    },
+    {
+      "id": "e19",
+      "date": "2025-03",
+      "precision": "month",
+      "factIds": [
+        "f8",
+        "f38",
+        "f39",
+        "f40"
+      ],
+      "summary": "La demandante descubrió el defecto por primera vez cuando aparecieron manchas de humedad en el techo del dormitorio trasero · Lucía García Romero tuvo conocimiento por primera vez de la gotera del dormitorio trasero en marzo de 2025 cuando observó manchas marrones de humedad extendiéndose por el techo tras unas lluvias intensas"
+    },
+    {
+      "id": "e20",
+      "date": "2025-03-20",
+      "precision": "day",
+      "factIds": [
+        "f9",
+        "f41",
+        "f61",
+        "f69",
+        "f70",
+        "f74",
+        "f75",
+        "f76",
+        "f109",
+        "f111"
+      ],
+      "summary": "La demandante comunicó por escrito el defecto a la demandada mediante correo electrónico, dentro de los diez días siguientes al descubrimiento, conforme a la cláusula 9 del contrato · Lucía García Romero envió a Tomás Ibarra un correo electrónico con el asunto 'Aviso formal de defectos' describiendo la gotera y pidiendo a Construcciones Valmar S.L. que la reparase"
+    },
+    {
+      "id": "e21",
+      "date": "2025-04-02",
+      "precision": "day",
+      "factIds": [
+        "f43",
+        "f110",
+        "f117",
+        "f118",
+        "f119"
+      ],
+      "summary": "Construcciones Valmar S.L. escribió a Lucía García Romero negando cualquier responsabilidad · Construcciones Valmar S.L. acusa recibo del correo electrónico de Lucía García Romero de 20 de marzo de 2025"
+    },
+    {
+      "id": "e22",
+      "date": "2026-03-03",
+      "precision": "day",
+      "factIds": [
+        "f67",
+        "f68"
+      ],
+      "summary": "Banco Meridional emitió la confirmación de pago con referencia BM-2024-118822 el 3 de marzo de 2026 · La confirmación de pago fue emitida a petición de Lucía García Romero"
+    },
+    {
+      "id": "e23",
+      "date": "2026-05-20",
+      "precision": "day",
+      "factIds": [
+        "f108"
+      ],
+      "summary": "Carmen Soler firmó su declaración testifical el 20 de mayo de 2026."
+    },
+    {
+      "id": "e24",
+      "date": "2026-05-28",
+      "precision": "day",
+      "factIds": [
+        "f45"
+      ],
+      "summary": "Lucía García Romero juró esta declaración el 28 de mayo de 2026 ante notario"
+    }
+  ],
+  "contradictions": [
+    {
+      "id": "C1",
+      "factA": "f35",
+      "factB": "f66",
+      "issue": "Monto de transferencia bancaria a Construcciones Valmar",
+      "rationale": "La declaración jurada afirma que pagó 48.000 euros el 14 de febrero de 2024. La confirmación bancaria documenta una transferencia de 40.000 euros y confirma que no hubo otras transferencias en ese período. Las cantidades son incompatibles.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.99,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C2",
+      "factA": "f5",
+      "factB": "f62",
+      "issue": "Importe del anticipo contractual pagado",
+      "rationale": "La demanda afirma que se pagaron 48.000 euros de anticipo el 14 de febrero de 2024. El documento bancario contemporáneo muestra que la transferencia fue de 40.000 euros en esa fecha. Son cantidades incompatibles para el mismo pago.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement",
+        "amount_mismatch"
+      ],
+      "confidence": 0.98,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C3",
+      "factA": "f35",
+      "factB": "f62",
+      "issue": "Importe del pago de anticipo",
+      "rationale": "La declaración jurada afirma que se pagaron 48.000 euros el 14 de febrero de 2024. La confirmación bancaria muestra que la transferencia fue de 40.000 euros en esa misma fecha. Los importes son incompatibles.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement",
+        "amount_mismatch"
+      ],
+      "confidence": 0.98,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C4",
+      "factA": "f39",
+      "factB": "f51",
+      "issue": "Comunicación previa sobre problemas de cubierta con Ibarra",
+      "rationale": "La declaración jurada niega haber hablado antes de marzo de 2025 de problemas de cubierta con Tomás Ibarra. El mensaje de WhatsApp del 14 de noviembre de 2024 documenta que Lucía García comunicó a Tomás Ibarra que el techo goteaba. Estas afirmaciones son directamente incompatibles.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.98,
+      "strength": "direct",
+      "issueId": "I4"
+    },
+    {
+      "id": "C5",
+      "factA": "f39",
+      "factB": "f52",
+      "issue": "Comunicación previa sobre problemas de cubierta con Ibarra",
+      "rationale": "La declaración jurada niega comunicación antes de marzo de 2025 sobre problemas de cubierta con Ibarra. El mensaje de WhatsApp del 14 de noviembre de 2024 sobre una mancha húmeda en el techo constituye una comunicación sobre un problema de cubierta. Son incompatibles.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.98,
+      "strength": "direct",
+      "issueId": "I4"
+    },
+    {
+      "id": "C6",
+      "factA": "f39",
+      "factB": "f56",
+      "issue": "Comunicación previa sobre problemas de cubierta con Ibarra",
+      "rationale": "La declaración jurada niega haber hablado antes de marzo de 2025 de problemas de cubierta con Ibarra. El mensaje del 3 de diciembre de 2024 informando que volvió a gotear documenta comunicación sobre problemas de cubierta. Ambas afirmaciones no pueden ser ciertas.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.98,
+      "strength": "direct",
+      "issueId": "I4"
+    },
+    {
+      "id": "C7",
+      "factA": "f62",
+      "factB": "f36",
+      "issue": "Importe del anticipo pagado",
+      "rationale": "El documento bancario confirma una transferencia de 40.000 EUR el 14 de febrero de 2024. La declaración jurada afirma que se pagaron 48.000 euros en esa misma fecha como totalidad del anticipo. Estas cantidades son directamente incompatibles.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement",
+        "amount_mismatch"
+      ],
+      "confidence": 0.98,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C8",
+      "factA": "f64",
+      "factB": "f35",
+      "issue": "Cantidad del anticipo transferido",
+      "rationale": "La confirmación bancaria muestra una transferencia de 40.000 EUR como anticipo el 14 de febrero de 2024. La declaración jurada afirma que se pagaron 48.000 euros mediante transferencia en esa misma fecha. Las cantidades son incompatibles.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement",
+        "amount_mismatch"
+      ],
+      "confidence": 0.98,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C9",
+      "factA": "f35",
+      "factB": "f63",
+      "issue": "Monto del pago febrero 2024",
+      "rationale": "La declaración jurada de Lucía García afirma que pagó 48.000 euros el 14 de febrero de 2024. Sin embargo, la confirmación bancaria muestra que el pago realizado esa fecha fue de 40.000 euros desde su cuenta terminada en 4471. Estos montos son directamente incompatibles para la misma transacción en la misma fecha.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement",
+        "amount_mismatch"
+      ],
+      "confidence": 0.98,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C10",
+      "factA": "f110",
+      "factB": "f26",
+      "issue": "Recepción de comunicación escrita previa",
+      "rationale": "La carta de Construcciones Valmar acusa recibo del correo de 20 de marzo de 2025. La contestación a la demanda afirma que no recibió ninguna comunicación escrita sobre defectos hasta la notificación de la demanda. Estas afirmaciones del mismo demandado son incompatibles.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.96,
+      "strength": "direct",
+      "issueId": "I2"
+    },
+    {
+      "id": "C11",
+      "factA": "f8",
+      "factB": "f51",
+      "issue": "Primer conocimiento del defecto de cubierta",
+      "rationale": "La demandante afirma bajo juramento que descubrió el defecto por primera vez en marzo de 2025. Sin embargo, mensajes de WhatsApp de noviembre de 2024 muestran que ya reportaba goteras en el mismo dormitorio trasero. Ambos documentos son de la misma parte (demandante) y son incompatibles sobre cuándo tuvo conocimiento del problema.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I3"
+    },
+    {
+      "id": "C12",
+      "factA": "f26",
+      "factB": "f69",
+      "issue": "Recepción de comunicación escrita",
+      "rationale": "La demandada afirma no haber recibido comunicación escrita sobre defectos hasta la demanda. El correo electrónico del 20 de marzo de 2025 dirigido a Tomás Ibarra de Valmar constituye una comunicación escrita formal sobre defectos anterior a la demanda.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I2"
+    },
+    {
+      "id": "C13",
+      "factA": "f38",
+      "factB": "f51",
+      "issue": "Fecha primer conocimiento de gotera dormitorio trasero",
+      "rationale": "La declaración jurada afirma que tuvo conocimiento por primera vez en marzo de 2025. Sin embargo, el mensaje de WhatsApp del 14 de noviembre de 2024 usa la palabra 'vuelve' a gotear, implicando conocimiento previo de que el techo goteaba. Ambas afirmaciones sobre el mismo hecho (primer conocimiento) son incompatibles.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I3"
+    },
+    {
+      "id": "C14",
+      "factA": "f52",
+      "factB": "f38",
+      "issue": "Fecha primer conocimiento de gotera dormitorio trasero",
+      "rationale": "El mensaje del 14 de noviembre de 2024 documenta conocimiento de una mancha húmeda en el techo del dormitorio. La declaración jurada afirma que tuvo conocimiento por primera vez en marzo de 2025. Ambas fechas de primer conocimiento son incompatibles.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I3"
+    },
+    {
+      "id": "C15",
+      "factA": "f56",
+      "factB": "f38",
+      "issue": "Fecha primer conocimiento de gotera dormitorio trasero",
+      "rationale": "El mensaje del 3 de diciembre de 2024 documenta conocimiento de que el techo goteaba. La declaración jurada afirma que tuvo conocimiento por primera vez en marzo de 2025. Estas fechas de primer conocimiento son directamente incompatibles.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I3"
+    },
+    {
+      "id": "C16",
+      "factA": "f76",
+      "factB": "f26",
+      "issue": "Recepción de comunicación escrita sobre defectos",
+      "rationale": "El acuse de lectura confirma que Tomás Ibarra leyó el aviso formal de defectos el 20 de marzo de 2025 a las 16:02. La demandada afirma que no recibió ninguna comunicación escrita sobre defectos hasta la notificación de la demanda. Estas afirmaciones son directamente incompatibles.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I2"
+    },
+    {
+      "id": "C17",
+      "factA": "f70",
+      "factB": "f28",
+      "issue": "Notificación previa de defectos antes de demandar",
+      "rationale": "El documento A muestra que Lucía García envió un aviso formal por escrito el 20 de marzo de 2025 conforme a la cláusula 9 del contrato, solicitando reparación de defectos. El documento B afirma que no se solicitó reparación alguna antes de interponer la demanda. Estas dos afirmaciones son incompatibles sobre el mismo hecho.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I2"
+    },
+    {
+      "id": "C18",
+      "factA": "f88",
+      "factB": "f62",
+      "issue": "Importe del anticipo pagado",
+      "rationale": "El contrato establece un anticipo de 48.000 euros (50% del precio). La confirmación bancaria muestra una transferencia de solo 40.000 euros el 14 de febrero de 2024. Existe una diferencia de 8.000 euros entre el importe contractual y el importe efectivamente transferido.",
+      "severity": "high",
+      "severityFactors": [
+        "party_statement",
+        "amount_mismatch"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C19",
+      "factA": "f114",
+      "factB": "f19",
+      "issue": "Fecha de firma del certificado",
+      "rationale": "La carta de Construcciones Valmar indica que el certificado fue firmado el 30 de agosto de 2024. La contestación a la demanda afirma que fue firmado el 2 de septiembre de 2024. Estas fechas son incompatibles.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I7"
+    },
+    {
+      "id": "C20",
+      "factA": "f109",
+      "factB": "f26",
+      "issue": "Recepción de correo sobre defectos",
+      "rationale": "La carta de Construcciones Valmar reconoce expresamente haber recibido 'su correo electrónico de 20 de marzo de 2025' sobre el defecto de la cubierta. Sin embargo, en su contestación a la demanda, la misma empresa afirma categóricamente que 'no recibió ninguna comunicación escrita sobre supuestos defectos hasta que le fue notificada esta demanda'. Estas dos afirmaciones de la misma parte son incompatibles sobre el mismo hecho.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I2"
+    },
+    {
+      "id": "C21",
+      "factA": "f36",
+      "factB": "f15",
+      "issue": "Importe total del anticipo",
+      "rationale": "La declaración jurada afirma que 48.000 euros era la totalidad del anticipo. La contestación de la demandada afirma que se abonaron 40.000 euros. Estos importes son incompatibles como totalidad del anticipo.",
+      "severity": "high",
+      "severityFactors": [
+        "party_statement",
+        "amount_mismatch"
+      ],
+      "confidence": 0.92,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C22",
+      "factA": "f22",
+      "factB": "f60",
+      "issue": "Causa de entrada de agua",
+      "rationale": "La demandada afirma que la entrada de agua se debe a paneles solares en la cubierta trasera. Lucía García indica que los paneles están en el faldón delantero y la gotera en el trasero. Estas ubicaciones son incompatibles con la explicación de la demandada.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.9,
+      "strength": "direct",
+      "issueId": "I8"
+    },
+    {
+      "id": "C23",
+      "factA": "f71",
+      "factB": "f40",
+      "issue": "Estado de la cubierta antes de marzo 2025",
+      "rationale": "El documento A afirma que el faldón trasero de la cubierta tiene goteras. El documento B es una declaración jurada donde Lucía afirma que creía que la cubierta estaba en perfecto estado antes de marzo de 2025. Estas afirmaciones son incompatibles: no puede simultáneamente creer que está en perfecto estado y afirmar que tiene goteras.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.9,
+      "strength": "direct",
+      "issueId": "I5"
+    },
+    {
+      "id": "C24",
+      "factA": "f62",
+      "factB": "f80",
+      "issue": "Suma total pagada incorrecta",
+      "rationale": "El pago de 40.000 euros en febrero 2024 más la factura final de 48.000 euros suma 88.000 euros, no los 96.000 euros del precio cerrado del contrato. Falta justificar 8.000 euros o existe un error en las cantidades declaradas.",
+      "severity": "high",
+      "severityFactors": [
+        "party_statement",
+        "timing_gap",
+        "amount_mismatch"
+      ],
+      "confidence": 0.88,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C25",
+      "factA": "f15",
+      "factB": "f35",
+      "issue": "Importe del pago de anticipo",
+      "rationale": "La contestación de la demandada afirma que recibió 40.000 euros. La declaración jurada de la demandante afirma que pagó 48.000 euros en la misma fecha. Son cantidades incompatibles para la misma transacción, aunque aquí es disputa entre partes opuestas.",
+      "severity": "high",
+      "severityFactors": [
+        "party_statement",
+        "amount_mismatch"
+      ],
+      "confidence": 0.85,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C26",
+      "factA": "f15",
+      "factB": "f80",
+      "issue": "Monto del primer pago",
+      "rationale": "La contestación a la demanda afirma que Lucía García abonó 40.000 euros el 14 de febrero de 2024. Sin embargo, el email de Tomás Ibarra del 2 de septiembre de 2024 menciona una factura final por 'el resto de 48.000 euros', lo que implica que el pago inicial fue de 40.000 euros (si el total es 88.000). Estos montos son incompatibles si el total del contrato era diferente.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement",
+        "timing_gap",
+        "amount_mismatch"
+      ],
+      "confidence": 0.85,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C27",
+      "factA": "f66",
+      "factB": "f36",
+      "issue": "Totalidad del anticipo versus transferencias",
+      "rationale": "El banco confirma que solo hubo una transferencia de 40.000 EUR entre enero y marzo de 2024. La declaración jurada afirma que se pagaron 48.000 euros como totalidad del anticipo el 14 de febrero. Si no hay otras transferencias, los 48.000 euros declarados no pueden ser correctos.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.95,
+      "strength": "inferential",
+      "issueId": "I1"
+    },
+    {
+      "id": "C28",
+      "factA": "f40",
+      "factB": "f51",
+      "issue": "Creencia sobre estado perfecto de la cubierta",
+      "rationale": "La declaración afirma que creía que la cubierta estaba en perfecto estado antes de marzo de 2025. El mensaje del 14 de noviembre de 2024 reportando que el techo goteaba implica que sabía de un problema en la cubierta. Una persona que sabe que el techo gotea no puede creer simultáneamente que la cubierta está en perfecto estado.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.92,
+      "strength": "inferential",
+      "issueId": "I5"
+    },
+    {
+      "id": "C29",
+      "factA": "f39",
+      "factB": "f57",
+      "issue": "Comunicación enero sobre cubierta",
+      "rationale": "Lucía García juró no haber hablado de problemas de cubierta antes de marzo 2025. El mensaje de WhatsApp del 10 de enero de 2025 muestra que Tomás Ibarra vio fotos del problema de cubierta, lo que implica que Lucía le comunicó el problema en enero, contradiciendo su declaración jurada.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.9,
+      "strength": "inferential",
+      "issueId": "I4"
+    },
+    {
+      "id": "C30",
+      "factA": "f103",
+      "factB": "f111",
+      "issue": "Primer conocimiento del defecto por constructor",
+      "rationale": "Carmen testifica que Lucía escribió mensaje al constructor en noviembre de 2024. Construcciones Valmar afirma que tuvo conocimiento por primera vez del defecto mediante escrito de marzo de 2025. Si el mensaje de noviembre fue recibido, contradice la afirmación de primer conocimiento en marzo.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.88,
+      "strength": "inferential",
+      "issueId": "I6"
+    },
+    {
+      "id": "C31",
+      "factA": "f106",
+      "factB": "f111",
+      "issue": "Conocimiento previo del constructor sobre defecto",
+      "rationale": "Carmen testifica que en diciembre 2024 Lucía dijo que el constructor no había ido a verlo, implicando que el constructor sabía del problema. Construcciones Valmar afirma que tuvo conocimiento por primera vez en marzo de 2025. Estas posiciones son incompatibles.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.87,
+      "strength": "inferential",
+      "issueId": "I6"
+    },
+    {
+      "id": "C32",
+      "factA": "f26",
+      "factB": "f61",
+      "issue": "Comunicación escrita sobre defectos recibida",
+      "rationale": "La demandada afirma no haber recibido comunicación escrita sobre defectos hasta la demanda. El mensaje WhatsApp indica que se envió un correo formal sobre la cubierta antes de la demanda. Si el correo fue recibido, contradice la afirmación de la demandada.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.85,
+      "strength": "inferential",
+      "issueId": "I2"
+    },
+    {
+      "id": "C33",
+      "factA": "f42",
+      "factB": "f54",
+      "issue": "Ofrecimiento de Ibarra para reparar la cubierta",
+      "rationale": "La declaración jurada afirma que Ibarra no se ofreció a reparar la cubierta. El mensaje de WhatsApp muestra que Ibarra se comprometió a enviar a alguien a revisar la gotera, lo cual constituye un ofrecimiento de atención al problema. Estas posiciones son incompatibles.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.85,
+      "strength": "inferential",
+      "issueId": "I9"
+    },
+    {
+      "id": "C34",
+      "factA": "f73",
+      "factB": "f39",
+      "issue": "Comunicación previa sobre problemas de cubierta",
+      "rationale": "El documento A (correo de marzo 2025) afirma que entra agua cada vez que llueve, lo que implica conocimiento previo del problema. El documento B es una declaración jurada donde Lucía niega haber hablado antes de marzo de 2025 de ningún problema de cubierta. Sin embargo, los mensajes WhatsApp de noviembre 2024 (mencionados en otros pares) muestran que sí comunicó el problema antes.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.85,
+      "strength": "inferential",
+      "issueId": "I4"
+    },
+    {
+      "id": "C35",
+      "factA": "f39",
+      "factB": "f76",
+      "issue": "Comunicación previa sobre defectos",
+      "rationale": "Lucía García juró que nunca habló de problemas de cubierta antes de marzo 2025. Sin embargo, el acuse de lectura muestra que Tomás Ibarra leyó su mensaje sobre defectos de cubierta el 20 de marzo de 2025, lo que implica que ella sí comunicó el problema en esa fecha (marzo 2025), contradiciendo su afirmación de 'nunca antes de marzo'.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.85,
+      "strength": "inferential",
+      "issueId": "I4"
+    },
+    {
+      "id": "C36",
+      "factA": "f28",
+      "factB": "f54",
+      "issue": "Solicitud de reparación previa",
+      "rationale": "La demandada afirma que no se solicitó reparación antes de la demanda. El mensaje muestra que Tomás Ibarra se comprometió a enviar a alguien a revisar la gotera, lo que implica que hubo una solicitud de reparación previa.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.82,
+      "strength": "inferential",
+      "issueId": "I10"
+    },
+    {
+      "id": "C37",
+      "factA": "f57",
+      "factB": "f26",
+      "issue": "Comunicación escrita sobre defectos recibida",
+      "rationale": "Tomás Ibarra vio fotos del problema de cubierta el 10 de enero de 2025, lo que constituye una comunicación sobre defectos. La demandada afirma no haber recibido ninguna comunicación escrita sobre defectos hasta la notificación de la demanda. Si las fotos fueron enviadas por escrito (WhatsApp), hay contradicción.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.82,
+      "strength": "inferential",
+      "issueId": "I2"
+    },
+    {
+      "id": "C38",
+      "factA": "f38",
+      "factB": "f101",
+      "issue": "Fecha primer conocimiento de gotera dormitorio trasero",
+      "rationale": "La declaración jurada de Lucía afirma que tuvo conocimiento por primera vez en marzo de 2025. La declaración testifical de Carmen Soler establece que Lucía le contó sobre la gotera en noviembre de 2024. Ambas fechas de primer conocimiento son incompatibles.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I3"
+    },
+    {
+      "id": "C39",
+      "factA": "f90",
+      "factB": "f77",
+      "issue": "Fecha de finalización de las obras",
+      "rationale": "El contrato establece que las obras terminarán antes del 30 de junio de 2024. El email de Tomás Ibarra confirma que las obras terminaron el 30 de agosto de 2024. Hay un retraso de dos meses respecto a la fecha contractual.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I11"
+    },
+    {
+      "id": "C40",
+      "factA": "f78",
+      "factB": "f114",
+      "issue": "Fecha de firma del certificado",
+      "rationale": "El email del 2 de septiembre adjunta el certificado para firma de Lucía. La carta de Valmar afirma que Lucía firmó el certificado el 30 de agosto. Es imposible firmar un documento el 30 de agosto si fue enviado para firma el 2 de septiembre. Estas fechas son incompatibles.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I7"
+    },
+    {
+      "id": "C41",
+      "factA": "f8",
+      "factB": "f101",
+      "issue": "Primer conocimiento del defecto de cubierta",
+      "rationale": "La demandante afirma bajo juramento que descubrió el defecto por primera vez en marzo de 2025. La declaración testifical de Carmen Soler indica que Lucía le contó sobre la filtración en noviembre de 2024. Ambos testimonios jurados son incompatibles sobre cuándo la demandante tuvo conocimiento del problema.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.92,
+      "strength": "direct",
+      "issueId": "I3"
+    },
+    {
+      "id": "C42",
+      "factA": "f103",
+      "factB": "f39",
+      "issue": "Comunicación con constructor sobre problemas cubierta",
+      "rationale": "Carmen Soler testifica que Lucía había escrito por mensaje a su constructor a principios de noviembre de 2024. Lucía declara bajo juramento que nunca habló de problemas de cubierta con Ibarra antes de marzo de 2025. Estas declaraciones sobre si hubo comunicación previa son directamente incompatibles.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.92,
+      "strength": "direct",
+      "issueId": "I4"
+    },
+    {
+      "id": "C43",
+      "factA": "f102",
+      "factB": "f40",
+      "issue": "Estado de cubierta en noviembre 2024",
+      "rationale": "Carmen testifica que entraba agua por el techo en noviembre de 2024. Lucía declara que creía que la cubierta estaba en perfecto estado antes de marzo de 2025. Si había filtración de agua, la cubierta no estaba en perfecto estado.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.92,
+      "strength": "direct",
+      "issueId": "I5"
+    },
+    {
+      "id": "C44",
+      "factA": "f104",
+      "factB": "f40",
+      "issue": "Conocimiento de humedad en noviembre 2024",
+      "rationale": "Carmen testifica haber visto personalmente una mancha de humedad en noviembre de 2024. Lucía declara que creía que la cubierta estaba en perfecto estado antes de marzo de 2025. Si había mancha visible de humedad, la cubierta no estaba en perfecto estado.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.91,
+      "strength": "direct",
+      "issueId": "I5"
+    },
+    {
+      "id": "C45",
+      "factA": "f102",
+      "factB": "f38",
+      "issue": "Conocimiento de gotera en dormitorio trasero",
+      "rationale": "Carmen Soler declara bajo juramento que entraba agua por el techo del dormitorio trasero a principios de noviembre de 2024. Lucía García declara bajo juramento que tuvo conocimiento por primera vez de la gotera en marzo de 2025. Ambas declaraciones juradas sobre el mismo hecho (cuándo Lucía conoció la gotera) son incompatibles.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.9,
+      "strength": "direct",
+      "issueId": "I3"
+    },
+    {
+      "id": "C46",
+      "factA": "f101",
+      "factB": "f40",
+      "issue": "Conocimiento de filtración en noviembre 2024",
+      "rationale": "Carmen testifica que Lucía le contó sobre entrada de agua en noviembre de 2024. Lucía declara bajo juramento que creía que la cubierta estaba en perfecto estado antes de marzo de 2025. Estas afirmaciones son incompatibles sobre el mismo hecho.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.9,
+      "strength": "direct",
+      "issueId": "I5"
+    },
+    {
+      "id": "C47",
+      "factA": "f16",
+      "factB": "f35",
+      "issue": "Importe del pago de anticipo",
+      "rationale": "La demandada afirma que el pago fue de 40.000 euros, mientras que la demandante bajo juramento afirma haber pagado 48.000 euros en la misma fecha. Son cantidades incompatibles para la misma transacción, aunque es disputa entre partes contrarias.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.85,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C48",
+      "factA": "f17",
+      "factB": "f36",
+      "issue": "Totalidad del anticipo pagado",
+      "rationale": "La declaración jurada afirma que 48.000 euros era la totalidad del anticipo exigido, lo que implica que fue pagado completamente. La contestación afirma que el resto del anticipo nunca fue pagado. Estas afirmaciones son incompatibles sobre si el anticipo total fue pagado o no.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.85,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C49",
+      "factA": "f59",
+      "factB": "f60",
+      "issue": "Ubicación del daño versus placas solares",
+      "rationale": "Tomás afirma que los instaladores de placas solares cortaron la lámina causando el problema. Lucía responde que las placas están en el faldón delantero pero la gotera está en el faldón trasero. Esto implica que las placas solares no pueden haber causado el daño en la ubicación donde está la gotera.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.88,
+      "strength": "inferential",
+      "issueId": "I8"
+    },
+    {
+      "id": "C50",
+      "factA": "f57",
+      "factB": "f111",
+      "issue": "Conocimiento previo del defecto de cubierta",
+      "rationale": "Tomás Ibarra vio fotos del problema de la cubierta el 10 de enero de 2025, lo que implica conocimiento del defecto en esa fecha. Sin embargo, Construcciones Valmar afirma que tuvo conocimiento por primera vez del defecto el 20 de marzo de 2025. Estas posiciones son incompatibles si Tomás Ibarra actuaba en representación de la empresa.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.85,
+      "strength": "inferential",
+      "issueId": "I6"
+    },
+    {
+      "id": "C51",
+      "factA": "f104",
+      "factB": "f38",
+      "issue": "Conocimiento de manchas de humedad en techo",
+      "rationale": "Carmen Soler vio una mancha marrón de humedad en el techo del dormitorio de Lucía el 16 de noviembre de 2024. Lucía declara haber observado por primera vez manchas marrones de humedad en marzo de 2025. Si Carmen vio la mancha en noviembre en casa de Lucía, es razonable inferir que Lucía también la conocía entonces.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.85,
+      "strength": "inferential",
+      "issueId": "I3"
+    },
+    {
+      "id": "C52",
+      "factA": "f103",
+      "factB": "f26",
+      "issue": "Mensaje escrito antes de la demanda",
+      "rationale": "Carmen Soler testifica que Lucía escribió por mensaje al constructor en noviembre de 2024. Construcciones Valmar afirma no haber recibido ninguna comunicación escrita sobre defectos hasta la notificación de la demanda. Si el mensaje fue enviado, contradice la afirmación de no recepción.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.85,
+      "strength": "inferential",
+      "issueId": "I2"
+    },
+    {
+      "id": "C53",
+      "factA": "f111",
+      "factB": "f51",
+      "issue": "Primer conocimiento del defecto",
+      "rationale": "Construcciones Valmar afirma haber tenido conocimiento por primera vez del defecto el 20 de marzo de 2025. El mensaje WhatsApp del 14 de noviembre de 2024 reportando la gotera a Tomás Ibarra sugiere conocimiento anterior si Ibarra representa a la empresa.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.8,
+      "strength": "inferential",
+      "issueId": "I6"
+    }
+  ],
+  "issues": [
+    {
+      "label": "Importe del anticipo pagado a Construcciones Valmar",
+      "severity": "high",
+      "leadId": "C1",
+      "memberIds": [
+        "C1",
+        "C2",
+        "C3",
+        "C7",
+        "C8",
+        "C9",
+        "C18",
+        "C21",
+        "C24",
+        "C25",
+        "C26",
+        "C27",
+        "C47",
+        "C48"
+      ],
+      "id": "I1"
+    },
+    {
+      "label": "Recepción de comunicación escrita sobre defectos por Construcciones Valmar",
+      "severity": "high",
+      "leadId": "C10",
+      "memberIds": [
+        "C10",
+        "C12",
+        "C16",
+        "C17",
+        "C20",
+        "C32",
+        "C37",
+        "C52"
+      ],
+      "id": "I2"
+    },
+    {
+      "label": "Fecha primer conocimiento de gotera en dormitorio trasero por Lucía García",
+      "severity": "high",
+      "leadId": "C13",
+      "memberIds": [
+        "C11",
+        "C13",
+        "C14",
+        "C15",
+        "C38",
+        "C41",
+        "C45",
+        "C51"
+      ],
+      "id": "I3"
+    },
+    {
+      "label": "Comunicación previa sobre problemas de cubierta con Tomás Ibarra",
+      "severity": "high",
+      "leadId": "C4",
+      "memberIds": [
+        "C4",
+        "C5",
+        "C6",
+        "C29",
+        "C34",
+        "C35",
+        "C42"
+      ],
+      "id": "I4"
+    },
+    {
+      "label": "Creencia sobre estado perfecto de cubierta antes de marzo 2025",
+      "severity": "high",
+      "leadId": "C23",
+      "memberIds": [
+        "C23",
+        "C28",
+        "C43",
+        "C44",
+        "C46"
+      ],
+      "id": "I5"
+    },
+    {
+      "label": "Primer conocimiento del defecto de cubierta por Construcciones Valmar",
+      "severity": "high",
+      "leadId": "C30",
+      "memberIds": [
+        "C30",
+        "C31",
+        "C50",
+        "C53"
+      ],
+      "id": "I6"
+    },
+    {
+      "label": "Fecha de firma del certificado de fin de obra",
+      "severity": "high",
+      "leadId": "C19",
+      "memberIds": [
+        "C19",
+        "C40"
+      ],
+      "id": "I7"
+    },
+    {
+      "label": "Causa de entrada de agua en cubierta",
+      "severity": "high",
+      "leadId": "C22",
+      "memberIds": [
+        "C22",
+        "C49"
+      ],
+      "id": "I8"
+    },
+    {
+      "label": "Ofrecimiento de Tomás Ibarra para reparar cubierta",
+      "severity": "high",
+      "leadId": "C33",
+      "memberIds": [
+        "C33"
+      ],
+      "id": "I9"
+    },
+    {
+      "label": "Solicitud de reparación previa a la demanda",
+      "severity": "high",
+      "leadId": "C36",
+      "memberIds": [
+        "C36"
+      ],
+      "id": "I10"
+    },
+    {
+      "label": "Fecha de finalización de las obras",
+      "severity": "medium",
+      "leadId": "C39",
+      "memberIds": [
+        "C39"
+      ],
+      "id": "I11"
+    }
+  ],
+  "allegations": [
+    {
+      "id": "A1",
+      "text": "La demandante alega que las partes firmaron un contrato de obra el 12 de enero de 2024 para la reforma de la cocina y la sustitución del faldón trasero de la cubierta.",
+      "party": "claimant",
+      "sourceFactIds": [
+        "f4",
+        "f33",
+        "f34"
+      ]
+    },
+    {
+      "id": "A2",
+      "text": "La demandante alega que abonó a la demandada 48.000 euros como anticipo contractual mediante transferencia el 14 de febrero de 2024.",
+      "party": "claimant",
+      "sourceFactIds": [
+        "f5",
+        "f35",
+        "f36"
+      ]
+    },
+    {
+      "id": "A3",
+      "text": "La demandada alega que la demandante solo abonó 40.000 euros el 14 de febrero de 2024 y que el resto del anticipo nunca fue pagado.",
+      "party": "respondent",
+      "sourceFactIds": [
+        "f15",
+        "f16",
+        "f17"
+      ]
+    },
+    {
+      "id": "A4",
+      "text": "La demandante alega que la cubierta sustituida por la demandada es defectuosa y el agua penetra por el techo del dormitorio trasero cada vez que llueve.",
+      "party": "claimant",
+      "sourceFactIds": [
+        "f7"
+      ]
+    },
+    {
+      "id": "A5",
+      "text": "La demandante alega que descubrió el defecto por primera vez en marzo de 2025 cuando aparecieron manchas de humedad en el techo del dormitorio trasero.",
+      "party": "claimant",
+      "sourceFactIds": [
+        "f8",
+        "f38"
+      ]
+    },
+    {
+      "id": "A6",
+      "text": "La demandada alega que la demandante firmó un certificado de fin de obra el 2 de septiembre de 2024 confirmando que las obras estaban completas y a su satisfacción.",
+      "party": "respondent",
+      "sourceFactIds": [
+        "f19",
+        "f20"
+      ]
+    },
+    {
+      "id": "A7",
+      "text": "La demandada alega que cualquier entrada de agua se debe a los paneles solares instalados por un tercero contratado por la demandante en octubre de 2024.",
+      "party": "respondent",
+      "sourceFactIds": [
+        "f22",
+        "f23"
+      ]
+    },
+    {
+      "id": "A8",
+      "text": "La demandante alega que comunicó por escrito el defecto a la demandada mediante correo electrónico el 20 de marzo de 2025.",
+      "party": "claimant",
+      "sourceFactIds": [
+        "f9",
+        "f41"
+      ]
+    },
+    {
+      "id": "A9",
+      "text": "La demandada alega que no recibió ninguna comunicación escrita sobre supuestos defectos hasta que le fue notificada la demanda.",
+      "party": "respondent",
+      "sourceFactIds": [
+        "f26",
+        "f28"
+      ]
+    },
+    {
+      "id": "A10",
+      "text": "La demandante alega que la demandada se ha negado a reparar el defecto.",
+      "party": "claimant",
+      "sourceFactIds": [
+        "f10",
+        "f42",
+        "f43"
+      ]
+    },
+    {
+      "id": "A11",
+      "text": "La demandante alega que el coste de las obras de reparación ha sido valorado en 35.000 euros.",
+      "party": "claimant",
+      "sourceFactIds": [
+        "f11",
+        "f44"
+      ]
+    },
+    {
+      "id": "A12",
+      "text": "La demandante alega que la demandada nunca obtuvo la licencia de obras exigida para los trabajos de cubierta.",
+      "party": "claimant",
+      "sourceFactIds": [
+        "f12"
+      ]
+    },
+    {
+      "id": "A13",
+      "text": "La demandada alega que se obtuvieron todas las licencias necesarias.",
+      "party": "respondent",
+      "sourceFactIds": [
+        "f31"
+      ]
+    },
+    {
+      "id": "A14",
+      "text": "Un tercero alega que la demandante le contó a principios de noviembre de 2024 que entraba agua por el techo de su dormitorio trasero y que había escrito por mensaje a su constructor.",
+      "party": "third_party",
+      "sourceFactIds": [
+        "f101",
+        "f102",
+        "f103"
+      ]
+    },
+    {
+      "id": "A15",
+      "text": "Un tercero alega haber visto una mancha marrón de humedad en el techo del dormitorio de la demandante el 16 de noviembre de 2024 aproximadamente.",
+      "party": "third_party",
+      "sourceFactIds": [
+        "f104"
+      ]
+    }
+  ],
+  "evidenceLinks": [
+    {
+      "allegationId": "A1",
+      "factId": "f4",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A1",
+      "factId": "f33",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A1",
+      "factId": "f34",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A1",
+      "factId": "f82",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A1",
+      "factId": "f83",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A1",
+      "factId": "f84",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A1",
+      "factId": "f85",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A1",
+      "factId": "f86",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A1",
+      "factId": "f98",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A1",
+      "factId": "f99",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A2",
+      "factId": "f5",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A2",
+      "factId": "f35",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A2",
+      "factId": "f36",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A2",
+      "factId": "f15",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A2",
+      "factId": "f16",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A2",
+      "factId": "f62",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A2",
+      "factId": "f63",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A2",
+      "factId": "f64",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A2",
+      "factId": "f66",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A3",
+      "factId": "f15",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A3",
+      "factId": "f16",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A3",
+      "factId": "f17",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A3",
+      "factId": "f62",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A3",
+      "factId": "f63",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A3",
+      "factId": "f64",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A3",
+      "factId": "f66",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A3",
+      "factId": "f5",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A3",
+      "factId": "f35",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A3",
+      "factId": "f36",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A4",
+      "factId": "f7",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A4",
+      "factId": "f51",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A4",
+      "factId": "f52",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A4",
+      "factId": "f56",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A4",
+      "factId": "f71",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A4",
+      "factId": "f72",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A4",
+      "factId": "f73",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A4",
+      "factId": "f102",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A4",
+      "factId": "f104",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A5",
+      "factId": "f8",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A5",
+      "factId": "f38",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A5",
+      "factId": "f40",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A5",
+      "factId": "f51",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A5",
+      "factId": "f52",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A5",
+      "factId": "f101",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A5",
+      "factId": "f102",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A5",
+      "factId": "f103",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A5",
+      "factId": "f104",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A6",
+      "factId": "f19",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A6",
+      "factId": "f20",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A6",
+      "factId": "f49",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A6",
+      "factId": "f50",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A6",
+      "factId": "f78",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A6",
+      "factId": "f79",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A6",
+      "factId": "f114",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A7",
+      "factId": "f22",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A7",
+      "factId": "f23",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A7",
+      "factId": "f58",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A7",
+      "factId": "f59",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A7",
+      "factId": "f115",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A7",
+      "factId": "f116",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A7",
+      "factId": "f60",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A8",
+      "factId": "f9",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A8",
+      "factId": "f41",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A8",
+      "factId": "f61",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A8",
+      "factId": "f69",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A8",
+      "factId": "f70",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A8",
+      "factId": "f74",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A8",
+      "factId": "f76",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A9",
+      "factId": "f26",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A9",
+      "factId": "f111",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A9",
+      "factId": "f9",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A9",
+      "factId": "f41",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A9",
+      "factId": "f61",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A9",
+      "factId": "f69",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A9",
+      "factId": "f70",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A9",
+      "factId": "f76",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A10",
+      "factId": "f10",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A10",
+      "factId": "f42",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A10",
+      "factId": "f43",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A10",
+      "factId": "f58",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A10",
+      "factId": "f110",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A10",
+      "factId": "f117",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A10",
+      "factId": "f118",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A11",
+      "factId": "f11",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A11",
+      "factId": "f44",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A12",
+      "factId": "f12",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A13",
+      "factId": "f31",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A13",
+      "factId": "f12",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A14",
+      "factId": "f101",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A14",
+      "factId": "f102",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A14",
+      "factId": "f103",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A14",
+      "factId": "f38",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A14",
+      "factId": "f39",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A14",
+      "factId": "f40",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A15",
+      "factId": "f104",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A15",
+      "factId": "f105",
+      "role": "supports"
+    }
+  ],
+  "gaps": [
+    {
+      "allegationId": "A2",
+      "reason": "opposed_without_support",
+      "suggestedDocuments": [
+        "bank_record"
+      ]
+    },
+    {
+      "allegationId": "A5",
+      "reason": "opposed_without_support",
+      "suggestedDocuments": []
+    },
+    {
+      "allegationId": "A11",
+      "reason": "only_own_pleading",
+      "suggestedDocuments": [
+        "expert_report",
+        "invoice_or_receipt"
+      ]
+    },
+    {
+      "allegationId": "A12",
+      "reason": "only_own_pleading",
+      "suggestedDocuments": [
+        "official_record"
+      ]
+    },
+    {
+      "allegationId": "A13",
+      "reason": "opposed_without_support",
+      "suggestedDocuments": [
+        "official_record"
+      ]
+    },
+    {
+      "allegationId": "A14",
+      "reason": "opposed_without_support",
+      "suggestedDocuments": []
+    },
+    {
+      "allegationId": "A15",
+      "reason": "only_own_pleading",
+      "suggestedDocuments": [
+        "photos_or_video"
+      ]
+    }
+  ],
+  "narrative": {
+    "summary": "El expediente contiene 10 documentos que generan 119 hechos verificados en fuente. Se identifican 11 contradicciones de severidad alta entre versiones de las partes y terceros, concentradas en 10 temas principales (I1–I10). Existen 7 lagunas probatorias sobre alegaciones clave que carecen de respaldo documental o están contradichas sin prueba de apoyo.",
+    "whatStandsOut": [
+      "I1: El importe del anticipo pagado difiere entre la declaración jurada de García (48.000 EUR) y la confirmación bancaria de Banco Meridional (40.000 EUR), con 14 pares de hechos en conflicto.",
+      "I3: García declara haber conocido la gotera en marzo 2025, pero los mensajes WhatsApp con Ibarra muestran que reportó gotera en el dormitorio trasero ya en noviembre 2024.",
+      "I4: García niega haber hablado de problemas de cubierta antes de marzo 2025, contradicho por los mensajes WhatsApp donde discute la gotera con Ibarra en noviembre 2024.",
+      "I2: Construcciones Valmar afirma no haber recibido comunicación escrita sobre defectos hasta la demanda, pero su propia carta acusa recibo del email de García del 20 marzo 2025.",
+      "I9: García declara que Ibarra no se ofreció a reparar, pero los mensajes WhatsApp muestran que Ibarra se comprometió a enviar a alguien el lunes a revisar la gotera.",
+      "A2, A5, A14: Tres alegaciones sobre el anticipo de 48.000 EUR, el descubrimiento en marzo 2025 y la conversación de noviembre 2024 están contradichas sin respaldo documental de quien las sostiene."
+    ],
+    "limits": [
+      "No se localizó documentación sobre la licencia de obras (alegaciones A12, A13 enfrentadas sin prueba).",
+      "No consta valoración pericial o presupuesto que respalde el coste de reparación de 35.000 EUR alegado (A11).",
+      "No se aportó el certificado de fin de obra mencionado en la contestación y en la carta de Construcciones Valmar (I7 identifica mención pero no el documento).",
+      "La declaración de Carmen Soler sobre la mancha de humedad del 16 noviembre 2024 (A15) carece de corroboración documental.",
+      "No consta factura final de 48.000 EUR mencionada en el email de Ibarra del 2 septiembre 2024, ni registro de su emisión o pago."
+    ]
+  },
+  "counts": {
+    "documents": 10,
+    "segments": 57,
+    "facts": 119,
+    "factsSourcePinned": 119,
+    "factsFuzzy": 0,
+    "factsModelTranscribed": 0,
+    "factsUnverified": 0,
+    "actors": 9,
+    "events": 24,
+    "contradictions": 11,
+    "contradictionsHigh": 10,
+    "contradictionPairs": 53,
+    "allegations": 15,
+    "gaps": 7
+  },
+  "cost": {
+    "calls": 43,
+    "inputTokens": 160623,
+    "outputTokens": 54780,
+    "cacheReadTokens": 0,
+    "estimatedCents": 130.35
+  },
+  "warnings": []
+}

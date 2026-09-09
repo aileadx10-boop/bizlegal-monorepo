@@ -26,7 +26,7 @@ import base64
 import pathlib
 from datetime import datetime, timezone
 
-GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
 REPO = "aileadx10-boop/bizlegal-ea"
 BRANCH = "main"
 BLOG_DIR = "content/blog"

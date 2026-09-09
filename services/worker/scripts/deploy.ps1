@@ -122,7 +122,7 @@ if (-not $githubVal) {
 }
 
 $telegramBotVal  = Get-EnvValueAny `
-    -Keys @("TELEGRAM_BOT_TOKEN","BIZLEGALBOT_TOKEN","BIZLEGAL_BOT_TOKEN","TG_BOT_TOKEN") `
+    -Keys @("TELEGRAM_HUB_TOKEN","TELEGRAM_BOT_TOKEN","BIZLEGALBOT_TOKEN","BIZLEGAL_BOT_TOKEN","TG_BOT_TOKEN") `
     -Files $envCandidates
 $telegramChatVal = Get-EnvValueAny `
     -Keys @("TELEGRAM_CHAT_ID","BIZLEGAL_TELEGRAM_CHAT_ID","TG_CHAT_ID") `

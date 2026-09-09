@@ -29,17 +29,23 @@ const ALLOW_LIST = new Set([
   'NEXT_RUNTIME', 'NEXT_PHASE', 'NEXT_PUBLIC_VERCEL_URL',
   'CF_PAGES', 'CF_PAGES_BRANCH', 'CF_PAGES_COMMIT_SHA', 'CF_PAGES_URL',
   'PYTHONPATH', 'PYTHONUNBUFFERED',
+  // Node runtime built-ins toggled deliberately by one-off scripts
+  'NODE_TLS_REJECT_UNAUTHORIZED',
 ])
 
 // Patterns that read env vars across our 3 languages.
+// The `(?!\s*\+)` lookahead skips partial names built by string concatenation
+// (e.g. os.environ.get("SUP" + chr(65) + "BASE_URL") or "TELEGRAM_" + "BOT_TOKEN").
+// The fully-constructed name is invisible to a static regex either way; flagging
+// the fragment (SUP, TELEGRAM_, RESEND...) produced un-vaultable false positives.
 const ENV_PATTERNS = [
-  /\bprocess\.env\.([A-Z][A-Z0-9_]+)/g,                // TS/JS:  process.env.X
-  /\bprocess\.env\[['"`]([A-Z][A-Z0-9_]+)['"`]\]/g,    // TS/JS:  process.env["X"]
-  /\bos\.environ\.get\(['"]([A-Z][A-Z0-9_]+)['"]/g,    // Python: os.environ.get("X")
-  /\bos\.environ\[['"]([A-Z][A-Z0-9_]+)['"]\]/g,        // Python: os.environ["X"]
-  /\bos\.getenv\(['"]([A-Z][A-Z0-9_]+)['"]/g,          // Python: os.getenv("X")
-  /\benv\.([A-Z][A-Z0-9_]+)/g,                          // CF Worker: env.X
-  /\bgetEnv\(['"]([A-Z][A-Z0-9_]+)['"]/g,               // generic helper
+  /\bprocess\.env\.([A-Z][A-Z0-9_]+)(?!\s*\+)/g,                // TS/JS:  process.env.X
+  /\bprocess\.env\[['"`]([A-Z][A-Z0-9_]+)['"`](?!\s*\+)/g,      // TS/JS:  process.env["X"]
+  /\bos\.environ\.get\(['"]([A-Z][A-Z0-9_]+)['"](?!\s*\+)/g,    // Python: os.environ.get("X")
+  /\bos\.environ\[['"]([A-Z][A-Z0-9_]+)['"](?!\s*\+)/g,         // Python: os.environ["X"]
+  /\bos\.getenv\(['"]([A-Z][A-Z0-9_]+)['"](?!\s*\+)/g,          // Python: os.getenv("X")
+  /\benv\.([A-Z][A-Z0-9_]+)(?!\s*\+)/g,                          // CF Worker: env.X
+  /\bgetEnv\(['"]([A-Z][A-Z0-9_]+)['"](?!\s*\+)/g,               // generic helper
 ]
 
 function loadVaultNames() {

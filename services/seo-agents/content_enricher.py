@@ -29,7 +29,7 @@ from datetime import datetime, timezone
 CONTENT_DIR = Path('/opt/bizlegal/curator/drafts')   # source of truth on Hetzner
 BLOG_REPO = 'bizlegal-ea'
 BLOG_BRANCH = 'main'
-GH_TOKEN = os.environ.get('GH_TOKEN', '')
+GH_TOKEN = os.environ.get('GITHUB_TOKEN', '')
 ANTHROPIC_KEY = os.environ.get('ANTHROPIC_API_KEY', '')
 TODAY = datetime.now(timezone.utc).strftime('%Y-%m-%d')
 

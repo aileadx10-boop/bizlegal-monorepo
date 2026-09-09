@@ -18,7 +18,7 @@ const APPS = ['hub', 'brai', 'docai', 'lexaudit', 'leadforge', 'tracr', 'forge']
 const ROOT = process.cwd()
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY
-const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY ?? process.env.ANTHROPIC_KEY
+const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY
 const CS = 'CRON_' + 'SECRET'  // chr() workaround for env-var-name mangle
 
 const SYSTEM = `You are a B2B SEO + AEO copywriter for BizLegal AI.

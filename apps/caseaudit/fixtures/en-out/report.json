@@ -1,0 +1,4806 @@
+{
+  "matterTitle": "Harlow v. Brightline Builders LLC",
+  "lang": "en",
+  "generatedAt": "2026-08-23T21:07:13.809Z",
+  "disclaimerVersion": "v1.0.0-p4",
+  "documents": [
+    {
+      "id": "d1",
+      "name": "01-complaint.docx",
+      "kind": "docx",
+      "sha256": "a9ad39445c2f17f0e2d16bf2e5eb3df8e3ea2b3477e3e5775bc0d1449125358b",
+      "bytes": 9441,
+      "mode": "n/a",
+      "lang": "en",
+      "warnings": []
+    },
+    {
+      "id": "d2",
+      "name": "02-answer.docx",
+      "kind": "docx",
+      "sha256": "c33bd1fc8797dab42bf132b6687322af0fda204895131ca123be3412c3130b79",
+      "bytes": 9224,
+      "mode": "n/a",
+      "lang": "en",
+      "warnings": []
+    },
+    {
+      "id": "d3",
+      "name": "03-affidavit-daniel-harlow.pdf",
+      "kind": "pdf",
+      "sha256": "eedeb8e409d4a623f7f1a331e3f6d804780ac46f898c615ea8f110c5ad3aca2c",
+      "bytes": 2245,
+      "pages": 1,
+      "mode": "text",
+      "lang": "en",
+      "warnings": []
+    },
+    {
+      "id": "d4",
+      "name": "04-whatsapp-harlow-reed.txt",
+      "kind": "whatsapp",
+      "sha256": "31049599c9771db5b311053e40d55aa1b2026c62fedb1628afc58ccdb3b24953",
+      "bytes": 1044,
+      "mode": "n/a",
+      "lang": "en",
+      "warnings": []
+    },
+    {
+      "id": "d5",
+      "name": "05-northgate-bank-confirmation.pdf",
+      "kind": "pdf",
+      "sha256": "ff9285611e69ea2a679bae021dcfa35cbe8d53a4175cd5e5a9aa5890e49185a4",
+      "bytes": 1819,
+      "pages": 1,
+      "mode": "text",
+      "lang": "en",
+      "warnings": []
+    },
+    {
+      "id": "d6",
+      "name": "06-email-notice-of-defects-2025-03-20.eml",
+      "kind": "eml",
+      "sha256": "c4434943dd88cbf3767c4ffe92b88efe4dffd22bc40ef85d77d3c97c95b76829",
+      "bytes": 848,
+      "mode": "n/a",
+      "lang": "en",
+      "warnings": []
+    },
+    {
+      "id": "d7",
+      "name": "07-renovation-contract-2024-01-12.pdf",
+      "kind": "pdf",
+      "sha256": "a0c19eac82b5c5eba7946238e429788549f007ef6dd9f7b4043d2c1fc4a7825b",
+      "bytes": 2278,
+      "pages": 1,
+      "mode": "text",
+      "lang": "en",
+      "warnings": []
+    },
+    {
+      "id": "d8",
+      "name": "08-email-completion-2024-09-02.eml",
+      "kind": "eml",
+      "sha256": "0377a824042010c740dfbafeae30ca563e261af6090202e193c720b4ce54cb94",
+      "bytes": 513,
+      "mode": "n/a",
+      "lang": "en",
+      "warnings": []
+    },
+    {
+      "id": "d9",
+      "name": "09-witness-statement-priya-natarajan.docx",
+      "kind": "docx",
+      "sha256": "7f80aec2e6a0df30ffa35b18186854b26022f9ee962702bbc97ac6cd262150fc",
+      "bytes": 9057,
+      "mode": "n/a",
+      "lang": "en",
+      "warnings": []
+    },
+    {
+      "id": "d10",
+      "name": "10-brightline-letter-2025-04-02.pdf",
+      "kind": "pdf",
+      "sha256": "5b0a00433c512fda79c39ae1f5c5e63918c403a527e6936cb20b0a235939b746",
+      "bytes": 1885,
+      "pages": 1,
+      "mode": "text",
+      "lang": "en",
+      "warnings": []
+    }
+  ],
+  "segments": [
+    {
+      "docId": "d1",
+      "seq": 1,
+      "kind": "paragraph",
+      "label": "¶1",
+      "text": "IN THE DISTRICT COURT · Civil Division · Case No. 26-CV-0412",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 2,
+      "kind": "paragraph",
+      "label": "¶2",
+      "text": "DANIEL HARLOW, Plaintiff, v. BRIGHTLINE BUILDERS LLC, Defendant.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 3,
+      "kind": "paragraph",
+      "label": "¶3",
+      "text": "COMPLAINT FOR BREACH OF CONTRACT AND DEFECTIVE WORKMANSHIP",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 4,
+      "kind": "paragraph",
+      "label": "¶4",
+      "text": "1. Plaintiff Daniel Harlow is the owner of the residence at 18 Alder Court, Westbrook.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 5,
+      "kind": "paragraph",
+      "label": "¶5",
+      "text": "2. Defendant Brightline Builders LLC is a building contractor. Its managing member is Marcus Reed.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 6,
+      "kind": "paragraph",
+      "label": "¶6",
+      "text": "3. On 12 January 2024 the parties signed a written Renovation Agreement for the renovation of the kitchen and the replacement of the rear roof section of the residence for a fixed price of $96,000.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 7,
+      "kind": "paragraph",
+      "label": "¶7",
+      "text": "4. On 14 February 2024 Plaintiff paid Defendant the contractual deposit of $48,000 by wire transfer from his account at Northgate Bank.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 8,
+      "kind": "paragraph",
+      "label": "¶8",
+      "text": "5. Defendant represented that the works were completed on 30 August 2024.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 9,
+      "kind": "paragraph",
+      "label": "¶9",
+      "text": "6. The roof section replaced by Defendant is defective. Water penetrates the rear bedroom ceiling during rainfall.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 10,
+      "kind": "paragraph",
+      "label": "¶10",
+      "text": "7. Plaintiff first discovered the defect in March 2025, when water stains appeared on the ceiling of the rear bedroom.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 11,
+      "kind": "paragraph",
+      "label": "¶11",
+      "text": "8. On 20 March 2025, within ten days of discovery, Plaintiff gave Defendant written notice of the defect by email, as required by clause 9 of the Renovation Agreement.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 12,
+      "kind": "paragraph",
+      "label": "¶12",
+      "text": "9. Defendant has refused to repair the defect.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 13,
+      "kind": "paragraph",
+      "label": "¶13",
+      "text": "10. The cost of remedial works has been assessed at $35,000 by a qualified roofing engineer.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 14,
+      "kind": "paragraph",
+      "label": "¶14",
+      "text": "11. Defendant never obtained the building permit required for the roof works, contrary to clause 6 of the Renovation Agreement.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 15,
+      "kind": "paragraph",
+      "label": "¶15",
+      "text": "WHEREFORE Plaintiff demands judgment against Defendant for $35,000 in damages, interest and costs.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d1",
+      "seq": 16,
+      "kind": "paragraph",
+      "label": "¶16",
+      "text": "Dated 2 June 2026. Counsel for Plaintiff.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 1,
+      "kind": "paragraph",
+      "label": "¶1",
+      "text": "IN THE DISTRICT COURT · Civil Division · Case No. 26-CV-0412",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 2,
+      "kind": "paragraph",
+      "label": "¶2",
+      "text": "DANIEL HARLOW, Plaintiff, v. BRIGHTLINE BUILDERS LLC, Defendant.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 3,
+      "kind": "paragraph",
+      "label": "¶3",
+      "text": "ANSWER AND DEFENSES OF BRIGHTLINE BUILDERS LLC",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 4,
+      "kind": "paragraph",
+      "label": "¶4",
+      "text": "1. Defendant admits paragraphs 1, 2 and 3 of the Complaint.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 5,
+      "kind": "paragraph",
+      "label": "¶5",
+      "text": "2. Defendant denies paragraph 4. Plaintiff paid Defendant $40,000 on or about 14 February 2024, not $48,000, and the balance of the deposit was never paid.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 6,
+      "kind": "paragraph",
+      "label": "¶6",
+      "text": "3. Defendant admits that it completed the works on 30 August 2024 and states that Plaintiff signed a certificate of completion on 2 September 2024 confirming that the works were complete and satisfactory.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 7,
+      "kind": "paragraph",
+      "label": "¶7",
+      "text": "4. Defendant denies paragraphs 6 and 7. Any water ingress is the result of solar panels installed on the rear roof by a third party engaged by Plaintiff in October 2024, after Defendant had left the site.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 8,
+      "kind": "paragraph",
+      "label": "¶8",
+      "text": "5. Defendant denies paragraph 8. Defendant received no written notice of any alleged defect until it was served with this lawsuit.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 9,
+      "kind": "paragraph",
+      "label": "¶9",
+      "text": "6. Defendant denies paragraph 9. No repair was requested before proceedings were issued.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 10,
+      "kind": "paragraph",
+      "label": "¶10",
+      "text": "7. Defendant denies paragraph 10 and puts Plaintiff to strict proof of the alleged repair cost.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 11,
+      "kind": "paragraph",
+      "label": "¶11",
+      "text": "8. Defendant denies paragraph 11. All required permits were obtained.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 12,
+      "kind": "paragraph",
+      "label": "¶12",
+      "text": "Defendant demands judgment dismissing the Complaint with costs.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d2",
+      "seq": 13,
+      "kind": "paragraph",
+      "label": "¶13",
+      "text": "Dated 30 June 2026. Counsel for Defendant.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d3",
+      "seq": 1,
+      "kind": "page",
+      "label": "p.1",
+      "text": "AFFIDAVIT OF DANIEL HARLOW\n\nI, Daniel Harlow, of 18 Alder Court, Westbrook, being duly sworn, state as follows:\n\n1. I am the Plaintiff in this action and I make this affidavit from my own knowledge.\n\n2. On 12 January 2024 I signed the Renovation Agreement with Brightline Builders LLC. Marcus\n\nReed signed for the company.\n\n3. On 14 February 2024 I paid Brightline Builders LLC the sum of $48,000 by wire transfer from my\n\naccount at Northgate Bank. This was the full deposit required by the Agreement.\n\n4. Brightline told me the works were finished at the end of August 2024.\n\n5. I first became aware of the leak in the rear bedroom in March 2025, when I noticed brown water\n\nstains spreading across the ceiling after heavy rain.\n\n6. Before March 2025 I had never discussed any roof problem with Brightline or with Mr Reed.\n\nThere was nothing to discuss; I believed the roof was sound.\n\n7. On 20 March 2025 I sent Mr Reed an email headed \"Formal notice of defects\" describing the\n\nleak and asking Brightline to repair it.\n\n8. Mr Reed did not offer to repair the roof. On 2 April 2025 Brightline wrote to me denying\n\nresponsibility.\n\n9. I have obtained an estimate of $35,000 for the remedial works.\n\nSworn on 28 May 2026 before a notary public.\n\nDaniel Harlow",
+      "source": "pdf-parse",
+      "meta": {
+        "page": 1
+      }
+    },
+    {
+      "docId": "d4",
+      "seq": 1,
+      "kind": "message",
+      "label": "msg 1",
+      "text": "2024-08-28 18:12 — Daniel Harlow: Kitchen looks great, thanks to the team",
+      "source": "whatsapp-txt",
+      "meta": {
+        "sender": "Daniel Harlow",
+        "timestamp": "2024-08-28T18:12"
+      }
+    },
+    {
+      "docId": "d4",
+      "seq": 2,
+      "kind": "message",
+      "label": "msg 2",
+      "text": "2024-08-28 18:20 — Marcus Reed: Glad you like it. Roof is done too, we just need to pick up the scaffold",
+      "source": "whatsapp-txt",
+      "meta": {
+        "sender": "Marcus Reed",
+        "timestamp": "2024-08-28T18:20"
+      }
+    },
+    {
+      "docId": "d4",
+      "seq": 3,
+      "kind": "message",
+      "label": "msg 3",
+      "text": "2024-09-02 10:05 — Marcus Reed: Sent you the completion certificate by email, can you sign and return",
+      "source": "whatsapp-txt",
+      "meta": {
+        "sender": "Marcus Reed",
+        "timestamp": "2024-09-02T10:05"
+      }
+    },
+    {
+      "docId": "d4",
+      "seq": 4,
+      "kind": "message",
+      "label": "msg 4",
+      "text": "2024-11-14 21:41 — Daniel Harlow: Marcus, the ceiling in the back bedroom is leaking again after last night's rain. There is a wet patch the size of a dinner plate",
+      "source": "whatsapp-txt",
+      "meta": {
+        "sender": "Daniel Harlow",
+        "timestamp": "2024-11-14T21:41"
+      }
+    },
+    {
+      "docId": "d4",
+      "seq": 5,
+      "kind": "message",
+      "label": "msg 5",
+      "text": "2024-11-14 21:58 — Marcus Reed: Ok. Could be the flashing. I will send someone Monday to have a look",
+      "source": "whatsapp-txt",
+      "meta": {
+        "sender": "Marcus Reed",
+        "timestamp": "2024-11-14T21:58"
+      }
+    },
+    {
+      "docId": "d4",
+      "seq": 6,
+      "kind": "message",
+      "label": "msg 6",
+      "text": "2024-11-18 08:30 — Marcus Reed: Crew got pulled onto another job, will be next week",
+      "source": "whatsapp-txt",
+      "meta": {
+        "sender": "Marcus Reed",
+        "timestamp": "2024-11-18T08:30"
+      }
+    },
+    {
+      "docId": "d4",
+      "seq": 7,
+      "kind": "message",
+      "label": "msg 7",
+      "text": "2024-12-03 19:15 — Daniel Harlow: Still waiting. It leaked again on Sunday",
+      "source": "whatsapp-txt",
+      "meta": {
+        "sender": "Daniel Harlow",
+        "timestamp": "2024-12-03T19:15"
+      }
+    },
+    {
+      "docId": "d4",
+      "seq": 8,
+      "kind": "message",
+      "label": "msg 8",
+      "text": "2025-01-10 11:02 — Marcus Reed: Looked at the photos. The roof issue is from the solar guys you hired, not us. They cut into our membrane",
+      "source": "whatsapp-txt",
+      "meta": {
+        "sender": "Marcus Reed",
+        "timestamp": "2025-01-10T11:02"
+      }
+    },
+    {
+      "docId": "d4",
+      "seq": 9,
+      "kind": "message",
+      "label": "msg 9",
+      "text": "2025-01-10 11:30 — Daniel Harlow: The solar panels are on the front roof, the leak is at the back",
+      "source": "whatsapp-txt",
+      "meta": {
+        "sender": "Daniel Harlow",
+        "timestamp": "2025-01-10T11:30"
+      }
+    },
+    {
+      "docId": "d4",
+      "seq": 10,
+      "kind": "message",
+      "label": "msg 10",
+      "text": "2025-03-20 16:02 — Daniel Harlow: Sent you a formal email about the roof just now, please read it",
+      "source": "whatsapp-txt",
+      "meta": {
+        "sender": "Daniel Harlow",
+        "timestamp": "2025-03-20T16:02"
+      }
+    },
+    {
+      "docId": "d5",
+      "seq": 1,
+      "kind": "page",
+      "label": "p.1",
+      "text": "NORTHGATE BANK\n\nPayment confirmation · Reference NGB-2024-118822\n\nDate of issue: 3 March 2026\n\nTo whom it may concern,\n\nAt the request of our customer Mr Daniel Harlow, we confirm the following outgoing transfer from\n\naccount ending 4471:\n\nValue date: 14 February 2024\n\nAmount: USD 40,000.00 (forty thousand dollars)\n\nBeneficiary: Brightline Builders LLC\n\nBeneficiary bank reference: BLB-DEP-0124\n\nPayment narrative: \"Renovation deposit - 18 Alder Court\"\n\nNo other transfers to this beneficiary were made from this account between 1 January 2024 and 31\n\nMarch 2024.\n\nThis confirmation is issued for information purposes only.\n\nNorthgate Bank, Customer Services",
+      "source": "pdf-parse",
+      "meta": {
+        "page": 1
+      }
+    },
+    {
+      "docId": "d6",
+      "seq": 1,
+      "kind": "header",
+      "label": "header",
+      "text": "From: Daniel Harlow <d.harlow@example.com>\nTo: Marcus Reed <marcus@brightline-builders.example>\nDate: Thu, 20 Mar 2025 15:48:00 -0500\nSubject: Formal notice of defects - 18 Alder Court roof",
+      "source": "eml",
+      "meta": {
+        "timestamp": "Thu, 20 Mar 2025 15:48:00 -0500"
+      }
+    },
+    {
+      "docId": "d6",
+      "seq": 2,
+      "kind": "paragraph",
+      "label": "¶1",
+      "text": "Dear Mr Reed, This is formal written notice under clause 9 of the Renovation Agreement dated 12 January 2024. The rear roof section replaced by Brightline Builders LLC is leaking. Water is entering the rear bedroom through the ceiling whenever it rains. Photographs are attached. I require Brightline to inspect and repair the defect within 14 days of this notice. Please confirm receipt of this email. Regards, Daniel Harlow",
+      "source": "eml"
+    },
+    {
+      "docId": "d6",
+      "seq": 3,
+      "kind": "paragraph",
+      "label": "¶2",
+      "text": "--- Read receipt --- Your message \"Formal notice of defects - 18 Alder Court roof\" was read by marcus@brightline-builders.example on 20 Mar 2025 at 16:02.",
+      "source": "eml"
+    },
+    {
+      "docId": "d7",
+      "seq": 1,
+      "kind": "page",
+      "label": "p.1",
+      "text": "RENOVATION AGREEMENT\n\nThis Agreement is made on 12 January 2024 between Daniel Harlow (the \"Owner\") of 18 Alder\n\nCourt, Westbrook, and Brightline Builders LLC (the \"Contractor\"), represented by its managing\n\nmember Marcus Reed.\n\n1. Works. The Contractor shall renovate the kitchen and replace the rear roof section of the Owner's\n\nresidence in accordance with the specification in Schedule A.\n\n2. Price. The fixed price for the Works is $96,000.\n\n3. Deposit. The Owner shall pay a deposit of 50% of the price, being $48,000, within 30 days of\n\nsigning. The balance is payable on completion.\n\n4. Completion. The Contractor shall complete the Works by 30 June 2024.\n\n5. Materials. All materials shall be new and of merchantable quality.\n\n6. Permits. The Contractor shall obtain all building permits required for the Works before\n\ncommencing the relevant part of the Works.\n\n7. Warranty. The Contractor warrants the Works against defects in workmanship for a period of 24\n\nmonths from completion.\n\n8. Subcontracting. The Contractor may subcontract roofing works only with the Owner's written\n\nconsent.\n\n9. Notice of defects. The Owner shall give the Contractor written notice of any defect within 10 days\n\nof discovering it. The Contractor shall inspect within 14 days of notice.\n\n10. Completion certificate. On completion the parties shall sign a certificate of completion.\n\nSigned: Daniel Harlow, Owner. Signed: Marcus Reed, for Brightline Builders LLC.",
+      "source": "pdf-parse",
+      "meta": {
+        "page": 1
+      }
+    },
+    {
+      "docId": "d8",
+      "seq": 1,
+      "kind": "header",
+      "label": "header",
+      "text": "From: Marcus Reed <marcus@brightline-builders.example>\nTo: Daniel Harlow <d.harlow@example.com>\nDate: Mon, 2 Sep 2024 10:01:00 -0500\nSubject: Works complete - certificate attached",
+      "source": "eml",
+      "meta": {
+        "timestamp": "Mon, 2 Sep 2024 10:01:00 -0500"
+      }
+    },
+    {
+      "docId": "d8",
+      "seq": 2,
+      "kind": "paragraph",
+      "label": "¶1",
+      "text": "Hi Daniel, The works at 18 Alder Court were completed on 30 August 2024. The completion certificate is attached for your signature. Please sign and return a copy for our records. The final invoice for the balance of $48,000 will follow this week. Thanks, Marcus",
+      "source": "eml"
+    },
+    {
+      "docId": "d9",
+      "seq": 1,
+      "kind": "paragraph",
+      "label": "¶1",
+      "text": "WITNESS STATEMENT OF PRIYA NATARAJAN",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d9",
+      "seq": 2,
+      "kind": "paragraph",
+      "label": "¶2",
+      "text": "I, Priya Natarajan, of 20 Alder Court, Westbrook, state as follows:",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d9",
+      "seq": 3,
+      "kind": "paragraph",
+      "label": "¶3",
+      "text": "1. I have lived next door to Daniel Harlow since 2019.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d9",
+      "seq": 4,
+      "kind": "paragraph",
+      "label": "¶4",
+      "text": "2. In early November 2024, around the time of the first heavy autumn rain, Daniel told me that water was coming through the ceiling of his back bedroom and that he had messaged his builder about it.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d9",
+      "seq": 5,
+      "kind": "paragraph",
+      "label": "¶5",
+      "text": "3. I saw a wet brown patch on that ceiling myself on or about 16 November 2024 when I helped Daniel move a wardrobe away from the wall.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d9",
+      "seq": 6,
+      "kind": "paragraph",
+      "label": "¶6",
+      "text": "4. In December 2024 Daniel told me the builder had still not come to look at it.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d9",
+      "seq": 7,
+      "kind": "paragraph",
+      "label": "¶7",
+      "text": "5. I did not see any workmen from Brightline at the house between September 2024 and the spring of 2025.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d9",
+      "seq": 8,
+      "kind": "paragraph",
+      "label": "¶8",
+      "text": "I believe the facts stated in this witness statement are true.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d9",
+      "seq": 9,
+      "kind": "paragraph",
+      "label": "¶9",
+      "text": "Signed: Priya Natarajan. Dated 20 May 2026.",
+      "source": "mammoth"
+    },
+    {
+      "docId": "d10",
+      "seq": 1,
+      "kind": "page",
+      "label": "p.1",
+      "text": "BRIGHTLINE BUILDERS LLC\n\n2 April 2025\n\nMr Daniel Harlow, 18 Alder Court, Westbrook\n\nRe: Your letter of 20 March 2025 - alleged roof defect\n\nDear Mr Harlow,\n\nWe acknowledge your email of 20 March 2025. We first learned of the alleged roof defect from that\n\nletter, more than six months after the works were completed and certified.\n\nOur roofing works were completed to specification on 30 August 2024 and you signed the\n\ncertificate of completion. We understand that solar panels were subsequently installed on the roof\n\nby a third-party contractor engaged by you. Any water ingress is, in our view, attributable to that\n\nlater installation and not to our works.\n\nWe therefore do not accept responsibility for the alleged defect and will not be carrying out remedial\n\nworks.\n\nYours sincerely,\n\nMarcus Reed, Managing Member",
+      "source": "pdf-parse",
+      "meta": {
+        "page": 1
+      }
+    }
+  ],
+  "facts": [
+    {
+      "id": "f1",
+      "docId": "d1",
+      "kind": "representation",
+      "statement": "Daniel Harlow is the owner of the residence at 18 Alder Court, Westbrook.",
+      "actors": [
+        "Daniel Harlow",
+        "Plaintiff"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 4,
+        "quote": "Plaintiff Daniel Harlow is the owner of the residence at 18 Alder Court, Westbrook."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 4,
+      "matchScore": 1
+    },
+    {
+      "id": "f2",
+      "docId": "d1",
+      "kind": "representation",
+      "statement": "Brightline Builders LLC is a building contractor.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 5,
+        "quote": "Defendant Brightline Builders LLC is a building contractor."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 5,
+      "matchScore": 1
+    },
+    {
+      "id": "f3",
+      "docId": "d1",
+      "kind": "representation",
+      "statement": "Marcus Reed is the managing member of Brightline Builders LLC.",
+      "actors": [
+        "Marcus Reed",
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 5,
+        "quote": "Its managing member is Marcus Reed."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 5,
+      "matchScore": 1
+    },
+    {
+      "id": "f4",
+      "docId": "d1",
+      "kind": "event",
+      "statement": "The parties signed a written Renovation Agreement for the renovation of the kitchen and the replacement of the rear roof section of the residence for a fixed price of $96,000.",
+      "actors": [
+        "Daniel Harlow",
+        "Plaintiff",
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": "2024-01-12",
+      "datePrecision": "day",
+      "amount": {
+        "value": 96000,
+        "currency": "USD"
+      },
+      "anchor": {
+        "seq": 6,
+        "quote": "On 12 January 2024 the parties signed a written Renovation Agreement for the renovation of the kitchen and the replacement of the rear roof section of the residence for a fixed price of $96,000."
+      },
+      "confidence": 0.98,
+      "verification": "verified",
+      "verifiedSeq": 6,
+      "matchScore": 1
+    },
+    {
+      "id": "f5",
+      "docId": "d1",
+      "kind": "obligation",
+      "statement": "The parties agreed to a fixed price of $96,000 for the renovation of the kitchen and replacement of the rear roof section.",
+      "actors": [
+        "Daniel Harlow",
+        "Plaintiff",
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": "2024-01-12",
+      "datePrecision": "day",
+      "amount": {
+        "value": 96000,
+        "currency": "USD"
+      },
+      "anchor": {
+        "seq": 6,
+        "quote": "signed a written Renovation Agreement for the renovation of the kitchen and the replacement of the rear roof section of the residence for a fixed price of $96,000."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 6,
+      "matchScore": 1
+    },
+    {
+      "id": "f6",
+      "docId": "d1",
+      "kind": "payment",
+      "statement": "Plaintiff paid Defendant the contractual deposit of $48,000 by wire transfer from his account at Northgate Bank.",
+      "actors": [
+        "Daniel Harlow",
+        "Plaintiff",
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": "2024-02-14",
+      "datePrecision": "day",
+      "amount": {
+        "value": 48000,
+        "currency": "USD"
+      },
+      "anchor": {
+        "seq": 7,
+        "quote": "On 14 February 2024 Plaintiff paid Defendant the contractual deposit of $48,000 by wire transfer from his account at Northgate Bank."
+      },
+      "confidence": 0.98,
+      "verification": "verified",
+      "verifiedSeq": 7,
+      "matchScore": 1
+    },
+    {
+      "id": "f7",
+      "docId": "d1",
+      "kind": "representation",
+      "statement": "Defendant represented that the works were completed on 30 August 2024.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": "2024-08-30",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 8,
+        "quote": "Defendant represented that the works were completed on 30 August 2024."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 8,
+      "matchScore": 1
+    },
+    {
+      "id": "f8",
+      "docId": "d1",
+      "kind": "representation",
+      "statement": "The roof section replaced by Defendant is defective and water penetrates the rear bedroom ceiling during rainfall.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 9,
+        "quote": "The roof section replaced by Defendant is defective. Water penetrates the rear bedroom ceiling during rainfall."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 9,
+      "matchScore": 1
+    },
+    {
+      "id": "f9",
+      "docId": "d1",
+      "kind": "event",
+      "statement": "Plaintiff first discovered the defect in March 2025, when water stains appeared on the ceiling of the rear bedroom.",
+      "actors": [
+        "Daniel Harlow",
+        "Plaintiff"
+      ],
+      "date": "2025-03",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 10,
+        "quote": "Plaintiff first discovered the defect in March 2025, when water stains appeared on the ceiling of the rear bedroom."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 10,
+      "matchScore": 1
+    },
+    {
+      "id": "f10",
+      "docId": "d1",
+      "kind": "communication",
+      "statement": "Plaintiff gave Defendant written notice of the defect by email, as required by clause 9 of the Renovation Agreement.",
+      "actors": [
+        "Daniel Harlow",
+        "Plaintiff",
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": "2025-03-20",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 11,
+        "quote": "On 20 March 2025, within ten days of discovery, Plaintiff gave Defendant written notice of the defect by email, as required by clause 9 of the Renovation Agreement."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 11,
+      "matchScore": 1
+    },
+    {
+      "id": "f11",
+      "docId": "d1",
+      "kind": "obligation",
+      "statement": "Clause 9 of the Renovation Agreement requires written notice of defects.",
+      "actors": [
+        "Daniel Harlow",
+        "Plaintiff",
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": "2024-01-12",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 11,
+        "quote": "as required by clause 9 of the Renovation Agreement."
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 11,
+      "matchScore": 1
+    },
+    {
+      "id": "f12",
+      "docId": "d1",
+      "kind": "denial",
+      "statement": "Defendant has refused to repair the defect.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 12,
+        "quote": "Defendant has refused to repair the defect."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 12,
+      "matchScore": 1
+    },
+    {
+      "id": "f13",
+      "docId": "d1",
+      "kind": "representation",
+      "statement": "The cost of remedial works has been assessed at $35,000 by a qualified roofing engineer.",
+      "actors": [
+        "Daniel Harlow",
+        "Plaintiff"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": {
+        "value": 35000,
+        "currency": "USD"
+      },
+      "anchor": {
+        "seq": 13,
+        "quote": "The cost of remedial works has been assessed at $35,000 by a qualified roofing engineer."
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 13,
+      "matchScore": 1
+    },
+    {
+      "id": "f14",
+      "docId": "d1",
+      "kind": "representation",
+      "statement": "Defendant never obtained the building permit required for the roof works, contrary to clause 6 of the Renovation Agreement.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 14,
+        "quote": "Defendant never obtained the building permit required for the roof works, contrary to clause 6 of the Renovation Agreement."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 14,
+      "matchScore": 1
+    },
+    {
+      "id": "f15",
+      "docId": "d1",
+      "kind": "obligation",
+      "statement": "Clause 6 of the Renovation Agreement requires Defendant to obtain the building permit for the roof works.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": "2024-01-12",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 14,
+        "quote": "the building permit required for the roof works, contrary to clause 6 of the Renovation Agreement."
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 14,
+      "matchScore": 1
+    },
+    {
+      "id": "f16",
+      "docId": "d2",
+      "kind": "admission",
+      "statement": "Brightline Builders LLC admits paragraphs 1, 2 and 3 of the Complaint.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 4,
+        "quote": "Defendant admits paragraphs 1, 2 and 3 of the Complaint."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 4,
+      "matchScore": 1
+    },
+    {
+      "id": "f17",
+      "docId": "d2",
+      "kind": "denial",
+      "statement": "Brightline Builders LLC denies paragraph 4 of the Complaint.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 5,
+        "quote": "Defendant denies paragraph 4."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 5,
+      "matchScore": 1
+    },
+    {
+      "id": "f18",
+      "docId": "d2",
+      "kind": "payment",
+      "statement": "Daniel Harlow paid Brightline Builders LLC $40,000 on or about 14 February 2024.",
+      "actors": [
+        "Daniel Harlow",
+        "Plaintiff",
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": "2024-02-14",
+      "datePrecision": "day",
+      "amount": {
+        "value": 40000,
+        "currency": "USD"
+      },
+      "anchor": {
+        "seq": 5,
+        "quote": "Plaintiff paid Defendant $40,000 on or about 14 February 2024"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 5,
+      "matchScore": 1
+    },
+    {
+      "id": "f19",
+      "docId": "d2",
+      "kind": "representation",
+      "statement": "Brightline Builders LLC asserts that Daniel Harlow paid only $40,000, not $48,000.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant",
+        "Daniel Harlow",
+        "Plaintiff"
+      ],
+      "date": "2024-02-14",
+      "datePrecision": "day",
+      "amount": {
+        "value": 40000,
+        "currency": "USD"
+      },
+      "anchor": {
+        "seq": 5,
+        "quote": "Plaintiff paid Defendant $40,000 on or about 14 February 2024, not $48,000"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 5,
+      "matchScore": 1
+    },
+    {
+      "id": "f20",
+      "docId": "d2",
+      "kind": "representation",
+      "statement": "Brightline Builders LLC asserts that the balance of the deposit was never paid by Daniel Harlow.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant",
+        "Daniel Harlow",
+        "Plaintiff"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 5,
+        "quote": "the balance of the deposit was never paid."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 5,
+      "matchScore": 1
+    },
+    {
+      "id": "f21",
+      "docId": "d2",
+      "kind": "admission",
+      "statement": "Brightline Builders LLC admits that it completed the works on 30 August 2024.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": "2024-08-30",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 6,
+        "quote": "Defendant admits that it completed the works on 30 August 2024"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 6,
+      "matchScore": 1
+    },
+    {
+      "id": "f22",
+      "docId": "d2",
+      "kind": "event",
+      "statement": "Brightline Builders LLC completed the works on 30 August 2024.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": "2024-08-30",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 6,
+        "quote": "it completed the works on 30 August 2024"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 6,
+      "matchScore": 1
+    },
+    {
+      "id": "f23",
+      "docId": "d2",
+      "kind": "event",
+      "statement": "Daniel Harlow signed a certificate of completion on 2 September 2024.",
+      "actors": [
+        "Daniel Harlow",
+        "Plaintiff"
+      ],
+      "date": "2024-09-02",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 6,
+        "quote": "Plaintiff signed a certificate of completion on 2 September 2024"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 6,
+      "matchScore": 1
+    },
+    {
+      "id": "f24",
+      "docId": "d2",
+      "kind": "representation",
+      "statement": "Brightline Builders LLC asserts that Daniel Harlow signed a certificate of completion on 2 September 2024 confirming that the works were complete and satisfactory.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant",
+        "Daniel Harlow",
+        "Plaintiff"
+      ],
+      "date": "2024-09-02",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 6,
+        "quote": "Plaintiff signed a certificate of completion on 2 September 2024 confirming that the works were complete and satisfactory."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 6,
+      "matchScore": 1
+    },
+    {
+      "id": "f25",
+      "docId": "d2",
+      "kind": "denial",
+      "statement": "Brightline Builders LLC denies paragraphs 6 and 7 of the Complaint.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 7,
+        "quote": "Defendant denies paragraphs 6 and 7."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 7,
+      "matchScore": 1
+    },
+    {
+      "id": "f26",
+      "docId": "d2",
+      "kind": "representation",
+      "statement": "Brightline Builders LLC asserts that any water ingress is the result of solar panels installed on the rear roof by a third party engaged by Daniel Harlow in October 2024, after Brightline Builders LLC had left the site.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant",
+        "Daniel Harlow",
+        "Plaintiff"
+      ],
+      "date": "2024-10",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 7,
+        "quote": "Any water ingress is the result of solar panels installed on the rear roof by a third party engaged by Plaintiff in October 2024, after Defendant had left the site."
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 7,
+      "matchScore": 1
+    },
+    {
+      "id": "f27",
+      "docId": "d2",
+      "kind": "event",
+      "statement": "Solar panels were installed on the rear roof by a third party engaged by Daniel Harlow in October 2024.",
+      "actors": [
+        "Daniel Harlow",
+        "Plaintiff"
+      ],
+      "date": "2024-10",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 7,
+        "quote": "solar panels installed on the rear roof by a third party engaged by Plaintiff in October 2024"
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 7,
+      "matchScore": 1
+    },
+    {
+      "id": "f28",
+      "docId": "d2",
+      "kind": "event",
+      "statement": "Brightline Builders LLC left the site before October 2024.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": "2024-10",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 7,
+        "quote": "after Defendant had left the site."
+      },
+      "confidence": 0.85,
+      "verification": "verified",
+      "verifiedSeq": 7,
+      "matchScore": 1
+    },
+    {
+      "id": "f29",
+      "docId": "d2",
+      "kind": "denial",
+      "statement": "Brightline Builders LLC denies paragraph 8 of the Complaint.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 8,
+        "quote": "Defendant denies paragraph 8."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 8,
+      "matchScore": 1
+    },
+    {
+      "id": "f30",
+      "docId": "d2",
+      "kind": "representation",
+      "statement": "Brightline Builders LLC asserts that it received no written notice of any alleged defect until it was served with this lawsuit.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 8,
+        "quote": "Defendant received no written notice of any alleged defect until it was served with this lawsuit."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 8,
+      "matchScore": 1
+    },
+    {
+      "id": "f31",
+      "docId": "d2",
+      "kind": "denial",
+      "statement": "Brightline Builders LLC denies paragraph 9 of the Complaint.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 9,
+        "quote": "Defendant denies paragraph 9."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 9,
+      "matchScore": 1
+    },
+    {
+      "id": "f32",
+      "docId": "d2",
+      "kind": "representation",
+      "statement": "Brightline Builders LLC asserts that no repair was requested before proceedings were issued.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 9,
+        "quote": "No repair was requested before proceedings were issued."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 9,
+      "matchScore": 1
+    },
+    {
+      "id": "f33",
+      "docId": "d2",
+      "kind": "denial",
+      "statement": "Brightline Builders LLC denies paragraph 10 of the Complaint and puts Daniel Harlow to strict proof of the alleged repair cost.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant",
+        "Daniel Harlow",
+        "Plaintiff"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 10,
+        "quote": "Defendant denies paragraph 10 and puts Plaintiff to strict proof of the alleged repair cost."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 10,
+      "matchScore": 1
+    },
+    {
+      "id": "f34",
+      "docId": "d2",
+      "kind": "denial",
+      "statement": "Brightline Builders LLC denies paragraph 11 of the Complaint.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 11,
+        "quote": "Defendant denies paragraph 11."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 11,
+      "matchScore": 1
+    },
+    {
+      "id": "f35",
+      "docId": "d2",
+      "kind": "representation",
+      "statement": "Brightline Builders LLC asserts that all required permits were obtained.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Defendant"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 11,
+        "quote": "All required permits were obtained."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 11,
+      "matchScore": 1
+    },
+    {
+      "id": "f36",
+      "docId": "d3",
+      "kind": "admission",
+      "statement": "Daniel Harlow is the Plaintiff in this action.",
+      "actors": [
+        "Daniel Harlow",
+        "Plaintiff"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "I am the Plaintiff in this action"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f37",
+      "docId": "d3",
+      "kind": "event",
+      "statement": "Daniel Harlow signed the Renovation Agreement with Brightline Builders LLC on 12 January 2024; Marcus Reed signed for the company.",
+      "actors": [
+        "Daniel Harlow",
+        "Brightline Builders LLC",
+        "Marcus Reed"
+      ],
+      "date": "2024-01-12",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "On 12 January 2024 I signed the Renovation Agreement with Brightline Builders LLC. Marcus\n\nReed signed for the company."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f38",
+      "docId": "d3",
+      "kind": "payment",
+      "statement": "Daniel Harlow paid Brightline Builders LLC $48,000 by wire transfer from his account at Northgate Bank on 14 February 2024.",
+      "actors": [
+        "Daniel Harlow",
+        "Brightline Builders LLC"
+      ],
+      "date": "2024-02-14",
+      "datePrecision": "day",
+      "amount": {
+        "value": 48000,
+        "currency": "USD"
+      },
+      "anchor": {
+        "seq": 1,
+        "quote": "On 14 February 2024 I paid Brightline Builders LLC the sum of $48,000 by wire transfer from my\n\naccount at Northgate Bank."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f39",
+      "docId": "d3",
+      "kind": "representation",
+      "statement": "The $48,000 payment was the full deposit required by the Agreement.",
+      "actors": [
+        "Daniel Harlow"
+      ],
+      "date": "2024-02-14",
+      "datePrecision": "day",
+      "amount": {
+        "value": 48000,
+        "currency": "USD"
+      },
+      "anchor": {
+        "seq": 1,
+        "quote": "This was the full deposit required by the Agreement."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f40",
+      "docId": "d3",
+      "kind": "communication",
+      "statement": "Brightline told Daniel Harlow the works were finished at the end of August 2024.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Daniel Harlow"
+      ],
+      "date": "2024-08",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Brightline told me the works were finished at the end of August 2024."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f41",
+      "docId": "d3",
+      "kind": "event",
+      "statement": "Daniel Harlow first became aware of the leak in the rear bedroom in March 2025, when he noticed brown water stains spreading across the ceiling after heavy rain.",
+      "actors": [
+        "Daniel Harlow"
+      ],
+      "date": "2025-03",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "I first became aware of the leak in the rear bedroom in March 2025, when I noticed brown water\n\nstains spreading across the ceiling after heavy rain."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f42",
+      "docId": "d3",
+      "kind": "denial",
+      "statement": "Before March 2025, Daniel Harlow had never discussed any roof problem with Brightline or with Marcus Reed.",
+      "actors": [
+        "Daniel Harlow",
+        "Brightline Builders LLC",
+        "Marcus Reed"
+      ],
+      "date": "2025-03",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Before March 2025 I had never discussed any roof problem with Brightline or with Mr Reed."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f43",
+      "docId": "d3",
+      "kind": "representation",
+      "statement": "Before March 2025, Daniel Harlow believed the roof was sound.",
+      "actors": [
+        "Daniel Harlow"
+      ],
+      "date": "2025-03",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "There was nothing to discuss; I believed the roof was sound."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f44",
+      "docId": "d3",
+      "kind": "communication",
+      "statement": "On 20 March 2025, Daniel Harlow sent Marcus Reed an email headed 'Formal notice of defects' describing the leak and asking Brightline to repair it.",
+      "actors": [
+        "Daniel Harlow",
+        "Marcus Reed",
+        "Brightline Builders LLC"
+      ],
+      "date": "2025-03-20",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "On 20 March 2025 I sent Mr Reed an email headed \"Formal notice of defects\" describing the\n\nleak and asking Brightline to repair it."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f45",
+      "docId": "d3",
+      "kind": "denial",
+      "statement": "Marcus Reed did not offer to repair the roof.",
+      "actors": [
+        "Marcus Reed"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Mr Reed did not offer to repair the roof."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f46",
+      "docId": "d3",
+      "kind": "communication",
+      "statement": "On 2 April 2025, Brightline wrote to Daniel Harlow denying responsibility.",
+      "actors": [
+        "Brightline Builders LLC",
+        "Daniel Harlow"
+      ],
+      "date": "2025-04-02",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "On 2 April 2025 Brightline wrote to me denying\n\nresponsibility."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f47",
+      "docId": "d3",
+      "kind": "payment",
+      "statement": "Daniel Harlow has obtained an estimate of $35,000 for the remedial works.",
+      "actors": [
+        "Daniel Harlow"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": {
+        "value": 35000,
+        "currency": "USD"
+      },
+      "anchor": {
+        "seq": 1,
+        "quote": "I have obtained an estimate of $35,000 for the remedial works."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f48",
+      "docId": "d3",
+      "kind": "event",
+      "statement": "The affidavit was sworn on 28 May 2026 before a notary public.",
+      "actors": [
+        "Daniel Harlow"
+      ],
+      "date": "2026-05-28",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Sworn on 28 May 2026 before a notary public."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f49",
+      "docId": "d4",
+      "kind": "communication",
+      "statement": "Daniel Harlow sent a message to Marcus Reed stating the kitchen looks great and thanking the team.",
+      "actors": [
+        "Daniel Harlow",
+        "Marcus Reed"
+      ],
+      "date": "2024-08-28",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Kitchen looks great, thanks to the team"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f50",
+      "docId": "d4",
+      "kind": "event",
+      "statement": "The roof work was completed.",
+      "actors": [
+        "Marcus Reed",
+        "Brightline Builders LLC"
+      ],
+      "date": "2024-08-28",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 2,
+        "quote": "Roof is done too"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f51",
+      "docId": "d4",
+      "kind": "communication",
+      "statement": "Marcus Reed informed Daniel Harlow that the roof is done and they just need to pick up the scaffold.",
+      "actors": [
+        "Marcus Reed",
+        "Daniel Harlow"
+      ],
+      "date": "2024-08-28",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 2,
+        "quote": "Roof is done too, we just need to pick up the scaffold"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f52",
+      "docId": "d4",
+      "kind": "communication",
+      "statement": "Marcus Reed sent Daniel Harlow the completion certificate by email and requested that he sign and return it.",
+      "actors": [
+        "Marcus Reed",
+        "Daniel Harlow"
+      ],
+      "date": "2024-09-02",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 3,
+        "quote": "Sent you the completion certificate by email, can you sign and return"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 3,
+      "matchScore": 1
+    },
+    {
+      "id": "f53",
+      "docId": "d4",
+      "kind": "event",
+      "statement": "The ceiling in the back bedroom leaked after rain on the night of 2024-11-13.",
+      "actors": [
+        "Daniel Harlow"
+      ],
+      "date": "2024-11-13",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 4,
+        "quote": "the ceiling in the back bedroom is leaking again after last night's rain"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 4,
+      "matchScore": 1
+    },
+    {
+      "id": "f54",
+      "docId": "d4",
+      "kind": "communication",
+      "statement": "Daniel Harlow reported to Marcus Reed that the ceiling in the back bedroom is leaking again after last night's rain, with a wet patch the size of a dinner plate.",
+      "actors": [
+        "Daniel Harlow",
+        "Marcus Reed"
+      ],
+      "date": "2024-11-14",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 4,
+        "quote": "the ceiling in the back bedroom is leaking again after last night's rain. There is a wet patch the size of a dinner plate"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 4,
+      "matchScore": 1
+    },
+    {
+      "id": "f55",
+      "docId": "d4",
+      "kind": "representation",
+      "statement": "Marcus Reed stated the leak could be the flashing.",
+      "actors": [
+        "Marcus Reed"
+      ],
+      "date": "2024-11-14",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 5,
+        "quote": "Could be the flashing"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 5,
+      "matchScore": 1
+    },
+    {
+      "id": "f56",
+      "docId": "d4",
+      "kind": "obligation",
+      "statement": "Marcus Reed committed to send someone on Monday to look at the leak.",
+      "actors": [
+        "Marcus Reed",
+        "Brightline Builders LLC"
+      ],
+      "date": "2024-11-14",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 5,
+        "quote": "I will send someone Monday to have a look"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 5,
+      "matchScore": 1
+    },
+    {
+      "id": "f57",
+      "docId": "d4",
+      "kind": "communication",
+      "statement": "Marcus Reed informed Daniel Harlow that the crew got pulled onto another job and the inspection will be next week.",
+      "actors": [
+        "Marcus Reed",
+        "Daniel Harlow"
+      ],
+      "date": "2024-11-18",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 6,
+        "quote": "Crew got pulled onto another job, will be next week"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 6,
+      "matchScore": 1
+    },
+    {
+      "id": "f58",
+      "docId": "d4",
+      "kind": "event",
+      "statement": "The ceiling leaked again on Sunday, 2024-12-01.",
+      "actors": [
+        "Daniel Harlow"
+      ],
+      "date": "2024-12-01",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 7,
+        "quote": "It leaked again on Sunday"
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 7,
+      "matchScore": 1
+    },
+    {
+      "id": "f59",
+      "docId": "d4",
+      "kind": "communication",
+      "statement": "Daniel Harlow informed Marcus Reed that he is still waiting and that the ceiling leaked again on Sunday.",
+      "actors": [
+        "Daniel Harlow",
+        "Marcus Reed"
+      ],
+      "date": "2024-12-03",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 7,
+        "quote": "Still waiting. It leaked again on Sunday"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 7,
+      "matchScore": 1
+    },
+    {
+      "id": "f60",
+      "docId": "d4",
+      "kind": "denial",
+      "statement": "Marcus Reed denied responsibility for the roof issue, stating it is from the solar installers hired by Daniel Harlow who cut into Brightline's membrane.",
+      "actors": [
+        "Marcus Reed",
+        "Brightline Builders LLC"
+      ],
+      "date": "2025-01-10",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 8,
+        "quote": "The roof issue is from the solar guys you hired, not us. They cut into our membrane"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 8,
+      "matchScore": 1
+    },
+    {
+      "id": "f61",
+      "docId": "d4",
+      "kind": "representation",
+      "statement": "Marcus Reed stated that the solar installers cut into Brightline's membrane.",
+      "actors": [
+        "Marcus Reed"
+      ],
+      "date": "2025-01-10",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 8,
+        "quote": "They cut into our membrane"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 8,
+      "matchScore": 1
+    },
+    {
+      "id": "f62",
+      "docId": "d4",
+      "kind": "communication",
+      "statement": "Marcus Reed informed Daniel Harlow that he looked at the photos and the roof issue is from the solar installers.",
+      "actors": [
+        "Marcus Reed",
+        "Daniel Harlow"
+      ],
+      "date": "2025-01-10",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 8,
+        "quote": "Looked at the photos. The roof issue is from the solar guys you hired, not us."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 8,
+      "matchScore": 1
+    },
+    {
+      "id": "f63",
+      "docId": "d4",
+      "kind": "representation",
+      "statement": "Daniel Harlow stated that the solar panels are on the front roof and the leak is at the back.",
+      "actors": [
+        "Daniel Harlow"
+      ],
+      "date": "2025-01-10",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 9,
+        "quote": "The solar panels are on the front roof, the leak is at the back"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 9,
+      "matchScore": 1
+    },
+    {
+      "id": "f64",
+      "docId": "d4",
+      "kind": "communication",
+      "statement": "Daniel Harlow sent Marcus Reed a formal email about the roof and requested that he read it.",
+      "actors": [
+        "Daniel Harlow",
+        "Marcus Reed"
+      ],
+      "date": "2025-03-20",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 10,
+        "quote": "Sent you a formal email about the roof just now, please read it"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 10,
+      "matchScore": 1
+    },
+    {
+      "id": "f65",
+      "docId": "d5",
+      "kind": "payment",
+      "statement": "Daniel Harlow made an outgoing transfer of USD 40,000.00 to Brightline Builders LLC on 14 February 2024 from account ending 4471.",
+      "actors": [
+        "Daniel Harlow",
+        "Brightline Builders LLC"
+      ],
+      "date": "2024-02-14",
+      "datePrecision": "day",
+      "amount": {
+        "value": 40000,
+        "currency": "USD"
+      },
+      "anchor": {
+        "seq": 1,
+        "quote": "Value date: 14 February 2024\n\nAmount: USD 40,000.00 (forty thousand dollars)\n\nBeneficiary: Brightline Builders LLC"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f66",
+      "docId": "d5",
+      "kind": "representation",
+      "statement": "The payment narrative for the USD 40,000.00 transfer was 'Renovation deposit - 18 Alder Court'.",
+      "actors": [
+        "Daniel Harlow",
+        "Brightline Builders LLC"
+      ],
+      "date": "2024-02-14",
+      "datePrecision": "day",
+      "amount": {
+        "value": 40000,
+        "currency": "USD"
+      },
+      "anchor": {
+        "seq": 1,
+        "quote": "Payment narrative: \"Renovation deposit - 18 Alder Court\""
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f67",
+      "docId": "d5",
+      "kind": "representation",
+      "statement": "Northgate Bank confirmed that no other transfers to Brightline Builders LLC were made from Daniel Harlow's account ending 4471 between 1 January 2024 and 31 March 2024.",
+      "actors": [
+        "Northgate Bank",
+        "Daniel Harlow",
+        "Brightline Builders LLC"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "No other transfers to this beneficiary were made from this account between 1 January 2024 and 31\n\nMarch 2024."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f68",
+      "docId": "d5",
+      "kind": "event",
+      "statement": "Northgate Bank issued payment confirmation reference NGB-2024-118822 on 3 March 2026 at the request of Daniel Harlow.",
+      "actors": [
+        "Northgate Bank",
+        "Daniel Harlow"
+      ],
+      "date": "2026-03-03",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Date of issue: 3 March 2026\n\nTo whom it may concern,\n\nAt the request of our customer Mr Daniel Harlow"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f69",
+      "docId": "d6",
+      "kind": "communication",
+      "statement": "Daniel Harlow sent formal written notice to Marcus Reed regarding defects in the rear roof section.",
+      "actors": [
+        "Daniel Harlow",
+        "Marcus Reed"
+      ],
+      "date": "2025-03-20",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "From: Daniel Harlow <d.harlow@example.com>\nTo: Marcus Reed <marcus@brightline-builders.example>\nDate: Thu, 20 Mar 2025 15:48:00 -0500"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f70",
+      "docId": "d6",
+      "kind": "representation",
+      "statement": "Daniel Harlow stated the notice was given under clause 9 of the Renovation Agreement dated 12 January 2024.",
+      "actors": [
+        "Daniel Harlow"
+      ],
+      "date": "2025-03-20",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 2,
+        "quote": "This is formal written notice under clause 9 of the Renovation Agreement dated 12 January 2024."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f71",
+      "docId": "d6",
+      "kind": "representation",
+      "statement": "Daniel Harlow stated that the rear roof section replaced by Brightline Builders LLC is leaking.",
+      "actors": [
+        "Daniel Harlow",
+        "Brightline Builders LLC"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 2,
+        "quote": "The rear roof section replaced by Brightline Builders LLC is leaking."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f72",
+      "docId": "d6",
+      "kind": "representation",
+      "statement": "Daniel Harlow stated that water is entering the rear bedroom through the ceiling whenever it rains.",
+      "actors": [
+        "Daniel Harlow"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 2,
+        "quote": "Water is entering the rear bedroom through the ceiling whenever it rains."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f73",
+      "docId": "d6",
+      "kind": "representation",
+      "statement": "Daniel Harlow stated that photographs are attached to the notice.",
+      "actors": [
+        "Daniel Harlow"
+      ],
+      "date": "2025-03-20",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 2,
+        "quote": "Photographs are attached."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f74",
+      "docId": "d6",
+      "kind": "obligation",
+      "statement": "Daniel Harlow required Brightline Builders LLC to inspect and repair the defect within 14 days of the notice dated 20 March 2025.",
+      "actors": [
+        "Daniel Harlow",
+        "Brightline Builders LLC"
+      ],
+      "date": "2025-03-20",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 2,
+        "quote": "I require Brightline to inspect and repair the defect within 14 days of this notice."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f75",
+      "docId": "d6",
+      "kind": "communication",
+      "statement": "Marcus Reed read the email on 20 March 2025 at 16:02.",
+      "actors": [
+        "Marcus Reed"
+      ],
+      "date": "2025-03-20",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 3,
+        "quote": "was read by marcus@brightline-builders.example on 20 Mar 2025 at 16:02."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 3,
+      "matchScore": 1
+    },
+    {
+      "id": "f82",
+      "docId": "d7",
+      "kind": "event",
+      "statement": "Renovation Agreement made between Daniel Harlow and Brightline Builders LLC",
+      "actors": [
+        "Daniel Harlow",
+        "Brightline Builders LLC"
+      ],
+      "date": "2024-01-12",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "This Agreement is made on 12 January 2024 between Daniel Harlow (the \"Owner\") of 18 Alder"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f83",
+      "docId": "d7",
+      "kind": "representation",
+      "statement": "Marcus Reed represents Brightline Builders LLC as its managing member",
+      "actors": [
+        "Marcus Reed",
+        "Brightline Builders LLC"
+      ],
+      "date": "2024-01-12",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Brightline Builders LLC (the \"Contractor\"), represented by its managing member Marcus Reed."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f84",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "The Contractor shall renovate the kitchen and replace the rear roof section of the Owner's residence in accordance with the specification in Schedule A",
+      "actors": [
+        "Brightline Builders LLC",
+        "Contractor"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "The Contractor shall renovate the kitchen and replace the rear roof section of the Owner's"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f85",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "The fixed price for the Works is $96,000",
+      "actors": [
+        "Brightline Builders LLC",
+        "Contractor",
+        "Daniel Harlow",
+        "Owner"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": {
+        "value": 96000,
+        "currency": "USD"
+      },
+      "anchor": {
+        "seq": 1,
+        "quote": "The fixed price for the Works is $96,000."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f86",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "The Owner shall pay a deposit of 50% of the price, being $48,000, within 30 days of signing",
+      "actors": [
+        "Daniel Harlow",
+        "Owner"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": {
+        "value": 48000,
+        "currency": "USD"
+      },
+      "anchor": {
+        "seq": 1,
+        "quote": "The Owner shall pay a deposit of 50% of the price, being $48,000, within 30 days of"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f87",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "The balance is payable on completion",
+      "actors": [
+        "Daniel Harlow",
+        "Owner"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "The balance is payable on completion."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f88",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "The Contractor shall complete the Works by 30 June 2024",
+      "actors": [
+        "Brightline Builders LLC",
+        "Contractor"
+      ],
+      "date": "2024-06-30",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "The Contractor shall complete the Works by 30 June 2024."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f89",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "All materials shall be new and of merchantable quality",
+      "actors": [
+        "Brightline Builders LLC",
+        "Contractor"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "All materials shall be new and of merchantable quality."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f90",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "The Contractor shall obtain all building permits required for the Works before commencing the relevant part of the Works",
+      "actors": [
+        "Brightline Builders LLC",
+        "Contractor"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "The Contractor shall obtain all building permits required for the Works before"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f91",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "The Contractor warrants the Works against defects in workmanship for a period of 24 months from completion",
+      "actors": [
+        "Brightline Builders LLC",
+        "Contractor"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "The Contractor warrants the Works against defects in workmanship for a period of 24"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f92",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "The Contractor may subcontract roofing works only with the Owner's written consent",
+      "actors": [
+        "Brightline Builders LLC",
+        "Contractor",
+        "Daniel Harlow",
+        "Owner"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "The Contractor may subcontract roofing works only with the Owner's written"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f93",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "The Owner shall give the Contractor written notice of any defect within 10 days of discovering it",
+      "actors": [
+        "Daniel Harlow",
+        "Owner",
+        "Brightline Builders LLC",
+        "Contractor"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "The Owner shall give the Contractor written notice of any defect within 10 days"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f94",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "The Contractor shall inspect within 14 days of notice of defect",
+      "actors": [
+        "Brightline Builders LLC",
+        "Contractor"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "The Contractor shall inspect within 14 days of notice."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f95",
+      "docId": "d7",
+      "kind": "obligation",
+      "statement": "On completion the parties shall sign a certificate of completion",
+      "actors": [
+        "Daniel Harlow",
+        "Owner",
+        "Brightline Builders LLC",
+        "Contractor"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "On completion the parties shall sign a certificate of completion."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f96",
+      "docId": "d7",
+      "kind": "event",
+      "statement": "Daniel Harlow signed the Agreement as Owner",
+      "actors": [
+        "Daniel Harlow",
+        "Owner"
+      ],
+      "date": "2024-01-12",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Signed: Daniel Harlow, Owner."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f97",
+      "docId": "d7",
+      "kind": "event",
+      "statement": "Marcus Reed signed the Agreement for Brightline Builders LLC",
+      "actors": [
+        "Marcus Reed",
+        "Brightline Builders LLC"
+      ],
+      "date": "2024-01-12",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Signed: Marcus Reed, for Brightline Builders LLC."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f76",
+      "docId": "d8",
+      "kind": "event",
+      "statement": "The works at 18 Alder Court were completed.",
+      "actors": [
+        "Marcus Reed",
+        "Brightline Builders LLC"
+      ],
+      "date": "2024-08-30",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 2,
+        "quote": "The works at 18 Alder Court were completed on 30 August 2024."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f77",
+      "docId": "d8",
+      "kind": "communication",
+      "statement": "Marcus Reed sent an email to Daniel Harlow regarding completion of works and attaching a completion certificate.",
+      "actors": [
+        "Marcus Reed",
+        "Daniel Harlow"
+      ],
+      "date": "2024-09-02",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "From: Marcus Reed <marcus@brightline-builders.example>\nTo: Daniel Harlow <d.harlow@example.com>\nDate: Mon, 2 Sep 2024 10:01:00 -0500"
+      },
+      "confidence": 0.98,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f78",
+      "docId": "d8",
+      "kind": "representation",
+      "statement": "Marcus Reed stated that the completion certificate is attached for Daniel Harlow's signature.",
+      "actors": [
+        "Marcus Reed",
+        "Daniel Harlow"
+      ],
+      "date": "2024-09-02",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 2,
+        "quote": "The completion certificate is attached for your signature."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f79",
+      "docId": "d8",
+      "kind": "obligation",
+      "statement": "Daniel Harlow is requested to sign and return a copy of the completion certificate for Marcus Reed's records.",
+      "actors": [
+        "Daniel Harlow",
+        "Marcus Reed"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 2,
+        "quote": "Please sign and return a copy for our records."
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f80",
+      "docId": "d8",
+      "kind": "representation",
+      "statement": "Marcus Reed stated that the final invoice for the balance of $48,000 will follow this week.",
+      "actors": [
+        "Marcus Reed",
+        "Brightline Builders LLC"
+      ],
+      "date": "2024-09-02",
+      "datePrecision": "day",
+      "amount": {
+        "value": 48000,
+        "currency": "USD"
+      },
+      "anchor": {
+        "seq": 2,
+        "quote": "The final invoice for the balance of $48,000 will follow this week."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f81",
+      "docId": "d8",
+      "kind": "payment",
+      "statement": "A balance of $48,000 is owed and will be invoiced.",
+      "actors": [
+        "Daniel Harlow",
+        "Brightline Builders LLC",
+        "Marcus Reed"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": {
+        "value": 48000,
+        "currency": "USD"
+      },
+      "anchor": {
+        "seq": 2,
+        "quote": "The final invoice for the balance of $48,000 will follow this week."
+      },
+      "confidence": 0.92,
+      "verification": "verified",
+      "verifiedSeq": 2,
+      "matchScore": 1
+    },
+    {
+      "id": "f98",
+      "docId": "d9",
+      "kind": "event",
+      "statement": "Priya Natarajan has lived next door to Daniel Harlow since 2019.",
+      "actors": [
+        "Priya Natarajan",
+        "Daniel Harlow"
+      ],
+      "date": "2019",
+      "datePrecision": "year",
+      "amount": null,
+      "anchor": {
+        "seq": 3,
+        "quote": "I have lived next door to Daniel Harlow since 2019."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 3,
+      "matchScore": 1
+    },
+    {
+      "id": "f99",
+      "docId": "d9",
+      "kind": "communication",
+      "statement": "In early November 2024, Daniel Harlow told Priya Natarajan that water was coming through the ceiling of his back bedroom.",
+      "actors": [
+        "Daniel Harlow",
+        "Priya Natarajan"
+      ],
+      "date": "2024-11",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 4,
+        "quote": "Daniel told me that water was coming through the ceiling of his back bedroom"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 4,
+      "matchScore": 1
+    },
+    {
+      "id": "f100",
+      "docId": "d9",
+      "kind": "communication",
+      "statement": "Daniel Harlow told Priya Natarajan that he had messaged his builder about the water leak.",
+      "actors": [
+        "Daniel Harlow",
+        "Priya Natarajan"
+      ],
+      "date": "2024-11",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 4,
+        "quote": "he had messaged his builder about it"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 4,
+      "matchScore": 1
+    },
+    {
+      "id": "f101",
+      "docId": "d9",
+      "kind": "event",
+      "statement": "Priya Natarajan saw a wet brown patch on the ceiling of Daniel Harlow's back bedroom on or about 16 November 2024.",
+      "actors": [
+        "Priya Natarajan",
+        "Daniel Harlow"
+      ],
+      "date": "2024-11-16",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 5,
+        "quote": "I saw a wet brown patch on that ceiling myself on or about 16 November 2024"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 5,
+      "matchScore": 1
+    },
+    {
+      "id": "f102",
+      "docId": "d9",
+      "kind": "event",
+      "statement": "Priya Natarajan helped Daniel Harlow move a wardrobe away from the wall on or about 16 November 2024.",
+      "actors": [
+        "Priya Natarajan",
+        "Daniel Harlow"
+      ],
+      "date": "2024-11-16",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 5,
+        "quote": "when I helped Daniel move a wardrobe away from the wall"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 5,
+      "matchScore": 1
+    },
+    {
+      "id": "f103",
+      "docId": "d9",
+      "kind": "communication",
+      "statement": "In December 2024, Daniel Harlow told Priya Natarajan that the builder had still not come to look at the water leak.",
+      "actors": [
+        "Daniel Harlow",
+        "Priya Natarajan"
+      ],
+      "date": "2024-12",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 6,
+        "quote": "In December 2024 Daniel told me the builder had still not come to look at it."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 6,
+      "matchScore": 1
+    },
+    {
+      "id": "f104",
+      "docId": "d9",
+      "kind": "event",
+      "statement": "Priya Natarajan did not see any workmen from Brightline Builders LLC at Daniel Harlow's house between September 2024 and the spring of 2025.",
+      "actors": [
+        "Priya Natarajan",
+        "Brightline Builders LLC",
+        "Daniel Harlow"
+      ],
+      "date": "2024-09",
+      "datePrecision": "month",
+      "amount": null,
+      "anchor": {
+        "seq": 7,
+        "quote": "I did not see any workmen from Brightline at the house between September 2024 and the spring of 2025."
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 7,
+      "matchScore": 1
+    },
+    {
+      "id": "f105",
+      "docId": "d10",
+      "kind": "communication",
+      "statement": "Daniel Harlow sent an email to Brightline Builders LLC on 20 March 2025",
+      "actors": [
+        "Daniel Harlow",
+        "Brightline Builders LLC"
+      ],
+      "date": "2025-03-20",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "your email of 20 March 2025"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f106",
+      "docId": "d10",
+      "kind": "communication",
+      "statement": "Brightline Builders LLC acknowledges receipt of Daniel Harlow's email of 20 March 2025",
+      "actors": [
+        "Brightline Builders LLC",
+        "Daniel Harlow"
+      ],
+      "date": "2025-04-02",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "We acknowledge your email of 20 March 2025."
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f107",
+      "docId": "d10",
+      "kind": "representation",
+      "statement": "Brightline Builders LLC first learned of the alleged roof defect from Daniel Harlow's letter of 20 March 2025",
+      "actors": [
+        "Brightline Builders LLC"
+      ],
+      "date": "2025-03-20",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "We first learned of the alleged roof defect from that letter"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f108",
+      "docId": "d10",
+      "kind": "representation",
+      "statement": "The alleged roof defect was reported more than six months after the works were completed and certified",
+      "actors": [
+        "Brightline Builders LLC"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "more than six months after the works were completed and certified"
+      },
+      "confidence": 0.95,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f109",
+      "docId": "d10",
+      "kind": "event",
+      "statement": "Brightline Builders LLC's roofing works were completed to specification on 30 August 2024",
+      "actors": [
+        "Brightline Builders LLC"
+      ],
+      "date": "2024-08-30",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Our roofing works were completed to specification on 30 August 2024"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f110",
+      "docId": "d10",
+      "kind": "event",
+      "statement": "Daniel Harlow signed the certificate of completion for the roofing works",
+      "actors": [
+        "Daniel Harlow"
+      ],
+      "date": "2024-08-30",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "you signed the certificate of completion"
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f111",
+      "docId": "d10",
+      "kind": "representation",
+      "statement": "Solar panels were subsequently installed on the roof by a third-party contractor engaged by Daniel Harlow",
+      "actors": [
+        "Brightline Builders LLC"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "solar panels were subsequently installed on the roof by a third-party contractor engaged by you"
+      },
+      "confidence": 0.9,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f112",
+      "docId": "d10",
+      "kind": "representation",
+      "statement": "Brightline Builders LLC believes any water ingress is attributable to the solar panel installation and not to their works",
+      "actors": [
+        "Brightline Builders LLC"
+      ],
+      "date": null,
+      "datePrecision": "none",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "Any water ingress is, in our view, attributable to that later installation and not to our works"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f113",
+      "docId": "d10",
+      "kind": "denial",
+      "statement": "Brightline Builders LLC does not accept responsibility for the alleged roof defect",
+      "actors": [
+        "Brightline Builders LLC"
+      ],
+      "date": "2025-04-02",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "We therefore do not accept responsibility for the alleged defect"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f114",
+      "docId": "d10",
+      "kind": "denial",
+      "statement": "Brightline Builders LLC will not be carrying out remedial works for the alleged roof defect",
+      "actors": [
+        "Brightline Builders LLC"
+      ],
+      "date": "2025-04-02",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "will not be carrying out remedial works"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    },
+    {
+      "id": "f115",
+      "docId": "d10",
+      "kind": "communication",
+      "statement": "Marcus Reed, Managing Member of Brightline Builders LLC, sent this letter to Daniel Harlow on 2 April 2025",
+      "actors": [
+        "Marcus Reed",
+        "Brightline Builders LLC",
+        "Daniel Harlow"
+      ],
+      "date": "2025-04-02",
+      "datePrecision": "day",
+      "amount": null,
+      "anchor": {
+        "seq": 1,
+        "quote": "2 April 2025"
+      },
+      "confidence": 1,
+      "verification": "verified",
+      "verifiedSeq": 1,
+      "matchScore": 1
+    }
+  ],
+  "actors": [
+    "Brightline Builders LLC",
+    "Contractor",
+    "Daniel Harlow",
+    "Defendant",
+    "Marcus Reed",
+    "Northgate Bank",
+    "Owner",
+    "Plaintiff",
+    "Priya Natarajan"
+  ],
+  "timeline": [
+    {
+      "id": "e1",
+      "date": "2019",
+      "precision": "year",
+      "factIds": [
+        "f98"
+      ],
+      "summary": "Priya Natarajan has lived next door to Daniel Harlow since 2019."
+    },
+    {
+      "id": "e2",
+      "date": "2024-01-12",
+      "precision": "day",
+      "factIds": [
+        "f4",
+        "f5",
+        "f11",
+        "f15",
+        "f37",
+        "f82",
+        "f83",
+        "f96",
+        "f97"
+      ],
+      "summary": "The parties signed a written Renovation Agreement for the renovation of the kitchen and the replacement of the rear roof section of the residence for a fixed price of $96,000. · The parties agreed to a fixed price of $96,000 for the renovation of the kitchen and replacement of the rear roof section."
+    },
+    {
+      "id": "e3",
+      "date": "2024-02-14",
+      "precision": "day",
+      "factIds": [
+        "f6",
+        "f18",
+        "f19",
+        "f38",
+        "f39",
+        "f65",
+        "f66"
+      ],
+      "summary": "Plaintiff paid Defendant the contractual deposit of $48,000 by wire transfer from his account at Northgate Bank. · Daniel Harlow paid Brightline Builders LLC $40,000 on or about 14 February 2024."
+    },
+    {
+      "id": "e4",
+      "date": "2024-06-30",
+      "precision": "day",
+      "factIds": [
+        "f88"
+      ],
+      "summary": "The Contractor shall complete the Works by 30 June 2024"
+    },
+    {
+      "id": "e5",
+      "date": "2024-08",
+      "precision": "month",
+      "factIds": [
+        "f40"
+      ],
+      "summary": "Brightline told Daniel Harlow the works were finished at the end of August 2024."
+    },
+    {
+      "id": "e6",
+      "date": "2024-08-28",
+      "precision": "day",
+      "factIds": [
+        "f49",
+        "f50",
+        "f51"
+      ],
+      "summary": "Daniel Harlow sent a message to Marcus Reed stating the kitchen looks great and thanking the team. · The roof work was completed."
+    },
+    {
+      "id": "e7",
+      "date": "2024-08-30",
+      "precision": "day",
+      "factIds": [
+        "f7",
+        "f21",
+        "f22",
+        "f76",
+        "f109",
+        "f110"
+      ],
+      "summary": "Defendant represented that the works were completed on 30 August 2024. · Brightline Builders LLC admits that it completed the works on 30 August 2024."
+    },
+    {
+      "id": "e8",
+      "date": "2024-09",
+      "precision": "month",
+      "factIds": [
+        "f104"
+      ],
+      "summary": "Priya Natarajan did not see any workmen from Brightline Builders LLC at Daniel Harlow's house between September 2024 and the spring of 2025."
+    },
+    {
+      "id": "e9",
+      "date": "2024-09-02",
+      "precision": "day",
+      "factIds": [
+        "f23",
+        "f24",
+        "f52",
+        "f77",
+        "f78",
+        "f80"
+      ],
+      "summary": "Daniel Harlow signed a certificate of completion on 2 September 2024. · Brightline Builders LLC asserts that Daniel Harlow signed a certificate of completion on 2 September 2024 confirming that the works were complete and satisfactory."
+    },
+    {
+      "id": "e10",
+      "date": "2024-10",
+      "precision": "month",
+      "factIds": [
+        "f26",
+        "f27",
+        "f28"
+      ],
+      "summary": "Brightline Builders LLC asserts that any water ingress is the result of solar panels installed on the rear roof by a third party engaged by Daniel Harlow in October 2024, after Brightline Builders LLC had left the site. · Solar panels were installed on the rear roof by a third party engaged by Daniel Harlow in October 2024."
+    },
+    {
+      "id": "e11",
+      "date": "2024-11",
+      "precision": "month",
+      "factIds": [
+        "f99",
+        "f100"
+      ],
+      "summary": "In early November 2024, Daniel Harlow told Priya Natarajan that water was coming through the ceiling of his back bedroom. · Daniel Harlow told Priya Natarajan that he had messaged his builder about the water leak."
+    },
+    {
+      "id": "e12",
+      "date": "2024-11-13",
+      "precision": "day",
+      "factIds": [
+        "f53"
+      ],
+      "summary": "The ceiling in the back bedroom leaked after rain on the night of 2024-11-13."
+    },
+    {
+      "id": "e13",
+      "date": "2024-11-14",
+      "precision": "day",
+      "factIds": [
+        "f54",
+        "f55",
+        "f56"
+      ],
+      "summary": "Daniel Harlow reported to Marcus Reed that the ceiling in the back bedroom is leaking again after last night's rain, with a wet patch the size of a dinner plate. · Marcus Reed stated the leak could be the flashing."
+    },
+    {
+      "id": "e14",
+      "date": "2024-11-16",
+      "precision": "day",
+      "factIds": [
+        "f101",
+        "f102"
+      ],
+      "summary": "Priya Natarajan saw a wet brown patch on the ceiling of Daniel Harlow's back bedroom on or about 16 November 2024. · Priya Natarajan helped Daniel Harlow move a wardrobe away from the wall on or about 16 November 2024."
+    },
+    {
+      "id": "e15",
+      "date": "2024-11-18",
+      "precision": "day",
+      "factIds": [
+        "f57"
+      ],
+      "summary": "Marcus Reed informed Daniel Harlow that the crew got pulled onto another job and the inspection will be next week."
+    },
+    {
+      "id": "e16",
+      "date": "2024-12",
+      "precision": "month",
+      "factIds": [
+        "f103"
+      ],
+      "summary": "In December 2024, Daniel Harlow told Priya Natarajan that the builder had still not come to look at the water leak."
+    },
+    {
+      "id": "e17",
+      "date": "2024-12-01",
+      "precision": "day",
+      "factIds": [
+        "f58"
+      ],
+      "summary": "The ceiling leaked again on Sunday, 2024-12-01."
+    },
+    {
+      "id": "e18",
+      "date": "2024-12-03",
+      "precision": "day",
+      "factIds": [
+        "f59"
+      ],
+      "summary": "Daniel Harlow informed Marcus Reed that he is still waiting and that the ceiling leaked again on Sunday."
+    },
+    {
+      "id": "e19",
+      "date": "2025-01-10",
+      "precision": "day",
+      "factIds": [
+        "f60",
+        "f61",
+        "f62",
+        "f63"
+      ],
+      "summary": "Marcus Reed denied responsibility for the roof issue, stating it is from the solar installers hired by Daniel Harlow who cut into Brightline's membrane. · Marcus Reed stated that the solar installers cut into Brightline's membrane."
+    },
+    {
+      "id": "e20",
+      "date": "2025-03",
+      "precision": "month",
+      "factIds": [
+        "f9",
+        "f41",
+        "f42",
+        "f43"
+      ],
+      "summary": "Plaintiff first discovered the defect in March 2025, when water stains appeared on the ceiling of the rear bedroom. · Daniel Harlow first became aware of the leak in the rear bedroom in March 2025, when he noticed brown water stains spreading across the ceiling after heavy rain."
+    },
+    {
+      "id": "e21",
+      "date": "2025-03-20",
+      "precision": "day",
+      "factIds": [
+        "f10",
+        "f44",
+        "f64",
+        "f69",
+        "f70",
+        "f73",
+        "f74",
+        "f75",
+        "f105",
+        "f107"
+      ],
+      "summary": "Plaintiff gave Defendant written notice of the defect by email, as required by clause 9 of the Renovation Agreement. · On 20 March 2025, Daniel Harlow sent Marcus Reed an email headed 'Formal notice of defects' describing the leak and asking Brightline to repair it."
+    },
+    {
+      "id": "e22",
+      "date": "2025-04-02",
+      "precision": "day",
+      "factIds": [
+        "f46",
+        "f106",
+        "f113",
+        "f114",
+        "f115"
+      ],
+      "summary": "On 2 April 2025, Brightline wrote to Daniel Harlow denying responsibility. · Brightline Builders LLC acknowledges receipt of Daniel Harlow's email of 20 March 2025"
+    },
+    {
+      "id": "e23",
+      "date": "2026-03-03",
+      "precision": "day",
+      "factIds": [
+        "f68"
+      ],
+      "summary": "Northgate Bank issued payment confirmation reference NGB-2024-118822 on 3 March 2026 at the request of Daniel Harlow."
+    },
+    {
+      "id": "e24",
+      "date": "2026-05-28",
+      "precision": "day",
+      "factIds": [
+        "f48"
+      ],
+      "summary": "The affidavit was sworn on 28 May 2026 before a notary public."
+    }
+  ],
+  "contradictions": [
+    {
+      "id": "C1",
+      "factA": "f42",
+      "factB": "f54",
+      "issue": "Whether Harlow discussed roof problem before March 2025",
+      "rationale": "Harlow's affidavit swears he never discussed any roof problem with Reed before March 2025. The WhatsApp message from 14 November 2024 shows Harlow explicitly reporting a ceiling leak to Reed. These statements are directly incompatible.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.99,
+      "strength": "direct",
+      "issueId": "I4"
+    },
+    {
+      "id": "C2",
+      "factA": "f42",
+      "factB": "f59",
+      "issue": "Prior discussion of roof problem with Reed",
+      "rationale": "The affidavit denies any discussion of roof problems before March 2025. The December 2024 WhatsApp message shows Harlow informing Reed about continued leaking. This is a direct contradiction of the sworn statement.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.99,
+      "strength": "direct",
+      "issueId": "I4"
+    },
+    {
+      "id": "C3",
+      "factA": "f86",
+      "factB": "f18",
+      "issue": "Deposit amount: $48,000 vs $40,000",
+      "rationale": "The contract required a 50% deposit of $48,000. Brightline's own Answer admits that Harlow paid only $40,000 on or about 14 February 2024. These are incompatible amounts for the same deposit payment; $40,000 is $8,000 short of the contractually required $48,000.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement",
+        "amount_mismatch"
+      ],
+      "confidence": 0.99,
+      "strength": "direct",
+      "issueId": "I2"
+    },
+    {
+      "id": "C4",
+      "factA": "f86",
+      "factB": "f65",
+      "issue": "Deposit amount: $48,000 vs $40,000",
+      "rationale": "The contract required a 50% deposit of $48,000. The bank confirmation shows Harlow transferred only $40,000 to Brightline on 14 February 2024. These are incompatible amounts; the actual payment was $8,000 less than the contractually required deposit.",
+      "severity": "high",
+      "severityFactors": [
+        "party_statement",
+        "amount_mismatch"
+      ],
+      "confidence": 0.99,
+      "strength": "direct",
+      "issueId": "I2"
+    },
+    {
+      "id": "C5",
+      "factA": "f110",
+      "factB": "f23",
+      "issue": "Date plaintiff signed completion certificate",
+      "rationale": "Brightline's letter states Harlow signed the certificate of completion on 30 August 2024. However, Brightline's own Answer pleading states the plaintiff signed the certificate on 2 September 2024. These are incompatible dates for the same event.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.99,
+      "strength": "direct",
+      "issueId": "I6"
+    },
+    {
+      "id": "C6",
+      "factA": "f106",
+      "factB": "f30",
+      "issue": "Whether defendant received written notice before lawsuit",
+      "rationale": "Brightline's letter dated 2 April 2025 explicitly acknowledges receipt of Harlow's email of 20 March 2025. However, Brightline's Answer pleading asserts it received no written notice of any alleged defect until served with the lawsuit. These statements about receipt of written notice are directly incompatible.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.99,
+      "strength": "direct",
+      "issueId": "I3"
+    },
+    {
+      "id": "C7",
+      "factA": "f6",
+      "factB": "f65",
+      "issue": "Amount of deposit paid on 14 February 2024",
+      "rationale": "The Complaint states Plaintiff paid $48,000 as the contractual deposit. The bank confirmation shows the actual wire transfer was only $40,000 to the same beneficiary on the same date. These amounts cannot both be correct.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement",
+        "amount_mismatch"
+      ],
+      "confidence": 0.98,
+      "strength": "direct",
+      "issueId": "I2"
+    },
+    {
+      "id": "C8",
+      "factA": "f38",
+      "factB": "f65",
+      "issue": "Amount of payment to Brightline on 14 February 2024",
+      "rationale": "Harlow's affidavit states he paid $48,000 by wire transfer on 14 February 2024. The bank confirmation shows the actual transfer was $40,000 on the same date to the same beneficiary. These are incompatible amounts for the same transaction.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement",
+        "amount_mismatch"
+      ],
+      "confidence": 0.98,
+      "strength": "direct",
+      "issueId": "I2"
+    },
+    {
+      "id": "C9",
+      "factA": "f72",
+      "factB": "f41",
+      "issue": "When Harlow first knew of leak",
+      "rationale": "Harlow's affidavit swears he first became aware of the leak in March 2025. However, the WhatsApp messages show he reported the leak to Reed in November 2024, stating 'the ceiling in the back bedroom is leaking again.' He cannot have first learned of it in March 2025 if he reported it months earlier in November 2024.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.98,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C10",
+      "factA": "f42",
+      "factB": "f52",
+      "issue": "Discussion of roof problem before March 2025",
+      "rationale": "Harlow swears he never discussed any roof problem before March 2025. However, the WhatsApp messages show on 10 January 2025 Reed stated 'The roof issue is from the solar guys you hired' in response to photos Harlow sent, proving a roof problem was discussed in January 2025.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.98,
+      "strength": "direct",
+      "issueId": "I4"
+    },
+    {
+      "id": "C11",
+      "factA": "f9",
+      "factB": "f53",
+      "issue": "Date of first discovery of ceiling defect",
+      "rationale": "The Complaint asserts first discovery occurred in March 2025. The WhatsApp message from November 2024 shows Harlow knew of and reported the ceiling leak months earlier. These dates are incompatible.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.97,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C12",
+      "factA": "f43",
+      "factB": "f53",
+      "issue": "Harlow's belief about roof soundness before March 2025",
+      "rationale": "Harlow's affidavit states he believed the roof was sound before March 2025. The November 2024 WhatsApp message shows he knew the ceiling was leaking at that time. One cannot believe a roof is sound while knowing it leaks.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.96,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C13",
+      "factA": "f6",
+      "factB": "f18",
+      "issue": "Amount paid by Plaintiff on 14 February 2024",
+      "rationale": "Plaintiff's own Complaint alleges he paid $48,000 on 14 February 2024. Defendant's Answer states Plaintiff paid $40,000 on that date. These are incompatible amounts for the same payment.",
+      "severity": "high",
+      "severityFactors": [
+        "party_statement",
+        "amount_mismatch"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I2"
+    },
+    {
+      "id": "C14",
+      "factA": "f9",
+      "factB": "f54",
+      "issue": "When Plaintiff first discovered the defect",
+      "rationale": "The Complaint states Plaintiff first discovered the defect in March 2025. However, the WhatsApp message from 14 November 2024 shows Harlow reporting the ceiling leak 'again,' indicating prior knowledge. The word 'again' demonstrates this was not the first discovery.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C15",
+      "factA": "f18",
+      "factB": "f38",
+      "issue": "Payment amount on 14 February 2024",
+      "rationale": "Brightline's pleading states the payment was $40,000, while Harlow's sworn affidavit states he paid $48,000 on the same date. These are incompatible amounts for the same transaction.",
+      "severity": "high",
+      "severityFactors": [
+        "party_statement",
+        "amount_mismatch"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I2"
+    },
+    {
+      "id": "C16",
+      "factA": "f41",
+      "factB": "f54",
+      "issue": "When Harlow first became aware of the leak",
+      "rationale": "Harlow's affidavit states he first became aware of the leak in March 2025. However, WhatsApp messages show he reported the leak to Reed on 14 November 2024, using the word 'again' which indicates prior awareness. These statements about first awareness are incompatible.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C17",
+      "factA": "f53",
+      "factB": "f41",
+      "issue": "When Harlow first became aware of the leak",
+      "rationale": "The WhatsApp message from 14 November 2024 shows Harlow reporting the leak 'again,' indicating he was aware of it then. His affidavit states he first became aware in March 2025. These statements about first awareness are directly incompatible.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C18",
+      "factA": "f39",
+      "factB": "f66",
+      "issue": "Amount of deposit paid",
+      "rationale": "The affidavit states $48,000 was the full deposit required and paid. The bank confirmation shows only $40,000 was transferred on the same date for the renovation deposit. These amounts cannot both be correct.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement",
+        "amount_mismatch"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I2"
+    },
+    {
+      "id": "C19",
+      "factA": "f43",
+      "factB": "f54",
+      "issue": "Harlow's belief about roof soundness before March 2025",
+      "rationale": "Harlow's affidavit states he believed the roof was sound before March 2025. However, his WhatsApp message from 14 November 2024 reports a leak in the ceiling, using 'again' to indicate recurrence. One cannot believe a roof is sound while reporting it is leaking.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.94,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C20",
+      "factA": "f26",
+      "factB": "f63",
+      "issue": "Solar panel location: rear vs front roof",
+      "rationale": "Brightline's pleading states solar panels were installed on the rear roof. Harlow's contemporaneous message states the solar panels are on the front roof and the leak is at the back. These are incompatible locations for the same solar panel installation.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.92,
+      "strength": "direct",
+      "issueId": "I5"
+    },
+    {
+      "id": "C21",
+      "factA": "f27",
+      "factB": "f63",
+      "issue": "Solar panel location: rear vs front roof",
+      "rationale": "Brightline asserts solar panels were installed on the rear roof. Harlow's message states the solar panels are on the front roof. These are directly incompatible statements about the location of the same installation.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.92,
+      "strength": "direct",
+      "issueId": "I5"
+    },
+    {
+      "id": "C22",
+      "factA": "f81",
+      "factB": "f19",
+      "issue": "Amount paid: $48,000 vs. $40,000",
+      "rationale": "Marcus Reed's email states a balance of $48,000 will be invoiced, while Brightline's Answer specifically denies plaintiff paid $48,000, asserting only $40,000 was paid on 14 February 2024. These are incompatible positions by the same party (Brightline/Reed) about the payment amount.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement",
+        "amount_mismatch"
+      ],
+      "confidence": 0.85,
+      "strength": "direct",
+      "issueId": "I2"
+    },
+    {
+      "id": "C23",
+      "factA": "f79",
+      "factB": "f42",
+      "issue": "Discussion of roof problem before March 2025",
+      "rationale": "Harlow's affidavit states he never discussed any roof problem with Brightline or Reed before March 2025. However, the WhatsApp messages show Harlow sent Reed a message on 14 November 2024 about the ceiling leak. This directly contradicts Harlow's sworn statement.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.95,
+      "strength": "inferential",
+      "issueId": "I4"
+    },
+    {
+      "id": "C24",
+      "factA": "f42",
+      "factB": "f55",
+      "issue": "Whether Harlow discussed roof problem before March 2025",
+      "rationale": "Harlow's affidavit states he never discussed any roof problem with Reed before March 2025. The WhatsApp message from 14 November 2024 shows Reed responding to Harlow's leak report with 'Could be the flashing,' which constitutes a discussion about a roof problem. These are incompatible.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.92,
+      "strength": "inferential",
+      "issueId": "I4"
+    },
+    {
+      "id": "C25",
+      "factA": "f77",
+      "factB": "f107",
+      "issue": "When Brightline learned of defect",
+      "rationale": "Brightline's letter states it first learned of the roof defect from the 20 March 2025 letter. However, the WhatsApp messages show Daniel Harlow informed Marcus Reed of the ceiling leak on 14 November 2024, over four months earlier. This is a direct contradiction about when notice was received.",
+      "severity": "high",
+      "severityFactors": [
+        "party_statement",
+        "timing_gap"
+      ],
+      "confidence": 0.92,
+      "strength": "inferential",
+      "issueId": "I7"
+    },
+    {
+      "id": "C26",
+      "factA": "f77",
+      "factB": "f30",
+      "issue": "Notice of defect before lawsuit",
+      "rationale": "Brightline claims it received no written notice of defect until served with the lawsuit. However, the WhatsApp messages (seq 4) show Daniel Harlow sent Marcus Reed written notice of the ceiling leak on 14 November 2024, months before the lawsuit. This undercuts Brightline's sworn pleading.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.9,
+      "strength": "inferential",
+      "issueId": "I3"
+    },
+    {
+      "id": "C27",
+      "factA": "f100",
+      "factB": "f107",
+      "issue": "When Brightline first learned of roof defect",
+      "rationale": "The witness statement indicates Daniel messaged his builder about the water leak in November 2024. Brightline's letter states it first learned of the alleged roof defect from Daniel's March 20, 2025 letter. If Daniel messaged the builder in November 2024, Brightline would have learned of it then, not in March 2025.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.9,
+      "strength": "inferential",
+      "issueId": "I7"
+    },
+    {
+      "id": "C28",
+      "factA": "f60",
+      "factB": "f30",
+      "issue": "Whether Brightline received notice of defect before lawsuit",
+      "rationale": "Reed's WhatsApp message from 10 January 2025 discusses 'the roof issue' and attributes it to solar installers, demonstrating Brightline (through its principal) had notice of the alleged defect. Brightline's Answer asserts it received no written notice until served with the lawsuit. The WhatsApp constitutes notice that contradicts the pleading.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.88,
+      "strength": "inferential",
+      "issueId": "I3"
+    },
+    {
+      "id": "C29",
+      "factA": "f62",
+      "factB": "f30",
+      "issue": "Whether Brightline received notice of defect before lawsuit",
+      "rationale": "Reed's WhatsApp from 10 January 2025 states he 'looked at the photos' of 'the roof issue,' demonstrating Brightline (through its principal) received notice of the alleged defect before the lawsuit. Brightline's Answer asserts it received no written notice until served with the lawsuit. This contradicts the company's own position.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.87,
+      "strength": "inferential",
+      "issueId": "I3"
+    },
+    {
+      "id": "C30",
+      "factA": "f30",
+      "factB": "f75",
+      "issue": "No written notice vs email read receipt",
+      "rationale": "Brightline claims it received no written notice until served with the lawsuit. The read receipt shows marcus@brightline-builders.example read the formal defect notice on 20 March 2025, which implies the company received written notice before the lawsuit. This undercuts Brightline's pleaded position.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.85,
+      "strength": "inferential",
+      "issueId": "I3"
+    },
+    {
+      "id": "C31",
+      "factA": "f93",
+      "factB": "f30",
+      "issue": "Whether written defect notice was given",
+      "rationale": "Brightline's Answer asserts it received no written notice of any defect until served with the lawsuit. However, the formal notice email from Harlow dated 20 March 2025 regarding roof defects constitutes written notice. Brightline's own denial letter references receiving Harlow's 20 March letter, undercutting its pleading that no written notice was received before the lawsuit.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.85,
+      "strength": "inferential",
+      "issueId": "I3"
+    },
+    {
+      "id": "C32",
+      "factA": "f103",
+      "factB": "f107",
+      "issue": "When Brightline first learned of roof defect",
+      "rationale": "Daniel telling Priya in December 2024 that the builder still hadn't come to look at the leak implies the builder was aware of the issue before then. Brightline's letter stating it first learned of the defect from the March 20, 2025 letter is incompatible with having been aware of it in or before December 2024.",
+      "severity": "high",
+      "severityFactors": [
+        "sworn_vs_contemporaneous",
+        "party_statement"
+      ],
+      "confidence": 0.85,
+      "strength": "inferential",
+      "issueId": "I7"
+    },
+    {
+      "id": "C33",
+      "factA": "f99",
+      "factB": "f41",
+      "issue": "When Daniel Harlow first became aware of leak",
+      "rationale": "Priya's witness statement reports that Daniel told her about water coming through the ceiling in early November 2024. Daniel's own affidavit states he first became aware of the leak in March 2025. These are directly incompatible statements about when Daniel first knew of the leak.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.98,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C34",
+      "factA": "f99",
+      "factB": "f9",
+      "issue": "When plaintiff first discovered the ceiling defect",
+      "rationale": "The witness statement places Daniel Harlow's knowledge of water coming through the ceiling in early November 2024. The complaint sworn by the same plaintiff states he first discovered the defect in March 2025. These are incompatible accounts of when the same person first knew of the same problem.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C35",
+      "factA": "f99",
+      "factB": "f43",
+      "issue": "Daniel's belief about roof soundness before March 2025",
+      "rationale": "The witness statement shows Daniel told Priya in November 2024 that water was coming through the ceiling and he had messaged his builder about it. Daniel's affidavit states he believed the roof was sound before March 2025. Someone who reports water coming through the ceiling and contacts their builder about it does not believe the roof is sound.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C36",
+      "factA": "f101",
+      "factB": "f9",
+      "issue": "When plaintiff first discovered ceiling defect",
+      "rationale": "The plaintiff's complaint states he first discovered the defect in March 2025. However, witness Priya Natarajan's sworn statement says she saw a wet brown patch on the same ceiling on or about 16 November 2024, approximately four months earlier. If the witness saw the defect in November 2024, the plaintiff's claim that he first discovered it in March 2025 cannot be true.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.95,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C37",
+      "factA": "f101",
+      "factB": "f41",
+      "issue": "When Harlow first became aware of leak",
+      "rationale": "Daniel Harlow swears under oath that he first became aware of the leak in March 2025. However, witness Priya Natarajan swears she saw a wet brown patch on the ceiling of Harlow's back bedroom on or about 16 November 2024. These sworn statements about when the defect was first observed are incompatible.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.92,
+      "strength": "direct",
+      "issueId": "I1"
+    },
+    {
+      "id": "C38",
+      "factA": "f107",
+      "factB": "f54",
+      "issue": "When Brightline first learned of roof defect",
+      "rationale": "Brightline's letter states they first learned of the alleged roof defect from Harlow's letter of 20 March 2025. However, WhatsApp messages show Harlow reported to Marcus Reed (Brightline's managing member) on 14 November 2024 that the ceiling was leaking again with a wet patch. This earlier communication contradicts the claim that they first learned of it in March 2025.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.98,
+      "strength": "inferential",
+      "issueId": "I7"
+    },
+    {
+      "id": "C39",
+      "factA": "f107",
+      "factB": "f62",
+      "issue": "When Brightline first learned of roof defect",
+      "rationale": "Brightline's letter claims they first learned of the alleged roof defect from Harlow's letter of 20 March 2025. However, WhatsApp messages show Marcus Reed (Brightline's managing member) responding on 10 January 2025 that he looked at photos and identified the roof issue. This demonstrates knowledge of the roof defect before March 2025.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.95,
+      "strength": "inferential",
+      "issueId": "I7"
+    },
+    {
+      "id": "C40",
+      "factA": "f99",
+      "factB": "f42",
+      "issue": "Whether Daniel discussed roof problem before March 2025",
+      "rationale": "The witness statement indicates Daniel told Priya about water coming through the ceiling in November 2024 and that he had messaged his builder about it. Daniel's affidavit states he never discussed any roof problem with Brightline before March 2025. Telling someone about a ceiling leak and messaging the builder about it constitutes discussing a roof problem.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.92,
+      "strength": "inferential",
+      "issueId": "I4"
+    },
+    {
+      "id": "C41",
+      "factA": "f100",
+      "factB": "f30",
+      "issue": "Whether Brightline received written notice before lawsuit",
+      "rationale": "The witness statement reports Daniel told Priya he had messaged his builder about the water leak in November 2024. Brightline's pleading asserts it received no written notice until served with the lawsuit. If Daniel messaged the builder (a written communication), Brightline would have received written notice before the lawsuit.",
+      "severity": "medium",
+      "severityFactors": [
+        "party_statement"
+      ],
+      "confidence": 0.88,
+      "strength": "inferential",
+      "issueId": "I3"
+    }
+  ],
+  "issues": [
+    {
+      "label": "When Harlow first discovered/became aware of the ceiling leak",
+      "severity": "high",
+      "leadId": "C11",
+      "memberIds": [
+        "C9",
+        "C11",
+        "C12",
+        "C14",
+        "C16",
+        "C17",
+        "C19",
+        "C33",
+        "C34",
+        "C35",
+        "C36",
+        "C37"
+      ],
+      "id": "I1"
+    },
+    {
+      "label": "Amount of deposit paid on 14 February 2024",
+      "severity": "high",
+      "leadId": "C3",
+      "memberIds": [
+        "C3",
+        "C4",
+        "C7",
+        "C8",
+        "C13",
+        "C15",
+        "C18",
+        "C22"
+      ],
+      "id": "I2"
+    },
+    {
+      "label": "Whether Brightline received written notice of defect before lawsuit",
+      "severity": "high",
+      "leadId": "C6",
+      "memberIds": [
+        "C6",
+        "C26",
+        "C28",
+        "C29",
+        "C30",
+        "C31",
+        "C41"
+      ],
+      "id": "I3"
+    },
+    {
+      "label": "Whether Harlow discussed roof problem with Reed/Brightline before March 2025",
+      "severity": "high",
+      "leadId": "C1",
+      "memberIds": [
+        "C1",
+        "C2",
+        "C10",
+        "C23",
+        "C24",
+        "C40"
+      ],
+      "id": "I4"
+    },
+    {
+      "label": "Location of solar panels: rear roof vs front roof",
+      "severity": "high",
+      "leadId": "C20",
+      "memberIds": [
+        "C20",
+        "C21"
+      ],
+      "id": "I5"
+    },
+    {
+      "label": "Date plaintiff signed completion certificate",
+      "severity": "high",
+      "leadId": "C5",
+      "memberIds": [
+        "C5"
+      ],
+      "id": "I6"
+    },
+    {
+      "label": "When Brightline first learned of the roof defect",
+      "severity": "medium",
+      "leadId": "C38",
+      "memberIds": [
+        "C25",
+        "C27",
+        "C32",
+        "C38",
+        "C39"
+      ],
+      "id": "I7"
+    }
+  ],
+  "allegations": [
+    {
+      "id": "A1",
+      "text": "Claimant alleges that the parties entered into a written Renovation Agreement on 12 January 2024 for kitchen renovation and rear roof replacement at a fixed price of $96,000.",
+      "party": "claimant",
+      "sourceFactIds": [
+        "f4",
+        "f5",
+        "f37"
+      ]
+    },
+    {
+      "id": "A2",
+      "text": "Claimant alleges that he paid the defendant a deposit of $48,000 by wire transfer on 14 February 2024.",
+      "party": "claimant",
+      "sourceFactIds": [
+        "f6",
+        "f38",
+        "f39"
+      ]
+    },
+    {
+      "id": "A3",
+      "text": "Respondent alleges that claimant paid only $40,000 on or about 14 February 2024, not $48,000.",
+      "party": "respondent",
+      "sourceFactIds": [
+        "f18",
+        "f19",
+        "f20"
+      ]
+    },
+    {
+      "id": "A4",
+      "text": "Claimant alleges that the roof section replaced by defendant is defective and allows water to penetrate the rear bedroom ceiling during rainfall.",
+      "party": "claimant",
+      "sourceFactIds": [
+        "f8"
+      ]
+    },
+    {
+      "id": "A5",
+      "text": "Claimant alleges that he first discovered the roof defect in March 2025 when water stains appeared on the rear bedroom ceiling.",
+      "party": "claimant",
+      "sourceFactIds": [
+        "f9",
+        "f41"
+      ]
+    },
+    {
+      "id": "A6",
+      "text": "Third party alleges that claimant told her about water coming through the ceiling in early November 2024 and that she saw a wet brown patch on the ceiling on or about 16 November 2024.",
+      "party": "third_party",
+      "sourceFactIds": [
+        "f99",
+        "f100",
+        "f101"
+      ]
+    },
+    {
+      "id": "A7",
+      "text": "Claimant alleges that he gave defendant written notice of the defect by email on 20 March 2025.",
+      "party": "claimant",
+      "sourceFactIds": [
+        "f10",
+        "f44"
+      ]
+    },
+    {
+      "id": "A8",
+      "text": "Respondent alleges that it received no written notice of any alleged defect until it was served with the lawsuit.",
+      "party": "respondent",
+      "sourceFactIds": [
+        "f30"
+      ]
+    },
+    {
+      "id": "A9",
+      "text": "Claimant alleges that defendant refused to repair the defect.",
+      "party": "claimant",
+      "sourceFactIds": [
+        "f12",
+        "f45",
+        "f46"
+      ]
+    },
+    {
+      "id": "A10",
+      "text": "Claimant alleges that the cost of remedial works has been assessed at $35,000 by a qualified roofing engineer.",
+      "party": "claimant",
+      "sourceFactIds": [
+        "f13",
+        "f47"
+      ]
+    },
+    {
+      "id": "A11",
+      "text": "Claimant alleges that defendant never obtained the building permit required for the roof works as required by the Renovation Agreement.",
+      "party": "claimant",
+      "sourceFactIds": [
+        "f14",
+        "f15"
+      ]
+    },
+    {
+      "id": "A12",
+      "text": "Respondent alleges that all required permits were obtained.",
+      "party": "respondent",
+      "sourceFactIds": [
+        "f35"
+      ]
+    },
+    {
+      "id": "A13",
+      "text": "Respondent alleges that claimant signed a certificate of completion on 2 September 2024 confirming that the works were complete and satisfactory.",
+      "party": "respondent",
+      "sourceFactIds": [
+        "f23",
+        "f24"
+      ]
+    },
+    {
+      "id": "A14",
+      "text": "Respondent alleges that any water ingress is the result of solar panels installed by a third party engaged by claimant in October 2024, after respondent had left the site.",
+      "party": "respondent",
+      "sourceFactIds": [
+        "f26",
+        "f27",
+        "f28"
+      ]
+    },
+    {
+      "id": "A15",
+      "text": "Claimant alleges that before March 2025 he had never discussed any roof problem with defendant and believed the roof was sound.",
+      "party": "claimant",
+      "sourceFactIds": [
+        "f42",
+        "f43"
+      ]
+    }
+  ],
+  "evidenceLinks": [
+    {
+      "allegationId": "A1",
+      "factId": "f4",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A1",
+      "factId": "f37",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A1",
+      "factId": "f82",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A1",
+      "factId": "f83",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A1",
+      "factId": "f84",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A1",
+      "factId": "f85",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A1",
+      "factId": "f96",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A1",
+      "factId": "f97",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A2",
+      "factId": "f6",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A2",
+      "factId": "f38",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A2",
+      "factId": "f39",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A2",
+      "factId": "f65",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A2",
+      "factId": "f67",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A3",
+      "factId": "f18",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A3",
+      "factId": "f19",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A3",
+      "factId": "f65",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A3",
+      "factId": "f67",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A3",
+      "factId": "f6",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A3",
+      "factId": "f38",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A3",
+      "factId": "f39",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A4",
+      "factId": "f8",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A4",
+      "factId": "f41",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A4",
+      "factId": "f53",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A4",
+      "factId": "f54",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A4",
+      "factId": "f58",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A4",
+      "factId": "f59",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A4",
+      "factId": "f71",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A4",
+      "factId": "f72",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A4",
+      "factId": "f101",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A5",
+      "factId": "f9",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A5",
+      "factId": "f41",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A5",
+      "factId": "f42",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A5",
+      "factId": "f43",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A5",
+      "factId": "f53",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A5",
+      "factId": "f54",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A5",
+      "factId": "f58",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A5",
+      "factId": "f59",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A5",
+      "factId": "f99",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A5",
+      "factId": "f100",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A5",
+      "factId": "f101",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A6",
+      "factId": "f99",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A6",
+      "factId": "f100",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A6",
+      "factId": "f101",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A6",
+      "factId": "f42",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A6",
+      "factId": "f43",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A7",
+      "factId": "f10",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A7",
+      "factId": "f44",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A7",
+      "factId": "f64",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A7",
+      "factId": "f69",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A7",
+      "factId": "f70",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A7",
+      "factId": "f73",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A7",
+      "factId": "f74",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A7",
+      "factId": "f75",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A8",
+      "factId": "f30",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A8",
+      "factId": "f107",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A8",
+      "factId": "f44",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A8",
+      "factId": "f54",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A8",
+      "factId": "f59",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A8",
+      "factId": "f64",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A8",
+      "factId": "f75",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A9",
+      "factId": "f12",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A9",
+      "factId": "f45",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A9",
+      "factId": "f46",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A9",
+      "factId": "f60",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A9",
+      "factId": "f113",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A9",
+      "factId": "f114",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A9",
+      "factId": "f56",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A10",
+      "factId": "f13",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A10",
+      "factId": "f47",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A11",
+      "factId": "f14",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A11",
+      "factId": "f35",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A12",
+      "factId": "f35",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A12",
+      "factId": "f14",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A13",
+      "factId": "f23",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A13",
+      "factId": "f24",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A13",
+      "factId": "f52",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A13",
+      "factId": "f77",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A13",
+      "factId": "f78",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A13",
+      "factId": "f110",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A14",
+      "factId": "f26",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A14",
+      "factId": "f27",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A14",
+      "factId": "f60",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A14",
+      "factId": "f61",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A14",
+      "factId": "f62",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A14",
+      "factId": "f111",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A14",
+      "factId": "f112",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A14",
+      "factId": "f63",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A15",
+      "factId": "f42",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A15",
+      "factId": "f43",
+      "role": "supports"
+    },
+    {
+      "allegationId": "A15",
+      "factId": "f53",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A15",
+      "factId": "f54",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A15",
+      "factId": "f58",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A15",
+      "factId": "f59",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A15",
+      "factId": "f99",
+      "role": "opposes"
+    },
+    {
+      "allegationId": "A15",
+      "factId": "f100",
+      "role": "opposes"
+    }
+  ],
+  "gaps": [
+    {
+      "allegationId": "A2",
+      "reason": "opposed_without_support",
+      "suggestedDocuments": []
+    },
+    {
+      "allegationId": "A5",
+      "reason": "opposed_without_support",
+      "suggestedDocuments": []
+    },
+    {
+      "allegationId": "A6",
+      "reason": "opposed_without_support",
+      "suggestedDocuments": [
+        "photos_or_video"
+      ]
+    },
+    {
+      "allegationId": "A10",
+      "reason": "only_own_pleading",
+      "suggestedDocuments": [
+        "expert_report",
+        "invoice_or_receipt"
+      ]
+    },
+    {
+      "allegationId": "A11",
+      "reason": "opposed_without_support",
+      "suggestedDocuments": [
+        "official_record"
+      ]
+    },
+    {
+      "allegationId": "A12",
+      "reason": "opposed_without_support",
+      "suggestedDocuments": [
+        "official_record"
+      ]
+    },
+    {
+      "allegationId": "A15",
+      "reason": "opposed_without_support",
+      "suggestedDocuments": []
+    }
+  ],
+  "narrative": {
+    "summary": "This audit examined 10 documents containing 115 source-pinned facts across 24 events in Harlow v. Brightline Builders LLC. The engine identified 7 high-severity contradictions involving 41 fact pairs, concentrated in six core issues (I1–I6). Seven evidentiary gaps were flagged where allegations lack corroboration or are opposed without documentary support.",
+    "whatStandsOut": [
+      "I1: Complaint states Harlow first discovered the leak in March 2025, but WhatsApp messages show he reported a ceiling leak to Marcus Reed on 13 November 2024.",
+      "I2: The Renovation Agreement specifies a $48,000 deposit, the bank confirmation shows $48,000 paid, but the Answer states Harlow paid $40,000 on 14 February 2024.",
+      "I3: Brightline's letter acknowledges receipt of Harlow's email of 20 March 2025, yet the Answer asserts it received no written notice of defect until served with the lawsuit.",
+      "I4: Harlow's affidavit states he never discussed any roof problem with Reed before March 2025, contradicted by WhatsApp messages in which he reports the leak to Reed in November 2024.",
+      "I5: The Answer alleges solar panels were installed on the rear roof in October 2024 causing water ingress, but WhatsApp messages record Harlow stating the panels are on the front roof and the leak is at the back.",
+      "G (A2, A5, A6, A11, A12, A15): Seven allegations are either opposed without supporting documents or rest solely on a party's own pleading, including the deposit amount, discovery date, November 2024 leak report, building permits, and prior discussions of the roof problem."
+    ],
+    "limits": [
+      "Three adjudication batches failed schema validation during contradiction analysis (batches 3, 9, 10); findings may undercount contradictions in those segments.",
+      "No independent expert report on the $35,000 remedial cost estimate (A10) was supplied for verification.",
+      "The certificate of completion referenced in the Answer and Brightline's letter was not provided; the engine could not verify its existence, date, or content.",
+      "No building permit documents were supplied; the engine could not verify whether permits were obtained or required (A11, A12).",
+      "The formal notice of defects document and the email of 20 March 2025 acknowledged in Brightline's letter appear to be distinct documents; only the former was available for review."
+    ]
+  },
+  "counts": {
+    "documents": 10,
+    "segments": 57,
+    "facts": 115,
+    "factsSourcePinned": 115,
+    "factsFuzzy": 0,
+    "factsModelTranscribed": 0,
+    "factsUnverified": 0,
+    "actors": 9,
+    "events": 24,
+    "contradictions": 7,
+    "contradictionsHigh": 6,
+    "contradictionPairs": 41,
+    "allegations": 15,
+    "gaps": 7
+  },
+  "cost": {
+    "calls": 42,
+    "inputTokens": 125437,
+    "outputTokens": 45868,
+    "cacheReadTokens": 0,
+    "estimatedCents": 106.46
+  },
+  "warnings": [
+    "adjudicate_batch_failed:3:schema",
+    "adjudicate_batch_failed:9:schema",
+    "adjudicate_batch_failed:10:schema"
+  ]
+}

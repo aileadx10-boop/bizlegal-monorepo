@@ -191,14 +191,14 @@ def run(input_dir: pathlib.Path, prefix: str, host: str,
     else:
         result["indexnow"] = (0, "INDEXNOW_KEY env not set")
 
-    bing_key = os.environ.get("BING_WMC_API_KEY", "")
+    bing_key = os.environ.get("BING_WEBMASTER_API_KEY", "")
     if bing_key:
         if dry_run:
             result["bing"] = (0, f"dry-run: would POST {len(new_urls)} urls to Bing WMC")
         else:
             result["bing"] = ping_bing(f"https://{host}", new_urls, bing_key)
     else:
-        result["bing"] = (0, "BING_WMC_API_KEY env not set (optional)")
+        result["bing"] = (0, "BING_WEBMASTER_API_KEY env not set (optional)")
 
     tg_token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
     tg_chat = os.environ.get("TELEGRAM_CHAT_ID", "")

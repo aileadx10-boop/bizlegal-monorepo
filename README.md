@@ -2,7 +2,7 @@
 
 BizLegal AI consolidated workspace. Phase Z (Stabilization Sprint, 2026-05-01).
 
-**Read [`CLAUDE.md`](./CLAUDE.md) first.** Every agent / Claude session / new contributor starts there.
+**Read [`CLAUDE.md`](./CLAUDE.md) first.** Every agent / Claude session / new contributor starts there. **Kimi Work sessions start at [`KIMI.md`](./KIMI.md)** (routing layer over this book, with the drive map and current-state digest).
 
 ## Quickstart
 

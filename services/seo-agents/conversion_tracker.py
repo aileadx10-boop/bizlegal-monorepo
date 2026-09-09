@@ -27,10 +27,7 @@ from collections import defaultdict
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
 SUPABASE_KEY = os.getenv("SUPABASE_" + "KEY", "")
-TG_BOT = os.environ.get("BIZLEGAL_HERMES_BOT_TOKEN_X", "")
-TG_BOT_TOKEN = os.getenv("TG_BOT_TOKEN", "")
-NOTIF_BOT_TOKEN = os.getenv("TG_BOT_TOKEN", "")
-CHAT_TOKEN_VAR = os.getenv("BIZLEGAL_TELEGRAM_BOT_SECRET_TOKEN_VALUE", "")
+TG_BOT = os.environ.get("TELEGRAM_HUB_TOKEN", "")
 TELEGRAM_CHAT = os.environ.get("TELEGRAM_CHAT_ID", "989097520")
 
 

@@ -19,6 +19,11 @@ import process from 'node:process'
 const REPO_ROOT = resolve(import.meta.dirname, '..')
 const ROOT_BOOK = join(REPO_ROOT, 'CLAUDE.md')
 const ENFORCED_PARENTS = ['apps', 'services', 'agents', 'packages']
+// Generated/build dirs that are never hand-maintained surfaces
+const SKIP_DIRS = new Set([
+  'node_modules', '__pycache__', 'dist', 'build', 'out',
+  '.next', '.turbo', '.vercel', '.cache', 'coverage',
+])
 
 function rootBookText() {
   if (!existsSync(ROOT_BOOK)) {
@@ -32,7 +37,7 @@ function listImmediateChildren(parentDir) {
   const abs = join(REPO_ROOT, parentDir)
   if (!existsSync(abs)) return []
   return readdirSync(abs).filter((name) => {
-    if (name.startsWith('.') || name === 'node_modules') return false
+    if (name.startsWith('.') || SKIP_DIRS.has(name)) return false
     try {
       return statSync(join(abs, name)).isDirectory()
     } catch {
