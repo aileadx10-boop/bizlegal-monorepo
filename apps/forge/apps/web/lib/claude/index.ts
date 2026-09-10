@@ -547,6 +547,11 @@ Return JSON:
 }`,
 }
 
+// Model id: fleet default is Sonnet 5 (matches apps/forge/CLAUDE.md "Sonnet drafter");
+// override with ANTHROPIC_MODEL. The previous literal 'claude-opus-4-5(20241120)'
+// was not a valid Anthropic model id and failed every call regardless of credits.
+const FORGE_MODEL = process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-5'
+
 // ── CORE: run any module through Claude ─────────────────────────────────────
 
 export async function runModule(vertical: VerticalType, payload: unknown): Promise<ModuleResult> {
@@ -555,7 +560,7 @@ export async function runModule(vertical: VerticalType, payload: unknown): Promi
 
   const prompt = fn(payload as Record<string, unknown>)
   const msg = await anthropic.messages.create({
-    model: 'claude-opus-4-5(20241120)',
+    model: FORGE_MODEL,
     max_tokens: 2048,
     system: 'You are a senior regulatory compliance analyst. Return only valid JSON matching the schema exactly. No markdown, no explanation.',
     messages: [{ role: 'user', content: prompt }],
@@ -574,7 +579,7 @@ export async function runModule(vertical: VerticalType, payload: unknown): Promi
 
 export async function runPassportAssessment(intake: PassportIntake): Promise<PassportResult> {
   const msg = await anthropic.messages.create({
-    model: 'claude-opus-4-5(20241120)',
+    model: FORGE_MODEL,
     max_tokens: 4096,
     system: PASSPORT_SYSTEM,
     messages: [{ role: 'user', content: buildPassportPrompt(intake) }],
@@ -597,7 +602,7 @@ export async function qualifyCase(vertical: string, payload: Record<string, unkn
 
   const prompt = fn(payload)
   const msg = await anthropic.messages.create({
-    model: 'claude-opus-4-5(20241120)',
+    model: FORGE_MODEL,
     max_tokens: 1024,
     system: 'You are a legal case qualification expert. Return only valid JSON matching the schema exactly.',
     messages: [{ role: 'user', content: prompt }],

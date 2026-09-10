@@ -1,4 +1,7 @@
 -- 20260909_tracr_wallet_leads.sql
+-- APPLIED 2026-09-10 to ydghhcuuopqzgqcicubg via Supabase MCP (migration name
+-- 20260909_tracr_wallet_leads). Prod was shape 2 below; payment_status +
+-- invoice_id now exist and wallet_address is nullable.
 -- Consolidated migration for the BRAI scan payment-gate lead table.
 --
 -- Two shapes exist in the wild:
