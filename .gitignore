@@ -71,3 +71,7 @@ tmp_*/
 .payment-agent.json
 apps/bench/scripts/.logs/
 
+
+langgap_out/
+supabase/.temp/
+tools/social-autopilot/out/
