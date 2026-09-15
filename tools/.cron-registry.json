@@ -1,0 +1,23 @@
+{
+  "schema": "bizlegal-local-cron-registry-v1",
+  "registry": [
+    {
+      "id": "O-027-daily",
+      "purpose": "Daily fleet social digest",
+      "schedule": "every day 05:30 UTC",
+      "cmd": "node tools/social-autopilot/src/run-daily.cjs",
+      "env_required": ["NEXT_PUBLIC_SUPABASE_URL", "SUPABASE_SERVICE_KEY", "RESEND_API_KEY", "RESEND_FROM", "SOCIAL_DIGEST_TO_EMAIL", "TELEGRAM_HUB_TOKEN", "TELEGRAM_CHAT_ID"],
+      "deploy_gate": "Moses authorization",
+      "status": "ready_local_not_authorized"
+    },
+    {
+      "id": "O-028-weekly",
+      "purpose": "Weekly LangGap growth scan + baseline",
+      "schedule": "every Tuesday 17:00 UTC",
+      "cmd": "python -m services.langgap.scanner --config services/langgap/config.json --run --diff --max-pages 500 --workers 6 --outdir langgap_out --stage-top 10; python -m services.langgap.baseline --outdir langgap_out",
+      "env_required": [],
+      "deploy_gate": "Moses authorization",
+      "status": "ready_local_not_authorized"
+    }
+  ]
+}

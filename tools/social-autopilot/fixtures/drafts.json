@@ -1,0 +1,48 @@
+{
+  "drafts": [
+    {
+      "id": 1,
+      "channel": "linkedin",
+      "status": "pending_approval",
+      "source_url": "https://blog.bizlegal-ai.com/mica-compliance-checklist-2026",
+      "source_title": "MiCA Compliance Checklist 2026",
+      "body": "MiCA is live. Here is the practical checklist your CASP needs before the transitional window closes."
+    },
+    {
+      "id": 2,
+      "channel": "x",
+      "status": "approved",
+      "source_url": "https://blog.bizlegal-ai.com/boi-report-fast",
+      "source_title": "File BOI report for your LLC fast",
+      "body": "5 tweets about BOI filing under CTA and why the AI answer is currently wrong."
+    },
+    {
+      "id": 3,
+      "channel": "reddit",
+      "status": "approved",
+      "source_url": "https://blog.bizlegal-ai.com/soc2-mica-dual-compliance",
+      "source_title": "SOC 2 + MiCA dual compliance roadmap",
+      "body": "Anyone else trying to square SOC 2 with MiCA? Here's what our roadmap found."
+    },
+    {
+      "id": 4,
+      "channel": "buffer",
+      "status": "pending_approval",
+      "source_url": "https://blog.bizlegal-ai.com/wallet-screening-ofac",
+      "source_title": "How to screen a wallet against OFAC",
+      "body": "Short caption about wallet screening and OFAC sanctions."
+    }
+  ],
+  "posts": [
+    {
+      "url": "https://blog.bizlegal-ai.com/mica-compliance-checklist-2026",
+      "title": "MiCA Compliance Checklist 2026",
+      "tags": ["mica", "casp"]
+    },
+    {
+      "url": "https://blog.bizlegal-ai.com/boi-report-fast",
+      "title": "File BOI report for your LLC fast",
+      "tags": ["boi", "cta"]
+    }
+  ]
+}

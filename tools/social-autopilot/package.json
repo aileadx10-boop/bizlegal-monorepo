@@ -1,0 +1,13 @@
+{
+  "name": "@bizlegal/social-autopilot",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "worker": "node src/cli.mjs",
+    "worker:live": "node src/cli.mjs",
+    "test": "node --test src/*.test.ts",
+    "worker:daily": "node src/run-daily.cjs"
+  }
+}
+
