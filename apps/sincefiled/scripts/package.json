@@ -1,0 +1,1 @@
+{ "type": "module", "scripts": { "demo:e2e": "node --experimental-strip-types local-e2e.ts" }, "devDependencies": { "tsx": "^4.19.0" } }

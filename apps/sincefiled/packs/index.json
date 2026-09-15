@@ -1,0 +1,29 @@
+{
+  "pack_us": {
+    "id": "pack_us",
+    "name": "US Compliance Rhythm Pack",
+    "priceKey": "sf_pack_us_19",
+    "reviewed": true,
+    "jurisdiction": "us",
+    "items": ["Trust account reconciliation tracker", "Renewal calendar", "CLE deadline sheet"],
+    "disclaimer": "Reviewer-gated; not legal advice."
+  },
+  "pack_dubai": {
+    "id": "pack_dubai",
+    "name": "Dubai Compliance Rhythm Pack",
+    "priceKey": "sf_pack_both_29",
+    "reviewed": true,
+    "jurisdiction": "dubai",
+    "items": ["Trust recon", "DLD service-charge clearance", "Oqood renewals"],
+    "disclaimer": "Reviewer-gated; not legal advice."
+  },
+  "pack_unreviewed": {
+    "id": "pack_unreviewed",
+    "name": "Unreviewed DRAFT pack (hidden)",
+    "priceKey": "sf_pack_both_29",
+    "reviewed": false,
+    "jurisdiction": "us",
+    "items": ["hidden"],
+    "disclaimer": "Not published."
+  }
+}
