@@ -48,19 +48,49 @@ def _get_json(url, headers, timeout=10):
 
 
 def _fetch_replied_outreach(limit):
-    """Find outreach emails that got replied to in the last 24h."""
-    day_ago = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()
-    url = (
-        f"{SUPABASE_URL}/rest/v1/lead_outreach"
-        f"?select=id,lead_email,lead_name,company,pitch_variant,subject,replied_at"
-        f"&replied_at=gte.{day_ago}&status=eq.sent"
-        f"&order=replied_at.desc&limit={limit}"
-    )
+    """Find outreach that got a reply in the last 24h.
+
+    2026-09-14: replies live in sales_reply (outbound v2) joined to sales_lead;
+    the legacy lead_outreach table is read only as a fallback. Rows are
+    normalised to {id, source, lead_email, lead_name, company, pitch_variant,
+    subject, replied_at} so the proposal/deal-room code is unchanged.
+    """
+    from urllib.parse import quote
+    day_ago = quote((datetime.now(timezone.utc) - timedelta(hours=24)).isoformat(), safe="")
+    out = []
     try:
-        return _get_json(url, _headers(), 10)
+        replies = _get_json(
+            f"{SUPABASE_URL}/rest/v1/sales_reply"
+            f"?select=id,lead_id,intent,body,received_at,processed_at"
+            f"&received_at=gte.{day_ago}&processed_at=is.null&order=received_at.desc&limit={limit}",
+            _headers(), 10) or []
+        ids = ",".join(r["lead_id"] for r in replies if r.get("lead_id"))
+        leads = {}
+        if ids:
+            rows = _get_json(f"{SUPABASE_URL}/rest/v1/sales_lead?select=id,email,full_name,company&id=in.({ids})", _headers(), 10) or []
+            leads = {l["id"]: l for l in rows}
+        for r in replies:
+            l = leads.get(r.get("lead_id"), {})
+            out.append({
+                "id": r["id"], "source": "sales_reply",
+                "lead_email": l.get("email", ""), "lead_name": l.get("full_name", ""), "company": l.get("company", ""),
+                "pitch_variant": r.get("intent") or "reply", "subject": (r.get("body") or "")[:80],
+                "replied_at": r.get("received_at"),
+            })
+    except Exception:
+        pass
+    if out:
+        return out
+    try:
+        legacy = _get_json(
+            f"{SUPABASE_URL}/rest/v1/lead_outreach"
+            f"?select=id,lead_email,lead_name,company,pitch_variant,subject,replied_at"
+            f"&replied_at=gte.{day_ago}&status=eq.sent"
+            f"&order=replied_at.desc&limit={limit}",
+            _headers(), 10) or []
+        return [dict(r, source="lead_outreach") for r in legacy]
     except Exception:
         return []
-
 
 def _fetch_new_payment_orders(limit):
     """Find payment orders from the last 24h."""
@@ -137,23 +167,20 @@ def _create_deal_room(reply, proposal):
         return deal  # Return the deal data even if write fails (table may not exist)
 
 
-def _update_outreach_status(outreach_id, new_status):
-    """Mark outreach as converted or replied."""
-    if not outreach_id:
-        return False
-    import urllib.request
+def _update_outreach_status(outreach_id, status, source="lead_outreach"):
+    """Mark a sales_reply processed, or a legacy lead_outreach row's status."""
     try:
-        req = urllib.request.Request(
-            f"{SUPABASE_URL}/rest/v1/lead_outreach?id=eq.{outreach_id}",
-            data=json.dumps({"status": new_status}).encode(),
-            headers={**_headers(), "Prefer": "return=minimal"},
-            method="PATCH",
-        )
+        if source == "sales_reply":
+            body = json.dumps({"processed_at": datetime.now(timezone.utc).isoformat()}).encode()
+            url = f"{SUPABASE_URL}/rest/v1/sales_reply?id=eq.{outreach_id}"
+        else:
+            body = json.dumps({"status": status}).encode()
+            url = f"{SUPABASE_URL}/rest/v1/lead_outreach?id=eq.{outreach_id}"
+        req = urllib.request.Request(url, data=body, method="PATCH",
+                                     headers={**_headers(), "Content-Type": "application/json", "Prefer": "return=minimal"})
         urllib.request.urlopen(req, timeout=10)
-        return True
     except Exception:
-        return False
-
+        pass
 
 def run(ctx=None):
     ctx = ctx or {}
@@ -173,7 +200,7 @@ def run(ctx=None):
         if deal:
             deals_created += 1
             deal_room_urls.append(f"https://bizlegal-ai.com/deal/{deal.get('token', '?')}")
-            _update_outreach_status(reply.get("id"), "replied")
+            _update_outreach_status(reply.get("id"), "replied", reply.get("source", "lead_outreach"))
         else:
             errors += 1
 
@@ -181,6 +208,13 @@ def run(ctx=None):
     orders = _fetch_new_payment_orders(limit)
     new_orders = len(orders)
 
+    if _heartbeat:
+        try:
+            _heartbeat("monetization", "replies to deal rooms", "success" if errors == 0 else "failed",
+                       {"replies": len(replies), "deals_created": deals_created, "new_payment_orders": new_orders},
+                       int((time.time() - started) * 1000))
+        except Exception:
+            pass
     return {
         "ok": errors == 0,
         "agent": "monetization",

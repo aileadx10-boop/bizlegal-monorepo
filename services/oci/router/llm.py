@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 PROMPT_PATH = Path(__file__).parent / "prompts" / "router.txt"
 HAIKU_MODEL = "claude-haiku-4-5"
-SONNET_MODEL = "claude-sonnet-4-6"
+SONNET_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5")
 ESCALATE_CLASSIFICATIONS = {"UAE_REAL_ESTATE", "EU_US_BUSINESS"}
 CONFIDENCE_THRESHOLD = 0.7
 

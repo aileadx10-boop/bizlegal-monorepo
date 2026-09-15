@@ -699,7 +699,7 @@ def stage_partnerships(draft_count: list[int]) -> int:
             "body_preview": body,
             "pitch_variant": "partner_referral",
             "status": "drafted",
-            "agent_run_id": f"enterprise_closer-partner-{int(time.time())}",
+            # agent_run_id is uuid — the old string label made every partner draft 400 (22P02)
         })
         if ok:
             sb_patch(f"partners?id=eq.{partner['id']}", {

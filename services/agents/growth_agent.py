@@ -355,7 +355,7 @@ Requirements:
 Return a JSON object:
 {{"body": "<full post text>", "hook_snippet": "<first 60 chars of post>", "score_rationale": "<why this will perform>"}}"""
 
-    raw = ai_call(prompt, max_tokens=1000, system=GROWTH_SYSTEM_PROMPT, model="claude-sonnet-4-6")
+    raw = ai_call(prompt, max_tokens=1000, system=GROWTH_SYSTEM_PROMPT, model=os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5"))
     return _parse_draft_json(raw, "linkedin")
 
 
@@ -589,7 +589,7 @@ def send_telegram_summary(plan: dict, stored: list[dict]) -> None:
         emoji = CHANNEL_EMOJI.get(ch, "📝")
         lines.append(
             f"{emoji} <b>{ch.upper()}</b> (score={s['score']}/100)\n"
-            f""{s['hook_snippet'][:60]}..."\n"
+            f"\"{s['hook_snippet'][:60]}...\"\n"
             f"<a href=\"{s['approve_url']}\">✅ Approve</a>  |  <a href=\"{s['reject_url']}\">❌ Reject</a>\n"
         )
     tg("\n".join(lines))

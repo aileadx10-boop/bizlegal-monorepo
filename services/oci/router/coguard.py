@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 coguard_router = APIRouter()
 
 HAIKU_MODEL = "claude-haiku-4-5-20251001"
-SONNET_MODEL = "claude-sonnet-4-6"
+SONNET_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5")
 
 CLASSIFY_SYSTEM = """You are a co-parenting communication analyst. Score this message on three dimensions (0.0–1.0):
 - hostility_score: emotional aggression, accusations, threats, personal attacks

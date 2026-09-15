@@ -51,7 +51,7 @@ def _post_json(url, headers, body, timeout=30):
     return json.loads(r.read())
 
 
-def _call_claude(prompt, system="", model="claude-sonnet-4-6", max_tokens=2048):
+def _call_claude(prompt, system="", model=os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5"), max_tokens=2048):
     """Call Claude with a prompt. Returns the text content."""
     if not ANTHROPIC:
         return "[skipped: no anthropic key]"
@@ -147,7 +147,7 @@ def _generate_blog(topic, research):
         "## FAQ\n[5 Q&A pairs, 2-3 sentences each]\n\n"
         "## Conclusion\n[100-word wrap with specific next step for compliance officers]"
     )
-    return _call_claude(prompt, system=system, model="claude-sonnet-4-6", max_tokens=4096)
+    return _call_claude(prompt, system=system, model=os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5"), max_tokens=4096)
 
 
 def _generate_linkedin(topic, blog_excerpt):

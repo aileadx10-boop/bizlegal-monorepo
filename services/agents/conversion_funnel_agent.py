@@ -191,7 +191,7 @@ def _save_draft(email: str, subject: str, body: str, channel: str = "email", tem
     if not lead_id:
         return False
     # Check cooldown: no draft for this lead in last DRAFT_COOLDOWN_DAYS days
-    since = (datetime.now(timezone.utc) - timedelta(days=DRAFT_COOLDOWN_DAYS)).isoformat()
+    since = urllib.parse.quote((datetime.now(timezone.utc) - timedelta(days=DRAFT_COOLDOWN_DAYS)).isoformat(), safe="")
     existing = sb(f"sales_outreach?lead_id=eq.{lead_id}&drafted_at=gte.{since}&select=id&limit=1")
     if isinstance(existing, list) and existing:
         return False
@@ -740,8 +740,10 @@ def track_d_payment_recovery(auto_budget: list[int]) -> int:
     print("\n[Track D] Payment abandonment recovery")
     processed = 0
     # pending orders 2-48 hours old (after that, cold)
-    cutoff_new = (datetime.now(timezone.utc) - timedelta(hours=2)).isoformat()
-    cutoff_old = (datetime.now(timezone.utc) - timedelta(hours=48)).isoformat()
+    # PostgREST reads a raw "+00:00" offset as a space (22007) — percent-encode
+    # the timestamps or the recovery query 400s on every run (seen 2026-09-14).
+    cutoff_new = urllib.parse.quote((datetime.now(timezone.utc) - timedelta(hours=2)).isoformat(), safe="")
+    cutoff_old = urllib.parse.quote((datetime.now(timezone.utc) - timedelta(hours=48)).isoformat(), safe="")
     pending = sb(
         f"payment_orders?status=eq.pending"
         f"&created_at=lte.{cutoff_new}"

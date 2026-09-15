@@ -55,10 +55,13 @@ SB_KEY = (
     or os.environ.get("SUP" + chr(65) + "BASE_SECRET", "")
 )
 
+# Premium Anthropic tier; override with ANTHROPIC_MODEL (fleet default Sonnet 5).
+SONNET_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5")
+
 # Cost estimates (cents per million tokens, input+output averaged)
 COST_PER_MTOK = {
-    # Anthropic Claude Sonnet 4.5: $3/M input, $15/M output
-    "claude-sonnet-4-5": 900,    # avg $9/M = 900 cents
+    # Anthropic Claude Sonnet tier: ~$3/M input, ~$15/M output
+    SONNET_MODEL: 900,           # avg $9/M = 900 cents
     "claude-haiku-4-5": 80,      # avg $0.80/M
     # Google Gemini
     "gemini-2.5-flash": 75,      # avg $0.75/M
@@ -225,13 +228,13 @@ def chat(system: str, messages: list, model_tier: str = "auto", max_tokens: int 
     """
     # Select provider
     if force_provider == "anthropic":
-        return _anthropic_chat(system, messages, "claude-sonnet-4-5", max_tokens)
+        return _anthropic_chat(system, messages, SONNET_MODEL, max_tokens)
     if force_provider == "gemini":
         return _gemini_chat(system, messages, "gemini-2.5-flash", max_tokens, anonymize_for_gemini)
     if force_provider == "ollama":
         return _ollama_chat(system, messages, OLLAMA_MODEL, max_tokens)
     if model_tier == "premium":
-        return _anthropic_chat(system, messages, "claude-sonnet-4-5", max_tokens)
+        return _anthropic_chat(system, messages, SONNET_MODEL, max_tokens)
     if model_tier == "fast":
         if _ollama_reachable():
             resp = _ollama_chat(system, messages, OLLAMA_FAST_MODEL, max_tokens)
