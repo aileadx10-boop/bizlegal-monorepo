@@ -53,10 +53,10 @@ function escapeMd(s: string): string {
 }
 
 async function sendTelegram(text: string): Promise<boolean> {
-  const token = process.env.TELEGRAM_BOT_TOKEN
-  const chatId = process.env.TELEGRAM_CHAT_ID
+  const token = (process.env.TELEGRAM_HUB_TOKEN ?? process.env.TELEGRAM_BOT_TOKEN)
+  const chatId = (process.env.TELEGRAM_MOSES_CHAT_ID ?? process.env.TELEGRAM_CHAT_ID)
   if (!token || !chatId) {
-    console.warn('[daily-todo] TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID not set')
+    console.warn('[daily-todo] TELEGRAM_HUB_TOKEN/TELEGRAM_BOT_TOKEN or TELEGRAM_MOSES_CHAT_ID/TELEGRAM_CHAT_ID not set')
     return false
   }
   try {

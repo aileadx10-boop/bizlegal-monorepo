@@ -1,5 +1,8 @@
 type FunnelType = "leadforge" | "pipeforge";
 
+const SAMPLE_DISCLAIMER =
+  "Illustrative sample data — not sourced from any docket, ledger, or live feed. Figures are placeholders that show the report format.";
+
 function sanitizeLocation(location: unknown) {
   if (typeof location !== "string") {
     return "";
@@ -86,16 +89,20 @@ export async function POST(req: Request) {
       location,
       reportType: "leadforge",
       generatedAt: new Date().toISOString(),
+      sample: true,
+      disclaimer: SAMPLE_DISCLAIMER,
     });
   }
 
   if (type === "pipeforge") {
     return Response.json({
       funds: buildPipeforgeFunds(location),
-      message: "Potential unclaimed funds detected",
+      message: "Sample unclaimed-funds format",
       location,
       reportType: "pipeforge",
       generatedAt: new Date().toISOString(),
+      sample: true,
+      disclaimer: SAMPLE_DISCLAIMER,
     });
   }
 

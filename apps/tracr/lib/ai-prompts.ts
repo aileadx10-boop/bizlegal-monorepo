@@ -4,7 +4,7 @@ import type { Transaction } from './covalent'
 
 // Lazy init — avoids build-time crash when ANTHROPIC_API_KEY is not present
 function getClient() { return new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY }) }
-const MODEL = 'claude-sonnet-4-6'
+const MODEL = process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-5'
 
 /* ─── Helpers ────────────────────────────────────────────────────────────── */
 function simplifyTxs(txs: Transaction[]) {

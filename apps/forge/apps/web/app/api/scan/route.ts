@@ -26,22 +26,20 @@ const ScanSchema = z.object({
 
 export async function POST(req: NextRequest) {
   const limiter = getRateLimiter('scan-api', 3, '1 m')
-  if (limiter) {
-    const ip = getIpFromRequest(req)
-    const { success, limit, remaining, reset } = await limiter.limit(ip)
-    if (!success) {
-      return NextResponse.json(
-        { error: 'Rate limit exceeded. Please try again later.' },
-        {
-          status: 429,
-          headers: {
-            'X-RateLimit-Limit': limit.toString(),
-            'X-RateLimit-Remaining': remaining.toString(),
-            'X-RateLimit-Reset': reset.toString(),
-          },
-        }
-      )
-    }
+  const ip = getIpFromRequest(req)
+  const { success, limit, remaining, reset } = await limiter.limit(ip)
+  if (!success) {
+    return NextResponse.json(
+      { error: 'Rate limit exceeded. Please try again later.' },
+      {
+        status: 429,
+        headers: {
+          'X-RateLimit-Limit': limit.toString(),
+          'X-RateLimit-Remaining': remaining.toString(),
+          'X-RateLimit-Reset': reset.toString(),
+        },
+      }
+    )
   }
 
   try {

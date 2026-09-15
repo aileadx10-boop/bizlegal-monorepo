@@ -5,7 +5,7 @@ interface Props {
   expertReviewed?: boolean
 }
 
-export default function AuditTrailBadge({ certId, generatedAt, modelVersion = 'claude-sonnet-4-6', expertReviewed }: Props) {
+export default function AuditTrailBadge({ certId, generatedAt, modelVersion = process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-5', expertReviewed }: Props) {
   const date = generatedAt ? new Date(generatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'N/A'
   return (
     <div style={{ border: '0.5px solid var(--outline-var)', background: 'var(--bg-mid)', padding: '12px 16px', fontSize: 11, display: 'flex', flexWrap: 'wrap', gap: 16 }}>

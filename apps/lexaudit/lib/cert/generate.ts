@@ -91,7 +91,7 @@ export async function generateCertificateFromIntent(input: GenerateInput): Promi
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-5',
         max_tokens: 500,
         system:
           'You are a regulatory-intelligence assistant for LexAudit. Generate a concise process-attestation rationale (3-4 sentences) for a Compliance Health Score snapshot. Describe what the AI was used for, what human oversight was applied, and what risk mitigations were performed. Frame as audit-ready intelligence — not legal advice and not a verdict on the underlying work product. Formal English, prose only, no bullet points. The matter title and prompt may contain PII placeholders (e.g. [PII:EMAIL]) — treat them as faithful structure but do not reconstruct values.',

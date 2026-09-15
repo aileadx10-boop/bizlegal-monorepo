@@ -117,7 +117,7 @@ async function extractWithSonnet(body: ExtractBody): Promise<ExtractResponse | n
         'content-type': 'application/json',
       },
       body: JSON.stringify({
-        model: process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-4-6',
+        model: process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-5',
         max_tokens: 2500,
         temperature: 0.1,
         messages: [{ role: 'user', content: prompt }],

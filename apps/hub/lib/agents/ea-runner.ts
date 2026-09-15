@@ -34,7 +34,7 @@ interface RunResult {
 
 const MODEL_ID: Record<EaModel, string> = {
   haiku: 'claude-haiku-4-5-20251001',
-  sonnet: 'claude-sonnet-4-6',
+  sonnet: process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-5',
 }
 
 let _client: Anthropic | null = null
@@ -98,8 +98,8 @@ export async function runEaTask(args: RunArgs): Promise<RunResult> {
 }
 
 export async function sendToTelegram(text: string): Promise<void> {
-  const token = process.env.TELEGRAM_BOT_TOKEN
-  const chatId = process.env.TELEGRAM_CHAT_ID
+  const token = (process.env.TELEGRAM_HUB_TOKEN ?? process.env.TELEGRAM_BOT_TOKEN)
+  const chatId = (process.env.TELEGRAM_MOSES_CHAT_ID ?? process.env.TELEGRAM_CHAT_ID)
   if (!token || !chatId) return
   try {
     await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {

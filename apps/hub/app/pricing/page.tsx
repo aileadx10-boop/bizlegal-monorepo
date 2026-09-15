@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Pricing — BizLegal AI | Regulatory Intelligence Plans',
   description:
-    'Compliance intelligence priced honestly. Free snapshot, $149/mo Pro, $499/mo Scale. One-time, monthly, and yearly billing — no contact-us dead ends.',
+    'Compliance intelligence priced honestly. Free snapshot today; Pro ($149/mo) and Scale ($499/mo) open by application while member entitlements ship.',
   alternates: { canonical: 'https://bizlegal-ai.com/pricing' },
 }
 
@@ -44,7 +44,8 @@ function checkoutHref(
 
 const PRO_TIER: PricingTierData = {
   name: 'Pro',
-  badge: 'Most popular',
+  badge: 'Founding access — by application',
+  ctaLabel: 'Apply for founding access',
   description:
     'Continuous regulatory monitoring across 50+ jurisdictions, on-demand risk analyses, and an exportable PDF brief every month.',
   prices: {
@@ -64,15 +65,19 @@ const PRO_TIER: PricingTierData = {
   ],
   excludes: ['White-label reports', 'SSO / SAML'],
   checkoutUrls: {
-    oneTime: { checkout: checkoutHref('hub', 'pro', 'one-time', 14900, 'BizLegal Hub Pro — one-time brief') },
-    monthly: { checkout: checkoutHref('hub', 'pro', 'monthly', 14900, 'BizLegal Hub Pro — monthly') },
-    yearly: { checkout: checkoutHref('hub', 'pro', 'yearly', 149000, 'BizLegal Hub Pro — yearly') },
+    // 2026-09-14: no membership grant exists yet (see lib/payments/price-map.ts),
+    // so Pro is by application. Re-point at checkoutHref() once
+    // lib/payments/hub-membership-grant.ts lands.
+    oneTime: { checkout: '/services/compliance-ops?plan=pro' },
+    monthly: { checkout: '/services/compliance-ops?plan=pro' },
+    yearly: { checkout: '/services/compliance-ops?plan=pro' },
   },
   highlighted: true,
 }
 
 const SCALE_TIER: PricingTierData = {
   name: 'Scale',
+  ctaLabel: 'Apply for Scale access',
   description:
     'For organisations operating across 5+ jurisdictions or needing custom regulatory coverage, white-label briefs, and a dedicated compliance analyst.',
   prices: {
@@ -92,9 +97,9 @@ const SCALE_TIER: PricingTierData = {
     '99.9% SLA',
   ],
   checkoutUrls: {
-    oneTime: { checkout: checkoutHref('hub', 'scale', 'one-time', 49900, 'BizLegal Hub Scale — enterprise brief') },
-    monthly: { checkout: checkoutHref('hub', 'scale', 'monthly', 49900, 'BizLegal Hub Scale — monthly') },
-    yearly: { checkout: checkoutHref('hub', 'scale', 'yearly', 499000, 'BizLegal Hub Scale — yearly') },
+    oneTime: { checkout: '/services/compliance-ops?plan=scale' },
+    monthly: { checkout: '/services/compliance-ops?plan=scale' },
+    yearly: { checkout: '/services/compliance-ops?plan=scale' },
   },
 }
 
@@ -161,42 +166,6 @@ export default function PricingPage() {
         offers: [
           {
             '@type': 'Offer',
-            name: 'Pro — monthly',
-            price: '149.00',
-            priceCurrency: 'USD',
-            priceValidUntil: '2027-12-31',
-            availability: 'https://schema.org/InStock',
-            url: 'https://bizlegal-ai.com/pricing',
-          },
-          {
-            '@type': 'Offer',
-            name: 'Pro — yearly',
-            price: '1490.00',
-            priceCurrency: 'USD',
-            priceValidUntil: '2027-12-31',
-            availability: 'https://schema.org/InStock',
-            url: 'https://bizlegal-ai.com/pricing',
-          },
-          {
-            '@type': 'Offer',
-            name: 'Scale — monthly',
-            price: '499.00',
-            priceCurrency: 'USD',
-            priceValidUntil: '2027-12-31',
-            availability: 'https://schema.org/InStock',
-            url: 'https://bizlegal-ai.com/pricing',
-          },
-          {
-            '@type': 'Offer',
-            name: 'Scale — yearly',
-            price: '4990.00',
-            priceCurrency: 'USD',
-            priceValidUntil: '2027-12-31',
-            availability: 'https://schema.org/InStock',
-            url: 'https://bizlegal-ai.com/pricing',
-          },
-          {
-            '@type': 'Offer',
             name: 'Free snapshot',
             price: '0',
             priceCurrency: 'USD',
@@ -252,7 +221,7 @@ export default function PricingPage() {
               margin: 0,
             }}
           >
-            Free snapshot, paid Pro, scale on request — every plan billable
+            Free snapshot today; Pro and Scale open by application (founding members are onboarded by hand until self-serve entitlements ship). Other products bill
             one-time, monthly, or yearly. Crypto via NOWPayments, card via
             PayPal. Cancel anytime; one-time deliveries non-refundable once
             produced (damaged or defective output redelivered or refunded).

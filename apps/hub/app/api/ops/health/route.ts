@@ -46,7 +46,7 @@ const TARGETS: ReadonlyArray<SubProbe> = [
   },
 ]
 
-const ENV_KEYS: ReadonlyArray<{ name: string; critical: boolean; reason: string }> = [
+const ENV_KEYS: ReadonlyArray<{ name: string; aliases?: string[]; critical: boolean; reason: string }> = [
   { name: 'NEXT_PUBLIC_SUPABASE_URL',     critical: true,  reason: 'ops_events writes' },
   { name: 'SUPABASE_SERVICE_KEY',         critical: true,  reason: 'service-role inserts' },
   { name: 'BIZLEGAL_INBOUND_SECRET',      critical: true,  reason: 'inbound HMAC pair (subdomains + curator + worker + oci)' },
@@ -57,8 +57,8 @@ const ENV_KEYS: ReadonlyArray<{ name: string; critical: boolean; reason: string 
   { name: 'PAYPAL_CLIENT_ID',             critical: true,  reason: 'card checkout' },
   { name: 'PAYPAL_CLIENT_SECRET',         critical: true,  reason: 'card checkout' },
   { name: 'PAYPAL_API_URL',               critical: false, reason: 'card checkout (defaults to live)' },
-  { name: 'TELEGRAM_BOT_TOKEN',           critical: false, reason: '/ops alerts notifications' },
-  { name: 'TELEGRAM_CHAT_ID',             critical: false, reason: '/ops alerts notifications' },
+  { name: 'TELEGRAM_HUB_TOKEN',           aliases: ['TELEGRAM_BOT_TOKEN'],   critical: false, reason: '/ops alerts notifications (canonical, O-022)' },
+  { name: 'TELEGRAM_MOSES_CHAT_ID',       aliases: ['TELEGRAM_CHAT_ID'],     critical: false, reason: '/ops alerts notifications (canonical, O-022)' },
   { name: 'ANTHROPIC_API_KEY',            critical: true,  reason: 'risk engine + sqa engine' },
   { name: 'NEXT_PUBLIC_APP_URL',          critical: false, reason: 'callback URLs (defaults to https://bizlegal-ai.com)' },
   { name: 'LEXAUDIT_MONITOR_URL',         critical: false, reason: 'compliance monitor cross-call' },
@@ -266,7 +266,8 @@ export async function GET(req: NextRequest) {
 
     const envs = ENV_KEYS.map((k) => ({
       name: k.name,
-      set: Boolean(process.env[k.name]),
+      set: Boolean(process.env[k.name] || (k.aliases ?? []).some((a) => process.env[a])),
+      aliases: k.aliases ?? [],
       critical: k.critical,
       reason: k.reason,
     }))

@@ -103,7 +103,7 @@ CONSTRAINTS:
 - Aim for ~600 words total across the four sections.`
 
     const message = await client.messages.create({
-      model: 'claude-sonnet-4-6',
+      model: process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-5',
       max_tokens: 2400,
       messages: [{ role: 'user', content: prompt }],
     })
@@ -127,7 +127,7 @@ CONSTRAINTS:
 
     return NextResponse.json({
       narrative,
-      model: 'claude-sonnet-4-6',
+      model: process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-5',
       generated_at: new Date().toISOString(),
       disclaimer_version: 'v1.0.0-p4',
     })

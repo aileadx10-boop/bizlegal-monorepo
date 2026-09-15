@@ -54,7 +54,9 @@ function verifyHmac(req: NextRequest, body: string): boolean {
   const sig = req.headers.get('x-bizlegal-signature') ?? ''
   if (!sig) return false
   const expected = crypto.createHmac('sha256', secret).update(body).digest('hex')
-  return sig === expected
+  const a = Buffer.from(sig, 'utf8')
+  const b = Buffer.from(expected, 'utf8')
+  return a.length === b.length && crypto.timingSafeEqual(a, b)
 }
 
 const ALL_FRAMEWORKS = ['soc2', 'iso27001', 'gdpr', 'hipaa', 'dpdp', 'nist-800-53'] as const

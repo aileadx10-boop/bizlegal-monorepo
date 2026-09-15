@@ -125,7 +125,7 @@ async function generatePolicy(body: GenBody): Promise<PolicyResponse | null> {
         'content-type': 'application/json',
       },
       body: JSON.stringify({
-        model: process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-4-6',
+        model: process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-5',
         max_tokens: 3000,
         temperature: 0.2,
         messages: [{ role: 'user', content: prompt }],

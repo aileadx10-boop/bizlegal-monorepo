@@ -13,9 +13,11 @@ export const maxDuration = 15
  * Aggregated by hub /api/ops/health into the /ops/health Fleet env matrix.
  */
 
-const ENV_KEYS: ReadonlyArray<{ name: string; critical: boolean; reason: string }> = [
+type EnvCheck = { name: string; aliases?: string[]; critical: boolean; reason: string }
+
+const ENV_KEYS: ReadonlyArray<EnvCheck> = [
   { name: 'NEXT_PUBLIC_SUPABASE_URL',     critical: true,  reason: 'leads + report orders reads' },
-  { name: 'SUPABASE_SERVICE_KEY',         critical: true,  reason: 'service-role inserts' },
+  { name: 'SUPABASE_SERVICE_KEY', aliases: ['SUPABASE_SERVICE_ROLE_KEY'], critical: true, reason: 'service-role inserts' },
   { name: 'BIZLEGAL_INBOUND_SECRET',      critical: true,  reason: 'inbound HMAC + outbound ops events' },
   { name: 'OPS_DASHBOARD_TOKEN',          critical: true,  reason: '/api/ops/health page guard' },
   { name: 'ANTHROPIC_API_KEY',            critical: true,  reason: 'lead drafter Sonnet' },
@@ -34,6 +36,10 @@ function timingSafeEq(a: string, b: string): boolean {
   return diff === 0
 }
 
+function isSet(check: EnvCheck): boolean {
+  return Boolean(process.env[check.name] || check.aliases?.some((alias) => Boolean(process.env[alias])))
+}
+
 export async function GET(req: NextRequest) {
   const expected = process.env.OPS_DASHBOARD_TOKEN ?? ''
   const url = new URL(req.url)
@@ -44,7 +50,8 @@ export async function GET(req: NextRequest) {
 
   const envs = ENV_KEYS.map((k) => ({
     name: k.name,
-    set: Boolean(process.env[k.name]),
+    aliases: k.aliases ?? [],
+    set: isSet(k),
     critical: k.critical,
     reason: k.reason,
   }))

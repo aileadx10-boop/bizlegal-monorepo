@@ -50,8 +50,8 @@ function escapeMd(s: string): string {
 }
 
 async function sendTelegram(text: string): Promise<boolean> {
-  const token = process.env.TELEGRAM_BOT_TOKEN
-  const chatId = process.env.TELEGRAM_CHAT_ID
+  const token = (process.env.TELEGRAM_HUB_TOKEN ?? process.env.TELEGRAM_BOT_TOKEN)
+  const chatId = (process.env.TELEGRAM_MOSES_CHAT_ID ?? process.env.TELEGRAM_CHAT_ID)
   if (!token || !chatId) return false
   try {
     const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {

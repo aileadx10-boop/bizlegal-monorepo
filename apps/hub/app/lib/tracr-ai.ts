@@ -39,7 +39,7 @@ export interface ReportContent {
 
 async function callClaude(prompt: string, maxTokens: number): Promise<string> {
   const res = await client.messages.create({
-    model: 'claude-sonnet-4-6',
+    model: process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-5',
     max_tokens: maxTokens,
     messages: [{ role: 'user', content: prompt }],
   })

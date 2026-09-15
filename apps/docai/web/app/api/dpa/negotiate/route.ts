@@ -74,7 +74,7 @@ ${contextText.slice(0, 8000)}
 Output the table + closing review-by-counsel line. No preamble, no headers above the table.`
 
     const message = await client.messages.create({
-      model: "claude-sonnet-4-6",
+      model: process.env.ANTHROPIC_MODEL ?? "claude-sonnet-5",
       max_tokens: 2400,
       messages: [{ role: "user", content: prompt }],
     })

@@ -13,11 +13,10 @@ function getServerEnv(name: string) {
 export function createServerSupabaseClient() {
   const supabaseUrl = getServerEnv("NEXT_PUBLIC_SUPABASE_URL");
   const serviceRoleKey =
-    process.env.SUPABASE_SERVICE_ROLE_KEY ??
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_KEY;
 
   if (!serviceRoleKey) {
-    throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY");
+    throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_SERVICE_KEY)");
   }
 
   return createClient(supabaseUrl, serviceRoleKey, {

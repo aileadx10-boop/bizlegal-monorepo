@@ -83,7 +83,7 @@ CONSTRAINTS:
 - Keep total output ~700 words.`
 
     const message = await client.messages.create({
-      model: 'claude-sonnet-4-6',
+      model: process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-5',
       max_tokens: 2800,
       messages: [{ role: 'user', content: prompt }],
     })
@@ -111,7 +111,7 @@ CONSTRAINTS:
       industry,
       businessModel,
       markdown,
-      model: 'claude-sonnet-4-6',
+      model: process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-5',
       generated_at: new Date().toISOString(),
       disclaimer_version: 'v1.0.0-p4',
     })

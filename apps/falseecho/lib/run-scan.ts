@@ -51,7 +51,7 @@ async function gradeFlag(item: BatteryItem, entity: string): Promise<{ confidenc
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: process.env.ANTHROPIC_GRADING_MODEL ?? 'claude-3-5-haiku-20241022',
+        model: process.env.ANTHROPIC_GRADING_MODEL ?? 'claude-haiku-4-5-20251001',
         max_tokens: 300,
         messages: [{
           role: 'user',

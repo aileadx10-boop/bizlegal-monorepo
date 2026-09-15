@@ -134,7 +134,7 @@ Generate a detailed compliance report in the following JSON format. Be specific,
 Be thorough, jurisdiction-specific, and revenue-focused. Flag all material risks. Include specific regulation names (e.g., VARA 2023, MiCA Article 3, SEC Howey Test, FCA PS19/22).`
 
     const message = await client.messages.create({
-      model: 'claude-sonnet-4-6',
+      model: process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-5',
       max_tokens: isPreview ? 2000 : 4000,
       messages: [{ role: 'user', content: prompt }],
     })

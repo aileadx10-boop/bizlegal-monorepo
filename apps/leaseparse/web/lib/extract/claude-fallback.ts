@@ -25,7 +25,7 @@ export function shouldFallback(result: ExtractionResult): boolean {
 }
 
 /** Haiku, not Sonnet — the cost gate is the whole point of this module. */
-const CLAUDE_MODEL = 'claude-3-5-haiku-20241022'
+const CLAUDE_MODEL = 'claude-haiku-4-5-20251001'
 const MAX_TOKENS = 4_096
 /**
  * Rough character cap on what we send. A commercial lease that overflows this

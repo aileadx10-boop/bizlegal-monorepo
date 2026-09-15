@@ -18,6 +18,8 @@ type LeadforgeResponse = {
   }>;
   lockedCount: number;
   location: string;
+  sample: boolean;
+  disclaimer: string;
 };
 
 type PipeforgeResponse = {
@@ -30,6 +32,8 @@ type PipeforgeResponse = {
   }>;
   message: string;
   location: string;
+  sample: boolean;
+  disclaimer: string;
 };
 
 interface ChatBotProps {
@@ -246,6 +250,12 @@ export function ChatBot({ mode = "leadforge" }: ChatBotProps) {
             </p>
           </div>
 
+          {leadResult.sample ? (
+            <p role="note" className="rounded-[1.2rem] border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+              <span className="font-semibold">Illustrative sample — not live data.</span> {leadResult.disclaimer}
+            </p>
+          ) : null}
+
           <div className="grid gap-4">
             {leadResult.previewDeals.map((deal) => (
               <article
@@ -282,7 +292,7 @@ export function ChatBot({ mode = "leadforge" }: ChatBotProps) {
                 </div>
                 <div>
                   <p className="font-semibold text-[color:var(--lead-ink)]">
-                    {leadResult.lockedCount} more deals are ready behind the full report.
+                    Full reports include up to {leadResult.lockedCount} deal entries per location.
                   </p>
                   <p className="text-sm text-navy-600">
                     Keep them in the same funnel or send them into Pipeforge for a second monetizable path.
@@ -320,6 +330,12 @@ export function ChatBot({ mode = "leadforge" }: ChatBotProps) {
               <span className="font-semibold text-white">{pipeResult.location}</span>
             </p>
           </div>
+
+          {pipeResult.sample ? (
+            <p role="note" className="rounded-[1.2rem] border border-amber-400/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+              <span className="font-semibold">Illustrative sample — not live data.</span> {pipeResult.disclaimer}
+            </p>
+          ) : null}
 
           {pipeResult.funds.map((fund) => (
             <article key={fund.id} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5">

@@ -5,6 +5,8 @@ import { useState } from 'react'
 export type BillingInterval = 'one-time' | 'monthly' | 'yearly'
 
 export interface PricingTierData {
+  /** Primary CTA text; defaults to the checkout wording. */
+  ctaLabel?: string
   /** Tier name (e.g. "Pro") */
   name: string
   /** Optional badge above name (e.g. "Most popular") */
@@ -83,6 +85,7 @@ export function PricingTierCard({
   features,
   excludes,
   checkoutUrls,
+  ctaLabel,
   highlighted = false,
   defaultInterval,
 }: PricingTierCardProps) {
@@ -330,7 +333,7 @@ export function PricingTierCard({
               className="bl-btn-primary"
               style={{ width: '100%', justifyContent: 'center' }}
             >
-              Continue to checkout
+              {ctaLabel ?? 'Continue to checkout'}
               <span aria-hidden="true">→</span>
             </a>
             <p

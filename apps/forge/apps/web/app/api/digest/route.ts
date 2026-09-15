@@ -25,6 +25,8 @@ interface ProductDigest {
   readonly bullets: ReadonlyArray<string>
   readonly score: number
   readonly links: ReadonlyArray<DigestLink>
+  /** True when the digest could not be computed (env missing / query failed). */
+  readonly degraded?: boolean
 }
 
 interface OpsEventRow {
@@ -49,20 +51,64 @@ const SIGNAL_TYPES = new Set([
   'subscription.cancelled',
 ])
 
+/**
+ * Degraded digest: the hub must see "unavailable" rather than a fabricated
+ * quiet day when env is missing or the query fails. Never cached.
+ */
+function degradedResponse(
+  date: string,
+  links: ReadonlyArray<DigestLink>,
+  headline: string,
+  bullet: string,
+): NextResponse {
+  const body: ProductDigest = {
+    product: 'forge',
+    date,
+    headline,
+    bullets: [bullet],
+    score: 0,
+    links,
+    degraded: true,
+  }
+  return NextResponse.json(body, {
+    status: 200,
+    headers: { 'cache-control': 'no-store' },
+  })
+}
+
 export async function GET(): Promise<NextResponse> {
   const date = new Date().toISOString().slice(0, 10)
+  const links: ReadonlyArray<DigestLink> = [
+    { label: 'Run a scan', href: 'https://forge.bizlegal-ai.com/scan' },
+    { label: 'Gap monitor', href: 'https://forge.bizlegal-ai.com/gap' },
+  ]
 
-  let rows: OpsEventRow[] = []
   const supabase = getSupabase()
-  if (supabase) {
-    const { data, error } = await supabase
-      .from('ops_events_24h_by_type')
-      .select('event_type, count')
-      .eq('source', 'forge')
-      .order('count', { ascending: false })
-      .limit(10)
-    if (!error && data) rows = data as OpsEventRow[]
+  if (!supabase) {
+    return degradedResponse(
+      date,
+      links,
+      'Digest unavailable — env missing',
+      'NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_KEY not set on this deployment.',
+    )
   }
+
+  const { data, error } = await supabase
+    .from('ops_events_24h_by_type')
+    .select('event_type, count')
+    .eq('source', 'forge')
+    .order('count', { ascending: false })
+    .limit(10)
+  if (error) {
+    console.error('[digest] ops_events_24h_by_type query failed:', error.message)
+    return degradedResponse(
+      date,
+      links,
+      'Digest unavailable — query failed',
+      'ops_events_24h_by_type query failed on this deployment; see server logs.',
+    )
+  }
+  const rows = (data ?? []) as OpsEventRow[]
 
   const signalRows = rows.filter((r) => SIGNAL_TYPES.has(r.event_type))
   const signalEvents = signalRows.reduce((acc, r) => acc + r.count, 0)
@@ -85,10 +131,7 @@ export async function GET(): Promise<NextResponse> {
     headline,
     bullets,
     score: signalEvents,
-    links: [
-      { label: 'Run a scan', href: 'https://forge.bizlegal-ai.com/scan' },
-      { label: 'Gap monitor', href: 'https://forge.bizlegal-ai.com/gap' },
-    ],
+    links,
   }
 
   return NextResponse.json(body, {

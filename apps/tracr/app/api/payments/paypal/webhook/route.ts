@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { logEventAsync } from '@/lib/ops/log'
+import { capturePayPalOrderForApp } from '@/lib/payments/paypal-capture'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30
@@ -25,6 +26,9 @@ interface PayPalEvent {
     custom_id?: string
     id?: string
     status?: string
+    // Present on CHECKOUT.ORDER.* events — start/route.ts puts the internal
+    // order id on the purchase unit (reference_id), not at resource level.
+    purchase_units?: Array<{ custom_id?: string; reference_id?: string }>
   }
 }
 
@@ -85,10 +89,13 @@ export async function POST(req: NextRequest) {
     const event = JSON.parse(rawBody) as PayPalEvent
     const supabase = getSupabase()
 
-    // PayPal Subscriptions: custom_id we set during start() ties back to our order.id
+    // custom_id we set during start() ties back to our order.id. Subscription
+    // events carry it at resource level; CHECKOUT.ORDER.* events carry the
+    // purchase unit's custom_id / reference_id instead.
     const orderId =
       event.resource.custom_id ??
-      ((event.resource as { custom_id?: string }).custom_id as string | undefined)
+      event.resource.purchase_units?.[0]?.custom_id ??
+      event.resource.purchase_units?.[0]?.reference_id
 
     if (!orderId) {
       // Some events (refunds via /v2/payments/captures/...) reference the
@@ -98,13 +105,68 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true, ignored: true })
     }
 
-    const updates: Record<string, unknown> = {
-      metadata: { last_event: event },
+    // Read the row before applying anything: metadata is merged on write (a
+    // wholesale overwrite would clobber paypal_capture_id written by the
+    // capture step), and an already-active row must not re-emit
+    // payment.confirmed when PAYMENT.CAPTURE.COMPLETED lands after the
+    // return page / APPROVED branch already captured and logged.
+    const { data: currentRow } = await supabase
+      .from('payment_orders')
+      .select('status, metadata, user_email, amount_cents, product, tier, billing_interval, source')
+      .eq('id', orderId)
+      .maybeSingle()
+    const wasActive = currentRow?.status === 'active'
+    const existingMeta =
+      currentRow?.metadata && typeof currentRow.metadata === 'object'
+        ? (currentRow.metadata as Record<string, unknown>)
+        : {}
+
+    // CHECKOUT.ORDER.APPROVED is NOT a paid event — with intent=CAPTURE no
+    // money has moved until the order is captured. Defensive capture: the
+    // return URL (/payment/paypal/return) is the primary capture path, but
+    // buyers sometimes close the tab before the redirect.
+    // capturePayPalOrderForApp reads the order status first, so this is a
+    // no-op when the return page already captured.
+    if (event.event_type === 'CHECKOUT.ORDER.APPROVED') {
+      const capture = await capturePayPalOrderForApp({
+        orderId,
+        paypalOrderId: event.resource.id,
+        source: 'webhook',
+        supabase,
+      })
+      if (capture.outcome === 'failed') {
+        console.warn('[paypal/webhook] defensive capture failed', orderId, capture.error)
+      }
+      if (capture.outcome === 'captured') {
+        logEventAsync({
+          type: 'payment.confirmed',
+          source: 'tracr',
+          ref_id: String(orderId),
+          email: currentRow?.user_email ?? undefined,
+          amount_cents: currentRow?.amount_cents ?? undefined,
+          status: 'ok',
+          metadata: {
+            gateway: 'paypal',
+            event_type: event.event_type,
+            paypal_order_id: event.resource.id,
+            paypal_capture_id: capture.captureId,
+            product: currentRow?.product,
+            tier: currentRow?.tier,
+            interval: currentRow?.billing_interval,
+            order_source: currentRow?.source,
+          },
+        })
+      }
+      return NextResponse.json({ ok: true, approved_capture: capture.outcome })
     }
 
-    // Map PayPal event_type → our status
+    const updates: Record<string, unknown> = {
+      metadata: { ...existingMeta, last_event: event },
+    }
+
+    // Map PayPal event_type → our status. The paid signal for one-time
+    // orders is PAYMENT.CAPTURE.COMPLETED (money moved), never APPROVED.
     switch (event.event_type) {
-      case 'CHECKOUT.ORDER.APPROVED':
       case 'PAYMENT.CAPTURE.COMPLETED':
       case 'BILLING.SUBSCRIPTION.ACTIVATED':
         updates.status = 'active'
@@ -155,7 +217,9 @@ export async function POST(req: NextRequest) {
               : updates.status === 'past_due'
                 ? 'payment.failed'
                 : null
-      if (opsType) {
+      // Row was already active (return page / APPROVED branch captured and
+      // logged) — record the transition, don't emit a duplicate confirmed.
+      if (opsType && !(opsType === 'payment.confirmed' && wasActive)) {
         const { data: orderRow } = await supabase
           .from('payment_orders')
           .select('user_email, amount_cents, product, tier, billing_interval, source')

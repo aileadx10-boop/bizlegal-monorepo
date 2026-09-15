@@ -53,6 +53,6 @@ export const SITE_CONFIG = {
     content_draft: 'gemma2:9b', // Ollama local — free
     content_qa: 'claude-haiku-4-5-20251001', // Anthropic — legal QA only
     bizbot: 'claude-haiku-4-5-20251001', // Anthropic — customer chat
-    reports: 'claude-sonnet-4-6', // Anthropic — Tier 1 reports only
+    reports: 'claude-sonnet-5', // Anthropic — Tier 1 reports only
   },
 }

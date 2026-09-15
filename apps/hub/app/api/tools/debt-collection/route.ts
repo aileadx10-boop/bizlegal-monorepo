@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     }
 
     const message = await client.messages.create({
-      model: 'claude-sonnet-4-6',
+      model: process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-5',
       max_tokens: 2500,
       messages: [{
         role: 'user',
