@@ -149,6 +149,25 @@ export const en = {
   "intake.thanks": "Got it. You will have a written reply within one business day.",
   "intake.error": "That did not go through. Try again, or write to the address below.",
 
+  // ── Checkout ──────────────────────────────────────────────────────────────
+  // Describe the software and what happens next. No outcome is promised here:
+  // the room organises a checklist, it does not close a transaction.
+  "buy.h2": "Or pay for the room now",
+  "buy.price": "{price} — one transaction, set up and run for the life of the deal.",
+  "buy.currency": "Currency",
+  "buy.currency.ils": "Shekels (₪)",
+  "buy.currency.usd": "US dollars ($)",
+  "buy.email": "Email for the receipt",
+  "buy.pay_card": "Pay by card",
+  "buy.pay_crypto": "Pay with crypto",
+  "buy.card_unavailable":
+    "Card payment cannot settle shekels, so the shekel price is paid by crypto or against an invoice. Write to the address below and the invoice goes out the same day.",
+  "buy.after":
+    "After payment we write to you for the signed agreement, the key dates and each party's details, then send every party their own link. No date is entered that you did not give us.",
+  "buy.working": "Opening checkout...",
+  "buy.error":
+    "Checkout did not open. Try again, or write to the address below and we will invoice you instead.",
+
   // ── Email ─────────────────────────────────────────────────────────────────
   "email.invite.subject": "{broker} added you to the deal room for {title}",
   "email.invite.intro": "{broker} set up a shared checklist for this transaction and added you as {role}.",

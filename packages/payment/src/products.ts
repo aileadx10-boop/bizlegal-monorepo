@@ -138,6 +138,26 @@ export interface ProductSpec {
   readonly cancellable: boolean
 }
 
+/**
+ * DEAL44 room setup — the shekel price and its dollar twin.
+ *
+ * The product is priced in shekels. Israel is market #1 and ₪2,500 is the
+ * number the founder set, so the USD SKU is not an independent price: it is
+ * that same price converted once, at a rate written down here rather than
+ * re-guessed at each deploy. It replaced a $699 placeholder that had drifted
+ * ~3% above the shekel figure it was meant to mirror.
+ *
+ * Rate: 3.68 ILS per USD. This is a STATED ASSUMPTION recorded on 2026-09-15,
+ * not a live quote — nothing in this repo fetches FX. ₪2,500 ÷ 3.68 = $679.35,
+ * rounded down to $679.
+ *
+ * Move both numbers together. A dollar figure that no longer tracks ₪2,500 is
+ * a second price, not a twin, and the two markets then quote different deals.
+ */
+export const DEAL44_ILS_PER_USD = 3.68
+export const DEAL44_ROOM_SETUP_ILS_AGOROT = 250_000
+export const DEAL44_ROOM_SETUP_USD_CENTS = 67_900
+
 export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
   // ───── BOI Tracker ─────
   boi_solo_monthly: {
@@ -788,9 +808,11 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
   // because PayPal cannot receive shekels (see the `currency` docblock above) —
   // a shekel card payment is invoiced instead and recorded as a manual order.
   //
-  // The USD amounts are a first pass at the non-Israel price, converted roughly
-  // from the shekel figures the founder set. Adjust once a non-Israel deal
-  // actually prices out.
+  // `deal44_room_setup_usd` is the FX twin of the ₪2,500 room (see
+  // DEAL44_ROOM_SETUP_USD_CENTS above for the rate and the date it was taken).
+  // `deal44_broker_monthly_usd` is still a first-pass figure and says so in its
+  // own description — no broker subscription has been sold outside Israel, and
+  // nothing in the B3 checkout offers it.
   // Canonical doc: decisions/DEAL44-WORKFLOW44-2026-09-07.md
   deal44_room_setup_ils: {
     id: 'deal44_room_setup_ils',
@@ -798,7 +820,7 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     description: 'One property transaction: a shared checklist for every party, dated against the signing and delivery dates, with reminders before each deadline. Set up and kept current for the life of the transaction. Software that organises the checklist — not legal services, not legal advice, and not a substitute for the parties own lawyers.',
     product_family: 'deal44',
     billing_interval: 'one-time',
-    amount_cents: 250000,
+    amount_cents: DEAL44_ROOM_SETUP_ILS_AGOROT,
     currency: 'ILS',
     checkout_origin: '/start',
     webhook_path: '/api/payments/nowpayments/webhook',
@@ -819,10 +841,10 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
   deal44_room_setup_usd: {
     id: 'deal44_room_setup_usd',
     name: 'DEAL44 deal room — setup and run',
-    description: 'One property transaction: a shared checklist for every party, dated against the signing and closing dates, with reminders before each deadline. Set up and kept current for the life of the transaction. Software that organises the checklist — not legal services, not legal advice, and not a substitute for the parties own lawyers. PLACEHOLDER PRICE pending the founder decision.',
+    description: 'One property transaction: a shared checklist for every party, dated against the signing and closing dates, with reminders before each deadline. Set up and kept current for the life of the transaction. Software that organises the checklist — not legal services, not legal advice, and not a substitute for the parties own lawyers. Priced as the dollar equivalent of the ₪2,500 room.',
     product_family: 'deal44',
     billing_interval: 'one-time',
-    amount_cents: 69900,
+    amount_cents: DEAL44_ROOM_SETUP_USD_CENTS,
     currency: 'USD',
     checkout_origin: '/start',
     webhook_path: '/api/payments/nowpayments/webhook',

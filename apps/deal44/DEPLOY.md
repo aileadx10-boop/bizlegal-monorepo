@@ -75,17 +75,33 @@ The dry run touches nothing. It is the honest check that the cron can read the d
 
 ## 6 — First room
 
-`https://deal44.bizlegal-ai.com/admin`, paste `INTERNAL_API_SECRET`.
+The browser room builder at `/admin` was deleted in B3 (2026-09-15): a public page whose only gate was a pasted `INTERNAL_API_SECRET` had no business on a live domain. Build the room with the API it called:
+
+```bash
+curl -X POST "https://deal44.bizlegal-ai.com/api/admin/rooms" \
+  -H "Content-Type: application/json" -H "x-internal-secret: $INTERNAL_API_SECRET" \
+  -d '{
+    "title": "רחוב הרצל 12, תל אביב",
+    "locale": "he-IL",
+    "template_id": "il-residential",
+    "anchors": {"signing": "2026-10-01", "closing": "2027-01-15"},
+    "broker": {"role": "broker", "name": "…", "email": "…"},
+    "parties": [{"role": "buyer", "name": "…", "email": "…"}]
+  }'
+```
 
 - Israel: template `il-residential`, set the **sale date** (drives the two statutory declarations) and the delivery date.
 - Elsewhere: `us-residential-purchase`, closing date only.
-- Or leave the template blank for a fully manual room and type the contract's own dates in.
+- Or leave `template_id` null for a fully manual room and type the contract's own dates in.
+- `"send_invites": false` holds the links back so you can forward them yourself.
 
 The links come back **once**. The database keeps only hashes, so copy them then.
 
 ## 7 — First payment
 
-Card and crypto are live for the USD SKUs. ILS runs on crypto — PayPal cannot receive shekels, so a shekel card sale is invoiced by hand and recorded as a manual order:
+**Self-serve (B3).** `/start` and `/en/start` carry a currency picker: shekels go to crypto, dollars to card or crypto, both through the hub's `/api/pay/start`. On payment the hub's `deal44-grant.ts` creates the paid room (email only — no parties, no template, no dates) and stamps `paid_order_id` + `activated_at`, then pings Telegram. You finish that room from the buyer's written brief using section 6. Apply `supabase/migrations/20260915_deal44_paid_room.sql` first — it is the guard that stops a re-delivered IPN from producing two rooms for one payment.
+
+**By hand.** Card and crypto are live for the USD SKUs. ILS runs on crypto — PayPal cannot receive shekels, so a shekel card sale is invoiced by hand and recorded as a manual order:
 
 ```sql
 insert into payment_orders

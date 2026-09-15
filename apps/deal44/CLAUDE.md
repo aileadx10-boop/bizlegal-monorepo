@@ -4,17 +4,21 @@
 
 A shared checklist for one property transaction. The broker opens a room, every party gets their own private link, and each deadline reaches the person responsible before it passes. **Hebrew and RTL first** — Israel is market #1 — with an English twin for everywhere else.
 
-## Status — BUILT, GATES OPEN, NOT YET DEPLOYED (2026-09-08)
+## Status — BUILT, GATES OPEN, NOT YET DEPLOYED (2026-09-15)
 
 Migration applied. Templates usable. Invites on by default. Checkout live on the rails that can carry it. No Vercel project yet, so nothing is public.
+
+**B3 (2026-09-15) — self-serve checkout.** `/start` now carries a currency picker next to the written brief: shekels on crypto, dollars on card or crypto. It posts to `/api/checkout/start`, which forwards to the hub's `/api/pay/start` (the CORS hop — `/api/pay/start` sets no CORS headers, so a direct browser POST from this origin never leaves the page). The USD SKU was repriced off its `$699` placeholder to `$679`, the FX twin of ₪2,500 at 3.68 ILS/USD recorded on 2026-09-15 — the rate and both amounts are named constants in `packages/payment/src/products.ts`. On payment, `apps/hub/lib/payments/deal44-grant.ts` creates the paid room (no parties, no template, no anchors — checkout collects an email and nothing else) and stamps `paid_order_id` + `activated_at`. `supabase/migrations/20260915_deal44_paid_room.sql` adds the partial unique index that makes a re-delivered IPN unable to produce a second room; **not applied**.
+
+`/admin` was deleted in the same pass — a public, `INTERNAL_API_SECRET`-gated room builder on a live domain is a Phase-0 artefact. The `POST /api/admin/rooms` API it called is unchanged and still the way a room is built.
 
 **What is open and what genuinely is not:** the USD SKUs take card and crypto. The ILS SKUs take crypto — NOWPayments prices in fiat and settles in crypto, so a shekel price is a number it converts. Card checkout refuses non-USD because **PayPal cannot receive shekels**; that is a rail limitation, not a policy gate, and a shekel card sale is invoiced instead and recorded as a `gateway='manual'` order.
 
 ## Key routes
 
-- `/` Hebrew landing · `/en` English twin · `/start` + `/en/start` async intake (no call, ever) · `/pricing` · `/privacy` · `/terms` · `/disclaimer` · `/sitemap.xml`
+- `/` Hebrew landing · `/en` English twin · `/start` + `/en/start` async intake + self-serve checkout (no call, ever) · `/pricing` · `/privacy` · `/terms` · `/disclaimer` · `/sitemap.xml`
 - `/r/[token]` — a party's room. The **product**.
-- `/admin` — Phase-0 room builder, `INTERNAL_API_SECRET` gated. Deleted in Phase 1.
+- `POST /api/checkout/start` — `{currency, user_email, gateway}` → hub `/api/pay/start`. Refuses ILS+card with a 503 before the hub does (PayPal cannot receive shekels); the currency → rail table is `lib/checkout/rails.ts`, pinned by tests.
 - `POST /api/admin/rooms` — create; returns each party's raw link **once**
 - `POST /api/admin/rooms/[id]/activate` — link a paid order to a room
 - `GET|PATCH /api/r/[token]` — read the room, tick one task
@@ -68,6 +72,6 @@ Vercel **Root Directory = `apps/deal44`**. Leaving it unset is what broke leadfo
 
 ## Tables
 
-`deals` (+7 columns) · `deal_parties` (incl. `can_manage`) · `deal_tasks` · `deal_alerts` · `deal_events`, from `20260908_deal44_rooms.sql`, `20260908_deal44_party_can_manage.sql`, `20260908_deal44_task_source_and_provenance.sql` — **all applied**.
+`deals` (+7 columns) · `deal_parties` (incl. `can_manage`) · `deal_tasks` · `deal_alerts` · `deal_events`, from `20260908_deal44_rooms.sql`, `20260908_deal44_party_can_manage.sql`, `20260908_deal44_task_source_and_provenance.sql` — **all applied**. `20260915_deal44_paid_room.sql` (indexes only, no new columns) is **not applied**.
 
 Canonical plan: `decisions/DEAL44-WORKFLOW44-2026-09-07.md`.

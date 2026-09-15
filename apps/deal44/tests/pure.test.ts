@@ -11,6 +11,7 @@ import { TEMPLATES } from '@bizlegal/closing-engine'
 import { he } from '../lib/i18n/he'
 import { getServiceClient } from '../lib/db'
 import type { PartyRow, TaskRow } from '../lib/db'
+import { CURRENCIES, ROOM_SETUP, optionFor, railAllowed } from '../lib/checkout/rails'
 
 // ── Access rules ────────────────────────────────────────────────────────────
 
@@ -273,4 +274,34 @@ test('every role and phase in every shipped template has a label', () => {
     for (const phase of template.phases) if (!(`phase.${phase}` in en)) missing.push(`phase.${phase}`)
   }
   assert.deepEqual([...new Set(missing)], [])
+})
+
+// ── Checkout rails ──────────────────────────────────────────────────────────
+
+test('a shekel room is never offered on the card rail', () => {
+  // PayPal cannot RECEIVE shekels. A card button here would open a checkout
+  // that takes the money and then cannot settle it, which is precisely the
+  // failure the hub's own 503 exists to prevent.
+  assert.equal(railAllowed('ILS', 'card'), false)
+  assert.equal(railAllowed('ILS', 'crypto'), true)
+  assert.equal(railAllowed('USD', 'card'), true)
+  assert.equal(railAllowed('USD', 'crypto'), true)
+})
+
+test('the rail check fails closed on anything it does not recognise', () => {
+  assert.equal(railAllowed('EUR', 'card'), false)
+  assert.equal(railAllowed('ILS', 'wire'), false)
+  assert.equal(railAllowed(undefined, undefined), false)
+})
+
+test('the displayed prices mirror the payment registry', () => {
+  // These two numbers are a display mirror of packages/payment/src/products.ts
+  // (this app does not depend on that package). The customer is charged from
+  // the registry, so a drift here quotes one price and charges another.
+  // ₪2,500, and its FX twin at 3.68 ILS/USD recorded 2026-09-15 → $679.
+  assert.equal(ROOM_SETUP.ILS.amountMinorUnits, 250_000)
+  assert.equal(ROOM_SETUP.USD.amountMinorUnits, 67_900)
+  assert.equal(ROOM_SETUP.ILS.productId, 'deal44_room_setup_ils')
+  assert.equal(ROOM_SETUP.USD.productId, 'deal44_room_setup_usd')
+  for (const code of CURRENCIES) assert.equal(optionFor(code).currency, code)
 })

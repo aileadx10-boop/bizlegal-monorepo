@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { t, dirFor, langFor, type Locale } from '@/lib/i18n'
+import CheckoutPanel from './CheckoutPanel'
 
 /**
  * One intake form, both languages.
@@ -54,6 +55,10 @@ export default function IntakeForm({ locale }: { locale: Locale }) {
         <div className="card">
           <p>{t(locale, 'intake.thanks')}</p>
         </div>
+        <CheckoutPanel locale={locale} />
+        <footer>
+          <p className="muted">{t(locale, 'landing.disclaimer')}</p>
+        </footer>
       </main>
     )
   }
@@ -92,6 +97,8 @@ export default function IntakeForm({ locale }: { locale: Locale }) {
           {state === 'sending' ? t(locale, 'intake.sending') : t(locale, 'intake.submit')}
         </button>
       </form>
+
+      <CheckoutPanel locale={locale} />
 
       <footer>
         <p className="muted">{t(locale, 'landing.disclaimer')}</p>
