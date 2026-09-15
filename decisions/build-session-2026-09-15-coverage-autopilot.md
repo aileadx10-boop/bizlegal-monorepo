@@ -19,3 +19,11 @@
 
 ## Next step
 - Decide whether to use hub-based checkout surface as the first-sale page (no new app deploy needed) or wire the new app deploys properly.
+
+## Corrections from the follow-up session (2026-09-15, later the same day)
+
+Superseded by `decisions/REVENUE-MACHINE-RELIGHT-2026-09-15.md`. Three claims above did not survive probing:
+- "SKUs are live" was true only for `/api/pay/start`; `/api/pay/price` does not exist (`/api/payments/price` takes `product/tier/interval`). Both rails verified on production: `cp_setup_490` crypto → NOWPayments invoice, `sf_lifetime_329` card → PayPal checkout.
+- "Migrations applied to Neon" — wrong database. The fleet Supabase had no `sf_*` / `casepage_waitlist` tables; applied via MCP in the follow-up session.
+- "O-027 Resend 403" — fixed by routing the digest through the hub relay (`/api/internal/send-email`, HMAC) instead of raw Resend on an unverified from-domain; a hoisting bug also made every configured run report `source=fixture` (fixed with `load-env.mjs`). Now `source=live`, 442 queued, 12 scheduled, `channel=email`.
+- The production hub deploy came from the **uncommitted** working tree via CLI; the tree is now committed (14 commits on local `main`) so git matches prod once pushed.

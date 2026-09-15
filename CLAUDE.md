@@ -191,7 +191,11 @@ When in doubt, ask: "does this advance Z0-Z7 verification or does it add scope?"
 
 ---
 
-## 7 — Where we are right now (2026-07-17)
+## 7 — Where we are right now
+
+**2026-09-15 — the relight (read `decisions/REVENUE-MACHINE-RELIGHT-2026-09-15.md` first).** Program plan = `decisions/REVENUE-MACHINE-PLAN-V3-2026-09-14.md`. Verified on production the same day: hub serves the relight code (PayPal capture-before-fulfil, live model ids, DocAI PII redaction, unshadowed sitemap/robots); the seven new SKUs (`cp_*` CasePage, `sf_*` SinceFiled) return real gateway URLs from `/api/pay/start` on both rails; `casepage_waitlist` + `sf_*` tables exist in the fleet Supabase; O-027 social autopilot runs live (442 drafts → 12/day digest by email via the hub relay). **Real revenue is still $0** (`payment_orders` active = 1 simulated smoke row; `fc_orders` 0 paid). Blocked on Moses (the auto-mode classifier refuses them from an agent session): `git push origin main` (14 commits local), FirmCited `vercel --prod` (Stage 1 intake still 404 in prod), `bash scripts/hetzner-relight-2026-09-15.sh` (box runs a dead Anthropic key + retired model), Vercel env/domain for casepage + sincefiled, `scripts/cf-dns-sync.mjs --apply`, and the real $490 buy (G0, 2026-09-20).
+
+### Earlier snapshot (2026-07-17)
 
 Phase Z complete. Current phase: **Phase AA — first revenue & traffic growth.**
 
@@ -269,6 +273,8 @@ Every planning + ops doc lives in `decisions/`:
 - `decisions/OUTBOUND-V2-RULE-7-AMENDED-2026-09-07.md` — **rule 7 amended by Moses**: outbound allowed under nine code-enforced invariants (`@bizlegal/email` kind `outbound`, dispatch cron as the only sender, per-campaign approval on `/sales`, `OUTBOUND_AUTOSEND` fail-closed, Instantly on a dedicated domain, never Resend). Incident lessons mapped to tests. Workflow `decisions/workflows/outbound_campaign.md`; agent side `agents/outbound/`.
 - `decisions/REVENUE-OS-INTAKE-PRONG-2026-09-10.md` — the KIMI "Revenue OS" master prompt adjudicated: **spear, not mission** (FirmCited prong 5 "Did it produce leads?"; idea 25 reopened narrowly as service-first PI-firm pilots; marketplace/Stage 5 stays killed), host = FirmCited repo, rail = warm-first + Moses's own Gmail (never Resend for cold), leak scan = site facts + verified benchmark. Phase 0 verification corrected three stale instructions (the $20 price was already reverted — **never `git revert 4ccce6a`**; forge's model id was invalid; prod was not behind) and fixed the `/ops` approve, inbound-webhook and forge bugs; `0014_intake_os` applied. Order O-023.
 
+- `decisions/REVENUE-MACHINE-PLAN-V3-2026-09-14.md` — **the program plan** ("one revenue machine", plan v3): ground-truth corrections table, the self-feeding loop (CONTENT → CAPTURE → NURTURE → BUY → DELIVER → RETAIN → REPORT with the code behind each arrow), the §31 CONNECT / REPAIR / REMOVE / BUILD answer, phases A/C/B/S/P/T/O/K/GB/GP/D/E, the LLM routing table (free tiers first, Sonnet only on paid deliverables, ≤$100/mo), realistic 3→36-month goals with kill rules, and the 14-point final audit.
+- `decisions/REVENUE-MACHINE-RELIGHT-2026-09-15.md` — execution handoff for the plan above: what shipped (14 commits, hashes), what was verified on production (rails, tables, digest), the classifier-blocked Moses ops as copy-paste blocks, five numbers from tables, next steps.
 - `decisions/O-028-GROWTH-ENGINE-FILING-2026-09-15.md` — GO verdict + filing of order O-028: the three-arbitrage organic growth playbook (language / AI-citation / plumbing) operationalized for BizLegal. Plumbing ~70% pre-built, AEO strategy already in AEO-AUSTIN-ARMSTRONG, DE/ES localization pipeline is the new build behind a mandatory YMYL review gate. Spec + paste-ready prompt: `orders/O-028-coverage-over-rankings-growth-engine.md`. Starts after G0 (09-20).
 
 When you write a new decision, add it here.

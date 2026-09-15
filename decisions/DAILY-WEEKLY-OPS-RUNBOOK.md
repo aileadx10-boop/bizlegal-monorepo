@@ -277,3 +277,16 @@ Fleet status: **9 of 11 rows GREEN; 2 rows need Moses action.**
 - `SKILL.md` token extraction now strips trailing `\r` (vault is CRLF → naive cut appended `\r` → every authed call 404'd).
 - Row 10 hostname corrected to `router.bizlegal-ai.com`.
 - `ssh hetzner` alias replaced with `ssh -i ~/.ssh/id_ed25519 root@204.168.209.235`.
+
+---
+
+## 2026-09-15 — Moses ops after the relight session (copy-paste, ~20 min)
+
+Full detail + verification lines: `decisions/REVENUE-MACHINE-RELIGHT-2026-09-15.md` §"Moses ops". In order:
+
+1. `cd "C:/Users/Moshe Dor/bizlegal-monorepo" && git push origin main feat/coverage-autopilot-build-2026-09-15 feat/legal-revenue-os-reference` — 14 commits; Vercel rebuilds the 9 linked projects.
+2. FirmCited Stage 1 to prod: `cd "C:/Users/Moshe Dor/AppData/Local/Temp/claude/c--Users-Moshe-Dor-bizlegal-monorepo/9f52e740-2085-45ef-bf4d-dc167b20e8f5/scratchpad/fc-deploy" && vercel --prod --yes` → `https://cited.bizlegal-ai.com/intake` must be 200.
+3. Hetzner: `bash scripts/hetzner-relight-2026-09-15.sh --dry-run` then without the flag → expect `anthropic probe: 200`; then commit `services/cron_jobs.txt`.
+4. Vercel casepage + sincefiled: dashboard → Git connect `aileadx10-boop/bizlegal-monorepo` + Root Directory `apps/<x>`; `node scripts/vercel-env-sync.mjs apps/<x> NEXT_PUBLIC_SUPABASE_URL SUPABASE_SERVICE_KEY NEXT_PUBLIC_SUPABASE_ANON_KEY BIZLEGAL_INBOUND_SECRET NEXT_PUBLIC_HUB_URL --target production,preview`; `vercel domains add <x>.bizlegal-ai.com <x> --scope aileadx10-5415s-projects`; Redeploy.
+5. DNS: `node scripts/cf-dns-sync.mjs` (review the diff) then `node scripts/cf-dns-sync.mjs --apply`.
+6. G0: the real $490 buy at `cited.bizlegal-ai.com/audit` (after step 2).
