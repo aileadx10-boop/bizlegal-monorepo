@@ -38,7 +38,7 @@ import urllib.request
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
 SUPABASE_SECRET = os.getenv("SUPABASE_SECRET", "")
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_CURATOR_BOT_TOKEN", "")
-TELEGRAM_CHAT = os.getenv("TELEGRAM_CHAT_ID", "989097520")
+TELEGRAM_CHAT = os.getenv("TELEGRAM_CHAT_ID", os.environ.get("TELEGRAM_MOSES_CHAT_ID", ""))
 CURATOR_DIR = os.getenv("CURATOR_DIR", "/opt/bizlegal/curator")
 PYTHON = os.getenv("PYTHON", "python3")
 

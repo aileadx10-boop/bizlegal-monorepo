@@ -1,56 +1,75 @@
-# BizLegal cron jobs (auto-installed by cron_installer.py)
-# DO NOT EDIT BY HAND — run cron_installer.py to update
-#
-# 2026-08-16 — COLD OUTBOUND REMOVED. signal_scout.py (LinkedIn→Apollo prospect
-# scrape), marketing_outreach.py (10 cold emails/day) and lead_nurture.py (cold
-# day-3/7 follow-ups) were deleted from this file, alongside the FirmCited cold
-# sender. Outbound is inbound-only: we email people who contacted us and
-# confirmed. Do not re-add a scraper or a cold sender here.
-30 6 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/aeo_loop.py >> /var/log/aeo-loop.log 2>&1
+
+0 10 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/crawlers/competitors.py >> /var/log/seo-agents.log 2>&1
+0 11 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/crawlers/ai_checks.py >> /var/log/seo-agents.log 2>&1
+0 12 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/crawlers/index_status.py >> /var/log/seo-agents.log 2>&1
+0 13 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/orchestrator.py socials >> /opt/bizlegal/curator/logs/machine/socials-noon.log 2>&1
+0 13 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/seo_watchdog.py >> /var/log/seo-agents.log 2>&1
+0 14 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/orchestrator.py enrichment >> /opt/bizlegal/curator/logs/machine/enrichment-pm.log 2>&1
+0 14 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/gsc_indexnow_pinger.py --input /opt/bizlegal/bizlegal-ea/content/blog --state /opt/bizlegal/curator/services/seo-agents/state/indexnow_state.json --prefix https://blog.bizlegal-ai.com/blog --host blog.bizlegal-ai.com >> /var/log/seo-agents.log 2>&1
+0 15 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/crawlers/sales.py >> /var/log/seo-agents.log 2>&1
+0 16 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/crawlers/leads.py >> /var/log/seo-agents.log 2>&1
+0 17 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/crawlers/customer_q.py >> /var/log/seo-agents.log 2>&1
+0 18 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/orchestrator.py socials >> /opt/bizlegal/curator/logs/machine/socials-pm.log 2>&1
+0 19 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/daily_orchestrator.py --task=19 >> /var/log/seo-agents.log 2>&1
+0 20 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/newsletter.py >> /var/log/seo-agents.log 2>&1
+0 21 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/cleanup.py >> /var/log/seo-agents.log 2>&1
+0 23 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/analytics_dashboard.py --days 30 --outdir /opt/bizlegal/decisions >> /var/log/seo-agents.log 2>&1
+0 2 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && PILLAR=$(( $(date +%u) % 8 + 1 )); python3 /opt/bizlegal/curator/services/seo-agents/seo_content_writer.py --pillar $PILLAR --outdir /opt/bizlegal/curator/services/seo-agents/blog_content >> /var/log/seo-agents.log 2>&1
+0 2 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/orchestrator.py enrichment >> /opt/bizlegal/curator/logs/machine/enrichment.log 2>&1
+0 3 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/og_image_generator.py --input /opt/bizlegal/curator/services/seo-agents/blog_content --output /opt/bizlegal/curator/services/seo-agents/blog_content/og --force >> /var/log/seo-agents.log 2>&1
+0 4 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/daily_orchestrator.py --task=04 >> /var/log/seo-agents.log 2>&1
+0 5 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/daily_orchestrator.py --task=05 >> /var/log/seo-agents.log 2>&1
+0 6 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/orchestrator.py content >> /opt/bizlegal/curator/logs/machine/content.log 2>&1
+0 6 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/salesperson_agent.py --draft-only >> /var/log/salesperson.log 2>&1
+0 6 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/daily_orchestrator.py --task=06 >> /var/log/seo-agents.log 2>&1
+0 7 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/geo_citation.py >> /var/log/seo-agents.log 2>&1
+0 8 * * 2 cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/orchestrator.py newsletter >> /opt/bizlegal/curator/logs/machine/newsletter.log 2>&1
+0 8 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/crawlers/site_health.py >> /var/log/seo-agents.log 2>&1
+0 9 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/orchestrator.py socials >> /opt/bizlegal/curator/logs/machine/socials-am.log 2>&1
+0 9 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/crawlers/backlinks.py >> /var/log/seo-agents.log 2>&1
+15 0 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/orchestrator.py code >> /opt/bizlegal/curator/logs/machine/code.log 2>&1
+5 * * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/orchestrator.py monetization >> /opt/bizlegal/curator/logs/machine/monetization.log 2>&1
+30 14 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/publish_blog.py >> /var/log/seo-agents.log 2>&1
+30 19 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/ea_agent.py >> /var/log/seo-agents.log 2>&1
+30 22 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/conversion_tracker.py --output /opt/bizlegal/decisions >> /var/log/seo-agents.log 2>&1
+30 3 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/internal_linker.py --input /opt/bizlegal/curator/services/seo-agents/blog_content --output /opt/bizlegal/curator/services/seo-agents/blog_content >> /var/log/seo-agents.log 2>&1
+30 6 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/enrich_page.py --output /opt/bizlegal/decisions >> /var/log/seo-agents.log 2>&1
+45 9 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/infographic_generator.py --from-mdx >> /var/log/seo-agents.log 2>&1
+5 11 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/discovery_scraper.py --source all --output /opt/bizlegal/decisions >> /var/log/seo-agents.log 2>&1
+5 12 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/content_distribution.py --output /opt/bizlegal/decisions >> /var/log/seo-agents.log 2>&1
+*/30 * * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/ops_alerts.py >> /opt/bizlegal/logs/ops_alerts.log 2>&1
+# All times UTC. Moses IDT (UTC+3) so 19:00 UTC = 22:00 IDT.
+# [HALTED-2026-07-10] 0 10 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/marketing_outreach.py >> /var/log/marketing-outreach.log 2>&1
+# [HALTED-2026-07-10] 0 1 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/signal_scout.py >> /var/log/signal-scout.log 2>&1
+# [HALTED-2026-07-10] 0 22 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/outreach/lead_nurture.py --stage 3 --limit 10 >> /var/log/seo-agents.log 2>&1
+# [HALTED-2026-07-10] 30 0 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/outreach/cold_email_sender.py --stage 0 --limit 5 --dry-run >> /var/log/seo-agents.log 2>&1
+# [HALTED-2026-07-10] 30 10 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/outreach/cold_email_outreach.py --count 6 --outdir /opt/bizlegal/decisions >> /var/log/seo-agents.log 2>&1
+# [HALTED-2026-07-10] 30 4 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/orchestrator.py headhunter >> /opt/bizlegal/curator/logs/machine/headhunter.log 2>&1
+# [HALTED-2026-07-10] 30 4 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/outreach/queue_outreach.py --min-score 90 --limit 20 >> /var/log/seo-agents.log 2>&1
+# [HALTED-2026-07-10] 30 9 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/outreach/reddit_outreach.py >> /var/log/seo-agents.log 2>&1
+# [HALTED-2026-07-10] 35 10 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/outreach/oci_deal_closer.py >> /var/log/seo-agents.log 2>&1
+# [HALTED-2026-07-10] 5 10 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/outreach/oci_funnel.py --output /opt/bizlegal/decisions >> /var/log/seo-agents.log 2>&1
+# [HALTED-2026-07-10] 5 16 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/outreach/lead_nurture.py --stage 1 --limit 10 >> /var/log/seo-agents.log 2>&1
+# [HALTED-2026-07-10] 5 21 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/outreach/lead_nurture.py --stage 2 --limit 10 >> /var/log/seo-agents.log 2>&1
+# [HALTED-2026-07-10] 5 7 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/daily_autonomous_seo.py --skip-send --headhunter-limit 3 >> /var/log/seo-agents.log 2>&1
+
+# BEGIN bizlegal-managed (cron_installer.py — do not edit by hand)
+0 1 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/signal_scout.py >> /var/log/signal-scout.log 2>&1
 0 7 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/marketing_copy.py >> /var/log/marketing-copy.log 2>&1
 0 8 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/daily_digest.py >> /var/log/daily-digest.log 2>&1
 0 9 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/env_audit.py >> /var/log/env-audit.log 2>&1
 0 9 * * 1 cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/weekly_health.py >> /var/log/weekly-health.log 2>&1
-30 18 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/marketing_revenue.py >> /var/log/marketing-revenue.log 2>&1
-*/5 * * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/self_heal.py >> /var/log/self-heal.log 2>&1
-*/30 * * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/code_fixer.py >> /var/log/code-fixer.log 2>&1
-# Content enricher (every 6h)
-0 */6 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/content_enricher.py >> /var/log/seo-agents.log 2>&1
-# Content enricher v2 (backfill regulation_tag, fix jurisdiction, deploy flag) — daily 02:00 UTC
+0 10 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/marketing_outreach.py >> /var/log/marketing-outreach.log 2>&1
+*/30 * * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/self_heal.py >> /var/log/self-heal.log 2>&1
+#DISABLED-2026-09-15 (patched prod on a timer) */30 * * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/code_fixer.py >> /var/log/code-fixer.log 2>&1
 0 2 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/content_enricher_v2.py >> /var/log/seo-agents.log 2>&1
-# AEO loop v2 (FAQ + JSON-LD for top 5 published pages) — daily 03:00 UTC
 0 3 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/aeo_loop_v2.py >> /var/log/seo-agents.log 2>&1
-# Index watchdog (IndexNow ping + GSC sitemap + drop alerts) — daily 04:00 UTC
 0 4 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/index_watchdog.py >> /var/log/seo-agents.log 2>&1
-# SEO dispatcher (write + publish + ping, every 12h: 00:00 and 12:00 UTC)
 0 0,12 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/seo_dispatcher.py >> /var/log/seo-agents.log 2>&1
-# Revenue alerter (every minute — needs Python script support, use */1)
-*/1 * * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/revenue_alerter.py >> /var/log/seo-agents.log 2>&1
-# Daily revenue summary (18:00 UTC)
-0 18 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/daily_revenue_summary.py >> /var/log/seo-agents.log 2>&1
-# Cohort-2 revenue agents (added 2026-07-17) — all draft to sales_outreach, Moses approves at /sales
-# AEO revenue agent (AEO Q&A → daily_gaps → citation tracking → revenue attribution) — 07:00 UTC
+0 */6 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/revenue_alerter.py >> /var/log/seo-agents.log 2>&1
 0 7 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/aeo_revenue_agent.py >> /var/log/aeo-revenue.log 2>&1
-# Conversion funnel agent (4-track drip: risk_snapshot/newsletter/free-scan/cart-recovery) — 08:00 UTC
 0 8 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/conversion_funnel_agent.py >> /var/log/conversion-funnel.log 2>&1
-# Enterprise closer agent (ICP≥75 proposals, ICP≥90 enterprise briefs, deal room progression) — 09:00 UTC
 0 9 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/enterprise_closer_agent.py >> /var/log/enterprise-closer.log 2>&1
-# Growth Agent — multi-channel Loop Engineering (LinkedIn + X + Reddit)
-# Plan → Draft → Score → Store → [Moses approves via Telegram] → Vercel cron posts → Measure → Learn → Repeat
-30 5 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/growth_agent.py >> /var/log/bizlegal/growth-agent.log 2>&1
-# Growth Measure — 24h engagement poll (LinkedIn/X/Reddit APIs → social_experiments → feedback loop)
-0 9 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/growth_measure.py >> /var/log/bizlegal/growth-measure.log 2>&1
-# Distributor — social copy (LinkedIn/X/Substack) for newly published articles; runs after publisher at 14:30
-30 15 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/distributor.py >> /var/log/bizlegal/distributor.log 2>&1
-# Dunning — checkout-abandonment follow-ups (day 3/7/14 staged reminders via Resend)
-30 9 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/dunning.py >> /var/log/bizlegal/dunning.log 2>&1
-# REMOVED 2026-08-16 — lead_nurture.py drafted COLD day-3/7 follow-ups. Warm,
-# opt-in nurture is handled by the Cloudflare worker (services/worker, */5),
-# which only sends to confirmed addresses.
-# PERMANENTLY DISABLED — DO NOT RE-ENABLE without Moses's explicit written approval
-# Opt-in outreach: disabled 2026-07-10 (ef3d90e spam incident — sent to unverified/fabricated inboxes)
-# Re-enable requires: (a) opt-in lead source, (b) suppression list, (c) verified addresses, (d) Moses written approval
-# 0 14 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/opt_in_outreach.py >> /var/log/opt-in-outreach.log 2>&1
-# PERMANENTLY DISABLED — DO NOT RE-ENABLE without Moses's explicit written approval
-# Engaged monetization: disabled 2026-07-10 (ef3d90e spam incident — same conditions apply)
-# */30 * * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/engaged_monetization.py >> /var/log/engaged-monetization.log 2>&1
+# END bizlegal-managed
+*/30 * * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/recovery_active.py >> /var/log/recovery-active.log 2>&1
+30 5 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && /usr/bin/node tools/social-autopilot/src/run-daily.cjs >> /var/log/social-autopilot.log 2>&1

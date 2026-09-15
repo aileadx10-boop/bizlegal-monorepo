@@ -24,7 +24,7 @@ SUPABASE_KEY = (
     or os.environ.get("SUPABASE_SECRET", "")
 )
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_" + "BOT_TOKEN", "")
-TELEGRAM_CHAT = os.environ.get("TELEGRAM_" + "CHAT_ID", "989097520")
+TELEGRAM_CHAT = os.environ.get("TELEGRAM_" + "CHAT_ID", os.environ.get("TELEGRAM_MOSES_CHAT_ID", ""))
 DAILY_TARGET_USD = 667  # $20K MRR / 30 days
 
 

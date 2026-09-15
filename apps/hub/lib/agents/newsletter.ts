@@ -6,6 +6,7 @@
  * Triggered by app/api/newsletter/send/route.ts (CRON_SECRET-gated).
  */
 import { createClient } from '@supabase/supabase-js'
+import { sendEmail } from '@bizlegal/email'
 import { logEventAsync } from '@/lib/ops/log'
 import { GUIDES, type Guide } from '@/lib/guides'
 import { runEaTask } from './ea-runner'
@@ -81,20 +82,15 @@ function renderHtml(intro: string, guides: readonly Guide[], subscriber: Subscri
 </html>`
 }
 
+/**
+ * One recipient, through the fleet's single email path. `kind: 'marketing'`
+ * makes @bizlegal/email re-check suppression + double-opt-in per address, so
+ * a stale subscriber row can never leak an issue past an unsubscribe.
+ */
 async function sendOne(subscriber: Subscriber, subject: string, html: string): Promise<boolean> {
-  const resendKey = process.env.RESEND_API_KEY
-  if (!resendKey) return false
-  const from = process.env.RESEND_FROM || 'intelligence@intelligence.bizlegal-ai.com'
   try {
-    const r = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${resendKey}`,
-        'Content-Type': 'application/json',
-        'User-Agent': 'bizlegal-agent/1.0',
-      },
-      body: JSON.stringify({ from: `BizLegal AI <${from}>`, to: [subscriber.email], subject, html }),
-    })
+    const r = await sendEmail({ to: subscriber.email, subject, html, kind: 'marketing' })
+    if (!r.ok) console.warn('[newsletter] send refused:', r.error, subscriber.email)
     return r.ok
   } catch {
     return false

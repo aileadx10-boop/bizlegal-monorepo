@@ -26,7 +26,7 @@ try:
         or os.environ.get("SUPABASE_SECRET", "")
     )
     TELEGRAM_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "") or os.environ.get("BIZLEGALFORGEBOT", "")
-    TELEGRAM_CHAT = os.environ.get("TELEGRAM_CHAT_ID", "989097520")
+    TELEGRAM_CHAT = os.environ.get("TELEGRAM_CHAT_ID", os.environ.get("TELEGRAM_MOSES_CHAT_ID", ""))
 except Exception as e:
     print(f"[self_heal] init err: {e}")
     SUPABASE_URL = SUPABASE_KEY = TELEGRAM_TOKEN = TELEGRAM_CHAT = ""

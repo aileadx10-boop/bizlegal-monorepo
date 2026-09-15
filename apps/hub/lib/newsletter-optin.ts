@@ -12,6 +12,7 @@
  * double_optin_confirmed and written email_consent_log. Product signup rows
  * therefore land as status='pending' and are activated by that confirm step.
  */
+import { sendEmail } from '@bizlegal/email'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { createHmac, randomBytes } from 'node:crypto'
 
@@ -144,22 +145,16 @@ export function originFromHeaders(headers: { get: (n: string) => string | null }
   return `${proto}://${host}`
 }
 
+/**
+ * The DOI confirmation itself is the one mail that must reach an unconfirmed
+ * address, so it goes through @bizlegal/email as `kind: 'transactional'`
+ * (suppression still applies — an unsubscribed address never gets it).
+ */
 async function sendConfirmationEmail(email: string, confirmUrl: string): Promise<boolean> {
-  const resendKey = process.env.RESEND_API_KEY
-  if (!resendKey) return false
-  const from = process.env.RESEND_FROM || 'intelligence@intelligence.bizlegal-ai.com'
   try {
-    const res = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${resendKey}`,
-        'Content-Type': 'application/json',
-        // Cloudflare blocks the default fetch UA on this account.
-        'User-Agent': 'bizlegal-agent/1.0',
-      },
-      body: JSON.stringify({
-        from: `BizLegal AI <${from}>`,
-        to: [email],
+    const res = await sendEmail({
+        kind: 'transactional',
+        to: email,
         subject: 'Confirm your BizLegal AI subscription',
         text: `Please confirm you want email from BizLegal AI:
 
@@ -177,8 +172,8 @@ This link expires in 7 days. If you didn't request this, ignore this email — w
 <hr style="border:none;border-top:1px solid #eee;margin:32px 0">
 <p style="color:#888;font-size:12px">BizLegal AI · <a href="https://bizlegal-ai.com/unsubscribe" style="color:#888">Unsubscribe</a></p>
 </div>`,
-      }),
     })
+    if (!res.ok) console.warn('[optin] confirm email refused:', res.error)
     return res.ok
   } catch (err) {
     console.warn('[optin] confirm email failed:', err instanceof Error ? err.message : err)

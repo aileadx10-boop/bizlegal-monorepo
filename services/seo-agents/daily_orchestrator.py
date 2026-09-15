@@ -51,7 +51,7 @@ except ImportError:
 SUPABASE_URL = os.environ.get('SUPABASE_URL', 'https://ydghhcuuopqzgqcicubg.supabase.co')
 SUPABASE_SECRET = os.environ.get('SUPABASE_SECRET', '')
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_CURATOR_BOT_TOKEN', '')
-TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID', '989097520')
+TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID', os.environ.get('TELEGRAM_MOSES_CHAT_ID', ''))
 NOWPAYMENTS_KEY = os.environ.get('NOWPAYMENTS_API_KEY', '')
 ANTHROPIC_KEY = os.environ.get('ANTHROPIC_API_KEY', '')
 OPENAI_KEY = os.environ.get('NEW_OPENAI_KEY', '')

@@ -38,7 +38,7 @@ def _q(path: str) -> list:
 
 def _telegram(msg: str):
     tok = os.environ.get("TELEGRAM_" + "BOT_TOKEN", "")
-    chat = os.environ.get("TELEGRAM_" + "CHAT_ID", "989097520")
+    chat = os.environ.get("TELEGRAM_" + "CHAT_ID", os.environ.get("TELEGRAM_MOSES_CHAT_ID", ""))
     if not tok: return
     try:
         req = urllib.request.Request(

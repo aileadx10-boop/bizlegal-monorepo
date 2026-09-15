@@ -34,7 +34,7 @@ SUPABASE_KEY = os.getenv("SUPABASE_KEY", "")
 BUFFER_TOKEN = os.environ.get("BUFFER_ACCESS_TOKEN", "")
 X_BEARER = os.environ.get("X_BEARER_TOKEN", "")
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_CURATOR_BOT_TOKEN", "")
-TELEGRAM_CHAT = os.environ.get("TELEGRAM_CHAT_ID", "989097520")
+TELEGRAM_CHAT = os.environ.get("TELEGRAM_CHAT_ID", os.environ.get("TELEGRAM_MOSES_CHAT_ID", ""))
 
 
 def http_json(url, headers=None, data=None, method="GET", timeout=15):

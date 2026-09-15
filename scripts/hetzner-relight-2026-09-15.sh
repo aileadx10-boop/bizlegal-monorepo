@@ -30,8 +30,8 @@ BOX=root@204.168.209.235
 KEY="$HOME/.ssh/id_ed25519"
 VAULT="${BIZLEGAL_VAULT_PATH:-$HOME/Downloads/env-hub-bizlegal-ai.txt}"
 DRY="${1:-}"
-SSH="ssh -i $KEY -o BatchMode=yes -o ConnectTimeout=20 $BOX"
-SCP="scp -i $KEY -o BatchMode=yes -q"
+SSH() { ssh -i "$KEY" -o BatchMode=yes -o ConnectTimeout=20 "$BOX" "$@"; }
+SCP() { scp -i "$KEY" -o BatchMode=yes -q "$@"; }
 
 [ -f "$VAULT" ] || { echo "vault not found: $VAULT"; exit 2; }
 [ -f services/agents/llm_router.py ] || { echo "run from the monorepo root"; exit 2; }
@@ -48,7 +48,8 @@ printf 'ANTHROPIC_MODEL=claude-sonnet-5\nOLLAMA_TUNNEL_URL=http://127.0.0.1:1143
 echo "   + ANTHROPIC_MODEL=claude-sonnet-5"
 echo "   + OLLAMA_TUNNEL_URL=http://127.0.0.1:11434"
 
-AGENTS=(conversion_funnel_agent enterprise_closer_agent monetization_agent llm_router content_agent growth_agent)
+AGENTS=(conversion_funnel_agent enterprise_closer_agent monetization_agent llm_router content_agent growth_agent code_fixer marketing_revenue self_heal weekly_health daily_digest)
+SEO_AGENTS=(content_distribution conversion_tracker daily_autonomous_seo daily_orchestrator ea_agent)
 CURATOR=(brain factual_review publisher)
 
 if [ "$DRY" = "--dry-run" ]; then
@@ -59,14 +60,16 @@ if [ "$DRY" = "--dry-run" ]; then
 fi
 
 echo "[relight] 1/5 push merge file + sources"
-$SCP "$MERGE" "$BOX:/tmp/merge.env"; rm -f "$MERGE"
-for a in "${AGENTS[@]}"; do $SCP "services/agents/$a.py" "$BOX:/opt/bizlegal/curator/services/agents/"; done
-for c in "${CURATOR[@]}"; do $SCP "services/hetzner/$c.py" "$BOX:/opt/bizlegal/curator/"; done
-$SSH 'mkdir -p /opt/bizlegal/curator/tools/social-autopilot'
-$SCP -r tools/social-autopilot/src tools/social-autopilot/fixtures tools/social-autopilot/package.json "$BOX:/opt/bizlegal/curator/tools/social-autopilot/"
+SCP "$MERGE" "$BOX:/tmp/merge.env"; rm -f "$MERGE"
+for a in "${AGENTS[@]}"; do SCP "services/agents/$a.py" "$BOX:/opt/bizlegal/curator/services/agents/"; done
+for c in "${CURATOR[@]}"; do SCP "services/hetzner/$c.py" "$BOX:/opt/bizlegal/curator/"; done
+for a in "${SEO_AGENTS[@]}"; do SCP "services/seo-agents/$a.py" "$BOX:/opt/bizlegal/curator/services/seo-agents/"; done
+SCP services/outreach/oci_deal_closer.py "$BOX:/opt/bizlegal/curator/services/outreach/" 2>/dev/null || true
+SSH 'mkdir -p /opt/bizlegal/curator/tools/social-autopilot'
+SCP -r tools/social-autopilot/src tools/social-autopilot/fixtures tools/social-autopilot/package.json "$BOX:/opt/bizlegal/curator/tools/social-autopilot/"
 
 echo "[relight] 2/5 merge env, 3/5 cron diet, 4/5 restart, 5/5 probe (on the box)"
-$SSH bash -s <<'REMOTE'
+SSH bash -s <<'REMOTE'
 set -euo pipefail
 B="/opt/bizlegal/backups/$(date -u +%Y-%m-%d)"; mkdir -p "$B"
 cp -n /opt/bizlegal/curator/.env "$B/curator.env" 2>/dev/null || true
@@ -107,6 +110,9 @@ for l in lines:
         l = re.sub(r"^\*/5 ", "*/30 ", l)
     elif "orchestrator.py monetization" in l:
         l = re.sub(r"^\*/15 \* ", "5 * ", l)
+    elif ("seo-agents/newsletter.py" in l or "orchestrator.py newsletter" in l) and not l.startswith("#"):
+        # plan REMOVE: three duplicate newsletters — the hub's Monday 13:00 send is the only one kept
+        l = "#DISABLED-2026-09-15 (duplicate newsletter; hub Mon 13:00 is canonical) " + l
     out.append(l)
 if not any("social-autopilot" in l for l in out):
     out.append("30 5 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && /usr/bin/node tools/social-autopilot/src/run-daily.cjs >> /var/log/social-autopilot.log 2>&1")
@@ -115,7 +121,7 @@ print("   crontab lines:", len(out))
 PY
 
 systemctl restart curator-bot curator-publisher
-systemctl start curator-scout.service || true
+systemctl start --no-block curator-scout.service || true   # oneshot scout can run for minutes; never block the relight on it
 echo "   services: $(systemctl is-active curator-bot curator-publisher ollama | tr '\n' ' ')"
 
 cd /opt/bizlegal/curator; set -a; . ./.env; set +a
@@ -131,7 +137,7 @@ REMOTE
 
 # Mirror the box's TELEGRAM_HUB_TOKEN into the vault when the canonical name is still empty.
 if [ -z "$(val TELEGRAM_HUB_TOKEN)" ]; then
-  t="$($SSH "grep -m1 '^TELEGRAM_HUB_TOKEN=' /opt/bizlegal/curator/.env | cut -d= -f2-")"
+  t="$(SSH "grep -m1 '^TELEGRAM_HUB_TOKEN=' /opt/bizlegal/curator/.env | cut -d= -f2-")"
   if [ -n "$t" ]; then
     python3 - "$VAULT" "$t" <<'PY'
 import sys, re
@@ -144,6 +150,6 @@ PY
   fi
 fi
 
-$SSH 'crontab -l' > services/cron_jobs.txt
+SSH 'crontab -l' > services/cron_jobs.txt
 echo "[relight] done. services/cron_jobs.txt refreshed — commit it."
 echo "[relight] verify in an hour: ssh $BOX 'tail -3 /var/log/conversion-funnel.log; tail -3 /var/log/social-autopilot.log'"

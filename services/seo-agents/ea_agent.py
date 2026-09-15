@@ -24,7 +24,7 @@ VAULT_PATH = Path('/opt/bizlegal/curator/.env')
 SUPABASE_URL = os.getenv('SUPABASE_URL', 'https://ydghhcuuopqzgqcicubg.supabase.co')
 SUPABASE_KEY = os.getenv('SUPABASE_SECRET', os.getenv('SUPABASE_SERVICE_KEY', ''))
 TELEGRAM_BOT_TOKEN = os.getenv('BIZLEGALFORGEBOT', os.getenv('TELEGRAM_CURATOR_BOT_TOKEN', ''))
-TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID', '989097520')
+TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID', os.environ.get('TELEGRAM_MOSES_CHAT_ID', ''))
 NOWPAYMENTS_KEY = os.getenv('NOWPAYMENTS_API_KEY', '')
 REPORTS_DIR = Path('/opt/bizlegal/decisions')
 
@@ -44,7 +44,7 @@ def load_env():
             os.environ[k.strip()] = v.strip()
     SUPABASE_KEY = os.environ.get('SUPABASE_SECRET', os.environ.get('SUPABASE_SERVICE_KEY', ''))
     TELEGRAM_BOT_TOKEN = os.environ.get('BIZLEGALFORGEBOT', os.environ.get('TELEGRAM_CURATOR_BOT_TOKEN', ''))
-    TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID', '989097520')
+    TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID', os.environ.get('TELEGRAM_MOSES_CHAT_ID', ''))
     NOWPAYMENTS_KEY = os.environ.get('NOWPAYMENTS_API_KEY', '')
 
 

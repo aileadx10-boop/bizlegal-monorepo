@@ -114,7 +114,6 @@ export const ROUTES: RouteEntry[] = [
   { method: 'POST', path: '/api/payments/lemonsqueezy', operationId: 'lemonsqueezyWebhook', summary: 'LemonSqueezy webhook', tags: ['payments'], security: OPEN },
 
   // Products
-  { method: 'GET', path: '/api/products/{product}/create-order', operationId: 'productCreateOrder', summary: 'Create product order', tags: ['products'], security: OPEN },
   { method: 'POST', path: '/api/products/{product}/webhook', operationId: 'productWebhook', summary: 'Product webhook', tags: ['products'], security: OPEN },
 
   // Agents

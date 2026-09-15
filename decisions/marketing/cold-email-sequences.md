@@ -1,3 +1,5 @@
+> **NON-COMPLIANT — DO NOT USE (banner added 2026-09-15, plan v3 §D).** These sequences predate hard rule 7 v2: they assume constructed/guessed addresses, no per-recipient lawful basis, no `@bizlegal/email` suppression, no per-campaign approval, and transactional-domain sending. Nothing here may be loaded into `sales_campaign` / Instantly. The compliant path is `decisions/workflows/outbound_campaign.md` + `agents/outbound/`. Kept only as copy reference.
+
 # BizLegal-AI Cold Email Sequences
 
 **Created:** 2026-06-17

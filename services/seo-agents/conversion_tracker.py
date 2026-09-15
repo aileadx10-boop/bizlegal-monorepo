@@ -28,7 +28,7 @@ from collections import defaultdict
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
 SUPABASE_KEY = os.getenv("SUPABASE_" + "KEY", "")
 TG_BOT = os.environ.get("TELEGRAM_HUB_TOKEN", "")
-TELEGRAM_CHAT = os.environ.get("TELEGRAM_CHAT_ID", "989097520")
+TELEGRAM_CHAT = os.environ.get("TELEGRAM_CHAT_ID", os.environ.get("TELEGRAM_MOSES_CHAT_ID", ""))
 
 
 def http_json(url, headers=None):
