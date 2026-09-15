@@ -107,6 +107,9 @@ export type ProductId =
   | 'deal44_room_setup_ils'
   | 'deal44_broker_monthly_ils'
   | 'deal44_room_setup_usd'
+  // BrainX — Intelligence OS (2026-09-16)
+  | 'brainx_opportunity_radar_monthly'
+  | 'brainx_opportunity_radar_yearly'
   | 'deal44_broker_monthly_usd'
 
 export type BillingInterval = 'one-time' | 'monthly' | 'yearly'
@@ -115,7 +118,7 @@ export interface ProductSpec {
   readonly id: ProductId
   readonly name: string
   readonly description: string
-  readonly product_family: 'boi' | 'ai_act' | 'policy_refresh' | 'psp' | 'tracr' | 'brai' | 'forge' | 'docai' | 'lexaudit' | 'conductor' | 'cle' | 'propsignal' | 'leaseparse' | 'closeflow' | 'academy' | 'reserve_report' | 'bench' | 'coguard' | 'ofac_watch' | 'casp' | 'ai_policy' | 'practice' | 'deal44' | 'casepage' | 'sincefiled'
+  readonly product_family: 'boi' | 'ai_act' | 'policy_refresh' | 'psp' | 'tracr' | 'brai' | 'forge' | 'docai' | 'lexaudit' | 'conductor' | 'cle' | 'propsignal' | 'leaseparse' | 'closeflow' | 'academy' | 'reserve_report' | 'bench' | 'coguard' | 'ofac_watch' | 'casp' | 'ai_policy' | 'practice' | 'deal44' | 'casepage' | 'sincefiled' | 'brainx'
   readonly billing_interval: BillingInterval
   readonly amount_cents: number
   /**
@@ -949,6 +952,35 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: false,
   },
+  // ───── BrainX — Intelligence OS (2026-09-16) ─────
+  // New standalone intelligence product at brainx.bizlegal-ai.com.
+  // Neon Postgres (not Supabase), evidence-first opportunities,
+  // Gmail-linked. Paid through the hub's universal /api/pay/start.
+  // Fulfillment: payment.confirmed → BrainX opportunity report/digest.
+  brainx_opportunity_radar_monthly: {
+    id: 'brainx_opportunity_radar_monthly',
+    name: 'BrainX Opportunity Radar (monthly)',
+    description: 'Monthly opportunity radar for one firm: evidence-backed compliance & practice opportunities, alerts, Gmail digest, BUILD THIS bundles. Not legal advice; no outcome guarantee.',
+    product_family: 'brainx',
+    billing_interval: 'monthly',
+    amount_cents: 9900,
+    currency: 'USD',
+    checkout_origin: 'https://brainx.bizlegal-ai.com/pricing',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: true,
+  },
+  brainx_opportunity_radar_yearly: {
+    id: 'brainx_opportunity_radar_yearly',
+    name: 'BrainX Opportunity Radar (yearly)',
+    description: 'Yearly BrainX radar subscription (save ~2 months). Evidence-first opportunities, Gmail digest, BUILD THIS bundles.',
+    product_family: 'brainx',
+    billing_interval: 'yearly',
+    amount_cents: 99900,
+    currency: 'USD',
+    checkout_origin: 'https://brainx.bizlegal-ai.com/pricing',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: true,
+  },
 }
 export function getProduct(id: ProductId): ProductSpec {
   const product = PRODUCTS[id]
@@ -966,6 +998,7 @@ export function getProduct(id: ProductId): ProductSpec {
   }
   return product
 }
+
 
 
 
