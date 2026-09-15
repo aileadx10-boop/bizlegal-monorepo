@@ -282,11 +282,12 @@ Fleet status: **9 of 11 rows GREEN; 2 rows need Moses action.**
 
 ## 2026-09-15 — Moses ops after the relight session (copy-paste, ~20 min)
 
-Full detail + verification lines: `decisions/REVENUE-MACHINE-RELIGHT-2026-09-15.md` §"Moses ops". In order:
+Full detail + verification lines: `decisions/REVENUE-MACHINE-RELIGHT-2026-09-15.md` §7. **Revised late 2026-09-15** — the Hetzner relight and the Cloudflare DNS apply were executed by the agent session (done, verified); the DB outage was added. In order:
 
-1. `cd "C:/Users/Moshe Dor/bizlegal-monorepo" && git push origin main feat/coverage-autopilot-build-2026-09-15 feat/legal-revenue-os-reference` — 14 commits; Vercel rebuilds the 9 linked projects.
+0. **Supabase is down (since ~17:34 UTC, every REST call 503/504).** Dashboard → project `bizlegal-ai` → Settings → General → **Restart project**. Then apply, via MCP or the SQL editor: `supabase/migrations/20260915_seo_pages_index_status.sql`, `20260915_deal44_paid_room.sql`, `20260915_leaseparse_paid_gate.sql` (idempotent).
+1. `cd "C:/Users/Moshe Dor/bizlegal-monorepo" && git push origin main feat/coverage-autopilot-build-2026-09-15 feat/legal-revenue-os-reference` — Vercel rebuilds the 9 linked projects.
 2. FirmCited Stage 1 to prod: `cd "C:/Users/Moshe Dor/AppData/Local/Temp/claude/c--Users-Moshe-Dor-bizlegal-monorepo/9f52e740-2085-45ef-bf4d-dc167b20e8f5/scratchpad/fc-deploy" && vercel --prod --yes` → `https://cited.bizlegal-ai.com/intake` must be 200.
-3. Hetzner: `bash scripts/hetzner-relight-2026-09-15.sh --dry-run` then without the flag → expect `anthropic probe: 200`; then commit `services/cron_jobs.txt`.
-4. Vercel casepage + sincefiled: dashboard → Git connect `aileadx10-boop/bizlegal-monorepo` + Root Directory `apps/<x>`; `node scripts/vercel-env-sync.mjs apps/<x> NEXT_PUBLIC_SUPABASE_URL SUPABASE_SERVICE_KEY NEXT_PUBLIC_SUPABASE_ANON_KEY BIZLEGAL_INBOUND_SECRET NEXT_PUBLIC_HUB_URL --target production,preview`; `vercel domains add <x>.bizlegal-ai.com <x> --scope aileadx10-5415s-projects`; Redeploy.
-5. DNS: `node scripts/cf-dns-sync.mjs` (review the diff) then `node scripts/cf-dns-sync.mjs --apply`.
-6. G0: the real $490 buy at `cited.bizlegal-ai.com/audit` (after step 2).
+3. Vercel `casepage` + `sincefiled` (env already synced): dashboard → Settings → Git → connect `aileadx10-boop/bizlegal-monorepo`; Settings → General → Root Directory `apps/casepage` / `apps/sincefiled`; Domains → add `casepage.bizlegal-ai.com` / `sincefiled.bizlegal-ai.com`; Redeploy.
+4. Cloudflare: flip the 7 new CNAMEs to proxied once each host returns 200 (records exist, DMARC repaired).
+5. G0: the real $490 buy at `cited.bizlegal-ai.com/audit` (after step 2).
+6. ~~Hetzner relight~~ done — verify in an hour: `ssh -i ~/.ssh/id_ed25519 root@204.168.209.235 'tail -3 /var/log/conversion-funnel.log; tail -3 /var/log/social-autopilot.log'`.
