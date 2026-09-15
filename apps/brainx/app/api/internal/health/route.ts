@@ -1,11 +1,7 @@
 import { NextResponse } from 'next/server'
-import { sql } from '@/lib/neon'
+import { apiHealth } from '@/lib/neon'
 
 export async function GET() {
-  try {
-    const rows = await sql()`select 1 as ok`
-    return NextResponse.json({ ok: rows?.[0]?.ok === 1, service: 'brainx' })
-  } catch (err) {
-    return NextResponse.json({ ok: false, error: String(err).slice(0, 160) }, { status: 500 })
-  }
+  const health = await apiHealth()
+  return NextResponse.json(health, { status: health.ok ? 200 : 502 })
 }

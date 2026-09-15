@@ -1,22 +1,22 @@
-import { neon } from '@neondatabase/serverless'
-import type { NeonHttpDatabase, NeonQueryFunction } from '@neondatabase/serverless'
+// BrainX DB access model:
+// - The Next.js dashboard NEVER connects directly to Neon.
+// - All reads go through the BrainX API (services/highintelligence-api, FastAPI).
+// - The API owns the Neon connection string (NEON_DATABASE_URL).
+// This file is the dashboard-side health/proxy helper.
 
-// BrainX uses Neon Postgres exclusively — no Supabase.
-// Server-only connection; never imported from client components.
-// Lazy-init so the Next.js build doesn't need DATABASE_URL present.
-let _sql: NeonQueryFunction<false, boolean> | null = null
+export const BRAINX_API_URL =
+  process.env.BRAINX_API_URL || process.env.NEXT_PUBLIC_BRAINX_API_URL || 'http://127.0.0.1:8080'
 
-export function sql() {
-  if (_sql) return _sql
-  const url = process.env.DATABASE_URL || process.env.NEON_DATABASE_URL
-  if (!url) throw new Error('BrainX: missing DATABASE_URL / NEON_DATABASE_URL (server boot)')
-  _sql = neon(url)
-  return _sql
+export async function apiHealth(): Promise<{ ok: boolean; service: string; error?: string }> {
+  try {
+    const res = await fetch(`${BRAINX_API_URL}/health`, {
+      signal: AbortSignal.timeout(5000),
+      headers: { 'x-internal-key': process.env.BRAINX_INTERNAL_KEY || '' },
+    })
+    if (!res.ok) return { ok: false, service: 'brainx-api', error: `http_${res.status}` }
+    const json = (await res.json()) as { ok?: boolean; service?: string }
+    return { ok: json.ok ?? true, service: json.service || 'brainx-api' }
+  } catch (err) {
+    return { ok: false, service: 'brainx-api', error: String(err).slice(0, 120) }
+  }
 }
-
-export async function healthCheck(): Promise<boolean> {
-  const rows = await sql()`select 1 as ok`
-  return rows?.[0]?.ok === 1
-}
-
-export type BrainXDb = NeonHttpDatabase
