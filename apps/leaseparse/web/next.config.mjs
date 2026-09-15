@@ -5,7 +5,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ['@bizlegal/closing-engine'],
+  transpilePackages: ['@bizlegal/closing-engine', '@bizlegal/themes'],
 
   // @bizlegal/closing-engine is authored NodeNext-style: relative imports carry
   // the .js extension, which its own tsc build requires. Webpack does not map

@@ -269,3 +269,192 @@ test('a complete abstract clears the confidence floor and skips Claude', async (
   assert.equal(confidence, 1)
   assert.equal(shouldFallback({ abstract, confidence, engine: 'hermes', warnings: [] }), false)
 })
+
+// ─── the paid gate (§B4) ───────────────────────────────────────────────────
+//
+// The gate is the difference between a $59 product and a free one, so the two
+// denial paths are tested directly: the flag being off, and no credit existing.
+// Both must deny — neither may ever fall through to the deliverable.
+
+import type { SupabaseClient } from '@supabase/supabase-js'
+
+interface StubResult {
+  data: unknown
+  error: { message: string } | null
+}
+
+interface StubBuilder {
+  select(columns: string): StubBuilder
+  in(column: string, values: string[]): StubBuilder
+  eq(column: string, value: string): StubBuilder
+  order(column: string, options: { ascending: boolean }): StubBuilder
+  limit(count: number): Promise<StubResult>
+}
+
+/** A Supabase client just real enough for the gate's one query. */
+function stubDb(result: StubResult): SupabaseClient {
+  const builder: StubBuilder = {
+    select: () => builder,
+    in: () => builder,
+    eq: () => builder,
+    order: () => builder,
+    limit: () => Promise.resolve(result),
+  }
+  return { from: () => builder } as unknown as SupabaseClient
+}
+
+/** A client whose only job is to answer the budget RPC. */
+function stubRpcDb(result: StubResult): SupabaseClient {
+  return { rpc: () => Promise.resolve(result) } as unknown as SupabaseClient
+}
+
+function withCheckoutFlag<T>(value: string | undefined, fn: () => T): T {
+  const previous = process.env.LEASEPARSE_CHECKOUT_LIVE
+  if (value === undefined) delete process.env.LEASEPARSE_CHECKOUT_LIVE
+  else process.env.LEASEPARSE_CHECKOUT_LIVE = value
+  try {
+    return fn()
+  } finally {
+    if (previous === undefined) delete process.env.LEASEPARSE_CHECKOUT_LIVE
+    else process.env.LEASEPARSE_CHECKOUT_LIVE = previous
+  }
+}
+
+const PAID_CREDIT = {
+  id: 'c1',
+  email: 'buyer@example.com',
+  order_id: 'ord_1',
+  status: 'unclaimed',
+  lease_id: null,
+}
+
+test('checkout dark: the gate refuses even when a paid credit exists', async () => {
+  const { requireLeaseCredit } = await import('../lib/payments/credits')
+  const gate = await withCheckoutFlag(undefined, () =>
+    requireLeaseCredit(stubDb({ data: [PAID_CREDIT], error: null }), {
+      email: 'buyer@example.com',
+    })
+  )
+  assert.equal(gate.ok, false)
+  if (gate.ok) return
+  assert.equal(gate.status, 503)
+  assert.equal(gate.body.error, 'checkout_dark')
+})
+
+test('checkout live but no credit: 402 payment_required, never the deliverable', async () => {
+  const { requireLeaseCredit } = await import('../lib/payments/credits')
+  const gate = await withCheckoutFlag('1', () =>
+    requireLeaseCredit(stubDb({ data: [], error: null }), { email: 'nobody@example.com' })
+  )
+  assert.equal(gate.ok, false)
+  if (gate.ok) return
+  assert.equal(gate.status, 402)
+  assert.equal(gate.body.error, 'payment_required')
+  assert.equal(typeof gate.body.checkout, 'string')
+})
+
+test('an unreadable credits table denies rather than allows', async () => {
+  const { requireLeaseCredit } = await import('../lib/payments/credits')
+  const gate = await withCheckoutFlag('1', () =>
+    requireLeaseCredit(stubDb({ data: null, error: { message: 'relation does not exist' } }), {
+      email: 'buyer@example.com',
+    })
+  )
+  assert.equal(gate.ok, false)
+})
+
+test('a paid unclaimed credit opens the gate', async () => {
+  const { requireLeaseCredit } = await import('../lib/payments/credits')
+  const gate = await withCheckoutFlag('1', () =>
+    requireLeaseCredit(stubDb({ data: [PAID_CREDIT], error: null }), {
+      email: 'buyer@example.com',
+    })
+  )
+  assert.equal(gate.ok, true)
+  if (!gate.ok) return
+  assert.equal(gate.credit.order_id, 'ord_1')
+})
+
+test('an order id whose email disagrees is not a credit', async () => {
+  const { requireLeaseCredit } = await import('../lib/payments/credits')
+  const gate = await withCheckoutFlag('1', () =>
+    requireLeaseCredit(stubDb({ data: [PAID_CREDIT], error: null }), {
+      email: 'someone.else@example.com',
+      orderId: 'ord_1',
+    })
+  )
+  assert.equal(gate.ok, false)
+})
+
+// ─── the $80/mo LLM cap ────────────────────────────────────────────────────
+
+test('the model default is ANTHROPIC_MODEL, falling back to claude-sonnet-5', async () => {
+  const { resolveModel, DEFAULT_MODEL } = await import('../lib/extract/llm-budget')
+  const previous = process.env.ANTHROPIC_MODEL
+  try {
+    delete process.env.ANTHROPIC_MODEL
+    assert.equal(resolveModel(), DEFAULT_MODEL)
+    assert.equal(DEFAULT_MODEL, 'claude-sonnet-5')
+    process.env.ANTHROPIC_MODEL = 'claude-haiku-4-5-20251001'
+    assert.equal(resolveModel(), 'claude-haiku-4-5-20251001')
+    assert.equal(resolveModel('explicit-wins'), 'explicit-wins')
+  } finally {
+    if (previous === undefined) delete process.env.ANTHROPIC_MODEL
+    else process.env.ANTHROPIC_MODEL = previous
+  }
+})
+
+test('an unknown model is priced pessimistically, never as free', async () => {
+  const { estimateCostUsd } = await import('../lib/extract/llm-budget')
+  const known = estimateCostUsd('claude-haiku-4-5-20251001', 180_000, 4_096)
+  const unknown = estimateCostUsd('some-new-model', 180_000, 4_096)
+  assert.ok(known > 0)
+  assert.ok(unknown > known)
+})
+
+test('monthKey is UTC YYYY-MM', async () => {
+  const { monthKey } = await import('../lib/extract/llm-budget')
+  assert.equal(monthKey(new Date('2026-09-15T23:30:00Z')), '2026-09')
+  assert.equal(monthKey(new Date('2026-01-01T00:00:00Z')), '2026-01')
+})
+
+test('the spend counter fails closed when the RPC errors', async () => {
+  const { reserveLlmSpend } = await import('../lib/extract/llm-budget')
+  const decision = await reserveLlmSpend({
+    db: stubRpcDb({ data: null, error: { message: 'function does not exist' } }),
+    usd: 0.5,
+  })
+  assert.equal(decision.allowed, false)
+  assert.equal(decision.reason, 'budget_unreadable')
+})
+
+test('the spend counter fails closed on an unrecognised RPC payload', async () => {
+  const { reserveLlmSpend } = await import('../lib/extract/llm-budget')
+  const decision = await reserveLlmSpend({ db: stubRpcDb({ data: 'nope', error: null }), usd: 0.5 })
+  assert.equal(decision.allowed, false)
+})
+
+test('over the cap the counter denies and the cap is $80', async () => {
+  const { reserveLlmSpend, MONTHLY_CAP_USD } = await import('../lib/extract/llm-budget')
+  assert.equal(MONTHLY_CAP_USD, 80)
+  const decision = await reserveLlmSpend({
+    db: stubRpcDb({
+      data: { allowed: false, spent_usd: 79.9, cap_usd: 80, reason: 'monthly_cap_reached' },
+      error: null,
+    }),
+    usd: 1,
+  })
+  assert.equal(decision.allowed, false)
+  assert.equal(decision.reason, 'monthly_cap_reached')
+  assert.equal(decision.spentUsd, 79.9)
+})
+
+test('under the cap the counter allows and reports the running total', async () => {
+  const { reserveLlmSpend } = await import('../lib/extract/llm-budget')
+  const decision = await reserveLlmSpend({
+    db: stubRpcDb({ data: { allowed: true, spent_usd: 12.5, cap_usd: 80 }, error: null }),
+    usd: 0.5,
+  })
+  assert.equal(decision.allowed, true)
+  assert.equal(decision.spentUsd, 12.5)
+})

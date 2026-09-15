@@ -12,6 +12,8 @@ import { grantPracticeRevenueReport } from '@/lib/payments/practice-revenue-gran
 import { grantOfacWatch } from '@/lib/payments/ofac-watch-grant'
 import { grantFalseEcho } from '@/lib/payments/falseecho-grant'
 import { grantSellerRadar } from '@/lib/payments/sellerradar-grant'
+import { grantDeal44Room } from '@/lib/payments/deal44-grant'
+import { grantLeaseParse } from '@/lib/payments/leaseparse-grant'
 import { sendPaymentConfirmationEmail } from '@/lib/resend'
 
 export const dynamic = 'force-dynamic'
@@ -253,6 +255,10 @@ export async function POST(req: NextRequest) {
         await grantFalseEcho(order)
         // SellerRadar fulfillment POST (no-op for other products).
         await grantSellerRadar(order)
+        // DEAL44 room setup (no-op for other products).
+        await grantDeal44Room(supabase, order)
+        // LeaseParse paid-gate credit (no-op for other products).
+        await grantLeaseParse(supabase, order)
         // Send payment confirmation email to customer (non-blocking).
         void sendPaymentConfirmationEmail(
           order.user_email,

@@ -2,8 +2,10 @@
  * Claude fallback — high-accuracy extraction for the ~10% of leases
  * Hermes can't confidently abstract.
  *
- * COST GATE: this engine is budgeted at ≤$80/mo (inside the trio's
- * shared $100/mo Claude budget). It may ONLY be called when
+ * COST GATE: this engine is capped at $80/mo (inside the trio's shared
+ * budget) and the cap is ENFORCED, not documented — pass `budgetDb` and every
+ * call reserves its worst-case cost against the leaseparse_llm_spend counter
+ * before the request goes out (./llm-budget). It may ONLY be called when
  * shouldFallback() returns true, and every call must be ops-logged so
  * the Hermes prompt can be improved to shrink the fallback rate.
  *
@@ -13,8 +15,15 @@
  */
 
 import Anthropic from '@anthropic-ai/sdk'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { coerceLeaseAbstract, parseModelJson } from './coerce'
 import { EXTRACTION_PROMPT, scoreConfidence } from './hermes-first'
+import {
+  LlmBudgetExceededError,
+  estimateCostUsd,
+  reserveLlmSpend,
+  resolveModel,
+} from './llm-budget'
 import type { ExtractionResult } from './types'
 
 /** Hermes results at or above this confidence never reach Claude. */
@@ -24,8 +33,6 @@ export function shouldFallback(result: ExtractionResult): boolean {
   return result.engine === 'hermes' && result.confidence < CONFIDENCE_FLOOR
 }
 
-/** Haiku, not Sonnet — the cost gate is the whole point of this module. */
-const CLAUDE_MODEL = 'claude-haiku-4-5-20251001'
 const MAX_TOKENS = 4_096
 /**
  * Rough character cap on what we send. A commercial lease that overflows this
@@ -36,7 +43,15 @@ const MAX_INPUT_CHARS = 180_000
 export interface ClaudeOptions {
   /** Defaults to process.env.ANTHROPIC_API_KEY. */
   apiKey?: string
+  /** Defaults to `ANTHROPIC_MODEL ?? 'claude-sonnet-5'` (see ./llm-budget). */
   model?: string
+  /**
+   * Service-role client used to reserve this call's worst-case cost against the
+   * $80/mo counter BEFORE the request goes out. Omitting it skips the reservation
+   * and is for tests only — every production caller passes it, and the route
+   * that forgets is the one that blows the budget.
+   */
+  budgetDb?: SupabaseClient
 }
 
 export async function extractWithClaude(
@@ -59,9 +74,21 @@ export async function extractWithClaude(
     warnings.push(`lease truncated to ${MAX_INPUT_CHARS} chars before Claude extraction`)
   }
 
+  const model = resolveModel(opts.model)
+
+  // Cost gate. Reserve first, call second — and if the reservation is refused,
+  // no request is made at all. See ./llm-budget for why it fails closed.
+  if (opts.budgetDb) {
+    const estimateUsd = estimateCostUsd(model, leaseText.length + EXTRACTION_PROMPT.length, MAX_TOKENS)
+    const decision = await reserveLlmSpend({ db: opts.budgetDb, usd: estimateUsd })
+    if (!decision.allowed) {
+      throw new LlmBudgetExceededError(decision, model, estimateUsd)
+    }
+  }
+
   const client = new Anthropic({ apiKey })
   const message = await client.messages.create({
-    model: opts.model ?? CLAUDE_MODEL,
+    model,
     max_tokens: MAX_TOKENS,
     temperature: 0,
     system: EXTRACTION_PROMPT,

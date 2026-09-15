@@ -10,6 +10,11 @@
       "types": "./src/index.ts",
       "import": "./src/index.ts",
       "default": "./src/index.ts"
+    },
+    "./seo": {
+      "types": "./src/seo.ts",
+      "import": "./src/seo.ts",
+      "default": "./src/seo.ts"
     }
   },
   "files": ["src", "dist"],
