@@ -11,7 +11,7 @@
 0 17 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/crawlers/customer_q.py >> /var/log/seo-agents.log 2>&1
 0 18 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/orchestrator.py socials >> /opt/bizlegal/curator/logs/machine/socials-pm.log 2>&1
 0 19 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/daily_orchestrator.py --task=19 >> /var/log/seo-agents.log 2>&1
-0 20 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/newsletter.py >> /var/log/seo-agents.log 2>&1
+#DISABLED-2026-09-15 (duplicate newsletter; hub Mon 13:00 is canonical) 0 20 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/newsletter.py >> /var/log/seo-agents.log 2>&1
 0 21 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/cleanup.py >> /var/log/seo-agents.log 2>&1
 0 23 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/analytics_dashboard.py --days 30 --outdir /opt/bizlegal/decisions >> /var/log/seo-agents.log 2>&1
 0 2 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && PILLAR=$(( $(date +%u) % 8 + 1 )); python3 /opt/bizlegal/curator/services/seo-agents/seo_content_writer.py --pillar $PILLAR --outdir /opt/bizlegal/curator/services/seo-agents/blog_content >> /var/log/seo-agents.log 2>&1
@@ -23,7 +23,7 @@
 0 6 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/salesperson_agent.py --draft-only >> /var/log/salesperson.log 2>&1
 0 6 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/daily_orchestrator.py --task=06 >> /var/log/seo-agents.log 2>&1
 0 7 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/geo_citation.py >> /var/log/seo-agents.log 2>&1
-0 8 * * 2 cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/orchestrator.py newsletter >> /opt/bizlegal/curator/logs/machine/newsletter.log 2>&1
+#DISABLED-2026-09-15 (duplicate newsletter; hub Mon 13:00 is canonical) 0 8 * * 2 cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/orchestrator.py newsletter >> /opt/bizlegal/curator/logs/machine/newsletter.log 2>&1
 0 8 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/crawlers/site_health.py >> /var/log/seo-agents.log 2>&1
 0 9 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/agents/orchestrator.py socials >> /opt/bizlegal/curator/logs/machine/socials-am.log 2>&1
 0 9 * * * cd /opt/bizlegal/curator && set -a && . ./.env && set +a && python3 /opt/bizlegal/curator/services/seo-agents/crawlers/backlinks.py >> /var/log/seo-agents.log 2>&1
