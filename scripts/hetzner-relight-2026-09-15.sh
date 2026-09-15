@@ -40,7 +40,7 @@ val() { grep -m1 "^$1=" "$VAULT" | cut -d= -f2- | tr -d '\r'; }
 
 MERGE="$(mktemp)"
 echo "[relight] vault → box (names only):"
-for n in ANTHROPIC_API_KEY GOOGLE_GEMINI_API_KEY OPENROUTER_API_KEY PERPLEXITY_API_KEY SOCIAL_DIGEST_TO_EMAIL NEXT_PUBLIC_HUB_URL; do
+for n in ANTHROPIC_API_KEY GOOGLE_GEMINI_API_KEY OPENROUTER_API_KEY PERPLEXITY_API_KEY SOCIAL_DIGEST_TO_EMAIL DIGEST_TO_EMAIL NEXT_PUBLIC_HUB_URL; do
   v="$(val "$n")"
   if [ -n "$v" ]; then printf '%s=%s\n' "$n" "$v" >> "$MERGE"; echo "   + $n"; else echo "   - $n (empty in vault — skipped)"; fi
 done

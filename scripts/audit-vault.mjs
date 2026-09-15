@@ -31,6 +31,11 @@ const ALLOW_LIST = new Set([
   'PYTHONPATH', 'PYTHONUNBUFFERED',
   // Node runtime built-ins toggled deliberately by one-off scripts
   'NODE_TLS_REJECT_UNAUTHORIZED',
+  // Python/OpenSSL CA-bundle overrides. Per-machine, never fleet config: a dev
+  // box behind a TLS-intercepting AV sets one, the Hetzner box sets neither.
+  // Vaulting them would export an EMPTY value onto the box (the relight script
+  // merges vault names into curator/.env), which breaks TLS rather than fixing it.
+  'REQUESTS_CA_BUNDLE', 'SSL_CERT_FILE',
 ])
 
 // Patterns that read env vars across our 3 languages.
