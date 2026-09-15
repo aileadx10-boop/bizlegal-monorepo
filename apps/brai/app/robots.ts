@@ -18,7 +18,9 @@ const BLOCK: string[] = [
   'SemrushBot', 'AhrefsBot', 'MJ12bot', 'DotBot', 'BLEXBot',
 ]
 
-const PRIVATE: string[] = ['/api/', '/_next/']
+// '/clients', '/reports', '/orders' ported 2026-09-15 from the retired
+// public/robots.txt (which shadowed this file).
+const PRIVATE: string[] = ['/api/', '/_next/', '/clients', '/reports', '/orders']
 
 export default function robots(): MetadataRoute.Robots {
   return {
