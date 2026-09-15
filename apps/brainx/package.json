@@ -10,8 +10,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@bizlegal/scoring": "workspace:*",
-    "@bizlegal/themes": "workspace:*",
     "next": "^14.2.35",
     "react": "^18",
     "react-dom": "^18",
@@ -25,6 +23,7 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.35",
+    "tailwindcss": "^3.4.19",
     "typescript": "^5"
   }
 }
