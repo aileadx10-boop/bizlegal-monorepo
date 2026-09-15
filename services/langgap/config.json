@@ -1,0 +1,10 @@
+{
+  "project": "bizlegal-ai langgap",
+  "targets": [
+    { "domain": "bizlegal-ai.com", "role": "own", "languages": ["de", "es"] },
+    { "domain": "vanta.com", "role": "competitor", "languages": ["de", "es"] },
+    { "domain": "drata.com", "role": "competitor", "languages": ["de", "es"] },
+    { "domain": "secureframe.com", "role": "competitor", "languages": ["de", "es"] },
+    { "domain": "sprinto.com", "role": "competitor", "languages": ["de", "es"] }
+  ]
+}
