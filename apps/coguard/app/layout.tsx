@@ -3,7 +3,7 @@ import './globals.css'
 import { ThemeProvider, themeFOUCScript, SiteShell } from '@bizlegal/themes'
 
 const FOUC = themeFOUCScript({
-  primary: 'midnight',
+  primary: 'royal-dark', // 'midnight' was never a ThemeId (plan v3 defect N); royal-dark is the closest fleet theme
   alternate: null,
   storageKey: 'coguard-theme',
 })
@@ -41,7 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
       </head>
       <body>
-        <ThemeProvider primary="midnight" alternate={null} storageKey="coguard-theme">
+        <ThemeProvider primary="royal-dark" alternate={null} storageKey="coguard-theme">
           <SiteShell
             brand="CoGuard"
             nav={[
