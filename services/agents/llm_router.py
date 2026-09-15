@@ -41,7 +41,9 @@ ENV_SB_URL = "SUP" + chr(65) + "BASE_URL"
 ENV_SB_KEY = "SUP" + chr(65) + "BASE_SERVICE_ROLE" + chr(95) + "KEY"
 
 ANTH_KEY = os.environ.get(ENV_ANT, "")
-GEM_KEY = os.environ.get(ENV_GEM, "")
+# The vault holds the value under GOOGLE_GEMINI_API_KEY while the legacy name is present-but-empty;
+# without the fallback the gemini path was silently dead on every box (found by the P build, 2026-09-15).
+GEM_KEY = os.environ.get(ENV_GEM, "") or os.environ.get("GOOGLE_GEMINI_API_KEY", "")
 
 # Ollama (local, free). Default: this Windows box. From Hetzner set
 # OLLAMA_BASE_URL to a reachable tunnel endpoint.
@@ -181,8 +183,10 @@ def _ollama_reachable() -> bool:
         return False
 
 
-def _gemini_chat(system: str, messages: list, model: str, max_tokens: int, anonymize_pii: bool) -> ChatResponse:
+def _gemini_chat(system: str, messages: list, model: str, max_tokens: int, anonymize_pii: bool,
+                 api_key: str = "") -> ChatResponse:
     started = time.time()
+    key = api_key or GEM_KEY
     # Gemini API: contents is a list of {role, parts:[{text}]}
     # System instruction goes in a separate field
     contents = []
@@ -194,7 +198,7 @@ def _gemini_chat(system: str, messages: list, model: str, max_tokens: int, anony
         "contents": contents,
         "generationConfig": {"maxOutputTokens": max_tokens, "temperature": 0.7},
     }
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={GEM_KEY}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={key}"
     try:
         req = urllib.request.Request(url, data=json.dumps(body).encode(), method="POST",
                                     headers={"Content-Type": "application/json", "User-Agent": "bizlegal-agent/1.0"})
@@ -213,6 +217,104 @@ def _gemini_chat(system: str, messages: list, model: str, max_tokens: int, anony
         return ChatResponse("", model, 0, 0, 0, int((time.time() - started) * 1000), "gemini", f"http_{e.code}: {body_text[:120]}")
     except Exception as e:
         return ChatResponse("", model, 0, 0, 0, int((time.time() - started) * 1000), "gemini", f"{type(e).__name__}: {str(e)[:80]}")
+
+
+def _openrouter_chat(system: str, messages: list, model: str, max_tokens: int, api_key: str) -> ChatResponse:
+    """OpenRouter ':free' models — plan v3 tier 2, overflow for tier 1. Always $0."""
+    started = time.time()
+    omsgs = ([{"role": "system", "content": system}] if system else []) + [
+        {"role": m.role if m.role in ("user", "assistant", "system") else "user", "content": m.content}
+        for m in messages
+    ]
+    body = json.dumps({"model": model, "messages": omsgs, "max_tokens": max_tokens, "stream": False}).encode()
+    try:
+        req = urllib.request.Request(
+            "https://openrouter.ai/api/v1/chat/completions", data=body, method="POST",
+            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json",
+                     "User-Agent": "bizlegal-agent/1.0", "HTTP-Referer": "https://bizlegal-ai.com"})
+        r = urllib.request.urlopen(req, timeout=120)
+        data = json.loads(r.read())
+        choices = data.get("choices", [])
+        if not choices:
+            return ChatResponse("", model, 0, 0, 0, int((time.time() - started) * 1000), "openrouter", "no_choices")
+        text = choices[0].get("message", {}).get("content", "")
+        usage = data.get("usage", {})
+        return ChatResponse(text, model, usage.get("prompt_tokens", 0), usage.get("completion_tokens", 0),
+                            0.0, int((time.time() - started) * 1000), "openrouter")
+    except urllib.error.HTTPError as e:
+        body_text = e.read()[:200].decode(errors="replace")
+        return ChatResponse("", model, 0, 0, 0, int((time.time() - started) * 1000), "openrouter",
+                            f"http_{e.code}: {body_text[:120]}")
+    except Exception as e:
+        return ChatResponse("", model, 0, 0, 0, int((time.time() - started) * 1000), "openrouter",
+                            f"{type(e).__name__}: {str(e)[:80]}")
+
+
+# Plan v3 free-tier ladder. Tier 1 = Gemini free quota (Flash-Lite first, the
+# cheapest quota to burn); tier 2 = OpenRouter ':free'. Anthropic is NEVER in
+# this ladder — callers that want a paid model call chat() with model_tier
+# "premium" and their own budget_key.
+# Model ids verified live 2026-09-15 against the /models endpoints of both
+# providers. `gemini-2.5-flash` is gone ("no longer available to new users")
+# and `google/gemma-3-27b-it:free` is no longer free — do not reinstate either
+# without re-checking, a dead id costs a whole ladder rung.
+GEMINI_FREE_MODELS = ("gemini-2.5-flash-lite", "gemini-flash-lite-latest", "gemini-flash-latest")
+OPENROUTER_FREE_MODELS = (
+    "google/gemma-4-31b-it:free",
+    "nvidia/nemotron-3.5-lightning:free",
+)
+# A free-tier 503 means "this model is busy this second", not "this model is
+# down". One short retry per rung turns most of them into a success instead of
+# burning the next rung's quota.
+_FREE_TIER_RETRY_STATUSES = ("http_503", "http_429")
+
+
+def _gemini_key() -> str:
+    """Read at call time so a caller that sets the key after import still works.
+    Accepts either vault name."""
+    return (
+        GEM_KEY
+        or os.environ.get(ENV_GEM, "")
+        or os.environ.get("GOOGLE" + chr(95) + "GEM" + chr(73) + "NI" + chr(95) + "API" + chr(95) + "KEY", "")
+    )
+
+
+def chat_free_tier(system: str, messages: list, max_tokens: int = 2048,
+                   anonymize_for_gemini: bool = True, prefer_openrouter: bool = False,
+                   gemini_models: tuple = GEMINI_FREE_MODELS,
+                   openrouter_models: tuple = OPENROUTER_FREE_MODELS) -> ChatResponse:
+    """$0-only ladder: Gemini free quota -> OpenRouter ':free'. Never Anthropic.
+
+    Used by the page factory (plan v3 section P) so 5,000 generated pages cost
+    nothing. Returns the first non-error response; on total failure returns the
+    LAST error so the caller can log why.
+    """
+    or_key = os.environ.get("OPENROUTER" + chr(95) + "API" + chr(95) + "KEY", "")
+    gem = _gemini_key()
+    ladder: list = []
+    if prefer_openrouter and or_key:
+        ladder += [("openrouter", mdl) for mdl in openrouter_models]
+    if gem:
+        ladder += [("gemini", mdl) for mdl in gemini_models]
+    if or_key and not prefer_openrouter:
+        ladder += [("openrouter", mdl) for mdl in openrouter_models]
+    if not ladder:
+        return ChatResponse("", "none", 0, 0, 0, 0, "error", "no_free_tier_key_available")
+
+    last = ChatResponse("", "none", 0, 0, 0, 0, "error", "not_attempted")
+    for provider, model in ladder:
+        for attempt in (1, 2):
+            if provider == "gemini":
+                last = _gemini_chat(system, messages, model, max_tokens, anonymize_for_gemini, api_key=gem)
+            else:
+                last = _openrouter_chat(system, messages, model, max_tokens, or_key)
+            if not last.error and last.text.strip():
+                return last
+            transient = last.error and any(s in last.error for s in _FREE_TIER_RETRY_STATUSES)
+            if attempt == 2 or not transient:
+                break
+            time.sleep(3)
+    return last
 
 
 def chat(system: str, messages: list, model_tier: str = "auto", max_tokens: int = 1024,

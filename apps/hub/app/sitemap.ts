@@ -2,6 +2,7 @@ import { MetadataRoute } from 'next'
 import { TRACKS } from '@/lib/academy/tracks'
 import { lessonHref, trackHref } from '@/lib/academy/types'
 import { getAllPosts } from '@/lib/blog'
+import { getPublishedFactoryPageUrls } from '@/lib/seo-pages'
 
 /**
  * Hub sitemap — static routes plus the hub's own blog posts.
@@ -15,8 +16,18 @@ import { getAllPosts } from '@/lib/blog'
  */
 const BASE = 'https://bizlegal-ai.com'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date()
+
+  // Programmatic pages (plan v3 P): published seo_pages rows rendered at
+  // /[hub]/[slug]. Empty when the table is unreachable — the static routes
+  // below never depend on the database.
+  const factory: MetadataRoute.Sitemap = (await getPublishedFactoryPageUrls()).map((page) => ({
+    url: page.url,
+    lastModified: page.lastModified,
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }))
 
   // /learn — tracks plus FREE lessons only. Gated lessons render an outline
   // instead of a body and carry robots:noindex, so listing them here would
@@ -48,6 +59,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ])
 
   return [
+    ...factory,
     // Top-level
     { url: BASE, lastModified: now, changeFrequency: 'daily', priority: 1.0 },
     { url: `${BASE}/snapshot`, lastModified: now, changeFrequency: 'daily', priority: 0.95 },
