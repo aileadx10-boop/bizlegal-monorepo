@@ -284,7 +284,7 @@ Fleet status: **9 of 11 rows GREEN; 2 rows need Moses action.**
 
 Full detail + verification lines: `decisions/REVENUE-MACHINE-RELIGHT-2026-09-15.md` §7. **Revised late 2026-09-15** — the Hetzner relight and the Cloudflare DNS apply were executed by the agent session (done, verified); the DB outage was added. In order:
 
-0. **Supabase is down (since ~17:34 UTC, every REST call 503/504).** Dashboard → project `bizlegal-ai` → Settings → General → **Restart project**. Then apply, via MCP or the SQL editor: `supabase/migrations/20260915_seo_pages_index_status.sql`, `20260915_deal44_paid_room.sql`, `20260915_leaseparse_paid_gate.sql` (idempotent).
+0. **Supabase is down (since ~17:34 UTC, every REST call 503/504).** Dashboard → project `bizlegal-ai` → Settings → General → **Restart project**. Then apply, via MCP or the SQL editor: `supabase/migrations/20260915_seo_pages_index_status.sql`, `20260915_deal44_paid_room.sql`, `20260915_leaseparse_paid_gate.sql`, `20260915_falseecho_pending_engine_status.sql` (all idempotent).
 1. `cd "C:/Users/Moshe Dor/bizlegal-monorepo" && git push origin main feat/coverage-autopilot-build-2026-09-15 feat/legal-revenue-os-reference` — Vercel rebuilds the 9 linked projects.
 2. FirmCited Stage 1 to prod: `cd "C:/Users/Moshe Dor/AppData/Local/Temp/claude/c--Users-Moshe-Dor-bizlegal-monorepo/9f52e740-2085-45ef-bf4d-dc167b20e8f5/scratchpad/fc-deploy" && vercel --prod --yes` → `https://cited.bizlegal-ai.com/intake` must be 200.
 3. Vercel `casepage` + `sincefiled` (env already synced): dashboard → Settings → Git → connect `aileadx10-boop/bizlegal-monorepo`; Settings → General → Root Directory `apps/casepage` / `apps/sincefiled`; Domains → add `casepage.bizlegal-ai.com` / `sincefiled.bizlegal-ai.com`; Redeploy.
