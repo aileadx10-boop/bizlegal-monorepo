@@ -32,6 +32,8 @@ bizlegal-monorepo/
 │   ├── sellerradar/  sellerradar.bizlegal-ai.com — seller-risk monitor MVP cron (built 2026-09, no Vercel project yet; see apps/sellerradar/CLAUDE.md)
 │   ├── caseaudit/    case-document audit SCAFFOLD (untracked mid-flight; engine in packages/case-engine; see apps/caseaudit/CLAUDE.md)
 │   ├── dealdesk/     deal-workspace SCAFFOLD (docs/workflows + empty web shell; see apps/dealdesk/CLAUDE.md)
+│   ├── casepage/     casepage.bizlegal-ai.com — law-firm matter-status pages $49/$149-mo + $490 setup (O-025, 2026-09-15; SKUs live on hub checkout; see apps/casepage/CLAUDE.md)
+│   ├── sincefiled/   sincefiled.bizlegal-ai.com — "days since" compliance tracker for firms $49/mo, $329 lifetime, PDF packs (O-026, 2026-09-15; see apps/sincefiled/CLAUDE.md)
 │   └── blog/         blog.bizlegal-ai.com (curator-fed MDX content; CF Pages)
 ├── services/         non-Vercel runtimes
 │   ├── hetzner/      curator pipeline: scout/brain/publisher/bot (Python, systemd) [Z1.C-pending]
@@ -45,6 +47,8 @@ bizlegal-monorepo/
 │   ├── seo-agents/   SEO pipeline scripts (headhunter, daily_orchestrator, publisher, etc.)
 │   ├── marketing/    Trigger.dev marketing jobs (weekly-newsletter, content queue; see services/marketing/CLAUDE.md)
 │   ├── outreach/     OCI partner-referral flow only (oci_funnel, oci_deal_closer, partner_onboarding)
+│   ├── legal-revenue-os/ Email-only Revenue OS (12 LangGraph agents + Revenue Memory + OPA-mirrored compliance gate); wave-1 US law-firm ICP for FirmCited/Practice-Revenue (see services/legal-revenue-os/CLAUDE.md)
+│   ├── langgap/      O-028 LangGap scanner — finds DE/ES localization candidates across the fleet, zero LLM at scan time, Moses YMYL review gate before any publish (Python; see services/langgap/CLAUDE.md)
 │   └── funnel-mvp/   TOMBSTONED 2026-05-24 — canonical is apps/docai/web/ (Fastify, never deployed; git-history reference only)
 ├── packages/         shared TS + Python siblings
 │   ├── deal-engine/  @bizlegal/deal-engine — transaction reconciliation core (normalise/reconcile/jurisdiction packs); pure, no LLM
@@ -75,7 +79,8 @@ bizlegal-monorepo/
 │   └── strategy/     SKOOL-NATE strategy chapters (01-11) + THE-MACHINE + master plans (Z1.G)
 ├── infrastructure/   Caddyfile, docker-compose, systemd units, Hetzner/OCI provisioning
 ├── supabase/         consolidated migrations (chronological YYYYMMDD_<app>_<feature>.sql)
-└── scripts/          audit-vault.mjs + audit-operating-book.mjs (Z2.5)
+├── scripts/          audit-vault.mjs + audit-operating-book.mjs (Z2.5) + vercel-env-sync / cf-dns-sync / paypal-provision-plans / apply-migrations (2026-09-14 relight helpers)
+└── tools/            deterministic operator tools — social-autopilot (O-027 drafts→queue→daily digest, zero LLM; see tools/social-autopilot/CLAUDE.md), cron_health.py + .cron-registry.json
 ```
 
 ---
@@ -263,6 +268,8 @@ Every planning + ops doc lives in `decisions/`:
 - `decisions/REVENUE-OS-IDEAS-RATED-2026-09-07.md` — the pasted "Legal Revenue OS / Base44 platform / solo sprint" ideas researched and rated against existing infra (28 ideas, weights, kill list, market numbers with sources, outbound legal matrix). Built the same day: **Practice Revenue Report** (`/practice-revenue`, free totals → $99, pure engine, browser-side pseudonymisation; workflow `decisions/workflows/practice_revenue_report.md`) and the outbound engine below. Orders O-020 / O-021.
 - `decisions/OUTBOUND-V2-RULE-7-AMENDED-2026-09-07.md` — **rule 7 amended by Moses**: outbound allowed under nine code-enforced invariants (`@bizlegal/email` kind `outbound`, dispatch cron as the only sender, per-campaign approval on `/sales`, `OUTBOUND_AUTOSEND` fail-closed, Instantly on a dedicated domain, never Resend). Incident lessons mapped to tests. Workflow `decisions/workflows/outbound_campaign.md`; agent side `agents/outbound/`.
 - `decisions/REVENUE-OS-INTAKE-PRONG-2026-09-10.md` — the KIMI "Revenue OS" master prompt adjudicated: **spear, not mission** (FirmCited prong 5 "Did it produce leads?"; idea 25 reopened narrowly as service-first PI-firm pilots; marketplace/Stage 5 stays killed), host = FirmCited repo, rail = warm-first + Moses's own Gmail (never Resend for cold), leak scan = site facts + verified benchmark. Phase 0 verification corrected three stale instructions (the $20 price was already reverted — **never `git revert 4ccce6a`**; forge's model id was invalid; prod was not behind) and fixed the `/ops` approve, inbound-webhook and forge bugs; `0014_intake_os` applied. Order O-023.
+
+- `decisions/O-028-GROWTH-ENGINE-FILING-2026-09-15.md` — GO verdict + filing of order O-028: the three-arbitrage organic growth playbook (language / AI-citation / plumbing) operationalized for BizLegal. Plumbing ~70% pre-built, AEO strategy already in AEO-AUSTIN-ARMSTRONG, DE/ES localization pipeline is the new build behind a mandatory YMYL review gate. Spec + paste-ready prompt: `orders/O-028-coverage-over-rankings-growth-engine.md`. Starts after G0 (09-20).
 
 When you write a new decision, add it here.
 
