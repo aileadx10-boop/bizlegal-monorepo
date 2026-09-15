@@ -19,9 +19,10 @@ const ENV_KEYS: ReadonlyArray<{ name: string; critical: boolean; reason: string 
   { name: 'RESEND_API_KEY',               critical: true,  reason: 'impact report + intake email delivery' },
   { name: 'PAYPAL_CLIENT_ID',             critical: true,  reason: 'card checkout ($49 audit)' },
   { name: 'PAYPAL_CLIENT_SECRET',         critical: true,  reason: 'card checkout ($49 audit)' },
-  { name: 'NOWPAYMENTS_API_KEY',          critical: false, reason: 'crypto checkout' },
+  { name: 'PAYPAL_WEBHOOK_ID',            critical: false, reason: 'recurring rail — subscription webhook 503s without it' },
+  { name: 'PAYPAL_PLAN_ID_SELLERRADAR_MONITOR_MONTHLY', critical: false, reason: 'monitor-tier recurring plan (Moses handoff)' },
+  { name: 'NOWPAYMENTS_API_KEY',          critical: false, reason: 'crypto checkout (one-time tiers only)' },
   { name: 'NOWPAYMENTS_IPN_SECRET',       critical: false, reason: 'crypto IPN verification' },
-  { name: 'PAYPAL_PLAN_ID_SELLERRADAR_MONITOR_MONTHLY', critical: false, reason: 'monitor-tier recurring (Moses handoff)' },
 ]
 
 function timingSafeEq(a: string, b: string): boolean {

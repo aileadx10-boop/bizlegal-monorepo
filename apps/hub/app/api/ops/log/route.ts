@@ -75,6 +75,10 @@ const ALLOWED_SOURCES = new Set([
   'oci', 'worker', 'curator', 'ea', 'gsc-bot',
   'propsignal', 'leaseparse', 'closeflow',
   'coguard', 'deal44',
+  // B1/B2 (2026-09-15): both surfaces have logged events since they were
+  // built, and the hub rejected every one of them with 400 — the two apps
+  // were invisible on /ops by omission, not by design.
+  'sellerradar', 'falseecho',
 ])
 
 export async function POST(req: NextRequest) {

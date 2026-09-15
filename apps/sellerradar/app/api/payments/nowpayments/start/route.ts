@@ -33,6 +33,24 @@ export async function POST(req: NextRequest) {
 
     const amount = TIER_PRICES_USD[tier]
     const interval = TIER_INTERVALS[tier] ?? 'one-time'
+
+    // A NOWPayments invoice is a single charge. Selling a monthly tier over it
+    // takes one payment and then runs the re-scan forever — the exact
+    // "monthly SKU bills once" defect the PayPal Subscriptions path fixes on
+    // the card rail. Crypto has no recurring rail here, so it refuses rather
+    // than quietly under-billing.
+    if (interval === 'monthly') {
+      return NextResponse.json(
+        {
+          error:
+            'Crypto checkout cannot bill monthly. Recurring tiers are card-only ' +
+            '(PayPal subscription) — use the card button for this plan.',
+          code: 'recurring_requires_card',
+        },
+        { status: 400 },
+      )
+    }
+
     const reportId = 'SR-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 90000) + 10000)
 
     // Link to the analysis; resolve the buyer email server-side from the

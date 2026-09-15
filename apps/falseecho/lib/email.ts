@@ -1,9 +1,41 @@
-import { Resend } from 'resend'
+import { sendEmail } from '@bizlegal/email'
 
-// Lazy init — avoids "Missing API key" crash during Vercel build (env not available at bundle time)
-function getResend() { return new Resend(process.env.RESEND_API_KEY) }
-const FROM = process.env.RESEND_FROM ?? 'reports@bizlegal-ai.com'
+/* ─── Transport ────────────────────────────────────────────────────────────
+   Every send in this file goes through @bizlegal/email. It was a raw Resend
+   client until 2026-09-15, which put suppression and consent in the caller —
+   the exact arrangement the package exists to end (packages/email/CLAUDE.md).
+
+   All three senders below are kind: 'transactional' and the justification is
+   written here rather than assumed:
+     · sendReportReady  — the evidence pack the buyer just paid for.
+     · sendMonitorAlert — the deliverable of the monitor subscription they
+       bought; the alert IS the product, not a promotion of it.
+     · sendIntakeEmail  — the "you paid, now name the entity" reply to a
+       checkout the buyer just completed.
+   Suppression still applies to all three. Nothing here is marketing, and
+   nothing here may be reused for marketing. */
+
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://falseecho.bizlegal-ai.com'
+
+/** `RESEND_FROM` may already carry a display name; only wrap it when it doesn't. */
+function fromAddress(): string {
+  const raw = process.env.RESEND_FROM
+  if (!raw) return 'FalseEcho <reports@bizlegal-ai.com>'
+  return raw.includes('<') ? raw : `FalseEcho <${raw}>`
+}
+
+/**
+ * A refusal (suppressed / not_configured / send_failed) is logged, never
+ * thrown and never silent — callers treat email as best-effort, and a
+ * swallowed refusal is how a paid evidence pack goes undelivered without a
+ * trace.
+ */
+async function deliver(label: string, to: string, subject: string, html: string): Promise<void> {
+  const res = await sendEmail({ to, subject, html, kind: 'transactional', from: fromAddress() })
+  if (!res.ok) {
+    console.warn(`[email] ${label} not sent to ${to}: ${res.error}${res.detail ? ` — ${res.detail}` : ''}`)
+  }
+}
 
 export async function sendReportReady(params: {
   to: string
@@ -15,11 +47,11 @@ export async function sendReportReady(params: {
   const { to, scanRef, entity, score, flagsCount } = params
   const reportUrl = `${SITE}/report/${scanRef}`
 
-  await getResend().emails.send({
-    from: `FalseEcho <${FROM}>`,
+  await deliver(
+    'report_ready',
     to,
-    subject: `Your FalseEcho evidence pack is ready — ${scanRef}`,
-    html: `
+    `Your FalseEcho evidence pack is ready — ${scanRef}`,
+    `
 <!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"></head>
@@ -66,7 +98,7 @@ export async function sendReportReady(params: {
   </div>
 </body>
 </html>`,
-  })
+  )
 }
 
 /**
@@ -104,11 +136,11 @@ export async function sendMonitorAlert(params: {
     )
     .join('')
 
-  await getResend().emails.send({
-    from: `FalseEcho <${FROM}>`,
+  await deliver(
+    'monitor_alert',
     to,
-    subject: `New falsehood detected about ${entity}`,
-    html: `
+    `New falsehood detected about ${entity}`,
+    `
 <!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"></head>
@@ -145,7 +177,7 @@ export async function sendMonitorAlert(params: {
   </div>
 </body>
 </html>`,
-  })
+  )
 }
 
 /**
@@ -161,11 +193,11 @@ export async function sendIntakeEmail(params: {
   const { to, tier, orderId } = params
   const intakeUrl = `${SITE}/scan?order=${encodeURIComponent(orderId)}`
 
-  await getResend().emails.send({
-    from: `FalseEcho <${FROM}>`,
+  await deliver(
+    'intake',
     to,
-    subject: `Your FalseEcho ${tier} purchase — tell us who to scan`,
-    html: `
+    `Your FalseEcho ${tier} purchase — tell us who to scan`,
+    `
 <!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"></head>
@@ -185,5 +217,5 @@ export async function sendIntakeEmail(params: {
   </div>
 </body>
 </html>`,
-  })
+  )
 }

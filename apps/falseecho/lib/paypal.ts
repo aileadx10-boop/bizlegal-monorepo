@@ -72,6 +72,106 @@ export async function createPayPalOrder(
   return { orderId: data.id as string, approvalUrl }
 }
 
+/* ─── Subscriptions (recurring) ────────────────────────────────────────────
+   The $149/mo monitor used to go through createPayPalOrder above, i.e. it
+   billed ONCE and then ran forever. A monthly SKU must be a PayPal
+   subscription against a plan created in the PayPal dashboard; the plan id
+   lives in PAYPAL_PLAN_ID_FALSEECHO_<TIER>_<INTERVAL> (same convention the
+   hub's /api/payments/paypal/start uses). No plan id → 503 at the call site,
+   never a silent one-time charge. */
+
+export function paypalPlanId(tier: string, interval: string): string | undefined {
+  const key = planEnvName(tier, interval)
+  const value = (process.env as Record<string, string | undefined>)[key]
+  return value && value.trim() ? value.trim() : undefined
+}
+
+export function planEnvName(tier: string, interval: string): string {
+  return `PAYPAL_PLAN_ID_FALSEECHO_${tier.toUpperCase()}_${interval.toUpperCase()}`
+}
+
+export interface CreateSubscriptionResult {
+  subscriptionId: string
+  approvalUrl: string
+}
+
+export async function createPayPalSubscription(params: {
+  planId: string
+  /** Echoed back as resource.custom_id on every BILLING.SUBSCRIPTION.* event. */
+  customId: string
+  email: string
+}): Promise<CreateSubscriptionResult> {
+  const token = await getAccessToken()
+  const site = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://falseecho.bizlegal-ai.com'
+
+  const res = await fetch(`${baseUrl()}/v1/billing/subscriptions`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      plan_id: params.planId,
+      custom_id: params.customId,
+      subscriber: { email_address: params.email },
+      application_context: {
+        brand_name: 'FalseEcho',
+        user_action: 'SUBSCRIBE_NOW',
+        return_url: `${site}/success?report=${params.customId}&method=paypal_subscription`,
+        cancel_url: `${site}/pricing`,
+      },
+    }),
+  })
+
+  if (!res.ok) {
+    const err = await res.text().catch(() => '')
+    throw new Error(`PayPal createSubscription failed: ${err}`)
+  }
+
+  const data = (await res.json()) as { id: string; links?: Array<{ rel: string; href: string }> }
+  const approvalUrl = data.links?.find((l) => l.rel === 'approve')?.href
+  if (!approvalUrl) throw new Error('No PayPal approval URL in subscription response')
+
+  return { subscriptionId: data.id, approvalUrl }
+}
+
+/**
+ * Verify a PayPal webhook against PAYPAL_WEBHOOK_ID. Fails CLOSED: a missing
+ * webhook id, missing credentials, an unreachable verifier or anything other
+ * than SUCCESS all return false.
+ */
+export async function verifyPayPalWebhook(
+  headers: Headers,
+  rawBody: string,
+  webhookId: string,
+): Promise<boolean> {
+  try {
+    const token = await getAccessToken()
+    const res = await fetch(`${baseUrl()}/v1/notifications/verify-webhook-signature`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        auth_algo: headers.get('paypal-auth-algo'),
+        cert_url: headers.get('paypal-cert-url'),
+        transmission_id: headers.get('paypal-transmission-id'),
+        transmission_sig: headers.get('paypal-transmission-sig'),
+        transmission_time: headers.get('paypal-transmission-time'),
+        webhook_id: webhookId,
+        webhook_event: JSON.parse(rawBody),
+      }),
+    })
+    if (!res.ok) return false
+    const out = (await res.json()) as { verification_status?: string }
+    return out.verification_status === 'SUCCESS'
+  } catch (err) {
+    console.error('[paypal] webhook verification threw:', err instanceof Error ? err.message : err)
+    return false
+  }
+}
+
 export async function capturePayPalOrder(orderId: string) {
   const token = await getAccessToken()
 

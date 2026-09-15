@@ -115,6 +115,8 @@ export interface LogEventInput {
     | 'closeflow'
     | 'coguard'
     | 'deal44'
+    | 'sellerradar'
+    | 'falseecho'
   ref_id?: string
   email?: string
   amount_cents?: number

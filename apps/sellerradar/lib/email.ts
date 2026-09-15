@@ -1,28 +1,69 @@
-import { Resend } from 'resend'
+import { sendEmail } from '@bizlegal/email'
 
-// Lazy init — avoids "Missing API key" crash during Vercel build (env not available at bundle time)
-function getResend() { return new Resend(process.env.RESEND_API_KEY) }
-const FROM = process.env.RESEND_FROM ?? 'reports@bizlegal-ai.com'
+/* ─── Transport ────────────────────────────────────────────────────────────
+   Every send in this file goes through @bizlegal/email. It was a raw Resend
+   client until 2026-09-15, which put suppression and consent in the caller —
+   the exact arrangement the package exists to end (packages/email/CLAUDE.md).
+
+   All three senders below are kind: 'transactional' and the justification is
+   written here rather than assumed:
+     · sendReportReady  — the deliverable the buyer just paid for.
+     · sendMonitorAlert — the deliverable of the monitor subscription they
+       bought; the alert IS the product, not a promotion of it.
+     · sendIntakeEmail  — the "you paid, now hand us the catalog" reply to a
+       checkout the buyer just completed.
+   Suppression still applies to all three. Nothing here is marketing, and
+   nothing here may be reused for marketing. */
+
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://sellerradar.bizlegal-ai.com'
+
+/** `RESEND_FROM` may already carry a display name; only wrap it when it doesn't. */
+function fromAddress(): string {
+  const raw = process.env.RESEND_FROM
+  if (!raw) return 'SellerRadar <reports@bizlegal-ai.com>'
+  return raw.includes('<') ? raw : `SellerRadar <${raw}>`
+}
+
+/**
+ * A refusal (suppressed / not_configured / send_failed) is logged, never
+ * thrown and never silent — callers treat email as best-effort, and a
+ * swallowed refusal is how a paid report goes undelivered without a trace.
+ */
+async function deliver(label: string, to: string, subject: string, html: string): Promise<void> {
+  const res = await sendEmail({ to, subject, html, kind: 'transactional', from: fromAddress() })
+  if (!res.ok) {
+    console.warn(`[email] ${label} not sent to ${to}: ${res.error}${res.detail ? ` — ${res.detail}` : ''}`)
+  }
+}
 
 const ESTIMATE_NOTE =
   'All impact figures are estimates computed from published Amazon fee schedules and your uploaded unit economics — verify against your settlement reports.'
 
+/**
+ * Sent twice in the life of one report, and the two sends say different
+ * things: `paid: false` (default) is the free top-line check that /api/analyze
+ * produces, `paid: true` is the delivery of the per-SKU audit the buyer paid
+ * for. Same link, different state behind it — so the subject and the lede say
+ * which one arrived instead of sending "your report is ready" twice.
+ */
 export async function sendReportReady(params: {
   to: string
   reportRef: string
   skuCount: number
   affectedCount: number
   annualImpact: number
+  paid?: boolean
 }) {
-  const { to, reportRef, skuCount, affectedCount, annualImpact } = params
+  const { to, reportRef, skuCount, affectedCount, annualImpact, paid = false } = params
   const reportUrl = `${SITE}/report/${reportRef}`
 
-  await getResend().emails.send({
-    from: `SellerRadar <${FROM}>`,
+  await deliver(
+    paid ? 'report_ready_paid' : 'report_ready_preview',
     to,
-    subject: `Your SellerRadar fee-impact report is ready — ${reportRef}`,
-    html: `
+    paid
+      ? `Your SellerRadar per-SKU audit is unlocked — ${reportRef}`
+      : `Your SellerRadar fee-impact report is ready — ${reportRef}`,
+    `
 <!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"></head>
@@ -33,19 +74,20 @@ export async function sendReportReady(params: {
     </div>
 
     <div style="background: #0d1118; border: 1px solid #1a2035; border-radius: 12px; padding: 32px; margin-bottom: 24px;">
-      <div style="font-family: monospace; font-size: 11px; color: #5a6278; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 12px;">Impact Report Ready</div>
+      <div style="font-family: monospace; font-size: 11px; color: #5a6278; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 12px;">${paid ? 'Per-SKU Audit Unlocked' : 'Impact Report Ready'}</div>
       <h1 style="font-family: Georgia, serif; font-size: 26px; font-weight: 700; color: #e8ecf4; margin: 0 0 16px;">
-        Your Amazon fee-change impact is computed.
+        ${paid ? 'Your per-SKU breakdown is unlocked.' : 'Your Amazon fee-change impact is computed.'}
       </h1>
       <p style="font-size: 14px; color: #5a6278; line-height: 1.7; margin: 0 0 24px;">
         We parsed <strong style="color: #e8ecf4;">${skuCount} SKUs</strong> from your catalog export and
         diffed them against the latest fee schedule.
         <strong style="color: #d4a843;">${affectedCount} SKUs</strong> are affected —
         estimated <strong style="color: #c0392b;">$${Math.abs(annualImpact).toLocaleString('en-US')}/year</strong>.
+        ${paid ? 'Payment confirmed — the report link below now carries the per-SKU rows, size-tier attribution and fee-schedule citations.' : ''}
       </p>
 
       <a href="${reportUrl}" style="display: block; text-align: center; padding: 14px; background: #d4a843; color: #07090e; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 15px;">
-        View Impact Report →
+        ${paid ? 'View Per-SKU Audit →' : 'View Impact Report →'}
       </a>
     </div>
 
@@ -57,7 +99,7 @@ export async function sendReportReady(params: {
   </div>
 </body>
 </html>`,
-  })
+  )
 }
 
 /**
@@ -82,11 +124,11 @@ export async function sendMonitorAlert(params: {
   const fmt = (n: number) =>
     `$${Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 
-  await getResend().emails.send({
-    from: `SellerRadar <${FROM}>`,
+  await deliver(
+    'monitor_alert',
     to,
-    subject: 'Amazon fee update changed your numbers',
-    html: `
+    'Amazon fee update changed your numbers',
+    `
 <!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"></head>
@@ -138,7 +180,7 @@ export async function sendMonitorAlert(params: {
   </div>
 </body>
 </html>`,
-  })
+  )
 }
 
 /**
@@ -154,11 +196,11 @@ export async function sendIntakeEmail(params: {
   const { to, tier, orderId } = params
   const intakeUrl = `${SITE}/analyze?order=${encodeURIComponent(orderId)}`
 
-  await getResend().emails.send({
-    from: `SellerRadar <${FROM}>`,
+  await deliver(
+    'intake',
     to,
-    subject: `Your SellerRadar ${tier} purchase — upload your catalog`,
-    html: `
+    `Your SellerRadar ${tier} purchase — upload your catalog`,
+    `
 <!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"></head>
@@ -179,5 +221,5 @@ export async function sendIntakeEmail(params: {
   </div>
 </body>
 </html>`,
-  })
+  )
 }

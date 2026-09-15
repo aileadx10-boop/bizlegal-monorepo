@@ -19,12 +19,17 @@ const ENV_KEYS: ReadonlyArray<{ name: string; critical: boolean; reason: string 
   { name: 'RESEND_API_KEY',               critical: true,  reason: 'evidence pack + intake email delivery' },
   { name: 'PAYPAL_CLIENT_ID',             critical: true,  reason: 'card checkout ($29 audit)' },
   { name: 'PAYPAL_CLIENT_SECRET',         critical: true,  reason: 'card checkout ($29 audit)' },
-  { name: 'NOWPAYMENTS_API_KEY',          critical: false, reason: 'crypto checkout' },
+  { name: 'PAYPAL_WEBHOOK_ID',            critical: false, reason: 'recurring rail — subscription webhook 503s without it' },
+  { name: 'PAYPAL_PLAN_ID_FALSEECHO_MONITOR_MONTHLY', critical: false, reason: 'monitor-tier recurring plan (Moses handoff)' },
+  { name: 'NOWPAYMENTS_API_KEY',          critical: false, reason: 'crypto checkout (one-time tiers only)' },
   { name: 'NOWPAYMENTS_IPN_SECRET',       critical: false, reason: 'crypto IPN verification' },
-  { name: 'OPENAI_API_KEY',               critical: false, reason: 'ChatGPT probe engine (degrades to unavailable)' },
-  { name: 'ANTHROPIC_API_KEY',            critical: false, reason: 'Claude probe engine + flag grading (degrades)' },
-  { name: 'PERPLEXITY_API_KEY',           critical: false, reason: 'Perplexity probe engine (degrades)' },
-  { name: 'SERPAPI_API_KEY',              critical: false, reason: 'Google AI Overviews probe engine (degrades)' },
+  // The four engine keys. Each is non-critical for the app to boot, but a
+  // PAID scan holds as 'pending_engine' if any of them is missing — see
+  // lib/fulfill.ts. "Degrades" is the free-check behaviour, not the paid one.
+  { name: 'OPENAI_API_KEY',               critical: false, reason: 'ChatGPT probe engine (paid scans hold without it)' },
+  { name: 'ANTHROPIC_API_KEY',            critical: false, reason: 'Claude probe engine + flag grading (paid scans hold without it)' },
+  { name: 'PERPLEXITY_API_KEY',           critical: false, reason: 'Perplexity probe engine (paid scans hold without it)' },
+  { name: 'SERPAPI_API_KEY',              critical: false, reason: 'Google AI Overviews probe engine (paid scans hold without it)' },
 ]
 
 function timingSafeEq(a: string, b: string): boolean {
