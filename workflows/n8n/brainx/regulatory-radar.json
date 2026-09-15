@@ -1,0 +1,29 @@
+{
+  "name": "BRAINX Regulatory Radar",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [ { "field": "cronExpression", "expression": "0 */6 * * *" } ] }
+      },
+      "name": "Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "{{$env.BRAINX_API_URL}}/api/v1/regulatory/ingest",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "genericHeaderAuth"
+      },
+      "name": "Ingest Regulatory",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [360, 0]
+    }
+  ],
+  "settings": { "executionOrder": "v1" },
+  "staticData": null,
+  "tags": ["brainx", "regulatory"]
+}

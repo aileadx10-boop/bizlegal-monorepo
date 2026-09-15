@@ -144,3 +144,21 @@ Full list: `packages/ops-log/src/index.ts`
 | Tool | File | Purpose | Status |
 |---|---|---|---|
 | Test Payment Agent | `apps/bench/scripts/test-payment-agent.mjs` | Authorized test-payment executor for bench (password+keyword auth, amount guard, execution log) | LIVE (requires `.payment-agent.json` config) |
+
+---
+
+## BRAINX — Intelligence OS (2026-09-16)
+
+New standalone product at `brainx.bizlegal-ai.com`. Neon Postgres (not Supabase), FastAPI, Next.js dashboard, Gmail API, Apify/n8n.
+
+| Component | Location | Purpose | Status |
+|---|---|---|---|
+| Dashboard | `apps/brainx/` | Evidence-first opportunity dashboard | BUILT (typecheck + build green) |
+| API | `services/highintelligence-api/` | FastAPI: signals, snapshots, regulatory, opportunities, alerts | BUILT (scoring tests pass) |
+| Agents (5) | `agents/brainx/*/prompt.md` | market, competitor, customer-voice, regulatory, monetization | WRITTEN |
+| Scoring | `packages/scoring/` | TS source of truth + Python mirror | BUILT (parity tests pass) |
+| Gmail | `packages/gmail-adapter/` + `apps/brainx/lib/gmail.ts` | Gmail send/receive, Resend fallback | BUILT |
+| Neon migration | `packages/database/neon/migrations/001_brainx_schema.sql` | Full BrainX DDL (Supabase-free) | WRITTEN |
+| Workflows | `workflows/n8n/brainx/*.json` | 5 n8n workflows | SKELETON |
+
+Ops needed: Neon project `brainx`, apply migration, `gws auth login`, Vercel connect + env, Cloudflare DNS.

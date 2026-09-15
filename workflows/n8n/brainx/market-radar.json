@@ -1,0 +1,31 @@
+{
+  "name": "BRAINX Market Radar",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [ { "field": "cronExpression", "expression": "0 6,18 * * *" } ] }
+      },
+      "name": "Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "{{$env.BRAINX_API_URL}}/api/v1/signals/ingest",
+        "sendBody": true,
+        "jsonBody": "={{ { run_id: $('Start Run').item.json.id, market_id: $json.market_id, source_id: $json.source_id, items: $json.items } }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "genericHeaderAuth"
+      },
+      "name": "Ingest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [360, 0]
+    }
+  ],
+  "settings": { "executionOrder": "v1" },
+  "staticData": null,
+  "tags": ["brainx", "intelligence-os"]
+}

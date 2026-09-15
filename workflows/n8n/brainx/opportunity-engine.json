@@ -1,0 +1,29 @@
+{
+  "name": "BRAINX Opportunity Engine",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [ { "field": "cronExpression", "expression": "0 */12 * * *" } ] }
+      },
+      "name": "Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "{{$env.BRAINX_API_URL}}/api/v1/opportunities/evaluate",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "genericHeaderAuth"
+      },
+      "name": "Evaluate",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [360, 0]
+    }
+  ],
+  "settings": { "executionOrder": "v1" },
+  "staticData": null,
+  "tags": ["brainx", "opportunity-engine"]
+}
