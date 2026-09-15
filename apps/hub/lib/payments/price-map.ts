@@ -37,10 +37,10 @@ type TierMap = Readonly<Record<string, Readonly<Partial<Record<CheckoutInterval,
 
 export const CHECKOUT_PRICE_MAP: Readonly<Record<string, TierMap>> = {
   // ───── Hub (apps/hub/app/pricing/page.tsx, ops quick links) ─────
-  hub: {
-    pro: { 'one-time': [14900], monthly: [14900], yearly: [149000] },
-    scale: { 'one-time': [49900], monthly: [49900], yearly: [499000] },
-  },
+  // hub Pro/Scale REMOVED 2026-09-14: no product spec in @bizlegal/payment and no
+  // grant in either webhook, so a paid order unlocked nothing. Cards now route to
+  // /services/compliance-ops (application). Re-add with hub-membership-grant.ts.
+  hub: {},
 
   // ───── BRAI — STOP-SOLD 2026-09-02 (fleet finding F4/brai). ─────
   // BRAI has no report-generation or fulfillment code, so paid checkout
@@ -127,8 +127,21 @@ export const CHECKOUT_PRICE_MAP: Readonly<Record<string, TierMap>> = {
   agent_marketplace_shield: { 'Marketplace Compliance Shield': { monthly: [4900] } },
   agent_ai_governance_product: { 'AI Governance for Product Teams': { monthly: [4900] } },
   agent_india_dpdpa: { 'India DPDPA Readiness Kit': { 'one-time': [1900] } },
-}
 
+  // ───── O-025 CasePage (2026-09-15) ─────
+  casepage: {
+    solo: { monthly: [4900], 'one-time': [4900] },
+    firm: { monthly: [14900], 'one-time': [14900] },
+    setup: { 'one-time': [49000] },
+  },
+  // ───── O-026 SinceFiled (2026-09-15) ─────
+  sincefiled: {
+    firm: { monthly: [4900], 'one-time': [4900] },
+    lifetime: { 'one-time': [32900] },
+    pack_us: { 'one-time': [1900] },
+    pack_both: { 'one-time': [2900] },
+  },
+} // end CHECKOUT_PRICE_MAP
 export interface ResolvedPrice {
   ok: true
   amountCents: number
@@ -177,3 +190,4 @@ export function resolveCheckoutPrice(
       : accepted[0]
   return { ok: true, amountCents }
 }
+

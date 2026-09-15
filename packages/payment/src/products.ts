@@ -17,6 +17,15 @@ import { activeExperimentFor } from './pricing-experiments'
 
 export type ProductId =
   // BOI Tracker
+  // O-025 CasePage
+  | 'cp_solo_49'
+  | 'cp_firm_149'
+  | 'cp_setup_490'
+  // O-026 SinceFiled
+  | 'sf_firm_49'
+  | 'sf_lifetime_329'
+  | 'sf_pack_us_19'
+  | 'sf_pack_both_29'
   | 'boi_solo_monthly'
   | 'boi_solo_yearly'
   | 'boi_firm_monthly'
@@ -106,7 +115,7 @@ export interface ProductSpec {
   readonly id: ProductId
   readonly name: string
   readonly description: string
-  readonly product_family: 'boi' | 'ai_act' | 'policy_refresh' | 'psp' | 'tracr' | 'brai' | 'forge' | 'docai' | 'lexaudit' | 'conductor' | 'cle' | 'propsignal' | 'leaseparse' | 'closeflow' | 'academy' | 'reserve_report' | 'bench' | 'coguard' | 'ofac_watch' | 'casp' | 'ai_policy' | 'practice' | 'deal44'
+  readonly product_family: 'boi' | 'ai_act' | 'policy_refresh' | 'psp' | 'tracr' | 'brai' | 'forge' | 'docai' | 'lexaudit' | 'conductor' | 'cle' | 'propsignal' | 'leaseparse' | 'closeflow' | 'academy' | 'reserve_report' | 'bench' | 'coguard' | 'ofac_watch' | 'casp' | 'ai_policy' | 'practice' | 'deal44' | 'casepage' | 'sincefiled'
   readonly billing_interval: BillingInterval
   readonly amount_cents: number
   /**
@@ -831,8 +840,94 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: true,
   },
-}
 
+  // ───── O-025 CasePage (2026-09-15) ─────
+  cp_solo_49: {
+    id: 'cp_solo_49',
+    name: 'CasePage Solo',
+    description: 'Up to 10 live matter-status pages, standard themes, milestone widget. For decision-support only; not legal advice.',
+    product_family: 'casepage',
+    billing_interval: 'monthly',
+    amount_cents: 4900,
+    currency: 'USD',
+    checkout_origin: '/pricing',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: true,
+  },
+  cp_firm_149: {
+    id: 'cp_firm_149',
+    name: 'CasePage Firm',
+    description: 'Unlimited pages, white-label domain, AI summaries with human approval gate, audio narration. For decision-support only; not legal advice.',
+    product_family: 'casepage',
+    billing_interval: 'monthly',
+    amount_cents: 14900,
+    currency: 'USD',
+    checkout_origin: '/pricing',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: true,
+  },
+  cp_setup_490: {
+    id: 'cp_setup_490',
+    name: 'CasePage Setup',
+    description: 'Template pack + branding + widget install by BizLegal. Human setup service; no outcome guarantees.',
+    product_family: 'casepage',
+    billing_interval: 'one-time',
+    amount_cents: 49000,
+    currency: 'USD',
+    checkout_origin: '/pricing',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: false,
+  },
+  // ───── O-026 SinceFiled (2026-09-15) ─────
+  sf_firm_49: {
+    id: 'sf_firm_49',
+    name: 'SinceFiled Firm',
+    description: 'Unlimited obligations, team seats, email log links, predictions. Prediction is an estimate — verify against jurisdiction rules.',
+    product_family: 'sincefiled',
+    billing_interval: 'monthly',
+    amount_cents: 4900,
+    currency: 'USD',
+    checkout_origin: '/pricing',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: true,
+  },
+  sf_lifetime_329: {
+    id: 'sf_lifetime_329',
+    name: 'SinceFiled Lifetime',
+    description: 'SinceFiled Firm plan, lifetime access. Prediction is an estimate — verify against jurisdiction rules.',
+    product_family: 'sincefiled',
+    billing_interval: 'one-time',
+    amount_cents: 32900,
+    currency: 'USD',
+    checkout_origin: '/pricing',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: false,
+  },
+  sf_pack_us_19: {
+    id: 'sf_pack_us_19',
+    name: 'US Compliance Rhythm Pack',
+    description: '19-page PDF: trust-recon tracker, renewal calendar, CLE deadline sheet. Reviewer-gated; not legal advice.',
+    product_family: 'sincefiled',
+    billing_interval: 'one-time',
+    amount_cents: 1900,
+    currency: 'USD',
+    checkout_origin: '/packs',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: false,
+  },
+  sf_pack_both_29: {
+    id: 'sf_pack_both_29',
+    name: 'US + Dubai Compliance Rhythm Pack',
+    description: 'Combined US + Dubai packs (32 pages). Reviewer-gated; not legal advice.',
+    product_family: 'sincefiled',
+    billing_interval: 'one-time',
+    amount_cents: 2900,
+    currency: 'USD',
+    checkout_origin: '/packs',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: false,
+  },
+}
 export function getProduct(id: ProductId): ProductSpec {
   const product = PRODUCTS[id]
   if (!product) throw new Error(`Unknown product_id: ${id}`)
@@ -849,3 +944,6 @@ export function getProduct(id: ProductId): ProductSpec {
   }
   return product
 }
+
+
+
