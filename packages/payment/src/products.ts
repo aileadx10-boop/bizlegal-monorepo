@@ -110,6 +110,8 @@ export type ProductId =
   // BrainX — Intelligence OS (2026-09-16)
   | 'brainx_opportunity_radar_monthly'
   | 'brainx_opportunity_radar_yearly'
+  | 'brainx_radar_build_monthly'
+  | 'brainx_radar_build_yearly'
   | 'deal44_broker_monthly_usd'
 
 export type BillingInterval = 'one-time' | 'monthly' | 'yearly'
@@ -952,15 +954,17 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
     webhook_path: '/api/payments/nowpayments/webhook',
     cancellable: false,
   },
-  // ───── BrainX — Intelligence OS (2026-09-16) ─────
-  // New standalone intelligence product at brainx.bizlegal-ai.com.
-  // Neon Postgres (not Supabase), evidence-first opportunities,
-  // Gmail-linked. Paid through the hub's universal /api/pay/start.
-  // Fulfillment: payment.confirmed → BrainX opportunity report/digest.
+  // ───── BrainX — Opportunity Intelligence (2026-09-16, productized) ─────
+  // brainx.bizlegal-ai.com. Neon Postgres (not Supabase). A weekly,
+  // operator-run radar — not a 24/7 pipeline; see apps/brainx/CLAUDE.md.
+  // Card billing is a real PayPal subscription via the hub's
+  // /api/payments/paypal/start (PAYPAL_PLAN_ID_BRAINX_<TIER>_<INTERVAL>);
+  // crypto is yearly-only via /api/pay/start. Fulfillment: hub webhook →
+  // HMAC POST to BrainX /api/fulfillment → apps/hub/lib/payments/brainx-grant.ts.
   brainx_opportunity_radar_monthly: {
     id: 'brainx_opportunity_radar_monthly',
-    name: 'BrainX Opportunity Radar (monthly)',
-    description: 'Monthly opportunity radar for one firm: evidence-backed compliance & practice opportunities, alerts, Gmail digest, BUILD THIS bundles. Not legal advice; no outcome guarantee.',
+    name: 'BrainX Radar (monthly)',
+    description: 'Weekly evidence-first opportunity radar across three verticals (real estate, legal & compliance, AI & fintech regulation). Every opportunity carries ≥3 verified public sources and a BrainX Decision Score v1. Up to 5 radar profiles. 2 BUILD THIS briefs/month. Not legal advice; no outcome guarantee.',
     product_family: 'brainx',
     billing_interval: 'monthly',
     amount_cents: 9900,
@@ -971,11 +975,35 @@ export const PRODUCTS: Readonly<Record<ProductId, ProductSpec>> = {
   },
   brainx_opportunity_radar_yearly: {
     id: 'brainx_opportunity_radar_yearly',
-    name: 'BrainX Opportunity Radar (yearly)',
-    description: 'Yearly BrainX radar subscription (save ~2 months). Evidence-first opportunities, Gmail digest, BUILD THIS bundles.',
+    name: 'BrainX Radar (yearly)',
+    description: 'Yearly BrainX Radar subscription (save 2 months). Weekly evidence-first opportunity radar, ≥3 verified sources per opportunity, BrainX Decision Score v1, up to 5 radar profiles, 2 BUILD THIS briefs/month.',
     product_family: 'brainx',
     billing_interval: 'yearly',
     amount_cents: 99900,
+    currency: 'USD',
+    checkout_origin: 'https://brainx.bizlegal-ai.com/pricing',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: true,
+  },
+  brainx_radar_build_monthly: {
+    id: 'brainx_radar_build_monthly',
+    name: 'BrainX Radar + Build (monthly)',
+    description: 'Everything in BrainX Radar, plus unlimited BUILD THIS briefs and a written, async expert review of each brief by Moses Dor, Adv. (capped at 4/month, within 5 business days — no calls). Not legal advice; no outcome guarantee.',
+    product_family: 'brainx',
+    billing_interval: 'monthly',
+    amount_cents: 24900,
+    currency: 'USD',
+    checkout_origin: 'https://brainx.bizlegal-ai.com/pricing',
+    webhook_path: '/api/payments/nowpayments/webhook',
+    cancellable: true,
+  },
+  brainx_radar_build_yearly: {
+    id: 'brainx_radar_build_yearly',
+    name: 'BrainX Radar + Build (yearly)',
+    description: 'Yearly BrainX Radar + Build subscription (save 2 months). Unlimited BUILD THIS briefs, written async expert review of each brief by Moses Dor, Adv. (capped at 4/month).',
+    product_family: 'brainx',
+    billing_interval: 'yearly',
+    amount_cents: 249900,
     currency: 'USD',
     checkout_origin: 'https://brainx.bizlegal-ai.com/pricing',
     webhook_path: '/api/payments/nowpayments/webhook',

@@ -1,6 +1,6 @@
 # BRAINX — Intelligence OS Implementation Plan (2026-09-16)
 
-Status: implemented in monorepo main (local, ahead of origin)
+Status: SUPERSEDED same-day by `decisions/BRAINX-PRODUCTIZATION-2026-09-16.md`. This plan's scaffold shipped with no compiled CSS, a checkout that 404d, and zero real opportunities — the productization pass fixed the product around the same stack and scope described below (Neon, 3 verticals, 5+1 agents), replacing the FastAPI/n8n automation layer with an operator-run weekly radar. Read the productization doc first.
 Owner: Moses Dor
 Stack: Neon Postgres + pgvector (not Supabase), FastAPI Python 3.11, Next.js 14, n8n, Apify, Claude + Gemini, Gmail API, Resend fallback.
 

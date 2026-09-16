@@ -14,6 +14,7 @@ import { grantFalseEcho } from '@/lib/payments/falseecho-grant'
 import { grantSellerRadar } from '@/lib/payments/sellerradar-grant'
 import { grantDeal44Room } from '@/lib/payments/deal44-grant'
 import { grantLeaseParse } from '@/lib/payments/leaseparse-grant'
+import { grantBrainX, syncBrainXSubscription, isBrainXOrder } from '@/lib/payments/brainx-grant'
 import { sendPaymentConfirmationEmail } from '@/lib/resend'
 
 export const dynamic = 'force-dynamic'
@@ -301,6 +302,21 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'update_failed' }, { status: 500 })
     }
 
+    // BrainX subscription renewal — BILLING.SUBSCRIPTION.RENEWED only bumps
+    // last_charge_at above; it never touches payment_orders.status (already
+    // 'active'), so it falls outside the opsType branch below entirely.
+    // Extend the subscriber's paid window directly instead.
+    if (event.event_type === 'BILLING.SUBSCRIPTION.RENEWED') {
+      const { data: renewedRow } = await supabase
+        .from('payment_orders')
+        .select('user_email, amount_cents, product, tier, billing_interval')
+        .eq('id', orderId)
+        .maybeSingle()
+      if (renewedRow && isBrainXOrder(renewedRow)) {
+        await syncBrainXSubscription({ ...renewedRow, id: orderId, gateway: 'paypal' }, 'renewed')
+      }
+    }
+
     if (typeof updates.status === 'string') {
       const opsType =
         updates.status === 'active'
@@ -359,6 +375,8 @@ export async function POST(req: NextRequest) {
           await grantSellerRadar(orderRow)
           await grantDeal44Room(supabase, orderRow)
           await grantLeaseParse(supabase, orderRow)
+          // BrainX fulfillment POST (no-op for other products).
+          await grantBrainX({ ...orderRow, id: orderId, gateway: 'paypal' })
           // Send payment confirmation email to customer (non-blocking).
           void sendPaymentConfirmationEmail(
             orderRow.user_email,
@@ -381,6 +399,11 @@ export async function POST(req: NextRequest) {
               })
               .eq('id', orderId)
           }
+        } else if (orderRow?.user_email && (opsType === 'payment.failed' || opsType === 'subscription.cancelled' || opsType === 'payment.refunded')) {
+          // BrainX past_due / cancelled / refunded — no local grant to reverse
+          // (entitlement lives in BrainX's own Neon), so this is a pure sync.
+          const brainxEvent = opsType === 'payment.failed' ? 'past_due' : opsType === 'payment.refunded' ? 'refunded' : 'cancelled'
+          await syncBrainXSubscription({ ...orderRow, id: orderId, gateway: 'paypal' }, brainxEvent)
         }
       }
     }

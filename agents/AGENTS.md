@@ -147,18 +147,22 @@ Full list: `packages/ops-log/src/index.ts`
 
 ---
 
-## BRAINX — Intelligence OS (2026-09-16)
+## BRAINX — Opportunity Radar (productized 2026-09-16)
 
-New standalone product at `brainx.bizlegal-ai.com`. Neon Postgres (not Supabase), FastAPI, Next.js dashboard, Gmail API, Apify/n8n.
+`brainx.bizlegal-ai.com`. Neon Postgres (not Supabase), Next.js. Weekly
+**operator-run** radar — no hosted FastAPI/n8n automation (see below). Full
+detail: `apps/brainx/CLAUDE.md`.
 
 | Component | Location | Purpose | Status |
 |---|---|---|---|
-| Dashboard | `apps/brainx/` | Evidence-first opportunity dashboard | BUILT (typecheck + build green) |
-| API | `services/highintelligence-api/` | FastAPI: signals, snapshots, regulatory, opportunities, alerts | BUILT (scoring tests pass) |
-| Agents (5) | `agents/brainx/*/prompt.md` | market, competitor, customer-voice, regulatory, monetization | WRITTEN |
-| Scoring | `packages/scoring/` | TS source of truth + Python mirror | BUILT (parity tests pass) |
-| Gmail | `packages/gmail-adapter/` + `apps/brainx/lib/gmail.ts` | Gmail send/receive, Resend fallback | BUILT |
-| Neon migration | `packages/database/neon/migrations/001_brainx_schema.sql` | Full BrainX DDL (Supabase-free) | WRITTEN |
-| Workflows | `workflows/n8n/brainx/*.json` | 5 n8n workflows | SKELETON |
+| App | `apps/brainx/` | Public site + gated dashboard, checkout, fulfilment | BUILT (typecheck + build + tests green); not deployed |
+| Radar-run agents (5) | `agents/brainx/{market,competitor,customer-voice,regulatory,monetization}/prompt.md` | Run as a Claude Code session per `agents/brainx/radar-run/SOP.md`, not an API call | WRITTEN, used |
+| Build-this agent | `agents/brainx/build-this/prompt.md` | Turns an opportunity + evidence into a 9-section brief | BUILT (2026-09-16) |
+| Scoring | `packages/scoring/` | 7-factor BrainX Decision Score v1 | BUILT (tests pass) |
+| Ingest tools | `apps/brainx/tools/{ingest-radar,ingest-brief,verify-urls,list-requests,send-weekly-pick}.ts` | Validate + write a radar run / brief; URL verification; operator queue; weekly email | BUILT (2026-09-16) |
+| Neon migrations | `packages/database/neon/migrations/{001_brainx_schema,002_brainx_subscribers}.sql` | Opportunity/evidence schema + subscriber/entitlement schema | WRITTEN; 001 applied, 002 pending (Moses) |
+| FastAPI service | `services/highintelligence-api/` | Intended automation layer | **PARKED**, not deployed (see its CLAUDE.md) |
+| Gmail adapter | ~~`packages/gmail-adapter/`~~ | Dead code, no OAuth token ever in vault | **DELETED 2026-09-16** |
+| n8n workflows | `workflows/n8n/brainx/*.json` | 5 skeletons targeting the parked FastAPI service | SKELETON, unused |
 
-Ops needed: Neon project `brainx`, apply migration, `gws auth login`, Vercel connect + env, Cloudflare DNS.
+Ops needed: apply migration 002, PayPal plans + vault values, Vercel connect + env + domain, push, first radar run, test buy. Full list: `apps/brainx/CLAUDE.md` §Moses ops.

@@ -117,6 +117,7 @@ export interface LogEventInput {
     | 'deal44'
     | 'sellerradar'
     | 'falseecho'
+    | 'brainx'
   ref_id?: string
   email?: string
   amount_cents?: number

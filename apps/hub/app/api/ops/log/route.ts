@@ -79,6 +79,8 @@ const ALLOWED_SOURCES = new Set([
   // built, and the hub rejected every one of them with 400 — the two apps
   // were invisible on /ops by omission, not by design.
   'sellerradar', 'falseecho',
+  // BrainX productization (2026-09-16).
+  'brainx',
 ])
 
 export async function POST(req: NextRequest) {

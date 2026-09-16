@@ -97,6 +97,14 @@ export const CHECKOUT_PRICE_MAP: Readonly<Record<string, TierMap>> = {
     monitor: { monthly: [9900] },
   },
 
+  // ───── BrainX (apps/brainx/app/pricing/page.tsx, via the legacy
+  // /api/payments/paypal/start subscription route — the ProductId SKUs in
+  // @bizlegal/payment cover the crypto/yearly-only path through /api/pay/start) ─────
+  brainx: {
+    radar: { monthly: [9900], yearly: [99900] },
+    radar_build: { monthly: [24900], yearly: [249900] },
+  },
+
   // ───── AI Conductor (amounts derived from @bizlegal/payment registry
   // by /api/payments/conductor/start — keep in sync with products.ts) ─────
   conductor: {

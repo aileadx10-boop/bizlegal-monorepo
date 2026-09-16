@@ -14,6 +14,7 @@ import { grantFalseEcho } from '@/lib/payments/falseecho-grant'
 import { grantSellerRadar } from '@/lib/payments/sellerradar-grant'
 import { grantDeal44Room } from '@/lib/payments/deal44-grant'
 import { grantLeaseParse } from '@/lib/payments/leaseparse-grant'
+import { grantBrainX, syncBrainXSubscription, isBrainXOrder } from '@/lib/payments/brainx-grant'
 import { sendPaymentConfirmationEmail } from '@/lib/resend'
 
 export const dynamic = 'force-dynamic'
@@ -198,6 +199,14 @@ export async function POST(req: NextRequest) {
         },
       })
 
+      // BrainX crypto is yearly-only, one invoice per activation — no renewal
+      // concept on this rail. Failure/refund still needs to reach BrainX so
+      // a bad crypto payment doesn't leave a subscriber row that was never
+      // actually paid, and a refund revokes access instead of running out.
+      if ((newStatus === 'failed' || newStatus === 'refunded') && isBrainXOrder(order)) {
+        await syncBrainXSubscription({ ...order, gateway: 'nowpayments' }, newStatus === 'refunded' ? 'refunded' : 'past_due')
+      }
+
       // On payment failure/refund, queue for dunning recovery (3-stage email cadence).
       if ((newStatus === 'failed' || newStatus === 'refunded') && order.user_email) {
         void supabase
@@ -259,6 +268,8 @@ export async function POST(req: NextRequest) {
         await grantDeal44Room(supabase, order)
         // LeaseParse paid-gate credit (no-op for other products).
         await grantLeaseParse(supabase, order)
+        // BrainX fulfillment POST (no-op for other products; crypto yearly only).
+        await grantBrainX({ ...order, gateway: 'nowpayments' })
         // Send payment confirmation email to customer (non-blocking).
         void sendPaymentConfirmationEmail(
           order.user_email,

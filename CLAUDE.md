@@ -34,8 +34,10 @@ bizlegal-monorepo/
 │   ├── dealdesk/     deal-workspace SCAFFOLD (docs/workflows + empty web shell; see apps/dealdesk/CLAUDE.md)
 │   ├── casepage/     casepage.bizlegal-ai.com — law-firm matter-status pages $49/$149-mo + $490 setup (O-025, 2026-09-15; SKUs live on hub checkout; see apps/casepage/CLAUDE.md)
 │   ├── sincefiled/   sincefiled.bizlegal-ai.com — "days since" compliance tracker for firms $49/mo, $329 lifetime, PDF packs (O-026, 2026-09-15; see apps/sincefiled/CLAUDE.md)
+│   ├── brainx/       brainx.bizlegal-ai.com — weekly, operator-run opportunity radar (real estate/legal/AI-fintech compliance), evidence-first, BrainX Decision Score v1; Radar $99-249/mo tiers (productized 2026-09-16, replacing the 2026-09-16 scaffold's dead checkout + unstyled site; not yet deployed; see apps/brainx/CLAUDE.md)
 │   └── blog/         blog.bizlegal-ai.com (curator-fed MDX content; CF Pages)
 ├── services/         non-Vercel runtimes
+│   ├── highintelligence-api/ BrainX FastAPI automation layer — PARKED, not deployed (see services/highintelligence-api/CLAUDE.md)
 │   ├── hetzner/      curator pipeline: scout/brain/publisher/bot (Python, systemd) [Z1.C-pending]
 │   ├── oci/          deal-router (FastAPI, Docker, Caddy + Cloudflare Tunnel) [Z1.C-pending]
 │   ├── worker/       Cloudflare Worker — bizlegal-lead-intake (TS, wrangler) [Z1.C-pending]
@@ -70,10 +72,13 @@ bizlegal-monorepo/
 │   ├── ops-heartbeat/ @bizlegal/ops-heartbeat — TS + Python heartbeat client (PLATFORM-BUILD P1)
 │   ├── api-client/   @bizlegal/api-client — typed hub API client + OpenAPI spec (P2)
 │   ├── bizlegal-debug/ @bizlegal/debug — Python debug shim: trace replay + breakpoints (P4)
+│   ├── scoring/      @bizlegal/scoring — BrainX Decision Score v1 (7-factor weighted score, TS+Python parity; see packages/scoring/CLAUDE.md)
+│   ├── database/     @bizlegal/database — raw Neon Postgres migrations (BrainX schema; deliberately not Supabase; see packages/database/CLAUDE.md)
 │   └── llm/          @bizlegal/llm — PLACEHOLDER scaffold (no sources yet; planned shared LLM client)
 ├── agents/           AGENTS.md + agent prompt seeds + WAT specs
 │   ├── ea/           Executive Assistant brain — prompts, schemas, templates, context (Z1.F)
 │   ├── outbound/     AI outbound engine, agent side (rule 7 v2, 2026-09-07): routine prompt, campaign templates + reply sets; see agents/outbound/CLAUDE.md
+│   ├── brainx/       BrainX's 6 prompts (market/competitor/customer-voice/regulatory/monetization/build-this) run as Claude Code sessions, not an API — see agents/brainx/CLAUDE.md
 │   └── socials/      Consent-based social acquisition plans, skills, and prompt seeds
 ├── decisions/        all planning + ops docs (single canonical location)
 │   └── strategy/     SKOOL-NATE strategy chapters (01-11) + THE-MACHINE + master plans (Z1.G)
@@ -277,6 +282,7 @@ Every planning + ops doc lives in `decisions/`:
 - `decisions/REVENUE-MACHINE-PLAN-V3-2026-09-14.md` — **the program plan** ("one revenue machine", plan v3): ground-truth corrections table, the self-feeding loop (CONTENT → CAPTURE → NURTURE → BUY → DELIVER → RETAIN → REPORT with the code behind each arrow), the §31 CONNECT / REPAIR / REMOVE / BUILD answer, phases A/C/B/S/P/T/O/K/GB/GP/D/E, the LLM routing table (free tiers first, Sonnet only on paid deliverables, ≤$100/mo), realistic 3→36-month goals with kill rules, and the 14-point final audit.
 - `decisions/REVENUE-MACHINE-RELIGHT-2026-09-15.md` — execution handoff for the plan above: what shipped (14 commits, hashes), what was verified on production (rails, tables, digest), the classifier-blocked Moses ops as copy-paste blocks, five numbers from tables, next steps.
 - `decisions/O-028-GROWTH-ENGINE-FILING-2026-09-15.md` — GO verdict + filing of order O-028: the three-arbitrage organic growth playbook (language / AI-citation / plumbing) operationalized for BizLegal. Plumbing ~70% pre-built, AEO strategy already in AEO-AUSTIN-ARMSTRONG, DE/ES localization pipeline is the new build behind a mandatory YMYL review gate. Spec + paste-ready prompt: `orders/O-028-coverage-over-rankings-growth-engine.md`. Starts after G0 (09-20).
+- `decisions/BRAINX-PRODUCTIZATION-2026-09-16.md` — order O-029: BrainX rebuilt from the 2026-09-16 scaffold (unstyled site, dead checkout, no fulfilment, public dashboard) into a real product — working PayPal-subscription + crypto-yearly checkout, hub fulfilment grant, gated `/radar` dashboard, a 5-opportunity sample radar with live-verified evidence, BUILD THIS request→brief loop, 3 evidence-gated guides. Engine is an operator-run weekly radar (Claude Code session + `tools/ingest-radar.ts`), not the parked FastAPI service. Not yet deployed — see `apps/brainx/CLAUDE.md` §Moses ops.
 
 When you write a new decision, add it here.
 

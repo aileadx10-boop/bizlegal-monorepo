@@ -1,21 +1,31 @@
 {
   "name": "@bizlegal/brainx",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test lib/radar/map.test.ts lib/radar/ingest-schema.test.ts lib/build/metering.test.ts lib/access.test.ts lib/fixtures/sample.test.ts content/guides/guides.test.ts app/api/fulfillment/route.test.ts",
+    "verify-urls": "tsx tools/verify-urls.ts",
+    "ingest-radar": "tsx tools/ingest-radar.ts",
+    "ingest-brief": "tsx tools/ingest-brief.ts",
+    "list-requests": "tsx tools/list-requests.ts",
+    "send-weekly-pick": "tsx tools/send-weekly-pick.ts"
   },
   "dependencies": {
+    "@bizlegal/email": "workspace:*",
+    "@bizlegal/rate-limit": "workspace:*",
+    "@bizlegal/scoring": "workspace:*",
+    "@bizlegal/themes": "workspace:*",
+    "@bizlegal/turnstile-verify": "workspace:*",
+    "@bizlegal/turnstile-widget": "workspace:*",
     "@neondatabase/serverless": "^0.10.4",
     "next": "^14.2.35",
     "react": "^18",
     "react-dom": "^18",
-    "resend": "^6.9.4",
-    "swr": "^2.4.1",
     "zod": "^4.3.6"
   },
   "devDependencies": {
@@ -24,7 +34,7 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.35",
-    "tailwindcss": "^3.4.19",
+    "tsx": "^4.19.0",
     "typescript": "^5"
   }
 }
