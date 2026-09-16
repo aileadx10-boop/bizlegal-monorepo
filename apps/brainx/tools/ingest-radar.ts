@@ -150,9 +150,10 @@ async function ingest(
     const normalized = normalizeUrl(ev.url)
     if (urlProblems(ev.url)) throw new Error(`evidence ${ev.key}: url failed static check at ingest time`)
     const contentHash = sha256(normalized)
+    const rawData = JSON.stringify({ ingest: 'radar_weekly', run_date: file.run_date, key: ev.key, source_type: ev.source_type, verified_status: urlResults.get(ev.key)?.status ?? null })
     const rows = (await db`
-      insert into signals (market_id, source_id, signal_type, title, url, publisher, excerpt, content_hash, detected_at, url_verified_at)
-      values (${marketId}::uuid, ${sourceId ?? null}, ${ev.kind}, ${ev.title}, ${ev.url}, ${ev.publisher}, ${ev.excerpt}, ${contentHash}, ${ev.published_at ?? new Date().toISOString()}, now())
+      insert into signals (market_id, source_id, signal_type, title, url, publisher, excerpt, content_hash, raw_data, detected_at, url_verified_at)
+      values (${marketId}::uuid, ${sourceId ?? null}, ${ev.kind}, ${ev.title}, ${ev.url}, ${ev.publisher}, ${ev.excerpt}, ${contentHash}, ${rawData}::jsonb, ${ev.published_at ?? new Date().toISOString()}, now())
       on conflict (market_id, source_id, content_hash) do update set url_verified_at = now()
       returning id
     `) as unknown as Array<{ id: string }>
