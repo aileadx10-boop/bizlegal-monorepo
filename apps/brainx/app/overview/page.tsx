@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import Link from 'next/link'
 import { sql } from '@/lib/neon'
 
@@ -62,3 +63,4 @@ function Kpi({ label, value }: { label: string; value: string }) {
     </div>
   )
 }
+

@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import { dbHealth } from '@/lib/neon'
 
@@ -10,3 +11,4 @@ export async function GET() {
     error: db.error || null,
   }, { status: db.ok ? 200 : 502 })
 }
+
