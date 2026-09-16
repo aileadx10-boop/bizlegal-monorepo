@@ -34,6 +34,15 @@ const OFFERS = {
       { env: 'PAYPAL_PLAN_ID_FALSEECHO_MONITOR_MONTHLY', name: 'FalseEcho Monitor', desc: 'Daily 25-prompt AI-answer monitoring with graded evidence', price: '149.00' },
     ],
   },
+  brainx: {
+    product: { name: 'BrainX', description: 'Weekly evidence-first opportunity radar — real estate compliance, legal practice growth, AI/fintech regulation' },
+    plans: [
+      { env: 'PAYPAL_PLAN_ID_BRAINX_RADAR_MONTHLY', name: 'BrainX Radar (monthly)', desc: 'Weekly opportunity radar, evidence vault, BrainX Decision Score v1, up to 5 radar profiles, 2 BUILD THIS briefs/month', price: '99.00', intervalUnit: 'MONTH' },
+      { env: 'PAYPAL_PLAN_ID_BRAINX_RADAR_YEARLY', name: 'BrainX Radar (yearly)', desc: 'Yearly BrainX Radar subscription (save 2 months)', price: '999.00', intervalUnit: 'YEAR' },
+      { env: 'PAYPAL_PLAN_ID_BRAINX_RADAR_BUILD_MONTHLY', name: 'BrainX Radar + Build (monthly)', desc: 'Everything in Radar, unlimited BUILD THIS briefs, written async expert review (capped 4/month)', price: '249.00', intervalUnit: 'MONTH' },
+      { env: 'PAYPAL_PLAN_ID_BRAINX_RADAR_BUILD_YEARLY', name: 'BrainX Radar + Build (yearly)', desc: 'Yearly BrainX Radar + Build subscription (save 2 months)', price: '2499.00', intervalUnit: 'YEAR' },
+    ],
+  },
 }
 if (!app || !OFFERS[app]) {
   console.error(`usage: --app <${Object.keys(OFFERS).join('|')}> [--apply]`)
@@ -93,13 +102,13 @@ if (!productId) {
 
 for (const plan of OFFERS[app].plans) {
   if (v(plan.env)) { console.log(`  ${plan.env}: exists`); continue }
-  console.log(`  ${plan.env}: ${APPLY ? 'creating' : 'would create'} $${plan.price}/mo`)
+  console.log(`  ${plan.env}: ${APPLY ? 'creating' : 'would create'} $${plan.price}/${(plan.intervalUnit || 'MONTH') === 'YEAR' ? 'yr' : 'mo'}`)
   if (!APPLY) continue
   const r = curl('POST', '/v1/billing/plans', {
     product_id: productId,
     name: plan.name,
     description: plan.desc,
-    billing_cycles: [{ frequency: { interval_unit: 'MONTH', interval_count: 1 }, tenure_type: 'REGULAR', sequence: 1, total_cycles: 0, pricing_scheme: { fixed_price: { value: plan.price, currency_code: 'USD' } } }],
+    billing_cycles: [{ frequency: { interval_unit: plan.intervalUnit || 'MONTH', interval_count: 1 }, tenure_type: 'REGULAR', sequence: 1, total_cycles: 0, pricing_scheme: { fixed_price: { value: plan.price, currency_code: 'USD' } } }],
     payment_preferences: { auto_bill_outstanding: true, setup_fee_failure_action: 'CONTINUE', payment_failure_threshold: 2 },
   }, token, [`PayPal-Request-Id: ${app}-${plan.env}-${Date.now()}`])
   if (r.status >= 300) { console.error(`  ✗ ${plan.env}`, r.status, JSON.stringify(r.data).slice(0, 200)); continue }
