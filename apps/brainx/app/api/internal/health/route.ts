@@ -1,7 +1,12 @@
 import { NextResponse } from 'next/server'
-import { apiHealth } from '@/lib/neon'
+import { dbHealth } from '@/lib/neon'
 
 export async function GET() {
-  const health = await apiHealth()
-  return NextResponse.json(health, { status: health.ok ? 200 : 502 })
+  const db = await dbHealth()
+  return NextResponse.json({
+    ok: db.ok,
+    service: 'brainx',
+    db: db.db || null,
+    error: db.error || null,
+  }, { status: db.ok ? 200 : 502 })
 }
