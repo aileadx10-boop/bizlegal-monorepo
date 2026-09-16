@@ -38,7 +38,18 @@ async function urlResolves(url: string): Promise<{ ok: boolean; status?: number;
     }
     return { ok: res.status >= 200 && res.status < 400, status: res.status }
   } catch (err) {
-    return { ok: false, error: err instanceof Error ? err.message : String(err) }
+    // Some government hosts (fincen.gov) hang on HEAD but answer GET promptly.
+    // One GET retry with a longer budget before calling the URL dead.
+    const retry = new AbortController()
+    const retryTimer = setTimeout(() => retry.abort(), TIMEOUT_MS * 2)
+    try {
+      const res = await fetch(url, { method: 'GET', redirect: 'follow', signal: retry.signal, headers: { 'user-agent': 'Mozilla/5.0 (compatible; BrainXIngest/1.0; +https://brainx.bizlegal-ai.com)' } })
+      return { ok: res.status >= 200 && res.status < 400, status: res.status }
+    } catch (err2) {
+      return { ok: false, error: err2 instanceof Error ? err2.message : String(err) }
+    } finally {
+      clearTimeout(retryTimer)
+    }
   } finally {
     clearTimeout(timer)
   }
