@@ -4,7 +4,7 @@
 -- Apply in order against the `brainx` Neon project main branch.
 -- ============================================================
 
-create extension if not exists "pgvector";
+create extension if not exists "vector";
 create extension if not exists "pgcrypto";
 
 -- ---------- markets / verticals ----------
@@ -290,3 +290,4 @@ insert into markets (slug, vertical, name, keywords) values
   ('legal-practice-growth', 'legal_compliance', 'Legal & Compliance Practice Growth', array['law firm growth','compliance practice','legal marketing']),
   ('ai-fintech-regulation', 'ai_fintech_regulation', 'AI & Fintech Regulation', array['AI compliance','fintech licensing','regulatory change'])
 on conflict (slug) do nothing;
+
