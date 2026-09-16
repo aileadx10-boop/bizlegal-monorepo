@@ -1,7 +1,7 @@
 import { sql } from '@/lib/neon'
 import { fromNeon, type OpportunityRow, type EvidenceRow, type RunRow, type BuildRequestRow } from './map'
 import type { OpportunityVM, Vertical } from './types'
-import { quotaFor } from '@/lib/build/metering'
+import { quotaFor } from '@/lib/build-this/metering'
 
 /**
  * All Neon reads for the subscriber radar. Every query is `force-dynamic`

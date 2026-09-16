@@ -11,7 +11,7 @@
 Public: `/` · `/sample` (indexable) · `/sample/[slug]` (noindex) · `/pricing` · `/guides` · `/guides/[slug]` · `/disclaimer` `/privacy` `/terms` `/contact` · `/robots.txt` `/sitemap.xml` `/llms.txt`.
 Gated (noindex, `bx_access` cookie via `lib/access.ts`): `/radar` · `/radar/o/[slug]` · `/radar/briefs` · `/radar/briefs/[id]` · `/radar/profiles`.
 Token exchange: `/enter?k=<token>` (outside the `/radar` layout on purpose — Next.js layouts don't receive `searchParams`). Lost-link: `/access`.
-API: `/api/checkout/start` · `/api/fulfillment` (hub grant callback, HMAC) · `/api/subscribe` · `/api/access/request` · `/api/build/{request,requests}` · `/api/radar/profiles[/[id]]` · `/api/internal/health`.
+API: `/api/checkout/start` · `/api/fulfillment` (hub grant callback, HMAC) · `/api/subscribe` · `/api/access/request` · `/api/build-this/{request,requests}` · `/api/radar/profiles[/[id]]` · `/api/internal/health`.
 
 ## Invariants
 
@@ -25,6 +25,8 @@ API: `/api/checkout/start` · `/api/fulfillment` (hub grant callback, HMAC) · `
 8. **Copy says "weekly," never "continuous" or "24/7."** `RunStamp` renders a real `research_runs.finished_at` or "No run yet." `tools/ingest-radar.ts` rejects those words in opportunity prose (`lib/radar/ingest-schema.ts::BANNED_PROSE`).
 9. **`packages/llm` is an empty placeholder** and `scripts/audit-shared-stream.mjs` blocks any direct `new Anthropic(...)`/`api.anthropic.com` call outside it. BUILD THIS brief generation and the weekly radar run are both **Claude Code sessions following a written SOP**, not an API call — see `agents/brainx/radar-run/SOP.md` and `agents/brainx/build-this/prompt.md`. Do not add a direct Anthropic client here; when `packages/llm` gets a router, that is the upgrade path.
 10. **`services/highintelligence-api` is PARKED**, not deployed — its 5 agent stubs return zeros and `workflows/n8n/brainx/*.json` target an unhosted `BRAINX_API_URL`. See its own CLAUDE.md.
+11. **Never name a source directory `build/`.** The root `.gitignore` line 9 ignores `build/` at any depth, so `lib/build/`, `app/components/build/` and `app/api/build/` silently never reached GitHub on 2026-09-16 — local builds were green, Vercel failed with `Module not found`. They are `build-this/` now. `git check-ignore -v <path>` before adding any new top-level folder name.
+12. **The vault's `NEON_DATABASE_URL` is NOT BrainX's database.** It points at the OnePath/SinceFiled Neon project (Codex applied `sf_*` migrations there). BrainX's own connection string lives only in the `brainx` Vercel project env (`vercel env pull` from `apps/brainx`) and, once pulled, in the vault as `BRAINX_NEON_DATABASE_URL`. `tools/apply-migration.mjs` reads `NEON_DATABASE_URL` from the environment first for exactly this reason — pass the BrainX one explicitly.
 
 ## Envs (names only; values in the canonical vault)
 
@@ -59,12 +61,24 @@ VERCEL=1 CI=1 ../../node_modules/.bin/next build
 
 Run `node_modules/.bin` binaries directly — pnpm scripts can false-green in this shell (root `CLAUDE.md` §7).
 
-## Moses ops (accumulate, never block)
+## Moses ops (accumulate, never block) — state as of 2026-09-17
 
-- [ ] `psql "$NEON_DATABASE_URL" -f packages/database/neon/migrations/002_brainx_subscribers.sql`
-- [ ] Vault values for the 6 new names (§Envs above) + `BRAINX_FULFILL_URL` on the hub
-- [ ] `node scripts/paypal-provision-plans.mjs --app brainx --apply` (4 plans) → plan ids into vault + Vercel env
-- [ ] Vercel: create/connect project `brainx`, Root Directory `apps/brainx`, env sync, domain
-- [ ] `git push`
+Done by the agent session: `git push` + merge to `main`; PayPal product + all 4 plans created on LIVE PayPal (ids in the vault); Vercel project `brainx` already existed with the domain attached; vault values for `NEXT_PUBLIC_BRAINX_SITE_URL` / `BRAINX_FULFILL_URL` set.
+
+Blocked for the agent by the auto-mode classifier (credential materialization / secret-store writes) — three copy-paste commands from the repo root:
+
+- [ ] Apply migration 002 to the **BrainX** Neon DB (see invariant 12 — not the vault's `NEON_DATABASE_URL`):
+  ```bash
+  cd apps/brainx && vercel env pull .env.vercel.local --environment production --scope aileadx10-5415s-projects --yes
+  NEON_DATABASE_URL="$(grep '^NEON_DATABASE_URL=' .env.vercel.local | cut -d= -f2- | tr -d '"')" node tools/apply-migration.mjs ../../packages/database/neon/migrations/002_brainx_subscribers.sql --purge-seed
+  ```
+- [ ] Sync env to the `brainx` Vercel project (values come from the vault, never printed):
+  ```bash
+  node scripts/vercel-env-sync.mjs apps/brainx BIZLEGAL_INBOUND_SECRET RESEND_API_KEY RESEND_FROM NEXT_PUBLIC_SUPABASE_URL SUPABASE_SERVICE_KEY NEXT_PUBLIC_PLAUSIBLE_DOMAIN NEXT_PUBLIC_BRAINX_SITE_URL --target production,preview
+  ```
+- [ ] Sync the PayPal plan ids to the hub project (the root `.vercel` link = project `bizlegal-ai`), then redeploy the hub:
+  ```bash
+  node scripts/vercel-env-sync.mjs . PAYPAL_PLAN_ID_BRAINX_RADAR_MONTHLY PAYPAL_PLAN_ID_BRAINX_RADAR_YEARLY PAYPAL_PLAN_ID_BRAINX_RADAR_BUILD_MONTHLY PAYPAL_PLAN_ID_BRAINX_RADAR_BUILD_YEARLY BRAINX_FULFILL_URL --target production
+  ```
 - [ ] First radar-run session (`agents/brainx/radar-run/SOP.md`) → confirm `RunStamp` goes live
 - [ ] $99 monthly test buy → PayPal `BILLING.SUBSCRIPTION.ACTIVATED` → hub `payment.confirmed` → BrainX subscriber row + access email → `/radar` renders; then cancel in PayPal → confirm `subscription.cancelled` reaches BrainX

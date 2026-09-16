@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import { getSubscriber } from '@/lib/access'
 import { getOpportunityBySlug } from '@/lib/radar/queries'
 import OpportunityDetail from '@/app/components/radar/OpportunityDetail'
-import BuildThisButton from '@/app/components/build/BuildThisButton'
+import BuildThisButton from '@/app/components/build-this/BuildThisButton'
 
 export const dynamic = 'force-dynamic'
 

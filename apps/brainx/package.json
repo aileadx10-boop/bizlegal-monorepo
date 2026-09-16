@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test lib/radar/map.test.ts lib/radar/ingest-schema.test.ts lib/build/metering.test.ts lib/access.test.ts lib/fixtures/sample.test.ts content/guides/guides.test.ts app/api/fulfillment/route.test.ts",
+    "test": "tsx --test lib/radar/map.test.ts lib/radar/ingest-schema.test.ts lib/build-this/metering.test.ts lib/access.test.ts lib/fixtures/sample.test.ts content/guides/guides.test.ts app/api/fulfillment/route.test.ts",
     "verify-urls": "tsx tools/verify-urls.ts",
     "ingest-radar": "tsx tools/ingest-radar.ts",
     "ingest-brief": "tsx tools/ingest-brief.ts",

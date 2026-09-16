@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { getSubscriber } from '@/lib/access'
 import { sql } from '@/lib/neon'
-import BriefView from '@/app/components/build/BriefView'
+import BriefView from '@/app/components/build-this/BriefView'
 import type { BriefVM, BriefStatus, Brief } from '@/lib/radar/types'
 
 export const dynamic = 'force-dynamic'

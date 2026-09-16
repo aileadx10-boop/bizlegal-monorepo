@@ -2,7 +2,7 @@
 /**
  * tools/ingest-brief.ts --product <products.id> --file <brief.json> [--dry-run]
  *
- * Validates a BUILD THIS brief (lib/build/brief-schema.ts) written by a
+ * Validates a BUILD THIS brief (lib/build-this/brief-schema.ts) written by a
  * Claude Code session against agents/brainx/build-this/prompt.md, checks
  * every evidence_ids reference resolves to the target opportunity's own
  * evidence_links, checks no URL in the prose is outside that evidence pack,
@@ -11,7 +11,7 @@
  * Exit codes: 0 ok · 2 validation failed · 4 database error.
  */
 import { readFileSync } from 'node:fs'
-import { brief as briefSchema, briefUrlViolations } from '../lib/build/brief-schema'
+import { brief as briefSchema, briefUrlViolations } from '../lib/build-this/brief-schema'
 import { sql } from '../lib/neon'
 import { sendBriefReady } from '../lib/email'
 import { logEvent } from '../lib/ops/log'
