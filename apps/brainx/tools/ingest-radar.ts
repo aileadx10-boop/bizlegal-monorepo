@@ -29,9 +29,12 @@ async function urlResolves(url: string): Promise<{ ok: boolean; status?: number;
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
   try {
-    let res = await fetch(url, { method: 'HEAD', redirect: 'follow', signal: controller.signal, headers: { 'user-agent': 'BrainXIngest/1.0 (+https://brainx.bizlegal-ai.com)' } })
+    // Browser-prefixed UA: many law-firm/vendor sites 403 a bare bot UA while
+    // serving the same page to a browser; we still identify ourselves.
+    const UA = 'Mozilla/5.0 (compatible; BrainXIngest/1.0; +https://brainx.bizlegal-ai.com)'
+    let res = await fetch(url, { method: 'HEAD', redirect: 'follow', signal: controller.signal, headers: { 'user-agent': UA } })
     if (res.status === 405 || res.status === 403) {
-      res = await fetch(url, { method: 'GET', redirect: 'follow', signal: controller.signal, headers: { 'user-agent': 'BrainXIngest/1.0 (+https://brainx.bizlegal-ai.com)' } })
+      res = await fetch(url, { method: 'GET', redirect: 'follow', signal: controller.signal, headers: { 'user-agent': UA } })
     }
     return { ok: res.status >= 200 && res.status < 400, status: res.status }
   } catch (err) {

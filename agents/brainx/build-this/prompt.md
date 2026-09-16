@@ -47,7 +47,7 @@ not market-confirmed pricing**.
 }
 ```
 
-Validated against `apps/brainx/lib/build/brief-schema.ts`, applied with:
+Validated against `apps/brainx/lib/build-this/brief-schema.ts`, applied with:
 
 ```bash
 cd apps/brainx
