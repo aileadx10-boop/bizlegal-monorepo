@@ -110,7 +110,7 @@ interface ProbeResult {
 async function probeOne(target: SubProbe): Promise<ProbeResult> {
   const start = Date.now()
   const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), 6000)
+  const timer = setTimeout(() => controller.abort(), 12_000)
   try {
     const res = await fetch(target.url, {
       method: 'GET',
@@ -163,7 +163,7 @@ async function probeSubdomainEnvs(
   token: string
 ): Promise<SubdomainEnvSnapshot> {
   const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), 6000)
+  const timer = setTimeout(() => controller.abort(), 12_000)
   try {
     const res = await fetch(`${target.url}?token=${encodeURIComponent(token)}`, {
       method: 'GET',
