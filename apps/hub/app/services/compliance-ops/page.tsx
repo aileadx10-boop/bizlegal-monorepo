@@ -8,9 +8,9 @@ export const metadata: Metadata = {
     title: "Compliance Ops Retainer — $2,500/month, 8 AI agents",
     description: "Stop chasing compliance. We run it. 24/7 monitoring + scan + flag + draft. 1 human maintains 8 client systems. $2,500/mo. First 2 weeks free.",
     type: "website",
-    url: "https://hub.bizlegal-ai.com/services/compliance-ops",
+    url: "https://bizlegal-ai.com/services/compliance-ops",
   },
-  alternates: { canonical: "https://hub.bizlegal-ai.com/services/compliance-ops" },
+  alternates: { canonical: "https://bizlegal-ai.com/services/compliance-ops" },
 }
 
 const AGENTS = [

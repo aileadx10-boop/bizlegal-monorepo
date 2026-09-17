@@ -19,6 +19,9 @@ export type ProductId =
   | "docai"
   | "leadforge"
   | "forge"
+  | "falseecho"
+  | "sellerradar"
+  | "leaseparse"
   | "none";
 
 export interface ClassificationResult {
@@ -70,6 +73,15 @@ const REGULATION_RULES: ReadonlyArray<{
   // Forge — multi-framework gap scan / BOI Kit / 15-framework
   { pattern: /\bboi\b|gap scan|gap analysis|multi-framework|compliance scan/i, product: "forge", weight: 0.85 },
   { pattern: /\bmica\b|\bvara\b|\bsec\b/i, product: "forge", weight: 0.4 },
+
+  // FalseEcho — AI answer-engine falsehood monitor (live 2026-09-18)
+  { pattern: /ai overview|chatgpt said|perplexity said|answer.?engine|ai (?:falsehood|hallucination)|brand mention/i, product: "falseecho", weight: 0.9 },
+
+  // SellerRadar — Amazon fee-change impact (live 2026-09-18)
+  { pattern: /amazon fba|amazon seller|seller central|referral fee|fba (?:fee|fulfillment)/i, product: "sellerradar", weight: 0.9 },
+
+  // LeaseParse — commercial lease abstract (live 2026-09-18; coguard/propsignal/closeflow stay parked)
+  { pattern: /commercial lease|lease abstract|rent commencement|cam reconcil/i, product: "leaseparse", weight: 0.9 },
 ];
 
 const VERTICAL_DEFAULTS: Record<NonNullable<LeadProfile["qualification"]>["vertical"], Exclude<ProductId, "none">> = {

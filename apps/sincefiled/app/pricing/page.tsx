@@ -1,3 +1,5 @@
+'use client'
+
 import { startSinceFiledCheckout } from '@/lib/checkout'
 
 export default function PricingPage() {

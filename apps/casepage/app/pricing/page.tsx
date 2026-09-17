@@ -1,3 +1,5 @@
+'use client'
+
 import { startCasePageCheckout } from '@/lib/checkout'
 
 export default function PricingPage() {
@@ -10,9 +12,8 @@ export default function PricingPage() {
   }
   const plans = [
     { id: 'cp_solo_49', name: 'Solo — $49/mo', desc: '10 pages, standard themes, milestone widget.' },
-    { id: 'cp_firm_149', name: 'Firm — $149/mo', desc: 'Unlimited pages, white-label, AI summaries, audio.' },
+    { id: 'cp_firm_149', name: 'Firm — $149/mo', desc: 'Unlimited pages and firm-wide matter-status tracking.' },
     { id: 'cp_setup_490', name: 'Setup — $490 once', desc: 'Template pack + branding + widget install.' },
-    { id: 'cp_setup_490_lifetime', name: 'Lifetime Firm — $290 once (demo uses setup SKU)', desc: 'Firm plan forever.' },
   ]
   return (
     <main style={{ fontFamily: 'system-ui, sans-serif', maxWidth: 680, margin: '3rem auto', padding: '0 1rem' }}>

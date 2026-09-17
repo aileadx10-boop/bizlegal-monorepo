@@ -15,6 +15,8 @@ import { grantSellerRadar } from '@/lib/payments/sellerradar-grant'
 import { grantDeal44Room } from '@/lib/payments/deal44-grant'
 import { grantLeaseParse } from '@/lib/payments/leaseparse-grant'
 import { grantBrainX, syncBrainXSubscription, isBrainXOrder } from '@/lib/payments/brainx-grant'
+import { grantCasePage } from '@/lib/payments/casepage-grant'
+import { grantSinceFiled } from '@/lib/payments/sincefiled-grant'
 import { sendPaymentConfirmationEmail } from '@/lib/resend'
 
 export const dynamic = 'force-dynamic'
@@ -270,6 +272,8 @@ export async function POST(req: NextRequest) {
         await grantLeaseParse(supabase, order)
         // BrainX fulfillment POST (no-op for other products; crypto yearly only).
         await grantBrainX({ ...order, gateway: 'nowpayments' })
+        await grantCasePage({ ...order, gateway: 'nowpayments' })
+        await grantSinceFiled({ ...order, gateway: 'nowpayments' })
         // Send payment confirmation email to customer (non-blocking).
         void sendPaymentConfirmationEmail(
           order.user_email,

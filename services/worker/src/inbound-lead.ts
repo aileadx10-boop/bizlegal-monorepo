@@ -28,6 +28,9 @@ const PRODUCT_ENDPOINTS: Record<Exclude<ProductId, "none">, string> = {
   docai: "https://docai.bizlegal-ai.com/api/inbound-lead",
   leadforge: "https://leadforge.bizlegal-ai.com/api/inbound-lead",
   forge: "https://forge.bizlegal-ai.com/api/inbound-lead",
+  falseecho: "https://falseecho.bizlegal-ai.com/api/inbound-lead",
+  sellerradar: "https://sellerradar.bizlegal-ai.com/api/inbound-lead",
+  leaseparse: "https://leaseparse.bizlegal-ai.com/api/inbound-lead",
 };
 
 export interface RoutingResult {

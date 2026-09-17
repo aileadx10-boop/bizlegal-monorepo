@@ -17,9 +17,9 @@ export const metadata: Metadata = {
     description:
       'Paste a doc. Get 3 risk flags + 1 fix. No signup. Used by 12,000+ founders, GCs, and compliance leads.',
     type: 'website',
-    url: 'https://hub.bizlegal-ai.com/compliance-snapshot',
+    url: 'https://bizlegal-ai.com/compliance-snapshot',
   },
-  alternates: { canonical: 'https://hub.bizlegal-ai.com/compliance-snapshot' },
+  alternates: { canonical: 'https://bizlegal-ai.com/compliance-snapshot' },
 }
 
 export default function Page() {

@@ -15,6 +15,8 @@ import { grantSellerRadar } from '@/lib/payments/sellerradar-grant'
 import { grantDeal44Room } from '@/lib/payments/deal44-grant'
 import { grantLeaseParse } from '@/lib/payments/leaseparse-grant'
 import { grantBrainX, syncBrainXSubscription, isBrainXOrder } from '@/lib/payments/brainx-grant'
+import { grantCasePage } from '@/lib/payments/casepage-grant'
+import { grantSinceFiled } from '@/lib/payments/sincefiled-grant'
 import { sendPaymentConfirmationEmail } from '@/lib/resend'
 
 export const dynamic = 'force-dynamic'
@@ -377,6 +379,8 @@ export async function POST(req: NextRequest) {
           await grantLeaseParse(supabase, orderRow)
           // BrainX fulfillment POST (no-op for other products).
           await grantBrainX({ ...orderRow, id: orderId, gateway: 'paypal' })
+          await grantCasePage({ ...orderRow, id: orderId, gateway: 'paypal' })
+          await grantSinceFiled({ ...orderRow, id: orderId, gateway: 'paypal' })
           // Send payment confirmation email to customer (non-blocking).
           void sendPaymentConfirmationEmail(
             orderRow.user_email,
@@ -404,6 +408,8 @@ export async function POST(req: NextRequest) {
           // (entitlement lives in BrainX's own Neon), so this is a pure sync.
           const brainxEvent = opsType === 'payment.failed' ? 'past_due' : opsType === 'payment.refunded' ? 'refunded' : 'cancelled'
           await syncBrainXSubscription({ ...orderRow, id: orderId, gateway: 'paypal' }, brainxEvent)
+          await grantCasePage({ ...orderRow, id: orderId, gateway: 'paypal', status: brainxEvent })
+          await grantSinceFiled({ ...orderRow, id: orderId, gateway: 'paypal', status: brainxEvent })
         }
       }
     }

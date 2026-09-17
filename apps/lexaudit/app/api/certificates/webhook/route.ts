@@ -15,23 +15,33 @@ export async function POST(req: NextRequest) {
     const sig = req.headers.get('x-nowpayments-sig')
     const secret = process.env.NOWPAYMENTS_IPN_SECRET
 
+    if (!secret) {
+      console.error('[lex/webhook] NOWPAYMENTS_IPN_SECRET missing — refusing IPN (fail-closed)')
+      return NextResponse.json({ error: 'ipn_secret_not_configured' }, { status: 503 })
+    }
+    if (!sig) {
+      return NextResponse.json({ error: 'missing signature' }, { status: 401 })
+    }
+
     const payload = JSON.parse(body)
 
     // Verify HMAC-SHA512
-    if (secret && sig) {
-      const sorted = Object.keys(payload)
-        .sort()
-        .reduce(
-          (acc, k) => {
-            acc[k] = payload[k]
-            return acc
-          },
-          {} as Record<string, unknown>,
-        )
-      const expected = crypto.createHmac('sha512', secret).update(JSON.stringify(sorted)).digest('hex')
-      if (expected !== sig) {
-        return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
-      }
+    const sorted = Object.keys(payload)
+      .sort()
+      .reduce(
+        (acc, k) => {
+          acc[k] = payload[k]
+          return acc
+        },
+        {} as Record<string, unknown>,
+      )
+    const expected = Buffer.from(
+      crypto.createHmac('sha512', secret).update(JSON.stringify(sorted)).digest('hex'),
+      'hex',
+    )
+    const supplied = Buffer.from(sig, 'hex')
+    if (expected.length !== supplied.length || !crypto.timingSafeEqual(expected, supplied)) {
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
     }
 
     const { payment_status, order_id, payment_id } = payload

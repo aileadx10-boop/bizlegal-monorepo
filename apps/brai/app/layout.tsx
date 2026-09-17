@@ -51,7 +51,7 @@ function CrossLinkBanner() {
       boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
     }}>
       <span style={{ marginRight: 12 }}>brai.bizlegal.ai is part of BizLegal. 24/7 compliance ops, $2,500/mo managed.</span>
-      <a href="https://hub.bizlegal-ai.com/services/compliance-ops"
+      <a href="https://bizlegal-ai.com/services/compliance-ops"
          style={{ color: 'white', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 2 }}>
         See the offer &rarr;
       </a>

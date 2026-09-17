@@ -12,6 +12,7 @@
   "dependencies": {
     "@bizlegal/payment": "workspace:*",
     "@bizlegal/ops-log": "workspace:*",
+    "@bizlegal/email": "workspace:*",
     "@bizlegal/themes": "workspace:*",
     "@supabase/supabase-js": "^2.99.2",
     "next": "^14.2.35",

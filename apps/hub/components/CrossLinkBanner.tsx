@@ -29,7 +29,7 @@ export function CrossLinkBanner({
     }}>
       <span style={{ marginRight: 12 }}>{message ?? default_msg}</span>
       <Link
-        href="https://hub.bizlegal-ai.com/services/compliance-ops"
+        href="https://bizlegal-ai.com/services/compliance-ops"
         style={{
           color: 'white',
           fontWeight: 600,

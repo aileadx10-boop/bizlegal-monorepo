@@ -3,7 +3,7 @@
  */
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs'
 import path from 'node:path'
-import { canUseLive, getSupabase } from '../supabase'
+import { canUseLive, getSupabase } from './supabase'
 
 export interface MatterPage {
   id: string
@@ -39,19 +39,40 @@ export function writeLocalState(state: CasePageState): void {
   writeFileSync(STATE_FILE, JSON.stringify(state, null, 2), 'utf8')
 }
 
-export async function readPages(): Promise<MatterPage[]> {
+export async function readPages(ownerEmail?: string): Promise<MatterPage[]> {
   if (canUseLive()) {
+    if (!ownerEmail) return []
     const s = getSupabase()
-    const { data } = await s.from('cp_pages').select('*').limit(100)
-    if (data && data.length) return data as MatterPage[]
+    const { data, error } = await s.from('cp_pages').select('id,title,template,jurisdiction,milestones,status').eq('owner_email', ownerEmail.toLowerCase()).limit(100)
+    if (error) throw new Error(error.message)
+    return (data ?? []) as MatterPage[]
   }
   return readLocalState().pages
 }
 
-export async function createPage(input: Omit<MatterPage, 'id' | 'status'>): Promise<{ ok: boolean; id?: string; error?: string }> {
+export async function readPublicPage(id: string): Promise<MatterPage | null> {
+  if (canUseLive()) {
+    const { data, error } = await getSupabase()
+      .from('cp_pages')
+      .select('id,title,template,jurisdiction,milestones,status')
+      .eq('id', id)
+      .eq('status', 'live')
+      .maybeSingle()
+    if (error) throw new Error(error.message)
+    return data as MatterPage | null
+  }
+  return readLocalState().pages.find((page) => page.id === id && page.status === 'live') ?? null
+}
+
+export async function createPage(input: Omit<MatterPage, 'id' | 'status'>, ownerEmail?: string): Promise<{ ok: boolean; id?: string; error?: string }> {
   const page: MatterPage = { ...input, id: `p${Date.now()}`, status: 'draft' }
   if (canUseLive()) {
-    const { data, error } = await getSupabase().from('cp_pages').insert(page).select('id').single()
+    if (!ownerEmail) return { ok: false, error: 'unauthorized' }
+    const email = ownerEmail.toLowerCase()
+    const supabase = getSupabase()
+    const { error: accountError } = await supabase.from('cp_accounts').upsert({ email, updated_at: new Date().toISOString() }, { onConflict: 'email' })
+    if (accountError) return { ok: false, error: accountError.message }
+    const { data, error } = await supabase.from('cp_pages').insert({ ...page, owner_email: email }).select('id').single()
     if (error) return { ok: false, error: error.message }
     return { ok: true, id: data?.id }
   }
@@ -60,31 +81,58 @@ export async function createPage(input: Omit<MatterPage, 'id' | 'status'>): Prom
   return { ok: true, id: page.id }
 }
 
-export async function updatePage(id: string, patch: Partial<MatterPage>): Promise<{ ok: boolean; error?: string }> {
+export async function updatePage(id: string, patch: Partial<MatterPage>, ownerEmail?: string): Promise<{ ok: boolean; error?: string }> {
   if (canUseLive()) {
-    const { error } = await getSupabase().from('cp_pages').update(patch).eq('id', id)
+    if (!ownerEmail) return { ok: false, error: 'unauthorized' }
+    const safePatch = {
+      ...(typeof patch.title === 'string' ? { title: patch.title } : {}),
+      ...(typeof patch.template === 'string' ? { template: patch.template } : {}),
+      ...(typeof patch.jurisdiction === 'string' ? { jurisdiction: patch.jurisdiction } : {}),
+      ...(Array.isArray(patch.milestones) ? { milestones: patch.milestones } : {}),
+      ...(patch.status && ['draft', 'live', 'archived'].includes(patch.status) ? { status: patch.status } : {}),
+      updated_at: new Date().toISOString(),
+    }
+    const { data, error } = await getSupabase().from('cp_pages').update(safePatch).eq('id', id).eq('owner_email', ownerEmail.toLowerCase()).select('id').maybeSingle()
     if (error) return { ok: false, error: error.message }
-    return { ok: true }
+    return data ? { ok: true } : { ok: false, error: 'not_found' }
   }
   const state = readLocalState()
   writeLocalState({ ...state, pages: state.pages.map((p) => p.id === id ? { ...p, ...patch } : p) })
   return { ok: true }
 }
 
-export async function isEntitled(): Promise<boolean> {
+export async function isEntitled(ownerEmail?: string): Promise<boolean> {
   if (canUseLive()) {
+    if (!ownerEmail) return false
     const s = getSupabase()
-    const { data } = await s.from('cp_subscriptions').select('id').eq('status', 'active').limit(1).maybeSingle()
+    const { data } = await s.from('cp_subscriptions').select('id').eq('owner_email', ownerEmail.toLowerCase()).eq('status', 'active').limit(1).maybeSingle()
     return Boolean(data)
   }
   return readLocalState().entitled
 }
 
-export async function grantEntitlement(): Promise<{ ok: boolean; error?: string }> {
+export async function pageLimitFor(ownerEmail?: string): Promise<number> {
   if (canUseLive()) {
-    const { error } = await getSupabase().from('cp_subscriptions').insert({ status: 'active', product_id: 'cp_firm_149', entitlement: {} })
-    if (error) return { ok: false, error: error.message }
-    return { ok: true }
+    if (!ownerEmail) return 0
+    const { data, error } = await getSupabase()
+      .from('cp_subscriptions')
+      .select('entitlement')
+      .eq('owner_email', ownerEmail.toLowerCase())
+      .eq('status', 'active')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+    if (error) throw new Error(error.message)
+    if (!data) return 1
+    const maxPages = (data.entitlement as { max_pages?: number | null } | null)?.max_pages
+    return maxPages == null ? Number.POSITIVE_INFINITY : maxPages
+  }
+  return readLocalState().entitled ? Number.POSITIVE_INFINITY : 1
+}
+
+export async function grantEntitlement(ownerEmail?: string): Promise<{ ok: boolean; error?: string }> {
+  if (canUseLive()) {
+    return { ok: false, error: ownerEmail ? 'payment_webhook_required' : 'unauthorized' }
   }
   const state = readLocalState()
   writeLocalState({ ...state, entitled: true })

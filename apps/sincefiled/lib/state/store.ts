@@ -35,17 +35,34 @@ const DEFAULT_FIRM: FirmState = {
 const STATE_DIR = '.sincefiled-state'
 const STATE_FILE = path.join(STATE_DIR, 'firm.json')
 
-export async function readFirmState(): Promise<FirmState> {
+export async function readFirmState(ownerEmail?: string): Promise<FirmState> {
   if (canUseLive()) {
+    if (!ownerEmail) throw new Error('owner email required')
     const s = getSupabase()
-    const { data } = await s.from('sf_firms').select('*').limit(1).maybeSingle()
-    if (data) {
-      return {
-        firmName: data.name ?? DEFAULT_FIRM.firmName,
-        email: data.email ?? DEFAULT_FIRM.email,
-        entitled: data.entitled ?? false,
-        obligations: DEFAULT_FIRM.obligations, // TODO: load sf_obligations rows
-      }
+    const email = ownerEmail.toLowerCase()
+    const { data: firm, error: firmError } = await s
+      .from('sf_firms')
+      .upsert({ owner_email: email, name: email.split('@')[0] || 'Firm' }, { onConflict: 'owner_email' })
+      .select('id,name')
+      .single()
+    if (firmError || !firm) throw new Error(firmError?.message ?? 'firm unavailable')
+    const [{ data: obligations, error: obligationsError }, { data: subscription, error: subscriptionError }] = await Promise.all([
+      s.from('sf_obligations').select('id,obligation_type,interval_days,jurisdiction,last_event_at').eq('firm_id', firm.id).order('created_at'),
+      s.from('sf_subscriptions').select('id').eq('firm_id', firm.id).eq('status', 'active').limit(1).maybeSingle(),
+    ])
+    if (obligationsError) throw new Error(obligationsError.message)
+    if (subscriptionError) throw new Error(subscriptionError.message)
+    return {
+      firmName: firm.name,
+      email,
+      entitled: Boolean(subscription),
+      obligations: (obligations ?? []).map((row) => ({
+        id: String(row.id),
+        obligationType: row.obligation_type,
+        intervalDays: row.interval_days,
+        jurisdiction: row.jurisdiction,
+        lastEventAt: row.last_event_at ?? new Date().toISOString(),
+      })),
     }
   }
   if (existsSync(STATE_FILE)) {

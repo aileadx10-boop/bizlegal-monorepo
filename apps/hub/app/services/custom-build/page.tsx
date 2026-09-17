@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     description:
       'White-labeled compliance AI for Series B+ fintechs. SOC 2, GDPR, AML monitoring. Full security packet pre-built. 6-week delivery.',
     type: 'website',
-    url: 'https://hub.bizlegal-ai.com/services/custom-build',
+    url: 'https://bizlegal-ai.com/services/custom-build',
   },
 }
 
@@ -124,7 +124,7 @@ const jsonLd = {
         url: 'https://bizlegal-ai.com',
       },
       serviceType: 'ComplianceAI',
-      url: 'https://hub.bizlegal-ai.com/services/custom-build',
+      url: 'https://bizlegal-ai.com/services/custom-build',
       offers: [
         {
           '@type': 'Offer',
@@ -161,8 +161,8 @@ const jsonLd = {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bizlegal-ai.com' },
-        { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://hub.bizlegal-ai.com/services' },
-        { '@type': 'ListItem', position: 3, name: 'Custom Build', item: 'https://hub.bizlegal-ai.com/services/custom-build' },
+        { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://bizlegal-ai.com/services' },
+        { '@type': 'ListItem', position: 3, name: 'Custom Build', item: 'https://bizlegal-ai.com/services/custom-build' },
       ],
     },
   ],

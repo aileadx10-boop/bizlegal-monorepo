@@ -8,6 +8,8 @@ export interface MatterRow {
   template: string
   jurisdiction: string
   milestones: Array<{ title: string; doneAt: string | null }>
+  status: 'draft' | 'live' | 'archived'
+  publicUrl: string
 }
 
 export default function PagesClient({ pages }: { pages: MatterRow[] }) {
@@ -23,10 +25,10 @@ export default function PagesClient({ pages }: { pages: MatterRow[] }) {
     const milestones = GALLERY_SEEDS.find((g) => g.slug === template)
       ? [{ title: 'Signed', doneAt: null }, { title: 'In progress', doneAt: null }]
       : []
-    const res = await fetch('C:/Users/Moshe Dor/bizlegal-monorepo/apps/casepage/app/api/pages/route.ts', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ title, template, jurisdiction, milestones }) })
+    const res = await fetch('/api/pages', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ title, template, jurisdiction, milestones }) })
     const data = await res.json()
     if (res.ok) { form.reset(); window.location.reload() }
-    else if (data.paywall) { setErr('Free limit reached. Upgrade to create more pages: /pricing') }
+    else if (data.paywall) { setErr('Page limit reached. Upgrade at /pricing to create more pages.') }
     else setErr(data.error ?? 'failed')
   }
 
@@ -34,6 +36,20 @@ export default function PagesClient({ pages }: { pages: MatterRow[] }) {
     const next = items.map((p) => p.id === id ? { ...p, milestones: p.milestones.map((m, i) => i === idx ? { ...m, doneAt: new Date().toISOString() } : m) } : p)
     setItems(next)
     await fetch(`/api/pages/${id}`, { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ milestones: next.find((p) => p.id === id)?.milestones }) })
+  }
+
+  async function setStatus(id: string, status: MatterRow['status']) {
+    const res = await fetch(`/api/pages/${id}`, {
+      method: 'PATCH',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ status }),
+    })
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}))
+      setErr(data.error ?? 'status_update_failed')
+      return
+    }
+    setItems((current) => current.map((page) => page.id === id ? { ...page, status } : page))
   }
 
   return (
@@ -44,6 +60,16 @@ export default function PagesClient({ pages }: { pages: MatterRow[] }) {
         {items.map((p) => (
           <div key={p.id} style={{ border: '1px solid #ddd', borderRadius: 8, padding: '1rem' }}>
             <strong>{p.title}</strong> <span style={{ fontSize: '0.8rem', color: '#888' }}>#{p.template} · {p.jurisdiction}</span>
+            <div style={{ marginTop: '0.5rem' }}>
+              {p.status === 'live' ? (
+                <>
+                  <a href={p.publicUrl} target="_blank" rel="noreferrer">Open client page</a>{' '}
+                  <button onClick={() => setStatus(p.id, 'draft')}>Unpublish</button>
+                </>
+              ) : (
+                <button onClick={() => setStatus(p.id, 'live')}>Publish client page</button>
+              )}
+            </div>
             <ul>
               {p.milestones.map((m, i) => (
                 <li key={i}>

@@ -9,8 +9,8 @@
  *   node scripts/cf-dns-sync.mjs            # dry run (default)
  *   node scripts/cf-dns-sync.mjs --apply    # write the diff
  *
- * Desired set (2026-09-14 plan §B): branded hosts for the dark apps,
- * hub → apex, one DMARC on the apex, DMARC on the Resend domain.
+ * Desired set: branded hosts for active apps, parked/broken aliases absent,
+ * one DMARC on the apex, and DMARC on the Resend domain.
  * `notes.` (outbound v2 sender) is deliberately NOT here until the sender
  * is chosen (rule 7 v2 #6).
  */
@@ -47,13 +47,20 @@ const zone = cf('GET', `/zones?name=${ZONE_NAME}`)[0]
 if (!zone) throw new Error('zone not visible to this token')
 const existing = cf('GET', `/zones/${zone.id}/dns_records?per_page=500`)
 
+const ABSENT_NAMES = new Set([
+  // Apex is canonical; this proxy-to-apex alias caused a Cloudflare 525 loop.
+  `hub.${ZONE_NAME}`,
+  // Explicitly parked until the active fleet proves revenue.
+  `propsignal.${ZONE_NAME}`,
+  `closeflow.${ZONE_NAME}`,
+  `coguard.${ZONE_NAME}`,
+])
+
 const DESIRED = [
-  // branded hosts for the dark apps (proxied off until each returns 200, then flip)
-  ...['sellerradar', 'falseecho', 'leaseparse', 'closeflow', 'propsignal', 'casepage', 'sincefiled'].map((h) => ({
+  // Branded hosts for active apps (proxied off until each returns 200, then flip).
+  ...['sellerradar', 'falseecho', 'leaseparse', 'casepage', 'sincefiled'].map((h) => ({
     type: 'CNAME', name: `${h}.${ZONE_NAME}`, content: 'cname.vercel-dns.com', proxied: false,
   })),
-  // hub.bizlegal-ai.com was NXDOMAIN while banners linked to it — alias the apex
-  { type: 'CNAME', name: `hub.${ZONE_NAME}`, content: ZONE_NAME, proxied: true },
   // ONE DMARC on the apex (two records = no policy)
   { type: 'TXT', name: `_dmarc.${ZONE_NAME}`, content: 'v=DMARC1; p=quarantine; rua=mailto:team@bizlegal-ai.com; pct=100', exclusive: true },
   // DMARC on the Resend transactional domain (Google bulk-sender rule)
@@ -62,6 +69,9 @@ const DESIRED = [
 
 const norm = (s) => String(s).replace(/^"|"$/g, '').trim()
 const plan = []
+for (const rec of existing) {
+  if (ABSENT_NAMES.has(rec.name)) plan.push({ op: 'delete', rec, why: 'canonical alias removed or product parked' })
+}
 for (const want of DESIRED) {
   const same = existing.filter((r) => r.type === want.type && r.name === want.name)
   const match = same.find((r) => norm(r.content) === norm(want.content))

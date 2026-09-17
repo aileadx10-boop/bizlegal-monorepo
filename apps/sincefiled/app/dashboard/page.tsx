@@ -1,10 +1,15 @@
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 import { readFirmState } from '@/lib/state/store'
+import { verifyToken } from '@/lib/auth'
 import { predict } from '@/lib/predict'
 import { assertToneSafe } from '@/lib/tone'
 import ObligationsClient from '@/components/obligations-client'
 
 export default async function DashboardPage() {
-  const firm = await readFirmState()
+  const session = verifyToken(cookies().get('sf_session')?.value ?? '')
+  if (!session) redirect('/login')
+  const firm = await readFirmState(session.email)
   const rows = firm.obligations.map((o) => ({ id: o.id, obligationType: o.obligationType, jurisdiction: o.jurisdiction, ...predict(o) }))
   const copy = 'Days since, predicted due, no guilt. Estimate — verify against jurisdiction rules. Not legal advice.'
   const toneOk = assertToneSafe(copy)

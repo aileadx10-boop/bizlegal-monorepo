@@ -9,9 +9,9 @@ export const metadata: Metadata = {
     title: "AI Compliance Risk Snapshot — $19, 2 minutes",
     description: "Drop your URL. Get 3 specific risk flags + 1 fix you can ship this week.",
     type: "website",
-    url: "https://hub.bizlegal-ai.com/products/risk-snapshot",
+    url: "https://bizlegal-ai.com/products/risk-snapshot",
   },
-  alternates: { canonical: "https://hub.bizlegal-ai.com/products/risk-snapshot" },
+  alternates: { canonical: "https://bizlegal-ai.com/products/risk-snapshot" },
 }
 
 export default function Page() { return <RiskSnapshotClient /> }

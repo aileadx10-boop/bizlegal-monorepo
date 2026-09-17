@@ -4,7 +4,7 @@ import { commitFileToGithub } from "./github";
 /**
  * Daily product-digest aggregator.
  *
- * Fetches `/api/digest` from each of the 6 BizLegal products, validates
+ * Fetches `/api/digest` from each live BizLegal product, validates
  * the shape, packages into a single canonical JSON document, persists
  * to:
  *   1. Cloudflare KV    — `hub:digest:latest` (TTL 25h)
@@ -29,6 +29,8 @@ const PRODUCT_ORIGINS = {
   docai: "https://docai.bizlegal-ai.com",
   leadforge: "https://leadforge.bizlegal-ai.com",
   forge: "https://forge.bizlegal-ai.com",
+  falseecho: "https://falseecho.bizlegal-ai.com",
+  sellerradar: "https://sellerradar.bizlegal-ai.com",
 } as const;
 
 export type ProductId = keyof typeof PRODUCT_ORIGINS;
