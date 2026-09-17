@@ -22,6 +22,7 @@ const nextConfig = {
     '@bizlegal/ops-log',
     '@bizlegal/payment',
     '@bizlegal/email',
+    '@bizlegal/nurture-enqueue',
     '@bizlegal/deal-engine',
   ],
 

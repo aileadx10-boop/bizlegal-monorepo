@@ -19,6 +19,7 @@
     "@bizlegal/deal-engine": "workspace:*",
     "@bizlegal/ops-log": "workspace:*",
     "@bizlegal/email": "workspace:*",
+    "@bizlegal/nurture-enqueue": "workspace:*",
     "@bizlegal/payment": "workspace:*",
     "@bizlegal/themes": "workspace:*",
     "@bizlegal/turnstile-widget": "workspace:*",

@@ -1,9 +1,29 @@
 import { createClient } from '@supabase/supabase-js'
+import { crossSellFor, type CrossSellSurface } from '@bizlegal/nurture-enqueue/cross-sell'
 
 export const dynamic = 'force-dynamic'
 
 interface PageProps {
   searchParams: Promise<{ order?: string; product?: string }>
+}
+
+function surfaceFor(product: string | null): CrossSellSurface | null {
+  if (!product) return null
+  const p = product.toLowerCase()
+  if (p.startsWith('cp_') || p.includes('casepage')) return 'casepage'
+  if (p.startsWith('sf_') || p.includes('sincefiled')) return 'sincefiled'
+  if (p.includes('brainx')) return 'brainx'
+  if (p.includes('deal44')) return 'deal44'
+  if (p.includes('falseecho')) return 'falseecho'
+  if (p.includes('sellerradar')) return 'sellerradar'
+  if (p.includes('leaseparse')) return 'leaseparse'
+  if (p.includes('tracr')) return 'tracr'
+  if (p.includes('docai')) return 'docai'
+  if (p.includes('lexaudit')) return 'lexaudit'
+  if (p.includes('passport')) return 'forge_passport'
+  if (p.includes('boi')) return 'forge_boi'
+  if (p.includes('leadforge')) return 'leadforge'
+  return null
 }
 
 function getSupabase() {
@@ -37,6 +57,9 @@ export default async function PaymentSuccessPage({ searchParams }: PageProps) {
       // best-effort — fall through to generic message
     }
   }
+
+  const surface = surfaceFor(productName)
+  const offers = surface ? crossSellFor(surface) : []
 
   return (
     <main
@@ -142,6 +165,45 @@ export default async function PaymentSuccessPage({ searchParams }: PageProps) {
         >
           Return to BizLegal AI →
         </a>
+
+        {offers.length > 0 && (
+            <div style={{ marginTop: 40, textAlign: 'left' }}>
+              <p
+                style={{
+                  fontSize: 11,
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  color: '#8d90a0',
+                  marginBottom: 12,
+                  textAlign: 'center',
+                }}
+              >
+                Also from the fleet
+              </p>
+              <div style={{ display: 'grid', gap: 12 }}>
+                {offers.map((offer) => (
+                  <a
+                    key={offer.url}
+                    href={offer.url}
+                    style={{
+                      display: 'block',
+                      padding: '16px 18px',
+                      border: '1px solid #2a3148',
+                      borderRadius: 8,
+                      textDecoration: 'none',
+                      color: '#dee1f7',
+                    }}
+                  >
+                    <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 6 }}>{offer.headline}</div>
+                    <div style={{ fontSize: 13, color: '#c3c6d7', lineHeight: 1.55, marginBottom: 8 }}>{offer.blurb}</div>
+                    <div style={{ fontSize: 12, color: '#e9c349' }}>
+                      {offer.product} · {offer.price} →
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
 
         <p
           style={{
