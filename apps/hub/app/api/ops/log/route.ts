@@ -81,6 +81,8 @@ const ALLOWED_SOURCES = new Set([
   'sellerradar', 'falseecho',
   // BrainX productization (2026-09-16).
   'brainx',
+  'casepage',
+  'sincefiled',
 ])
 
 export async function POST(req: NextRequest) {

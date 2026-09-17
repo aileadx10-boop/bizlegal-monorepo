@@ -33,8 +33,15 @@ const TARGETS: ReadonlyArray<SubProbe> = [
   { name: 'lexaudit',  url: 'https://lexaudit.bizlegal-ai.com/api/digest',  source: 'lexaudit' },
   { name: 'docai',     url: 'https://docai.bizlegal-ai.com/api/digest',     source: 'docai' },
   { name: 'leadforge', url: 'https://leadforge.bizlegal-ai.com/api/digest', source: 'leadforge' },
-  { name: 'forge',     url: 'https://forge.bizlegal-ai.com/api/digest',     source: 'forge' },
-  { name: 'blog',      url: 'https://blog.bizlegal-ai.com/sitemap.xml',     source: 'blog' },
+  { name: 'forge',     url: 'https://forge.bizlegal-ai.com/api/digest',      source: 'forge' },
+  { name: 'falseecho', url: 'https://falseecho.bizlegal-ai.com/api/digest',  source: 'falseecho' },
+  { name: 'sellerradar', url: 'https://sellerradar.bizlegal-ai.com/api/digest', source: 'sellerradar' },
+  { name: 'casepage',  url: 'https://casepage.bizlegal-ai.com/',             source: 'casepage' },
+  { name: 'sincefiled', url: 'https://sincefiled.bizlegal-ai.com/',          source: 'sincefiled' },
+  { name: 'leaseparse', url: 'https://leaseparse.bizlegal-ai.com/',          source: 'leaseparse' },
+  { name: 'brainx',    url: 'https://brainx.bizlegal-ai.com/api/internal/health', source: 'brainx' },
+  { name: 'cited',     url: 'https://cited.bizlegal-ai.com/intake',          source: 'firmcited' },
+  { name: 'blog',      url: 'https://blog.bizlegal-ai.com/sitemap.xml',      source: 'blog' },
   { name: 'oci',       url: 'https://router.bizlegal-ai.com/health',        source: 'oci' },
   // Hetzner curator publisher — FastAPI on :8082 fronted by Caddy + Cloudflare Tunnel.
   // Default URL is the public publisher.bizlegal-ai.com hostname; can be overridden via env

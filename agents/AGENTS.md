@@ -92,7 +92,7 @@ Defined in each product app's `vercel.json` (not the hub).
 |---|---|---|---|
 | bizlegal-lead-intake | `services/worker/` | Inbound lead → HMAC → hub /api/inbound-lead | LIVE |
 | telegram-hub | `services/telegram-hub/` | @BizlegalHubBot FAQ bot | LIVE |
-| gsc-bot | `services/gsc-bot/` | Weekly GSC sitemap submission | LIVE |
+| bizlegal-gsc-bot | `services/gsc-bot/` | Weekly GSC sitemap submission (17 hosts as of 2026-09-18) | LIVE |
 
 ---
 
@@ -160,7 +160,7 @@ detail: `apps/brainx/CLAUDE.md`.
 | Build-this agent | `agents/brainx/build-this/prompt.md` | Turns an opportunity + evidence into a 9-section brief | BUILT (2026-09-16) |
 | Scoring | `packages/scoring/` | 7-factor BrainX Decision Score v1 | BUILT (tests pass) |
 | Ingest tools | `apps/brainx/tools/{ingest-radar,ingest-brief,verify-urls,list-requests,send-weekly-pick}.ts` | Validate + write a radar run / brief; URL verification; operator queue; weekly email | BUILT (2026-09-16) |
-| Neon migrations | `packages/database/neon/migrations/{001_brainx_schema,002_brainx_subscribers}.sql` | Opportunity/evidence schema + subscriber/entitlement schema | WRITTEN; 001 applied, 002 pending (Moses) |
+| Neon migrations | `packages/database/neon/migrations/{001_brainx_schema,002_brainx_subscribers}.sql` | Opportunity/evidence schema + subscriber/entitlement schema | WRITTEN; 001+002 applied (2026-09-18) |
 | FastAPI service | `services/highintelligence-api/` | Intended automation layer | **PARKED**, not deployed (see its CLAUDE.md) |
 | Gmail adapter | ~~`packages/gmail-adapter/`~~ | Dead code, no OAuth token ever in vault | **DELETED 2026-09-16** |
 | n8n workflows | `workflows/n8n/brainx/*.json` | 5 skeletons targeting the parked FastAPI service | SKELETON, unused |

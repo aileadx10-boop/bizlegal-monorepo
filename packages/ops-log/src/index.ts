@@ -118,6 +118,8 @@ export interface LogEventInput {
     | 'sellerradar'
     | 'falseecho'
     | 'brainx'
+    | 'casepage'
+    | 'sincefiled'
   ref_id?: string
   email?: string
   amount_cents?: number
