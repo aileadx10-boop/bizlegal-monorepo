@@ -31,6 +31,11 @@ const PRODUCT_ORIGINS = {
   forge: "https://forge.bizlegal-ai.com",
   falseecho: "https://falseecho.bizlegal-ai.com",
   sellerradar: "https://sellerradar.bizlegal-ai.com",
+  leaseparse: "https://leaseparse.bizlegal-ai.com",
+  casepage: "https://casepage.bizlegal-ai.com",
+  sincefiled: "https://sincefiled.bizlegal-ai.com",
+  brainx: "https://brainx.bizlegal-ai.com",
+  deal44: "https://deal44.bizlegal-ai.com",
 } as const;
 
 export type ProductId = keyof typeof PRODUCT_ORIGINS;

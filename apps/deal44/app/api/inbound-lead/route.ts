@@ -4,8 +4,8 @@ import { logEventAsync } from '@/lib/ops/log'
 import { enqueueNurture } from '@bizlegal/nurture-enqueue'
 
 /**
- * LeaseParse /api/inbound-lead — see docai equivalent for protocol.
- * Verifies HMAC-SHA256 of body against BIZLEGAL_INBOUND_SECRET.
+ * DEAL44 /api/inbound-lead — HMAC-verified handoff from the fleet
+ * lead-intake Worker (same protocol as FalseEcho).
  */
 
 export const dynamic = 'force-dynamic'
@@ -43,9 +43,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'invalid_json' }, { status: 400 })
   }
 
-  if (payload.classification?.product !== 'leaseparse') {
+  if (payload.classification?.product !== 'deal44') {
     return NextResponse.json(
-      { error: 'wrong_product', expected: 'leaseparse', received: payload.classification?.product ?? 'unknown' },
+      { error: 'wrong_product', expected: 'deal44', received: payload.classification?.product ?? 'unknown' },
       { status: 400 }
     )
   }
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   logEventAsync({
     type: 'lead.inbound',
-    source: 'leaseparse',
+    source: 'deal44',
     ref_id: leadId,
     email,
     metadata: {
@@ -68,8 +68,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     void enqueueNurture({
       lead_id: leadId,
       email,
-      vertical: 'leaseparse',
-      source: 'leaseparse:inbound-lead',
+      vertical: 'deal44',
+      source: 'deal44:inbound-lead',
       lead_classification: {
         confidence: payload.classification.confidence,
         reason: payload.classification.reason,
@@ -82,7 +82,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
 export async function GET(): Promise<NextResponse> {
   return NextResponse.json(
-    { ok: true, service: 'leaseparse', endpoint: 'inbound-lead', configured: Boolean(process.env.BIZLEGAL_INBOUND_SECRET) },
+    { ok: true, service: 'deal44', endpoint: 'inbound-lead', configured: Boolean(process.env.BIZLEGAL_INBOUND_SECRET) },
     { status: 200 }
   )
 }

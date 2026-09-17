@@ -12,6 +12,7 @@ const nextConfig = {
     '@bizlegal/rate-limit',
     '@bizlegal/turnstile-verify',
     '@bizlegal/turnstile-widget',
+    '@bizlegal/nurture-enqueue',
   ],
   // @bizlegal/closing-engine and @bizlegal/deal-engine are authored
   // NodeNext-style: relative imports carry the .js extension, which their own

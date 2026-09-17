@@ -13,6 +13,7 @@ const nextConfig = {
     '@bizlegal/themes',
     '@bizlegal/turnstile-verify',
     '@bizlegal/turnstile-widget',
+    '@bizlegal/nurture-enqueue',
   ],
   webpack: (config) => {
     config.resolve.alias['@'] = __dirname

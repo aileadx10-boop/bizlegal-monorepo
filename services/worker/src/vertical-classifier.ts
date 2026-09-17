@@ -22,6 +22,10 @@ export type ProductId =
   | "falseecho"
   | "sellerradar"
   | "leaseparse"
+  | "casepage"
+  | "sincefiled"
+  | "brainx"
+  | "deal44"
   | "none";
 
 export interface ClassificationResult {
@@ -82,6 +86,18 @@ const REGULATION_RULES: ReadonlyArray<{
 
   // LeaseParse — commercial lease abstract (live 2026-09-18; coguard/propsignal/closeflow stay parked)
   { pattern: /commercial lease|lease abstract|rent commencement|cam reconcil/i, product: "leaseparse", weight: 0.9 },
+
+  // DEAL44 — Israeli/Hebrew multi-party rooms. After UAE/SG rules so DIFC stays OCI.
+  { pattern: /\bdeal44\b|workflow44|israeli (?:property|real.?estate|purchase|sale|closing)|tabu (?:registry|title)|hebrew.?rtl/i, product: "deal44", weight: 0.95 },
+
+  // CasePage — law-firm client matter-status pages
+  { pattern: /\bcasepage\b|matter.?status page|client.?facing (?:case|matter)|law.?firm client portal/i, product: "casepage", weight: 0.9 },
+
+  // SinceFiled — days-since compliance tracker
+  { pattern: /\bsincefiled\b|days since (?:filed|trust|cle)|trust reconcil|cle (?:hours|deadline)/i, product: "sincefiled", weight: 0.9 },
+
+  // BrainX — weekly opportunity radar
+  { pattern: /\bbrainx\b|opportunity radar|weekly (?:opportunity|radar) brief|build this brief/i, product: "brainx", weight: 0.9 },
 ];
 
 const VERTICAL_DEFAULTS: Record<NonNullable<LeadProfile["qualification"]>["vertical"], Exclude<ProductId, "none">> = {

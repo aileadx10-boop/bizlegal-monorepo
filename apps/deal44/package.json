@@ -16,6 +16,7 @@
     "@bizlegal/closing-engine": "workspace:*",
     "@bizlegal/deal-engine": "workspace:*",
     "@bizlegal/email": "workspace:*",
+    "@bizlegal/nurture-enqueue": "workspace:*",
     "@bizlegal/rate-limit": "workspace:*",
     "@bizlegal/turnstile-verify": "workspace:*",
     "@bizlegal/turnstile-widget": "workspace:*",

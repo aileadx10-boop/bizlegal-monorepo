@@ -16,6 +16,7 @@
     "@anthropic-ai/sdk": "^0.27.0",
     "@bizlegal/closing-engine": "workspace:*",
     "@bizlegal/email": "workspace:*",
+    "@bizlegal/nurture-enqueue": "workspace:*",
     "@bizlegal/themes": "workspace:*",
     "@supabase/supabase-js": "^2.57.4",
     "next": "14.2.35",

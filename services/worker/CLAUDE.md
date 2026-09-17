@@ -21,7 +21,7 @@ Multi-purpose Cloudflare Worker. Receives landing-form submissions, runs them th
 - `src/pipeline.ts` — 5-stage pipeline (extract/critique/score/summary/route)
 - `src/pipeline-report.ts` — snapshot pipeline (jurisdictional comparisons)
 - `src/inbound-lead.ts` — HMAC-signed POST to product `/api/inbound-lead`
-- `src/vertical-classifier.ts` — keyword + Sonnet routing across 7 verticals (BRAI, TRACR, LexAudit, DocAI, LeadForge, Forge, Realestate→OCI)
+- `src/vertical-classifier.ts` — keyword routing across live products (BRAI, TRACR, LexAudit, DocAI, LeadForge, Forge, Realestate→OCI, FalseEcho, SellerRadar, LeaseParse, CasePage, SinceFiled, BrainX, DEAL44). Parked: propsignal / coguard / closeflow.
 - `src/ops-log.ts` — Worker-runtime HMAC client to hub `/api/ops/log`
 - `src/digest.ts` — daily aggregator
 - `src/extract.ts`, `critique.ts`, `score.ts`, `summary.ts` — Haiku pipeline stages

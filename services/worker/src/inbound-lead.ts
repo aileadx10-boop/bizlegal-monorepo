@@ -31,6 +31,10 @@ const PRODUCT_ENDPOINTS: Record<Exclude<ProductId, "none">, string> = {
   falseecho: "https://falseecho.bizlegal-ai.com/api/inbound-lead",
   sellerradar: "https://sellerradar.bizlegal-ai.com/api/inbound-lead",
   leaseparse: "https://leaseparse.bizlegal-ai.com/api/inbound-lead",
+  casepage: "https://casepage.bizlegal-ai.com/api/inbound-lead",
+  sincefiled: "https://sincefiled.bizlegal-ai.com/api/inbound-lead",
+  brainx: "https://brainx.bizlegal-ai.com/api/inbound-lead",
+  deal44: "https://deal44.bizlegal-ai.com/api/inbound-lead",
 };
 
 export interface RoutingResult {

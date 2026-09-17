@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@bizlegal/email": "workspace:*",
+    "@bizlegal/nurture-enqueue": "workspace:*",
     "@bizlegal/rate-limit": "workspace:*",
     "@bizlegal/scoring": "workspace:*",
     "@bizlegal/themes": "workspace:*",

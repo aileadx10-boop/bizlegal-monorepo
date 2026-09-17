@@ -7,7 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const nextConfig = {
   reactStrictMode: true,
   // Workspace packages ship TypeScript source (main: ./src/index.ts).
-  transpilePackages: ['@bizlegal/payment', '@bizlegal/ops-log', '@bizlegal/themes'],
+  transpilePackages: ['@bizlegal/payment', '@bizlegal/ops-log', '@bizlegal/themes', '@bizlegal/nurture-enqueue'],
   // @bizlegal/payment is authored NodeNext-style (relative imports carry .js);
   // webpack does not map .js → .ts, so try the .ts sibling first. Same fix as
   // apps/hub and apps/deal44.
