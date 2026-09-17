@@ -21,7 +21,7 @@ export async function grantedPacks(ownerEmail: string): Promise<PackProduct[]> {
     .eq('firm_id', firm.id)
     .eq('status', 'active')
   if (error) throw new Error(error.message)
-  return [...new Set((data ?? []).map((row) => row.product_id).filter(isPackProduct))]
+  return Array.from(new Set((data ?? []).map((row) => row.product_id).filter(isPackProduct)))
 }
 
 const US_SECTIONS = [
