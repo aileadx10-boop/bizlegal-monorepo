@@ -1,0 +1,14 @@
+{
+  "name": "BizLegal AI Monorepo",
+  "install": "pnpm install --frozen-lockfile",
+  "terminals": [
+    {
+      "name": "hub-dev",
+      "command": "pnpm -F @bizlegal/hub dev",
+      "description": "Next.js dev server for apps/hub (the brain) — http://localhost:3000"
+    }
+  ],
+  "ports": [
+    { "name": "hub", "port": 3000 }
+  ]
+}
