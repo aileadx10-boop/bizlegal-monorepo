@@ -30,10 +30,91 @@ export const metadata: Metadata = {
   },
 }
 
+/** GEO/AEO enrichment — Organization / WebSite / Product / FAQPage JSON-LD. */
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${SITE}#org`,
+      name: 'DEAL44',
+      url: SITE,
+      description: 'חדר עסקה משותף לעסקאות נדל"ן — כל הצדדים, כל המועדים, חדר אחד.',
+      brand: 'DEAL44',
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE}#website`,
+      name: 'DEAL44',
+      url: SITE,
+      inLanguage: ['he', 'en'],
+      publisher: { '@id': `${SITE}#org` },
+    },
+    {
+      '@type': 'Product',
+      '@id': `${SITE}#product`,
+      name: 'DEAL44 Deal Room',
+      description:
+        'מרחב משימות משותף לעסקת נדל"ן: כל הצדדים, כל המועדים, חדר אחד. תזכורות יוצאות לפני המועד.',
+      brand: { '@id': `${SITE}#org` },
+      offers: [
+        {
+          '@type': 'Offer',
+          name: 'הקמת חדר עסקה (ILS)',
+          priceCurrency: 'ILS',
+          price: '2500',
+          priceValidUntil: new Date(Date.now() + 365 * 24 * 3600 * 1000).toISOString().slice(0, 10),
+        },
+        {
+          '@type': 'Offer',
+          name: 'Deal room setup (USD)',
+          priceCurrency: 'USD',
+          price: '679',
+          priceValidUntil: new Date(Date.now() + 365 * 24 * 3600 * 1000).toISOString().slice(0, 10),
+        },
+      ],
+      isRelatedTo: `${SITE}#product-detail`,
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'מה זה DEAL44?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'מרחב משימות משותף (deal room) לעסקת נדל"ן: כל הצדדים רואים את אותה רשימת משימות ואותם מועדים, ותזכורות יוצאות לפני כל מועד קריטי.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'כמה עולה DEAL44?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'הקמה חד-פעמית של ₪2,500 (או $679 עבור הגרסה האנגלית) + ₪349 לחודש. הצפנת תשלומים: ILS דרך קריפטו בלבד, USD בשני המסלולים.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'למי זה מיועד?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'למתווכי נדל"ן ולצדדים לעסקה בישראל — קונה, מוכר, בנק, עורכי דין, ורישום בטאבו / רמ"י / חברה משכנת.',
+          },
+        },
+      ],
+    },
+  ],
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="he" dir="rtl">
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (
           <script
             defer
